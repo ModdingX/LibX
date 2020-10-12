@@ -18,15 +18,6 @@ pipeline {
             }
         }
 
-        stage('Javadoc') {
-            steps {
-                echo 'Documentation'
-                sh './gradlew javadoc'
-                sh 'git checkout gh-pages'
-
-            }
-        }
-
         // Publish is left out due to tests
 
         //stage('Archive artifacts') {
@@ -43,5 +34,16 @@ pipeline {
                 sh './gradlew publish'
             }
         }*/
+
+        stage('Javadoc') {
+            steps {
+                echo 'Documentation'
+                sh './gradlew javadoc'
+                sh 'git checkout gh-pages'
+                sh 'copy -rp build/docs/* .'
+                sh 'git commit -a'
+                sh 'git push'
+            }
+        }
     }
 }
