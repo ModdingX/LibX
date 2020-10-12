@@ -1,0 +1,31 @@
+package io.github.noeppi_noeppi.libx.mod.registration;
+
+import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.mod.ModX;
+import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+
+import java.util.Set;
+
+public class BlockBase extends Block implements Registerable {
+
+    private final Item item;
+
+    public BlockBase(ModX mod, Properties properties) {
+        this(mod, properties, new Item.Properties());
+    }
+
+    public BlockBase(ModX mod, Properties properties, Item.Properties itemProperties) {
+        super(properties);
+        if (mod.tab != null) {
+            itemProperties.group(mod.tab);
+        }
+        this.item = new BlockItem(this, itemProperties);
+    }
+
+    @Override
+    public Set<Object> getAdditionalRegisters() {
+        return ImmutableSet.of(this.item);
+    }
+}

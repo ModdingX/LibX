@@ -1,0 +1,87 @@
+package io.github.noeppi_noeppi.libx.data.provider;
+
+import io.github.noeppi_noeppi.libx.mod.ModX;
+import net.minecraft.block.Block;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public class BlockStateProviderBase extends BlockStateProvider {
+
+    protected final ModX mod;
+
+    private static final Set<Block> manualState = new HashSet<>();
+    private static final Set<Block> existingModel = new HashSet<>();
+    private static final Map<Block, ModelFile> customModel = new HashMap<>();
+
+    public BlockStateProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
+        super(generator, mod.modid, fileHelper);
+        this.mod = mod;
+    }
+
+    @Nonnull
+    @Override
+    public final String getName() {
+        return this.mod.modid + " blockstates and models";
+    }
+
+    protected void manualState(Block b) {
+        manualState.add(b);
+    }
+
+    protected void manualModel(Block b) {
+        existingModel.add(b);
+    }
+
+    protected void manualModel(Block b, ModelFile model) {
+        customModel.put(b, model);
+    }
+
+    @Override
+    protected void registerStatesAndModels() {
+        for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
+			ResourceLocation id = entry.getKey();
+			Block block = entry.getValue();
+			if (this.mod.modid.equals(id.getNamespace()) && !manualState.contains(block)) {
+			    if (existingModel.contains(block)) {
+                    this.defaultState(id, block, this.models().getExistingFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
+                } else if (customModel.containsKey(block)) {
+			        this.defaultState(id, block, customModel.get(block));
+			    } else {
+                    this.defaultState(id, block, this.defaultModel(id, block));
+                }
+            }
+		}
+    }
+
+    protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
+        if (block.getStateContainer().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
+            VariantBlockStateBuilder builder = this.getVariantBuilder(block);
+            for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
+                builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
+                        .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+            }
+        } else if (block.getStateContainer().getProperties().contains(BlockStateProperties.FACING)) {
+            VariantBlockStateBuilder builder = this.getVariantBuilder(block);
+            for (Direction direction : BlockStateProperties.FACING.getAllowedValues()) {
+                builder.partialState().with(BlockStateProperties.FACING, direction)
+                        .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+            }
+        } else {
+            this.simpleBlock(block, model);
+        }
+    }
+
+    protected ModelFile defaultModel(ResourceLocation id, Block block) {
+        return this.cubeAll(block);
+    }
+}
