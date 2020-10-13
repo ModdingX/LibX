@@ -9,6 +9,9 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraftforge.fluids.FluidStack;
 
+/**
+ * Helper class to render fluids into a gui. This can either render FluidStacks or fluids with a special color.
+ */
 public class RenderHelperFluid {
 
     public static void renderFluid(MatrixStack matrixStack, IRenderTypeBuffer buffer, FluidStack stack, int x, int y, int width, int height) {

@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.*;
 
+// TODO self descriptive method names + better documentation
 public class RecipeHelper {
 
     /**

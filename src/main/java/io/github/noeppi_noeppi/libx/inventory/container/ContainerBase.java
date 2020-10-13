@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.container;
+package io.github.noeppi_noeppi.libx.inventory.container;
 
 import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Function5;
@@ -21,13 +21,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
+ * A base class for containers that handles basic container logic such as shift-clicks,
+ * and laying out slots.
+ * <p>
  * There are some things you need to pay attention to if you want to use this:
  * Always register player inventory slots with layoutPlayerInventorySlots
  * Register input slots, THEN output slots and THEN player inventory.
- *
+ * <p>
  * Call the super constructor with
- *  firstOutputSlot    =  the number of input slot you have / the first output slot number
- *  firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number.
+ * firstOutputSlot    =  the number of input slot you have / the first output slot number
+ * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number.
  */
 public abstract class ContainerBase<T extends TileEntity> extends Container {
     public final T tile;
@@ -59,6 +62,12 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
         return isWithinUsableDistance(IWorldPosCallable.of(this.tile.getWorld(), this.tile.getPos()), this.player, this.tile.getBlockState().getBlock());
     }
 
+    /**
+     * Places the player inventory slots into the container.
+     *
+     * @param leftCol The x coordinate of the top left slot
+     * @param topRow  The y coordinate of the top left lot
+     */
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
         this.addSlotBox(this.playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 
@@ -66,14 +75,58 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
         this.addSlotRange(this.playerInventory, 0, leftCol, topRow, 9, 18);
     }
 
+    /**
+     * Adds a box of slots to the container
+     *
+     * @param handler   The inventory of the slot
+     * @param index     The index of the first slot
+     * @param x         The x coordinate of the top left slot
+     * @param y         The y coordinate of the top left lot
+     * @param horAmount The amount of slots in horizontal direction
+     * @param dx        The space between two slots in horizontal direction. Should not be less that 16 or
+     *                  you create overlapping slots. Most of the time this is 18
+     * @param verAmount The amount of slots in vertical direction
+     * @param dy        The space between two slots in vertical direction. Should not be less that 16 or
+     *                  you create overlapping slots. Most of the time this is 18
+     * @return The next index to be used to create a slot
+     */
     protected int addSlotBox(IItemHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
         return this.addSlotBox(handler, index, x, y, horAmount, dx, verAmount, dy, SlotItemHandler::new);
     }
 
+    /**
+     * Adds a row of slots to the container
+     *
+     * @param handler The inventory of the slot
+     * @param index   The index of the first slot
+     * @param x       The x coordinate of the top left slot
+     * @param y       The y coordinate of the top left lot
+     * @param amount  The amount of slots
+     * @param dx      The space between two slots. Should not be less that 16 or
+     *                you create overlapping slots. Most of the time this is 18
+     * @return The next index to be used to create a slot
+     */
     protected int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
         return this.addSlotRange(handler, index, x, y, amount, dx, SlotItemHandler::new);
     }
 
+    /**
+     * Adds a box of slots to the container
+     *
+     * @param handler     The inventory of the slot
+     * @param index       The index of the first slot
+     * @param x           The x coordinate of the top left slot
+     * @param y           The y coordinate of the top left lot
+     * @param horAmount   The amount of slots in horizontal direction
+     * @param dx          The space between two slots in horizontal direction. Should not be less that 16 or
+     *                    you create overlapping slots. Most of the time this is 18
+     * @param verAmount   The amount of slots in vertical direction
+     * @param dy          The space between two slots in vertical direction. Should not be less that 16 or
+     *                    you create overlapping slots. Most of the time this is 18
+     * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
+     *                    or {@code SlotOutputOnly::new} for output slots.
+     * @return The next index to be used to create a slot
+     */
     protected int addSlotBox(IItemHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy, Function4<IItemHandler, Integer, Integer, Integer, Slot> slotFactory) {
         for (int j = 0; j < verAmount; j++) {
             index = this.addSlotRange(handler, index, x, y, horAmount, dx, slotFactory);
@@ -82,6 +135,20 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
         return index;
     }
 
+    /**
+     * Adds a row of slots to the container
+     *
+     * @param handler     The inventory of the slot
+     * @param index       The index of the first slot
+     * @param x           The x coordinate of the top left slot
+     * @param y           The y coordinate of the top left lot
+     * @param amount      The amount of slots
+     * @param dx          The space between two slots. Should not be less that 16 or
+     *                    you create overlapping slots. Most of the time this is 18
+     * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
+     *                    or {@code SlotOutputOnly::new} for output slots.
+     * @return The next index to be used to create a slot
+     */
     protected int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx, Function4<IItemHandler, Integer, Integer, Integer, Slot> slotFactory) {
         for (int i = 0; i < amount; i++) {
             this.addSlot(slotFactory.apply(handler, index, x, y));
@@ -110,10 +177,10 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
 
             final int inventorySize = this.firstInventorySlot;
             final int playerInventoryEnd = inventorySize + 27;
-            final int playerHotbarEnd = playerInventoryEnd + 9;
+            final int playerHotBarEnd = playerInventoryEnd + 9;
 
             if (index < this.firstOutputSlot) {
-                if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, true)) {
+                if (!this.mergeItemStack(stack, inventorySize, playerHotBarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
 
@@ -122,13 +189,13 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
                 if (!this.mergeItemStack(stack, 0, this.firstOutputSlot, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
-                    if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
+                    if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotBarEnd, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < playerHotbarEnd && !this.mergeItemStack(stack, inventorySize, playerInventoryEnd, false)) {
+                } else if (index < playerHotBarEnd && !this.mergeItemStack(stack, inventorySize, playerInventoryEnd, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, false)) {
+            } else if (!this.mergeItemStack(stack, inventorySize, playerHotBarEnd, false)) {
                 return ItemStack.EMPTY;
             }
             if (stack.isEmpty()) {
@@ -154,7 +221,7 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
         }
 
         if (stack.isStackable()) {
-            while(!stack.isEmpty()) {
+            while (!stack.isEmpty()) {
                 if (reverseDirection) {
                     if (i < startIndex) {
                         break;
@@ -196,7 +263,7 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
                 i = startIndex;
             }
 
-            while(true) {
+            while (true) {
                 if (reverseDirection) {
                     if (i < startIndex) {
                         break;
@@ -230,7 +297,12 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
         return flag;
     }
 
-    public static <T extends  Container> ContainerType<T> createContainerType(Function5<Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
+    /**
+     * Creates a container type for a container.
+     *
+     * @param constructor A method reference to the container's constructor.
+     */
+    public static <T extends Container> ContainerType<T> createContainerType(Function5<Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
         return IForgeContainerType.create((windowId1, inv, data) -> {
             BlockPos pos1 = data.readBlockPos();
             World world1 = inv.player.getEntityWorld();

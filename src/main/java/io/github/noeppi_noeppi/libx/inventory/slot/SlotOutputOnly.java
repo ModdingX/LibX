@@ -7,7 +7,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 /**
- * A slot that only accepts items in an ingredient. Pass Ingredient.EMPTY for an output only slot.
+ * A slot that only no items can be inserted in.
  */
 public class SlotOutputOnly extends SlotItemHandler {
 

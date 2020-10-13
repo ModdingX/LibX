@@ -6,6 +6,9 @@ import net.minecraft.data.DataGenerator;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A base class for block tag provider
+ */
 public class BlockTagProviderBase extends BlockTagsProvider {
 
     protected final ModX mod;
@@ -18,6 +21,6 @@ public class BlockTagProviderBase extends BlockTagsProvider {
     @Nonnull
     @Override
     public final String getName() {
-        return mod.modid + " block tags";
+        return this.mod.modid + " block tags";
     }
 }

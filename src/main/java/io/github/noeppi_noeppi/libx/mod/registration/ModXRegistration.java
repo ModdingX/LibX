@@ -13,6 +13,33 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * You should extends this instead of {@link ModX} if you want to use the alternative registration system
+ * in LibX.
+ * <p>
+ * This works like this:
+ * You define your objects for registration in classes like {@code ModItems}. Create some static methods
+ * there that register all the items. To register something you need to call
+ * {@link ModXRegistration#register(String, Object)}. The in the constructor of you mod class you call
+ * {@link ModXRegistration#addRegistrationHandler(Runnable)} for every registration method with a method
+ * reference to it. (Example: {@code addRegistrationHandler(ModItems::init)}. The handlers will get called
+ * in the order you added them.
+ * <p>
+ * This system has several advantages over the one recommended by forge:
+ * <ul>
+ *     <li>An object can have dependencies that are automatically registered with it. This is done with
+ *     the {@link Registerable} interface. For example {@link BlockTE} registers a block, an item for
+ *     the block and a tile entity type. You could even go further with it and automatically register
+ *     slabs, stairs, walls and doors for all of your decorative blocks.</li>
+ *     <li>There's way less code you need to write.</li>
+ *     <li>You don't need the {@code .get()} when you want to access a registration object</li>
+ * </ul>
+ * <p>
+ * So you might want to know what exactly can be registered with this system. You can register everything
+ * that has a forge registry such as items, block, biomes, enchantments... And if other mods add things
+ * to register via forge registries you can register those as well. Another thing you can register are
+ * thing that implement {@link Registerable}. See there for more info.
+ */
 public abstract class ModXRegistration extends ModX {
 
     private final List<Runnable> registrationHandlers = new ArrayList<>();
@@ -22,13 +49,24 @@ public abstract class ModXRegistration extends ModX {
     protected ModXRegistration(String modid, ItemGroup tab) {
         super(modid, tab);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistration);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegistry);
     }
 
-    protected void addRegistrationsHandler(Runnable handler) {
+    /**
+     * Adds a registration handler .Should be called only in constructor. See class description for more info.
+     */
+    protected final void addRegistrationHandler(Runnable handler) {
         this.registrationHandlers.add(handler);
     }
 
-    public void register(String id, Object obj) {
+    /**
+     * Registers an object with a given id. The id must be a valid ResourceLocation path. It's automatically
+     * prefixed with the mod id.
+     */
+    public final void register(String id, Object obj) {
+        if (!ResourceLocation.isPathValid(id)) {
+            throw new IllegalArgumentException("ModXRegistration#register called with invalid id argument.");
+        }
         this.registerables.add(Pair.of(id, obj));
         if (obj instanceof Registerable) {
             ((Registerable) obj).getAdditionalRegisters().forEach(o -> this.register(id, o));
@@ -50,7 +88,7 @@ public abstract class ModXRegistration extends ModX {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public void onRegistry(final RegistryEvent.Register<? extends IForgeRegistryEntry<?>> event) {
+    private void onRegistry(final RegistryEvent.Register<? extends IForgeRegistryEntry<?>> event) {
         this.runRegistration();
         this.registerables.stream().filter(pair -> event.getRegistry().getRegistrySuperType().isAssignableFrom(pair.getRight().getClass())).forEach(pair -> {
             ((IForgeRegistryEntry<?>) pair.getRight()).setRegistryName(new ResourceLocation(this.modid, pair.getLeft()));

@@ -14,10 +14,18 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
-public class BlockTE<T extends TileEntityBase> extends BlockBase {
+/**
+ * Base class for blocks with tile entities for mods using {@link ModXRegistration}. This will automatically
+ * set the creative tab if it's defined in the mod and register a block item and a tile entity type..
+ * <p>
+ * The constructor requires a TileEntity class. The tile entity class  <b>must</b> define a public constructor
+ * with one argument of type {@code TileEntityType} for this to create a tile entity type. This class will do
+ * the magic to wire the tile entity to the block and invoke the constructor.
+ */
+public class BlockTE<T extends TileEntity> extends BlockBase {
 
     private final Class<T> teClass;
-    private final Constructor<T> teCtor;
+    private final Constructor<T> teConstructor;
     private final TileEntityType<T> teType;
 
     public BlockTE(ModX mod, Class<T> teClass, Properties properties) {
@@ -29,7 +37,7 @@ public class BlockTE<T extends TileEntityBase> extends BlockBase {
         this.teClass = teClass;
 
         try {
-            this.teCtor = teClass.getConstructor(TileEntityType.class);
+            this.teConstructor = teClass.getConstructor(TileEntityType.class);
         } catch (ReflectiveOperationException e) {
             if (e.getCause() != null)
                 e.getCause().printStackTrace();
@@ -38,7 +46,7 @@ public class BlockTE<T extends TileEntityBase> extends BlockBase {
         //noinspection ConstantConditions
         this.teType = new TileEntityType<>(() -> {
             try {
-                return this.teCtor.newInstance(this.getTileType());
+                return this.teConstructor.newInstance(this.getTileType());
             } catch (ReflectiveOperationException e) {
                 if (e.getCause() != null)
                     e.getCause().printStackTrace();
@@ -49,7 +57,7 @@ public class BlockTE<T extends TileEntityBase> extends BlockBase {
 
     @Override
     public Set<Object> getAdditionalRegisters() {
-        return ImmutableSet.builder().addAll(super.getAdditionalRegisters()).add(teType).build();
+        return ImmutableSet.builder().addAll(super.getAdditionalRegisters()).add(this.teType).build();
     }
 
     @Override
@@ -66,7 +74,7 @@ public class BlockTE<T extends TileEntityBase> extends BlockBase {
     public T getTile(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te == null || !this.teClass.isAssignableFrom(te.getClass())) {
-            throw new IllegalStateException("Expected a tile entity of type " + teClass + " at " + world + " " + pos + ", got" + te);
+            throw new IllegalStateException("Expected a tile entity of type " + this.teClass + " at " + world + " " + pos + ", got" + te);
         }
         //noinspection unchecked
         return (T) te;

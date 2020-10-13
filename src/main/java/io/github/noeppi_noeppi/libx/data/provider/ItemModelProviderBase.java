@@ -15,6 +15,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A base class for item model provider. When overriding this you should call the {@code handheld} and
+ * {@code manualModel} methods in constructor.
+ */
 public class ItemModelProviderBase extends ItemModelProvider {
 
     private static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
@@ -33,13 +37,19 @@ public class ItemModelProviderBase extends ItemModelProvider {
     @Nonnull
     @Override
     public final String getName() {
-        return mod.modid + " item models";
+        return this.mod.modid + " item models";
     }
 
+    /**
+     * This item will get a handheld model.
+     */
     protected void handheld(Item item) {
         this.handheld.add(item);
     }
 
+    /**
+     * This item will not be processed by the generator.
+     */
     protected void manualModel(Item item) {
         this.blacklist.add(item);
     }

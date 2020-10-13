@@ -11,8 +11,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /*
- * Thanks to Cucumber by BlakeBr0
- * https://github.com/BlakeBr0/Cucumber/blob/1.15/src/main/java/com/blakebr0/cucumber/inventory/SidedItemStackHandlerWrapper.java
+ * Copied from <a href = "https://github.com/BlakeBr0/Cucumber/blob/1.15/src/main/java/com/blakebr0/cucumber/inventory/SidedItemStackHandlerWrapper.java">Cucumber</a>
+ * and modified.
+ *
+ * A wrapper for an IItemHandlerModifiable to be used as capability with extra slot limitations. Meant to be used as capability.
  */
 public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
     private final IItemHandlerModifiable inventory;
@@ -68,18 +70,36 @@ public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
         return this.canInsert == null || this.canInsert.apply(slot, stack);
     }
 
+    /**
+     * Creates a new LazyOptional wrapping an IItemHandlerModifiable
+     */
     public static LazyOptional<IItemHandlerModifiable> create(IItemHandlerModifiable inv) {
         return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv, null, null));
     }
 
+    /**
+     * Creates a new LazyOptional wrapping an IItemHandlerModifiable
+     *
+     * @param canExtract A function to determine whether extraction is allowed from a slot
+     * @param canInsert  A function to determine whether insertion is allowed into a slot
+     */
     public static LazyOptional<IItemHandlerModifiable> create(IItemHandlerModifiable inv, @Nullable Function<Integer, Boolean> canExtract, @Nullable BiFunction<Integer, ItemStack, Boolean> canInsert) {
         return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv, canExtract, canInsert));
     }
 
+    /**
+     * Creates a new LazyOptional wrapping an IItemHandlerModifiable
+     */
     public static LazyOptional<IItemHandlerModifiable> createLazy(Supplier<IItemHandlerModifiable> inv) {
         return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv.get(), null, null));
     }
 
+    /**
+     * Creates a new LazyOptional wrapping an IItemHandlerModifiable
+     *
+     * @param canExtract A function to determine whether extraction is allowed from a slot
+     * @param canInsert  A function to determine whether insertion is allowed into a slot
+     */
     public static LazyOptional<IItemHandlerModifiable> createLazy(Supplier<IItemHandlerModifiable> inv, @Nullable Function<Integer, Boolean> canExtract, @Nullable BiFunction<Integer, ItemStack, Boolean> canInsert) {
         return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv.get(), canExtract, canInsert));
     }

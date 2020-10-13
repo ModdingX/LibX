@@ -10,6 +10,11 @@ import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A TileEntityRenderer that before calling the actual render code rotates the MatrixStack depending
+ * on the horizontal facing. This may only be used with blocks that have the property
+ * {@code BlockStateProperties.HORIZONTAL_FACING}
+ */
 public abstract class HorizontalRotatedTesr<T extends TileEntity> extends TileEntityRenderer<T> {
 
     public HorizontalRotatedTesr(TileEntityRendererDispatcher rendererDispatcherIn) {
@@ -27,5 +32,8 @@ public abstract class HorizontalRotatedTesr<T extends TileEntity> extends TileEn
         matrixStack.pop();
     }
 
+    /**
+     * The custom render code goes in here.
+     */
     protected abstract void doRender(@Nonnull T tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay);
 }

@@ -8,6 +8,10 @@ import net.minecraft.item.Item;
 
 import java.util.Set;
 
+/**
+ * Base class for blocks for mods using {@link ModXRegistration}. This will automatically set the
+ * creative tab if it's defined in the mod and register a block item.
+ */
 public class BlockBase extends Block implements Registerable {
 
     private final Item item;

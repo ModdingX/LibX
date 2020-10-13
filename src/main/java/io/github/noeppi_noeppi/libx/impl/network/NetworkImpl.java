@@ -10,6 +10,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.PacketDistributor;
 
+/**
+ * The network implementation of LibX. Allows for some networking functions that are required very often.
+ */
 public final class NetworkImpl extends NetworkX {
 
     public NetworkImpl(ModX mod) {
@@ -27,13 +30,18 @@ public final class NetworkImpl extends NetworkX {
         this.register(new TeRequestHandler(), NetworkDirection.PLAY_TO_SERVER);
     }
 
+    /**
+     * Sends the nbt tag retrieved from {@code TileEntity#getUpdateTag} from the tile entity at the given
+     * position to all clients tracking the chunk. On the client the tag is passed
+     * to {@code TileEntity#handleUpdateTag}. Does nothing when called on the client.
+     */
     public void updateTE(World world, BlockPos pos) {
         if (!world.isRemote) {
             this.updateTE(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), world, pos);
         }
     }
 
-    protected void updateTE(PacketDistributor.PacketTarget target, World world, BlockPos pos) {
+    void updateTE(PacketDistributor.PacketTarget target, World world, BlockPos pos) {
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(pos);
             if (te == null)
@@ -49,6 +57,12 @@ public final class NetworkImpl extends NetworkX {
         }
     }
 
+    /**
+     * Requests the tile entity at the given position from the server. This is automatically done when
+     * a {@link io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase} is loaded. The server will
+     * send an update packet as described in {@link NetworkImpl#updateTE(World, BlockPos)} to the client.
+     * Does nothing when called on the server.
+     */
     public void requestTE(World world, BlockPos pos) {
         if (world.isRemote) {
             this.instance.sendToServer(new TeRequestHandler.TeRequestMessage(pos));

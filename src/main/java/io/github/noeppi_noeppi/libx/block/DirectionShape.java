@@ -7,6 +7,10 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Holds 4 different VoxelShapes, one for each horizontal facing. Those are all created by rotating
+ * one original VoxelShape.
+ */
 public class DirectionShape {
 
     private final VoxelShape north;
@@ -14,6 +18,9 @@ public class DirectionShape {
     private final VoxelShape east;
     private final VoxelShape west;
 
+    /**
+     * Creates a new DirectionShape with the given base shape.
+     */
     public DirectionShape(VoxelShape baseShape) {
         this.north = baseShape.simplify();
         this.east = rotated(this.north);
@@ -21,6 +28,10 @@ public class DirectionShape {
         this.west = rotated(this.south);
     }
 
+    /**
+     * Gets the VoxelShape for the given direction. If the direction is not a horizontal
+     * direction the base shape is returned.
+     */
     public VoxelShape getShape(Direction direction) {
         switch (direction) {
             case SOUTH:

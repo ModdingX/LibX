@@ -3,16 +3,27 @@ package io.github.noeppi_noeppi.libx.inventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+/**
+ * Wraps an IItemHandlerModifiable to a vanilla IInventory.
+ */
 public class VanillaWrapper implements IInventory {
 
-    public final ItemStackHandler handler;
+    public final IItemHandlerModifiable handler;
+
+    @Nullable
     public final Runnable dirty;
 
-    public VanillaWrapper(ItemStackHandler handler, Runnable dirty) {
+    /**
+     * Wraps the given IItemHandlerModifiable to a vanilla IInventory.
+     *
+     * @param dirty A runnable which is always called when {@code markDirty();} is called on the vanilla inventory.
+     */
+    public VanillaWrapper(IItemHandlerModifiable handler, @Nullable Runnable dirty) {
         this.handler = handler;
         this.dirty = dirty;
     }
@@ -67,7 +78,9 @@ public class VanillaWrapper implements IInventory {
 
     @Override
     public void markDirty() {
-        this.dirty.run();
+        if (this.dirty != null) {
+            this.dirty.run();
+        }
     }
 
     @Override
@@ -92,6 +105,8 @@ public class VanillaWrapper implements IInventory {
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < this.handler.getSlots(); i++) {
+            this.handler.setStackInSlot(i, ItemStack.EMPTY);
+        }
     }
 }

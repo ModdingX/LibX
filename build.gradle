@@ -154,7 +154,7 @@ javadoc {
     options.destinationDirectory(file("build/docs/${version}"))
 }
 
-/*publishing {
+publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = project.group
@@ -178,7 +178,7 @@ javadoc {
             url "/var/www/maven"
         }
     }
-}*/
+}
 
 private static String getVersion(String group, String artifact, String baseVersion) {
     java.nio.file.Path mavenPath = Paths.get('/var/www/maven').resolve(group.replace('.', '/')).resolve(artifact)

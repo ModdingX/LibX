@@ -1,7 +1,5 @@
 package io.github.noeppi_noeppi.libx.inventory;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -10,15 +8,18 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-/*
- * Thanks to Cucumber by BlakeBr0
- * https://github.com/BlakeBr0/Cucumber/blob/1.15/src/main/java/com/blakebr0/cucumber/inventory/BaseItemStackHandler.java
+/**
+ * Copied from <a href = "https://github.com/BlakeBr0/Cucumber/blob/1.15/src/main/java/com/blakebr0/cucumber/inventory/BaseItemStackHandler.java">Cucumber</a>
+ * and modified.
+ * <p>
+ * An ItemStackHandler with some extra features.
  */
 public class BaseItemStackHandler extends ItemStackHandler {
 
@@ -31,10 +32,18 @@ public class BaseItemStackHandler extends ItemStackHandler {
     private int[] outputSlots = null;
     private int[] inputSlots = null;
 
+    /**
+     * Creates a new BaseItemStackHandler with the given size.
+     */
     public BaseItemStackHandler(int size) {
         this(size, null);
     }
 
+    /**
+     * Creates a new BaseItemStackHandler with the given size.
+     *
+     * @param onContentsChanged A listener that is always called when contents are changed.
+     */
     public BaseItemStackHandler(int size, Consumer<Integer> onContentsChanged) {
         super(size);
         this.onContentsChanged = onContentsChanged;
@@ -42,6 +51,12 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.slotValidator = null;
     }
 
+    /**
+     * Creates a new BaseItemStackHandler with the given size.
+     *
+     * @param onContentsChanged A listener that is always called when contents are changed.
+     * @param slotValidator     A Function that determines whether an ItemStack is valid for a given slot id.
+     */
     public BaseItemStackHandler(int size, Consumer<Integer> onContentsChanged, BiFunction<Integer, ItemStack, Boolean> slotValidator) {
         super(size);
         this.onContentsChanged = onContentsChanged;
@@ -85,18 +100,30 @@ public class BaseItemStackHandler extends ItemStackHandler {
         return this.stacks;
     }
 
+    /**
+     * Gets the slot ids of the input slots.
+     */
     public int[] getInputSlots() {
         return this.inputSlots;
     }
 
+    /**
+     * Gets the slot ids of the output slots.
+     */
     public int[] getOutputSlots() {
         return this.outputSlots;
     }
 
+    /**
+     * Sets the default maximum stack size for this inventory.
+     */
     public void setDefaultSlotLimit(int size) {
         this.maxStackSize = size;
     }
 
+    /**
+     * Sets the maximum stack size for one given slot.
+     */
     public void addSlotLimit(int slot, int size) {
         this.slotSizeMap.put(slot, size);
     }
@@ -105,15 +132,24 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.slotValidator = validator;
     }
 
+    /**
+     * Sets the slot ids of the input slots.
+     */
     public void setInputSlots(int... slots) {
         Arrays.sort(slots);
         this.inputSlots = slots;
     }
 
+    /**
+     * Sets the slot ids of the output slots.
+     */
     public void setOutputSlots(int... slots) {
         this.outputSlots = slots;
     }
 
+    /**
+     * Checks whether the input slots are all empty
+     */
     public boolean isInputEmpty() {
         if (this.inputSlots != null) {
             for (int i : this.inputSlots) {
@@ -125,6 +161,9 @@ public class BaseItemStackHandler extends ItemStackHandler {
         return true;
     }
 
+    /**
+     * Checks whether the output slots are all empty
+     */
     public boolean isOutputEmpty() {
         if (this.outputSlots != null) {
             for (int i : this.outputSlots) {
@@ -136,10 +175,25 @@ public class BaseItemStackHandler extends ItemStackHandler {
         return true;
     }
 
-    public IInventory toIInventory() {
-        return new Inventory(this.stacks.toArray(new ItemStack[0]));
+    /**
+     * Converts this BaseItemStackHandler to a vanilla inventory.
+     */
+    public VanillaWrapper toIInventory() {
+        return new VanillaWrapper(this, null);
     }
 
+    /**
+     * Converts this BaseItemStackHandler to a vanilla inventory.
+     *
+     * @param dirty A runnable that is always called when {@code markDirty();} is called on the VanillaWrapper.
+     */
+    public VanillaWrapper toIInventory(@Nullable Runnable dirty) {
+        return new VanillaWrapper(this, null);
+    }
+
+    /**
+     * Gets the unrestricted wrapper for this inventory. This can bypass any slot validity limitations.
+     */
     public IItemHandlerModifiable getUnrestricted() {
         return this.unrestricted;
     }

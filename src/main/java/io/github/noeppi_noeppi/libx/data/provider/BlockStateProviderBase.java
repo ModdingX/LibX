@@ -15,6 +15,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A base class for block state and model provider. When overriding this you should call the {@code manualState}
+ * and {@code manualModel} methods in constructor. Another thing you can do is override {@code defaultState} and
+ * {@code defaultModel} to adjust the state and model depending on the block.
+ */
 public class BlockStateProviderBase extends BlockStateProvider {
 
     protected final ModX mod;
@@ -31,17 +36,26 @@ public class BlockStateProviderBase extends BlockStateProvider {
     @Nonnull
     @Override
     public final String getName() {
-        return this.mod.modid + " blockstates and models";
+        return this.mod.modid + " block states and models";
     }
 
+    /**
+     * The provider will not process this block.
+     */
     protected void manualState(Block b) {
         manualState.add(b);
     }
 
+    /**
+     * The provider will add a block state for a custom manual model
+     */
     protected void manualModel(Block b) {
         existingModel.add(b);
     }
 
+    /**
+     * The provider will add a block state with the given model
+     */
     protected void manualModel(Block b, ModelFile model) {
         customModel.put(b, model);
     }
@@ -49,20 +63,25 @@ public class BlockStateProviderBase extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
-			ResourceLocation id = entry.getKey();
-			Block block = entry.getValue();
-			if (this.mod.modid.equals(id.getNamespace()) && !manualState.contains(block)) {
-			    if (existingModel.contains(block)) {
+            ResourceLocation id = entry.getKey();
+            Block block = entry.getValue();
+            if (this.mod.modid.equals(id.getNamespace()) && !manualState.contains(block)) {
+                if (existingModel.contains(block)) {
                     this.defaultState(id, block, this.models().getExistingFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
                 } else if (customModel.containsKey(block)) {
-			        this.defaultState(id, block, customModel.get(block));
-			    } else {
+                    this.defaultState(id, block, customModel.get(block));
+                } else {
                     this.defaultState(id, block, this.defaultModel(id, block));
                 }
             }
-		}
+        }
     }
 
+    /**
+     * Creates a block state for the given block using the given model. The default implementation checks whether
+     * the block has the properties {@code BlockStateProperties.HORIZONTAL_FACING} or
+     * {@code BlockStateProperties.FACING} and creates block states matching those.
+     */
     protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
         if (block.getStateContainer().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
@@ -81,6 +100,9 @@ public class BlockStateProviderBase extends BlockStateProvider {
         }
     }
 
+    /**
+     * Creates a model for the given block. The default implementation always creates cube_all models.
+     */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         return this.cubeAll(block);
     }

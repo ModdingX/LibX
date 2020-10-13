@@ -2,10 +2,11 @@ package io.github.noeppi_noeppi.libx.mod.registration;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;
-import io.github.noeppi_noeppi.libx.annotation.KeepConstructor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -13,20 +14,24 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+/**
+ * A base class for tile entities. This provides some useful methods for tile entities.
+ */
 public class TileEntityBase extends TileEntity {
 
     private final Set<Capability<?>> caps;
 
-    @KeepConstructor
     public TileEntityBase(TileEntityType<?> tileEntityTypeIn) {
         this(tileEntityTypeIn, new Capability[0]);
     }
 
-    // Give it a set of capabilities this class implements.
+    /**
+     * This constructor accepts some capabilities that this tile entity will have. Just make sure that
+     * the class also implements the required capability types or you might crash the game.
+     */
     public TileEntityBase(TileEntityType<?> tileEntityTypeIn, Capability<?>... caps) {
         super(tileEntityTypeIn);
         this.caps = ImmutableSet.copyOf(caps);
-
     }
 
     @Nonnull
@@ -40,6 +45,10 @@ public class TileEntityBase extends TileEntity {
         }
     }
 
+    /**
+     * This will update the tile entity when on the client
+     * using {@link io.github.noeppi_noeppi.libx.impl.network.NetworkImpl#requestTE(World, BlockPos)}.
+     */
     @Override
     public void onLoad() {
         super.onLoad();
@@ -48,9 +57,13 @@ public class TileEntityBase extends TileEntity {
         }
     }
 
-    public void markDispatachable() {
+    /**
+     * This will update the tile entity to all clients that are tracking it when called on the server
+     * using {@link io.github.noeppi_noeppi.libx.impl.network.NetworkImpl#updateTE(World, BlockPos)}.
+     */
+    public void markDispatchable() {
         if (this.world != null && this.pos != null && !this.world.isRemote) {
-            LibX.getNetwork().updateTE(world, pos);
+            LibX.getNetwork().updateTE(this.world, this.pos);
         }
     }
 }

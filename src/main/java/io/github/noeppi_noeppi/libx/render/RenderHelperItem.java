@@ -4,26 +4,26 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Matrix4f;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Helper to deal with item rendering.
+ */
 public class RenderHelperItem {
 
+    /**
+     * Renders an item tinted in the given color.
+     */
     public static void renderItemTinted(ItemStack stack, ItemCameraTransforms.TransformType transformType, int light, int overlay, MatrixStack matrixStack, IRenderTypeBuffer buffer, float r, float g, float b) {
         if (!stack.isEmpty()) {
             boolean isGui = transformType == ItemCameraTransforms.TransformType.GUI;
