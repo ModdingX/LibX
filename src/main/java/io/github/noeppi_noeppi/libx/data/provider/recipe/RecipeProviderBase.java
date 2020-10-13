@@ -32,7 +32,7 @@ public abstract class RecipeProviderBase extends RecipeProvider {
      * Creates four recipes like it's done with blocks, ingots and nuggets.
      */
     @SuppressWarnings("ConstantConditions")
-    private void makeBlockItemNugget(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot, IItemProvider nugget) {
+    public void makeBlockItemNugget(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot, IItemProvider nugget) {
 
         this.makeBlockItem(consumer, block, ingot);
 
@@ -56,7 +56,7 @@ public abstract class RecipeProviderBase extends RecipeProvider {
      * Creates two recipes like it's done with blocks and ingots or ingots and nuggets
      */
     @SuppressWarnings("ConstantConditions")
-    private void makeBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot) {
+    public void makeBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot) {
 
         ShapedRecipeBuilder.shapedRecipe(block)
                 .key('a', ingot)
