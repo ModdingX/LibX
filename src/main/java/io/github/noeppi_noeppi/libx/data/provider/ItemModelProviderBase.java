@@ -20,8 +20,8 @@ import java.util.Set;
  */
 public class ItemModelProviderBase extends ItemModelProvider {
 
-    private static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
-    private static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
+    public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
+    public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
 
     protected final ModX mod;
 
