@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.recipe;
+package io.github.noeppi_noeppi.libx.crafting.recipe;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.Blocks;
