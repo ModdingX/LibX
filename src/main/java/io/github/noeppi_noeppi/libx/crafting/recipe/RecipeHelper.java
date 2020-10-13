@@ -1,36 +1,30 @@
 package io.github.noeppi_noeppi.libx.crafting.recipe;
 
-import com.google.common.collect.Lists;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.world.World;
+import net.minecraft.item.crafting.RecipeManager;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-// TODO self descriptive method names + better documentation
 public class RecipeHelper {
 
     /**
-     * @param world      {@link World} to get the {@link net.minecraft.item.crafting.RecipeManager} from
-     * @param recipeType {@link IRecipeType} to filter which recipe type will be checked
-     * @param input      {@link ItemStack} which will be checked to fit
-     * @return If the input is in any recipe
+     * Gets whether an ItemStack is a valid input for at least one recipe of a given recipe type.
+     *
+     * @param rm The recipe manager to use. You can get one from a world.
      */
-    public static <X extends IRecipe<?>> boolean isItemValid(@Nullable World world, IRecipeType<X> recipeType, ItemStack input) {
-        if (world == null) return false;
-        Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes();
+    public static boolean isItemValidInput(RecipeManager rm, IRecipeType<?> recipeType, ItemStack stack) {
+        Collection<? extends IRecipe<?>> recipes = rm.getRecipes(recipeType).values();
         for (IRecipe<?> recipe : recipes) {
-            if (recipe.getType() == recipeType) {
-                for (Ingredient ingredient : recipe.getIngredients()) {
-                    for (ItemStack stack : ingredient.getMatchingStacks()) {
-                        if (stack.getItem() == input.getItem())
-                            return true;
-                    }
+            for (Ingredient ingredient : recipe.getIngredients()) {
+                if (ingredient.test(stack)) {
+                    return true;
                 }
             }
         }
@@ -38,103 +32,63 @@ public class RecipeHelper {
     }
 
     /**
-     * Checks if stacks are ingredients for the recipe
+     * Checks whether all the ingredients of a recipe are present in a list of ItemStacks. This
+     * does not check that all ingredients are on different slots.
      *
-     * @param stacks {@link List} of {@link ItemStack} which includes the stacks to be checked
-     * @param items  {@link Map} with {@link Item} item and {@link Integer} amount of all items needed for the recipe
-     * @param recipe The {@link IRecipe} to be checked
-     * @return If all items are contained in the stacks
+     * @param exactMatch When this is true this will return false if the stack list contains
+     *                   more items than the recipe requires.
      */
-    public static boolean checkIngredients(List<ItemStack> stacks, Map<Item, Integer> items, IRecipe<?> recipe) {
-        Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
-        for (int i = 0; i < recipe.getIngredients().size(); i++) {
-            Ingredient ingredient = recipe.getIngredients().get(i);
-            boolean done = false;
-            for (Ingredient ingredient1 : recipeIngredients.keySet()) {
-                if (ingredient.serialize().equals(ingredient1.serialize())) {
-                    recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
-                    done = true;
-                    break;
-                }
-            }
-            if (!done) recipeIngredients.put(ingredient, 1);
+    public static boolean matches(IRecipe<?> recipe, List<ItemStack> stacks, boolean exactMatch) {
+
+        ArrayList<Integer> countsLeft = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            countsLeft.add(stack.isEmpty() ? 0 : stack.getCount());
         }
 
-        for (ItemStack input : stacks) {
-            Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
-            if (remove != null) {
-                recipeIngredients.remove(remove);
-            }
-        }
-        return recipeIngredients.isEmpty();
-    }
-
-    /**
-     * Used to find the matching ingredient to an inventories {@link ItemStack}
-     *
-     * @param ingredients {@link Map} with the {@link Ingredient} ingredient and {@link Integer} amount to search the matching one
-     * @param items       {@link Map} with {@link Item} item and {@link Integer} amount of all items to be checked
-     * @param input       specific {@link ItemStack} to be tested
-     * @return matching {@link Ingredient}
-     */
-    @Nullable
-    public static Ingredient getMatchingIngredient(Map<Ingredient, Integer> ingredients, Map<Item, Integer> items, ItemStack input) {
-        for (Map.Entry<Ingredient, Integer> entry : ingredients.entrySet()) {
-            Ingredient ingredient = entry.getKey();
-            int count = entry.getValue();
-            if (ingredient.test(input)) {
-
-                for (Map.Entry<Item, Integer> itemEntry : items.entrySet()) {
-                    Item item = itemEntry.getKey();
-                    int itemCount = itemEntry.getValue();
-                    for (Ingredient.IItemList iItemList : ingredient.acceptedItems) {
-                        for (ItemStack stack : iItemList.getStacks()) {
-                            if (stack.getItem() == item) {
-                                if (itemCount >= count) {
-                                    return ingredient;
-                                }
-                            }
-                        }
+        ingredientLoop: for (Ingredient ingredient : recipe.getIngredients()) {
+            for (int i = 0; i < stacks.size(); i++) {
+                if (countsLeft.get(i) > 0) {
+                    if (ingredient.test(stacks.get(i))) {
+                        countsLeft.set(i, countsLeft.get(i) - 1);
+                        continue ingredientLoop;
                     }
                 }
             }
+            return false;
         }
-        return null;
+
+        return !exactMatch || countsLeft.stream().noneMatch(count -> count > 0);
     }
 
     /**
-     * @param stacks All {@link ItemStack}s from the inventory
-     * @return {@link Map} which includes the item and amount for all items in inventory
+     * Takes a list of ItemStacks and stacks them up so multiple ItemStacks that can be
+     * stacked are transformed into one.
+     *
+     * @param ignoreMaxStackSize Whether this should create ItemStacks with a stack size
+     *                           greater than the maximum.
      */
-    public static Map<Item, Integer> getInvItems(List<ItemStack> stacks) {
-        Map<Item, Integer> items = new HashMap<>();
-        stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
-        stacks.forEach(stack -> {
-            Item item = stack.getItem();
-            if (!items.containsKey(item)) {
-                items.put(item, stack.getCount());
-            } else {
-                int prevCount = items.get(item);
-                items.replace(item, prevCount, prevCount + stack.getCount());
-            }
-        });
-        return items;
-    }
-
-    /**
-     * @param list   {@link List} to remove from
-     * @param arrays indexes to remove
-     */
-    public static void removeFromList(List<?> list, int[]... arrays) {
-        List<Integer> toRemove = new ArrayList<>();
-        for (int[] array : arrays) {
-            for (int i : array) {
-                toRemove.add(i);
+    public List<ItemStack> stackUp(List<ItemStack> stacks, boolean ignoreMaxStackSize) {
+        List<ItemStack> stacked = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            if (!stack.isEmpty()) {
+                int itemsLeft = stack.getCount();
+                for (ItemStack used : stacked) {
+                    if (Container.areItemsAndTagsEqual(stack, used)) {
+                        int stackTransfer = ignoreMaxStackSize ? itemsLeft : Math.min(itemsLeft, used.getMaxStackSize() - used.getCount());
+                        if (stackTransfer < 0) {
+                            stackTransfer = 0;
+                        }
+                        used.grow(stackTransfer);
+                        itemsLeft -= stackTransfer;
+                    }
+                }
+                if (itemsLeft > 0) {
+                    ItemStack newStack = stack.copy();
+                    newStack.setCount(itemsLeft);
+                    stacked.add(newStack);
+                }
             }
         }
-        toRemove.sort(Comparator.naturalOrder());
-        for (int i : Lists.reverse(toRemove)) {
-            list.remove(i);
-        }
+        return Collections.unmodifiableList(stacked);
     }
 }

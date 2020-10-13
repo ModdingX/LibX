@@ -204,9 +204,20 @@ public class EffectIngredient extends Ingredient {
                 effects.add(new EffectInstance(potion, duration, amplifier));
             }
 
-            boolean extraEffects = json.get("extraEffects").getAsBoolean();
-            boolean higherAmplifier = json.get("higherAmplifier").getAsBoolean();
-            boolean higherDuration = json.get("higherDuration").getAsBoolean();
+            boolean extraEffects = false;
+            if (json.has("extraEffects")) {
+                extraEffects = json.get("extraEffects").getAsBoolean();
+            }
+
+            boolean higherAmplifier = true;
+            if (json.has("higherAmplifier")) {
+                higherAmplifier = json.get("higherAmplifier").getAsBoolean();
+            }
+
+            boolean higherDuration = true;
+            if (json.has("higherDuration")) {
+                higherDuration = json.get("higherDuration").getAsBoolean();
+            }
 
             return new EffectIngredient(potionItem, effects, extraEffects, higherAmplifier, higherDuration);
         }

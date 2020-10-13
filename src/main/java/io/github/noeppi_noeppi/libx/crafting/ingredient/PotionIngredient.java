@@ -103,7 +103,7 @@ public class PotionIngredient extends Ingredient {
 
     public static class Serializer implements IIngredientSerializer<PotionIngredient> {
 
-        public static final EffectIngredient.Serializer INSTANCE = new EffectIngredient.Serializer();
+        public static final Serializer INSTANCE = new Serializer();
 
         @Nonnull
         @Override
