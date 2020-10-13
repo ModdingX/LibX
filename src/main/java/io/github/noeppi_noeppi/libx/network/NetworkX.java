@@ -2,8 +2,10 @@ package io.github.noeppi_noeppi.libx.network;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.IndexedMessageCodec;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.Optional;
@@ -38,7 +40,18 @@ public abstract class NetworkX {
      * @param direction The network direction the packet should go.
      */
     protected <T> void register(NetworkHandler<T> handler, NetworkDirection direction) {
-        this.instance.registerMessage(this.discriminator++, handler.messageClass(), handler::encode, handler::decode, handler::handle, Optional.of(direction));
+        if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_CLIENT) {
+            DistExecutor.unsafeRunForDist(() -> () -> {
+                this.instance.registerMessage(this.discriminator++, handler.messageClass(), handler::encode, handler::decode, handler::handle, Optional.of(direction));
+                return null;
+            }, () -> () -> {
+                //this.instance.registerMessage(this.discriminator++, handler.messageClass(), handler::encode, handler::decode, (msg, ctx) -> {}, Optional.of(direction));
+                return null;
+
+            });
+        } else {
+            //this.instance.registerMessage(this.discriminator++, handler.messageClass(), handler::encode, handler::decode, handler::handle, Optional.of(direction));
+        }
     }
 
     /**
