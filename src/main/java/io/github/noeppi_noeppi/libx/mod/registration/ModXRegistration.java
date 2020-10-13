@@ -4,14 +4,19 @@ import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.EventBus;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * You should extends this instead of {@link ModX} if you want to use the alternative registration system
@@ -49,7 +54,14 @@ public abstract class ModXRegistration extends ModX {
     protected ModXRegistration(String modid, ItemGroup tab) {
         super(modid, tab);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistration);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegistry);
+
+        try {
+            Method method = EventBus.class.getDeclaredMethod("addListener", EventPriority.class, Predicate.class, Class.class, Consumer.class);
+            method.setAccessible(true);
+            method.invoke(FMLJavaModLoadingContext.get().getModEventBus(), EventPriority.NORMAL, (Predicate<Object>) obj -> true, RegistryEvent.Register.class, (Consumer<RegistryEvent.Register<?>>) this::onRegistry);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("could not add generic listener to listen all registry events for mod " + modid + ".", e);
+        }
     }
 
     /**
