@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[32,)"
+loaderVersion="[34,)"
 license="APACHE-2.0"
 issueTrackerURL="https://github.com/noeppi-noeppi/LibX/issues"
 
@@ -16,7 +16,7 @@ A library mod for minecraft.
 [[dependencies.libx]]
     modId="forge"
     mandatory=true
-    versionRange="[34,)"
+    versionRange="[34.1,)"
     ordering="NONE"
     side="BOTH"
 
