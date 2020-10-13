@@ -14,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building'
-                sh './gradlew build'
+                sh './gradlew build' // add 'curseforge' to publish on curseforge
             }
         }
 
