@@ -14,6 +14,7 @@ import java.util.Set;
  */
 public class BlockBase extends Block implements Registerable {
 
+    protected final ModX mod;
     private final Item item;
 
     public BlockBase(ModX mod, Properties properties) {
@@ -22,6 +23,7 @@ public class BlockBase extends Block implements Registerable {
 
     public BlockBase(ModX mod, Properties properties, Item.Properties itemProperties) {
         super(properties);
+        this.mod = mod;
         if (mod.tab != null) {
             itemProperties.group(mod.tab);
         }

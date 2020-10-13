@@ -27,7 +27,6 @@ public abstract class ModX {
      */
     public final Logger logger;
 
-    @Nullable
     public final ItemGroup tab;
 
     private final List<Runnable> setupTasks = new ArrayList<>();

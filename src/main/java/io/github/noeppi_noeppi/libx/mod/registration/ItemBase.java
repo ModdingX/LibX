@@ -11,6 +11,8 @@ import java.util.function.Supplier;
  */
 public class ItemBase extends Item {
 
+    protected final ModX mod;
+
     public ItemBase(ModX mod, Properties properties) {
         super(((Supplier<Properties>) () -> {
             if (mod.tab != null) {
@@ -18,5 +20,6 @@ public class ItemBase extends Item {
             }
             return properties;
         }).get());
+        this.mod = mod;
     }
 }
