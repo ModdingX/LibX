@@ -45,19 +45,19 @@ minecraft {
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-    createRunConfig("Client")
-    createRunConfig("Server")
-    createRunConfig("Data", { RunConfig run ->
+    createRunConfig("client")
+    createRunConfig("server")
+    createRunConfig("data", { RunConfig run ->
         run.args "--mod", modid, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources"), "--existing", file("libs/resources")
     })
 }
 
 def createRunConfig(String name, Closure extra = {}) {
     minecraft.runs.create(name) { RunConfig run ->
-        run.workingDirectory project.file("run" + name)
+        run.workingDirectory project.file("run" + name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase())
         run.property "forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP"
         run.jvmArg "-Dmixin.env.disableRefMap=true"
-        run.property "forge.logging.console.level", "info"
+        run.property "forge.logging.console.level", "debug"
         run.mods.create(modid) { ModConfig mod ->
             source sourceSets.main
         }
