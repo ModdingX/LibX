@@ -59,7 +59,7 @@ public class ItemModelProviderBase extends ItemModelProvider {
             Item item = ForgeRegistries.ITEMS.getValue(id);
             if (item != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
                 if (item instanceof BlockItem) {
-                    this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
+                    this.defaultBlock(id, (BlockItem) item);
                 } else if (this.handheld.contains(item)) {
                     this.withExistingParent(id.getPath(), HANDHELD).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
                 } else {
@@ -67,5 +67,9 @@ public class ItemModelProviderBase extends ItemModelProvider {
                 }
             }
         }
+    }
+
+    protected void defaultBlock(ResourceLocation id, BlockItem item) {
+        this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
     }
 }
