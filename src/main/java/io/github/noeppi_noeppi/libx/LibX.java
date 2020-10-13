@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient;
+import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -26,6 +27,7 @@ public class LibX extends ModX {
     protected void setup(FMLCommonSetupEvent event) {
         CraftingHelper.register(new ResourceLocation(this.modid, "effect"), EffectIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(this.modid, "potion"), PotionIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(this.modid, "nbt"), NbtIngredient.Serializer.INSTANCE);
     }
 
     @Override

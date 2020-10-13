@@ -6,13 +6,12 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -56,10 +55,9 @@ public class ItemModelProviderBase extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        for (Map.Entry<ResourceLocation, Item> entry : ForgeRegistries.ITEMS.getEntries()) {
-            ResourceLocation id = entry.getKey();
-            Item item = entry.getValue();
-            if (this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
+        for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys()) {
+            Item item = ForgeRegistries.ITEMS.getValue(id);
+            if (item != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
                 if (item instanceof BlockItem) {
                     this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
                 } else if (this.handheld.contains(item)) {

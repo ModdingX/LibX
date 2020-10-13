@@ -7,6 +7,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -62,10 +63,9 @@ public class BlockStateProviderBase extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
-            ResourceLocation id = entry.getKey();
-            Block block = entry.getValue();
-            if (this.mod.modid.equals(id.getNamespace()) && !manualState.contains(block)) {
+        for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
+            Block block = ForgeRegistries.BLOCKS.getValue(id);
+            if (block != null && this.mod.modid.equals(id.getNamespace()) && !manualState.contains(block)) {
                 if (existingModel.contains(block)) {
                     this.defaultState(id, block, this.models().getExistingFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
                 } else if (customModel.containsKey(block)) {

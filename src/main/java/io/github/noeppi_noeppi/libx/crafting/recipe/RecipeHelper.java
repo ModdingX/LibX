@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.crafting.recipe;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -20,7 +21,8 @@ public class RecipeHelper {
      * @param rm The recipe manager to use. You can get one from a world.
      */
     public static boolean isItemValidInput(RecipeManager rm, IRecipeType<?> recipeType, ItemStack stack) {
-        Collection<? extends IRecipe<?>> recipes = rm.getRecipes(recipeType).values();
+        //noinspection unchecked
+        Collection<? extends IRecipe<?>> recipes = rm.getRecipes((IRecipeType<IRecipe<IInventory>>) recipeType).values();
         for (IRecipe<?> recipe : recipes) {
             for (Ingredient ingredient : recipe.getIngredients()) {
                 if (ingredient.test(stack)) {

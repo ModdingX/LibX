@@ -73,10 +73,9 @@ public class BlockLootProviderBase implements IDataProvider {
     public void act(@Nonnull DirectoryCache cache) throws IOException {
         Map<ResourceLocation, LootTable.Builder> tables = new HashMap<>();
 
-        for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
-            ResourceLocation id = entry.getKey();
-            Block block = entry.getValue();
-            if (this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(block)) {
+        for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
+            Block block = ForgeRegistries.BLOCKS.getValue(id);
+            if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(block)) {
                 Function<Block, LootTable.Builder> loot = this.functionMap.getOrDefault(block, BlockLootProviderBase::regular);
                 tables.put(id, loot.apply(block));
             }

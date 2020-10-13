@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nonnull;
 
@@ -13,8 +14,8 @@ public class ItemTagProviderBase extends ItemTagsProvider {
 
     protected final ModX mod;
 
-    public ItemTagProviderBase(ModX mod, DataGenerator generatorIn, BlockTagProviderBase blockTags) {
-        super(generatorIn, blockTags);
+    public ItemTagProviderBase(ModX mod, DataGenerator generatorIn, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
+        super(generatorIn, blockTags, mod.modid, fileHelper);
         this.mod = mod;
     }
 

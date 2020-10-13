@@ -39,7 +39,7 @@ public class NbtIngredient extends Ingredient {
 
     @Override
     public boolean test(@Nullable ItemStack input) {
-        if (input == null || input.getItem() != this.stack.getItem())
+        if (input == null || this.stack.isEmpty() || input.getItem() != this.stack.getItem())
             return false;
         if (input.isDamageable() != this.stack.isDamageable() || (this.stack.isDamageable() && input.getDamage() != this.stack.getDamage())) {
             return false;

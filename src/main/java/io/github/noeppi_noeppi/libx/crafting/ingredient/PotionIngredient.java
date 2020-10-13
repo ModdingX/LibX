@@ -57,7 +57,7 @@ public class PotionIngredient extends Ingredient {
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
-        if (stack == null || stack.getItem() != this.potionItem) {
+        if (stack == null || stack.isEmpty() || stack.getItem() != this.potionItem) {
             return false;
         }
         Potion itemPotion = PotionUtils.getPotionFromItem(stack);
@@ -88,6 +88,11 @@ public class PotionIngredient extends Ingredient {
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
         return PotionIngredient.Serializer.INSTANCE;
+    }
+
+    @Override
+    public boolean hasNoMatchingItems() {
+        return this.potionItem == Items.AIR;
     }
 
     @Nonnull
