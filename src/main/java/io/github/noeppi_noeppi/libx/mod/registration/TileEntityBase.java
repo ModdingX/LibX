@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.mod.registration;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -59,11 +60,12 @@ public class TileEntityBase extends TileEntity {
 
     /**
      * This will update the tile entity to all clients that are tracking it when called on the server
-     * using {@link io.github.noeppi_noeppi.libx.impl.network.NetworkImpl#updateTE(World, BlockPos)}.
+     * using {@link io.github.noeppi_noeppi.libx.impl.network.NetworkImpl#updateTE(World, BlockPos)}
+     * at the end of this tick.
      */
     public void markDispatchable() {
         if (this.world != null && this.pos != null && !this.world.isRemote) {
-            LibX.getNetwork().updateTE(this.world, this.pos);
+            TileEntityUpdateQueue.scheduleUpdate(this.world, this.pos);
         }
     }
 }
