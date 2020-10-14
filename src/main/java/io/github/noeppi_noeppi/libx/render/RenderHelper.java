@@ -1,13 +1,17 @@
 package io.github.noeppi_noeppi.libx.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.noeppi_noeppi.libx.LibX;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Some utilities for rendering in general.
@@ -111,5 +115,31 @@ public class RenderHelper {
     public static void resetColor() {
         //noinspection deprecation
         RenderSystem.color3f(1, 1, 1);
+    }
+
+    /**
+     * Renders a text with a gray semi-transparent background.
+     */
+    public static void renderText(String text, MatrixStack matrixStack, IRenderTypeBuffer buffer) {
+        float widthHalf = Minecraft.getInstance().fontRenderer.getStringWidth(text) / 2f;
+        float heightHalf = Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2f;
+
+        matrixStack.push();
+        matrixStack.translate(-(widthHalf + 2), -(heightHalf + 2), 0);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        //noinspection deprecation
+        GlStateManager.color4f(0.2f, 0.2f, 0.2f, 0.8f);
+        Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_WHITE);
+
+        AbstractGui.blit(matrixStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
+
+        //noinspection deprecation
+        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.disableBlend();
+        matrixStack.translate(widthHalf + 2, heightHalf + 2, 10);
+
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, text, -widthHalf, -heightHalf, 0xFFFFFF);
+        matrixStack.pop();
     }
 }

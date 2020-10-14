@@ -2,12 +2,16 @@ package io.github.noeppi_noeppi.libx.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
@@ -74,6 +78,66 @@ public class RenderHelperItem {
 
         for (BakedQuad bakedquad : quads) {
             buffer.addVertexData(entry, bakedquad, r, g, b, light, overlay, true);
+        }
+    }
+
+    /**
+     * Renders an item into a gui. This allows to set the size of the item and whether the
+     * amount should be included.
+     */
+    public static void renderItemGui(MatrixStack matrixStack, IRenderTypeBuffer buffer, ItemStack stack, int x, int y, int size, boolean includeAmount) {
+        if (!stack.isEmpty()) {
+            IBakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, null, Minecraft.getInstance().player);
+
+            matrixStack.push();
+            Minecraft.getInstance().getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+            //noinspection ConstantConditions
+            Minecraft.getInstance().getTextureManager().getTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE).setBlurMipmapDirect(false, false);
+
+            //noinspection deprecation
+            RenderSystem.enableAlphaTest();
+            RenderSystem.defaultAlphaFunc();
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            //noinspection deprecation
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+            matrixStack.translate(x, y, 50);
+            matrixStack.scale(size / 16f, size / 16f, 1);
+            matrixStack.translate(8.0F, 8.0F, 0.0F);
+            matrixStack.scale(1.0F, -1.0F, 1.0F);
+            matrixStack.scale(16.0F, 16.0F, 16.0F);
+
+            if (!model.isSideLit()) {
+                net.minecraft.client.renderer.RenderHelper.setupGuiFlatDiffuseLighting();
+            }
+
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GUI, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, model);
+            ((IRenderTypeBuffer.Impl) buffer).finish();
+
+            RenderSystem.enableDepthTest();
+
+            if (!model.isSideLit()) {
+                net.minecraft.client.renderer.RenderHelper.setupGui3DDiffuseLighting();
+            }
+
+            //noinspection deprecation
+            RenderSystem.disableAlphaTest();
+            //noinspection deprecation
+            RenderSystem.disableRescaleNormal();
+
+            matrixStack.pop();
+
+            if (includeAmount && stack.getCount() > 1) {
+                matrixStack.push();
+                matrixStack.translate(x, y, 90);
+
+                FontRenderer fr = Minecraft.getInstance().fontRenderer;
+                String text = Integer.toString(stack.getCount());
+                fr.renderString(text, (float)(17 - fr.getStringWidth(text)), 9, 16777215, true, matrixStack.getLast().getMatrix(), buffer, false, 0, 15728880);
+
+                matrixStack.pop();
+            }
         }
     }
 }

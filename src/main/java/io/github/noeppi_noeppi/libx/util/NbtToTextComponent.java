@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.util.text;
+package io.github.noeppi_noeppi.libx.util;
 
 import net.minecraft.nbt.*;
 import net.minecraft.util.text.IFormattableTextComponent;
