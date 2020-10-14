@@ -63,10 +63,14 @@ public class ItemModelProviderBase extends ItemModelProvider {
                 } else if (this.handheld.contains(item)) {
                     this.withExistingParent(id.getPath(), HANDHELD).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
                 } else {
-                    this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
+                    this.defaultItem(id, item);
                 }
             }
         }
+    }
+
+    protected void defaultItem(ResourceLocation id, Item item) {
+        this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
     }
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
