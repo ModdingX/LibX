@@ -49,7 +49,7 @@ public abstract class NetworkX {
         if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_CLIENT) {
             realHandler = DistExecutor.unsafeRunForDist(() -> handler, () -> () -> (msg, ctx) -> {});
         } else {
-            realHandler = DistExecutor.unsafeRunForDist(() -> () -> (msg, ctx) -> {}, () -> handler);
+            realHandler = handler.get();
         }
         this.instance.registerMessage(this.discriminator++, serializer.messageClass(), serializer::encode, serializer::decode, realHandler, Optional.of(direction));
     }

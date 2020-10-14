@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -35,7 +36,7 @@ public interface Registerable {
      * Do stuff needed on the client
      */
     @OnlyIn(Dist.CLIENT)
-    default void registerClient(String id) {
+    default void registerClient(ResourceLocation id) {
 
     }
 }
