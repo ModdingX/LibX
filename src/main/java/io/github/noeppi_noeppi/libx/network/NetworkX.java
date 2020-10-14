@@ -4,11 +4,14 @@ import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.IndexedMessageCodec;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * A class implementing network logic. You should subclass it and create an instance in your
@@ -37,21 +40,18 @@ public abstract class NetworkX {
     /**
      * Registers a packet handler.
      *
+     * @param handler The double lambda is required to prevent classloading on the server.
      * @param direction The network direction the packet should go.
      */
-    protected <T> void register(NetworkHandler<T> handler, NetworkDirection direction) {
+    protected <T> void register(PacketSerializer<T> serializer, Supplier<BiConsumer<T, Supplier<NetworkEvent.Context>>> handler, NetworkDirection direction) {
+        Objects.requireNonNull(direction);
+        BiConsumer<T, Supplier<NetworkEvent.Context>> realHandler;
         if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_CLIENT) {
-            DistExecutor.unsafeRunForDist(() -> () -> {
-                this.instance.registerMessage(this.discriminator++, handler.messageClass(), handler::encode, handler::decode, handler::handle, Optional.of(direction));
-                return null;
-            }, () -> () -> {
-                //this.instance.registerMessage(this.discriminator++, handler.messageClass(), handler::encode, handler::decode, (msg, ctx) -> {}, Optional.of(direction));
-                return null;
-
-            });
+            realHandler = DistExecutor.unsafeRunForDist(() -> handler, () -> () -> (msg, ctx) -> {});
         } else {
-            //this.instance.registerMessage(this.discriminator++, handler.messageClass(), handler::encode, handler::decode, handler::handle, Optional.of(direction));
+            realHandler = DistExecutor.unsafeRunForDist(() -> () -> (msg, ctx) -> {}, () -> handler);
         }
+        this.instance.registerMessage(this.discriminator++, serializer.messageClass(), serializer::encode, serializer::decode, realHandler, Optional.of(direction));
     }
 
     /**

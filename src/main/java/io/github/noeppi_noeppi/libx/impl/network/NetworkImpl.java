@@ -26,8 +26,8 @@ public final class NetworkImpl extends NetworkX {
 
     @Override
     protected void registerPackets() {
-        this.register(new TeUpdateHandler(), NetworkDirection.PLAY_TO_CLIENT);
-        this.register(new TeRequestHandler(), NetworkDirection.PLAY_TO_SERVER);
+        this.register(new TeUpdateSerializer(), () -> TeUpdateHandler::handle, NetworkDirection.PLAY_TO_CLIENT);
+        this.register(new TeRequestSerializer(), () -> TeRequestHandler::handle, NetworkDirection.PLAY_TO_SERVER);
     }
 
     /**
@@ -53,7 +53,7 @@ public final class NetworkImpl extends NetworkX {
             ResourceLocation id = te.getType().getRegistryName();
             if (id == null)
                 return;
-            this.instance.send(target, new TeUpdateHandler.TeUpdateMessage(pos, id, nbt));
+            this.instance.send(target, new TeUpdateSerializer.TeUpdateMessage(pos, id, nbt));
         }
     }
 
@@ -65,7 +65,7 @@ public final class NetworkImpl extends NetworkX {
      */
     public void requestTE(World world, BlockPos pos) {
         if (world.isRemote) {
-            this.instance.sendToServer(new TeRequestHandler.TeRequestMessage(pos));
+            this.instance.sendToServer(new TeRequestSerializer.TeRequestMessage(pos));
         }
     }
 }
