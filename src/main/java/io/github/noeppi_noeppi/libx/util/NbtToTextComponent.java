@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class NbtToTextComponent {
 
     /**
-     * As teh fancy colored nbt text components are only availablefor blocks, entities
+     * As the fancy colored nbt text components are only available for blocks, entities
      * and world storage by default, this translates a piece of NBT to a colored text
      * component.
      */

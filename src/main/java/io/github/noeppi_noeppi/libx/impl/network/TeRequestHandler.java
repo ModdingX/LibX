@@ -21,5 +21,6 @@ public class TeRequestHandler {
                 LibX.getNetwork().updateTE(PacketDistributor.PLAYER.with(() -> sender), world, msg.pos);
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

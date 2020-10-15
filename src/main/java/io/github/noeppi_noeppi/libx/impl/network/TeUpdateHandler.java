@@ -19,5 +19,6 @@ public class TeUpdateHandler {
                 te.handleUpdateTag(world.getBlockState(msg.pos), msg.nbt);
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }
