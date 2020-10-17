@@ -110,6 +110,10 @@ public class PotionIngredient extends Ingredient {
 
         public static final Serializer INSTANCE = new Serializer();
 
+        private Serializer() {
+
+        }
+
         @Nonnull
         @Override
         public PotionIngredient parse(@Nonnull PacketBuffer buffer) {

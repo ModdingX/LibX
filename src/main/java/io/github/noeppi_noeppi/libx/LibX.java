@@ -31,14 +31,14 @@ public class LibX extends ModX {
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
         MinecraftForge.EVENT_BUS.addListener(TileEntityUpdateQueue::tick);
         MinecraftForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
+
+        CraftingHelper.register(new ResourceLocation(this.modid, "effect"), EffectIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(this.modid, "potion"), PotionIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(this.modid, "nbt"), NbtIngredient.Serializer.INSTANCE);
     }
 
     @Override
     protected void setup(FMLCommonSetupEvent event) {
-        CraftingHelper.register(new ResourceLocation(this.modid, "effect"), EffectIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(this.modid, "potion"), PotionIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(this.modid, "nbt"), NbtIngredient.Serializer.INSTANCE);
-
         CommandUtil.registerGenericCommandArgument(this.modid + "_upperenum", UppercaseEnumArgument.class, new UppercaseEnumArgument.Serializer());
     }
 

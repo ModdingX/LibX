@@ -162,6 +162,10 @@ public class EffectIngredient extends Ingredient {
 
         public static final Serializer INSTANCE = new Serializer();
 
+        private Serializer() {
+
+        }
+
         @Nonnull
         @Override
         public EffectIngredient parse(@Nonnull PacketBuffer buffer) {

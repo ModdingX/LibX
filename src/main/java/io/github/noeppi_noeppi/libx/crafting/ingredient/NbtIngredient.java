@@ -93,6 +93,10 @@ public class NbtIngredient extends Ingredient {
 
         public static final Serializer INSTANCE = new Serializer();
 
+        private Serializer() {
+
+        }
+
         @Nonnull
         @Override
         public NbtIngredient parse(PacketBuffer buffer) {
