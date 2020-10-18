@@ -29,6 +29,25 @@ public abstract class RecipeProviderBase extends RecipeProvider {
     protected abstract void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer);
 
     /**
+     * Gets a resource location with the namespace being the modid of the mod given in constructor
+     * and the path being the registry path of the given item.
+     */
+    protected ResourceLocation loc(IItemProvider item) {
+        //noinspection ConstantConditions
+        return new ResourceLocation(mod.modid, item.asItem().getRegistryName().getPath());
+    }
+
+    /**
+     * Gets a resource location with the namespace being the modid of the mod given in constructor
+     * and the path being the registry path of the given item followed by an underscore and the
+     * given suffix.
+     */
+    protected ResourceLocation loc(IItemProvider item, String suffix) {
+        //noinspection ConstantConditions
+        return new ResourceLocation(mod.modid, item.asItem().getRegistryName().getPath() + "_" + suffix);
+    }
+
+    /**
      * Creates four recipes like it's done with blocks, ingots and nuggets.
      */
     @SuppressWarnings("ConstantConditions")
