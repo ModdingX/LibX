@@ -34,7 +34,7 @@ public abstract class RecipeProviderBase extends RecipeProvider {
      */
     protected ResourceLocation loc(IItemProvider item) {
         //noinspection ConstantConditions
-        return new ResourceLocation(mod.modid, item.asItem().getRegistryName().getPath());
+        return new ResourceLocation(this.mod.modid, item.asItem().getRegistryName().getPath());
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class RecipeProviderBase extends RecipeProvider {
      */
     protected ResourceLocation loc(IItemProvider item, String suffix) {
         //noinspection ConstantConditions
-        return new ResourceLocation(mod.modid, item.asItem().getRegistryName().getPath() + "_" + suffix);
+        return new ResourceLocation(this.mod.modid, item.asItem().getRegistryName().getPath() + "_" + suffix);
     }
 
     /**
