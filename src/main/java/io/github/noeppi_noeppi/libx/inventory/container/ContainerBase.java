@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
  * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number.
  */
 public abstract class ContainerBase<T extends TileEntity> extends Container {
+
     public final T tile;
     public final PlayerEntity player;
     public final IItemHandler playerInventory;
