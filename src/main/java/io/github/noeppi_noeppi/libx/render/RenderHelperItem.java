@@ -39,20 +39,40 @@ public class RenderHelperItem {
             matrixStack.push();
             matrixStack.translate(-0.5D, -0.5D, -0.5D);
 
+            if (alpha < 1) {
+                RenderSystem.enableBlend();
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            }
+
             if (!model.isBuiltInRenderer() && (stack.getItem() != Items.TRIDENT || isFixed)) {
                 RenderType type = RenderTypeLookup.func_239219_a_(stack, true);
                 if (isGui && Objects.equals(type, Atlases.getTranslucentCullBlockType())) {
                     type = Atlases.getTranslucentCullBlockType();
+                }
+                if (alpha < 1) {
+                    if (Objects.equals(type, RenderType.getSolid())) {
+                        type = RenderType.getTranslucentNoCrumbling();
+                    } else if (Objects.equals(type, RenderType.getCutout())) {
+                        type = RenderType.getCutoutMipped();
+                    } else if (Objects.equals(type, Atlases.getSolidBlockType())) {
+                        type = Atlases.getTranslucentCullBlockType();
+                    } else if (Objects.equals(type, Atlases.getCutoutBlockType())) {
+                        type = Atlases.getTranslucentCullBlockType();
+                    }
                 }
 
                 IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, type, true, stack.hasEffect());
                 renderTintedModel(model, light, overlay, matrixStack, ivertexbuilder, r, g, b, alpha);
             } else {
                 //noinspection deprecation
-                GlStateManager.color4f(r, g, b, 1);
+                GlStateManager.color4f(r, g, b, alpha);
                 stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, transformType, matrixStack, buffer, light, overlay);
                 //noinspection deprecation
                 GlStateManager.color4f(1, 1, 1, 1);
+            }
+
+            if (alpha < 1) {
+                RenderSystem.disableBlend();
             }
 
             matrixStack.pop();
