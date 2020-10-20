@@ -30,16 +30,16 @@ import java.util.Set;
  * This block registers a container to it'S tile entity and handles the gui opening when the
  * block is right clicked. You still need to manually register the screen on the client.
  */
-public class BlockGUI<T extends TileEntity> extends BlockTE<T> {
+public class BlockGUI<T extends TileEntity, C extends ContainerBase<T>> extends BlockTE<T> {
 
-    public final ContainerType<ContainerBase<T>> container;
+    public final ContainerType<C> container;
 
-    public BlockGUI(ModX mod, Class<T> teClass, ContainerType<ContainerBase<T>> container, Properties properties) {
+    public BlockGUI(ModX mod, Class<T> teClass, ContainerType<C> container, Properties properties) {
         super(mod, teClass, properties);
         this.container = container;
     }
 
-    public BlockGUI(ModX mod, Class<T> teClass, ContainerType<ContainerBase<T>> container, Properties properties, Item.Properties itemProperties) {
+    public BlockGUI(ModX mod, Class<T> teClass, ContainerType<C> container, Properties properties, Item.Properties itemProperties) {
         super(mod, teClass, properties, itemProperties);
         this.container = container;
     }
