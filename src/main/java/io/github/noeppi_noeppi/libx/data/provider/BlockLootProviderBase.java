@@ -76,7 +76,7 @@ public class BlockLootProviderBase implements IDataProvider {
         for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
             Block block = ForgeRegistries.BLOCKS.getValue(id);
             if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(block)) {
-                Function<Block, LootTable.Builder> loot = this.functionMap.getOrDefault(block, BlockLootProviderBase::regular);
+                Function<Block, LootTable.Builder> loot = this.functionMap.getOrDefault(block, this::defaultBehavior);
                 tables.put(id, loot.apply(block));
             }
         }
@@ -92,18 +92,19 @@ public class BlockLootProviderBase implements IDataProvider {
     }
 
     /**
-     * Creates an empty loot table for the given block.
+     * Creates an empty loot table for the given block. Should be called in constructor.
      */
-    public static LootTable.Builder empty(Block b) {
-        return LootTable.builder();
+    public void empty(Block b) {
+        this.customLootTable(b, LootTable.builder());
     }
 
     /**
-     * Creates a loot table that copies NBT-Data from a tile entity into the dropped item
+     * Creates a loot table that copies NBT-Data from a tile entity into the dropped item.
+     * Should be called in constructor.
      *
      * @param tags The toplevel tags of the tile entity to be copied.
      */
-    public static LootTable.Builder copyNBT(Block b, String... tags) {
+    public void copyNBT(Block b, String... tags) {
         LootEntry.Builder<?> entry = ItemLootEntry.builder(b);
         CopyNbt.Builder func = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);
         for (String tag : tags) {
@@ -112,13 +113,14 @@ public class BlockLootProviderBase implements IDataProvider {
         LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
                 .acceptCondition(SurvivesExplosion.builder())
                 .acceptFunction(func);
-        return LootTable.builder().addLootPool(pool);
+        this.customLootTable(b, LootTable.builder().addLootPool(pool));
     }
 
     /**
-     * Creates a default loot table for the given block.
+     * Creates a default loot table for the given block. Can be overridden to alter
+     * default behaviour.
      */
-    public static LootTable.Builder regular(Block b) {
+    protected LootTable.Builder defaultBehavior(Block b) {
         LootEntry.Builder<?> entry = ItemLootEntry.builder(b);
         LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
                 .acceptCondition(SurvivesExplosion.builder());
