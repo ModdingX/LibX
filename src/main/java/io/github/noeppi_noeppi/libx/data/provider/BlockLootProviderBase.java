@@ -24,9 +24,9 @@ import java.util.function.Function;
 
 /**
  * A base class for block loot provider. When overriding this you should call the {@code customLootTable} methods in
- * constructor to adjust the loot tables. Every block of you mod that is left untouched will get a default loot table.
+ * {@code setup} to adjust the loot tables. Every block of you mod that is left untouched will get a default loot table.
  */
-public class BlockLootProviderBase implements IDataProvider {
+public abstract class BlockLootProviderBase implements IDataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -71,6 +71,8 @@ public class BlockLootProviderBase implements IDataProvider {
 
     @Override
     public void act(@Nonnull DirectoryCache cache) throws IOException {
+        this.setup();
+
         Map<ResourceLocation, LootTable.Builder> tables = new HashMap<>();
 
         for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
@@ -86,6 +88,8 @@ public class BlockLootProviderBase implements IDataProvider {
             IDataProvider.save(GSON, cache, LootTableManager.toJson(e.getValue().setParameterSet(LootParameterSets.BLOCK).build()), path);
         }
     }
+
+    protected abstract void setup();
 
     private static Path getPath(Path root, ResourceLocation id) {
         return root.resolve("data/" + id.getNamespace() + "/loot_tables/blocks/" + id.getPath() + ".json");

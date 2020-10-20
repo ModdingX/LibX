@@ -16,9 +16,9 @@ import java.util.Set;
 
 /**
  * A base class for item model provider. When overriding this you should call the {@code handheld} and
- * {@code manualModel} methods in constructor.
+ * {@code manualModel} methods in {@code setup}.
  */
-public class ItemModelProviderBase extends ItemModelProvider {
+public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
@@ -55,6 +55,8 @@ public class ItemModelProviderBase extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        this.setup();
+
         for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys()) {
             Item item = ForgeRegistries.ITEMS.getValue(id);
             if (item != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
@@ -68,6 +70,8 @@ public class ItemModelProviderBase extends ItemModelProvider {
             }
         }
     }
+
+    protected abstract void setup();
 
     protected void defaultItem(ResourceLocation id, Item item) {
         this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));

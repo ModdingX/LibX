@@ -18,10 +18,11 @@ import java.util.Set;
 
 /**
  * A base class for block state and model provider. When overriding this you should call the {@code manualState}
- * and {@code manualModel} methods in constructor. Another thing you can do is override {@code defaultState} and
+ * and {@code manualModel} methods in {@code setup}. Unlike the other provider this has an extra method
+ * because custom models would not generate if not done there. Another thing you can do is override {@code defaultState} and
  * {@code defaultModel} to adjust the state and model depending on the block.
  */
-public class BlockStateProviderBase extends BlockStateProvider {
+public abstract class BlockStateProviderBase extends BlockStateProvider {
 
     protected final ModX mod;
 
@@ -62,7 +63,9 @@ public class BlockStateProviderBase extends BlockStateProvider {
     }
 
     @Override
-    protected void registerStatesAndModels() {
+    protected final void registerStatesAndModels() {
+        this.setup();
+
         for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
             Block block = ForgeRegistries.BLOCKS.getValue(id);
             if (block != null && this.mod.modid.equals(id.getNamespace()) && !manualState.contains(block)) {
@@ -76,6 +79,8 @@ public class BlockStateProviderBase extends BlockStateProvider {
             }
         }
     }
+
+    protected abstract void setup();
 
     /**
      * Creates a block state for the given block using the given model. The default implementation checks whether
