@@ -28,7 +28,7 @@ public class RenderHelperItem {
     /**
      * Renders an item tinted in the given color.
      */
-    public static void renderItemTinted(ItemStack stack, ItemCameraTransforms.TransformType transformType, int light, int overlay, MatrixStack matrixStack, IRenderTypeBuffer buffer, float r, float g, float b) {
+    public static void renderItemTinted(ItemStack stack, ItemCameraTransforms.TransformType transformType, int light, int overlay, MatrixStack matrixStack, IRenderTypeBuffer buffer, float r, float g, float b, float alpha) {
         if (!stack.isEmpty()) {
             boolean isGui = transformType == ItemCameraTransforms.TransformType.GUI;
             boolean isFixed = isGui || transformType == ItemCameraTransforms.TransformType.GROUND || transformType == ItemCameraTransforms.TransformType.FIXED;
@@ -46,7 +46,7 @@ public class RenderHelperItem {
                 }
 
                 IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, type, true, stack.hasEffect());
-                renderTintedModel(model, light, overlay, matrixStack, ivertexbuilder, r, g, b);
+                renderTintedModel(model, light, overlay, matrixStack, ivertexbuilder, r, g, b, alpha);
             } else {
                 //noinspection deprecation
                 GlStateManager.color4f(r, g, b, 1);
@@ -59,25 +59,25 @@ public class RenderHelperItem {
         }
     }
 
-    private static void renderTintedModel(IBakedModel model, int light, int overlay, MatrixStack matrixStack, IVertexBuilder buffer, float r, float g, float b) {
+    private static void renderTintedModel(IBakedModel model, int light, int overlay, MatrixStack matrixStack, IVertexBuilder buffer, float r, float g, float b, float alpha) {
         Random random = new Random();
 
         for (Direction direction : Direction.values()) {
             random.setSeed(42);
             //noinspection deprecation
-            renderTintedQuads(matrixStack, buffer, model.getQuads(null, direction, random), light, overlay, r, g, b);
+            renderTintedQuads(matrixStack, buffer, model.getQuads(null, direction, random), light, overlay, r, g, b, alpha);
         }
 
         random.setSeed(42);
         //noinspection deprecation
-        renderTintedQuads(matrixStack, buffer, model.getQuads(null, null, random), light, overlay, r, g, b);
+        renderTintedQuads(matrixStack, buffer, model.getQuads(null, null, random), light, overlay, r, g, b, alpha);
     }
 
-    private static void renderTintedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, int light, int overlay, float r, float g, float b) {
+    private static void renderTintedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, int light, int overlay, float r, float g, float b, float alpha) {
         MatrixStack.Entry entry = matrixStack.getLast();
 
         for (BakedQuad bakedquad : quads) {
-            buffer.addVertexData(entry, bakedquad, r, g, b, light, overlay, true);
+            buffer.addVertexData(entry, bakedquad, r, g, b, alpha, light, overlay, true);
         }
     }
 
@@ -86,6 +86,14 @@ public class RenderHelperItem {
      * amount should be included.
      */
     public static void renderItemGui(MatrixStack matrixStack, IRenderTypeBuffer buffer, ItemStack stack, int x, int y, int size, boolean includeAmount) {
+        renderItemGui(matrixStack, buffer, stack, x, y, size, includeAmount, 1, 1, 1, 1);
+    }
+
+    /**
+     * Renders an item into a gui. This allows to set the size of the item and whether the
+     * amount should be included.
+     */
+    public static void renderItemGui(MatrixStack matrixStack, IRenderTypeBuffer buffer, ItemStack stack, int x, int y, int size, boolean includeAmount, float r, float g, float b, float alpha) {
         if (!stack.isEmpty()) {
             IBakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, null, Minecraft.getInstance().player);
 
@@ -112,7 +120,7 @@ public class RenderHelperItem {
                 net.minecraft.client.renderer.RenderHelper.setupGuiFlatDiffuseLighting();
             }
 
-            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GUI, false, matrixStack, buffer, 15728880, OverlayTexture.NO_OVERLAY, model);
+            renderItemTinted(stack, ItemCameraTransforms.TransformType.GUI, 0xf000f0, OverlayTexture.NO_OVERLAY, matrixStack, buffer, r, g, b, alpha);
             ((IRenderTypeBuffer.Impl) buffer).finish();
 
             RenderSystem.enableDepthTest();
@@ -134,7 +142,7 @@ public class RenderHelperItem {
 
                 FontRenderer fr = Minecraft.getInstance().fontRenderer;
                 String text = Integer.toString(stack.getCount());
-                fr.renderString(text, (float)(17 - fr.getStringWidth(text)), 9, 16777215, true, matrixStack.getLast().getMatrix(), buffer, false, 0, 15728880);
+                fr.renderString(text, (float) (17 - fr.getStringWidth(text)), 9, 16777215, true, matrixStack.getLast().getMatrix(), buffer, false, 0, 15728880);
 
                 matrixStack.pop();
             }
