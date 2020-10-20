@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.inventory.container;
 
 import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Function5;
+import io.github.noeppi_noeppi.libx.fi.Function6;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -19,6 +20,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A base class for containers that handles basic container logic such as shift-clicks,
@@ -309,5 +311,21 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
             World world1 = inv.player.getEntityWorld();
             return constructor.apply(windowId1, world1, pos1, inv, inv.player);
         });
+    }
+
+    /**
+     * Creates a container type for a container.
+     *
+     * @param constructor A method reference to the container's constructor.
+     */
+    public static <T extends Container> ContainerType<T> createContainerType(Function6<ContainerType<T>, Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
+        AtomicReference<ContainerType<T>> typeRef = new AtomicReference<>(null);
+        ContainerType<T> type = IForgeContainerType.create((windowId1, inv, data) -> {
+            BlockPos pos1 = data.readBlockPos();
+            World world1 = inv.player.getEntityWorld();
+            return constructor.apply(typeRef.get(), windowId1, world1, pos1, inv, inv.player);
+        });
+        typeRef.set(type);
+        return type;
     }
 }
