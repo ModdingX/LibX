@@ -26,7 +26,7 @@ public class CommandUtil {
     }
 
     /**
-     * Gets an argument for a command and if it's not present a deault value.
+     * Gets an argument for a command and if it's not present a default value.
      * @param name The argument's name
      * @param clazz The argument's class
      * @param defaultValue A default value when the argument is not present.

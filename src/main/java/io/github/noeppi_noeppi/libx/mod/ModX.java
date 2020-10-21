@@ -68,9 +68,11 @@ public abstract class ModX {
     @Deprecated
     public final void addSetupTask(Runnable runnable) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        StackTraceElement element = stackTrace[2];
-        if (!element.getClassName().startsWith("io.github.noeppi_noeppi.libx")) {
-            this.logger.warn("ModX#addSetupTask was called from outside the library. You should override ModX#setup instead. This might fail in future versions. Caller was: " + element.getClassName() + " Please report to mod author.");
+        if (stackTrace.length > 2) {
+            StackTraceElement element = stackTrace[2];
+            if (!element.getClassName().startsWith("io.github.noeppi_noeppi.libx")) {
+                this.logger.warn("ModX#addSetupTask was called from outside the library. You should override ModX#setup instead. This might fail in future versions. Caller was: " + element.getClassName() + " Please report to mod author.");
+            }
         }
         this.setupTasks.add(runnable);
     }
