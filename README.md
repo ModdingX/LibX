@@ -20,3 +20,5 @@ dependencies {
     compile fg.deobf("io.github.noeppi_noeppi.mods:LibX:${mc_version}-${libx-version}")
 }
 ```
+
+**Javadoc can be found here: https://git.io/libx**
