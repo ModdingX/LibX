@@ -98,7 +98,7 @@ jar.finalizedBy('reobfJar')
 
 javadoc {
     options.addStringOption('Xdoclint:none', '-quiet')
-    options.destinationDirectory(file("build/docs/${version}"))
+    options.destinationDirectory(file("build/docs/javadoc"))
 }
 
 publishing {
