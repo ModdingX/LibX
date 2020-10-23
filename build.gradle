@@ -99,6 +99,11 @@ jar.finalizedBy('reobfJar')
 javadoc {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.destinationDirectory(file("build/docs/javadoc"))
+    title("LibX ${base_version} JavDoc")
+    options.windowTitle("LibX ${base_version} JavDoc")
+    options.footer('<h3><a href="https://www.curseforge.com/minecraft/mc-mods/libx" target="_blank">CurseForge</a>'
+            + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+            + '<a href="https://github.com/noeppi-noeppi/LibX" target="_blank">GitHub</a></h2>')
 }
 
 publishing {
