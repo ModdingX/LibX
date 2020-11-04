@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 /**
  * An ingredient that unlike the one by forge does not check the share tag but the actual
- * ItemStack tag. The tags
+ * ItemStack tag.
  */
 public class NbtIngredient extends Ingredient {
 

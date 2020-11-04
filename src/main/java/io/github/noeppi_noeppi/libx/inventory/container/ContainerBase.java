@@ -26,13 +26,15 @@ import java.util.concurrent.atomic.AtomicReference;
  * A base class for containers that handles basic container logic such as shift-clicks,
  * and laying out slots.
  * <p>
- * There are some things you need to pay attention to if you want to use this:
- * Always register player inventory slots with layoutPlayerInventorySlots
- * Register input slots, THEN output slots and THEN player inventory.
+ * There are some things you need to pay attention to if you want to use this: <br>
+ * Always register player inventory slots with layoutPlayerInventorySlots <br>
+ * Register input slots, THEN output slots and THEN player inventory. <br>
+ * </p>
  * <p>
- * Call the super constructor with
- * firstOutputSlot    =  the number of input slot you have / the first output slot number
- * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number.
+ * Call the super constructor with <br>
+ * firstOutputSlot    =  the number of input slot you have / the first output slot number <br>
+ * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number. <br>
+ * </p>
  */
 public abstract class ContainerBase<T extends TileEntity> extends Container {
 

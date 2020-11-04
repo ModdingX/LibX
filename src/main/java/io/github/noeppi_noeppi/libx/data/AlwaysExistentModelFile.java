@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ModelFile;
 
 /**
- * Just because sometimes the generator don't seems to find a model. An @{code AlwaysExistentModelFile} will
+ * Just because sometimes the generator don't seems to find a model. An {@code AlwaysExistentModelFile} will
  * always return true in it's {@code exists} method.
  */
 public class AlwaysExistentModelFile extends ModelFile {
