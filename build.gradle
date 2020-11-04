@@ -134,7 +134,7 @@ publishing {
 
 curseforge {
     apiKey = findProperty('curse_auth') ?: 0
-    def versions = "${curse_versions}".split(', ')
+    def versions = "${curse_versions}".split(',')
     project {
         if (project.hasProperty('curse_project')) {
             id = "${curse_project}"
@@ -154,7 +154,7 @@ curseforge {
                     relations {
 
                         if (project.hasProperty('curse_requirements')) {
-                            def requirements = "${curse_requirements}".split(', ')
+                            def requirements = "${curse_requirements}".split(',')
                             requirements.each {
 
                                 requiredLibrary "${it}"
