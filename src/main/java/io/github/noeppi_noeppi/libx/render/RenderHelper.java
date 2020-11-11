@@ -56,7 +56,7 @@ public class RenderHelper {
     }
 
     /**
-     * Same as {@link RenderHelper#repeatBlit(MatrixStack, int, int, int, int, int, int, TextureAtlasSprite)} but without the u and v values set directly and not with a TextureAtlasSprite.
+     * Same as {@link RenderHelper#repeatBlit(MatrixStack, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
      */
     public static void repeatBlit(MatrixStack ms, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
         int pixelsRenderedX = 0;
