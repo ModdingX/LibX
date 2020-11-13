@@ -32,7 +32,7 @@ public class RenderHelperBlock {
     /**
      * Renders the break effect for a block state.
      *
-     * @param breakProgress How much the block already broke. 0 means no break. This should not be lower than 0 and not be greaer than 10.
+     * @param breakProgress How much the block already broke. 0 means no break. This should not be lower than 0 and not be greater than 10.
      */
     public static void renderBlockBreak(BlockState state, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, int breakProgress) {
         renderBlockBreak(state, matrixStack, buffer, light, overlay, breakProgress, state.getPositionRandom(BlockPos.ZERO));
@@ -41,7 +41,7 @@ public class RenderHelperBlock {
     /**
      * Renders the break effect for a block state.
      *
-     * @param breakProgress How much the block already broke. 0 means no break. This should not be lower than 0 and not be greaer than 10.
+     * @param breakProgress How much the block already broke. 0 means no break. This should not be lower than 0 and not be greater than 10.
      * @param positionRandom The long value to randomize the position. This can be obtained via {@code BlockState#getPositionRandom}.
      */
     public static void renderBlockBreak(BlockState state, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, int breakProgress, long positionRandom) {
@@ -80,8 +80,8 @@ public class RenderHelperBlock {
         int[] newData = new int[data.length];
         System.arraycopy(data, 0, newData, 0, data.length);
         for (int off = 0; off + 7 < newData.length; off += DefaultVertexFormats.BLOCK.getIntegerSize()) {
-            newData[off + 4] = Float.floatToRawIntBits(Float.intBitsToFloat(data[off + 4]) - oldSprite.getMinU() + newSprite.getMinU());
-            newData[off + 5] = Float.floatToRawIntBits(Float.intBitsToFloat(data[off + 5]) - oldSprite.getMinV() + newSprite.getMinV());
+            newData[off + 4] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 4]) - oldSprite.getMinU()) * newSprite.getWidth() / oldSprite.getWidth()) + newSprite.getMinU());
+            newData[off + 5] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 5]) - oldSprite.getMinV()) * newSprite.getHeight() / oldSprite.getHeight()) + newSprite.getMinV());
         }
         return newData;
     }
