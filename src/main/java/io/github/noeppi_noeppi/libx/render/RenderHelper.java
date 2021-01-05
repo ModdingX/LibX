@@ -153,7 +153,7 @@ public class RenderHelper {
     }
 
     /**
-     * Works like {@code IVerteyBuilder#addQuad} but allows you to modify alpha values as well. Like
+     * Works like {@code IVertexBuilder#addQuad} but allows you to modify alpha values as well. Like
      * {@code IVerteyBuilder#addQuad} this uses {@code DefaultVertexFormats.BLOCK}.
      *
      * @param alpha The alpha value to use.

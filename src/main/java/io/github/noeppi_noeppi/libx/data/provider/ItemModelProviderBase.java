@@ -1,7 +1,9 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
+import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.data.AlwaysExistentModelFile;
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -22,6 +24,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
+    public static final ResourceLocation TEISR_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/teisr");
 
     protected final ModX mod;
 
@@ -78,6 +81,10 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     }
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
-        this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
+        if (item.getItemStackTileEntityRenderer() == ItemStackRenderer.get()) {
+            this.getBuilder(id.getPath()).parent(this.getExistingFile(TEISR_PARENT));
+        } else {
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
+        }
     }
 }
