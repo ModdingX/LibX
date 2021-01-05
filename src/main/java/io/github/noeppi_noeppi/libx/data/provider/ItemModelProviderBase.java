@@ -82,7 +82,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
         if (item.getItemStackTileEntityRenderer() == ItemStackRenderer.get()) {
-            this.getBuilder(id.getPath()).parent(this.getExistingFile(TEISR_PARENT));
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(TEISR_PARENT));
         } else {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
         }
