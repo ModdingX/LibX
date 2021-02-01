@@ -16,11 +16,17 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 
 import java.util.Collections;
 import java.util.List;
 
 public class HandCommand implements Command<CommandSource> {
+    private static final HoverEvent COPY_NAME = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("command.libx.copy_name"));
+    private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("command.libx.copy_nbt"));
 
     @Override
     public int run(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
@@ -46,19 +52,24 @@ public class HandCommand implements Command<CommandSource> {
 
         @SuppressWarnings("ConstantConditions")
         IFormattableTextComponent tc = new StringTextComponent(item.getRegistryName().toString());
+        Style copyName = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, item.getRegistryName().toString()))
+                .setHoverEvent(COPY_NAME);
+        tc.setStyle(copyName);
 
         if (count != 1) {
             tc = tc.append(new StringTextComponent(" ")).append(new StringTextComponent(Integer.toString(count)));
         }
 
         if (nbt != null && !nbt.isEmpty()) {
+            Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, nbt.toString()))
+                .setHoverEvent(COPY_NBT);
             List<INBT> printNBT = Collections.singletonList(nbt);
             if (path != null) {
                 printNBT = path.func_218071_a(nbt);
             }
 
             for (INBT element : printNBT) {
-                tc = tc.append(new StringTextComponent(" ")).append(NbtToTextComponent.toText(element));
+                tc = tc.append(new StringTextComponent(" ")).append(NbtToTextComponent.toText(element).setStyle(copyTag));
             }
         }
 
