@@ -1,9 +1,9 @@
 package io.github.noeppi_noeppi.libx.util;
 
 import net.minecraft.nbt.*;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,12 +13,19 @@ import java.util.stream.Collectors;
  */
 public class NbtToTextComponent {
 
+    private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("libx.misc.copy_nbt"));
+
     /**
      * As the fancy colored nbt text components are only available for blocks, entities
      * and world storage by default, this translates a piece of NBT to a colored text
      * component.
      */
     public static IFormattableTextComponent toText(INBT nbt) {
+        Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, nbt.toString())).setHoverEvent(COPY_NBT);
+        return toTextInternal(nbt).mergeStyle(copyTag);
+    }
+    
+    public static IFormattableTextComponent toTextInternal(INBT nbt) {
         if (nbt instanceof EndNBT) {
             return new StringTextComponent("");
         } else if (nbt instanceof CompoundNBT) {
@@ -34,7 +41,7 @@ public class NbtToTextComponent {
                 } else {
                     tc = tc.append(new StringTextComponent(": "));
                 }
-                tc = tc.append(toText(((CompoundNBT) nbt).get(keys.get(i))));
+                tc = tc.append(toTextInternal(((CompoundNBT) nbt).get(keys.get(i))));
                 if (i + 1 < keys.size()) {
                     tc = tc.append(new StringTextComponent(", "));
                 }
@@ -44,7 +51,7 @@ public class NbtToTextComponent {
         } else if (nbt instanceof ListNBT) {
             IFormattableTextComponent tc = new StringTextComponent("[");
             for (int i = 0; i < ((ListNBT) nbt).size(); i++) {
-                tc = tc.append(toText(((ListNBT) nbt).get(i)));
+                tc = tc.append(toTextInternal(((ListNBT) nbt).get(i)));
                 if (i + 1 < ((ListNBT) nbt).size()) {
                     tc = tc.append(new StringTextComponent(", "));
                 }
@@ -77,7 +84,7 @@ public class NbtToTextComponent {
             tc = tc.append(new StringTextComponent("B").mergeStyle(TextFormatting.LIGHT_PURPLE));
             tc = tc.append(new StringTextComponent("; "));
             for (int i = 0; i < ((ByteArrayNBT) nbt).size(); i++) {
-                tc = tc.append(toText(((ByteArrayNBT) nbt).get(i)));
+                tc = tc.append(toTextInternal(((ByteArrayNBT) nbt).get(i)));
                 if (i + 1 < ((ByteArrayNBT) nbt).size()) {
                     tc = tc.append(new StringTextComponent(", "));
                 }
@@ -89,7 +96,7 @@ public class NbtToTextComponent {
             tc = tc.append(new StringTextComponent("I").mergeStyle(TextFormatting.LIGHT_PURPLE));
             tc = tc.append(new StringTextComponent("; "));
             for (int i = 0; i < ((IntArrayNBT) nbt).size(); i++) {
-                tc = tc.append(toText(((IntArrayNBT) nbt).get(i)));
+                tc = tc.append(toTextInternal(((IntArrayNBT) nbt).get(i)));
                 if (i + 1 < ((IntArrayNBT) nbt).size()) {
                     tc = tc.append(new StringTextComponent(", "));
                 }
@@ -101,7 +108,7 @@ public class NbtToTextComponent {
             tc = tc.append(new StringTextComponent("L").mergeStyle(TextFormatting.LIGHT_PURPLE));
             tc = tc.append(new StringTextComponent("; "));
             for (int i = 0; i < ((LongArrayNBT) nbt).size(); i++) {
-                tc = tc.append(toText(((LongArrayNBT) nbt).get(i)));
+                tc = tc.append(toTextInternal(((LongArrayNBT) nbt).get(i)));
                 if (i + 1 < ((LongArrayNBT) nbt).size()) {
                     tc = tc.append(new StringTextComponent(", "));
                 }
