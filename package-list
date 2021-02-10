@@ -2,6 +2,7 @@ io.github.noeppi_noeppi.libx
 io.github.noeppi_noeppi.libx.block
 io.github.noeppi_noeppi.libx.block.tesr
 io.github.noeppi_noeppi.libx.command
+io.github.noeppi_noeppi.libx.config
 io.github.noeppi_noeppi.libx.crafting.ingredient
 io.github.noeppi_noeppi.libx.crafting.recipe
 io.github.noeppi_noeppi.libx.data
@@ -10,6 +11,7 @@ io.github.noeppi_noeppi.libx.data.provider.recipe
 io.github.noeppi_noeppi.libx.fi
 io.github.noeppi_noeppi.libx.impl
 io.github.noeppi_noeppi.libx.impl.commands
+io.github.noeppi_noeppi.libx.impl.config
 io.github.noeppi_noeppi.libx.impl.network
 io.github.noeppi_noeppi.libx.inventory
 io.github.noeppi_noeppi.libx.inventory.container
