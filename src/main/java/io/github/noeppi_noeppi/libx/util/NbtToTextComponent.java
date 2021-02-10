@@ -25,7 +25,7 @@ public class NbtToTextComponent {
         return toTextInternal(nbt).mergeStyle(copyTag);
     }
     
-    public static IFormattableTextComponent toTextInternal(INBT nbt) {
+    private static IFormattableTextComponent toTextInternal(INBT nbt) {
         if (nbt instanceof EndNBT) {
             return new StringTextComponent("");
         } else if (nbt instanceof CompoundNBT) {

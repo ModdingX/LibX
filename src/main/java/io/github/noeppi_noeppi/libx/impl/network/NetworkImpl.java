@@ -21,12 +21,14 @@ public final class NetworkImpl extends NetworkX {
 
     @Override
     protected String getProtocolVersion() {
-        return "1";
+        return "2";
     }
 
     @Override
     protected void registerPackets() {
         this.register(new TeUpdateSerializer(), () -> TeUpdateHandler::handle, NetworkDirection.PLAY_TO_CLIENT);
+        this.register(new ConfigShadowSerializer(), () -> ConfigShadowHandler::handle, NetworkDirection.PLAY_TO_CLIENT);
+       
         this.register(new TeRequestSerializer(), () -> TeRequestHandler::handle, NetworkDirection.PLAY_TO_SERVER);
     }
 

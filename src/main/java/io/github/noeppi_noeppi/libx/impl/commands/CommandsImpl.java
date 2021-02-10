@@ -15,6 +15,8 @@ public class CommandsImpl {
                 literal("hand").executes(new HandCommand()).then(argument("nbt_path", nbtPath()).executes(new HandCommand()))
         ).then(
                 literal("entitydata").then(argument("entities", entities()).then(argument("nbt", nbt()).executes(new EntityDataCommand())))
+        ).then(
+                literal("reload").executes(new ReloadCommand())
         ));
     }
 }

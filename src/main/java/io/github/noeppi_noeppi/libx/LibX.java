@@ -16,10 +16,14 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod("libx")
 public class LibX extends ModX {
 
+    public static final Logger logger = LogManager.getLogger();
+    
     private static LibX instance;
     private static NetworkImpl network;
 
