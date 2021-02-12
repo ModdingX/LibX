@@ -1,7 +1,9 @@
 package io.github.noeppi_noeppi.libx.impl.commands;
 
+import io.github.noeppi_noeppi.libx.impl.NbtOutputType;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
+import static io.github.noeppi_noeppi.libx.command.UppercaseEnumArgument.enumArgument;
 import static net.minecraft.command.Commands.argument;
 import static net.minecraft.command.Commands.literal;
 import static net.minecraft.command.arguments.EntityArgument.entities;
@@ -12,7 +14,10 @@ public class CommandsImpl {
 
     public static void registerCommands(RegisterCommandsEvent event) {
         event.getDispatcher().register(literal("libx").requires(source -> source.hasPermissionLevel(2)).then(
-                literal("hand").executes(new HandCommand()).then(argument("nbt_path", nbtPath()).executes(new HandCommand()))
+                literal("hand")
+                        .executes(new HandCommand())
+                        .then(argument("output_format", enumArgument(NbtOutputType.class)).executes(new HandCommand())
+                                .then(argument("nbt_path", nbtPath()).executes(new HandCommand())))
         ).then(
                 literal("entitydata").then(argument("entities", entities()).then(argument("nbt", nbt()).executes(new EntityDataCommand())))
         ).then(

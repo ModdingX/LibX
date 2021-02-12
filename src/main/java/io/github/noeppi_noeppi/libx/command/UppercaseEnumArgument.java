@@ -64,7 +64,7 @@ public class UppercaseEnumArgument<T extends Enum<T>> implements ArgumentType<T>
             try {
                 return new UppercaseEnumArgument(Class.forName(name));
             } catch (ClassNotFoundException e) {
-                System.err.println("Can' get enum value of type " + name + ". " + e.getMessage());
+                System.err.println("Can't get enum value of type " + name + ". " + e.getMessage());
                 //noinspection ConstantConditions
                 return null;
             }

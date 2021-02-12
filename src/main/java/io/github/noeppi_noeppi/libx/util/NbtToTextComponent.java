@@ -24,14 +24,14 @@ public class NbtToTextComponent {
         Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, nbt.toString())).setHoverEvent(COPY_NBT);
         return toTextInternal(nbt).mergeStyle(copyTag);
     }
-    
+
     private static IFormattableTextComponent toTextInternal(INBT nbt) {
         if (nbt instanceof EndNBT) {
             return new StringTextComponent("");
         } else if (nbt instanceof CompoundNBT) {
             IFormattableTextComponent tc = new StringTextComponent("{");
             List<String> keys = ((CompoundNBT) nbt).keySet().stream().sorted().collect(Collectors.toList());
-            for (int i = 0;i < keys.size(); i++) {
+            for (int i = 0; i < keys.size(); i++) {
                 if (quotesRequired(keys.get(i))) {
                     tc = tc.append(new StringTextComponent("\""));
                 }
@@ -115,7 +115,7 @@ public class NbtToTextComponent {
             }
             tc = tc.append(new StringTextComponent("]"));
             return tc;
-        } else  {
+        } else {
             throw new IllegalArgumentException("NBT type unknown: " + nbt.getClass());
         }
     }
@@ -131,6 +131,10 @@ public class NbtToTextComponent {
     private static String escape(String text) {
         return text.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
-                .replace("\n", "\\\n");
+                .replace("\n", "\\\n")
+                .replace("\t", "\\\t")
+                .replace("\r", "\\\r")
+                .replace("\0", "\\\0")
+                .replace("\f", "\\\f");
     }
 }

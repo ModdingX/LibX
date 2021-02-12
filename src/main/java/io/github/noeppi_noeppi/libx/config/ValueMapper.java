@@ -4,8 +4,6 @@ import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import net.minecraft.network.PacketBuffer;
 
-import java.util.function.Function;
-
 /**
  * A way to serialise values of a specific type for a config file. See {@link ConfigManager} for
  * more info.

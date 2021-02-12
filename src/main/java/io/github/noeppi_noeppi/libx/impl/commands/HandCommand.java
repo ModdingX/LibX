@@ -4,7 +4,10 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
+import io.github.noeppi_noeppi.libx.impl.NbtOutputType;
 import io.github.noeppi_noeppi.libx.util.IdToTextComponent;
+import io.github.noeppi_noeppi.libx.util.JsonToTextComponent;
+import io.github.noeppi_noeppi.libx.util.NbtToJson;
 import io.github.noeppi_noeppi.libx.util.NbtToTextComponent;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.NBTPathArgument;
@@ -25,6 +28,7 @@ public class HandCommand implements Command<CommandSource> {
 
     @Override
     public int run(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+        NbtOutputType format = CommandUtil.getArgumentOrDefault(ctx, "output_format", NbtOutputType.class, NbtOutputType.NBT);
 
         ServerPlayerEntity player = ctx.getSource().asPlayer();
         ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
@@ -59,7 +63,10 @@ public class HandCommand implements Command<CommandSource> {
             }
 
             for (INBT element : printNBT) {
-                tc = tc.append(new StringTextComponent(" ")).append(NbtToTextComponent.toText(element));
+                tc = tc.append(new StringTextComponent(" "))
+                        .append(format == NbtOutputType.NBT ?
+                                NbtToTextComponent.toText(nbt) :
+                                JsonToTextComponent.toText(NbtToJson.getJson(element, true)));
             }
         }
 
