@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient;
 import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
 import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
+import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
@@ -35,6 +36,7 @@ public class LibX extends ModX {
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
         MinecraftForge.EVENT_BUS.addListener(TileEntityUpdateQueue::tick);
         MinecraftForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
+        MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 
         CraftingHelper.register(new ResourceLocation(this.modid, "effect"), EffectIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(this.modid, "potion"), PotionIngredient.Serializer.INSTANCE);
