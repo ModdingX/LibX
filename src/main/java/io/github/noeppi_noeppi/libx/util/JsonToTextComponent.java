@@ -1,8 +1,6 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
@@ -15,13 +13,13 @@ import java.util.Map;
  */
 public class JsonToTextComponent {
 
-    private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("libx.misc.copy_nbt"));
+    private static final HoverEvent COPY_JSON = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("libx.misc.copy_json"));
 
     /**
      * This translates a piece of NBT to a colored text component in JSON style.
      */
     public static IFormattableTextComponent toText(JsonElement element) {
-        Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, element.toString())).setHoverEvent(COPY_NBT);
+        Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, element.toString())).setHoverEvent(COPY_JSON);
         return toTextInternal(element).mergeStyle(copyTag);
     }
 
@@ -42,43 +40,38 @@ public class JsonToTextComponent {
                 return toTextInternal(primitive);
             }
         } else if (element.isJsonArray()) {
-            return getFromArray((JsonArray) element);
+            IFormattableTextComponent tc = new StringTextComponent("[");
+            boolean first = true;
+            for (JsonElement entry : element.getAsJsonArray()) {
+                if (first) {
+                    first = false;
+                } else {
+                    tc.append(new StringTextComponent(", "));
+                }
+                tc = tc.append(toTextInternal(entry));
+            }
+            tc = tc.append(new StringTextComponent("]"));
+            return tc;
         } else if (element.isJsonObject()) {
-            return getFromObject((JsonObject) element);
+            IFormattableTextComponent tc = new StringTextComponent("{");
+            boolean first = true;
+            for (Map.Entry<String, JsonElement> entry : element.getAsJsonObject().entrySet()) {
+                if (first) {
+                    first = false;
+                } else {
+                    tc.append(new StringTextComponent(", "));
+                }
+                tc = tc.append(new StringTextComponent("\"")
+                        .append(new StringTextComponent(entry.getKey()).mergeStyle(TextFormatting.AQUA))
+                        .append(new StringTextComponent("\"")))
+                        .append(new StringTextComponent(": "))
+                        .append(toTextInternal(entry.getValue()));
+            }
+            tc = tc.append(new StringTextComponent("}"));
+            return tc;
         } else {
             throw new IllegalArgumentException("JSON type unknown: " + element.getClass());
         }
-    }
-
-    private static IFormattableTextComponent getFromArray(JsonArray array) {
-        IFormattableTextComponent tc = new StringTextComponent("[");
-
-        for (JsonElement element : array) {
-            tc = tc.append(toTextInternal(element));
-        }
-
-        tc = tc.append(new StringTextComponent("]"));
-        return tc;
-    }
-
-    private static IFormattableTextComponent getFromObject(JsonObject object) {
-        IFormattableTextComponent tc = new StringTextComponent("{");
-
-        int i = 0;
-        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-            i++;
-            tc = tc.append(new StringTextComponent("\"")
-                        .append(new StringTextComponent(entry.getKey()).mergeStyle(TextFormatting.AQUA))
-                        .append(new StringTextComponent("\"")))
-                    .append(new StringTextComponent(": "))
-                    .append(toTextInternal(entry.getValue()));
-            if (i < object.entrySet().size()) {
-                tc = tc.append(new StringTextComponent(", "));
-            }
-        }
-
-        tc = tc.append(new StringTextComponent("}"));
-        return tc;
     }
 
     private static String escape(String text) {

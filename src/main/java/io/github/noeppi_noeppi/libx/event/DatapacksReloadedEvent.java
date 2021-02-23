@@ -20,7 +20,6 @@ public class DatapacksReloadedEvent extends Event {
     public DatapacksReloadedEvent(MinecraftServer server, DataPackRegistries datapacks) {
         this.server = server;
         this.datapacks = datapacks;
-        System.out.println("RELOADED");
     }
 
     /**

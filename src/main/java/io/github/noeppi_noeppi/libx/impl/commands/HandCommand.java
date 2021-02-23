@@ -4,7 +4,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
-import io.github.noeppi_noeppi.libx.impl.NbtOutputType;
 import io.github.noeppi_noeppi.libx.util.IdToTextComponent;
 import io.github.noeppi_noeppi.libx.util.JsonToTextComponent;
 import io.github.noeppi_noeppi.libx.util.NbtToJson;

@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.impl.commands;
 
-import io.github.noeppi_noeppi.libx.impl.NbtOutputType;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
 import static io.github.noeppi_noeppi.libx.command.UppercaseEnumArgument.enumArgument;
