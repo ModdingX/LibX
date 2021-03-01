@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
@@ -14,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -32,7 +34,6 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
     protected final ModX mod;
     protected final DataGenerator generator;
-
 
     private final Set<Block> blacklist = new HashSet<>();
     private final Map<Block, Function<Block, LootTable.Builder>> functionMap = new HashMap<>();
@@ -78,8 +79,15 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
             Block block = ForgeRegistries.BLOCKS.getValue(id);
             if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(block)) {
-                Function<Block, LootTable.Builder> loot = this.functionMap.getOrDefault(block, this::defaultBehavior);
-                tables.put(id, loot.apply(block));
+                Function<Block, LootTable.Builder> loot;
+                if (this.functionMap.containsKey(block)) {
+                    loot = this.functionMap.get(block);
+                } else {
+                    loot = b -> this.defaultBehavior(block);
+                }
+                if (loot != null) {
+                    tables.put(id, loot.apply(block));
+                }
             }
         }
 
@@ -122,12 +130,28 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
     /**
      * Creates a default loot table for the given block. Can be overridden to alter
-     * default behaviour.
+     * default behaviour. Should return null if no loot table should be generated.
      */
+    @Nullable
     protected LootTable.Builder defaultBehavior(Block b) {
-        LootEntry.Builder<?> entry = ItemLootEntry.builder(b);
-        LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
-                .acceptCondition(SurvivesExplosion.builder());
-        return LootTable.builder().addLootPool(pool);
+        if (b.getStateContainer().getValidStates().stream().anyMatch(this::needsLootTable)) {
+            LootEntry.Builder<?> entry = ItemLootEntry.builder(b);
+            LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
+                    .acceptCondition(SurvivesExplosion.builder());
+            return LootTable.builder().addLootPool(pool);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns whether this block state needs a loot table. If all blockstates of a block don't
+     * need a loot table, defaultBehavior will return null for that block. Can be overridden to
+     * alter the behaviour.
+     */
+    protected boolean needsLootTable(BlockState state) {
+        //noinspection deprecation
+        return !state.isAir() && state.getFluidState().getBlockState().getBlock() != state.getBlock()
+                && !LootTables.EMPTY.equals(state.getBlock().getLootTable());
     }
 }
