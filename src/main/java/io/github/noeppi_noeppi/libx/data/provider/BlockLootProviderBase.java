@@ -10,7 +10,9 @@ import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.SurvivesExplosion;
+import net.minecraft.loot.functions.CopyBlockState;
 import net.minecraft.loot.functions.CopyNbt;
+import net.minecraft.state.Property;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -121,6 +123,26 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         CopyNbt.Builder func = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);
         for (String tag : tags) {
             func = func.replaceOperation(tag, "BlockEntityTag." + tag);
+        }
+        LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
+                .acceptCondition(SurvivesExplosion.builder())
+                .acceptFunction(func);
+        this.customLootTable(b, LootTable.builder().addLootPool(pool));
+    }
+
+    /**
+     * Creates a loot table that copies properties from a blockstate into the dropped item.
+     * Should be called in constructor.
+     *
+     * @param properties The properties of the blockstate to be copied.
+     */
+    private void copyProperties(Block b, Property<?>... properties) {
+        LootEntry.Builder<?> entry = ItemLootEntry.builder(b);
+        CopyBlockState.Builder func = CopyBlockState.func_227545_a_(b);
+
+
+        for (Property<?> property : properties) {
+            func = func.func_227552_a_(property);
         }
         LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
                 .acceptCondition(SurvivesExplosion.builder())
