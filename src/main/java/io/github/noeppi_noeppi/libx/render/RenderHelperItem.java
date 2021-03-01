@@ -62,7 +62,7 @@ public class RenderHelperItem {
                 }
 
                 IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, type, true, stack.hasEffect());
-                renderTintedModel(model, light, overlay, matrixStack, ivertexbuilder, r, g, b, alpha);
+                renderTintedModel(model, stack, light, overlay, matrixStack, ivertexbuilder, r, g, b, alpha);
             } else {
                 //noinspection deprecation
                 GlStateManager.color4f(r, g, b, alpha);
@@ -79,25 +79,33 @@ public class RenderHelperItem {
         }
     }
 
-    private static void renderTintedModel(IBakedModel model, int light, int overlay, MatrixStack matrixStack, IVertexBuilder buffer, float r, float g, float b, float alpha) {
+    private static void renderTintedModel(IBakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrixStack, IVertexBuilder buffer, float r, float g, float b, float alpha) {
         Random random = new Random();
 
         for (Direction direction : Direction.values()) {
             random.setSeed(42);
             //noinspection deprecation
-            renderTintedQuads(matrixStack, buffer, model.getQuads(null, direction, random), light, overlay, r, g, b, alpha);
+            renderTintedQuads(matrixStack, buffer, model.getQuads(null, direction, random), stack, light, overlay, r, g, b, alpha);
         }
 
         random.setSeed(42);
         //noinspection deprecation
-        renderTintedQuads(matrixStack, buffer, model.getQuads(null, null, random), light, overlay, r, g, b, alpha);
+        renderTintedQuads(matrixStack, buffer, model.getQuads(null, null, random), stack, light, overlay, r, g, b, alpha);
     }
 
-    private static void renderTintedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, int light, int overlay, float r, float g, float b, float alpha) {
+    private static void renderTintedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, ItemStack stack, int light, int overlay, float r, float g, float b, float alpha) {
         MatrixStack.Entry entry = matrixStack.getLast();
 
         for (BakedQuad bakedquad : quads) {
-            buffer.addVertexData(entry, bakedquad, r, g, b, alpha, light, overlay, true);
+            if (bakedquad.hasTintIndex()) {
+                int mixColor = Minecraft.getInstance().getItemRenderer().itemColors.getColor(stack, bakedquad.getTintIndex());
+                float ir = (float)(mixColor >> 16 & 255) / 255f;
+                float ig = (float)(mixColor >> 8 & 255) / 255f;
+                float ib = (float)(mixColor & 255) / 255f;
+                buffer.addVertexData(entry, bakedquad, r * ir, g * ig, b * ib, alpha, light, overlay, true);
+            } else {
+                buffer.addVertexData(entry, bakedquad, r, g, b, alpha, light, overlay, true);
+            }
         }
     }
 

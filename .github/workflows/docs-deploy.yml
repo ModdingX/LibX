@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    if: startsWith(github.repository, 'noeppi-noeppi') # don't run this in forks
+    if: startsWith(github.repository, 'noeppi-noeppi/') # don't run this in forks
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout 🛎️'
@@ -18,7 +18,7 @@ jobs:
         run: './gradlew javadoc'
 
       - name: 'Install SSH Client 🔑'
-        uses: 'webfactory/ssh-agent@v0.2.0'
+        uses: 'webfactory/ssh-agent@v0.4.1'
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 

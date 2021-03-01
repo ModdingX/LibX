@@ -92,4 +92,37 @@ public abstract class RecipeProviderBase extends RecipeProvider {
                 .addCriterion("has_item", hasItem(block))
                 .build(consumer, new ResourceLocation(this.mod.modid, ingot.asItem().getRegistryName().getPath() + "_from_block"));
     }
+
+    /**
+     * Calls {@link RecipeProviderBase#makeSmallBlockItem(Consumer, IItemProvider, IItemProvider, boolean)} with default value true for {@code revert}
+     */
+    public void makeSmallBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot) {
+
+        this.makeSmallBlockItem(consumer, block, ingot, true);
+    }
+
+    /**
+     * Creates one or two recipes like it's done with blocks with 2x2 ingots
+     *
+     * @param revert Whether the block can be crafted back or not
+     */
+    @SuppressWarnings("ConstantConditions")
+    public void makeSmallBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot, boolean revert) {
+
+        ShapedRecipeBuilder.shapedRecipe(block)
+                .key('a', ingot)
+                .patternLine("aa")
+                .patternLine("aa")
+                .setGroup(block.asItem().getRegistryName() + "_from_ingots")
+                .addCriterion("has_item", hasItem(ingot))
+                .build(consumer, new ResourceLocation(this.mod.modid, block.asItem().getRegistryName().getPath() + "_from_ingots"));
+
+        if (revert) {
+            ShapelessRecipeBuilder.shapelessRecipe(ingot, 4)
+                    .addIngredient(block)
+                    .setGroup(ingot.asItem().getRegistryName() + "_from_block")
+                    .addCriterion("has_item", hasItem(block))
+                    .build(consumer, new ResourceLocation(this.mod.modid, ingot.asItem().getRegistryName().getPath() + "_from_block"));
+        }
+    }
 }

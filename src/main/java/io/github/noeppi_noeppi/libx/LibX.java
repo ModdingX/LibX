@@ -5,9 +5,10 @@ import io.github.noeppi_noeppi.libx.command.UppercaseEnumArgument;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient;
-import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
-import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
+import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
+import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
+import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import net.minecraft.util.ResourceLocation;
@@ -16,10 +17,14 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod("libx")
 public class LibX extends ModX {
 
+    public static final Logger logger = LogManager.getLogger();
+    
     private static LibX instance;
     private static NetworkImpl network;
 
@@ -31,6 +36,7 @@ public class LibX extends ModX {
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
         MinecraftForge.EVENT_BUS.addListener(TileEntityUpdateQueue::tick);
         MinecraftForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
+        MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 
         CraftingHelper.register(new ResourceLocation(this.modid, "effect"), EffectIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(this.modid, "potion"), PotionIngredient.Serializer.INSTANCE);
