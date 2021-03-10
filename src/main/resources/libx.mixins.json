@@ -1,7 +1,7 @@
 {
   "required": true,
   "compatibilityLevel": "JAVA_8",
-  "refmap": "next_christmas.refmap.json",
+  "refmap": "libx.refmap.json",
   "package": "io.github.noeppi_noeppi.libx.impl.mixin",
   "minVersion": "0.8",
   "client": [],
