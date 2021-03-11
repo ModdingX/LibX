@@ -154,7 +154,7 @@ public class ConfigImpl {
             throw new IllegalStateException("Can't read config from file: Default state not set.");
         }
         if (!Files.isRegularFile(this.path) || !Files.isReadable(this.path)) {
-            throw new IllegalStateException("Config '" + this.id + "' does not exist or is not readble.");
+            throw new IllegalStateException("Config '" + this.id + "' does not exist or is not readable.");
         }
         Reader reader = Files.newBufferedReader(this.path);
         JsonObject config = GSON.fromJson(reader, JsonObject.class);

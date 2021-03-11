@@ -178,7 +178,7 @@ public class ConfigManager {
     }
 
     /**
-     * Resolves a value mapper. If {@code id} is null, a value mapper is detected dfrom the builtin
+     * Resolves a value mapper. If {@code id} is null, a value mapper is detected from the builtin
      * mappers. If no mapper exits, an exception is thrown.
      */
     public static <T> ValueMapper<T, ?> getMapper(@Nullable ResourceLocation id, Class<T> fieldClass) {
@@ -248,7 +248,7 @@ public class ConfigManager {
     }
 
     /**
-     * Forces a reload of al lconfigs.
+     * Forces a reload of all configs. <b>This will not sync the config tough. Use forceResync for this.</b>
      */
     public static void reloadAll() {
         for (Class<?> configClass : configs.keySet()) {
@@ -275,7 +275,7 @@ public class ConfigManager {
     }
 
     /**
-     * Forces a reload of one config.
+     * Forces a reload of one config. <b>This will not sync the config tough. Use forceResync for this.</b>
      */
     public static void reloadConfig(Class<?> configClass) {
         if (!configIds.containsValue(configClass)) {
@@ -295,6 +295,25 @@ public class ConfigManager {
         }
     }
 
+    /**
+     * Forces a resync of one config to one player.
+     */
+    public static void forceResync(@Nullable ServerPlayerEntity player, Class<?> configClass) {
+        if (!configIds.containsValue(configClass)) {
+            throw new IllegalArgumentException("Class " + configClass + " is not registered as a config.");
+        }
+        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
+            ResourceLocation id = configIds.inverse().get(configClass);
+            ConfigImpl config = ConfigImpl.getConfig(id);
+            if (!config.clientConfig) {
+                PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
+                LibX.getNetwork().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+            }
+        } else {
+            LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
+        }
+    }
+    
     /**
      * Forces a resync of all configs to one player.
      */
