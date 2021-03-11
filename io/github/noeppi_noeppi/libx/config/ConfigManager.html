@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -249,20 +249,27 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#forceResync-net.minecraft.entity.player.ServerPlayerEntity-java.lang.Class-">forceResync</a></span>(net.minecraft.entity.player.ServerPlayerEntity&nbsp;player,
+           java.lang.Class&lt;?&gt;&nbsp;configClass)</code>
+<div class="block">Forces a resync of one config to one player.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;T,?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#getMapper-net.minecraft.util.ResourceLocation-java.lang.Class-">getMapper</a></span>(net.minecraft.util.ResourceLocation&nbsp;id,
          java.lang.Class&lt;T&gt;&nbsp;fieldClass)</code>
 <div class="block">Resolves a value mapper.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static net.minecraft.util.ResourceLocation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#getMapperByAnnotationValue-java.lang.String-java.lang.Class-">getMapperByAnnotationValue</a></span>(java.lang.String&nbsp;annotationValue,
                           java.lang.Class&lt;?&gt;&nbsp;typeClass)</code>
 <div class="block">Gets a value mapper by values of the <a href="../../../../../io/github/noeppi_noeppi/libx/config/Config.html" title="annotation in io.github.noeppi_noeppi.libx.config"><code>@Config</code></a> annotation.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerConfig-net.minecraft.util.ResourceLocation-java.lang.Class-boolean-">registerConfig</a></span>(net.minecraft.util.ResourceLocation&nbsp;location,
               java.lang.Class&lt;?&gt;&nbsp;configClass,
@@ -270,7 +277,7 @@ extends java.lang.Object</pre>
 <div class="block">Registers a config.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerConfig-java.lang.String-java.lang.Class-boolean-">registerConfig</a></span>(java.lang.String&nbsp;modid,
               java.lang.Class&lt;?&gt;&nbsp;configClass,
@@ -278,20 +285,20 @@ extends java.lang.Object</pre>
 <div class="block">Registers a config.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerValueMapper-net.minecraft.util.ResourceLocation-io.github.noeppi_noeppi.libx.config.ValueMapper-">registerValueMapper</a></span>(net.minecraft.util.ResourceLocation&nbsp;id,
                    <a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;?,?&gt;&nbsp;mapper)</code>
 <div class="block">Registers a new <a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config"><code>ValueMapper</code></a> that can be used to serialise config values.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#reloadAll--">reloadAll</a></span>()</code>
-<div class="block">Forces a reload of al lconfigs.</div>
+<div class="block">Forces a reload of all configs.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#reloadConfig-java.lang.Class-">reloadConfig</a></span>(java.lang.Class&lt;?&gt;&nbsp;configClass)</code>
 <div class="block">Forces a reload of one config.</div>
@@ -367,7 +374,7 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;T,?&gt;&nbsp;getMapper(@Nullable
                                              net.minecraft.util.ResourceLocation&nbsp;id,
                                              java.lang.Class&lt;T&gt;&nbsp;fieldClass)</pre>
-<div class="block">Resolves a value mapper. If <code>id</code> is null, a value mapper is detected dfrom the builtin
+<div class="block">Resolves a value mapper. If <code>id</code> is null, a value mapper is detected from the builtin
  mappers. If no mapper exits, an exception is thrown.</div>
 </li>
 </ul>
@@ -417,7 +424,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>reloadAll</h4>
 <pre>public static&nbsp;void&nbsp;reloadAll()</pre>
-<div class="block">Forces a reload of al lconfigs.</div>
+<div class="block">Forces a reload of all configs. <b>This will not sync the config tough. Use forceResync for this.</b></div>
 </li>
 </ul>
 <a name="reloadConfig-java.lang.Class-">
@@ -427,7 +434,19 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>reloadConfig</h4>
 <pre>public static&nbsp;void&nbsp;reloadConfig(java.lang.Class&lt;?&gt;&nbsp;configClass)</pre>
-<div class="block">Forces a reload of one config.</div>
+<div class="block">Forces a reload of one config. <b>This will not sync the config tough. Use forceResync for this.</b></div>
+</li>
+</ul>
+<a name="forceResync-net.minecraft.entity.player.ServerPlayerEntity-java.lang.Class-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forceResync</h4>
+<pre>public static&nbsp;void&nbsp;forceResync(@Nullable
+                               net.minecraft.entity.player.ServerPlayerEntity&nbsp;player,
+                               java.lang.Class&lt;?&gt;&nbsp;configClass)</pre>
+<div class="block">Forces a resync of one config to one player.</div>
 </li>
 </ul>
 <a name="forceResync-net.minecraft.entity.player.ServerPlayerEntity-">
