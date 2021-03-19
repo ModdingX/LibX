@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
 import io.github.noeppi_noeppi.libx.impl.config.AdvancedValueMappers;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigState;
@@ -15,6 +16,7 @@ import io.github.noeppi_noeppi.libx.util.ClassUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -105,6 +107,7 @@ import java.util.function.Function;
  *     <li>String</li>
  *     <li>List&lt;T&gt;</li>
  *     <li>Map&lt;String, T&gt;</li>
+ *     <li>ResourceLocation</li>
  *     <li>Ingredient</li>
  *     <li>IFormattableTextComponent</li>
  * </ul>
@@ -136,6 +139,7 @@ public class ConfigManager {
             SimpleValueMappers.STRING,
             SimpleValueMappers.LIST,
             SimpleValueMappers.MAP,
+            AdvancedValueMappers.RESOURCE,
             AdvancedValueMappers.INGREDIENT,
             AdvancedValueMappers.TEXT_COMPONENT
     ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
@@ -268,6 +272,7 @@ public class ConfigManager {
                 ConfigState state = config.readFromFileOrCreateBy(defaultState);
                 config.saveState(state);
                 state.apply();
+                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.INITIAL, config.clientConfig, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
             LibX.logger.error("Failed to load config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
@@ -289,6 +294,7 @@ public class ConfigManager {
                 if (!config.isShadowed()) {
                     state.apply();
                 }
+                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
             LibX.logger.error("Failed to reload config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);

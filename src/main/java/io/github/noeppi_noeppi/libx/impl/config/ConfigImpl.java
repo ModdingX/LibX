@@ -7,9 +7,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
@@ -239,6 +241,7 @@ public class ConfigImpl {
         }
         this.shadowed = true;
         state.apply();
+        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.SHADOW, this.clientConfig, this.path));
     }
     
     public void restore() {
@@ -248,6 +251,7 @@ public class ConfigImpl {
             LibX.logger.warn("Could not restore config: No saved state");
         }
         this.shadowed = false;
+        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.RESTORE, this.clientConfig, this.path));
     }
     
     public void saveState(ConfigState state) {
