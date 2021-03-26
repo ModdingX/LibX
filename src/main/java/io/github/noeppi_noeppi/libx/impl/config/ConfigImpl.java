@@ -14,16 +14,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConfigImpl {
@@ -42,8 +40,9 @@ public class ConfigImpl {
         return gsonbuilder.create();
     });
 
-    private static final Map<ResourceLocation, ConfigImpl> configs = new HashMap<>();
+    private static final Map<ResourceLocation, ConfigImpl> configs = Collections.synchronizedMap(new HashMap<>());
 
+    @Nonnull
     public static ConfigImpl getConfig(ResourceLocation id) {
         if (configs.containsKey(id)) {
             return configs.get(id);
@@ -68,7 +67,6 @@ public class ConfigImpl {
     private ConfigState defaultState;
 
     public ConfigImpl(ResourceLocation id, Class<?> baseClass, Path path, boolean clientConfig) {
-        this.clientConfig = clientConfig;
         if (configs.containsKey(id)) {
             throw new IllegalStateException("Config registered twice: " + id + " (" + baseClass + ")");
         }
@@ -76,6 +74,7 @@ public class ConfigImpl {
         this.id = id;
         this.path = path;
         this.baseClass = baseClass;
+        this.clientConfig = clientConfig;
         try {
             ImmutableMap.Builder<Field, ConfigKey> keys = ImmutableMap.builder();
             addAllFieldsToBuilder(baseClass, baseClass, keys);

@@ -1,9 +1,6 @@
 package io.github.noeppi_noeppi.libx.config;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.*;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
@@ -25,6 +22,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -145,9 +143,9 @@ public class ConfigManager {
     ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
     @SuppressWarnings("UnstableApiUsage")
     private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase()))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
-    private static final Map<ResourceLocation, ValueMapper<?, ?>> mappers = new HashMap<>();
-    private static final BiMap<ResourceLocation, Class<?>> configIds = HashBiMap.create();
-    private static final Map<Class<?>, Path> configs = new HashMap<>();
+    private static final Map<ResourceLocation, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
+    private static final BiMap<ResourceLocation, Class<?>> configIds = Maps.synchronizedBiMap(HashBiMap.create());
+    private static final Map<Class<?>, Path> configs = Collections.synchronizedMap(new HashMap<>());
     
     static {
         globalMappers.forEach((key, value) -> registerValueMapper(globalMappersToRL.get(key), value));
@@ -341,6 +339,6 @@ public class ConfigManager {
      * Gets all registered config ids.
      */
     public static Set<ResourceLocation> configs() {
-        return configIds.keySet();
+        return Collections.unmodifiableSet(configIds.keySet());
     }
 }
