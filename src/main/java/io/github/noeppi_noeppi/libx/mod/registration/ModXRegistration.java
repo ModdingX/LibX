@@ -12,6 +12,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +65,12 @@ public abstract class ModXRegistration extends ModX {
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("could not add generic listener to listen all registry events for mod " + modid + ".", e);
         }
+        
+        this.addAutomaticRegistrationHandlers();
     }
 
     /**
-     * Adds a registration handler .Should be called only in constructor. See class description for more info.
+     * Adds a registration handler. Should be called only in constructor. See class description for more info.
      */
     protected final void addRegistrationHandler(Runnable handler) {
         this.registrationHandlers.add(handler);
@@ -106,5 +111,27 @@ public abstract class ModXRegistration extends ModX {
             ((IForgeRegistryEntry<?>) pair.getRight()).setRegistryName(new ResourceLocation(this.modid, pair.getLeft()));
             ((IForgeRegistry) event.getRegistry()).register((IForgeRegistryEntry<?>) pair.getRight());
         });
+    }
+    
+    private void addAutomaticRegistrationHandlers() {
+        InputStream stream = this.getClass().getClassLoader().getResourceAsStream("/libx/register/" + this.getClass().getCanonicalName());
+        if (stream != null) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            reader.lines().map(String::trim).filter(s -> !s.isEmpty()).forEach(cls -> {
+                try {
+                    Class<?> clazz = Class.forName(cls);
+                    Method method = clazz.getMethod("init");
+                    this.addRegistrationHandler(() -> {
+                        try {
+                            method.invoke(null);
+                        } catch (ReflectiveOperationException | NoClassDefFoundError e) {
+                            throw new RuntimeException("Failed to apply automatic registration class " + cls + ": " + e.getMessage(), e);
+                        }
+                    });
+                } catch (ReflectiveOperationException | NoClassDefFoundError e) {
+                    throw new RuntimeException("Failed to add automatic registration class " + cls + ": " + e.getMessage(), e);
+                }
+            });
+        }
     }
 }

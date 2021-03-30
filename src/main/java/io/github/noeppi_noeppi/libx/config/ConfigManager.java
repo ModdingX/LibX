@@ -125,6 +125,8 @@ import java.util.function.Function;
  */
 public class ConfigManager {
 
+    // Whenever a mapper is added here, add the class to `ConfigProcessor`
+    // `ConfigProcessor` can not just access this because of class loading.
     @SuppressWarnings("UnstableApiUsage")
     private static final Map<Class<?>, ValueMapper<?, ?>> globalMappers = ImmutableSet.of(
             SimpleValueMappers.BOOLEAN,
