@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":42,"i1":6,"i2":6};
+var methods = {"i0":42,"i1":10,"i2":6,"i3":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -196,12 +196,16 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/mod/ModX.html#callGeneratedCode--">callGeneratedCode</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/mod/ModX.html#clientSetup-net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent-">clientSetup</a></span>(net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent&nbsp;event)</code>
 <div class="block">Automatically registered to the event bus.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/mod/ModX.html#setup-net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent-">setup</a></span>(net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent&nbsp;event)</code>
 <div class="block">Automatically registered to the event bus.</div>
@@ -310,7 +314,7 @@ extends java.lang.Object</pre>
 <a name="addSetupTask-java.lang.Runnable-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>addSetupTask</h4>
 <pre>@Deprecated
@@ -319,6 +323,15 @@ public final&nbsp;void&nbsp;addSetupTask(java.lang.Runnable&nbsp;runnable)</pre>
 <div class="block">This is used internally to add tasks to this mod. <b>THIS SHOULD NOT BE CALLED BY PEOPLE USING
  THIS LIBRARY.</b> Override <a href="../../../../../io/github/noeppi_noeppi/libx/mod/ModX.html#setup-net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent-"><code>setup(FMLCommonSetupEvent)</code></a> instead. This method might
  fail in the future if called from outside this library.</div>
+</li>
+</ul>
+<a name="callGeneratedCode--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>callGeneratedCode</h4>
+<pre>protected final&nbsp;void&nbsp;callGeneratedCode()</pre>
 </li>
 </ul>
 </li>

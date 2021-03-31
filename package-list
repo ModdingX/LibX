@@ -1,5 +1,7 @@
 io.github.noeppi_noeppi.libx
+io.github.noeppi_noeppi.libx.annotation
 io.github.noeppi_noeppi.libx.annotation.processor
+io.github.noeppi_noeppi.libx.annotation.processor.modinit
 io.github.noeppi_noeppi.libx.block
 io.github.noeppi_noeppi.libx.block.tesr
 io.github.noeppi_noeppi.libx.command
