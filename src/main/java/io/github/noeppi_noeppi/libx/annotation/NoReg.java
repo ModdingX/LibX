@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.mod.registration;
+package io.github.noeppi_noeppi.libx.annotation;
 
 import java.lang.annotation.*;
 

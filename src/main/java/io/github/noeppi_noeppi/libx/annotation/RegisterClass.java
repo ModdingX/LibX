@@ -1,4 +1,6 @@
-package io.github.noeppi_noeppi.libx.mod.registration;
+package io.github.noeppi_noeppi.libx.annotation;
+
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 
 import java.lang.annotation.*;
 
@@ -13,7 +15,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 @Documented
-public @interface Registrate {
+public @interface RegisterClass {
 
-    Class<? extends ModXRegistration> value();
+    /**
+     * Higher priorities are registered first.
+     */
+    int priority() default 0;
 }
