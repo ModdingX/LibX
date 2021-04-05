@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -47,7 +47,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigEvents.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigGroup.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigKey.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -136,22 +136,26 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#clientConfig">clientConfig</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>java.util.Set&lt;<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigGroup.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigGroup</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#groups">groups</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static com.google.gson.Gson</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#GSON">GSON</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>net.minecraft.util.ResourceLocation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#id">id</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static com.google.gson.Gson</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#INTERNAL">INTERNAL</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.reflect.Field,<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigKey.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigKey</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#keys">keys</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>java.nio.file.Path</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#path">path</a></span></code>&nbsp;</td>
 </tr>
@@ -216,25 +220,29 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#readState-net.minecraft.network.PacketBuffer-">readState</a></span>(net.minecraft.network.PacketBuffer&nbsp;buffer)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#readFromFileOrCreateByDefault--">readFromFileOrCreateByDefault</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#restore--">restore</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#readState-net.minecraft.network.PacketBuffer-">readState</a></span>(net.minecraft.network.PacketBuffer&nbsp;buffer)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#saveState-io.github.noeppi_noeppi.libx.impl.config.ConfigState-">saveState</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;state)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#restore--">restore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#setDefaultState-io.github.noeppi_noeppi.libx.impl.config.ConfigState-">setDefaultState</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;defaultState)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#saveState-io.github.noeppi_noeppi.libx.impl.config.ConfigState-">saveState</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;state)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#shadowBy-io.github.noeppi_noeppi.libx.impl.config.ConfigState-">shadowBy</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;state)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#setDefaultState-io.github.noeppi_noeppi.libx.impl.config.ConfigState-">setDefaultState</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;defaultState)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#shadowBy-io.github.noeppi_noeppi.libx.impl.config.ConfigState-">shadowBy</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;state)</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#stateFromValues--">stateFromValues</a></span>()</code>&nbsp;</td>
 </tr>
@@ -314,6 +322,15 @@ extends java.lang.Object</pre>
 <pre>public final&nbsp;java.util.Map&lt;java.lang.reflect.Field,<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigKey.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigKey</a>&gt; keys</pre>
 </li>
 </ul>
+<a name="groups">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>groups</h4>
+<pre>public final&nbsp;java.util.Set&lt;<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigGroup.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigGroup</a>&gt; groups</pre>
+</li>
+</ul>
 <a name="clientConfig">
 <!--   -->
 </a>
@@ -387,6 +404,20 @@ public static&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/
 <li class="blockList">
 <h4>readState</h4>
 <pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;readState(net.minecraft.network.PacketBuffer&nbsp;buffer)</pre>
+</li>
+</ul>
+<a name="readFromFileOrCreateByDefault--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readFromFileOrCreateByDefault</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a>&nbsp;readFromFileOrCreateByDefault()
+                                          throws java.io.IOException</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+</dl>
 </li>
 </ul>
 <a name="readFromFileOrCreateBy-io.github.noeppi_noeppi.libx.impl.config.ConfigState-">
@@ -499,7 +530,7 @@ public static&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/impl/
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigEvents.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigGroup.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../io/github/noeppi_noeppi/libx/impl/config/ConfigKey.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

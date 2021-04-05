@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../io/github/noeppi_noeppi/libx/config/Config.html" title="annotation in io.github.noeppi_noeppi.libx.config"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?io/github/noeppi_noeppi/libx/config/ConfigManager.html" target="_top">Frames</a></li>
@@ -183,6 +183,7 @@ extends java.lang.Object</pre>
      <li>float</li>
      <li>double</li>
      <li>String</li>
+     <li>Optional&lt;T&gt;</li>
      <li>List&lt;T&gt;</li>
      <li>Map&lt;String, T&gt;</li>
      <li>ResourceLocation</li>
@@ -201,7 +202,11 @@ extends java.lang.Object</pre>
  only loaded on the client.
  A config is registered with <a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerConfig-net.minecraft.util.ResourceLocation-java.lang.Class-boolean-"><code>registerConfig(ResourceLocation, Class, boolean)</code></a>.
  You can then just use the values in the config class. Make sure to not modify them as the results
- are unpredictable.</div>
+ are unpredictable.
+ 
+ Config values may never be null in the code. However value mappers are allowed to produce json-null
+ values.If you need a nullable value in the config, use an Optional. Empty Optionals will translate
+ to null in the JSON.</div>
 </li>
 </ul>
 </div>
@@ -271,6 +276,13 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>static &lt;A extends java.lang.annotation.Annotation&gt;<br><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config">ConfigValidator</a>&lt;?,A&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#getValidatorByAnnotation-java.lang.Class-">getValidatorByAnnotation</a></span>(java.lang.Class&lt;A&gt;&nbsp;validatorClass)</code>
+<div class="block">Gets a config validator by an annotation class or null if the annotation is not registered as
+ a validator.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerConfig-net.minecraft.util.ResourceLocation-java.lang.Class-boolean-">registerConfig</a></span>(net.minecraft.util.ResourceLocation&nbsp;location,
               java.lang.Class&lt;?&gt;&nbsp;configClass,
@@ -278,7 +290,7 @@ extends java.lang.Object</pre>
 <div class="block">Registers a config.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerConfig-java.lang.String-java.lang.Class-boolean-">registerConfig</a></span>(java.lang.String&nbsp;modid,
               java.lang.Class&lt;?&gt;&nbsp;configClass,
@@ -286,20 +298,26 @@ extends java.lang.Object</pre>
 <div class="block">Registers a config.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerConfigValidator-io.github.noeppi_noeppi.libx.config.ConfigValidator-">registerConfigValidator</a></span>(<a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config">ConfigValidator</a>&lt;?,?&gt;&nbsp;validator)</code>
+<div class="block">Registers a new <a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config"><code>ConfigValidator</code></a> that can be used to validate config values.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerValueMapper-net.minecraft.util.ResourceLocation-io.github.noeppi_noeppi.libx.config.ValueMapper-">registerValueMapper</a></span>(net.minecraft.util.ResourceLocation&nbsp;id,
                    <a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;?,?&gt;&nbsp;mapper)</code>
 <div class="block">Registers a new <a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config"><code>ValueMapper</code></a> that can be used to serialise config values.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#reloadAll--">reloadAll</a></span>()</code>
 <div class="block">Forces a reload of all configs.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigManager.html#reloadConfig-java.lang.Class-">reloadConfig</a></span>(java.lang.Class&lt;?&gt;&nbsp;configClass)</code>
 <div class="block">Forces a reload of one config.</div>
@@ -377,6 +395,27 @@ extends java.lang.Object</pre>
                                              java.lang.Class&lt;T&gt;&nbsp;fieldClass)</pre>
 <div class="block">Resolves a value mapper. If <code>id</code> is null, a value mapper is detected from the builtin
  mappers. If no mapper exits, an exception is thrown.</div>
+</li>
+</ul>
+<a name="registerConfigValidator-io.github.noeppi_noeppi.libx.config.ConfigValidator-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>registerConfigValidator</h4>
+<pre>public static&nbsp;void&nbsp;registerConfigValidator(<a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config">ConfigValidator</a>&lt;?,?&gt;&nbsp;validator)</pre>
+<div class="block">Registers a new <a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config"><code>ConfigValidator</code></a> that can be used to validate config values.</div>
+</li>
+</ul>
+<a name="getValidatorByAnnotation-java.lang.Class-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getValidatorByAnnotation</h4>
+<pre>public static&nbsp;&lt;A extends java.lang.annotation.Annotation&gt;&nbsp;<a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config">ConfigValidator</a>&lt;?,A&gt;&nbsp;getValidatorByAnnotation(java.lang.Class&lt;A&gt;&nbsp;validatorClass)</pre>
+<div class="block">Gets a config validator by an annotation class or null if the annotation is not registered as
+ a validator.</div>
 </li>
 </ul>
 <a name="registerConfig-java.lang.String-java.lang.Class-boolean-">
@@ -500,7 +539,7 @@ extends java.lang.Object</pre>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../io/github/noeppi_noeppi/libx/config/Config.html" title="annotation in io.github.noeppi_noeppi.libx.config"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?io/github/noeppi_noeppi/libx/config/ConfigManager.html" target="_top">Frames</a></li>

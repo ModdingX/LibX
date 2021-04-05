@@ -6,6 +6,7 @@ io.github.noeppi_noeppi.libx.block
 io.github.noeppi_noeppi.libx.block.tesr
 io.github.noeppi_noeppi.libx.command
 io.github.noeppi_noeppi.libx.config
+io.github.noeppi_noeppi.libx.config.validator
 io.github.noeppi_noeppi.libx.crafting.ingredient
 io.github.noeppi_noeppi.libx.crafting.recipe
 io.github.noeppi_noeppi.libx.data
