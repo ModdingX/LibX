@@ -2,11 +2,15 @@ package io.github.noeppi_noeppi.libx.data.provider;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -109,6 +113,10 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * Creates a model for the given block. The default implementation always creates cube_all models.
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
-        return this.cubeAll(block);
+        if (block.getStateContainer().getValidStates().stream().allMatch(state -> state.getRenderType() != BlockRenderType.MODEL)) {
+            return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
+        } else {
+            return this.cubeAll(block);
+        }
     }
 }

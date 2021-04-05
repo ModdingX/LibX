@@ -36,17 +36,17 @@ public class UppercaseEnumArgument<T extends Enum<T>> implements ArgumentType<T>
 
     @Override
     public T parse(final StringReader reader) {
-        return Enum.valueOf(enumClass, reader.readUnquotedString().toUpperCase());
+        return Enum.valueOf(this.enumClass, reader.readUnquotedString().toUpperCase());
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
-        return ISuggestionProvider.suggest(Stream.of(enumClass.getEnumConstants()).map(Object::toString), builder);
+        return ISuggestionProvider.suggest(Stream.of(this.enumClass.getEnumConstants()).map(Object::toString), builder);
     }
 
     @Override
     public Collection<String> getExamples() {
-        return Stream.of(enumClass.getEnumConstants()).map(Object::toString).collect(Collectors.toList());
+        return Stream.of(this.enumClass.getEnumConstants()).map(Object::toString).collect(Collectors.toList());
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -64,7 +64,7 @@ public class UppercaseEnumArgument<T extends Enum<T>> implements ArgumentType<T>
             try {
                 return new UppercaseEnumArgument(Class.forName(name));
             } catch (ClassNotFoundException e) {
-                System.err.println("Can' get enum value of type " + name + ". " + e.getMessage());
+                System.err.println("Can't get enum value of type " + name + ". " + e.getMessage());
                 //noinspection ConstantConditions
                 return null;
             }

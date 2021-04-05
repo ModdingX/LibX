@@ -77,6 +77,7 @@ public class BlockTE<T extends TileEntity> extends BlockBase {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onReplaced(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
         if (!world.isRemote && this.shouldDropInventory(world, pos, state)) {
             TileEntity te = world.getTileEntity(pos);
@@ -110,7 +111,7 @@ public class BlockTE<T extends TileEntity> extends BlockBase {
     }
 
     /**
-     * Override this to prevent the inventory of the tile entity to be droppen when the block is
+     * Override this to prevent the inventory of the tile entity to be dropped when the block is
      * broken. To automatically drop the inventory the tile entity must provide an item handler
      * capability that is an instance of {@code IItemHandlerModifiable}
      */

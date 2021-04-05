@@ -62,12 +62,14 @@ public abstract class ModXRegistration extends ModX {
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("could not add generic listener to listen all registry events for mod " + modid + ".", e);
         }
+        // Call the generated code here as well
+        this.callGeneratedCode();
     }
 
     /**
-     * Adds a registration handler .Should be called only in constructor. See class description for more info.
+     * Adds a registration handler. Should be called only in constructor. See class description for more info.
      */
-    protected final void addRegistrationHandler(Runnable handler) {
+    public final void addRegistrationHandler(Runnable handler) {
         this.registrationHandlers.add(handler);
     }
 

@@ -14,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building'
-                sh './gradlew build' // add 'curseforge' to publish on curseforge
+                sh './gradlew build'
             }
         }
 
@@ -22,6 +22,13 @@ pipeline {
             steps {
                 echo 'Archive'
                 archiveArtifacts 'build/libs*/*jar'
+            }
+        }
+
+        stage('Upload artifacts to CurseForge') {
+            steps {
+                echo 'Uploading to CurseForge'
+                sh './gradlew curseforge'
             }
         }
 

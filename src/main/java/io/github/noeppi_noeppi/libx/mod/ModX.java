@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod;
 
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -8,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +45,11 @@ public abstract class ModX {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::runSetupTasks);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        // As the generated code registers registration handlers this will produce a null pointer exception
+        // as the list of handlers will be null. So for instances of ModXRegistration we don't call it here
+        // but in the constructor of ModXRegistration
+        if (!(this instanceof ModXRegistration))
+            this.callGeneratedCode();
     }
 
     private void runSetupTasks(FMLCommonSetupEvent event) {
@@ -68,10 +76,31 @@ public abstract class ModX {
     @Deprecated
     public final void addSetupTask(Runnable runnable) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        StackTraceElement element = stackTrace[2];
-        if (!element.getClassName().startsWith("io.github.noeppi_noeppi.libx")) {
-            this.logger.warn("ModX#addSetupTask was called from outside the library. You should override ModX#setup instead. This might fail in future versions. Caller was: " + element.getClassName() + " Please report to mod author.");
+        if (stackTrace.length > 2) {
+            StackTraceElement element = stackTrace[2];
+            if (!element.getClassName().startsWith("io.github.noeppi_noeppi.libx")) {
+                this.logger.warn("ModX#addSetupTask was called from outside the library. You should override ModX#setup instead. This might fail in future versions. Caller was: " + element.getClassName() + " Please report to mod author.");
+            }
         }
         this.setupTasks.add(runnable);
+    }
+    
+    protected final void callGeneratedCode() {
+        try {
+            Class<?> clazz;
+            try {
+                clazz = Class.forName(this.getClass().getCanonicalName() + "$");
+            } catch (ClassNotFoundException e) {
+                clazz = null;
+            }
+            if (clazz != null) {
+                Method method = clazz.getDeclaredMethod("init", ModX.class);
+                method.invoke(null, this);
+            }
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException("Generated code threw an exception", e.getTargetException());
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to load generated code", e);
+        }
     }
 }

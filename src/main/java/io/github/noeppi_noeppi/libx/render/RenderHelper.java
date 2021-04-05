@@ -8,10 +8,19 @@ import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.math.vector.Vector4f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryStack;
+
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 /**
  * Some utilities for rendering in general.
@@ -141,5 +150,63 @@ public class RenderHelper {
 
         Minecraft.getInstance().fontRenderer.drawString(matrixStack, text, -widthHalf, -heightHalf, 0xFFFFFF);
         matrixStack.pop();
+    }
+
+    /**
+     * Works like {@code IVertexBuilder#addQuad} but allows you to modify alpha values as well. Like
+     * {@code IVerteyBuilder#addQuad} this uses {@code DefaultVertexFormats.BLOCK}.
+     *
+     * @param alpha The alpha value to use.
+     * @param mulAlpha If set to true the given alpha value is multiplied with the value set in
+     *                 the four byte of {@code COLOR_4UB} assuming it is stored as {@code RGBA}.
+     *                 If set to false just the given alpha value will be used.
+     */
+    public static void addQuadWithAlpha(IVertexBuilder vertex, MatrixStack.Entry matrix, BakedQuad quad, float red, float green, float blue, float alpha, int light, int overlay, boolean mulColor, boolean mulAlpha) {
+        int[] vertexData = quad.getVertexData();
+        Vector3i vector3i = quad.getFace().getDirectionVec();
+        Vector3f vector3f = new Vector3f((float)vector3i.getX(), (float)vector3i.getY(), (float)vector3i.getZ());
+        Matrix4f matrix4f = matrix.getMatrix();
+        vector3f.transform(matrix.getNormal());
+
+        try (MemoryStack memorystack = MemoryStack.stackPush()) {
+            ByteBuffer bytebuffer = memorystack.malloc(DefaultVertexFormats.BLOCK.getSize());
+            IntBuffer intbuffer = bytebuffer.asIntBuffer();
+
+            for(int i = 0; i < vertexData.length / 8; i++) {
+                intbuffer.clear();
+                intbuffer.put(vertexData, i * 8, 8);
+                float x = bytebuffer.getFloat(0);
+                float y = bytebuffer.getFloat(4);
+                float z = bytebuffer.getFloat(8);
+                float a;
+                float r;
+                float g;
+                float b;
+
+                if (mulAlpha) {
+                    a = (float)(bytebuffer.get(15) & 255) / 255.0F * alpha;
+                } else {
+                    a = alpha;
+                }
+
+                if (mulColor) {
+                    r = (float)(bytebuffer.get(12) & 255) / 255.0F * red;
+                    g = (float)(bytebuffer.get(13) & 255) / 255.0F * green;
+                    b = (float)(bytebuffer.get(14) & 255) / 255.0F * blue;
+                } else {
+                    r = red;
+                    g = green;
+                    b = blue;
+                }
+
+                int l = vertex.applyBakedLighting(light, bytebuffer);
+                float u = bytebuffer.getFloat(16);
+                float v = bytebuffer.getFloat(20);
+                Vector4f vector4f = new Vector4f(x, y, z, 1.0F);
+                vector4f.transform(matrix4f);
+                vertex.applyBakedNormals(vector3f, bytebuffer, matrix.getNormal());
+                vertex.addVertex(vector4f.getX(), vector4f.getY(), vector4f.getZ(), r, g, b, a, u, v, overlay, l, vector3f.getX(), vector3f.getY(), vector3f.getZ());
+            }
+        }
     }
 }
