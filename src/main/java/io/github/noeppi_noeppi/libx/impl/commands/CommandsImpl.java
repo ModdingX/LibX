@@ -24,7 +24,7 @@ public class CommandsImpl {
                 literal("reload").executes(new ReloadCommand())
         ).then(
                 literal("modlist").executes(new ModListCommand())
-                        .then(argument("simplified", bool()).executes(new ModListCommand()))
+                        .then(argument("extended", bool()).executes(new ModListCommand()))
         ));
     }
 }

@@ -10,25 +10,31 @@ import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ModListCommand implements Command<CommandSource> {
 
     private static final HoverEvent COPY_MODLIST = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("libx.misc.copy_modlist"));
 
+
     @Override
     public int run(CommandContext<CommandSource> context) {
-        boolean extended = !CommandUtil.getArgumentOrDefault(context, "simplified", Boolean.class, false);
+        boolean extended = CommandUtil.getArgumentOrDefault(context, "extended", Boolean.class, false);
 
         AtomicInteger i = new AtomicInteger();
         IFormattableTextComponent component = new StringTextComponent("");
-        ModList.get().forEachModContainer((modid, container) -> {
-            if (i.get() != 0) {
-                component.appendString("\n");
-            }
+        List<ModInfo> mods = new ArrayList<>(ModList.get().getMods());
+        mods.sort(Comparator.comparing(ModInfo::getDisplayName));
 
-            if (!modid.equalsIgnoreCase("minecraft")) {
-                ModInfo modInfo = (ModInfo) container.getModInfo();
+        mods.forEach(modInfo -> {
+            if (!modInfo.getModId().equalsIgnoreCase("minecraft")) {
+                if (i.get() != 0) {
+                    component.appendString("\n");
+                }
+
                 StringBuilder builder = new StringBuilder();
 
                 builder.append(modInfo.getDisplayName());
