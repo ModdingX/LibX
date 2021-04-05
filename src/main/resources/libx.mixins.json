@@ -9,6 +9,7 @@
   "mixins": [
     "MixinAbstractBlockState",
     "MixinFluidState",
+    "MixinPlayerInteractionManager",
     "MixinPlayerList"
   ]
 }
