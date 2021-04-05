@@ -9,6 +9,7 @@ import net.minecraft.network.PacketBuffer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -145,6 +146,68 @@ public class SimpleValueMappers {
             for (Map.Entry<String, ?> entry : value.entrySet()) {
                 buffer.writeString(entry.getKey(), 0x7fff);
                 mapper.write(entry.getValue(), buffer, void.class);
+            }
+        }
+    };
+
+    public static final ValueMapper<Optional<?>, JsonElement> OPTION = new ValueMapper<Optional<?>, JsonElement>() {
+
+        @Override
+        public Class<Optional<?>> type() {
+            //noinspection unchecked
+            return (Class<Optional<?>>) (Class<?>) Optional.class;
+        }
+
+        @Override
+        public Class<JsonElement> element() {
+            return JsonElement.class;
+        }
+
+        @Override
+        public Optional<?> fromJSON(JsonElement json, Class<?> elementType) {
+            if (json.isJsonNull()) {
+                return Optional.empty();
+            } else {
+                //noinspection unchecked
+                ValueMapper<Object, JsonElement> mapper = (ValueMapper<Object, JsonElement>) ConfigManager.getMapper(null, elementType);
+                if (!mapper.element().isAssignableFrom(json.getClass())) {
+                    throw new JsonSyntaxException("Can't deserialise object of type " + mapper.type() + " from json of type " + json.getClass().getSimpleName() + " (expected " + mapper.element().getSimpleName() + ")");
+                }
+                return Optional.of(mapper.fromJSON(json, void.class));
+            }
+        }
+
+        @Override
+        public JsonElement toJSON(Optional<?> value, Class<?> elementType) {
+            if (!value.isPresent()) {
+                return JsonNull.INSTANCE;
+            } else {
+                //noinspection unchecked
+                ValueMapper<Object, JsonElement> mapper = (ValueMapper<Object, JsonElement>) ConfigManager.getMapper(null, elementType);
+                return mapper.toJSON(value.get(), void.class);
+            }
+        }
+
+        @Override
+        public Optional<?> read(PacketBuffer buffer, Class<?> elementType) {
+            if (!buffer.readBoolean()) {
+                return Optional.empty();
+            } else {
+                //noinspection unchecked
+                ValueMapper<Object, JsonElement> mapper = (ValueMapper<Object, JsonElement>) ConfigManager.getMapper(null, elementType);
+                return Optional.of(mapper.read(buffer, void.class));
+            }
+        }
+
+        @Override
+        public void write(Optional<?> value, PacketBuffer buffer, Class<?> elementType) {
+            if (!value.isPresent()) {
+                buffer.writeBoolean(false);
+            } else {
+                buffer.writeBoolean(true);
+                //noinspection unchecked
+                ValueMapper<Object, JsonElement> mapper = (ValueMapper<Object, JsonElement>) ConfigManager.getMapper(null, elementType);
+                mapper.write(value.get(), buffer,void.class);
             }
         }
     };

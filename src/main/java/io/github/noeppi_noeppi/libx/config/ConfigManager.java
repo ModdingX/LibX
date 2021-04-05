@@ -4,15 +4,14 @@ import com.google.common.collect.*;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
-import io.github.noeppi_noeppi.libx.impl.config.AdvancedValueMappers;
-import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
-import io.github.noeppi_noeppi.libx.impl.config.ConfigState;
-import io.github.noeppi_noeppi.libx.impl.config.SimpleValueMappers;
+import io.github.noeppi_noeppi.libx.impl.config.*;
 import io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer;
 import io.github.noeppi_noeppi.libx.util.ClassUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.OnlyIns;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -21,11 +20,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -103,6 +100,7 @@ import java.util.function.Function;
  *     <li>float</li>
  *     <li>double</li>
  *     <li>String</li>
+ *     <li>Optional&lt;T&gt;</li>
  *     <li>List&lt;T&gt;</li>
  *     <li>Map&lt;String, T&gt;</li>
  *     <li>ResourceLocation</li>
@@ -122,6 +120,10 @@ import java.util.function.Function;
  * A config is registered with {@link ConfigManager#registerConfig(ResourceLocation, Class, boolean)}.
  * You can then just use the values in the config class. Make sure to not modify them as the results
  * are unpredictable.
+ * 
+ * Config values may never be null in the code. However value mappers are allowed to produce json-null
+ * values.If you need a nullable value in the config, use an Optional. Empty Optionals will translate
+ * to null in the JSON.
  */
 public class ConfigManager {
 
@@ -137,6 +139,7 @@ public class ConfigManager {
             SimpleValueMappers.FLOAT,
             SimpleValueMappers.DOUBLE,
             SimpleValueMappers.STRING,
+            SimpleValueMappers.OPTION,
             SimpleValueMappers.LIST,
             SimpleValueMappers.MAP,
             AdvancedValueMappers.RESOURCE,
@@ -146,6 +149,17 @@ public class ConfigManager {
     @SuppressWarnings("UnstableApiUsage")
     private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase()))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
     private static final Map<ResourceLocation, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
+    
+    @SuppressWarnings("UnstableApiUsage")
+    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = ImmutableSet.of(
+            SimpleValidators.SHORT,
+            SimpleValidators.INTEGER,
+            SimpleValidators.LONG,
+            SimpleValidators.FLOAT,
+            SimpleValidators.DOUBLE
+    ).stream().collect(ImmutableMap.toImmutableMap(ConfigValidator::annotation, Function.identity()));
+    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> validators = Collections.synchronizedMap(new HashMap<>());
+    
     private static final BiMap<ResourceLocation, Class<?>> configIds = Maps.synchronizedBiMap(HashBiMap.create());
     private static final Map<Class<?>, Path> configs = Collections.synchronizedMap(new HashMap<>());
     
@@ -210,6 +224,45 @@ public class ConfigManager {
                 }
             } else {
                 throw new IllegalStateException("No config mapper registered for id '" + id + "'.");
+            }
+        }
+    }
+    
+    /**
+     * Registers a new {@link ConfigValidator} that can be used to validate config values.
+     */
+    public static void registerConfigValidator(ConfigValidator<?, ?> validator) {
+        if (validators.containsKey(validator.annotation())) {
+            throw new IllegalStateException("Config validator '" + validator.annotation() + "' is already registered.");
+        }
+        validators.put(validator.annotation(), validator);
+    }
+    
+    /**
+     * Gets a config validator by an annotation class or null if the annotation is not registered as
+     * a validator.
+     */
+    public static <A extends Annotation> ConfigValidator<?, A> getValidatorByAnnotation(Class<A> validatorClass) {
+        // Annotations will be proxies at runtime so we can't check classes for equality.
+        if (Config.class.isAssignableFrom(validatorClass) || Group.class.isAssignableFrom(validatorClass)
+                || OnlyIn.class.isAssignableFrom(validatorClass) || OnlyIns.class.isAssignableFrom(validatorClass)) {
+            // Just in case someone register those...
+            return null;
+        } else {
+            Optional<? extends ConfigValidator<?, ?>> validator = globalValidators.entrySet().stream()
+                    .filter(e -> e.getKey().isAssignableFrom(validatorClass))
+                    .map(Map.Entry::getValue)
+                    .findFirst();
+            if (validator.isPresent()) {
+                //noinspection unchecked
+                return (ConfigValidator<?, A>) validator.get();
+            } else {
+                validator = validators.entrySet().stream()
+                        .filter(e -> e.getKey().isAssignableFrom(validatorClass))
+                        .map(Map.Entry::getValue)
+                        .findFirst();
+                //noinspection unchecked
+                return (ConfigValidator<?, A>) validator.orElse(null);
             }
         }
     }
@@ -289,7 +342,7 @@ public class ConfigManager {
         try {
             ConfigImpl config = ConfigImpl.getConfig(configIds.inverse().get(configClass));
             if (!config.clientConfig || FMLEnvironment.dist == Dist.CLIENT) {
-                ConfigState state = config.readFromFile();
+                ConfigState state = config.readFromFileOrCreateByDefault();
                 config.saveState(state);
                 if (!config.isShadowed()) {
                     state.apply();

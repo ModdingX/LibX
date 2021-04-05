@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 import io.github.noeppi_noeppi.libx.annotation.NoReg;
 import io.github.noeppi_noeppi.libx.annotation.RegName;
 import io.github.noeppi_noeppi.libx.annotation.RegisterClass;
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 
 import javax.lang.model.element.*;
 import javax.tools.Diagnostic;
@@ -23,6 +24,10 @@ public class RegisterClassProcessor {
         }
         RegisterClass registerClass = element.getAnnotation(RegisterClass.class);
         ModInit mod = env.getMod(element);
+        if (!env.types().isSubtype(env.types().erasure(mod.modClass.asType()), env.types().erasure(env.forClass(ModXRegistration.class)))) {
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "@RegisterClass used with a mod that is not a subtype of ModXRegistration", element);
+            return;
+        }
         List<RegistrationEntry> entries = element.getEnclosedElements().stream().flatMap(e -> fromElement(e, env)).collect(Collectors.toList());
         mod.addRegistration(registerClass.priority(), entries);
     }

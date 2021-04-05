@@ -1,10 +1,12 @@
 package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import net.minecraft.network.PacketBuffer;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -18,10 +20,12 @@ public class ConfigState {
     
     private final ConfigImpl config;
     private final Map<ConfigKey, Object> values;
+    private final Set<ConfigGroup> groups;
 
-    public ConfigState(ConfigImpl config, ImmutableMap<ConfigKey, Object> values) {
+    public ConfigState(ConfigImpl config, ImmutableMap<ConfigKey, Object> values, ImmutableSet<ConfigGroup> groups) {
         this.config = config;
         this.values = values;
+        this.groups = groups;
     }
     
     public Object getValue(ConfigKey key) {
@@ -63,11 +67,11 @@ public class ConfigState {
             Files.createDirectories(this.config.path.getParent());
         }
         Writer writer = Files.newBufferedWriter(this.config.path, StandardOpenOption.CREATE);
-        writer.write("{\n" + this.applyIndent(this.writeObject(this.values.keySet(), 0), "  ") + "\n}\n");
+        writer.write("{\n" + this.applyIndent(this.writeObject(this.values.keySet(), this.groups, 0), "  ") + "\n}\n");
         writer.close();
     }
     
-    public String writeObject(Set<ConfigKey> keys, int pathStrip) {
+    public String writeObject(@Nonnull Set<ConfigKey> keys, Set<ConfigGroup> groups, int pathStrip) {
         List<ConfigKey> simpleKeysSorted = keys.stream()
                 .filter(key -> key.path.size() == pathStrip + 1)
                 .sorted(ConfigKey.BY_PATH).collect(Collectors.toList());
@@ -94,13 +98,24 @@ public class ConfigState {
         
         List<String> subGroupKeys = subGroups.keySet().stream().sorted().collect(Collectors.toList());
         for (String group : subGroupKeys) {
+            ConfigGroup cg = groups.stream()
+                    .filter(g -> g.path.size() == pathStrip + 1)
+                    .filter(g -> g.path.get(pathStrip).equals(group))
+                    .findFirst().orElse(null);
+            Set<ConfigGroup> subGroupInstances = groups.stream()
+                    .filter(g -> g.path.size() > pathStrip + 1)
+                    .filter(g -> g.path.get(pathStrip).equals(group))
+                    .collect(Collectors.toSet());
             if (first) {
                 first = false;
             } else {
                 builder.append(",\n\n");
             }
-            builder.append("\"").append(quote(group)).append("\": {\n");
-            builder.append(this.applyIndent(this.writeObject(subGroups.get(group), pathStrip + 1), "  "));
+            if (cg != null) {
+                cg.comment.forEach(line -> builder.append("// ").append(line.replace('\n', ' ')).append("\n"));
+            }
+            builder.append("\"").append(quote(group)).append("\": {\n\n");
+            builder.append(this.applyIndent(this.writeObject(subGroups.get(group), subGroupInstances, pathStrip + 1), "  "));
             builder.append("\n}");
         }
         return builder.toString();

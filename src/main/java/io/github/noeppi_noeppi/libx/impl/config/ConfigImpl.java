@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -60,6 +61,7 @@ public class ConfigImpl {
     public final Class<?> baseClass;
     public final Path path;
     public final Map<Field, ConfigKey> keys;
+    public final Set<ConfigGroup> groups;
     public final boolean clientConfig;
     
     private boolean shadowed;
@@ -77,8 +79,10 @@ public class ConfigImpl {
         this.clientConfig = clientConfig;
         try {
             ImmutableMap.Builder<Field, ConfigKey> keys = ImmutableMap.builder();
-            addAllFieldsToBuilder(baseClass, baseClass, keys);
+            ImmutableSet.Builder<ConfigGroup> groups = ImmutableSet.builder();
+            addAllFieldsToBuilder(baseClass, baseClass, keys, groups);
             this.keys = keys.build();
+            this.groups = groups.build();
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to build config for class " + baseClass, e);
         }
@@ -97,7 +101,7 @@ public class ConfigImpl {
                 }
                 values.put(key, value);
             }
-            return new ConfigState(this, values.build());
+            return new ConfigState(this, values.build(), ImmutableSet.copyOf(this.groups));
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to read config state from current values.");
         }
@@ -134,12 +138,19 @@ public class ConfigImpl {
             if (!keysLeft.isEmpty()) {
                 LibX.logger.warn("Config " + this.id + ": There are additional fields on the client, not sent by the server. Using client values.");
             }
-            return new ConfigState(this, values.build());
+            return new ConfigState(this, values.build(), ImmutableSet.copyOf(this.groups));
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to read config state.", e);
         }
     }
 
+    public ConfigState readFromFileOrCreateByDefault() throws IOException {
+        if (this.defaultState == null) {
+            throw new IllegalStateException("LibX config internal error: Default state not set.");
+        }
+        return this.readFromFileOrCreateBy(this.defaultState);
+    }
+    
     public ConfigState readFromFileOrCreateBy(ConfigState state) throws IOException {
         if (!Files.isRegularFile(this.path)) {
             LibX.logger.info("Config '" + this.id + "' does not exist. Creating default.");
@@ -164,14 +175,14 @@ public class ConfigImpl {
         for (ConfigKey key : this.keys.values()) {
             JsonElement elem = getInObjectKeyPath(config, key, needsCorrection);
             if (elem != null && key.mapper.element().isAssignableFrom(elem.getClass())) {
-                if (elem.isJsonNull()) {
-                    LibX.logger.error("Null values are not allowed in the config. Using default.");
-                    values.put(key, this.defaultState.getValue(key));
-                    needsCorrection.set(true);
-                } else {
+                try {
                     //noinspection unchecked
                     Object value = ((ValueMapper<?, JsonElement>) key.mapper).fromJSON(elem, key.elementType);
-                    values.put(key, value);
+                    values.put(key, key.validate(value, "Invalid value in config file", needsCorrection));
+                } catch (Exception e) {
+                    LibX.logger.warn("Failed to read config value " + String.join(".", key.path) + ". Using default. Error: " + e.getMessage());
+                    values.put(key, this.defaultState.getValue(key));
+                    needsCorrection.set(true);
                 }
             } else {
                 values.put(key, this.defaultState.getValue(key));
@@ -179,7 +190,7 @@ public class ConfigImpl {
             }
         }
         reader.close();
-        ConfigState state = new ConfigState(this, values.build());
+        ConfigState state = new ConfigState(this, values.build(), ImmutableSet.copyOf(this.groups));
         if (needsCorrection.get()) {
             LibX.logger.info("Correcting config '" + this.id + "'");
             state.writeToFile();
@@ -187,7 +198,7 @@ public class ConfigImpl {
         return state;
     }
 
-    private static void addAllFieldsToBuilder(Class<?> baseClass, Class<?> currentClass, ImmutableMap.Builder<Field, ConfigKey> keys) throws ReflectiveOperationException {
+    private static void addAllFieldsToBuilder(Class<?> baseClass, Class<?> currentClass, ImmutableMap.Builder<Field, ConfigKey> keys, ImmutableSet.Builder<ConfigGroup> groups) throws ReflectiveOperationException {
         Set<String> names = new HashSet<>();
         for (Field field : currentClass.getDeclaredFields()) {
             ConfigKey key = ConfigKey.create(field, baseClass);
@@ -202,12 +213,16 @@ public class ConfigImpl {
             }
         }
         for (Class<?> clazz : currentClass.getDeclaredClasses()) {
-            if (names.contains(clazz.getSimpleName())) {
-                throw new IllegalStateException("Duplicate key in config definition: " + clazz.getSimpleName());
-            } else {
-                names.add(clazz.getSimpleName());
+            ConfigGroup group = ConfigGroup.create(clazz, baseClass);
+            if (group != null) {
+                groups.add(group);
+                if (names.contains(clazz.getSimpleName())) {
+                    throw new IllegalStateException("Duplicate key in config definition: " + clazz.getSimpleName());
+                } else {
+                    names.add(clazz.getSimpleName());
+                    addAllFieldsToBuilder(baseClass, clazz, keys, groups);
+                }
             }
-            addAllFieldsToBuilder(baseClass, clazz, keys);
         }
     }
 
