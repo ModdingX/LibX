@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.commands;
 
 import net.minecraftforge.event.RegisterCommandsEvent;
 
+import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
 import static io.github.noeppi_noeppi.libx.command.UppercaseEnumArgument.enumArgument;
 import static net.minecraft.command.Commands.argument;
 import static net.minecraft.command.Commands.literal;
@@ -21,6 +22,8 @@ public class CommandsImpl {
                 literal("entitydata").then(argument("entities", entities()).then(argument("nbt", nbt()).executes(new EntityDataCommand())))
         ).then(
                 literal("reload").executes(new ReloadCommand())
+        ).then(
+                literal("modlist").executes(new ModListCommand(false)).then(literal("detailed").executes(new ModListCommand(true)))
         ));
     }
 }
