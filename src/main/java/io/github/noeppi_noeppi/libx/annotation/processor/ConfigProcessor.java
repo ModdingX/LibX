@@ -30,6 +30,7 @@ public class ConfigProcessor extends Processor {
         validTypes.add(this.forClass(float.class));
         validTypes.add(this.forClass(double.class));
         validTypes.add(this.forClass(String.class));
+        validTypes.add(this.forClass(Optional.class));
         validTypes.add(this.forClass(List.class));
         validTypes.add(this.forClass(Map.class));
         validTypes.add(this.elements.getTypeElement("net.minecraft.item.crafting.Ingredient").asType());
