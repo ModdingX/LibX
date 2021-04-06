@@ -23,8 +23,7 @@ public class CommandsImpl {
         ).then(
                 literal("reload").executes(new ReloadCommand())
         ).then(
-                literal("modlist").executes(new ModListCommand())
-                        .then(argument("extended", bool()).executes(new ModListCommand()))
+                literal("modlist").executes(new ModListCommand(false)).then(literal("detailed").executes(new ModListCommand(true)))
         ));
     }
 }
