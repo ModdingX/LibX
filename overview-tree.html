@@ -90,6 +90,8 @@
 <li><a href="io/github/noeppi_noeppi/libx/impl/package-tree.html">io.github.noeppi_noeppi.libx.impl</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/impl/commands/package-tree.html">io.github.noeppi_noeppi.libx.impl.commands</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/impl/config/package-tree.html">io.github.noeppi_noeppi.libx.impl.config</a>, </li>
+<li><a href="io/github/noeppi_noeppi/libx/impl/inventory/container/package-tree.html">io.github.noeppi_noeppi.libx.impl.inventory.container</a>, </li>
+<li><a href="io/github/noeppi_noeppi/libx/impl/inventory/screen/package-tree.html">io.github.noeppi_noeppi.libx.impl.inventory.screen</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/impl/mixin/package-tree.html">io.github.noeppi_noeppi.libx.impl.mixin</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/impl/network/package-tree.html">io.github.noeppi_noeppi.libx.impl.network</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/inventory/package-tree.html">io.github.noeppi_noeppi.libx.inventory</a>, </li>
@@ -107,6 +109,23 @@
 <ul>
 <li type="circle">java.lang.Object
 <ul>
+<li type="circle">net.minecraft.client.gui.AbstractGui
+<ul>
+<li type="circle">net.minecraft.client.gui.FocusableGui (implements net.minecraft.client.gui.INestedGuiEventHandler)
+<ul>
+<li type="circle">net.minecraft.client.gui.screen.Screen (implements net.minecraft.client.gui.IRenderable, net.minecraft.client.gui.screen.IScreen)
+<ul>
+<li type="circle">net.minecraft.client.gui.screen.inventory.ContainerScreen&lt;T&gt; (implements net.minecraft.client.gui.IHasContainer&lt;T&gt;)
+<ul>
+<li type="circle">io.github.noeppi_noeppi.libx.impl.inventory.screen.<a href="io/github/noeppi_noeppi/libx/impl/inventory/screen/GenericScreen.html" title="class in io.github.noeppi_noeppi.libx.impl.inventory.screen"><span class="typeNameLink">GenericScreen</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li type="circle">javax.annotation.processing.AbstractProcessor (implements javax.annotation.processing.Processor)
 <ul>
 <li type="circle">io.github.noeppi_noeppi.libx.annotation.processor.<a href="io/github/noeppi_noeppi/libx/annotation/processor/Processor.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor"><span class="typeNameLink">Processor</span></a>
@@ -152,7 +171,12 @@
 <li type="circle">io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/ConfiguredValidator.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">ConfiguredValidator</span></a>&lt;T,A&gt;</li>
 <li type="circle">net.minecraft.inventory.container.Container
 <ul>
+<li type="circle">io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/CommonContainer.html" title="class in io.github.noeppi_noeppi.libx.inventory.container"><span class="typeNameLink">CommonContainer</span></a>
+<ul>
 <li type="circle">io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container"><span class="typeNameLink">ContainerBase</span></a>&lt;T&gt;</li>
+<li type="circle">io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/GenericContainer.html" title="class in io.github.noeppi_noeppi.libx.inventory.container"><span class="typeNameLink">GenericContainer</span></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li type="circle">io.github.noeppi_noeppi.libx.data.<a href="io/github/noeppi_noeppi/libx/data/CraftingHelper2.html" title="class in io.github.noeppi_noeppi.libx.data"><span class="typeNameLink">CraftingHelper2</span></a></li>
@@ -164,6 +188,7 @@
 <li type="circle">io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/ClickBlockEmptyHandEvent.html" title="class in io.github.noeppi_noeppi.libx.event"><span class="typeNameLink">ClickBlockEmptyHandEvent</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent.html" title="class in io.github.noeppi_noeppi.libx.event"><span class="typeNameLink">ConfigLoadedEvent</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/DatapacksReloadedEvent.html" title="class in io.github.noeppi_noeppi.libx.event"><span class="typeNameLink">DatapacksReloadedEvent</span></a></li>
+<li type="circle">io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/PlayerFindAmmoEvent.html" title="class in io.github.noeppi_noeppi.libx.event"><span class="typeNameLink">PlayerFindAmmoEvent</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/RandomTickEvent.html" title="class in io.github.noeppi_noeppi.libx.event"><span class="typeNameLink">RandomTickEvent</span></a>
 <ul>
 <li type="circle">io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/RandomTickEvent.Block.html" title="class in io.github.noeppi_noeppi.libx.event"><span class="typeNameLink">RandomTickEvent.Block</span></a></li>
@@ -193,11 +218,16 @@
 </li>
 <li type="circle">net.minecraft.item.Item (implements net.minecraftforge.common.extensions.IForgeItem, net.minecraft.util.IItemProvider)
 <ul>
-<li type="circle">io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/ItemBase.html" title="class in io.github.noeppi_noeppi.libx.mod.registration"><span class="typeNameLink">ItemBase</span></a></li>
+<li type="circle">io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/ItemBase.html" title="class in io.github.noeppi_noeppi.libx.mod.registration"><span class="typeNameLink">ItemBase</span></a>
+<ul>
+<li type="circle">io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/ItemInventory.html" title="class in io.github.noeppi_noeppi.libx.mod.registration"><span class="typeNameLink">ItemInventory</span></a>&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
 </li>
+</ul>
+</li>
+<li type="circle">io.github.noeppi_noeppi.libx.impl.inventory.container.<a href="io/github/noeppi_noeppi/libx/impl/inventory/container/GenericContainerSlotValidationWrapper.html" title="class in io.github.noeppi_noeppi.libx.impl.inventory.container"><span class="typeNameLink">GenericContainerSlotValidationWrapper</span></a> (implements net.minecraftforge.items.IItemHandlerModifiable)</li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.commands.<a href="io/github/noeppi_noeppi/libx/impl/commands/HandCommand.html" title="class in io.github.noeppi_noeppi.libx.impl.commands"><span class="typeNameLink">HandCommand</span></a> (implements com.mojang.brigadier.Command&lt;S&gt;)</li>
 <li type="circle">io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/IdToTextComponent.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="typeNameLink">IdToTextComponent</span></a></li>
 <li type="circle">net.minecraft.item.crafting.Ingredient (implements java.util.function.Predicate&lt;T&gt;)
@@ -221,6 +251,8 @@
 <li type="circle">io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/JsonToTextComponent.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="typeNameLink">JsonToTextComponent</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.annotation.processor.modinit.<a href="io/github/noeppi_noeppi/libx/annotation/processor/modinit/LoadableModel.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">LoadableModel</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinAbstractBlockState.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinAbstractBlockState</span></a></li>
+<li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinBowItem.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinBowItem</span></a></li>
+<li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinCrossbowItem.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinCrossbowItem</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinFluidState.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinFluidState</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinPlayerInteractionManager.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinPlayerInteractionManager</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinPlayerList.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinPlayerList</span></a></li>

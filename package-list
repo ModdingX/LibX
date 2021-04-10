@@ -17,6 +17,8 @@ io.github.noeppi_noeppi.libx.fi
 io.github.noeppi_noeppi.libx.impl
 io.github.noeppi_noeppi.libx.impl.commands
 io.github.noeppi_noeppi.libx.impl.config
+io.github.noeppi_noeppi.libx.impl.inventory.container
+io.github.noeppi_noeppi.libx.impl.inventory.screen
 io.github.noeppi_noeppi.libx.impl.mixin
 io.github.noeppi_noeppi.libx.impl.network
 io.github.noeppi_noeppi.libx.inventory
