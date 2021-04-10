@@ -32,6 +32,7 @@ public class RenderHelper {
      * be colored via {@link RenderHelper#color(int)}
      */
     public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation(LibX.getInstance().modid, "textures/white.png");
+    private static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
 
     /**
      * Same as {@link RenderHelper#repeatBlit(MatrixStack, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
@@ -156,7 +157,7 @@ public class RenderHelper {
      * Works like {@code IVertexBuilder#addQuad} but allows you to modify alpha values as well. Like
      * {@code IVerteyBuilder#addQuad} this uses {@code DefaultVertexFormats.BLOCK}.
      *
-     * @param alpha The alpha value to use.
+     * @param alpha    The alpha value to use.
      * @param mulAlpha If set to true the given alpha value is multiplied with the value set in
      *                 the four byte of {@code COLOR_4UB} assuming it is stored as {@code RGBA}.
      *                 If set to false just the given alpha value will be used.
@@ -164,7 +165,7 @@ public class RenderHelper {
     public static void addQuadWithAlpha(IVertexBuilder vertex, MatrixStack.Entry matrix, BakedQuad quad, float red, float green, float blue, float alpha, int light, int overlay, boolean mulColor, boolean mulAlpha) {
         int[] vertexData = quad.getVertexData();
         Vector3i vector3i = quad.getFace().getDirectionVec();
-        Vector3f vector3f = new Vector3f((float)vector3i.getX(), (float)vector3i.getY(), (float)vector3i.getZ());
+        Vector3f vector3f = new Vector3f((float) vector3i.getX(), (float) vector3i.getY(), (float) vector3i.getZ());
         Matrix4f matrix4f = matrix.getMatrix();
         vector3f.transform(matrix.getNormal());
 
@@ -172,7 +173,7 @@ public class RenderHelper {
             ByteBuffer bytebuffer = memorystack.malloc(DefaultVertexFormats.BLOCK.getSize());
             IntBuffer intbuffer = bytebuffer.asIntBuffer();
 
-            for(int i = 0; i < vertexData.length / 8; i++) {
+            for (int i = 0; i < vertexData.length / 8; i++) {
                 intbuffer.clear();
                 intbuffer.put(vertexData, i * 8, 8);
                 float x = bytebuffer.getFloat(0);
@@ -184,15 +185,15 @@ public class RenderHelper {
                 float b;
 
                 if (mulAlpha) {
-                    a = (float)(bytebuffer.get(15) & 255) / 255.0F * alpha;
+                    a = (float) (bytebuffer.get(15) & 255) / 255.0F * alpha;
                 } else {
                     a = alpha;
                 }
 
                 if (mulColor) {
-                    r = (float)(bytebuffer.get(12) & 255) / 255.0F * red;
-                    g = (float)(bytebuffer.get(13) & 255) / 255.0F * green;
-                    b = (float)(bytebuffer.get(14) & 255) / 255.0F * blue;
+                    r = (float) (bytebuffer.get(12) & 255) / 255.0F * red;
+                    g = (float) (bytebuffer.get(13) & 255) / 255.0F * green;
+                    b = (float) (bytebuffer.get(14) & 255) / 255.0F * blue;
                 } else {
                     r = red;
                     g = green;
@@ -208,5 +209,45 @@ public class RenderHelper {
                 vertex.addVertex(vector4f.getX(), vector4f.getY(), vector4f.getZ(), r, g, b, a, u, v, overlay, l, vector3f.getX(), vector3f.getY(), vector3f.getZ());
             }
         }
+    }
+
+    /**
+     * Renders a gui background of any size. This is created from the chest GUI texture and should
+     * work with texture packs. The width and height must be at least 9.
+     *
+     * @param x      The x position for the top left corner.
+     * @param y      The y position for the top left corner.
+     * @param width  The width of the GUI background
+     * @param height The height of the GUI background
+     */
+    public static void renderGuiBackground(MatrixStack matrixStack, int x, int y, int width, int height) {
+        //noinspection deprecation
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE_CHEST_GUI);
+        // Background
+        repeatBlit(matrixStack, x + 2, y + 2,
+                162, 14, width - 4, height - 4,
+                7 / 256f, 169 / 256f, 125 / 256f, 139 / 256f);
+        // Corners
+        AbstractGui.blit(matrixStack, x, y, 0, 0, 0, 4, 4, 256, 256);
+        AbstractGui.blit(matrixStack, x + width - 5, y, 0, 172, 0, 4, 4, 256, 256);
+        AbstractGui.blit(matrixStack, x, y + height - 5, 0, 0, 218, 4, 4, 256, 256);
+        AbstractGui.blit(matrixStack, x + width - 5, y + height - 5, 0, 172, 218, 4, 4, 256, 256);
+        // Top edge
+        repeatBlit(matrixStack, x + 4, y,
+                169, 3, width - 8, 3,
+                4 / 256f, 173 / 256f, 0 / 256f, 3 / 256f);
+        // Bottom edge
+        repeatBlit(matrixStack, x + 4, y + height - 4,
+                169, 3, width - 8, 3,
+                4 / 256f, 173 / 256f, 219 / 256f, 222 / 256f);
+        // Left edge
+        repeatBlit(matrixStack, x, y + 4,
+                3, 214, 3, height - 8,
+                0 / 256f, 3 / 256f, 4 / 256f, 218 / 256f);
+        // Right edge
+        repeatBlit(matrixStack, x + width - 4, y + 4,
+                3, 214, 3, height - 8,
+                173 / 256f, 176 / 256f, 4 / 256f, 218 / 256f);
     }
 }

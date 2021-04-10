@@ -8,6 +8,8 @@
   "server": [],
   "mixins": [
     "MixinAbstractBlockState",
+    "MixinBowItem",
+    "MixinCrossbowItem",
     "MixinFluidState",
     "MixinPlayerInteractionManager",
     "MixinPlayerList"
