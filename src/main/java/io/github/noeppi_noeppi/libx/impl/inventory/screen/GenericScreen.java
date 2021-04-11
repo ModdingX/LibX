@@ -13,9 +13,7 @@ import javax.annotation.Nonnull;
 
 // Screen for the GenericContainer. Do not use manually.
 public class GenericScreen extends ContainerScreen<GenericContainer> {
-
-    private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
-
+    
     private final GenericContainer container;
 
     public GenericScreen(GenericContainer container, PlayerInventory playerInventory, ITextComponent title) {

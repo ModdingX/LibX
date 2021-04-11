@@ -7,8 +7,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.BiPredicate;
 
-// Used to provide a validity check for items when usin ga fake handler
-// un the client.
+// Used to provide a validity check for items when using a fake handler
+// on the client.
 public class GenericContainerSlotValidationWrapper implements IItemHandlerModifiable {
 
     private final IItemHandlerModifiable handler;
