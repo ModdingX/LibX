@@ -29,21 +29,21 @@ public abstract class ItemTagProviderBase extends ItemTagsProvider {
     public final String getName() {
         return this.mod.modid + " item tags";
     }
-    
-    @Override
-	protected final void registerTags() {
-        this.setup();
-        
-		ForgeRegistries.ITEMS.getValues().stream()
-				.filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
-				.filter(i -> !(i instanceof BlockItem))
-				.forEach(this::defaultItemTags);
 
-		ForgeRegistries.ITEMS.getValues().stream()
-				.filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
-				.filter(i -> i instanceof BlockItem)
-				.map(i -> ((BlockItem) i).getBlock())
-				.forEach(this::defaultBlockItemTags);
+    @Override
+    protected final void registerTags() {
+        this.setup();
+
+        ForgeRegistries.ITEMS.getValues().stream()
+                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .filter(i -> !(i instanceof BlockItem))
+                .forEach(this::defaultItemTags);
+
+        ForgeRegistries.ITEMS.getValues().stream()
+                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .filter(i -> i instanceof BlockItem)
+                .map(i -> ((BlockItem) i).getBlock())
+                .forEach(this::defaultBlockItemTags);
     }
 
     /**
@@ -56,15 +56,15 @@ public abstract class ItemTagProviderBase extends ItemTagsProvider {
      * add item tags here, that can be inferred from the item.
      */
     public void defaultItemTags(Item item) {
-		
-	}
 
-	/**
+    }
+
+    /**
      * Called for every item from your mod that is a {@code BlockItem}. You should
      * add item tags here, that can be inferred from the block. However this is not
      * the correct place for block tags.
      */
-	public void defaultBlockItemTags(Block block) {
-		
-	}
+    public void defaultBlockItemTags(Block block) {
+
+    }
 }

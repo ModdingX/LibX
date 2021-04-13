@@ -27,14 +27,14 @@ public abstract class BlockTagProviderBase extends BlockTagsProvider {
     public final String getName() {
         return this.mod.modid + " block tags";
     }
-    
+
     @Override
-	protected final void registerTags() {
+    protected final void registerTags() {
         this.setup();
-        
-		ForgeRegistries.BLOCKS.getValues().stream()
-				.filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
-				.forEach(this::defaultBlockTags);
+
+        ForgeRegistries.BLOCKS.getValues().stream()
+                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .forEach(this::defaultBlockTags);
     }
 
     /**
@@ -47,6 +47,6 @@ public abstract class BlockTagProviderBase extends BlockTagsProvider {
      * that can be inferred from the block.
      */
     public void defaultBlockTags(Block block) {
-		
-	}
+
+    }
 }
