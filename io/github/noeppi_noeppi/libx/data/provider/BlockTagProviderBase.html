@@ -17,8 +17,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -121,7 +121,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">BlockTagProviderBase</span>
+<pre>public abstract class <span class="typeNameLabel">BlockTagProviderBase</span>
 extends net.minecraft.data.BlockTagsProvider</pre>
 <div class="block">A base class for block tag provider</div>
 </li>
@@ -204,14 +204,30 @@ extends net.minecraft.data.BlockTagsProvider</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html#defaultBlockTags-net.minecraft.block.Block-">defaultBlockTags</a></span>(net.minecraft.block.Block&nbsp;block)</code>
+<div class="block">Called for every block from your mod.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html#getName--">getName</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html#registerTags--">registerTags</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected abstract void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html#setup--">setup</a></span>()</code>
+<div class="block">A method to add your custom tags to blocks.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -219,7 +235,7 @@ extends net.minecraft.data.BlockTagsProvider</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minecraft.data.BlockTagsProvider</h3>
-<code>makePath, registerTags</code></li>
+<code>makePath</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.net.minecraft.data.TagsProvider">
@@ -295,7 +311,7 @@ extends net.minecraft.data.BlockTagsProvider</pre>
 <a name="getName--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getName</h4>
 <pre>@Nonnull
@@ -306,6 +322,40 @@ public final&nbsp;java.lang.String&nbsp;getName()</pre>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>getName</code>&nbsp;in class&nbsp;<code>net.minecraft.data.BlockTagsProvider</code></dd>
 </dl>
+</li>
+</ul>
+<a name="registerTags--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>registerTags</h4>
+<pre>protected final&nbsp;void&nbsp;registerTags()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>registerTags</code>&nbsp;in class&nbsp;<code>net.minecraft.data.BlockTagsProvider</code></dd>
+</dl>
+</li>
+</ul>
+<a name="setup--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>protected abstract&nbsp;void&nbsp;setup()</pre>
+<div class="block">A method to add your custom tags to blocks.</div>
+</li>
+</ul>
+<a name="defaultBlockTags-net.minecraft.block.Block-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>defaultBlockTags</h4>
+<pre>public&nbsp;void&nbsp;defaultBlockTags(net.minecraft.block.Block&nbsp;block)</pre>
+<div class="block">Called for every block from your mod. You should add block tags here,
+ that can be inferred from the block.</div>
 </li>
 </ul>
 </li>

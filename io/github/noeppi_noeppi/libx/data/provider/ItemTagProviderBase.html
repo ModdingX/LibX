@@ -17,8 +17,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -121,7 +121,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">ItemTagProviderBase</span>
+<pre>public abstract class <span class="typeNameLabel">ItemTagProviderBase</span>
 extends net.minecraft.data.ItemTagsProvider</pre>
 <div class="block">A base class for block tag provider</div>
 </li>
@@ -205,14 +205,36 @@ extends net.minecraft.data.ItemTagsProvider</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#defaultBlockItemTags-net.minecraft.block.Block-">defaultBlockItemTags</a></span>(net.minecraft.block.Block&nbsp;block)</code>
+<div class="block">Called for every item from your mod that is a <code>BlockItem</code>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#defaultItemTags-net.minecraft.item.Item-">defaultItemTags</a></span>(net.minecraft.item.Item&nbsp;item)</code>
+<div class="block">Called for every item from your mod that is not a <code>BlockItem</code>.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#getName--">getName</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#registerTags--">registerTags</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>protected abstract void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#setup--">setup</a></span>()</code>
+<div class="block">A method to add your custom tags to items.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -220,7 +242,7 @@ extends net.minecraft.data.ItemTagsProvider</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minecraft.data.ItemTagsProvider</h3>
-<code>copy, makePath, registerTags</code></li>
+<code>copy, makePath</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.net.minecraft.data.TagsProvider">
@@ -297,7 +319,7 @@ extends net.minecraft.data.ItemTagsProvider</pre>
 <a name="getName--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getName</h4>
 <pre>@Nonnull
@@ -308,6 +330,52 @@ public final&nbsp;java.lang.String&nbsp;getName()</pre>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>getName</code>&nbsp;in class&nbsp;<code>net.minecraft.data.ItemTagsProvider</code></dd>
 </dl>
+</li>
+</ul>
+<a name="registerTags--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>registerTags</h4>
+<pre>protected final&nbsp;void&nbsp;registerTags()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>registerTags</code>&nbsp;in class&nbsp;<code>net.minecraft.data.ItemTagsProvider</code></dd>
+</dl>
+</li>
+</ul>
+<a name="setup--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>protected abstract&nbsp;void&nbsp;setup()</pre>
+<div class="block">A method to add your custom tags to items.</div>
+</li>
+</ul>
+<a name="defaultItemTags-net.minecraft.item.Item-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>defaultItemTags</h4>
+<pre>public&nbsp;void&nbsp;defaultItemTags(net.minecraft.item.Item&nbsp;item)</pre>
+<div class="block">Called for every item from your mod that is not a <code>BlockItem</code>. You should
+ add item tags here, that can be inferred from the item.</div>
+</li>
+</ul>
+<a name="defaultBlockItemTags-net.minecraft.block.Block-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>defaultBlockItemTags</h4>
+<pre>public&nbsp;void&nbsp;defaultBlockItemTags(net.minecraft.block.Block&nbsp;block)</pre>
+<div class="block">Called for every item from your mod that is a <code>BlockItem</code>. You should
+ add item tags here, that can be inferred from the block. However this is not
+ the correct place for block tags.</div>
 </li>
 </ul>
 </li>

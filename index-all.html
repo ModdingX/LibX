@@ -519,8 +519,20 @@
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase.html#defaultBlock-net.minecraft.util.ResourceLocation-net.minecraft.item.BlockItem-">defaultBlock(ResourceLocation, BlockItem)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">ItemModelProviderBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#defaultBlockItemTags-net.minecraft.block.Block-">defaultBlockItemTags(Block)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">ItemTagProviderBase</a></dt>
+<dd>
+<div class="block">Called for every item from your mod that is a <code>BlockItem</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html#defaultBlockTags-net.minecraft.block.Block-">defaultBlockTags(Block)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockTagProviderBase</a></dt>
+<dd>
+<div class="block">Called for every block from your mod.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase.html#defaultItem-net.minecraft.util.ResourceLocation-net.minecraft.item.Item-">defaultItem(ResourceLocation, Item)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">ItemModelProviderBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#defaultItemTags-net.minecraft.item.Item-">defaultItemTags(Item)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">ItemTagProviderBase</a></dt>
+<dd>
+<div class="block">Called for every item from your mod that is not a <code>BlockItem</code>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html#defaultModel-net.minecraft.util.ResourceLocation-net.minecraft.block.Block-">defaultModel(ResourceLocation, Block)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockStateProviderBase</a></dt>
 <dd>
 <div class="block">Creates a model for the given block.</div>
@@ -1308,6 +1320,10 @@
 <dl>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html#magenta">magenta</a></span> - Variable in class io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html" title="class in io.github.noeppi_noeppi.libx.mod.registration">Colored</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeArmor-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeArmor(Consumer&lt;IFinishedRecipe&gt;, IItemProvider, IItemProvider, IItemProvider, IItemProvider, IItemProvider)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.recipe.<a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe">RecipeProviderBase</a></dt>
+<dd>
+<div class="block">Creates armor recipes for a material.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeBlockItem-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeBlockItem(Consumer&lt;IFinishedRecipe&gt;, IItemProvider, IItemProvider)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.recipe.<a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe">RecipeProviderBase</a></dt>
 <dd>
 <div class="block">Creates two recipes like it's done with blocks and ingots or ingots and nuggets</div>
@@ -1323,6 +1339,10 @@
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeSmallBlockItem-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-boolean-">makeSmallBlockItem(Consumer&lt;IFinishedRecipe&gt;, IItemProvider, IItemProvider, boolean)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.recipe.<a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe">RecipeProviderBase</a></dt>
 <dd>
 <div class="block">Creates one or two recipes like it's done with blocks with 2x2 ingots</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeTools-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeTools(Consumer&lt;IFinishedRecipe&gt;, IItemProvider, IItemProvider, IItemProvider, IItemProvider, IItemProvider, IItemProvider)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.recipe.<a href="io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe">RecipeProviderBase</a></dt>
+<dd>
+<div class="block">Creates tool recipes for a material.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html#manualModel-net.minecraft.block.Block-">manualModel(Block)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockStateProviderBase</a></dt>
 <dd>
@@ -1763,6 +1783,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html#registerStatesAndModels--">registerStatesAndModels()</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockStateProviderBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html#registerTags--">registerTags()</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockTagProviderBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#registerTags--">registerTags()</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">ItemTagProviderBase</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/config/ConfigManager.html#registerValueMapper-net.minecraft.util.ResourceLocation-io.github.noeppi_noeppi.libx.config.ValueMapper-">registerValueMapper(ResourceLocation, ValueMapper&lt;?, ?&gt;)</a></span> - Static method in class io.github.noeppi_noeppi.libx.config.<a href="io/github/noeppi_noeppi/libx/config/ConfigManager.html" title="class in io.github.noeppi_noeppi.libx.config">ConfigManager</a></dt>
 <dd>
 <div class="block">Registers a new <a href="io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config"><code>ValueMapper</code></a> that can be used to serialise config values.</div>
@@ -1947,8 +1971,16 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html#setup--">setup()</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockStateProviderBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html#setup--">setup()</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockTagProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockTagProviderBase</a></dt>
+<dd>
+<div class="block">A method to add your custom tags to blocks.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase.html#setup--">setup()</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">ItemModelProviderBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html#setup--">setup()</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/ItemTagProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">ItemTagProviderBase</a></dt>
+<dd>
+<div class="block">A method to add your custom tags to items.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/LibX.html#setup-net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent-">setup(FMLCommonSetupEvent)</a></span> - Method in class io.github.noeppi_noeppi.libx.<a href="io/github/noeppi_noeppi/libx/LibX.html" title="class in io.github.noeppi_noeppi.libx">LibX</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/mod/ModX.html#setup-net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent-">setup(FMLCommonSetupEvent)</a></span> - Method in class io.github.noeppi_noeppi.libx.mod.<a href="io/github/noeppi_noeppi/libx/mod/ModX.html" title="class in io.github.noeppi_noeppi.libx.mod">ModX</a></dt>

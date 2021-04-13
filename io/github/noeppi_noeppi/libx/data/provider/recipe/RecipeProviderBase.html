@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":6};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -210,13 +210,24 @@ extends net.minecraft.data.RecipeProvider</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeArmor-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeArmor</a></span>(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
+         net.minecraft.util.IItemProvider&nbsp;material,
+         net.minecraft.util.IItemProvider&nbsp;helmet,
+         net.minecraft.util.IItemProvider&nbsp;chestplate,
+         net.minecraft.util.IItemProvider&nbsp;leggings,
+         net.minecraft.util.IItemProvider&nbsp;boots)</code>
+<div class="block">Creates armor recipes for a material.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeBlockItem-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeBlockItem</a></span>(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
              net.minecraft.util.IItemProvider&nbsp;block,
              net.minecraft.util.IItemProvider&nbsp;ingot)</code>
 <div class="block">Creates two recipes like it's done with blocks and ingots or ingots and nuggets</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeBlockItemNugget-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeBlockItemNugget</a></span>(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
                    net.minecraft.util.IItemProvider&nbsp;block,
@@ -225,7 +236,7 @@ extends net.minecraft.data.RecipeProvider</pre>
 <div class="block">Creates four recipes like it's done with blocks, ingots and nuggets.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeSmallBlockItem-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeSmallBlockItem</a></span>(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
                   net.minecraft.util.IItemProvider&nbsp;block,
@@ -233,7 +244,7 @@ extends net.minecraft.data.RecipeProvider</pre>
 <div class="block">Calls <a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeSmallBlockItem-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-boolean-"><code>makeSmallBlockItem(Consumer, IItemProvider, IItemProvider, boolean)</code></a> with default value true for <code>revert</code></div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeSmallBlockItem-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-boolean-">makeSmallBlockItem</a></span>(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
                   net.minecraft.util.IItemProvider&nbsp;block,
@@ -242,7 +253,19 @@ extends net.minecraft.data.RecipeProvider</pre>
 <div class="block">Creates one or two recipes like it's done with blocks with 2x2 ingots</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#makeTools-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">makeTools</a></span>(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
+         net.minecraft.util.IItemProvider&nbsp;material,
+         net.minecraft.util.IItemProvider&nbsp;sword,
+         net.minecraft.util.IItemProvider&nbsp;axe,
+         net.minecraft.util.IItemProvider&nbsp;pick,
+         net.minecraft.util.IItemProvider&nbsp;shovel,
+         net.minecraft.util.IItemProvider&nbsp;hoe)</code>
+<div class="block">Creates tool recipes for a material.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase.html#registerRecipes-java.util.function.Consumer-">registerRecipes</a></span>(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer)</code>&nbsp;</td>
 </tr>
@@ -411,7 +434,7 @@ public&nbsp;java.lang.String&nbsp;getName()</pre>
 <a name="makeSmallBlockItem-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-boolean-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>makeSmallBlockItem</h4>
 <pre>public&nbsp;void&nbsp;makeSmallBlockItem(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
@@ -423,6 +446,46 @@ public&nbsp;java.lang.String&nbsp;getName()</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>revert</code> - Whether the block can be crafted back or not</dd>
 </dl>
+</li>
+</ul>
+<a name="makeTools-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeTools</h4>
+<pre>public&nbsp;void&nbsp;makeTools(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
+                      net.minecraft.util.IItemProvider&nbsp;material,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;sword,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;axe,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;pick,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;shovel,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;hoe)</pre>
+<div class="block">Creates tool recipes for a material. All the tool items may be null in which case the recipe is not created.</div>
+</li>
+</ul>
+<a name="makeArmor-java.util.function.Consumer-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-net.minecraft.util.IItemProvider-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>makeArmor</h4>
+<pre>public&nbsp;void&nbsp;makeArmor(java.util.function.Consumer&lt;net.minecraft.data.IFinishedRecipe&gt;&nbsp;consumer,
+                      net.minecraft.util.IItemProvider&nbsp;material,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;helmet,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;chestplate,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;leggings,
+                      @Nullable
+                      net.minecraft.util.IItemProvider&nbsp;boots)</pre>
+<div class="block">Creates armor recipes for a material. All the armor items may be null in which case the recipe is not created.</div>
 </li>
 </ul>
 </li>
