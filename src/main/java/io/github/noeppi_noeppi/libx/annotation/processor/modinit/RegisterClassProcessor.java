@@ -28,11 +28,11 @@ public class RegisterClassProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@RegisterClass used with a mod that is not a subtype of ModXRegistration", element);
             return;
         }
-        List<RegistrationEntry> entries = element.getEnclosedElements().stream().flatMap(e -> fromElement(e, env)).collect(Collectors.toList());
+        List<RegistrationEntry> entries = element.getEnclosedElements().stream().flatMap(e -> fromElement(registerClass, e, env)).collect(Collectors.toList());
         mod.addRegistration(registerClass.priority(), entries);
     }
     
-    private static Stream<RegistrationEntry> fromElement(Element element, ModEnv env) {
+    private static Stream<RegistrationEntry> fromElement(RegisterClass classAnnotation, Element element, ModEnv env) {
         if (element.getKind() != ElementKind.FIELD || element.getAnnotation(NoReg.class) != null) {
             return Stream.empty();
         } else if (!(element.getEnclosingElement() instanceof QualifiedNameable)) {
@@ -63,6 +63,9 @@ public class RegisterClassProcessor {
                     sb.append(Character.toLowerCase(chr));
                 }
                 registryName = sb.toString();
+            }
+            if (!classAnnotation.prefix().isEmpty()) {
+                registryName = classAnnotation.prefix() + "_" + registryName;
             }
             String fqn = ((QualifiedNameable) element.getEnclosingElement()).getQualifiedName() + "." + element.getSimpleName();
             return Stream.of(new RegistrationEntry(registryName, fqn));

@@ -21,4 +21,10 @@ public @interface RegisterClass {
      * Higher priorities are registered first.
      */
     int priority() default 0;
+
+    /**
+     * All elements from this clas are prefixed with a special prefix. This way you can keep field names simple
+     * and avoid duplicates.
+     */
+    String prefix() default "";
 }
