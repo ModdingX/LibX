@@ -120,6 +120,12 @@ public @interface <span class="memberNameLabel">RegisterClass</span></pre>
 <th class="colLast" scope="col">Optional Element and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/annotation/RegisterClass.html#prefix--">prefix</a></span></code>
+<div class="block">All elements from this clas are prefixed with a special prefix.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/annotation/RegisterClass.html#priority--">priority</a></span></code>
 <div class="block">Higher priorities are registered first.</div>
@@ -143,7 +149,7 @@ public @interface <span class="memberNameLabel">RegisterClass</span></pre>
 <a name="priority--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>priority</h4>
 <pre>public abstract&nbsp;int&nbsp;priority</pre>
@@ -151,6 +157,24 @@ public @interface <span class="memberNameLabel">RegisterClass</span></pre>
 <dl>
 <dt>Default:</dt>
 <dd>0</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="prefix--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>prefix</h4>
+<pre>public abstract&nbsp;java.lang.String&nbsp;prefix</pre>
+<div class="block">All elements from this clas are prefixed with a special prefix. This way you can keep field names simple
+ and avoid duplicates.</div>
+<dl>
+<dt>Default:</dt>
+<dd>""</dd>
 </dl>
 </li>
 </ul>
