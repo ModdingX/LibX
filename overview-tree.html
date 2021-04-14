@@ -139,6 +139,8 @@
 </li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/AdvancedValueMappers.html" title="class in io.github.noeppi_noeppi.libx.impl.config"><span class="typeNameLink">AdvancedValueMappers</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase</span></a> (implements net.minecraft.data.IDataProvider)</li>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.SilkModifier</span></a></li>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.WrappedLootEntry</span></a> (implements io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.StandaloneLootFactory</a>)</li>
 <li type="circle">net.minecraftforge.client.model.generators.BlockStateProvider (implements net.minecraft.data.IDataProvider)
 <ul>
 <li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockStateProviderBase</span></a></li>
@@ -249,6 +251,12 @@
 </li>
 <li type="circle">io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/JsonToTextComponent.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="typeNameLink">JsonToTextComponent</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.annotation.processor.modinit.<a href="io/github/noeppi_noeppi/libx/annotation/processor/modinit/LoadableModel.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">LoadableModel</span></a></li>
+<li type="circle">net.minecraft.loot.LootEntry.Builder&lt;T&gt; (implements net.minecraft.loot.ILootConditionConsumer&lt;T&gt;)
+<ul>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GroupLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.GroupLootBuilder</span></a></li>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SequenceLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.SequenceLootBuilder</span></a></li>
+</ul>
+</li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinAbstractBlockState.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinAbstractBlockState</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinFluidState.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinFluidState</span></a></li>
 <li type="circle">io.github.noeppi_noeppi.libx.impl.mixin.<a href="io/github/noeppi_noeppi/libx/impl/mixin/MixinPlayerInteractionManager.html" title="class in io.github.noeppi_noeppi.libx.impl.mixin"><span class="typeNameLink">MixinPlayerInteractionManager</span></a></li>
@@ -348,6 +356,21 @@
 </ul>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.LootFactory</span></a>
+<ul>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.GenericLootModifier</span></a>
+<ul>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.LootModifier</span></a> (also extends io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.StandaloneLootFactory</a>)</li>
+</ul>
+</li>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.LootModifier</span></a> (also extends io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GenericLootModifier</a>, io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.StandaloneLootFactory</a>)</li>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.StandaloneLootFactory</span></a>
+<ul>
+<li type="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase.LootModifier</span></a> (also extends io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GenericLootModifier</a>)</li>
+</ul>
+</li>
+</ul>
+</li>
 <li type="circle">io.github.noeppi_noeppi.libx.config.<a href="io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config"><span class="typeNameLink">ConfigValidator</span></a>&lt;T,A&gt;</li>
 <li type="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Function4.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="typeNameLink">Function4</span></a>&lt;A,B,C,D,R&gt;</li>
 <li type="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Function5.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="typeNameLink">Function5</span></a>&lt;A,B,C,D,E,R&gt;</li>

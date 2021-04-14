@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":6};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":6,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" target="_top">Frames</a></li>
@@ -72,7 +72,7 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -122,6 +122,63 @@ implements net.minecraft.data.IDataProvider</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GenericLootModifier</a></span></code>
+<div class="block">Interface to modify a standalone loot entry to a new loot entry.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GroupLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GroupLootBuilder</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a></span></code>
+<div class="block">Interface to get a loot entry from a block.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></span></code>
+<div class="block">Interface to modify a standalone loot entry to a new standalone loot entry.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SequenceLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SequenceLootBuilder</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SilkModifier</a></span></code>
+<div class="block">A class used in the drops method to reduce ambiguity and make the code more readable.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.StandaloneLootFactory</a></span></code>
+<div class="block">Interface to get a standalone loot entry fro ma block.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field.summary">
@@ -187,57 +244,247 @@ implements net.minecraft.data.IDataProvider</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#act-net.minecraft.data.DirectoryCache-">act</a></span>(net.minecraft.data.DirectoryCache&nbsp;cache)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#copyNBT-net.minecraft.block.Block-java.lang.String...-">copyNBT</a></span>(net.minecraft.block.Block&nbsp;b,
-       java.lang.String...&nbsp;tags)</code>
-<div class="block">Creates a loot table that copies NBT-Data from a tile entity into the dropped item.</div>
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#combine-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">combine</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</code>
+<div class="block">Combines the given loot factories into one.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>net.minecraft.loot.LootEntry.Builder&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#combine-net.minecraft.loot.LootEntry.Builder...-">combine</a></span>(net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</code>
+<div class="block">Combines the given loot builders into one.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#copyNBT-java.lang.String...-">copyNBT</a></span>(java.lang.String...&nbsp;tags)</code>
+<div class="block">Creates a loot modifier that copies NBT-Data from a tile entity into the dropped item.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#copyProperties-net.minecraft.state.Property...-">copyProperties</a></span>(net.minecraft.state.Property&lt;?&gt;...&nbsp;properties)</code>
+<div class="block">Creates a loot modifier that copies properties from a blockstate into the dropped item.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#customLootTable-net.minecraft.block.Block-">customLootTable</a></span>(net.minecraft.block.Block&nbsp;block)</code>
 <div class="block">The given block will not be processed by this provider.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#customLootTable-net.minecraft.block.Block-java.util.function.Function-">customLootTable</a></span>(net.minecraft.block.Block&nbsp;block,
                java.util.function.Function&lt;net.minecraft.block.Block,net.minecraft.loot.LootTable.Builder&gt;&nbsp;loot)</code>
 <div class="block">The given block will get the given loot table function.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#customLootTable-net.minecraft.block.Block-net.minecraft.loot.LootTable.Builder-">customLootTable</a></span>(net.minecraft.block.Block&nbsp;block,
                net.minecraft.loot.LootTable.Builder&nbsp;loot)</code>
 <div class="block">The given block will get the given loot table.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>protected net.minecraft.loot.LootTable.Builder</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#defaultBehavior-net.minecraft.block.Block-">defaultBehavior</a></span>(net.minecraft.block.Block&nbsp;b)</code>
 <div class="block">Creates a default loot table for the given block.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#empty-net.minecraft.block.Block-">empty</a></span>(net.minecraft.block.Block&nbsp;b)</code>
-<div class="block">Creates an empty loot table for the given block.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#drops-net.minecraft.block.Block-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">drops</a></span>(net.minecraft.block.Block&nbsp;b,
+     <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</code>
+<div class="block">Method to add a custom loot table for a block.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#drops-net.minecraft.block.Block-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.SilkModifier-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">drops</a></span>(net.minecraft.block.Block&nbsp;b,
+     <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SilkModifier</a>&nbsp;silk,
+     <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</code>
+<div class="block">Method to add a custom loot table for a block.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#drops-net.minecraft.block.Block-boolean-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">drops</a></span>(net.minecraft.block.Block&nbsp;b,
+     boolean&nbsp;silk,
+     <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</code>
+<div class="block">Method to add a custom loot table for a block.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#drops-net.minecraft.block.Block-boolean-net.minecraft.item.ItemStack...-">drops</a></span>(net.minecraft.block.Block&nbsp;b,
+     boolean&nbsp;silk,
+     net.minecraft.item.ItemStack...&nbsp;drops)</code>
+<div class="block">Method to add a custom loot table for a block.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#drops-net.minecraft.block.Block-boolean-net.minecraft.loot.LootEntry.Builder...-">drops</a></span>(net.minecraft.block.Block&nbsp;b,
+     boolean&nbsp;silk,
+     net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</code>
+<div class="block">Method to add a custom loot table for a block.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#first-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">first</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</code>
+<div class="block">Combines the given loot factories into one.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>net.minecraft.loot.LootEntry.Builder&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#first-net.minecraft.loot.LootEntry.Builder...-">first</a></span>(net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</code>
+<div class="block">Combines the given loot builders into one.</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#fortuneBinomial-float-">fortuneBinomial</a></span>(float&nbsp;probability)</code>
+<div class="block">A loot modifier to apply fortune based on a binomial formula.</div>
+</td>
+</tr>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#fortuneBinomial-float-int-">fortuneBinomial</a></span>(float&nbsp;probability,
+               int&nbsp;bonus)</code>
+<div class="block">A loot modifier to apply fortune based on a binomial formula.</div>
+</td>
+</tr>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#fortuneOres--">fortuneOres</a></span>()</code>
+<div class="block">A loot modifier to apply fortune based on the formula used for ores.</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#fortuneUniform--">fortuneUniform</a></span>()</code>
+<div class="block">A loot modifier to apply fortune based on a uniform formula.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#fortuneUniform-int-">fortuneUniform</a></span>(int&nbsp;multiplier)</code>
+<div class="block">A loot modifier to apply fortune based on a uniform formula.</div>
+</td>
+</tr>
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#from-net.minecraft.loot.LootEntry.Builder-">from</a></span>(net.minecraft.loot.LootEntry.Builder&lt;?&gt;&nbsp;entry)</code>
+<div class="block">Turns a loot entry into a loot factory.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#from-net.minecraft.loot.LootFunction.Builder-">from</a></span>(net.minecraft.loot.LootFunction.Builder&lt;?&gt;&nbsp;function)</code>
+<div class="block">Turns a loot function into a loot modifier.</div>
+</td>
+</tr>
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#from-net.minecraft.loot.StandaloneLootEntry.Builder-">from</a></span>(net.minecraft.loot.StandaloneLootEntry.Builder&lt;?&gt;&nbsp;entry)</code>
+<div class="block">Turns a standalone loot entry into a standalone loot factory.</div>
+</td>
+</tr>
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#getName--">getName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i25" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GroupLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GroupLootBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#group--">group</a></span>()</code>
+<div class="block">Minecraft does not seem to have a loot builder for groups.</div>
+</td>
+</tr>
+<tr id="i26" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.StandaloneLootFactory</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#item--">item</a></span>()</code>
+<div class="block">Gets a standalone loot factory to always drop the block as item.</div>
+</td>
+</tr>
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#needsLootTable-net.minecraft.block.BlockState-">needsLootTable</a></span>(net.minecraft.block.BlockState&nbsp;state)</code>
 <div class="block">Returns whether this block state needs a loot table.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i28" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SilkModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#noSilk--">noSilk</a></span>()</code>
+<div class="block">Gets a new silk modifier that means: No special silk touch behaviour.</div>
+</td>
+</tr>
+<tr id="i29" class="rowColor">
+<td class="colFirst"><code>net.minecraft.loot.conditions.ILootCondition.IBuilder</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#not-net.minecraft.loot.conditions.ILootCondition.IBuilder-">not</a></span>(net.minecraft.loot.conditions.ILootCondition.IBuilder&nbsp;condition)</code>
+<div class="block">Inverts a loot condition</div>
+</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code>net.minecraft.loot.conditions.ILootCondition.IBuilder</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#or-net.minecraft.loot.conditions.ILootCondition.IBuilder-">or</a></span>(net.minecraft.loot.conditions.ILootCondition.IBuilder&nbsp;condition)</code>
+<div class="block">Joins conditions with OR.</div>
+</td>
+</tr>
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code>net.minecraft.loot.conditions.ILootCondition.IBuilder</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#random-float-">random</a></span>(float&nbsp;chance)</code>
+<div class="block">A condition that is random with a chance.</div>
+</td>
+</tr>
+<tr id="i32" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#repeat-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory-int-">repeat</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>&nbsp;factory,
+      int&nbsp;times)</code>
+<div class="block">Repeats a loot factory a fixed amount of times.</div>
+</td>
+</tr>
+<tr id="i33" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SequenceLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SequenceLootBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#sequence--">sequence</a></span>()</code>
+<div class="block">Minecraft does not seem to have a loot builder for sequences.</div>
+</td>
+</tr>
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#setup--">setup</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i35" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SilkModifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#silk-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.GenericLootModifier-">silk</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GenericLootModifier</a>&nbsp;modifier)</code>
+<div class="block">Turns a generic loot modifier into a silk modifier.</div>
+</td>
+</tr>
+<tr id="i36" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#stack-net.minecraft.util.IItemProvider-">stack</a></span>(net.minecraft.util.IItemProvider&nbsp;item)</code>
+<div class="block">A loot factory for a specific item.</div>
+</td>
+</tr>
+<tr id="i37" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#stack-net.minecraft.item.ItemStack-">stack</a></span>(net.minecraft.item.ItemStack&nbsp;stack)</code>
+<div class="block">Tries to create the best possible representation of stack in a loot entry.</div>
+</td>
+</tr>
+<tr id="i38" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#whileMatch-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">whileMatch</a></span>(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</code>
+<div class="block">Combines the given loot factories into one.</div>
+</td>
+</tr>
+<tr id="i39" class="rowColor">
+<td class="colFirst"><code>net.minecraft.loot.LootEntry.Builder&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#whileMatch-net.minecraft.loot.LootEntry.Builder...-">whileMatch</a></span>(net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</code>
+<div class="block">Combines the given loot builders into one.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -384,30 +631,380 @@ public final&nbsp;java.lang.String&nbsp;getName()</pre>
 <pre>protected abstract&nbsp;void&nbsp;setup()</pre>
 </li>
 </ul>
-<a name="empty-net.minecraft.block.Block-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>empty</h4>
-<pre>public&nbsp;void&nbsp;empty(net.minecraft.block.Block&nbsp;b)</pre>
-<div class="block">Creates an empty loot table for the given block. Should be called in constructor.</div>
-</li>
-</ul>
-<a name="copyNBT-net.minecraft.block.Block-java.lang.String...-">
+<a name="copyNBT-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>copyNBT</h4>
-<pre>public&nbsp;void&nbsp;copyNBT(net.minecraft.block.Block&nbsp;b,
-                    java.lang.String...&nbsp;tags)</pre>
-<div class="block">Creates a loot table that copies NBT-Data from a tile entity into the dropped item.
- Should be called in constructor.</div>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;copyNBT(java.lang.String...&nbsp;tags)</pre>
+<div class="block">Creates a loot modifier that copies NBT-Data from a tile entity into the dropped item. Use this
+ with one of the <code>drops</code> methods.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>tags</code> - The toplevel tags of the tile entity to be copied.</dd>
 </dl>
+</li>
+</ul>
+<a name="copyProperties-net.minecraft.state.Property...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>copyProperties</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;copyProperties(net.minecraft.state.Property&lt;?&gt;...&nbsp;properties)</pre>
+<div class="block">Creates a loot modifier that copies properties from a blockstate into the dropped item. Use this
+ with one of the <code>drops</code> methods.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>properties</code> - The properties of the blockstate to be copied.</dd>
+</dl>
+</li>
+</ul>
+<a name="drops-net.minecraft.block.Block-boolean-net.minecraft.item.ItemStack...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drops</h4>
+<pre>public&nbsp;void&nbsp;drops(net.minecraft.block.Block&nbsp;b,
+                  boolean&nbsp;silk,
+                  net.minecraft.item.ItemStack...&nbsp;drops)</pre>
+<div class="block">Method to add a custom loot table for a block.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - The block to add the loot table to.</dd>
+<dd><code>silk</code> - Whether the block can be mined with silk touch to drop itself.</dd>
+<dd><code>drops</code> - A list of stacks that will all be dropped if silk touch is false or the block
+              is mined without silk touch.</dd>
+</dl>
+</li>
+</ul>
+<a name="drops-net.minecraft.block.Block-boolean-net.minecraft.loot.LootEntry.Builder...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drops</h4>
+<pre>public&nbsp;void&nbsp;drops(net.minecraft.block.Block&nbsp;b,
+                  boolean&nbsp;silk,
+                  net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</pre>
+<div class="block">Method to add a custom loot table for a block.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - The block to add the loot table to.</dd>
+<dd><code>silk</code> - Whether the block can be mined with silk touch to drop itself.</dd>
+<dd><code>loot</code> - A list of loot factories that will all be applied if silk touch is false or the block
+             is mined without silk touch.</dd>
+</dl>
+</li>
+</ul>
+<a name="drops-net.minecraft.block.Block-boolean-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drops</h4>
+<pre>public&nbsp;void&nbsp;drops(net.minecraft.block.Block&nbsp;b,
+                  boolean&nbsp;silk,
+                  <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</pre>
+<div class="block">Method to add a custom loot table for a block.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - The block to add the loot table to.</dd>
+<dd><code>silk</code> - Whether the block can be mined with silk touch to drop itself.</dd>
+<dd><code>loot</code> - A list of loot factories that will all be applied if silk touch is false or the block
+             is mined without silk touch.</dd>
+</dl>
+</li>
+</ul>
+<a name="drops-net.minecraft.block.Block-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drops</h4>
+<pre>public&nbsp;void&nbsp;drops(net.minecraft.block.Block&nbsp;b,
+                  <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</pre>
+<div class="block">Method to add a custom loot table for a block.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - The block to add the loot table to.</dd>
+<dd><code>loot</code> - A list of loot factories that will all be applied.</dd>
+</dl>
+</li>
+</ul>
+<a name="drops-net.minecraft.block.Block-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.SilkModifier-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>drops</h4>
+<pre>public&nbsp;void&nbsp;drops(net.minecraft.block.Block&nbsp;b,
+                  <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SilkModifier</a>&nbsp;silk,
+                  <a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</pre>
+<div class="block">Method to add a custom loot table for a block.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>b</code> - The block to add the loot table to.</dd>
+<dd><code>silk</code> - Either null in which case no special handling of silk touch is done or a LootModifier that
+             can modify the stack after mining with silk touch.</dd>
+<dd><code>loot</code> - A list of loot factories that are used when silk ouch is either null or the block is mined
+             without silk touch. All of them will be applied.</dd>
+</dl>
+</li>
+</ul>
+<a name="item--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>item</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.StandaloneLootFactory</a>&nbsp;item()</pre>
+<div class="block">Gets a standalone loot factory to always drop the block as item.</div>
+</li>
+</ul>
+<a name="silk-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.GenericLootModifier-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>silk</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SilkModifier</a>&nbsp;silk(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GenericLootModifier</a>&nbsp;modifier)</pre>
+<div class="block">Turns a generic loot modifier into a silk modifier. This exists to reduce ambiguity.
+ A silk modifier does not extend <code>GenericLootModifier</code> for this reason.</div>
+</li>
+</ul>
+<a name="noSilk--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>noSilk</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SilkModifier.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SilkModifier</a>&nbsp;noSilk()</pre>
+<div class="block">Gets a new silk modifier that means: No special silk touch behaviour.</div>
+</li>
+</ul>
+<a name="repeat-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>repeat</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>&nbsp;repeat(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>&nbsp;factory,
+                                                int&nbsp;times)</pre>
+<div class="block">Repeats a loot factory a fixed amount of times.</div>
+</li>
+</ul>
+<a name="from-net.minecraft.loot.StandaloneLootEntry.Builder-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>from</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a>&nbsp;from(net.minecraft.loot.StandaloneLootEntry.Builder&lt;?&gt;&nbsp;entry)</pre>
+<div class="block">Turns a standalone loot entry into a standalone loot factory.</div>
+</li>
+</ul>
+<a name="from-net.minecraft.loot.LootEntry.Builder-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>from</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>&nbsp;from(net.minecraft.loot.LootEntry.Builder&lt;?&gt;&nbsp;entry)</pre>
+<div class="block">Turns a loot entry into a loot factory.</div>
+</li>
+</ul>
+<a name="from-net.minecraft.loot.LootFunction.Builder-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>from</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;from(net.minecraft.loot.LootFunction.Builder&lt;?&gt;&nbsp;function)</pre>
+<div class="block">Turns a loot function into a loot modifier.</div>
+</li>
+</ul>
+<a name="fortuneOres--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fortuneOres</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;fortuneOres()</pre>
+<div class="block">A loot modifier to apply fortune based on the formula used for ores.</div>
+</li>
+</ul>
+<a name="fortuneUniform--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fortuneUniform</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;fortuneUniform()</pre>
+<div class="block">A loot modifier to apply fortune based on a uniform formula.</div>
+</li>
+</ul>
+<a name="fortuneUniform-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fortuneUniform</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;fortuneUniform(int&nbsp;multiplier)</pre>
+<div class="block">A loot modifier to apply fortune based on a uniform formula.</div>
+</li>
+</ul>
+<a name="fortuneBinomial-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fortuneBinomial</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;fortuneBinomial(float&nbsp;probability)</pre>
+<div class="block">A loot modifier to apply fortune based on a binomial formula.</div>
+</li>
+</ul>
+<a name="fortuneBinomial-float-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fortuneBinomial</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootModifier</a>&nbsp;fortuneBinomial(float&nbsp;probability,
+                                                          int&nbsp;bonus)</pre>
+<div class="block">A loot modifier to apply fortune based on a binomial formula.</div>
+</li>
+</ul>
+<a name="random-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>random</h4>
+<pre>public&nbsp;net.minecraft.loot.conditions.ILootCondition.IBuilder&nbsp;random(float&nbsp;chance)</pre>
+<div class="block">A condition that is random with a chance.</div>
+</li>
+</ul>
+<a name="not-net.minecraft.loot.conditions.ILootCondition.IBuilder-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>not</h4>
+<pre>public&nbsp;net.minecraft.loot.conditions.ILootCondition.IBuilder&nbsp;not(net.minecraft.loot.conditions.ILootCondition.IBuilder&nbsp;condition)</pre>
+<div class="block">Inverts a loot condition</div>
+</li>
+</ul>
+<a name="or-net.minecraft.loot.conditions.ILootCondition.IBuilder-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>or</h4>
+<pre>public&nbsp;net.minecraft.loot.conditions.ILootCondition.IBuilder&nbsp;or(net.minecraft.loot.conditions.ILootCondition.IBuilder&nbsp;condition)</pre>
+<div class="block">Joins conditions with OR.</div>
+</li>
+</ul>
+<a name="group--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>group</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GroupLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.GroupLootBuilder</a>&nbsp;group()</pre>
+<div class="block">Minecraft does not seem to have a loot builder for groups. So here you have one.</div>
+</li>
+</ul>
+<a name="sequence--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sequence</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.SequenceLootBuilder.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.SequenceLootBuilder</a>&nbsp;sequence()</pre>
+<div class="block">Minecraft does not seem to have a loot builder for sequences. So here you have one.</div>
+</li>
+</ul>
+<a name="combine-net.minecraft.loot.LootEntry.Builder...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>combine</h4>
+<pre>public&nbsp;net.minecraft.loot.LootEntry.Builder&lt;?&gt;&nbsp;combine(net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</pre>
+<div class="block">Combines the given loot builders into one. (All loot builders will be applied).</div>
+</li>
+</ul>
+<a name="combine-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>combine</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>&nbsp;combine(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</pre>
+<div class="block">Combines the given loot factories into one. (All loot factories will be applied).</div>
+</li>
+</ul>
+<a name="first-net.minecraft.loot.LootEntry.Builder...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>first</h4>
+<pre>public&nbsp;net.minecraft.loot.LootEntry.Builder&lt;?&gt;&nbsp;first(net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</pre>
+<div class="block">Combines the given loot builders into one. Only the first matching builder is applied.</div>
+</li>
+</ul>
+<a name="first-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>first</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>&nbsp;first(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</pre>
+<div class="block">Combines the given loot factories into one. Only the first matching factory is applied.</div>
+</li>
+</ul>
+<a name="whileMatch-net.minecraft.loot.LootEntry.Builder...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>whileMatch</h4>
+<pre>public&nbsp;net.minecraft.loot.LootEntry.Builder&lt;?&gt;&nbsp;whileMatch(net.minecraft.loot.LootEntry.Builder&lt;?&gt;...&nbsp;loot)</pre>
+<div class="block">Combines the given loot builders into one. Only the first matching builder is applied.</div>
+</li>
+</ul>
+<a name="whileMatch-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>whileMatch</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>&nbsp;whileMatch(<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.LootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.LootFactory</a>...&nbsp;loot)</pre>
+<div class="block">Combines the given loot factories into one. Only the first matching factory is applied.</div>
+</li>
+</ul>
+<a name="stack-net.minecraft.util.IItemProvider-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>stack</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a>&nbsp;stack(net.minecraft.util.IItemProvider&nbsp;item)</pre>
+<div class="block">A loot factory for a specific item.</div>
+</li>
+</ul>
+<a name="stack-net.minecraft.item.ItemStack-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>stack</h4>
+<pre>public&nbsp;<a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a>&nbsp;stack(net.minecraft.item.ItemStack&nbsp;stack)</pre>
+<div class="block">Tries to create the best possible representation of stack in a loot entry.</div>
 </li>
 </ul>
 <a name="defaultBehavior-net.minecraft.block.Block-">
@@ -463,7 +1060,7 @@ protected&nbsp;net.minecraft.loot.LootTable.Builder&nbsp;defaultBehavior(net.min
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" target="_top">Frames</a></li>
@@ -487,7 +1084,7 @@ protected&nbsp;net.minecraft.loot.LootTable.Builder&nbsp;defaultBehavior(net.min
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
