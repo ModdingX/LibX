@@ -9,14 +9,15 @@ import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
 import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.inventory.screen.GenericScreen;
+import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.inventory.container.GenericContainer;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -40,6 +41,7 @@ public class LibX extends ModX {
         instance = this;
         network = new NetworkImpl(this);
 
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::registerContainers);
 
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
@@ -54,7 +56,6 @@ public class LibX extends ModX {
 
     @Override
     protected void setup(FMLCommonSetupEvent event) {
-        GenericContainer.registerSlotValidator(new ResourceLocation("libx", "test"), (s, stack) -> s >= 5 || ItemTags.ARROWS.contains(stack.getItem()));
         CommandUtil.registerGenericCommandArgument(this.modid + "_upperenum", UppercaseEnumArgument.class, new UppercaseEnumArgument.Serializer());
     }
 
@@ -69,6 +70,11 @@ public class LibX extends ModX {
 
     public static NetworkImpl getNetwork() {
         return network;
+    }
+
+    // We can not do this in setup as it would not be available for `runData`
+    private void registerMisc(RegistryEvent.NewRegistry event) {
+        Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, AllLootEntry.TYPE);
     }
     
     private void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {

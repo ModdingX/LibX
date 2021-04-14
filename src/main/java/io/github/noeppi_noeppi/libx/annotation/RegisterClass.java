@@ -23,7 +23,7 @@ public @interface RegisterClass {
     int priority() default 0;
 
     /**
-     * All elements from this clas are prefixed with a special prefix. This way you can keep field names simple
+     * All elements from this class are prefixed with a special prefix. This way you can keep field names simple
      * and avoid duplicates.
      */
     String prefix() default "";

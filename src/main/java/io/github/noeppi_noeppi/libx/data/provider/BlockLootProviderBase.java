@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
@@ -322,9 +323,17 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     public ILootCondition.IBuilder or(ILootCondition.IBuilder condition) {
         return Alternative.builder(condition);
     }
+
+    /**
+     * A builder for loot groups where every member is selected.
+     */
+    public AllLootBuilder all() {
+        return new AllLootBuilder();
+    }
     
     /**
      * Minecraft does not seem to have a loot builder for groups. So here you have one.
+     * This will select only one element per roll.
      */
     public GroupLootBuilder group() {
         return new GroupLootBuilder();
@@ -332,6 +341,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     
     /**
      * Minecraft does not seem to have a loot builder for sequences. So here you have one.
+     * This will select only one element per roll.
      */
     public SequenceLootBuilder sequence() {
         return new SequenceLootBuilder();
@@ -361,13 +371,27 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * Combines the given loot builders into one. (All loot builders will be applied).
      */
     public LootEntry.Builder<?> combine(LootEntry.Builder<?>... loot) {
-        return this.combineBy(GroupLootBuilder::new, loot);
+        return this.combineBy(AllLootBuilder::new, loot);
     }
 
     /**
      * Combines the given loot factories into one. (All loot factories will be applied).
      */
     public LootFactory combine(LootFactory... loot) {
+        return this.combineBy(AllLootBuilder::new, loot);
+    }
+    
+    /**
+     * Combines the given loot builders into one. (One loot builder will be applied).
+     */
+    public LootEntry.Builder<?> random(LootEntry.Builder<?>... loot) {
+        return this.combineBy(GroupLootBuilder::new, loot);
+    }
+
+    /**
+     * Combines the given loot factories into one. (One loot factory will be applied).
+     */
+    public LootFactory random(LootFactory... loot) {
         return this.combineBy(GroupLootBuilder::new, loot);
     }
 
@@ -386,14 +410,16 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     }
     
     /**
-     * Combines the given loot builders into one. Only the first matching builder is applied.
+     * Combines the given loot builders into one.
+     * From all the loot entries until the first one not matching, one is selected.
      */
     public LootEntry.Builder<?> whileMatch(LootEntry.Builder<?>... loot) {
         return this.combineBy(SequenceLootBuilder::new, loot);
     }
 
     /**
-     * Combines the given loot factories into one. Only the first matching factory is applied.
+     * Combines the given loot factories into one.
+     * From all the loot factories until the first one not matching, one is selected.
      */
     public LootFactory whileMatch(LootFactory... loot) {
         return this.combineBy(SequenceLootBuilder::new, loot);
@@ -451,6 +477,34 @@ public abstract class BlockLootProviderBase implements IDataProvider {
                 && !LootTables.EMPTY.equals(state.getBlock().getLootTable());
     }
 
+    // Builder for our own loot entry type
+    public static class AllLootBuilder extends LootEntry.Builder<AllLootBuilder> {
+
+        private final List<LootEntry> lootEntries = new ArrayList<>();
+
+        private AllLootBuilder(LootEntry.Builder<?>... entries) {
+            for (LootEntry.Builder<?> builder : entries) {
+                this.lootEntries.add(builder.build());
+            }
+        }
+
+        @Nonnull
+        @Override
+        protected AllLootBuilder func_212845_d_() {
+            return this;
+        }
+
+        public AllLootBuilder add(LootEntry.Builder<?> entry) {
+            this.lootEntries.add(entry.build());
+            return this;
+        }
+
+        @Nonnull
+        public LootEntry build() {
+            return new AllLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.func_216079_f());
+        }
+    }
+    
     // Weirdly mc has no builder for this
     public static class GroupLootBuilder extends LootEntry.Builder<GroupLootBuilder> {
 
