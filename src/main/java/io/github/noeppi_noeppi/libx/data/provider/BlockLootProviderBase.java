@@ -601,7 +601,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
         StandaloneLootEntry.Builder<?> build(Block block);
         
-        default LootFactory with(GenericLootModifier finalModifier) {
+        default LootFactory withFinal(GenericLootModifier finalModifier) {
             return b -> finalModifier.apply(b, this.build(b));
         }
         
