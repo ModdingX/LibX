@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -25,6 +26,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
     public static final ResourceLocation TEISR_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/teisr");
+    public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
 
     protected final ModX mod;
 
@@ -77,7 +79,11 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     protected abstract void setup();
 
     protected void defaultItem(ResourceLocation id, Item item) {
-        this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
+        if (item instanceof SpawnEggItem) {
+             this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
+        } else {
+            this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
+        }
     }
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
