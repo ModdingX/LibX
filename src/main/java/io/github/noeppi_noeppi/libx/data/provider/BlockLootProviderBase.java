@@ -88,7 +88,8 @@ public abstract class BlockLootProviderBase implements IDataProvider {
                 if (this.functionMap.containsKey(block)) {
                     loot = this.functionMap.get(block);
                 } else {
-                    loot = b -> this.defaultBehavior(block);
+                    LootTable.Builder builder = this.defaultBehavior(block);
+                    loot = builder == null ? null : b -> builder;
                 }
                 if (loot != null) {
                     tables.put(id, loot.apply(block));
