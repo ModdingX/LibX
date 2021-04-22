@@ -19,7 +19,6 @@ public class WorldSeedHolder {
      */
     @Deprecated
     public static void setSeed(long worldSeed) {
-        System.out.println("World seed: " + worldSeed);
         seed = worldSeed;
     }
 }
