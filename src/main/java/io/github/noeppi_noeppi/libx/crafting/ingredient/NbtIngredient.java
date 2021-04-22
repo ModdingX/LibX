@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 public class NbtIngredient extends Ingredient {
 
     private final ItemStack stack;
+    private final ItemStack[] matchingStacks;
 
     /**
      * If this is true, the tags must be equals. If it is false the matched item must at
@@ -33,8 +34,9 @@ public class NbtIngredient extends Ingredient {
 
     public NbtIngredient(ItemStack stack, boolean exactMatch) {
         super(Stream.of(new Ingredient.SingleItemList(stack)));
-        this.stack = stack;
+        this.stack = stack.copy();
         this.exactMatch = exactMatch;
+        this.matchingStacks = new ItemStack[] { stack.copy() };
     }
 
     @Override
@@ -63,6 +65,12 @@ public class NbtIngredient extends Ingredient {
 
             return merged.equals(inputNbt);
         }
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack[] getMatchingStacks() {
+        return this.matchingStacks;
     }
 
     @Override
