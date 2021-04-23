@@ -36,6 +36,7 @@ public class ConfigKey {
         this.path = path;
         ImmutableList.Builder<String> commentBuilder = ImmutableList.builder();
         commentBuilder.addAll(comment);
+        commentBuilder.addAll(mapper.comment(elementType));
         if (validator != null) {
             commentBuilder.addAll(validator.comment());
         }

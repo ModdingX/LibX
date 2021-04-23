@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.processor;
 
 import io.github.noeppi_noeppi.libx.config.Config;
+import io.github.noeppi_noeppi.libx.util.ResourceList;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -33,6 +34,7 @@ public class ConfigProcessor extends Processor {
         validTypes.add(this.forClass(Optional.class));
         validTypes.add(this.forClass(List.class));
         validTypes.add(this.forClass(Map.class));
+        validTypes.add(this.forClass(ResourceList.class));
         validTypes.add(this.elements.getTypeElement("net.minecraft.item.crafting.Ingredient").asType());
         validTypes.add(this.elements.getTypeElement("net.minecraft.util.text.IFormattableTextComponent").asType());
         validTypes.add(this.elements.getTypeElement("net.minecraft.util.ResourceLocation").asType());

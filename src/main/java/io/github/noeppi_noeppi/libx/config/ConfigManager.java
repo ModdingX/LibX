@@ -106,6 +106,7 @@ import java.util.function.Function;
  *     <li>ResourceLocation</li>
  *     <li>Ingredient</li>
  *     <li>IFormattableTextComponent</li>
+ *     <li>ResourceList</li>
  * </ul>
  * 
  * The type {@code T} can be any of the builtin types. It must be provided to the {@link Config @Config}
@@ -144,8 +145,9 @@ public class ConfigManager {
             SimpleValueMappers.MAP,
             AdvancedValueMappers.RESOURCE,
             AdvancedValueMappers.INGREDIENT,
-            AdvancedValueMappers.TEXT_COMPONENT
-    ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
+            AdvancedValueMappers.TEXT_COMPONENT,
+            AdvancedValueMappers.RESOURCE_LIST
+            ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
     @SuppressWarnings("UnstableApiUsage")
     private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase()))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
     private static final Map<ResourceLocation, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
