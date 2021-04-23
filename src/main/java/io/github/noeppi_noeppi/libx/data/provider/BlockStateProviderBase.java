@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
@@ -15,10 +16,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A base class for block state and model provider. When overriding this you should call the {@code manualState}
@@ -27,6 +25,8 @@ import java.util.Set;
  * {@code defaultModel} to adjust the state and model depending on the block.
  */
 public abstract class BlockStateProviderBase extends BlockStateProvider {
+
+    public static final ResourceLocation LEAVES_PARENT = new ResourceLocation("minecraft", "block/leaves");
 
     protected final ModX mod;
 
@@ -115,6 +115,9 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateContainer().getValidStates().stream().allMatch(state -> state.getRenderType() != BlockRenderType.MODEL)) {
             return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
+        } else if (block instanceof LeavesBlock) {
+            return this.models().withExistingParent(Objects.requireNonNull(block.getRegistryName()).getPath(), LEAVES_PARENT)
+                    .texture("all", this.blockTexture(block));
         } else {
             return this.cubeAll(block);
         }
