@@ -107,6 +107,7 @@ import java.util.function.Function;
  *     <li>Ingredient</li>
  *     <li>IFormattableTextComponent</li>
  *     <li>ResourceList</li>
+ *     <li>Any enum</li>
  * </ul>
  * 
  * The type {@code T} can be any of the builtin types. It must be provided to the {@link Config @Config}
@@ -185,7 +186,9 @@ public class ConfigManager {
     public static ResourceLocation getMapperByAnnotationValue(String annotationValue, Class<?> typeClass) {
         if (annotationValue.isEmpty()) {
             Class<?> boxed = ClassUtil.boxed(typeClass);
-            if (globalMappersToRL.containsKey(boxed)) {
+            if (boxed.isEnum()) {
+                return EnumConfigMapper.ID;
+            } else if (globalMappersToRL.containsKey(boxed)) {
                 return globalMappersToRL.get(boxed);
             } else if (typeClass != boxed){
                 throw new IllegalStateException("No builtin JSON mapper for type " + typeClass + " (" + boxed + "). You must provide one yourself.");
@@ -207,7 +210,10 @@ public class ConfigManager {
         }
         Class<?> boxed = ClassUtil.boxed(fieldClass);
         if (id == null) {
-            if (globalMappers.containsKey(boxed)) {
+            if (boxed.isEnum()) {
+                //noinspection unchecked
+                return (ValueMapper<T, ?>) EnumConfigMapper.getMapper((Class<? extends Enum<?>>) fieldClass);
+            } else if (globalMappers.containsKey(boxed)) {
                 //noinspection unchecked
                 return (ValueMapper<T, ?>) globalMappers.get(boxed);
             } else if (fieldClass != boxed){
@@ -216,7 +222,10 @@ public class ConfigManager {
                 throw new IllegalStateException("No builtin JSON mapper for type " + fieldClass + ". You must provide one yourself.");
             }
         } else {
-            if (mappers.containsKey(id)) {
+            if (EnumConfigMapper.ID.equals(id)) {
+                //noinspection unchecked
+                return (ValueMapper<T, ?>) EnumConfigMapper.getMapper((Class<? extends Enum<?>>) fieldClass);
+            } else if (mappers.containsKey(id)) {
                 ValueMapper<?, ?> mapper = mappers.get(id);
                 if (mapper.type() == boxed) {
                     //noinspection unchecked
