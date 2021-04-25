@@ -26,4 +26,6 @@ public interface ModEnv {
     boolean sameErasure(TypeMirror type1, TypeMirror type2);
     TypeMirror classType(Supplier<Class<?>> accessor);
     List<? extends TypeMirror> classTypes(Supplier<List<Class<?>>> accessor);
+    TypeMirror boxed(TypeMirror type);
+    TypeMirror unboxed(TypeMirror type);
 }

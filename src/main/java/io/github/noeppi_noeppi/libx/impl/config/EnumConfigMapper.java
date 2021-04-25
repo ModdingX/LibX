@@ -53,7 +53,7 @@ public class EnumConfigMapper implements ValueMapper<Enum<?>, JsonPrimitive> {
                 return e;
             }
         }
-        throw new NoSuchElementException("Enu mconstant not found: " + str);
+        throw new NoSuchElementException("Enum constant not found: " + str);
     }
 
     @Override

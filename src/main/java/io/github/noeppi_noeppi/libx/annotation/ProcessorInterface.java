@@ -1,12 +1,18 @@
 package io.github.noeppi_noeppi.libx.annotation;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import io.github.noeppi_noeppi.libx.util.LazyImmutableMap;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Contains methods the annotation processor code generator uses that rely on minecraft
@@ -27,5 +33,22 @@ public class ProcessorInterface {
     
     public static <T extends Event> void addForgeListener(Class<T> event, Consumer<T> listener) {
         MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, event, listener);
+    }
+    
+    public static <K, V> LazyMapBuilder<K, V> lazyMapBuilder() {
+        return new LazyMapBuilder<>();
+    }
+    
+    public static class LazyMapBuilder<K, V> {
+        
+        private final ImmutableMap.Builder<K, LazyValue<V>> builder = ImmutableMap.builder();
+        
+        public void put(K k, Supplier<V> v) {
+            this.builder.put(k, new LazyValue<>(v));
+        }
+        
+        public Map<K, V> build() {
+            return new LazyImmutableMap<>(this.builder.build());
+        }
     }
 }

@@ -1,9 +1,13 @@
 package io.github.noeppi_noeppi.libx.world;
 
+import com.mojang.serialization.Codec;
+
 /**
  * Provides a way to get the world seed in codecs.
  */
 public class WorldSeedHolder {
+    
+    public static final Codec<Long> CODEC = Codec.LONG.orElseGet(WorldSeedHolder::getSeed);
     
     private static long seed = 0;
 

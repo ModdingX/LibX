@@ -29,7 +29,9 @@ public class ModInitProcessor extends Processor {
                 NoReg.class,
                 RegName.class,
                 Model.class,
-                RegisterConfig.class
+                RegisterConfig.class,
+                Param.class,
+                PrimaryConstructor.class
         };
     }
 
@@ -117,6 +119,16 @@ public class ModInitProcessor extends Processor {
             }
 
             @Override
+            public TypeMirror boxed(TypeMirror type) {
+                return ModInitProcessor.this.boxed(type);
+            }
+
+            @Override
+            public TypeMirror unboxed(TypeMirror type) {
+                return ModInitProcessor.this.unboxed(type);
+            }
+
+            @Override
             public ModInit getMod(Element element) {
                 return this.getMod(element, element);
             }
@@ -162,6 +174,12 @@ public class ModInitProcessor extends Processor {
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(RegisterConfig.class)) {
             RegisterConfigProcessor.processRegisterConfig(element, local);
+        }
+        for (Element element : roundEnv.getElementsAnnotatedWith(Param.class)) {
+            CodecProcessor.processParam(element, local);
+        }
+        for (Element element : roundEnv.getElementsAnnotatedWith(PrimaryConstructor.class)) {
+            CodecProcessor.processPrimaryConstructor(element, local);
         }
         for (ModInit mod : modInits.values()) {
             mod.write(this.filer, this.messager);
