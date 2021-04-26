@@ -51,7 +51,6 @@ public class CodecProcessor {
         }
         List<GeneratedCodec.CodecParam> params = new ArrayList<>();
         for (VariableElement param : element.getParameters()) {
-            System.out.println(param.asType());
             String name = param.getSimpleName().toString();
             String codecFieldName;
             {
