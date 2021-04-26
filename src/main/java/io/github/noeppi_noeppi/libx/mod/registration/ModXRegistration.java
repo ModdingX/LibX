@@ -100,13 +100,13 @@ public abstract class ModXRegistration extends ModX {
     private void commonRegistration(FMLCommonSetupEvent event) {
         this.runRegistration();
         this.registerables.stream().filter(pair -> pair.getRight() instanceof Registerable)
-                .forEach(pair -> ((Registerable) pair.getRight()).registerCommon(new ResourceLocation(this.modid, pair.getLeft())));
+                .forEach(pair -> ((Registerable) pair.getRight()).registerCommon(new ResourceLocation(this.modid, pair.getLeft()), event::enqueueWork));
     }
     
     private void clientRegistration(FMLClientSetupEvent event) {
         this.runRegistration();
         this.registerables.stream().filter(pair -> pair.getRight() instanceof Registerable)
-                .forEach(pair -> ((Registerable) pair.getRight()).registerClient(new ResourceLocation(this.modid, pair.getLeft())));
+                .forEach(pair -> ((Registerable) pair.getRight()).registerClient(new ResourceLocation(this.modid, pair.getLeft()), event::enqueueWork));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

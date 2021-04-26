@@ -7,6 +7,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Everything that is registered to {@link ModXRegistration} that implements this can specify dependencies
@@ -33,17 +34,41 @@ public interface Registerable {
     }
 
     /**
-     * Do stuff needed in the setup phase.
+     * Do stuff needed in the setup phase
+     * 
+     * @deprecated Use {@link Registerable#registerCommon(ResourceLocation, Consumer)} instead.
      */
+    @Deprecated
     default void registerCommon(ResourceLocation id) {
 
     }
     
     /**
      * Do stuff needed on the client
+     * 
+     * @deprecated Use {@link Registerable#registerClient(ResourceLocation, Consumer)} instead.
      */
     @OnlyIn(Dist.CLIENT)
     default void registerClient(ResourceLocation id) {
 
+    }
+    
+    /**
+     * Do stuff needed in the setup phase. This is called during parallel mod loading.
+     * 
+     * @param defer Pass a runnable to this to defer it to the synchronous work queue.
+     */
+    default void registerCommon(ResourceLocation id, Consumer<Runnable> defer) {
+        this.registerCommon(id);
+    }
+    
+    /**
+     * Do stuff needed on the client. This is called during parallel mod loading.
+     * 
+     * @param defer Pass a runnable to this to defer it to the synchronous work queue.
+     */
+    @OnlyIn(Dist.CLIENT)
+    default void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
+        this.registerClient(id);
     }
 }
