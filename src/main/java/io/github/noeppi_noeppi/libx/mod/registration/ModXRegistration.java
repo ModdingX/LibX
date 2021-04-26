@@ -7,6 +7,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.EventBus;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -53,6 +54,7 @@ public abstract class ModXRegistration extends ModX {
 
     protected ModXRegistration(String modid, ItemGroup tab) {
         super(modid, tab);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonRegistration);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistration);
 
         try {
@@ -94,7 +96,13 @@ public abstract class ModXRegistration extends ModX {
             this.registrationHandlers.forEach(Runnable::run);
         }
     }
-
+    
+    private void commonRegistration(FMLCommonSetupEvent event) {
+        this.runRegistration();
+        this.registerables.stream().filter(pair -> pair.getRight() instanceof Registerable)
+                .forEach(pair -> ((Registerable) pair.getRight()).registerCommon(new ResourceLocation(this.modid, pair.getLeft())));
+    }
+    
     private void clientRegistration(FMLClientSetupEvent event) {
         this.runRegistration();
         this.registerables.stream().filter(pair -> pair.getRight() instanceof Registerable)

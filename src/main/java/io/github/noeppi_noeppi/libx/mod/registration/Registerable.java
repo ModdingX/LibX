@@ -33,6 +33,13 @@ public interface Registerable {
     }
 
     /**
+     * Do stuff needed in the setup phase.
+     */
+    default void registerCommon(ResourceLocation id) {
+
+    }
+    
+    /**
      * Do stuff needed on the client
      */
     @OnlyIn(Dist.CLIENT)
