@@ -53,6 +53,17 @@ public class CodecProcessor {
         for (VariableElement param : element.getParameters()) {
             System.out.println(param.asType());
             String name = param.getSimpleName().toString();
+            String codecFieldName;
+            {
+                StringBuilder sb = new StringBuilder();
+                for (char chr : name.toCharArray()) {
+                    if (Character.isUpperCase(chr)) {
+                        sb.append('_');
+                    }
+                    sb.append(Character.toLowerCase(chr));
+                }
+                codecFieldName = sb.toString();
+            }
             String typeFqn = param.asType().toString();
             String typeFqnBoxed = env.boxed(param.asType()).toString();
             String codecFqn;
@@ -77,7 +88,7 @@ public class CodecProcessor {
             if (getter == null) {
                 return;
             }
-            params.add(new GeneratedCodec.CodecParam(name, typeFqn, typeFqnBoxed, codecFqn, list, getter));
+            params.add(new GeneratedCodec.CodecParam(codecFieldName, typeFqn, typeFqnBoxed, codecFqn, list, getter));
         }
         GeneratedCodec codec = new GeneratedCodec(type.getQualifiedName().toString(), params);
         env.getMod(element).addCodec(codec);
