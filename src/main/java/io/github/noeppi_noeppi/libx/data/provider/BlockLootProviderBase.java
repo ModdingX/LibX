@@ -312,6 +312,28 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     public ILootCondition.IBuilder random(float chance) {
         return RandomChance.builder(chance);
     }
+
+    /**
+     * A condition that is random with a chance and optionally different chances for
+     * different fortune levels. Chances for different levels are computed automatically.
+     */
+    public ILootCondition.IBuilder randomFortune(float baseChance) {
+        return this.randomFortune(baseChance, baseChance * (10/9f), baseChance * 1.25f, baseChance * (5/3f), baseChance * 5);
+    }
+    
+    /**
+     * A condition that is random with a chance and optionally different chances for
+     * different fortune levels.
+     * 
+     * @param baseChance The chance without fortune.
+     * @param levelChances the chances with fortune.
+     */
+    public ILootCondition.IBuilder randomFortune(float baseChance, float... levelChances) {
+        float[] chances = new float[levelChances.length + 1];
+        chances[0] = baseChance;
+        System.arraycopy(levelChances, 0, chances, 1, levelChances.length);
+        return TableBonus.builder(Enchantments.FORTUNE, chances);
+    }
     
     /**
      * Inverts a loot condition
