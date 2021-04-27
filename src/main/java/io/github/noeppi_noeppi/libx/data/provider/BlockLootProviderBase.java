@@ -334,6 +334,31 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         System.arraycopy(levelChances, 0, chances, 1, levelChances.length);
         return TableBonus.builder(Enchantments.FORTUNE, chances);
     }
+
+    /**
+     * A loot modifier that sets the count of a stack.
+     */
+    public LootModifier count(int count) {
+        return this.from(SetCount.builder(ConstantRange.of(count)));
+    }
+    
+    /**
+     * A loot modifier that uniformly sets the count of a stack between two values.
+     */
+    public LootModifier count(int min, int max) {
+        if (min == max) {
+            return this.from(SetCount.builder(ConstantRange.of(min)));
+        } else {
+            return this.from(SetCount.builder(RandomValueRange.of(min, max)));
+        }
+    }
+    
+    /**
+     * A loot modifier that sets the count of a stack based on a binomial formula.
+     */
+    public LootModifier countBinomial(float chance, int num) {
+        return this.from(SetCount.builder(BinomialRange.of(num, chance)));
+    }
     
     /**
      * Inverts a loot condition
