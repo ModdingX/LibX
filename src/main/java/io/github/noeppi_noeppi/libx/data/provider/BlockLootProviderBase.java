@@ -12,12 +12,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.*;
 import net.minecraft.loot.functions.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.Property;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -203,10 +207,8 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     public void drops(Block b, SilkModifier silk, LootFactory... loot) {
         LootEntry.Builder<?> entry = this.combine(LootFactory.resolve(b, loot));
         if (silk.modifier != null) {
-            ItemPredicate.Builder predicate = ItemPredicate.Builder.create()
-                    .enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1)));
             LootEntry.Builder<?> silkBuilder = silk.modifier.apply(b, ItemLootEntry.builder(b)
-                    .acceptCondition(MatchTool.builder(predicate)));
+                    .acceptCondition(this.silkCondition()));
             entry = AlternativesLootEntry.builder(silkBuilder, entry);
         }
         LootPool.Builder pool = LootPool.builder().name("main")
@@ -431,6 +433,29 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      */
     public WrappedLootEntry stack(IItemProvider item) {
         return new WrappedLootEntry(ItemLootEntry.builder(item));
+    }
+    
+    /**
+     * Gets a loot condition builder for a match tool condition.
+     */
+    public MatchToolBuilder matchTool(IItemProvider item) {
+        return new MatchToolBuilder(ItemPredicate.Builder.create().item(item));
+    }
+    
+    /**
+     * Gets a loot condition builder for a match tool condition.
+     */
+    public MatchToolBuilder matchTool(ITag<Item> item) {
+        return new MatchToolBuilder(ItemPredicate.Builder.create().tag(item));
+    }
+
+    /**
+     * Gets a loot condition for silk touch tools.
+     */
+    public ILootCondition.IBuilder silkCondition() {
+        ItemPredicate.Builder predicate = ItemPredicate.Builder.create()
+                .enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1)));
+        return MatchTool.builder(predicate);
     }
     
     /**
@@ -785,6 +810,63 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
         private SilkModifier(@Nullable GenericLootModifier modifier) {
             this.modifier = modifier;
+        }
+    }
+
+    /**
+     * This serves as a builder for a loot condition and a builder for a match tool predicate
+     * in one.
+     */
+    public static class MatchToolBuilder implements ILootCondition.IBuilder {
+        
+        private final ItemPredicate.Builder builder;
+
+        private MatchToolBuilder(ItemPredicate.Builder builder) {
+            this.builder = builder;
+        }
+
+        @Nonnull
+        @Override
+        public ILootCondition build() {
+            return MatchTool.builder(this.builder).build();
+        }
+
+        /**
+         * Adds a required enchantment to this builder.
+         */
+        public MatchToolBuilder ench(Enchantment ench) {
+            return this.ench(ench, MinMaxBounds.IntBound.atLeast(1));
+        }
+        
+        /**
+         * Adds a required enchantment to this builder.
+         * 
+         * @param minLevel The minimum level of the enchantment that must be present.
+         */
+        public MatchToolBuilder ench(Enchantment ench, int minLevel) {
+            return this.ench(ench, MinMaxBounds.IntBound.atLeast(minLevel));
+        }
+        
+        /**
+         * Adds a required enchantment to this builder.
+         * 
+         * @param level The exact level of the enchantment that must be present.
+         */
+        public MatchToolBuilder enchExact(Enchantment ench, int level) {
+            return this.ench(ench, MinMaxBounds.IntBound.exactly(level));
+        }
+        
+        private MatchToolBuilder ench(Enchantment ench, MinMaxBounds.IntBound bounds) {
+            this.builder.enchantment(new EnchantmentPredicate(ench, bounds));
+            return this;
+        }
+
+        /**
+         * Adds required NBT data to this builder.
+         */
+        public MatchToolBuilder nbt(CompoundNBT nbt) {
+            this.builder.nbt(nbt);
+            return this;
         }
     }
 }
