@@ -321,8 +321,8 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * Joins conditions with OR.
      */
-    public ILootCondition.IBuilder or(ILootCondition.IBuilder condition) {
-        return Alternative.builder(condition);
+    public ILootCondition.IBuilder or(ILootCondition.IBuilder... conditions) {
+        return Alternative.builder(conditions);
     }
 
     /**
