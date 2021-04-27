@@ -21,10 +21,7 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is meant to apply a TileEntityRenderer to items. Using it is really straightforward:
@@ -39,8 +36,8 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
 
     private static final ItemStackRenderer INSTANCE = new ItemStackRenderer();
 
-    private static final List<TileEntityType<?>> types = new LinkedList<>();
-    private static final Map<TileEntityType<?>, Pair<LazyValue<TileEntity>, Boolean>> tiles = new HashMap<>();
+    private static final List<TileEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
+    private static final Map<TileEntityType<?>, Pair<LazyValue<TileEntity>, Boolean>> tiles = Collections.synchronizedMap(new HashMap<>());
     private static final Map<TileEntityType<?>, CompoundNBT> defaultTags = new HashMap<>();
 
     private ItemStackRenderer() {
