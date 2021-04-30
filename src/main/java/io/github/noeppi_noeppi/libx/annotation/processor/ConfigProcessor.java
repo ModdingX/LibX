@@ -70,14 +70,14 @@ public class ConfigProcessor extends Processor {
                 continue;
             }
 
-            
-
             if (config.mapper().isEmpty()) {
                 TypeMirror type = element.asType();
                 if (this.validTypes.stream().noneMatch(t -> this.sameErasure(t, type))) {
                     if (this.validTypesWrapper.stream().anyMatch(t -> this.sameErasure(t, type))) {
                         this.messager.printMessage(Diagnostic.Kind.WARNING, "@Config should not use wrapper type: " + type, element);
                     } else {
+                        Element typeElem = this.types.asElement(type);
+                        if (typeElem == null || typeElem.getKind() != ElementKind.ENUM)
                         this.messager.printMessage(Diagnostic.Kind.ERROR, "No value mapper found for type of @Config. Register you own." + type, element);
                     }
                 }
