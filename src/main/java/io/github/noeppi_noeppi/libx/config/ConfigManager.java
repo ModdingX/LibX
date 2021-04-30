@@ -147,7 +147,8 @@ public class ConfigManager {
             AdvancedValueMappers.RESOURCE,
             AdvancedValueMappers.INGREDIENT,
             AdvancedValueMappers.TEXT_COMPONENT,
-            AdvancedValueMappers.RESOURCE_LIST
+            AdvancedValueMappers.RESOURCE_LIST,
+            AdvancedValueMappers.INGREDIENT_STACK
             ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
     @SuppressWarnings("UnstableApiUsage")
     private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase()))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.crafting.IngredientStack;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -153,6 +154,39 @@ public class AdvancedValueMappers {
         @Override
         public List<String> comment(Class<?> elementType) {
             return this.COMMENT;
+        }
+    };
+    
+    public static final ValueMapper<IngredientStack, JsonObject> INGREDIENT_STACK = new ValueMapper<IngredientStack, JsonObject>() {
+
+        @Override
+        public Class<IngredientStack> type() {
+            return IngredientStack.class;
+        }
+
+        @Override
+        public Class<JsonObject> element() {
+            return JsonObject.class;
+        }
+
+        @Override
+        public IngredientStack fromJSON(JsonObject json, Class<?> elementType) {
+            return IngredientStack.deserialize(json);
+        }
+
+        @Override
+        public JsonObject toJSON(IngredientStack value, Class<?> elementType) {
+            return value.serialize();
+        }
+
+        @Override
+        public IngredientStack read(PacketBuffer buffer, Class<?> elementType) {
+            return IngredientStack.read(buffer);
+        }
+
+        @Override
+        public void write(IngredientStack value, PacketBuffer buffer, Class<?> elementType) {
+            value.write(buffer);
         }
     };
 }

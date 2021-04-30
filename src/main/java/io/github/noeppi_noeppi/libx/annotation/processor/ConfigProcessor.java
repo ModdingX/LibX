@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.processor;
 
 import io.github.noeppi_noeppi.libx.config.Config;
+import io.github.noeppi_noeppi.libx.crafting.IngredientStack;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -35,9 +36,10 @@ public class ConfigProcessor extends Processor {
         validTypes.add(this.forClass(List.class));
         validTypes.add(this.forClass(Map.class));
         validTypes.add(this.forClass(ResourceList.class));
-        validTypes.add(this.elements.getTypeElement("net.minecraft.item.crafting.Ingredient").asType());
-        validTypes.add(this.elements.getTypeElement("net.minecraft.util.text.IFormattableTextComponent").asType());
-        validTypes.add(this.elements.getTypeElement("net.minecraft.util.ResourceLocation").asType());
+        validTypes.add(this.forClass(IngredientStack.class));
+        this.addIfFound(validTypes, "net.minecraft.item.crafting.Ingredient");
+        this.addIfFound(validTypes, "net.minecraft.util.text.IFormattableTextComponent");
+        this.addIfFound(validTypes, "net.minecraft.util.ResourceLocation");
         this.validTypes = Collections.unmodifiableSet(validTypes);
         
         Set<TypeMirror> validTypesWrapper = new HashSet<>();
@@ -107,5 +109,12 @@ public class ConfigProcessor extends Processor {
             }
         }
         return true;
+    }
+    
+    private void addIfFound(Set<TypeMirror> types, String clazz) {
+        TypeElement elem = this.elements.getTypeElement(clazz);
+        if (elem != null && elem.asType() != null) {
+            types.add(elem.asType());
+        }
     }
 }
