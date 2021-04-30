@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":18,"i3":6,"i4":6,"i5":18};
+var methods = {"i0":18,"i1":6,"i2":6,"i3":18,"i4":6,"i5":6,"i6":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -102,6 +102,10 @@ var activeTableTab = "activeTableTab";
 <dd><code>T</code> - The type that this mapper can serialise.</dd>
 <dd><code>E</code> - The JSON element type this mapper uses.</dd>
 </dl>
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../../../io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper.html" title="class in io.github.noeppi_noeppi.libx.impl.config">EnumConfigMapper</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">ValueMapper&lt;T,E extends com.google.gson.JsonElement&gt;</span></pre>
@@ -126,39 +130,45 @@ var activeTableTab = "activeTableTab";
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>default java.util.List&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html#comment-java.lang.Class-">comment</a></span>(java.lang.Class&lt;?&gt;&nbsp;elementType)</code>
+<div class="block">Returns a list of comment lines that will be added to the values specified in @Config.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.Class&lt;<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">E</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html#element--">element</a></span>()</code>
 <div class="block">Gets the class of the JSON element type this mapper uses.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html#fromJSON-E-java.lang.Class-">fromJSON</a></span>(<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">E</a>&nbsp;json,
         java.lang.Class&lt;?&gt;&nbsp;elementType)</code>
 <div class="block">Reads an object from JSON.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>default <a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html#read-net.minecraft.network.PacketBuffer-java.lang.Class-">read</a></span>(net.minecraft.network.PacketBuffer&nbsp;buffer,
     java.lang.Class&lt;?&gt;&nbsp;elementType)</code>
 <div class="block">Reads a value from a <code>PacketBuffer</code>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">E</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html#toJSON-T-java.lang.Class-">toJSON</a></span>(<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">T</a>&nbsp;value,
       java.lang.Class&lt;?&gt;&nbsp;elementType)</code>
 <div class="block">Serialises a value to JSON.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.Class&lt;<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html#type--">type</a></span>()</code>
 <div class="block">Gets the class of the type that this mapper can serialise.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>default void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html#write-T-net.minecraft.network.PacketBuffer-java.lang.Class-">write</a></span>(<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">T</a>&nbsp;value,
      net.minecraft.network.PacketBuffer&nbsp;buffer,
@@ -263,7 +273,7 @@ var activeTableTab = "activeTableTab";
 </a><a name="write-T-net.minecraft.network.PacketBuffer-java.lang.Class-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
 <pre>default&nbsp;void&nbsp;write(<a href="../../../../../io/github/noeppi_noeppi/libx/config/ValueMapper.html" title="type parameter in ValueMapper">T</a>&nbsp;value,
@@ -271,6 +281,16 @@ var activeTableTab = "activeTableTab";
                    java.lang.Class&lt;?&gt;&nbsp;elementType)</pre>
 <div class="block">Writes a value to a <code>PacketBuffer</code>. The default implementation calls
  <code>toJSON</code> and writes the resulting JSON as a string.</div>
+</li>
+</ul>
+<a name="comment-java.lang.Class-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>comment</h4>
+<pre>default&nbsp;java.util.List&lt;java.lang.String&gt;&nbsp;comment(java.lang.Class&lt;?&gt;&nbsp;elementType)</pre>
+<div class="block">Returns a list of comment lines that will be added to the values specified in @Config.</div>
 </li>
 </ul>
 </li>
