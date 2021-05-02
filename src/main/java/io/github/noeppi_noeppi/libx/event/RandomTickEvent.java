@@ -66,7 +66,7 @@ public abstract class RandomTickEvent extends Event {
         }
 
         /**
-         * Gets the blockstate that is being ticked.
+         * Gets the block state that is being ticked.
          */
         public BlockState getState() {
             return this.state;
@@ -93,7 +93,7 @@ public abstract class RandomTickEvent extends Event {
         }
         
         /**
-         * Gets the fluidstate that is being ticked.
+         * Gets the fluid state that is being ticked.
          */
         public FluidState getState() {
             return this.state;

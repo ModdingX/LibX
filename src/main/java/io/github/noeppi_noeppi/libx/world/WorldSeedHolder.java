@@ -12,7 +12,7 @@ public class WorldSeedHolder {
     private static long seed = 0;
 
     /**
-     * Gets the world seet to be used in codecs. Vanilla provides no way for this.
+     * Gets the world seed to be used in codecs. Vanilla provides no way for this.
      */
     public static long getSeed() {
         return seed;

@@ -32,7 +32,7 @@ public class SimpleValidators {
             if (validator.min() == Short.MIN_VALUE && validator.max() == Short.MAX_VALUE) {
                 return ImmutableList.of();
             } else if (validator.max() == Short.MAX_VALUE) {
-                return ImmutableList.of("Minumum: " + validator.min());
+                return ImmutableList.of("Minimum: " + validator.min());
             } else if (validator.min() == Short.MIN_VALUE) {
                 return ImmutableList.of("Maximum: " + validator.max());
             } else {
@@ -63,7 +63,7 @@ public class SimpleValidators {
             if (validator.min() == Integer.MIN_VALUE && validator.max() == Integer.MAX_VALUE) {
                 return ImmutableList.of();
             } else if (validator.max() == Integer.MAX_VALUE) {
-                return ImmutableList.of("Minumum: " + validator.min());
+                return ImmutableList.of("Minimum: " + validator.min());
             } else if (validator.min() == Integer.MIN_VALUE) {
                 return ImmutableList.of("Maximum: " + validator.max());
             } else {
@@ -94,7 +94,7 @@ public class SimpleValidators {
             if (validator.min() == Long.MIN_VALUE && validator.max() == Long.MAX_VALUE) {
                 return ImmutableList.of();
             } else if (validator.max() == Long.MAX_VALUE) {
-                return ImmutableList.of("Minumum: " + validator.min());
+                return ImmutableList.of("Minimum: " + validator.min());
             } else if (validator.min() == Long.MIN_VALUE) {
                 return ImmutableList.of("Maximum: " + validator.max());
             } else {
@@ -125,7 +125,7 @@ public class SimpleValidators {
             if (validator.min() == Float.NEGATIVE_INFINITY && validator.max() == Float.POSITIVE_INFINITY) {
                 return ImmutableList.of();
             } else if (validator.max() == Float.POSITIVE_INFINITY) {
-                return ImmutableList.of("Minumum: " + validator.min());
+                return ImmutableList.of("Minimum: " + validator.min());
             } else if (validator.min() == Float.NEGATIVE_INFINITY) {
                 return ImmutableList.of("Maximum: " + validator.max());
             } else {
@@ -156,7 +156,7 @@ public class SimpleValidators {
             if (validator.min() == Double.NEGATIVE_INFINITY && validator.max() == Double.POSITIVE_INFINITY) {
                 return ImmutableList.of();
             } else if (validator.max() == Double.POSITIVE_INFINITY) {
-                return ImmutableList.of("Minumum: " + validator.min());
+                return ImmutableList.of("Minimum: " + validator.min());
             } else if (validator.min() == Double.NEGATIVE_INFINITY) {
                 return ImmutableList.of("Maximum: " + validator.max());
             } else {

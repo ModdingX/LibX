@@ -130,10 +130,10 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     }
 
     /**
-     * Creates a loot modifier that copies properties from a blockstate into the dropped item. Use this
+     * Creates a loot modifier that copies properties from a block state into the dropped item. Use this
      * with one of the {@code drops} methods.
      *
-     * @param properties The properties of the blockstate to be copied.
+     * @param properties The properties of the block state to be copied.
      */
     public LootModifier copyProperties(Property<?>... properties) {
         return (b, entry) -> {
@@ -540,7 +540,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     }
 
     /**
-     * Returns whether this block state needs a loot table. If all blockstates of a block don't
+     * Returns whether this block state needs a loot table. If all block states of a block don't
      * need a loot table, defaultBehavior will return null for that block. Can be overridden to
      * alter the behaviour.
      */
@@ -690,7 +690,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     public interface StandaloneLootFactory extends LootFactory {
 
         /**
-         * Gets a standalone loot factory that always returns the gven block as item.
+         * Gets a standalone loot factory that always returns the given block as item.
          */
         static StandaloneLootFactory item() {
             return ItemLootEntry::builder;

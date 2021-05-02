@@ -67,7 +67,7 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
 
     /**
      * Gets the inventory of an ItemStack or null if the ItemStack doesn't have tha item handler capability
-     * or the intem handler is not an instance of {@code IItemHandlerModifiable}.
+     * or the item handler is not an instance of {@code IItemHandlerModifiable}.
      */
     @Nullable
     public static IItemHandlerModifiable getInventory(ItemStack stack) {
@@ -80,8 +80,8 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
     }
     
     /**
-     * Gets a stream containing the inevntory of an ItemStack or an empty stream if the ItemStack
-     * doesn't have tha item handler capability or the intem handler is not an instance of
+     * Gets a stream containing the inventory of an ItemStack or an empty stream if the ItemStack
+     * doesn't have tha item handler capability or the item handler is not an instance of
      * {@code IItemHandlerModifiable}.
      */
     public static Stream<IItemHandlerModifiable> getInventoryStream(ItemStack stack) {

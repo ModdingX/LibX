@@ -47,7 +47,7 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
     /**
      * Registers a Tile Entity Type to be rendered with the ItemStackRenderer.
      *
-     * @param teType             The Tile Entit Type.
+     * @param teType             The Tile Entity Type.
      * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the tile
      *                           entities {@code read} method will get called before rendering.
      */

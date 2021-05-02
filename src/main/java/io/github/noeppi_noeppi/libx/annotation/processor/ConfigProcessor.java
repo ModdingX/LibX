@@ -77,8 +77,9 @@ public class ConfigProcessor extends Processor {
                         this.messager.printMessage(Diagnostic.Kind.WARNING, "@Config should not use wrapper type: " + type, element);
                     } else {
                         Element typeElem = this.types.asElement(type);
-                        if (typeElem == null || typeElem.getKind() != ElementKind.ENUM)
-                        this.messager.printMessage(Diagnostic.Kind.ERROR, "No value mapper found for type of @Config. Register you own." + type, element);
+                        if (typeElem == null || typeElem.getKind() != ElementKind.ENUM) {
+                            this.messager.printMessage(Diagnostic.Kind.ERROR, "No value mapper found for type of @Config. Register you own." + type, element);
+                        }
                     }
                 }
             }
@@ -110,7 +111,7 @@ public class ConfigProcessor extends Processor {
         }
         return true;
     }
-    
+
     private void addIfFound(Set<TypeMirror> types, String clazz) {
         TypeElement elem = this.elements.getTypeElement(clazz);
         if (elem != null && elem.asType() != null) {

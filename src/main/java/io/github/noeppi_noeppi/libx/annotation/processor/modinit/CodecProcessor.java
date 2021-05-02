@@ -71,7 +71,7 @@ public class CodecProcessor {
                 DeclaredType listType = (DeclaredType) param.asType();
                 List<? extends TypeMirror> generics = listType.getTypeArguments();
                 if (generics.size() != 1) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for unparameterized list type.");
+                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for parameterized list type.");
                     return;
                 }
                 codecFqn = getCodecFqn(generics.get(0), param, env);

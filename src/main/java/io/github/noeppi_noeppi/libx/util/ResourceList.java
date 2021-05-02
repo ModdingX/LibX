@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * A list of rules that will be applied one after anoher. The first rule that matches
+ * A list of rules that will be applied one after another. The first rule that matches
  * a resource location determines the result.
  * The resource list can either be a white list or a black list. If it is a whitelist,
  * by default a matching rule will make the {@code test} function return true. If it's

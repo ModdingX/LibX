@@ -163,7 +163,7 @@ public class GenericContainer extends CommonContainer {
 
     /**
      * Registers a slot validator. This is required as the item handler can not be synced to the client,
-     * so the slot validation method of the item handler can not be used. This should be called uring setup.
+     * so the slot validation method of the item handler can not be used. This should be called during setup.
      */
     public static void registerSlotValidator(ResourceLocation validatorId, BiPredicate<Integer, ItemStack> validator) {
         synchronized (validators) {

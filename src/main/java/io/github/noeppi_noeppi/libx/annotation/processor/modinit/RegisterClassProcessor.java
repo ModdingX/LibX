@@ -15,7 +15,7 @@ public class RegisterClassProcessor {
 
     public static void processRegisterClass(Element element, ModEnv env) {
         if (!(element instanceof QualifiedNameable)) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for element annotaed with @RegisterClass", element);
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for element annotated with @RegisterClass", element);
             return;
         }
         if (!(element.getEnclosingElement() instanceof PackageElement)) {
