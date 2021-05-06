@@ -17,6 +17,12 @@
     catch(err) {
     }
 //-->
+var methods = {"i0":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -41,8 +47,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/LoadableModel.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecRegistry.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecParam.html" target="_top">Frames</a></li>
@@ -69,13 +75,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -92,7 +98,12 @@
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit">io.github.noeppi_noeppi.libx.annotation.processor.modinit.GeneratedCodec.CodecElement</a></li>
+<li>
+<ul class="inheritance">
 <li>io.github.noeppi_noeppi.libx.annotation.processor.modinit.GeneratedCodec.CodecParam</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -106,7 +117,7 @@
 <hr>
 <br>
 <pre>public static class <span class="typeNameLabel">GeneratedCodec.CodecParam</span>
-extends java.lang.Object</pre>
+extends <a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit">GeneratedCodec.CodecElement</a></pre>
 </li>
 </ul>
 </div>
@@ -141,15 +152,14 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecParam.html#name">name</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecParam.html#typeFqn">typeFqn</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecParam.html#typeFqnBoxed">typeFqnBoxed</a></span></code>&nbsp;</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.io.github.noeppi_noeppi.libx.annotation.processor.modinit.GeneratedCodec.CodecElement">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;io.github.noeppi_noeppi.libx.annotation.processor.modinit.<a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit">GeneratedCodec.CodecElement</a></h3>
+<code><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html#typeFqn">typeFqn</a>, <a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html#typeFqnBoxed">typeFqnBoxed</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -180,6 +190,17 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecParam.html#writeCode-java.io.Writer-">writeCode</a></span>(java.io.Writer&nbsp;writer)</code>&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -208,24 +229,6 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>name</h4>
 <pre>public final&nbsp;java.lang.String name</pre>
-</li>
-</ul>
-<a name="typeFqn">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>typeFqn</h4>
-<pre>public final&nbsp;java.lang.String typeFqn</pre>
-</li>
-</ul>
-<a name="typeFqnBoxed">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>typeFqnBoxed</h4>
-<pre>public final&nbsp;java.lang.String typeFqnBoxed</pre>
 </li>
 </ul>
 <a name="codecFqn">
@@ -279,6 +282,30 @@ extends java.lang.Object</pre>
 </ul>
 </li>
 </ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="writeCode-java.io.Writer-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>writeCode</h4>
+<pre>public&nbsp;void&nbsp;writeCode(java.io.Writer&nbsp;writer)
+               throws java.io.IOException</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html#writeCode-java.io.Writer-">writeCode</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit">GeneratedCodec.CodecElement</a></code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </div>
@@ -305,8 +332,8 @@ extends java.lang.Object</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/LoadableModel.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecElement.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecRegistry.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?io/github/noeppi_noeppi/libx/annotation/processor/modinit/GeneratedCodec.CodecParam.html" target="_top">Frames</a></li>
@@ -333,13 +360,13 @@ extends java.lang.Object</pre>
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">
