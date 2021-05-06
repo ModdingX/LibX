@@ -20,6 +20,20 @@ import java.lang.annotation.*;
  * the type of that parameter must have a public static field named {@code CODEC}
  * or a value must have been set explicitly by a {@link Param} annotation.
  * 
+ * To allow for more special codecs that field codecs, you can also add different
+ * annotations. Supported annotations are:
+ * 
+ * <ul>
+ *     <li>
+ *         {@link Lookup} for registry lookup codecs. Fields with type {@code Registry&lt;?&gt;}
+ *         default to this type.
+ *     </li>
+ * </ul>
+ * 
+ * To force a parameter to generate a field codec, add an empty {@link Param} annotation
+ * to it. This for example allows for registries to be used as normal fields in codecs.
+ *  
+ * 
  * You can also use Lists of any of the supported codec types.
  * 
  * To get your codec, use {@link Codecs#get(Class, Class)}.

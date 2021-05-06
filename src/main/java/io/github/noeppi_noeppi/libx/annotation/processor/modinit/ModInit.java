@@ -78,13 +78,10 @@ public class ModInit  {
                     writer.write("() -> " + RECORD_CODEC_BUILDER_FQN + ".<" + codec.fqn + ">create(instance->");
                     writer.write("instance.group(");
                     for (int i = 0; i < codec.params.size(); i++) {
-                        GeneratedCodec.CodecParam param = codec.params.get(i);
-                        writer.write(param.codecFqn);
-                        if (param.list) {
-                            writer.write(".listOf()");
-                        }
-                        writer.write(".fieldOf(\"" + this.quote(param.name) + "\")");
-                        writer.write(".forGetter(" + param.getter + ")");
+                        GeneratedCodec.CodecElement param = codec.params.get(i);
+                        writer.write("(");
+                        param.writeCode(writer);
+                        writer.write(")");
                         if (i < codec.params.size() - 1) {
                             writer.write(",");
                         }
@@ -92,7 +89,7 @@ public class ModInit  {
                     writer.write(").apply(instance,instance.stable(");
                     writer.write("(");
                     for (int i = 0; i < codec.params.size(); i++) {
-                        GeneratedCodec.CodecParam param = codec.params.get(i);
+                        GeneratedCodec.CodecElement param = codec.params.get(i);
                         writer.write(param.typeFqnBoxed + " ctorArg" + i);
                         if (i < codec.params.size() - 1) {
                             writer.write(",");
@@ -118,7 +115,7 @@ public class ModInit  {
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
             for (RegisteredConfig config : this.configs) {
                 //noinspection deprecation
-                writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + this.quote(this.modid) + "\",\"" + this.quote(config.name) + "\")," + config.classFqn + ".class," + config.client + ");");
+                writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name) + "\")," + config.classFqn + ".class," + config.client + ");");
             }
             if (!allReg.isEmpty()) {
                 writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
@@ -135,7 +132,7 @@ public class ModInit  {
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
                 for (RegistrationEntry entry : allReg) {
-                    writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).register(\"" + this.quote(entry.registryName) + "\"," + entry.fqn + ");");
+                    writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).register(\"" + quote(entry.registryName) + "\"," + entry.fqn + ");");
                 }
                 writer.write("}");
             }
@@ -144,14 +141,14 @@ public class ModInit  {
                 writer.write("private static void registerModels(net.minecraftforge.client.event.ModelRegistryEvent event){");
                 for (LoadableModel model : this.models) {
                     //noinspection deprecation
-                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + this.quote(model.modelNamespace) + "\",\"" + this.quote(model.modelPath) + "\"));");
+                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
                 }
                 writer.write("}");
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void bakeModels(net.minecraftforge.client.event.ModelBakeEvent event){");
                 for (LoadableModel model : this.models) {
                     //noinspection deprecation
-                    writer.write(model.classFqn + "." + this.quote(model.fieldName) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + this.quote(model.modelNamespace) + "\",\"" + this.quote(model.modelPath) + "\"));");
+                    writer.write(model.classFqn + "." + quote(model.fieldName) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
                 }
                 writer.write("}");
             }
@@ -162,7 +159,7 @@ public class ModInit  {
         }
     }
     
-    private String quote(String str) {
+    public static String quote(String str) {
         StringBuilder sb = new StringBuilder();
         for (char chr : str.toCharArray()) {
             if (chr == '\\') {

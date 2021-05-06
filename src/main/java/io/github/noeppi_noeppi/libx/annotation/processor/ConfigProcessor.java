@@ -66,7 +66,7 @@ public class ConfigProcessor extends Processor {
 
             if (element.getKind() != ElementKind.FIELD || !element.getModifiers().contains(Modifier.STATIC) ||
                     !element.getModifiers().contains(Modifier.PUBLIC) || element.getModifiers().contains(Modifier.FINAL)) {
-                this.messager.printMessage(Diagnostic.Kind.ERROR, "Only public non-final static fields can be annotated with @Config", element);
+                this.messager.printMessage(Diagnostic.Kind.ERROR, "Only public static non-final fields can be annotated with @Config", element);
                 continue;
             }
 
