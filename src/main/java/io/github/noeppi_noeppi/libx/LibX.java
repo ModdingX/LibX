@@ -10,7 +10,7 @@ import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.inventory.screen.GenericScreen;
 import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
-import io.github.noeppi_noeppi.libx.impl.loot.conditions.BlockTag;
+import io.github.noeppi_noeppi.libx.impl.loot.conditions.BlockTagCondition;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.inventory.container.GenericContainer;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -76,7 +76,7 @@ public class LibX extends ModX {
     // We can not do this in setup as it would not be available for `runData`
     private void registerMisc(RegistryEvent.NewRegistry event) {
         Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, AllLootEntry.TYPE);
-        Registry.register(Registry.LOOT_CONDITION_TYPE, BlockTag.ID, BlockTag.TYPE);
+        Registry.register(Registry.LOOT_CONDITION_TYPE, BlockTagCondition.ID, BlockTagCondition.TYPE);
     }
     
     private void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
