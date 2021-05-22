@@ -151,7 +151,7 @@ public class ConfigManager {
             AdvancedValueMappers.INGREDIENT_STACK
             ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase(Locale.ENGLISH)))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
+    private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase(Locale.ROOT)))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
     private static final Map<ResourceLocation, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
     
     @SuppressWarnings("UnstableApiUsage")
