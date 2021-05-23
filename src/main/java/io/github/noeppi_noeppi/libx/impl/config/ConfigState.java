@@ -126,20 +126,24 @@ public class ConfigState {
     private String specialString(JsonElement json) {
         if (json.isJsonObject() && json.getAsJsonObject().size() == 0) {
             return "{}";
-        } else if (json.isJsonArray() && json.getAsJsonArray().size() == 0) {
+        }
+        if (json.isJsonArray() && json.getAsJsonArray().size() == 0) {
             return "[]";
-        } else if (json.isJsonArray() && json.getAsJsonArray().size() < 5) {
+        }
+        if (json.isJsonArray() && json.getAsJsonArray().size() < 5) {
             //noinspection UnstableApiUsage
             List<JsonElement> list = Streams.stream(json.getAsJsonArray()).collect(Collectors.toList());
             if (list.stream().allMatch(this::isSimple)) {
                 return "[ " + list.stream().map(ConfigImpl.GSON::toJson).collect(Collectors.joining(", ")) + " ]";
             }
-        } else if (json.isJsonObject()) {
+        }
+        if (json.isJsonObject()) {
             String content = json.getAsJsonObject().entrySet().stream()
                     .map(e -> ConfigImpl.GSON.toJson(new JsonPrimitive(e.getKey())) + ": " + this.specialString(e.getValue()))
                     .collect(Collectors.joining(",\n")).trim();
             return "{\n" + this.applyIndent(content, "  ") + "\n}";
-        } else if (json.isJsonArray()) {
+        }
+        if (json.isJsonArray()) {
             //noinspection UnstableApiUsage
             String content = Streams.stream(json.getAsJsonArray())
                     .map(this::specialString)
