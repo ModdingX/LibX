@@ -3,8 +3,8 @@ package io.github.noeppi_noeppi.libx.impl.config;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import net.minecraft.network.PacketBuffer;
 
@@ -124,12 +124,27 @@ public class ConfigState {
     }
     
     private String specialString(JsonElement json) {
-        if (json.isJsonArray() && json.getAsJsonArray().size() < 5) {
+        if (json.isJsonObject() && json.getAsJsonObject().size() == 0) {
+            return "{}";
+        } else if (json.isJsonArray() && json.getAsJsonArray().size() == 0) {
+            return "[]";
+        } else if (json.isJsonArray() && json.getAsJsonArray().size() < 5) {
             //noinspection UnstableApiUsage
-            List<JsonElement> list = Streams.stream(json.getAsJsonArray().iterator()).collect(Collectors.toList());
+            List<JsonElement> list = Streams.stream(json.getAsJsonArray()).collect(Collectors.toList());
             if (list.stream().allMatch(this::isSimple)) {
                 return "[ " + list.stream().map(ConfigImpl.GSON::toJson).collect(Collectors.joining(", ")) + " ]";
             }
+        } else if (json.isJsonObject()) {
+            String content = json.getAsJsonObject().entrySet().stream()
+                    .map(e -> ConfigImpl.GSON.toJson(new JsonPrimitive(e.getKey())) + ": " + this.specialString(e.getValue()))
+                    .collect(Collectors.joining(",\n")).trim();
+            return "{\n" + this.applyIndent(content, "  ") + "\n}";
+        } else if (json.isJsonArray()) {
+            //noinspection UnstableApiUsage
+            String content = Streams.stream(json.getAsJsonArray())
+                    .map(this::specialString)
+                    .collect(Collectors.joining(",\n")).trim();
+            return "[\n" + this.applyIndent(content, "  ") + "\n]";
         }
         return ConfigImpl.GSON.toJson(json);
     }
