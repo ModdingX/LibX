@@ -58,7 +58,7 @@ public class EnumConfigMapper implements ValueMapper<Enum<?>, JsonPrimitive> {
 
     @Override
     public JsonPrimitive toJSON(Enum<?> value, Class<?> elementType) {
-        return new JsonPrimitive(value.name().toLowerCase());
+        return new JsonPrimitive(value.name().toLowerCase(Locale.ROOT));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EnumConfigMapper implements ValueMapper<Enum<?>, JsonPrimitive> {
     public List<String> comment(Class<?> elementType) {
         return ImmutableList.of(
                 "Allowed values: " + Arrays.stream(this.clazz.getEnumConstants())
-                        .map(e -> e.name().toLowerCase())
+                        .map(e -> e.name().toLowerCase(Locale.ROOT))
                         .collect(Collectors.joining(", "))
         );
     }
