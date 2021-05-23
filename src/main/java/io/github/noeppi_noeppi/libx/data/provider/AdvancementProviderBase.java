@@ -269,7 +269,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
      * Gets the given {@code EntityPredicate} as an {@code EntityPredicate.AndPredicate}.
      */
     public EntityPredicate.AndPredicate entity(EntityPredicate entity) {
-        return EntityPredicate.AndPredicate.serializePredicate(EntityHasProperty.func_237477_a_(LootContext.EntityTarget.THIS, entity).build());
+        return EntityPredicate.AndPredicate.serializePredicate(EntityHasProperty.builder(LootContext.EntityTarget.THIS, entity).build());
     }
 
     /**

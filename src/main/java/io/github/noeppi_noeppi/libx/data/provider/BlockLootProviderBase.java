@@ -137,9 +137,9 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      */
     public LootModifier copyProperties(Property<?>... properties) {
         return (b, entry) -> {
-            CopyBlockState.Builder func = CopyBlockState.func_227545_a_(b);
+            CopyBlockState.Builder func = CopyBlockState.builder(b);
             for (Property<?> property : properties) {
-                func = func.func_227552_a_(property);
+                func = func.with(property);
             }
             return entry.acceptFunction(func);
         };
@@ -399,7 +399,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
     private LootEntry.Builder<?> combineBy(Function<LootEntry.Builder<?>[], LootEntry.Builder<?>> combineFunc, LootEntry.Builder<?>[] loot) {
         if (loot.length == 0) {
-            return EmptyLootEntry.func_216167_a();
+            return EmptyLootEntry.builder();
         } else if (loot.length == 1) {
             return loot[0];
         } else {
@@ -409,7 +409,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
     private LootFactory combineBy(Function<LootEntry.Builder<?>[], LootEntry.Builder<?>> combineFunc, LootFactory[] loot) {
         if (loot.length == 0) {
-            return b -> EmptyLootEntry.func_216167_a();
+            return b -> EmptyLootEntry.builder();
         } else if (loot.length == 1) {
             return loot[0];
         } else {
@@ -515,7 +515,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
         if (stack.getDamage() != 0) {
             float damage = (stack.getMaxDamage() - stack.getDamage()) / (float) stack.getMaxDamage();
-            entry.acceptFunction(SetDamage.func_215931_a(new RandomValueRange(damage)));
+            entry.acceptFunction(SetDamage.builder(new RandomValueRange(damage)));
         }
         if (stack.hasTag()) {
             entry.acceptFunction(SetNBT.builder(stack.getOrCreateTag()));
@@ -563,7 +563,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
         @Nonnull
         @Override
-        protected AllLootBuilder func_212845_d_() {
+        protected AllLootBuilder getSelf() {
             return this;
         }
 
@@ -573,8 +573,9 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         @Nonnull
+        @Override
         public LootEntry build() {
-            return new AllLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.func_216079_f());
+            return new AllLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
         }
     }
     
@@ -591,7 +592,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
         @Nonnull
         @Override
-        protected GroupLootBuilder func_212845_d_() {
+        protected GroupLootBuilder getSelf() {
             return this;
         }
 
@@ -601,8 +602,9 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         @Nonnull
+        @Override
         public LootEntry build() {
-            return new GroupLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.func_216079_f());
+            return new GroupLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
         }
     }
     
@@ -619,7 +621,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
         @Nonnull
         @Override
-        protected SequenceLootBuilder func_212845_d_() {
+        protected SequenceLootBuilder getSelf() {
             return this;
         }
 
@@ -629,8 +631,9 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         @Nonnull
+        @Override
         public LootEntry build() {
-            return new SequenceLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.func_216079_f());
+            return new SequenceLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
         }
     }
 
@@ -726,6 +729,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
             return entries;
         }
 
+        @Override
         StandaloneLootEntry.Builder<?> build(Block block);
         
         default LootFactory withFinal(GenericLootModifier finalModifier) {
@@ -737,6 +741,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
             return b -> chained.apply(b, this.build(b));
         }
 
+        @Override
         default StandaloneLootFactory with(ILootCondition.IBuilder... conditions) {
             return b -> {
                 StandaloneLootEntry.Builder<?> entry = this.build(b);
@@ -830,6 +835,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
             }
         }
 
+        @Override
         StandaloneLootEntry.Builder<?> apply(Block block, StandaloneLootEntry.Builder<?> entry);
 
         @Override

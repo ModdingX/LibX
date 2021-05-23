@@ -52,18 +52,18 @@ public class HandCommand implements Command<CommandSource> {
         IFormattableTextComponent tc = IdToTextComponent.toText(item.getRegistryName());
 
         if (count != 1) {
-            tc = tc.append(new StringTextComponent(" ")).append(new StringTextComponent(Integer.toString(count)));
+            tc = tc.appendSibling(new StringTextComponent(" ")).appendSibling(new StringTextComponent(Integer.toString(count)));
         }
 
         if (nbt != null && !nbt.isEmpty()) {
             List<INBT> printNBT = Collections.singletonList(nbt);
             if (path != null) {
-                printNBT = path.func_218071_a(nbt);
+                printNBT = path.findTags(nbt);
             }
 
             for (INBT element : printNBT) {
-                tc = tc.append(new StringTextComponent(" "))
-                        .append(format == NbtOutputType.NBT ?
+                tc = tc.appendSibling(new StringTextComponent(" "))
+                        .appendSibling(format == NbtOutputType.NBT ?
                                 NbtToTextComponent.toText(nbt) :
                                 JsonToTextComponent.toText(NbtToJson.getJson(element, true)));
             }

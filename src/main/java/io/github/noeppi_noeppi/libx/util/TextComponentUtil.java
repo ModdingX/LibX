@@ -87,7 +87,7 @@ public class TextComponentUtil {
                 traverseComponent(child, style, consumer);
             }
         } else if (tc instanceof KeybindTextComponent) {
-            traverseComponent(((KeybindTextComponent) tc).func_240698_i_(), style, consumer);
+            traverseComponent(((KeybindTextComponent) tc).getDisplayComponent(), style, consumer);
         } else if (tc instanceof ITextComponent) {
             consumer.accept(((ITextComponent) tc).getUnformattedComponentText(), style);
         } else {

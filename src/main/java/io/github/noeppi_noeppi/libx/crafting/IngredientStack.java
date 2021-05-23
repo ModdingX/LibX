@@ -41,6 +41,7 @@ public class IngredientStack implements Predicate<ItemStack> {
      * Returns whether the ingredient matches the stack and the count of the stack is greater or equal
      * to the count of the IngredientStack.
      */
+    @Override
     public boolean test(ItemStack stack) {
         return stack.getCount() >= this.count && this.ingredient.test(stack);
     }

@@ -18,13 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPlayerInteractionManager {
 
     @Inject(
-            method = "Lnet/minecraft/server/management/PlayerInteractionManager;func_219441_a(Lnet/minecraft/entity/player/ServerPlayerEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Hand;Lnet/minecraft/util/math/BlockRayTraceResult;)Lnet/minecraft/util/ActionResultType;",
+            method = "Lnet/minecraft/server/management/PlayerInteractionManager;processItemUsage(Lnet/minecraft/entity/player/ServerPlayerEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Hand;Lnet/minecraft/util/math/BlockRayTraceResult;)Lnet/minecraft/util/ActionResultType;",
             at = @At(
                     value = "TAIL"
             ),
             cancellable = true
     )
-    public void func_219441_a(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockRayTraceResult hit, CallbackInfoReturnable<ActionResultType> cir) {
+    public void processItemUsage(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockRayTraceResult hit, CallbackInfoReturnable<ActionResultType> cir) {
         if (stack.isEmpty()) {
             ClickBlockEmptyHandEvent event = new ClickBlockEmptyHandEvent(player, world, hand, hit);
             if (MinecraftForge.EVENT_BUS.post(event)) {

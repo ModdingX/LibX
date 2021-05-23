@@ -57,7 +57,7 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
     }
 
     @Override
-    public void func_239207_a_(ItemStack stack, @Nonnull ItemCameraTransforms.TransformType type, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+    public void render(ItemStack stack, @Nonnull ItemCameraTransforms.TransformType type, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
         Block block = Block.getBlockFromItem(stack.getItem());
         if (block != Blocks.AIR) {
             for (TileEntityType<?> teType : types) {

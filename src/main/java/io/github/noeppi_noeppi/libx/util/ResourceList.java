@@ -248,6 +248,7 @@ public class ResourceList {
         }
 
         @Nullable
+        @Override
         public Boolean test(ResourceLocation rl) {
             if (this.namespace.matcher.getValue().test(rl.getNamespace())
                     && this.path.matcher.getValue().test(rl.getPath())) {

@@ -2,6 +2,8 @@ package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Streams;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import net.minecraft.network.PacketBuffer;
@@ -93,7 +95,7 @@ public class ConfigState {
             Object value = this.values.get(key);
             //noinspection unchecked
             JsonElement json = ((ValueMapper<Object, ?>) key.mapper).toJSON(value, key.elementType);
-            builder.append(ConfigImpl.GSON.toJson(json));
+            builder.append(this.specialString(json));
         }
         
         List<String> subGroupKeys = subGroups.keySet().stream().sorted().collect(Collectors.toList());
@@ -119,6 +121,27 @@ public class ConfigState {
             builder.append("\n}");
         }
         return builder.toString();
+    }
+    
+    private String specialString(JsonElement json) {
+        if (json.isJsonArray() && json.getAsJsonArray().size() < 5) {
+            //noinspection UnstableApiUsage
+            List<JsonElement> list = Streams.stream(json.getAsJsonArray().iterator()).collect(Collectors.toList());
+            if (list.stream().allMatch(this::isSimple)) {
+                return "[ " + list.stream().map(ConfigImpl.GSON::toJson).collect(Collectors.joining(", ")) + " ]";
+            }
+        }
+        return ConfigImpl.GSON.toJson(json);
+    }
+    
+    private boolean isSimple(JsonElement json) {
+        if (json.isJsonNull()) {
+            return true;
+        } else if (json.isJsonPrimitive()) {
+            return !json.getAsJsonPrimitive().isString() || json.getAsJsonPrimitive().getAsString().length() <= 10;
+        } else {
+            return false;
+        }
     }
     
     private String applyIndent(String str, @SuppressWarnings("SameParameterValue") String indentStr) {

@@ -13,60 +13,63 @@ import java.util.function.Consumer;
 
 // A loot entry that merges multiple entries into one to be found in one roll.
 public class AllLootEntry extends ParentedLootEntry {
-    
+
     public static final ResourceLocation ID = new ResourceLocation(LibX.getInstance().modid, "all");
     public static final LootPoolEntryType TYPE = new LootPoolEntryType(ParentedLootEntry.getSerializer(AllLootEntry::new));
-    
+
     public AllLootEntry(LootEntry[] children, ILootCondition[] conditions) {
-      super(children, conditions);
-   }
+        super(children, conditions);
+    }
 
-   @Nonnull
-   public LootPoolEntryType func_230420_a_() {
-      return TYPE;
-   }
+    @Nonnull
+    @Override
+    public LootPoolEntryType getEntryType() {
+        return TYPE;
+    }
 
-   @Nonnull
-   protected ILootEntry combineChildren(ILootEntry[] entries) {
-      switch(entries.length) {
-      case 0:
-         return field_216140_b;
-      case 1:
-         return entries[0];
-      default:
-         return (ctx, consumer) -> {
-            List<ILootGenerator> list = new ArrayList<>();
-            boolean success = false;
-            for(ILootEntry entry : entries) {
-               if (entry.expand(ctx, list::add)) {
-                  success = true;
-               }
-            }
-            if (list.size() == 1) {
-               consumer.accept(list.get(0));
-            } else if (!list.isEmpty()) {
-               // Just hand one entry to the parent consumer that will if picked call all entries from
-               // the children.
-               consumer.accept(new ILootGenerator() {
-                  @Override
-                  public int getEffectiveWeight(float luck) {
-                     int total = 0;
-                     for (ILootGenerator gen : list) {
-                        total += gen.getEffectiveWeight(luck);
-                     }
-                     return total;
-                  }
+    @Nonnull
+    @Override
+    protected ILootEntry combineChildren(ILootEntry[] entries) {
+        switch (entries.length) {
+            case 0:
+                return SUCCESS;
+            case 1:
+                return entries[0];
+            default:
+                return (ctx, consumer) -> {
+                    List<ILootGenerator> list = new ArrayList<>();
+                    boolean success = false;
+                    for (ILootEntry entry : entries) {
+                        if (entry.expand(ctx, list::add)) {
+                            success = true;
+                        }
+                    }
+                    if (list.size() == 1) {
+                        consumer.accept(list.get(0));
+                    } else if (!list.isEmpty()) {
+                        // Just hand one entry to the parent consumer that will if picked call all entries from
+                        // the children.
+                        consumer.accept(new ILootGenerator() {
+                            
+                            @Override
+                            public int getEffectiveWeight(float luck) {
+                                int total = 0;
+                                for (ILootGenerator gen : list) {
+                                    total += gen.getEffectiveWeight(luck);
+                                }
+                                return total;
+                            }
 
-                  @Override
-                  public void func_216188_a(@Nonnull Consumer<ItemStack> stacks, @Nonnull LootContext ctx) {
-                     for (ILootGenerator gen : list) {
-                        gen.func_216188_a(stacks, ctx);
-                     }
-                  }
-               });
-            }
-            return success;
-         };
-      }
-   }
+                            @Override
+                            public void generateLoot(@Nonnull Consumer<ItemStack> stacks, @Nonnull LootContext ctx) {
+                                for (ILootGenerator gen : list) {
+                                    gen.generateLoot(stacks, ctx);
+                                }
+                            }
+                        });
+                    }
+                    return success;
+                };
+        }
+    }
 }
