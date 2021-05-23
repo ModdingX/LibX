@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":9};
+var methods = {"i0":9,"i1":9,"i2":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -162,19 +162,19 @@ extends net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer</pr
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/render/ItemStackRenderer.html#func_239207_a_-net.minecraft.item.ItemStack-net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType-com.mojang.blaze3d.matrix.MatrixStack-net.minecraft.client.renderer.IRenderTypeBuffer-int-int-">func_239207_a_</a></span>(net.minecraft.item.ItemStack&nbsp;stack,
-              net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType&nbsp;type,
-              com.mojang.blaze3d.matrix.MatrixStack&nbsp;matrixStack,
-              net.minecraft.client.renderer.IRenderTypeBuffer&nbsp;buffer,
-              int&nbsp;light,
-              int&nbsp;overlay)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../io/github/noeppi_noeppi/libx/render/ItemStackRenderer.html" title="class in io.github.noeppi_noeppi.libx.render">ItemStackRenderer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/render/ItemStackRenderer.html#get--">get</a></span>()</code>
 <div class="block">Gets the instance of the ItemStackRenderer.</div>
 </td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../io/github/noeppi_noeppi/libx/render/ItemStackRenderer.html#render-net.minecraft.item.ItemStack-net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType-com.mojang.blaze3d.matrix.MatrixStack-net.minecraft.client.renderer.IRenderTypeBuffer-int-int-">render</a></span>(net.minecraft.item.ItemStack&nbsp;stack,
+      net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType&nbsp;type,
+      com.mojang.blaze3d.matrix.MatrixStack&nbsp;matrixStack,
+      net.minecraft.client.renderer.IRenderTypeBuffer&nbsp;buffer,
+      int&nbsp;light,
+      int&nbsp;overlay)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -215,24 +215,24 @@ extends net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer</pr
 </dl>
 </li>
 </ul>
-<a name="func_239207_a_-net.minecraft.item.ItemStack-net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType-com.mojang.blaze3d.matrix.MatrixStack-net.minecraft.client.renderer.IRenderTypeBuffer-int-int-">
+<a name="render-net.minecraft.item.ItemStack-net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType-com.mojang.blaze3d.matrix.MatrixStack-net.minecraft.client.renderer.IRenderTypeBuffer-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>func_239207_a_</h4>
-<pre>public&nbsp;void&nbsp;func_239207_a_(net.minecraft.item.ItemStack&nbsp;stack,
-                           @Nonnull
-                           net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType&nbsp;type,
-                           @Nonnull
-                           com.mojang.blaze3d.matrix.MatrixStack&nbsp;matrixStack,
-                           @Nonnull
-                           net.minecraft.client.renderer.IRenderTypeBuffer&nbsp;buffer,
-                           int&nbsp;light,
-                           int&nbsp;overlay)</pre>
+<h4>render</h4>
+<pre>public&nbsp;void&nbsp;render(net.minecraft.item.ItemStack&nbsp;stack,
+                   @Nonnull
+                   net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType&nbsp;type,
+                   @Nonnull
+                   com.mojang.blaze3d.matrix.MatrixStack&nbsp;matrixStack,
+                   @Nonnull
+                   net.minecraft.client.renderer.IRenderTypeBuffer&nbsp;buffer,
+                   int&nbsp;light,
+                   int&nbsp;overlay)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>func_239207_a_</code>&nbsp;in class&nbsp;<code>net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer</code></dd>
+<dd><code>render</code>&nbsp;in class&nbsp;<code>net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer</code></dd>
 </dl>
 </li>
 </ul>
