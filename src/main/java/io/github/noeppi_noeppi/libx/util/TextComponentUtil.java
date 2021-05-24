@@ -25,7 +25,7 @@ public class TextComponentUtil {
     
     private static void formattingCodes(StringBuilder sb, Style style) {
         if (style.getColor() != null) {
-            int color = style.getColor().getColor();
+            int color = style.getColor().color;
             sb.append("\u001B[38;2;").append((color >> 16) & 0xFF).append(";").append((color >> 8) & 0xFF).append(";").append(color & 0xFF).append("m");
         }
         if (style.bold != null) {
