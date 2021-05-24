@@ -14,6 +14,7 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
+import java.util.UUID;
 
 public class AdvancedValueMappers {
     
@@ -187,6 +188,42 @@ public class AdvancedValueMappers {
         @Override
         public void write(IngredientStack value, PacketBuffer buffer, Class<?> elementType) {
             value.write(buffer);
+        }
+    };
+    
+    public static final ValueMapper<UUID, JsonPrimitive> UID = new ValueMapper<UUID, JsonPrimitive>() {
+
+        @Override
+        public Class<java.util.UUID> type() {
+            return UUID.class;
+        }
+
+        @Override
+        public Class<JsonPrimitive> element() {
+            return JsonPrimitive.class;
+        }
+
+        @Override
+        public java.util.UUID fromJSON(JsonPrimitive json, Class<?> elementType) {
+            return UUID.fromString(json.getAsString());
+        }
+
+        @Override
+        public JsonPrimitive toJSON(java.util.UUID value, Class<?> elementType) {
+            return new JsonPrimitive(value.toString());
+        }
+
+        @Override
+        public UUID read(PacketBuffer buffer, Class<?> elementType) {
+            long mostSignificantBits = buffer.readLong();
+            long leastSignificantBits = buffer.readLong();
+            return new UUID(mostSignificantBits, leastSignificantBits);
+        }
+
+        @Override
+        public void write(UUID value, PacketBuffer buffer, Class<?> elementType) {
+            buffer.writeLong(value.getMostSignificantBits());
+            buffer.writeLong(value.getLeastSignificantBits());
         }
     };
 }

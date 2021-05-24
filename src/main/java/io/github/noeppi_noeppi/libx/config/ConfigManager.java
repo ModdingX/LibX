@@ -107,6 +107,7 @@ import java.util.function.Function;
  *     <li>Ingredient</li>
  *     <li>IFormattableTextComponent</li>
  *     <li>ResourceList</li>
+ *     <li>UUID</li>
  *     <li>Any enum</li>
  * </ul>
  * 
@@ -148,10 +149,13 @@ public class ConfigManager {
             AdvancedValueMappers.INGREDIENT,
             AdvancedValueMappers.TEXT_COMPONENT,
             AdvancedValueMappers.RESOURCE_LIST,
-            AdvancedValueMappers.INGREDIENT_STACK
+            AdvancedValueMappers.INGREDIENT_STACK,
+            AdvancedValueMappers.UID
             ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase(Locale.ROOT)))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
+    private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream()
+            .map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase(Locale.ROOT))))
+            .collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
     private static final Map<ResourceLocation, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
     
     @SuppressWarnings("UnstableApiUsage")

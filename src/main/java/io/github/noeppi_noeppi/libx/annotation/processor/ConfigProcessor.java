@@ -37,6 +37,7 @@ public class ConfigProcessor extends Processor {
         validTypes.add(this.forClass(Map.class));
         validTypes.add(this.forClass(ResourceList.class));
         validTypes.add(this.forClass(IngredientStack.class));
+        validTypes.add(this.forClass(UUID.class));
         this.addIfFound(validTypes, "net.minecraft.item.crafting.Ingredient");
         this.addIfFound(validTypes, "net.minecraft.util.text.IFormattableTextComponent");
         this.addIfFound(validTypes, "net.minecraft.util.ResourceLocation");
