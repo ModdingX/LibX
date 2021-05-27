@@ -132,8 +132,9 @@ implements net.minecraftforge.items.IItemHandlerModifiable</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/impl/inventory/container/GenericContainerSlotValidationWrapper.html#GenericContainerSlotValidationWrapper-net.minecraftforge.items.IItemHandlerModifiable-java.util.function.BiPredicate-">GenericContainerSlotValidationWrapper</a></span>(net.minecraftforge.items.IItemHandlerModifiable&nbsp;handler,
-                                     java.util.function.BiPredicate&lt;java.lang.Integer,net.minecraft.item.ItemStack&gt;&nbsp;validator)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../io/github/noeppi_noeppi/libx/impl/inventory/container/GenericContainerSlotValidationWrapper.html#GenericContainerSlotValidationWrapper-net.minecraftforge.items.IItemHandlerModifiable-java.util.function.BiPredicate-int:A-">GenericContainerSlotValidationWrapper</a></span>(net.minecraftforge.items.IItemHandlerModifiable&nbsp;handler,
+                                     java.util.function.BiPredicate&lt;java.lang.Integer,net.minecraft.item.ItemStack&gt;&nbsp;validator,
+                                     int[]&nbsp;slotLimits)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -206,7 +207,7 @@ implements net.minecraftforge.items.IItemHandlerModifiable</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GenericContainerSlotValidationWrapper-net.minecraftforge.items.IItemHandlerModifiable-java.util.function.BiPredicate-">
+<a name="GenericContainerSlotValidationWrapper-net.minecraftforge.items.IItemHandlerModifiable-java.util.function.BiPredicate-int:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -214,7 +215,9 @@ implements net.minecraftforge.items.IItemHandlerModifiable</pre>
 <h4>GenericContainerSlotValidationWrapper</h4>
 <pre>public&nbsp;GenericContainerSlotValidationWrapper(net.minecraftforge.items.IItemHandlerModifiable&nbsp;handler,
                                              @Nullable
-                                             java.util.function.BiPredicate&lt;java.lang.Integer,net.minecraft.item.ItemStack&gt;&nbsp;validator)</pre>
+                                             java.util.function.BiPredicate&lt;java.lang.Integer,net.minecraft.item.ItemStack&gt;&nbsp;validator,
+                                             @Nullable
+                                             int[]&nbsp;slotLimits)</pre>
 </li>
 </ul>
 </li>
