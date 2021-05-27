@@ -54,7 +54,11 @@ public class GenericContainer extends CommonContainer {
             LibX.logger.warn("Received invalid validator for generic container. Validator: " + validatorId);
             validator = validators.get(EMPTY_VALIDATOR);
         }
-        IItemHandlerModifiable handler = new GenericContainerSlotValidationWrapper(new ItemStackHandler(size), validator);
+        int[] slotLimits = new int[size];
+        for (int i = 0; i < size; i++) {
+            slotLimits[i] = buffer.readVarInt();
+        }
+        IItemHandlerModifiable handler = new GenericContainerSlotValidationWrapper(new ItemStackHandler(size), validator, slotLimits);
         return new GenericContainer(id, handler, playerInv);
     });
 
@@ -152,12 +156,15 @@ public class GenericContainer extends CommonContainer {
                     LibX.logger.warn("Generic container created with invalid validator. Validator ID: " + validatorId);
                     validator = validators.get(EMPTY_VALIDATOR);
                 }
-                return new GenericContainer(id, new GenericContainerSlotValidationWrapper(inventory, validator), playerInventory);
+                return new GenericContainer(id, new GenericContainerSlotValidationWrapper(inventory, validator, null), playerInventory);
             }
         };
         NetworkHooks.openGui(player, provider, buffer -> {
             buffer.writeVarInt(inventory.getSlots());
             buffer.writeResourceLocation(validatorId == null ? EMPTY_VALIDATOR : validatorId);
+            for (int i = 0; i < inventory.getSlots(); i++) {
+                buffer.writeVarInt(inventory.getSlotLimit(i));
+            }
         });
     }
 

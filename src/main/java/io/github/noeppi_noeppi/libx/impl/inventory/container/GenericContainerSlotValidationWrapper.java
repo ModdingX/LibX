@@ -14,10 +14,13 @@ public class GenericContainerSlotValidationWrapper implements IItemHandlerModifi
     private final IItemHandlerModifiable handler;
     @Nullable
     private final BiPredicate<Integer, ItemStack> validator;
-    
-    public GenericContainerSlotValidationWrapper(IItemHandlerModifiable handler, @Nullable BiPredicate<Integer, ItemStack> validator) {
+    @Nullable // Null on server side as we have access to the method directly.
+    private final int[] slotLimits;
+
+    public GenericContainerSlotValidationWrapper(IItemHandlerModifiable handler, @Nullable BiPredicate<Integer, ItemStack> validator, @Nullable int[] slotLimits) {
         this.handler = handler;
         this.validator = validator;
+        this.slotLimits = slotLimits;
     }
 
     @Override
@@ -50,7 +53,11 @@ public class GenericContainerSlotValidationWrapper implements IItemHandlerModifi
 
     @Override
     public int getSlotLimit(int slot) {
-        return this.handler.getSlotLimit(slot);
+        if (this.slotLimits != null && slot >= 0 && slot < this.slotLimits.length) {
+            return this.slotLimits[slot];
+        } else {
+            return this.handler.getSlotLimit(slot);
+        }
     }
 
     @Override
