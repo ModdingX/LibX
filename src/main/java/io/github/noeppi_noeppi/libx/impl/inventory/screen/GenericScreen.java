@@ -32,7 +32,6 @@ public class GenericScreen extends ContainerScreen<GenericContainer> {
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
     
-
     @Override
     protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
         if (this.minecraft != null) {

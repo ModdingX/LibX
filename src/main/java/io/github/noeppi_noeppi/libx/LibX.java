@@ -56,12 +56,18 @@ public class LibX extends ModX {
 
     @Override
     protected void setup(FMLCommonSetupEvent event) {
-        CommandUtil.registerGenericCommandArgument(this.modid + "_upperenum", UppercaseEnumArgument.class, new UppercaseEnumArgument.Serializer());
+        //noinspection CodeBlock2Expr
+        event.enqueueWork(() -> {
+            CommandUtil.registerGenericCommandArgument(this.modid + "_upperenum", UppercaseEnumArgument.class, new UppercaseEnumArgument.Serializer());
+        });
     }
 
     @Override
     protected void clientSetup(FMLClientSetupEvent event) {
-        ScreenManager.registerFactory(GenericContainer.TYPE, GenericScreen::new);
+        //noinspection CodeBlock2Expr
+        event.enqueueWork(() -> {
+            ScreenManager.registerFactory(GenericContainer.TYPE, GenericScreen::new);
+        });
     }
 
     public static LibX getInstance() {

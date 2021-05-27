@@ -150,7 +150,7 @@ public class GenericContainer extends CommonContainer {
             @Override
             public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
                 BiPredicate<Integer, ItemStack> validator;
-                if (validators.containsKey(validatorId)) {
+                if (validators.containsKey(validatorId == null ? EMPTY_VALIDATOR : validatorId)) {
                     validator = validators.get(validatorId);
                 } else {
                     LibX.logger.warn("Generic container created with invalid validator. Validator ID: " + validatorId);
