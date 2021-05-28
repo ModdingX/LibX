@@ -2,15 +2,14 @@ package io.github.noeppi_noeppi.libx.inventory.container;
 
 import com.mojang.datafixers.util.Function5;
 import io.github.noeppi_noeppi.libx.fi.Function6;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 
@@ -19,37 +18,24 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A base class for containers that handles basic container logic such as shift-clicks,
- * and laying out slots.
- * <p>
- * There are some things you need to pay attention to if you want to use this: <br>
- * Always register player inventory slots with layoutPlayerInventorySlots <br>
- * Register input slots, THEN output slots and THEN player inventory. <br>
- * </p>
- * <p>
- * Call the super constructor with <br>
- * firstOutputSlot    =  the number of input slot you have / the first output slot number <br>
- * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number. <br>
- * </p>
+ * Just like {@link ContainerBase} but for entities instead of tiles.
  */
-public abstract class ContainerBase<T extends TileEntity> extends CommonContainer {
+public abstract class ContainerBaseEntity<T extends Entity> extends CommonContainer {
 
-    public final T tile;
+    public final T entity;
     public final PlayerEntity player;
-    public final BlockPos pos;
     public final World world;
 
     // Used for automatic transferStackInSlot. To further restrict this use Slot#isItemValid.
     public final int firstOutputSlot;
     public final int firstInventorySlot;
 
-    protected ContainerBase(@Nullable ContainerType<?> type, int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player, int firstOutputSlot, int firstInventorySlot) {
+    protected ContainerBaseEntity(@Nullable ContainerType<?> type, int windowId, World world, int entityId, PlayerInventory playerInventory, PlayerEntity player, int firstOutputSlot, int firstInventorySlot) {
         super(type, windowId, playerInventory);
         // This should always work. If it doesn't something is very wrong.
         //noinspection unchecked
-        this.tile = (T) world.getTileEntity(pos);
+        this.entity = (T) world.getEntityByID(entityId);
         this.player = player;
-        this.pos = pos;
         this.world = world;
         this.firstOutputSlot = firstOutputSlot;
         this.firstInventorySlot = firstInventorySlot;
@@ -57,12 +43,7 @@ public abstract class ContainerBase<T extends TileEntity> extends CommonContaine
 
     @Override
     public boolean canInteractWith(@Nonnull PlayerEntity player) {
-        //noinspection ConstantConditions
-        return isWithinUsableDistance(IWorldPosCallable.of(this.tile.getWorld(), this.tile.getPos()), this.player, this.tile.getBlockState().getBlock());
-    }
-
-    public BlockPos getPos() {
-        return this.pos;
+        return isWithinUsableDistance(IWorldPosCallable.of(this.world, this.entity.getPosition()), this.player, this.world.getBlockState(this.entity.getPosition()).getBlock());
     }
 
     public World getWorld() {
@@ -119,11 +100,11 @@ public abstract class ContainerBase<T extends TileEntity> extends CommonContaine
      *
      * @param constructor A method reference to the container's constructor.
      */
-    public static <T extends Container> ContainerType<T> createContainerType(Function5<Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
+    public static <T extends Container> ContainerType<T> createContainerType(Function5<Integer, World, Integer, PlayerInventory, PlayerEntity, T> constructor) {
         return IForgeContainerType.create((windowId1, inv, data) -> {
-            BlockPos pos1 = data.readBlockPos();
+            int entityId1 = data.readInt();
             World world1 = inv.player.getEntityWorld();
-            return constructor.apply(windowId1, world1, pos1, inv, inv.player);
+            return constructor.apply(windowId1, world1, entityId1, inv, inv.player);
         });
     }
 
@@ -132,12 +113,12 @@ public abstract class ContainerBase<T extends TileEntity> extends CommonContaine
      *
      * @param constructor A method reference to the container's constructor.
      */
-    public static <T extends Container> ContainerType<T> createContainerType(Function6<ContainerType<T>, Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
+    public static <T extends Container> ContainerType<T> createContainerType(Function6<ContainerType<T>, Integer, World, Integer, PlayerInventory, PlayerEntity, T> constructor) {
         AtomicReference<ContainerType<T>> typeRef = new AtomicReference<>(null);
         ContainerType<T> type = IForgeContainerType.create((windowId1, inv, data) -> {
-            BlockPos pos1 = data.readBlockPos();
+            int entityId1 = data.readInt();
             World world1 = inv.player.getEntityWorld();
-            return constructor.apply(typeRef.get(), windowId1, world1, pos1, inv, inv.player);
+            return constructor.apply(typeRef.get(), windowId1, world1, entityId1, inv, inv.player);
         });
         typeRef.set(type);
         return type;
