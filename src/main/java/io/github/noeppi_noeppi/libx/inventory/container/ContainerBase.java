@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.inventory.container;
 
-import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Function5;
 import io.github.noeppi_noeppi.libx.fi.Function6;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,9 +13,6 @@ import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -149,6 +145,33 @@ public abstract class ContainerBase<T extends TileEntity> extends CommonContaine
             BlockPos pos1 = data.readBlockPos();
             World world1 = inv.player.getEntityWorld();
             return constructor.apply(typeRef.get(), windowId1, world1, pos1, inv, inv.player);
+        });
+        typeRef.set(type);
+        return type;
+    }
+    
+    /**
+     * Creates a container type for a container that should exist without a tile entity.
+     *
+     * @param constructor A method reference to the container's constructor.
+     */
+    public static <T extends Container> ContainerType<T> blocklessContainerType(Function5<Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
+        return IForgeContainerType.create((windowId1, inv, data) -> {
+            World world1 = inv.player.getEntityWorld();
+            return constructor.apply(windowId1, world1, null, inv, inv.player);
+        });
+    }
+
+    /**
+     * Creates a container type for a container that should exist without a tile entity.
+     *
+     * @param constructor A method reference to the container's constructor.
+     */
+    public static <T extends Container> ContainerType<T> blocklessContainerType(Function6<ContainerType<T>, Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
+        AtomicReference<ContainerType<T>> typeRef = new AtomicReference<>(null);
+        ContainerType<T> type = IForgeContainerType.create((windowId1, inv, data) -> {
+            World world1 = inv.player.getEntityWorld();
+            return constructor.apply(typeRef.get(), windowId1, world1, null, inv, inv.player);
         });
         typeRef.set(type);
         return type;
