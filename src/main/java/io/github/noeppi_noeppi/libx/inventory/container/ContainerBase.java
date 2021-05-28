@@ -38,8 +38,10 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public abstract class ContainerBase<T extends TileEntity> extends CommonContainer {
 
+    @Nullable
     public final T tile;
     public final PlayerEntity player;
+    @Nullable
     public final BlockPos pos;
     public final World world;
 
@@ -47,11 +49,11 @@ public abstract class ContainerBase<T extends TileEntity> extends CommonContaine
     public final int firstOutputSlot;
     public final int firstInventorySlot;
 
-    protected ContainerBase(@Nullable ContainerType<?> type, int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player, int firstOutputSlot, int firstInventorySlot) {
+    protected ContainerBase(@Nullable ContainerType<?> type, int windowId, World world, @Nullable BlockPos pos, PlayerInventory playerInventory, PlayerEntity player, int firstOutputSlot, int firstInventorySlot) {
         super(type, windowId, playerInventory);
         // This should always work. If it doesn't something is very wrong.
         //noinspection unchecked
-        this.tile = (T) world.getTileEntity(pos);
+        this.tile = pos == null ? null : (T) world.getTileEntity(pos);
         this.player = player;
         this.pos = pos;
         this.world = world;
@@ -61,10 +63,15 @@ public abstract class ContainerBase<T extends TileEntity> extends CommonContaine
 
     @Override
     public boolean canInteractWith(@Nonnull PlayerEntity player) {
-        //noinspection ConstantConditions
-        return isWithinUsableDistance(IWorldPosCallable.of(this.tile.getWorld(), this.tile.getPos()), this.player, this.tile.getBlockState().getBlock());
+        if (this.tile == null) {
+            return true;
+        } else {
+            //noinspection ConstantConditions
+            return isWithinUsableDistance(IWorldPosCallable.of(this.tile.getWorld(), this.tile.getPos()), this.player, this.tile.getBlockState().getBlock());
+        }
     }
 
+    @Nullable
     public BlockPos getPos() {
         return this.pos;
     }
