@@ -282,14 +282,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/mod/registration/BlockGUI.html#BlockGUI-io.github.noeppi_noeppi.libx.mod.ModX-java.lang.Class-net.minecraft.inventory.container.ContainerType-net.minecraft.block.AbstractBlock.Properties-net.minecraft.item.Item.Properties-">BlockGUI(ModX, Class&lt;T&gt;, ContainerType&lt;C&gt;, AbstractBlock.Properties, Item.Properties)</a></span> - Constructor for class io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/BlockGUI.html" title="class in io.github.noeppi_noeppi.libx.mod.registration">BlockGUI</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#blocklessContainerType-com.mojang.datafixers.util.Function5-">blocklessContainerType(Function5&lt;Integer, World, BlockPos, PlayerInventory, PlayerEntity, T&gt;)</a></span> - Static method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
-<dd>
-<div class="block">Creates a container type for a container that should exist without a tile entity.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#blocklessContainerType-io.github.noeppi_noeppi.libx.fi.Function6-">blocklessContainerType(Function6&lt;ContainerType&lt;T&gt;, Integer, World, BlockPos, PlayerInventory, PlayerEntity, T&gt;)</a></span> - Static method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
-<dd>
-<div class="block">Creates a container type for a container that should exist without a tile entity.</div>
-</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider"><span class="typeNameLink">BlockLootProviderBase</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/data/provider/package-summary.html">io.github.noeppi_noeppi.libx.data.provider</a></dt>
 <dd>
 <div class="block">A base class for block loot provider.</div>
@@ -428,6 +420,8 @@
 <div class="block">Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#canInteractWith-net.minecraft.entity.player.PlayerEntity-">canInteractWith(PlayerEntity)</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#canInteractWith-net.minecraft.entity.player.PlayerEntity-">canInteractWith(PlayerEntity)</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/GenericContainer.html#canInteractWith-net.minecraft.entity.player.PlayerEntity-">canInteractWith(PlayerEntity)</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/GenericContainer.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">GenericContainer</a></dt>
 <dd>&nbsp;</dd>
@@ -652,6 +646,12 @@
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#ContainerBase-net.minecraft.inventory.container.ContainerType-int-net.minecraft.world.World-net.minecraft.util.math.BlockPos-net.minecraft.entity.player.PlayerInventory-net.minecraft.entity.player.PlayerEntity-int-int-">ContainerBase(ContainerType&lt;?&gt;, int, World, BlockPos, PlayerInventory, PlayerEntity, int, int)</a></span> - Constructor for class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container"><span class="typeNameLink">ContainerBaseEntity</span></a>&lt;<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="type parameter in ContainerBaseEntity">T</a> extends net.minecraft.entity.Entity&gt; - Class in <a href="io/github/noeppi_noeppi/libx/inventory/container/package-summary.html">io.github.noeppi_noeppi.libx.inventory.container</a></dt>
+<dd>
+<div class="block">Just like <a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container"><code>ContainerBase</code></a> but for entities instead of tiles.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#ContainerBaseEntity-net.minecraft.inventory.container.ContainerType-int-net.minecraft.world.World-int-net.minecraft.entity.player.PlayerInventory-net.minecraft.entity.player.PlayerEntity-int-int-">ContainerBaseEntity(ContainerType&lt;?&gt;, int, World, int, PlayerInventory, PlayerEntity, int, int)</a></span> - Constructor for class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/util/LazyImmutableMap.html#containsKey-java.lang.Object-">containsKey(Object)</a></span> - Method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/LazyImmutableMap.html" title="class in io.github.noeppi_noeppi.libx.util">LazyImmutableMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/util/LazyImmutableMap.html#containsValue-java.lang.Object-">containsValue(Object)</a></span> - Method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/LazyImmutableMap.html" title="class in io.github.noeppi_noeppi.libx.util">LazyImmutableMap</a></dt>
@@ -717,6 +717,14 @@
 <div class="block">Creates a container type for a container.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#createContainerType-io.github.noeppi_noeppi.libx.fi.Function6-">createContainerType(Function6&lt;ContainerType&lt;T&gt;, Integer, World, BlockPos, PlayerInventory, PlayerEntity, T&gt;)</a></span> - Static method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
+<dd>
+<div class="block">Creates a container type for a container.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#createContainerType-com.mojang.datafixers.util.Function5-">createContainerType(Function5&lt;Integer, World, Integer, PlayerInventory, PlayerEntity, T&gt;)</a></span> - Static method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
+<dd>
+<div class="block">Creates a container type for a container.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#createContainerType-io.github.noeppi_noeppi.libx.fi.Function6-">createContainerType(Function6&lt;ContainerType&lt;T&gt;, Integer, World, Integer, PlayerInventory, PlayerEntity, T&gt;)</a></span> - Static method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
 <dd>
 <div class="block">Creates a container type for a container.</div>
 </dd>
@@ -982,6 +990,8 @@
 <dd>
 <div class="block">Gets an <code>EntityPredicate.AndPredicate</code> that matches for a specific entity type.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#entity">entity</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/impl/commands/EntityDataCommand.html" title="class in io.github.noeppi_noeppi.libx.impl.commands"><span class="typeNameLink">EntityDataCommand</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/impl/commands/package-summary.html">io.github.noeppi_noeppi.libx.impl.commands</a></dt>
 <dd>
 <div class="block">As the "new" /data merge entity command can only merge data to one enttiy at a time and you always have to
@@ -1059,7 +1069,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#firstInventorySlot">firstInventorySlot</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#firstInventorySlot">firstInventorySlot</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#firstOutputSlot">firstOutputSlot</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#firstOutputSlot">firstOutputSlot</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/impl/config/SimpleValidators.html#FLOAT">FLOAT</a></span> - Static variable in class io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/SimpleValidators.html" title="class in io.github.noeppi_noeppi.libx.impl.config">SimpleValidators</a></dt>
 <dd>&nbsp;</dd>
@@ -1501,6 +1515,8 @@
 <div class="block">Gets the world where the block / fluid is about to be ticked randomly.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#getWorld--">getWorld()</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#getWorld--">getWorld()</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html#gray">gray</a></span> - Variable in class io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html" title="class in io.github.noeppi_noeppi.libx.mod.registration">Colored</a></dt>
 <dd>&nbsp;</dd>
@@ -2338,6 +2354,8 @@
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html#pink">pink</a></span> - Variable in class io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html" title="class in io.github.noeppi_noeppi.libx.mod.registration">Colored</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#player">player</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#player">player</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/CommonContainer.html#playerInventory">playerInventory</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/CommonContainer.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">CommonContainer</a></dt>
 <dd>&nbsp;</dd>
@@ -3181,6 +3199,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#transferStackInSlot-net.minecraft.entity.player.PlayerEntity-int-">transferStackInSlot(PlayerEntity, int)</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#transferStackInSlot-net.minecraft.entity.player.PlayerEntity-int-">transferStackInSlot(PlayerEntity, int)</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/GenericContainer.html#transferStackInSlot-net.minecraft.entity.player.PlayerEntity-int-">transferStackInSlot(PlayerEntity, int)</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/GenericContainer.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">GenericContainer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/config/ConfigValidator.html#type--">type()</a></span> - Method in interface io.github.noeppi_noeppi.libx.config.<a href="io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config">ConfigValidator</a></dt>
@@ -3311,6 +3331,8 @@ the order they are declared.</div>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html#withFinal-io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.GenericLootModifier-">withFinal(BlockLootProviderBase.GenericLootModifier)</a></span> - Method in interface io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.StandaloneLootFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.StandaloneLootFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html#world">world</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBase.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html#world">world</a></span> - Variable in class io.github.noeppi_noeppi.libx.inventory.container.<a href="io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity.html" title="class in io.github.noeppi_noeppi.libx.inventory.container">ContainerBaseEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world"><span class="typeNameLink">WorldSeedHolder</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/world/package-summary.html">io.github.noeppi_noeppi.libx.world</a></dt>
 <dd>
