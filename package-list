@@ -30,6 +30,7 @@ io.github.noeppi_noeppi.libx.inventory.slot
 io.github.noeppi_noeppi.libx.mod
 io.github.noeppi_noeppi.libx.mod.registration
 io.github.noeppi_noeppi.libx.network
+io.github.noeppi_noeppi.libx.network.datasync
 io.github.noeppi_noeppi.libx.render
 io.github.noeppi_noeppi.libx.util
 io.github.noeppi_noeppi.libx.world

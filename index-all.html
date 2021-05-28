@@ -682,6 +682,8 @@
 <dd>
 <div class="block">Creates a loot modifier that copies properties from a block state into the dropped item.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html#copyValue-T-">copyValue(T)</a></span> - Method in class io.github.noeppi_noeppi.libx.network.datasync.<a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html" title="class in io.github.noeppi_noeppi.libx.network.datasync">EnumDataSerializer</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#count-int-">count(int)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase</a></dt>
 <dd>
 <div class="block">A loot modifier that sets the count of a stack.</div>
@@ -1009,6 +1011,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper.html#EnumConfigMapper-java.lang.Class-">EnumConfigMapper(Class&lt;? extends Enum&lt;?&gt;&gt;)</a></span> - Constructor for class io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper.html" title="class in io.github.noeppi_noeppi.libx.impl.config">EnumConfigMapper</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html" title="class in io.github.noeppi_noeppi.libx.network.datasync"><span class="typeNameLink">EnumDataSerializer</span></a>&lt;<a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html" title="type parameter in EnumDataSerializer">T</a> extends java.lang.Enum&lt;<a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html" title="type parameter in EnumDataSerializer">T</a>&gt;&gt; - Class in <a href="io/github/noeppi_noeppi/libx/network/datasync/package-summary.html">io.github.noeppi_noeppi.libx.network.datasync</a></dt>
+<dd>
+<div class="block">Data serializers for enums.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/annotation/processor/modinit/LoadableModel.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class io.github.noeppi_noeppi.libx.annotation.processor.modinit.<a href="io/github/noeppi_noeppi/libx/annotation/processor/modinit/LoadableModel.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit">LoadableModel</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/annotation/processor/modinit/RegisteredConfig.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class io.github.noeppi_noeppi.libx.annotation.processor.modinit.<a href="io/github/noeppi_noeppi/libx/annotation/processor/modinit/RegisteredConfig.html" title="class in io.github.noeppi_noeppi.libx.annotation.processor.modinit">RegisteredConfig</a></dt>
@@ -1221,6 +1227,10 @@
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html#get-net.minecraft.item.DyeColor-">get(DyeColor)</a></span> - Method in class io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/Colored.html" title="class in io.github.noeppi_noeppi.libx.mod.registration">Colored</a></dt>
 <dd>
 <div class="block">Gets a value for a dye colour.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html#get-java.lang.Class-">get(Class&lt;T&gt;)</a></span> - Static method in class io.github.noeppi_noeppi.libx.network.datasync.<a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html" title="class in io.github.noeppi_noeppi.libx.network.datasync">EnumDataSerializer</a></dt>
+<dd>
+<div class="block">Gets a data serializer for an enum class.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/render/ItemStackRenderer.html#get--">get()</a></span> - Static method in class io.github.noeppi_noeppi.libx.render.<a href="io/github/noeppi_noeppi/libx/render/ItemStackRenderer.html" title="class in io.github.noeppi_noeppi.libx.render">ItemStackRenderer</a></dt>
 <dd>
@@ -1732,6 +1742,8 @@
 <dt><a href="io/github/noeppi_noeppi/libx/mod/registration/package-summary.html">io.github.noeppi_noeppi.libx.mod.registration</a> - package io.github.noeppi_noeppi.libx.mod.registration</dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/network/package-summary.html">io.github.noeppi_noeppi.libx.network</a> - package io.github.noeppi_noeppi.libx.network</dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/network/datasync/package-summary.html">io.github.noeppi_noeppi.libx.network.datasync</a> - package io.github.noeppi_noeppi.libx.network.datasync</dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/render/package-summary.html">io.github.noeppi_noeppi.libx.render</a> - package io.github.noeppi_noeppi.libx.render</dt>
 <dd>&nbsp;</dd>
@@ -2514,6 +2526,8 @@
 <div class="block">Reads an IngredientStack from a PacketBuffer</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper.html#read-net.minecraft.network.PacketBuffer-java.lang.Class-">read(PacketBuffer, Class&lt;?&gt;)</a></span> - Method in class io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper.html" title="class in io.github.noeppi_noeppi.libx.impl.config">EnumConfigMapper</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html#read-net.minecraft.network.PacketBuffer-">read(PacketBuffer)</a></span> - Method in class io.github.noeppi_noeppi.libx.network.datasync.<a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html" title="class in io.github.noeppi_noeppi.libx.network.datasync">EnumDataSerializer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html#readFromFile--">readFromFile()</a></span> - Method in class io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/ConfigImpl.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigImpl</a></dt>
 <dd>&nbsp;</dd>
@@ -3363,6 +3377,8 @@ the order they are declared.</div>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/impl/config/ConfigState.html#write-net.minecraft.network.PacketBuffer-">write(PacketBuffer)</a></span> - Method in class io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/ConfigState.html" title="class in io.github.noeppi_noeppi.libx.impl.config">ConfigState</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper.html#write-java.lang.Enum-net.minecraft.network.PacketBuffer-java.lang.Class-">write(Enum&lt;?&gt;, PacketBuffer, Class&lt;?&gt;)</a></span> - Method in class io.github.noeppi_noeppi.libx.impl.config.<a href="io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper.html" title="class in io.github.noeppi_noeppi.libx.impl.config">EnumConfigMapper</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html#write-net.minecraft.network.PacketBuffer-T-">write(PacketBuffer, T)</a></span> - Method in class io.github.noeppi_noeppi.libx.network.datasync.<a href="io/github/noeppi_noeppi/libx/network/datasync/EnumDataSerializer.html" title="class in io.github.noeppi_noeppi.libx.network.datasync">EnumDataSerializer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#write-net.minecraft.network.PacketBuffer-">write(PacketBuffer)</a></span> - Method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></dt>
 <dd>
