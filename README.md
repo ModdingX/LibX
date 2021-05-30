@@ -23,6 +23,6 @@ dependencies {
 
 **Javadoc can be found here: https://git.io/libx**
 
-### The `future` branch
+### LibX 2
 
-The `future` branch is used to create breaking changes that are not urgent and will be done in the next major minecraft release.
+LibX 2 will be the version of LibX for 1.17. This branch is used to implement breaking changes on top of LibX 1 in minecraft 1.16 to make porting faster.

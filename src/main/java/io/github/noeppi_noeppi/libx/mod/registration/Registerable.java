@@ -32,26 +32,6 @@ public interface Registerable {
     default Map<String, Object> getNamedAdditionalRegisters() {
         return Collections.emptyMap();
     }
-
-    /**
-     * Do stuff needed in the setup phase
-     * 
-     * @deprecated Use {@link Registerable#registerCommon(ResourceLocation, Consumer)} instead.
-     */
-    @Deprecated
-    default void registerCommon(ResourceLocation id) {
-
-    }
-    
-    /**
-     * Do stuff needed on the client
-     * 
-     * @deprecated Use {@link Registerable#registerClient(ResourceLocation, Consumer)} instead.
-     */
-    @OnlyIn(Dist.CLIENT)
-    default void registerClient(ResourceLocation id) {
-
-    }
     
     /**
      * Do stuff needed in the setup phase. This is called during parallel mod loading.
@@ -59,7 +39,7 @@ public interface Registerable {
      * @param defer Pass a runnable to this to defer it to the synchronous work queue.
      */
     default void registerCommon(ResourceLocation id, Consumer<Runnable> defer) {
-        this.registerCommon(id);
+        
     }
     
     /**
@@ -69,6 +49,6 @@ public interface Registerable {
      */
     @OnlyIn(Dist.CLIENT)
     default void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
-        this.registerClient(id);
+        
     }
 }
