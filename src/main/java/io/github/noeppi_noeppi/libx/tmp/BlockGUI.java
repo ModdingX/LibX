@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.mod.registration;
+package io.github.noeppi_noeppi.libx.tmp;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;

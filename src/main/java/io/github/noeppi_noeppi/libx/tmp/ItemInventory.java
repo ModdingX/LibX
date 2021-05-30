@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.mod.registration;
+package io.github.noeppi_noeppi.libx.tmp;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.item.ItemStack;
@@ -36,7 +36,6 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
         super(mod, properties);
         this.inventoryFactory = inventoryFactory;
     }
-
     
     @Nullable
     @Override

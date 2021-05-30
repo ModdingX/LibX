@@ -1,7 +1,8 @@
-package io.github.noeppi_noeppi.libx.mod.registration;
+package io.github.noeppi_noeppi.libx.tmp;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;

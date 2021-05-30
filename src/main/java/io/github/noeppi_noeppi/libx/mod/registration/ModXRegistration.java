@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import io.github.noeppi_noeppi.libx.tmp.BlockTE;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
@@ -12,10 +13,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -51,6 +54,9 @@ public abstract class ModXRegistration extends ModX {
     private final List<Runnable> registrationHandlers = new ArrayList<>();
     private boolean registered = false;
     private final List<Pair<String, Object>> registerables = new ArrayList<>();
+    private final List<RegistryCondition> registryConditions;
+    private final List<RegistryTransformer> registryReplacers;
+    private final List<RegistryTransformer> registryTransformers;
 
     protected ModXRegistration(String modid, ItemGroup tab) {
         super(modid, tab);
@@ -64,6 +70,15 @@ public abstract class ModXRegistration extends ModX {
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("could not add generic listener to listen all registry events for mod " + modid + ".", e);
         }
+        
+        // Initialise the registration system.
+        RegistrationBuilder builder = new RegistrationBuilder();
+        this.initRegistration(builder);
+        Triple<List<RegistryCondition>, List<RegistryTransformer>, List<RegistryTransformer>> result = builder.build();
+        this.registryConditions = result.getLeft();
+        this.registryReplacers = result.getMiddle();
+        this.registryTransformers = result.getRight();
+        
         // Call the generated code here as well
         this.callGeneratedCode();
     }
@@ -83,12 +98,32 @@ public abstract class ModXRegistration extends ModX {
         if (!ResourceLocation.isPathValid(id)) {
             throw new IllegalArgumentException("ModXRegistration#register called with invalid id argument.");
         }
-        this.registerables.add(Pair.of(id, obj));
-        if (obj instanceof Registerable) {
-            ((Registerable) obj).getAdditionalRegisters().forEach(o -> this.register(id, o));
-            ((Registerable) obj).getNamedAdditionalRegisters().forEach((str, o) -> this.register(id + "_" + str, o));
+        ResourceLocation rl = new ResourceLocation(this.modid, id);
+        if (this.registryConditions.stream().allMatch(c -> c.shouldRegister(rl, obj))) {
+            Object replaced = this.registryReplacers.stream()
+                    .map(r -> r.getAdditional(rl, obj))
+                    .filter(Objects::nonNull)
+                    .findFirst().orElse(obj);
+            this.registerables.add(Pair.of(id, replaced));
+            if (replaced instanceof Registerable) {
+                ((Registerable) replaced).getAdditionalRegisters().forEach(o -> this.register(id, o));
+                ((Registerable) replaced).getNamedAdditionalRegisters().forEach((str, o) -> this.register(id + "_" + str, o));
+            }
+            this.registryTransformers.forEach(t -> {
+                Object additional = t.getAdditional(rl, replaced);
+                if (additional != null) this.register(id, additional);
+            });
         }
     }
+
+    /**
+     * This is called from the {@link ModXRegistration} constructor. It is used to configure the registration
+     * system for this mod with the given builder. In all cases, you must set the version of the registration
+     * system to be used for this mod, or it will fail.
+     * 
+     * @see RegistrationBuilder
+     */
+    protected abstract void initRegistration(RegistrationBuilder builder);
 
     private void runRegistration() {
         if (!this.registered) {

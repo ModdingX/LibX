@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.network;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.network.NetworkX;
+import io.github.noeppi_noeppi.libx.tmp.TileEntityBase;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -37,6 +38,7 @@ public final class NetworkImpl extends NetworkX {
      * position to all clients tracking the chunk. On the client the tag is passed
      * to {@code TileEntity#handleUpdateTag}. Does nothing when called on the client.
      */
+    // TODO method in impl should not be used directly. Add another API for this
     public void updateTE(World world, BlockPos pos) {
         if (!world.isRemote) {
             this.updateTE(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), world, pos);
@@ -61,10 +63,11 @@ public final class NetworkImpl extends NetworkX {
 
     /**
      * Requests the tile entity at the given position from the server. This is automatically done when
-     * a {@link io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase} is loaded. The server will
+     * a {@link TileEntityBase} is loaded. The server will
      * send an update packet as described in {@link NetworkImpl#updateTE(World, BlockPos)} to the client.
      * Does nothing when called on the server.
      */
+    // TODO method in impl should not be used directly. Add another API for this
     public void requestTE(World world, BlockPos pos) {
         if (world.isRemote) {
             this.instance.sendToServer(new TeRequestSerializer.TeRequestMessage(pos));

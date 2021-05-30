@@ -1,6 +1,7 @@
-package io.github.noeppi_noeppi.libx.mod.registration;
+package io.github.noeppi_noeppi.libx.tmp;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.item.Item;
 
 import java.util.function.Supplier;

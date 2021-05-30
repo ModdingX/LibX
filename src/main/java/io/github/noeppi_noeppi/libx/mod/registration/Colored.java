@@ -14,6 +14,7 @@ import java.util.function.Function;
  *
  * @param <T> The type of the thing to register.
  */
+// FIXME get a more generic variant that can work with any enum
 public class Colored<T> implements Registerable {
 
     public final T white;
