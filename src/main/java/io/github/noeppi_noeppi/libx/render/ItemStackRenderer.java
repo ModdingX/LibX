@@ -21,10 +21,7 @@ import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is meant to apply a TileEntityRenderer to items. Using it is really straightforward:
@@ -39,8 +36,8 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
 
     private static final ItemStackRenderer INSTANCE = new ItemStackRenderer();
 
-    private static final List<TileEntityType<?>> types = new LinkedList<>();
-    private static final Map<TileEntityType<?>, Pair<LazyValue<TileEntity>, Boolean>> tiles = new HashMap<>();
+    private static final List<TileEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
+    private static final Map<TileEntityType<?>, Pair<LazyValue<TileEntity>, Boolean>> tiles = Collections.synchronizedMap(new HashMap<>());
     private static final Map<TileEntityType<?>, CompoundNBT> defaultTags = new HashMap<>();
 
     private ItemStackRenderer() {
@@ -50,7 +47,7 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
     /**
      * Registers a Tile Entity Type to be rendered with the ItemStackRenderer.
      *
-     * @param teType             The Tile Entit Type.
+     * @param teType             The Tile Entity Type.
      * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the tile
      *                           entities {@code read} method will get called before rendering.
      */
@@ -60,7 +57,7 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
     }
 
     @Override
-    public void func_239207_a_(ItemStack stack, @Nonnull ItemCameraTransforms.TransformType type, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+    public void render(ItemStack stack, @Nonnull ItemCameraTransforms.TransformType type, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
         Block block = Block.getBlockFromItem(stack.getItem());
         if (block != Blocks.AIR) {
             for (TileEntityType<?> teType : types) {

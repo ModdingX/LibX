@@ -30,7 +30,7 @@ public class EntityDataCommand implements Command<CommandSource> {
         for (Entity entity : entities) {
             if (entity instanceof PlayerEntity) {
                 if (!context.getSource().hasPermissionLevel(4)) {
-                    throw new SimpleCommandExceptionType(new TranslationTextComponent("libx.commamnd.entitydata.player_modify_no_permission")).create();
+                    throw new SimpleCommandExceptionType(new TranslationTextComponent("libx.command.entitydata.player_modify_no_permission")).create();
                 } else {
                     players = true;
                 }
@@ -44,7 +44,7 @@ public class EntityDataCommand implements Command<CommandSource> {
             entity.read(entityNBT);
             entity.setUniqueId(uid);
         }
-        context.getSource().sendFeedback(new TranslationTextComponent(players ? "libx.commamnd.entitydata.modified_player" : "libx.commamnd.entitydata.modified", entities.size()), true);
+        context.getSource().sendFeedback(new TranslationTextComponent(players ? "libx.command.entitydata.modified_player" : "libx.command.entitydata.modified", entities.size()), true);
         
         return 0;
     }

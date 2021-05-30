@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 /**
- * A registerable that registers 16 things, one for each dye colour. This is
+ * A {@link Registerable} that registers 16 things, one for each dye colour. This is
  * done via {@link Registerable#getNamedAdditionalRegisters()} so the color
  * names will be applied automatically.
  *

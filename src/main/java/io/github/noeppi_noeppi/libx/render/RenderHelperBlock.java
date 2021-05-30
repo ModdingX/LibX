@@ -20,6 +20,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * Helper to deal with block rendering
@@ -45,33 +46,69 @@ public class RenderHelperBlock {
      * @param positionRandom The long value to randomize the position. This can be obtained via {@code BlockState#getPositionRandom}.
      */
     public static void renderBlockBreak(BlockState state, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, int breakProgress, long positionRandom) {
-        if (state.getRenderType() == BlockRenderType.MODEL && breakProgress > 0) {
+        if (breakProgress > 0) {
             ResourceLocation tex = ModelBakery.DESTROY_STAGES.get((breakProgress - 1) % ModelBakery.DESTROY_STAGES.size());
+            TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(tex);
+            renderBlockOverlaySprite(state, matrixStack, buffer, light, overlay, sprite, positionRandom);
+        }
+    }
+
+    /**
+     * Renders a block overlay on top of a state with the same method as the crumbling is rendered. However you cen specify
+     * your own TextureAtlasSprite here to be used. (It must be from PlayerContainer.LOCATION_BLOCKS_TEXTURE)
+     */
+    public static void renderBlockOverlaySprite(BlockState state, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, TextureAtlasSprite sprite) {
+        renderBlockOverlaySprite(state, matrixStack, buffer, light, overlay, sprite, state.getPositionRandom(BlockPos.ZERO));
+    }
+
+    /**
+     * Renders a block overlay on top of a state with the same method as the crumbling is rendered. However you cen specify
+     * your own TextureAtlasSprite here to be used. (It must be from PlayerContainer.LOCATION_BLOCKS_TEXTURE)
+     */
+    public static void renderBlockOverlaySprite(BlockState state, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, TextureAtlasSprite sprite, long positionRandom) {
+        renderBlockOverlaySprite(state, matrixStack, buffer, light, overlay, sprite, positionRandom, dir -> true);
+    }
+
+    /**
+     * Renders a block overlay on top of a state with the same method as the crumbling is rendered. However you cen specify
+     * your own TextureAtlasSprite here to be used. (It must be from PlayerContainer.LOCATION_BLOCKS_TEXTURE)
+     */
+    public static void renderBlockOverlaySprite(BlockState state, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, TextureAtlasSprite sprite, Predicate<Direction> dirs) {
+        renderBlockOverlaySprite(state, matrixStack, buffer, light, overlay, sprite, state.getPositionRandom(BlockPos.ZERO), dirs);
+    }
+
+    /**
+     * Renders a block overlay on top of a state with the same method as the crumbling is rendered. However you cen specify
+     * your own TextureAtlasSprite here to be used. (It must be from PlayerContainer.LOCATION_BLOCKS_TEXTURE)
+     */
+    public static void renderBlockOverlaySprite(BlockState state, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, int overlay, TextureAtlasSprite sprite, long positionRandom, Predicate<Direction> dirs) {
+        if (state.getRenderType() == BlockRenderType.MODEL) {
             IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelShapes().getModel(state);
 
-            TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(tex);
             IVertexBuilder vertex = Minecraft.getInstance().getRenderTypeBuffers().getCrumblingBufferSource().getBuffer(RENDER_TYPE_BREAK);
 
             for (Direction direction : Direction.values()) {
                 random.setSeed(positionRandom);
                 List<BakedQuad> list = model.getQuads(state, direction, random, EmptyModelData.INSTANCE);
                 if (!list.isEmpty()) {
-                    renderBlockBreakQuad(matrixStack.getLast(), vertex, list, light, overlay, sprite);
+                    renderBlockBreakQuad(matrixStack.getLast(), vertex, list, light, overlay, sprite, dirs);
                 }
             }
 
             random.setSeed(positionRandom);
             List<BakedQuad> list = model.getQuads(state, null, random, EmptyModelData.INSTANCE);
             if (!list.isEmpty()) {
-                renderBlockBreakQuad(matrixStack.getLast(), vertex, list, light, overlay, sprite);
+                renderBlockBreakQuad(matrixStack.getLast(), vertex, list, light, overlay, sprite, dirs);
             }
         }
     }
 
-    private static void renderBlockBreakQuad(MatrixStack.Entry matrix, IVertexBuilder vertex, List<BakedQuad> list, int light, int overlay, TextureAtlasSprite sprite) {
+    private static void renderBlockBreakQuad(MatrixStack.Entry matrix, IVertexBuilder vertex, List<BakedQuad> list, int light, int overlay, TextureAtlasSprite sprite, Predicate<Direction> dirs) {
         for (BakedQuad quad : list) {
-            BakedQuad modifiedQuad = new BakedQuad(modifyBlockBreakQuadData(quad.getVertexData(), quad.getSprite(), sprite), quad.getTintIndex(), quad.getFace(), sprite, quad.applyDiffuseLighting());
-            vertex.addQuad(matrix, modifiedQuad, 1, 1, 1, light, overlay);
+            if (dirs.test(quad.getFace())) {
+                BakedQuad modifiedQuad = new BakedQuad(modifyBlockBreakQuadData(quad.getVertexData(), quad.getSprite(), sprite), quad.getTintIndex(), quad.getFace(), sprite, quad.applyDiffuseLighting());
+                vertex.addQuad(matrix, modifiedQuad, 1, 1, 1, light, overlay);
+            }
         }
     }
 

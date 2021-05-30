@@ -18,8 +18,8 @@ public @interface Config {
 
     /**
      * The resource location of a {@link ValueMapper} to convert this value.
-     * Leave it out to automatically detect a matching mapper fromn the builtin
-     * ones. Auto detection is not possible with custom mappers. 
+     * Leave it out to automatically detect a matching mapper from the builtin
+     * ones. Auto detection is not possible with custom mappers.
      */
     String mapper() default "";
     

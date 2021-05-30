@@ -4,6 +4,9 @@ import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import net.minecraft.network.PacketBuffer;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * A way to serialise values of a specific type for a config file. See {@link ConfigManager} for
  * more info.
@@ -58,5 +61,12 @@ public interface ValueMapper<T, E extends JsonElement> {
      */
     default void write(T value, PacketBuffer buffer, Class<?> elementType) {
         buffer.writeString(ConfigImpl.INTERNAL.toJson(this.toJSON(value, elementType)), 0x40000);
+    }
+
+    /**
+     * Returns a list of comment lines that will be added to the values specified in @Config.
+     */
+    default List<String> comment(Class<?> elementType) {
+        return Collections.emptyList();
     }
 }

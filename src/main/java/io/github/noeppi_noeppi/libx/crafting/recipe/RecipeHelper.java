@@ -69,7 +69,7 @@ public class RecipeHelper {
      * @param ignoreMaxStackSize Whether this should create ItemStacks with a stack size
      *                           greater than the maximum.
      */
-    public List<ItemStack> stackUp(List<ItemStack> stacks, boolean ignoreMaxStackSize) {
+    public static List<ItemStack> stackUp(List<ItemStack> stacks, boolean ignoreMaxStackSize) {
         List<ItemStack> stacked = new ArrayList<>();
         for (ItemStack stack : stacks) {
             if (!stack.isEmpty()) {

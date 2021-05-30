@@ -45,7 +45,7 @@ public class RenderHelperItem {
             }
 
             if (!model.isBuiltInRenderer() && (stack.getItem() != Items.TRIDENT || isFixed)) {
-                RenderType type = RenderTypeLookup.func_239219_a_(stack, true);
+                RenderType type = RenderTypeLookup.getItemRenderType(stack, true);
                 if (isGui && Objects.equals(type, Atlases.getTranslucentCullBlockType())) {
                     type = Atlases.getTranslucentCullBlockType();
                 }
@@ -66,7 +66,7 @@ public class RenderHelperItem {
             } else {
                 //noinspection deprecation
                 GlStateManager.color4f(r, g, b, alpha);
-                stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, transformType, matrixStack, buffer, light, overlay);
+                stack.getItem().getItemStackTileEntityRenderer().render(stack, transformType, matrixStack, buffer, light, overlay);
                 //noinspection deprecation
                 GlStateManager.color4f(1, 1, 1, 1);
             }

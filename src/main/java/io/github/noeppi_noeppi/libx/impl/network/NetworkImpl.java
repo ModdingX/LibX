@@ -21,7 +21,7 @@ public final class NetworkImpl extends NetworkX {
 
     @Override
     protected String getProtocolVersion() {
-        return "2";
+        return "5";
     }
 
     @Override
