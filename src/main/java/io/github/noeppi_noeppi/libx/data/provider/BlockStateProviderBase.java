@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -96,13 +97,13 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
                 builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
-                        .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+                        .addModels(new ConfiguredModel(model, 0, (int) direction.getOpposite().getHorizontalAngle(), false));
             }
         } else if (block.getStateContainer().getProperties().contains(BlockStateProperties.FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.FACING.getAllowedValues()) {
                 builder.partialState().with(BlockStateProperties.FACING, direction)
-                        .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+                        .addModels(new ConfiguredModel(model, direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0, direction.getAxis().isVertical() ? 0 : (int) direction.getOpposite().getHorizontalAngle(), false));
             }
         } else {
             this.simpleBlock(block, model);
