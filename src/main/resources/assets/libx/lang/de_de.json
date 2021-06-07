@@ -6,5 +6,6 @@
   "libx.command.entitydata.modified": "NBT-Daten von %s Mobs wurden geändert.",
   "libx.command.entitydata.modified_player": "NBT-Daten von %s Mobs wurden geändert. (Achtung: Du hast Spieler-NBT geändert))",
   "libx.command.entitydata.player_modify_no_permission": "Nur Operatoren mit Berechtigungslevel 4 können Spieler-NBT bearbeiten.",
-  "libx.command.reload": "Lade alle LibX Konfigurationen neu."
+  "libx.command.reload": "Lade alle LibX Konfigurationen neu.",
+  "libx.tooltip.fluidbase.bucket": "%seimer"
 }

@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -115,7 +115,11 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateContainer().getValidStates().stream().allMatch(state -> state.getRenderType() != BlockRenderType.MODEL)) {
-            return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
+            if (block instanceof FlowingFluidBlock) {
+                return this.models().getBuilder(id.getPath()).texture("particle", ((FlowingFluidBlock) block).getFluid().getAttributes().getStillTexture());
+            } else {
+                return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
+            }
         } else if (block instanceof LeavesBlock) {
             return this.models().withExistingParent(Objects.requireNonNull(block.getRegistryName()).getPath(), LEAVES_PARENT)
                     .texture("all", this.blockTexture(block));

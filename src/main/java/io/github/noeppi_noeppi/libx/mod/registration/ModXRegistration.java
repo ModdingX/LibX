@@ -106,8 +106,8 @@ public abstract class ModXRegistration extends ModX {
                     .findFirst().orElse(obj);
             this.registerables.add(Pair.of(id, replaced));
             if (replaced instanceof Registerable) {
-                ((Registerable) replaced).getAdditionalRegisters().forEach(o -> this.register(id, o));
-                ((Registerable) replaced).getNamedAdditionalRegisters().forEach((str, o) -> this.register(id + "_" + str, o));
+                ((Registerable) replaced).getAdditionalRegisters(rl).forEach(o -> this.register(id, o));
+                ((Registerable) replaced).getNamedAdditionalRegisters(rl).forEach((str, o) -> this.register(id + "_" + str, o));
             }
             this.registryTransformers.forEach(t -> {
                 Object additional = t.getAdditional(rl, replaced);

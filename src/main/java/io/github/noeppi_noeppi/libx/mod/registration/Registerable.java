@@ -19,7 +19,7 @@ public interface Registerable {
      * Gets additional items that should be registered. Those may be Registerable,
      * Items, Block TileEntities, Biomes ...
      */
-    default Set<Object> getAdditionalRegisters() {
+    default Set<Object> getAdditionalRegisters(ResourceLocation id) {
         return Collections.emptySet();
     }
 
@@ -29,7 +29,7 @@ public interface Registerable {
      * That allows to register multiple thing to the same registry. The new id is created
      * from the id of this registerable, an underscore and the key in the map.
      */
-    default Map<String, Object> getNamedAdditionalRegisters() {
+    default Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
         return Collections.emptyMap();
     }
     
