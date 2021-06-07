@@ -16,6 +16,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
@@ -45,8 +46,8 @@ public class BlockGUI<T extends TileEntity, C extends ContainerBase<T>> extends 
     }
 
     @Override
-    public Set<Object> getAdditionalRegisters() {
-        return ImmutableSet.builder().addAll(super.getAdditionalRegisters()).add(this.container).build();
+    public Set<Object> getAdditionalRegisters(ResourceLocation id) {
+        return ImmutableSet.builder().addAll(super.getAdditionalRegisters(id)).add(this.container).build();
     }
 
     @Nonnull

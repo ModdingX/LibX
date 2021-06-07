@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class BlockBase extends Block implements Registerable {
     }
 
     @Override
-    public Set<Object> getAdditionalRegisters() {
+    public Set<Object> getAdditionalRegisters(ResourceLocation id) {
         return ImmutableSet.of(this.item);
     }
 }

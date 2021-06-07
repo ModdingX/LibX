@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.mod.registration;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.item.DyeColor;
+import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Locale;
@@ -64,7 +65,7 @@ public class EnumObjects<E extends Enum<E>, T> implements Registerable {
     }
 
     @Override
-    public Map<String, Object> getNamedAdditionalRegisters() {
+    public Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
         //noinspection UnstableApiUsage
         return this.map.entrySet().stream()
                 .map(e -> Pair.of(e.getKey().name().toLowerCase(Locale.ROOT), e.getValue()))

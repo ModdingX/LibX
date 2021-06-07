@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -62,8 +63,8 @@ public class BlockTE<T extends TileEntity> extends BlockBase {
     }
 
     @Override
-    public Set<Object> getAdditionalRegisters() {
-        return ImmutableSet.builder().addAll(super.getAdditionalRegisters()).add(this.teType).build();
+    public Set<Object> getAdditionalRegisters(ResourceLocation id) {
+        return ImmutableSet.builder().addAll(super.getAdditionalRegisters(id)).add(this.teType).build();
     }
 
     @Override
