@@ -27,20 +27,35 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
     private final FluidTagProviderBase fluidTags;
 
     private boolean isSetup = false;
+    private final List<Pair<ITag.INamedTag<Fluid>, ITag.INamedTag<Block>>> fluidCopies = new ArrayList<>();
 
     public CommonTagsProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
         this.mod = mod;
         this.generator = generator;
         this.fileHelper = fileHelper;
-        this.blockTags = new BlockTagProviderBase(mod, generator, ForgeRegistries.BLOCKS, fileHelper);
-        this.itemTags = new ItemTagProviderBase(mod, generator, ForgeRegistries.ITEMS, fileHelper);
-        this.fluidTags = new FluidTagProviderBase(mod, generator, ForgeRegistries.FLUIDS, fileHelper);
+        // blockTags must be assigned before itemTags
+        this.blockTags = new BlockTagProviderBase(generator);
+        this.itemTags = new ItemTagProviderBase(generator);
+        this.fluidTags = new FluidTagProviderBase(generator);
         generator.addProvider(this.blockTags);
         generator.addProvider(this.itemTags);
         generator.addProvider(this.fluidTags);
     }
 
     public abstract void setup();
+
+    private void doSetup() {
+        setup();
+        ForgeRegistries.BLOCKS.getValues().stream()
+                .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .forEach(CommonTagsProviderBase.this::defaultBlockTags);
+        ForgeRegistries.ITEMS.getValues().stream()
+                .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .forEach(CommonTagsProviderBase.this::defaultItemTags);
+        ForgeRegistries.FLUIDS.getValues().stream()
+                .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .forEach(CommonTagsProviderBase.this::defaultFluidTags);
+    }
 
     public void defaultItemTags(Item item) {
 
@@ -54,6 +69,26 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
 
     }
 
+    public TagsProvider.Builder<Item> item(ITag.INamedTag<Item> tag) {
+        return this.itemTags.getOrCreateBuilder(tag);
+    }
+
+    public TagsProvider.Builder<Block> block(ITag.INamedTag<Block> tag) {
+        return this.blockTags.getOrCreateBuilder(tag);
+    }
+
+    public TagsProvider.Builder<Fluid> fluid(ITag.INamedTag<Fluid> tag) {
+        return this.fluidTags.getOrCreateBuilder(tag);
+    }
+
+    public void copyBlock(ITag.INamedTag<Block> from, ITag.INamedTag<Item> to) {
+        this.itemTags.copy(from, to);
+    }
+
+    public void copyFluid(ITag.INamedTag<Fluid> from, ITag.INamedTag<Block> to) {
+        this.fluidCopies.add(Pair.of(from, to));
+    }
+
     @Nonnull
     @Override
     public String getName() {
@@ -64,17 +99,31 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         // We don't do anything here, everything is done by the three child providers
     }
 
-    private class BlockTagProviderBase extends TagProviderBase<Block> {
+    private class BlockTagProviderBase extends BlockTagsProvider {
 
-        protected BlockTagProviderBase(ModX mod, DataGenerator generator, IForgeRegistry<Block> registry, @Nullable ExistingFileHelper fileHelper) {
-            super(mod, generator, registry, fileHelper);
+        private Map<ResourceLocation, ITag.Builder> tagCache;
+
+        protected BlockTagProviderBase(DataGenerator generator) {
+            super(generator);
         }
 
         @Override
-        protected void setup() {
+        protected void registerTags() {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
-                CommonTagsProviderBase.this.setup();
+                CommonTagsProviderBase.this.doSetup();
+            } else if (this.tagCache != null) {
+                this.tagToBuilder.putAll(this.tagCache);
+            }
+            // Add fluid copies
+            for (Pair<ITag.INamedTag<Fluid>, ITag.INamedTag<Block>> copy : fluidCopies) {
+                TagsProvider.Builder<Block> builder = getOrCreateBuilder(copy.getRight());
+                for (ResourceLocation entry : fluidTags.getTagInfo(copy.getLeft())) {
+                    Fluid fluid = ForgeRegistries.FLUIDS.getValue(entry);
+                    if (fluid != null) {
+                        builder.add(fluid.getDefaultState().getBlockState().getBlock());
+                    }
+                }
             }
         }
 
@@ -88,19 +137,28 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         public TagsProvider.Builder<Block> getOrCreateBuilder(@Nonnull ITag.INamedTag<Block> tag) {
             return super.getOrCreateBuilder(tag);
         }
+
+        @Override
+        public String getName() {
+            return mod.modid + " common block tags";
+        }
     }
 
-    private class ItemTagProviderBase extends TagProviderBase<Item> {
+    private class ItemTagProviderBase extends ItemTagsProvider {
 
-        protected ItemTagProviderBase(ModX mod, DataGenerator generator, IForgeRegistry<Item> registry, @Nullable ExistingFileHelper fileHelper) {
-            super(mod, generator, registry, fileHelper);
+        private Map<ResourceLocation, ITag.Builder> tagCache;
+
+        protected ItemTagProviderBase(DataGenerator generator) {
+            super(generator, CommonTagsProviderBase.this.blockTags);
         }
 
         @Override
-        protected void setup() {
+        protected void registerTags() {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
-                CommonTagsProviderBase.this.setup();
+                CommonTagsProviderBase.this.doSetup();
+            } else if (this.tagCache != null) {
+                this.tagToBuilder.putAll(this.tagCache);
             }
         }
 
@@ -114,19 +172,33 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         public TagsProvider.Builder<Item> getOrCreateBuilder(@Nonnull ITag.INamedTag<Item> tag) {
             return super.getOrCreateBuilder(tag);
         }
+
+        @Override
+        public void copy(ITag.INamedTag<Block> blockTag, ITag.INamedTag<Item> itemTag) {
+            super.copy(blockTag, itemTag);
+        }
+
+        @Override
+        public String getName() {
+            return mod.modid + " common item tags";
+        }
     }
 
-    private class FluidTagProviderBase extends TagProviderBase<Fluid> {
+    private class FluidTagProviderBase extends FluidTagsProvider {
 
-        protected FluidTagProviderBase(ModX mod, DataGenerator generator, IForgeRegistry<Fluid> registry, @Nullable ExistingFileHelper fileHelper) {
-            super(mod, generator, registry, fileHelper);
+        private Map<ResourceLocation, ITag.Builder> tagCache;
+
+        protected FluidTagProviderBase(DataGenerator generator) {
+            super(generator);
         }
 
         @Override
         protected void registerTags() {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
-                CommonTagsProviderBase.this.setup();
+                CommonTagsProviderBase.this.doSetup();
+            } else if (this.tagCache != null) {
+                this.tagToBuilder.putAll(this.tagCache);
             }
         }
 
@@ -139,6 +211,19 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         @Nonnull
         public TagsProvider.Builder<Fluid> getOrCreateBuilder(@Nonnull ITag.INamedTag<Fluid> tag) {
             return super.getOrCreateBuilder(tag);
+        }
+
+        public List<ResourceLocation> getTagInfo(ITag.INamedTag<Fluid> tag) {
+            TagsProvider.Builder<Fluid> builder = getOrCreateBuilder(tag);
+            return builder.getInternalBuilder().getProxyStream()
+                    .filter(p -> p.getEntry() instanceof ITag.ItemEntry)
+                    .map(p -> new ResourceLocation(((ITag.ItemEntry) p.getEntry()).toString()))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return mod.modid + " common fluid tags";
         }
     }
 }
