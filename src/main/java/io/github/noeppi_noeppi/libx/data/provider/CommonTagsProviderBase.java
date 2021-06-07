@@ -2,18 +2,20 @@ package io.github.noeppi_noeppi.libx.data.provider;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.Block;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
+import net.minecraft.data.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
+import net.minecraft.tags.ITag;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.Collectors;
 
+@SuppressWarnings("ALL")
 public abstract class CommonTagsProviderBase implements IDataProvider {
 
     protected final ModX mod;
@@ -77,8 +79,14 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         }
 
         @Override
-        public void defaultTags(Block block) {
-            CommonTagsProviderBase.this.defaultBlockTags(block);
+        public void act(DirectoryCache cache) {
+            this.tagCache = new HashMap<>(this.tagToBuilder);
+            super.act(cache);
+        }
+
+        @Nonnull
+        public TagsProvider.Builder<Block> getOrCreateBuilder(@Nonnull ITag.INamedTag<Block> tag) {
+            return super.getOrCreateBuilder(tag);
         }
     }
 
@@ -97,8 +105,14 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         }
 
         @Override
-        public void defaultTags(Item item) {
-            CommonTagsProviderBase.this.defaultItemTags(item);
+        public void act(DirectoryCache cache) {
+            this.tagCache = new HashMap<>(this.tagToBuilder);
+            super.act(cache);
+        }
+
+        @Nonnull
+        public TagsProvider.Builder<Item> getOrCreateBuilder(@Nonnull ITag.INamedTag<Item> tag) {
+            return super.getOrCreateBuilder(tag);
         }
     }
 
@@ -109,7 +123,7 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         }
 
         @Override
-        protected void setup() {
+        protected void registerTags() {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
                 CommonTagsProviderBase.this.setup();
@@ -117,8 +131,14 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         }
 
         @Override
-        public void defaultTags(Fluid fluid) {
-            CommonTagsProviderBase.this.defaultFluidTags(fluid);
+        public void act(DirectoryCache cache) {
+            this.tagCache = new HashMap<>(this.tagToBuilder);
+            super.act(cache);
+        }
+
+        @Nonnull
+        public TagsProvider.Builder<Fluid> getOrCreateBuilder(@Nonnull ITag.INamedTag<Fluid> tag) {
+            return super.getOrCreateBuilder(tag);
         }
     }
 }
