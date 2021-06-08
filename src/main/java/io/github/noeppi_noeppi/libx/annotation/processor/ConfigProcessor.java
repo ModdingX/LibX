@@ -13,6 +13,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.*;
 
+//FIXME make it work with config system changes
 public class ConfigProcessor extends Processor {
 
     private Set<TypeMirror> validTypes;
@@ -71,19 +72,20 @@ public class ConfigProcessor extends Processor {
                 continue;
             }
 
-            if (config.mapper().isEmpty()) {
-                TypeMirror type = element.asType();
-                if (this.validTypes.stream().noneMatch(t -> this.sameErasure(t, type))) {
-                    if (this.validTypesWrapper.stream().anyMatch(t -> this.sameErasure(t, type))) {
-                        this.messager.printMessage(Diagnostic.Kind.WARNING, "@Config should not use wrapper type: " + type, element);
-                    } else {
-                        Element typeElem = this.types.asElement(type);
-                        if (typeElem == null || typeElem.getKind() != ElementKind.ENUM) {
-                            this.messager.printMessage(Diagnostic.Kind.ERROR, "No value mapper found for type of @Config. Register you own." + type, element);
-                        }
-                    }
-                }
-            }
+            // Commented out because compile errors
+//            if (config.mapper().isEmpty()) {
+//                TypeMirror type = element.asType();
+//                if (this.validTypes.stream().noneMatch(t -> this.sameErasure(t, type))) {
+//                    if (this.validTypesWrapper.stream().anyMatch(t -> this.sameErasure(t, type))) {
+//                        this.messager.printMessage(Diagnostic.Kind.WARNING, "@Config should not use wrapper type: " + type, element);
+//                    } else {
+//                        Element typeElem = this.types.asElement(type);
+//                        if (typeElem == null || typeElem.getKind() != ElementKind.ENUM) {
+//                            this.messager.printMessage(Diagnostic.Kind.ERROR, "No value mapper found for type of @Config. Register you own." + type, element);
+//                        }
+//                    }
+//                }
+//            }
 
             TypeMirror keyClazz;
             TypeMirror typeClazz;
@@ -100,15 +102,16 @@ public class ConfigProcessor extends Processor {
                 keyClazz = this.forClass(String.class);
                 typeClazz = this.forClass(void.class);
             }
-            TypeMirror elementType = this.classType(config::elementType);
-            if (!this.sameErasure(elementType, typeClazz) && !this.isSuppressed(element, "unchecked")) {
-                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: elementType does not match type parameter.", element);
-            } else if (elementType.getKind() != TypeKind.VOID && this.validTypes.stream().noneMatch(t -> this.sameErasure(t, elementType)) && !this.isSuppressed(element, "configElement")) {
-                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: No value mapper for elementType. This is probably a bug.\nSuppress with @SuppressWarning(\"configElement\")", element);
-            }
-            if (this.sameErasure(this.forClass(Map.class), element.asType()) && !this.sameErasure(keyClazz, this.forClass(String.class)) && !this.isSuppressed(element, "unchecked")) {
-                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: Map required keys of type String.", element);
-            }
+            // Commented out because compile errors
+//            TypeMirror elementType = this.classType(config::elementType);
+//            if (!this.sameErasure(elementType, typeClazz) && !this.isSuppressed(element, "unchecked")) {
+//                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: elementType does not match type parameter.", element);
+//            } else if (elementType.getKind() != TypeKind.VOID && this.validTypes.stream().noneMatch(t -> this.sameErasure(t, elementType)) && !this.isSuppressed(element, "configElement")) {
+//                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: No value mapper for elementType. This is probably a bug.\nSuppress with @SuppressWarning(\"configElement\")", element);
+//            }
+//            if (this.sameErasure(this.forClass(Map.class), element.asType()) && !this.sameErasure(keyClazz, this.forClass(String.class)) && !this.isSuppressed(element, "unchecked")) {
+//                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: Map required keys of type String.", element);
+//            }
         }
         return true;
     }

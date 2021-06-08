@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.impl.config;
+package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonPrimitive;
@@ -9,19 +9,17 @@ import net.minecraft.util.ResourceLocation;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EnumConfigMapper implements ValueMapper<Enum<?>, JsonPrimitive> {
-
-    public static final ResourceLocation ID = new ResourceLocation("minecraft", "enum");
+public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
     
-    private static final Map<Class<? extends Enum<?>>, EnumConfigMapper> mappers = new HashMap<>();
+    private static final Map<Class<? extends Enum<?>>, EnumValueMappers> mappers = new HashMap<>();
     
-    public static EnumConfigMapper getMapper(Class<? extends Enum<?>> enumClass) {
+    public static EnumValueMappers getMapper(Class<? extends Enum<?>> enumClass) {
         if (!enumClass.isEnum()) {
             throw new IllegalArgumentException("Can't get enum serializer for non-enum class: " + enumClass);
         } else if (mappers.containsKey(enumClass)) {
             return mappers.get(enumClass);
         } else {
-            EnumConfigMapper mapper = new EnumConfigMapper(enumClass);
+            EnumValueMappers mapper = new EnumValueMappers(enumClass);
             mappers.put(enumClass, mapper);
             return mapper;
         }
@@ -29,7 +27,7 @@ public class EnumConfigMapper implements ValueMapper<Enum<?>, JsonPrimitive> {
     
     private final Class<? extends Enum<?>> clazz;
 
-    public EnumConfigMapper(Class<? extends Enum<?>> clazz) {
+    public EnumValueMappers(Class<? extends Enum<?>> clazz) {
         this.clazz = clazz;
     }
 
@@ -45,7 +43,7 @@ public class EnumConfigMapper implements ValueMapper<Enum<?>, JsonPrimitive> {
     }
 
     @Override
-    public Enum<?> fromJSON(JsonPrimitive json, Class<?> elementType) {
+    public Enum<?> fromJSON(JsonPrimitive json) {
         String str = json.getAsString();
         Enum<?>[] enums = this.clazz.getEnumConstants();
         for (Enum<?> e : enums) {
@@ -57,22 +55,22 @@ public class EnumConfigMapper implements ValueMapper<Enum<?>, JsonPrimitive> {
     }
 
     @Override
-    public JsonPrimitive toJSON(Enum<?> value, Class<?> elementType) {
+    public JsonPrimitive toJSON(Enum<?> value) {
         return new JsonPrimitive(value.name().toLowerCase(Locale.ROOT));
     }
 
     @Override
-    public Enum<?> read(PacketBuffer buffer, Class<?> elementType) {
+    public Enum<?> read(PacketBuffer buffer) {
         return this.clazz.getEnumConstants()[buffer.readVarInt()];
     }
 
     @Override
-    public void write(Enum<?> value, PacketBuffer buffer, Class<?> elementType) {
+    public void write(Enum<?> value, PacketBuffer buffer) {
         buffer.writeVarInt(value.ordinal());
     }
 
     @Override
-    public List<String> comment(Class<?> elementType) {
+    public List<String> comment() {
         return ImmutableList.of(
                 "Allowed values: " + Arrays.stream(this.clazz.getEnumConstants())
                         .map(e -> e.name().toLowerCase(Locale.ROOT))

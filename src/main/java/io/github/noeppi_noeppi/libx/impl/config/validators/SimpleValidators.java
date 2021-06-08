@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.impl.config;
+package io.github.noeppi_noeppi.libx.impl.config.validators;
 
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.config.ConfigValidator;

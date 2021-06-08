@@ -80,7 +80,7 @@ public class ConfigImpl {
         try {
             ImmutableMap.Builder<Field, ConfigKey> keys = ImmutableMap.builder();
             ImmutableSet.Builder<ConfigGroup> groups = ImmutableSet.builder();
-            addAllFieldsToBuilder(baseClass, baseClass, keys, groups);
+            addAllFieldsToBuilder(id.getNamespace(), baseClass, baseClass, keys, groups);
             this.keys = keys.build();
             this.groups = groups.build();
         } catch (ReflectiveOperationException e) {
@@ -120,18 +120,11 @@ public class ConfigImpl {
                 } catch (NoSuchFieldException e) {
                     field = null;
                 }
-                ResourceLocation mapperId = buffer.readResourceLocation();
-                String elementTypeStr = buffer.readString(0x7fff);
-                Class<?> elementType = elementTypeStr.isEmpty() ? void.class : Class.forName(elementTypeStr);
                 ConfigKey key = field == null ? null : this.keys.get(field);
                 if (key == null) {
                     throw new IllegalStateException("Config between client and server mismatch. Server sent unknown or non-config field. Ignoring");
-                } else if (!key.mapperId.equals(mapperId)) {
-                    throw new IllegalStateException("Config incompatible. Don't know how to read object: Mapper unknown: Local mapper: " + key.mapperId + ", Remote Mapper: " + mapperId);
-                } else if (!key.elementType.equals(elementType)) {
-                    throw new IllegalStateException("Config incompatible. Don't know how to read object: Different element types.");
                 }
-                Object value = key.mapper.read(buffer, key.elementType);
+                Object value = key.mapper.read(buffer);
                 values.put(key, value);
                 keysLeft.remove(key);
             }
@@ -177,7 +170,7 @@ public class ConfigImpl {
             if (elem != null && key.mapper.element().isAssignableFrom(elem.getClass())) {
                 try {
                     //noinspection unchecked
-                    Object value = ((ValueMapper<?, JsonElement>) key.mapper).fromJSON(elem, key.elementType);
+                    Object value = ((ValueMapper<?, JsonElement>) key.mapper).fromJSON(elem);
                     values.put(key, key.validate(value, "Invalid value in config file", needsCorrection));
                 } catch (Exception e) {
                     LibX.logger.warn("Failed to read config value " + String.join(".", key.path) + ". Using default. Error: " + e.getMessage());
@@ -198,10 +191,10 @@ public class ConfigImpl {
         return state;
     }
 
-    private static void addAllFieldsToBuilder(Class<?> baseClass, Class<?> currentClass, ImmutableMap.Builder<Field, ConfigKey> keys, ImmutableSet.Builder<ConfigGroup> groups) throws ReflectiveOperationException {
+    private static void addAllFieldsToBuilder(String modid, Class<?> baseClass, Class<?> currentClass, ImmutableMap.Builder<Field, ConfigKey> keys, ImmutableSet.Builder<ConfigGroup> groups) throws ReflectiveOperationException {
         Set<String> names = new HashSet<>();
         for (Field field : currentClass.getDeclaredFields()) {
-            ConfigKey key = ConfigKey.create(field, baseClass);
+            ConfigKey key = ConfigKey.create(modid, field, baseClass);
             if (key != null) {
                 field.setAccessible(true);
                 keys.put(field, key);
@@ -220,7 +213,7 @@ public class ConfigImpl {
                     throw new IllegalStateException("Duplicate key in config definition: " + clazz.getSimpleName());
                 } else {
                     names.add(clazz.getSimpleName());
-                    addAllFieldsToBuilder(baseClass, clazz, keys, groups);
+                    addAllFieldsToBuilder(modid, baseClass, clazz, keys, groups);
                 }
             }
         }

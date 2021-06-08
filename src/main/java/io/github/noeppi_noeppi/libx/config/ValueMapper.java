@@ -13,17 +13,7 @@ import java.util.List;
  * @param <T> The type that this mapper can serialise.
  * @param <E> The JSON element type this mapper uses.
  */
-public interface ValueMapper<T, E extends JsonElement> {
-
-    /**
-     * Gets the class of the type that this mapper can serialise.
-     */
-    Class<T> type();
-
-    /**
-     * Gets the class of the JSON element type this mapper uses.
-     */
-    Class<E> element();
+public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper<T, E> {
 
     /**
      * Reads an object from JSON. If the json is invalid you may either throw
@@ -32,41 +22,30 @@ public interface ValueMapper<T, E extends JsonElement> {
      * default values.
      * 
      * @param json The json data
-     * @param elementType The element type specified in the {@link Config @Config}
-     *                    annotation. If it's left out, this will be {@code void.class}
      * @return The value read.
      */
-    T fromJSON(E json, Class<?> elementType);
+    T fromJSON(E json);
 
     /**
      * Serialises a value to JSON.
      * @param value The value to serialise
-     * @param elementType The element type specified in the {@link Config @Config}
-     *                    annotation. If it's left out, this will be {@code void.class}
      * @return The resulting json data.
      */
-    E toJSON(T value, Class<?> elementType);
+    E toJSON(T value);
 
     /**
      * Reads a value from a {@code PacketBuffer}. The default implementation expects a
      * JSON string and gives this string to {@code fromJSON}.
      */
-    default T read(PacketBuffer buffer, Class<?> elementType) {
-        return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readString(0x40000), this.element()), elementType);
+    default T read(PacketBuffer buffer) {
+        return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readString(0x40000), this.element()));
     }
 
     /**
      * Writes a value to a {@code PacketBuffer}. The default implementation calls
      * {@code toJSON} and writes the resulting JSON as a string.
      */
-    default void write(T value, PacketBuffer buffer, Class<?> elementType) {
-        buffer.writeString(ConfigImpl.INTERNAL.toJson(this.toJSON(value, elementType)), 0x40000);
-    }
-
-    /**
-     * Returns a list of comment lines that will be added to the values specified in @Config.
-     */
-    default List<String> comment(Class<?> elementType) {
-        return Collections.emptyList();
+    default void write(T value, PacketBuffer buffer) {
+        buffer.writeString(ConfigImpl.INTERNAL.toJson(this.toJSON(value)), 0x40000);
     }
 }
