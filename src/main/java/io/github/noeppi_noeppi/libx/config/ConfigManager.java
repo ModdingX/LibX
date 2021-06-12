@@ -11,6 +11,7 @@ import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigState;
 import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer;
+import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.crafting.Ingredient;
@@ -263,7 +264,7 @@ public class ConfigManager {
             ConfigImpl config = ConfigImpl.getConfig(id);
             if (!config.clientConfig) {
                 PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                LibX.getNetwork().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                NetworkImpl.getImpl().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
             }
         } else {
             LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
@@ -279,7 +280,7 @@ public class ConfigManager {
                 ConfigImpl config = ConfigImpl.getConfig(id);
                 if (!config.clientConfig) {
                     PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                    LibX.getNetwork().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                    NetworkImpl.getImpl().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
                 }
             }
         } else {

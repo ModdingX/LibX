@@ -34,12 +34,13 @@ public class LibX extends ModX {
     public static final Logger logger = LogManager.getLogger();
     
     private static LibX instance;
-    private static NetworkImpl network;
+    private static CommonNetwork networkWrapper;
 
     public LibX() {
         super("libx", null);
         instance = this;
-        network = new NetworkImpl(this);
+        NetworkImpl network = new NetworkImpl(this);
+        networkWrapper = new CommonNetwork(network);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::registerContainers);
@@ -74,8 +75,8 @@ public class LibX extends ModX {
         return instance;
     }
 
-    public static NetworkImpl getNetwork() {
-        return network;
+    public static CommonNetwork getNetwork() {
+        return networkWrapper;
     }
 
     // We can not do this in setup as it would not be available for `runData`

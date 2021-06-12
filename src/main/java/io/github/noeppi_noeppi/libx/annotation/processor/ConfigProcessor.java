@@ -1,58 +1,33 @@
 package io.github.noeppi_noeppi.libx.annotation.processor;
 
 import io.github.noeppi_noeppi.libx.config.Config;
-import io.github.noeppi_noeppi.libx.crafting.IngredientStack;
-import io.github.noeppi_noeppi.libx.util.ResourceList;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.*;
 
-//FIXME make it work with config system changes
 public class ConfigProcessor extends Processor {
 
-    private Set<TypeMirror> validTypes;
-    private Set<TypeMirror> validTypesWrapper;
+    private Set<TypeMirror> wrapperTypes;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         
-        // No immutable set, we only want classes from java(x) packages here.
-        Set<TypeMirror> validTypes = new HashSet<>();
-        validTypes.add(this.forClass(boolean.class));
-        validTypes.add(this.forClass(byte.class));
-        validTypes.add(this.forClass(short.class));
-        validTypes.add(this.forClass(int.class));
-        validTypes.add(this.forClass(long.class));
-        validTypes.add(this.forClass(float.class));
-        validTypes.add(this.forClass(double.class));
-        validTypes.add(this.forClass(String.class));
-        validTypes.add(this.forClass(Optional.class));
-        validTypes.add(this.forClass(List.class));
-        validTypes.add(this.forClass(Map.class));
-        validTypes.add(this.forClass(ResourceList.class));
-        validTypes.add(this.forClass(IngredientStack.class));
-        validTypes.add(this.forClass(UUID.class));
-        this.addIfFound(validTypes, "net.minecraft.item.crafting.Ingredient");
-        this.addIfFound(validTypes, "net.minecraft.util.text.IFormattableTextComponent");
-        this.addIfFound(validTypes, "net.minecraft.util.ResourceLocation");
-        this.validTypes = Collections.unmodifiableSet(validTypes);
-        
-        Set<TypeMirror> validTypesWrapper = new HashSet<>();
-        validTypesWrapper.add(this.forClass(Boolean.class));
-        validTypesWrapper.add(this.forClass(Byte.class));
-        validTypesWrapper.add(this.forClass(Short.class));
-        validTypesWrapper.add(this.forClass(Integer.class));
-        validTypesWrapper.add(this.forClass(Long.class));
-        validTypesWrapper.add(this.forClass(Float.class));
-        validTypesWrapper.add(this.forClass(Double.class));
-        this.validTypesWrapper = Collections.unmodifiableSet(validTypesWrapper);
+        Set<TypeMirror> wrapperTypesMutable = new HashSet<>();
+        wrapperTypesMutable.add(this.forClass(Boolean.class));
+        wrapperTypesMutable.add(this.forClass(Byte.class));
+        wrapperTypesMutable.add(this.forClass(Character.class));
+        wrapperTypesMutable.add(this.forClass(Short.class));
+        wrapperTypesMutable.add(this.forClass(Integer.class));
+        wrapperTypesMutable.add(this.forClass(Long.class));
+        wrapperTypesMutable.add(this.forClass(Float.class));
+        wrapperTypesMutable.add(this.forClass(Double.class));
+        this.wrapperTypes = Collections.unmodifiableSet(wrapperTypesMutable);
     }
 
     @Override
@@ -63,7 +38,6 @@ public class ConfigProcessor extends Processor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         for (Element element : roundEnv.getElementsAnnotatedWith(Config.class)) {
-            Config config = element.getAnnotation(Config.class);
             if (this.isSuppressed(element, "config")) continue;
 
             if (element.getKind() != ElementKind.FIELD || !element.getModifiers().contains(Modifier.STATIC) ||
@@ -72,54 +46,27 @@ public class ConfigProcessor extends Processor {
                 continue;
             }
 
-            // Commented out because compile errors
-//            if (config.mapper().isEmpty()) {
-//                TypeMirror type = element.asType();
-//                if (this.validTypes.stream().noneMatch(t -> this.sameErasure(t, type))) {
-//                    if (this.validTypesWrapper.stream().anyMatch(t -> this.sameErasure(t, type))) {
-//                        this.messager.printMessage(Diagnostic.Kind.WARNING, "@Config should not use wrapper type: " + type, element);
-//                    } else {
-//                        Element typeElem = this.types.asElement(type);
-//                        if (typeElem == null || typeElem.getKind() != ElementKind.ENUM) {
-//                            this.messager.printMessage(Diagnostic.Kind.ERROR, "No value mapper found for type of @Config. Register you own." + type, element);
-//                        }
-//                    }
-//                }
-//            }
-
-            TypeMirror keyClazz;
-            TypeMirror typeClazz;
+            TypeMirror firstGeneric = this.forClass(String.class);
             if (element.asType() instanceof DeclaredType) {
                 List<? extends TypeMirror> parameters = ((DeclaredType) element.asType()).getTypeArguments();
-                if (parameters.isEmpty()) {
-                    keyClazz = this.forClass(String.class);
-                    typeClazz = this.forClass(void.class);
-                } else {
-                    keyClazz = parameters.get(0);
-                    typeClazz = parameters.get(parameters.size() - 1);
+                if (!parameters.isEmpty()) {
+                    firstGeneric = parameters.get(0);
                 }
-            } else {
-                keyClazz = this.forClass(String.class);
-                typeClazz = this.forClass(void.class);
             }
-            // Commented out because compile errors
-//            TypeMirror elementType = this.classType(config::elementType);
-//            if (!this.sameErasure(elementType, typeClazz) && !this.isSuppressed(element, "unchecked")) {
-//                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: elementType does not match type parameter.", element);
-//            } else if (elementType.getKind() != TypeKind.VOID && this.validTypes.stream().noneMatch(t -> this.sameErasure(t, elementType)) && !this.isSuppressed(element, "configElement")) {
-//                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: No value mapper for elementType. This is probably a bug.\nSuppress with @SuppressWarning(\"configElement\")", element);
-//            }
-//            if (this.sameErasure(this.forClass(Map.class), element.asType()) && !this.sameErasure(keyClazz, this.forClass(String.class)) && !this.isSuppressed(element, "unchecked")) {
-//                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: Map required keys of type String.", element);
-//            }
+            
+            for (TypeMirror wrapper : this.wrapperTypes) {
+                if (this.sameErasure(element.asType(), wrapper)) {
+                    this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: Config should use primitive instead of wrapper type.", element);
+                    break;
+                }
+            }
+            
+            if (this.sameErasure(this.forClass(Map.class), element.asType())
+                    && !this.sameErasure(firstGeneric, this.forClass(String.class))
+                    && !this.isSuppressed(element, "unchecked")) {
+                this.messager.printMessage(Diagnostic.Kind.WARNING, "Unchecked @Config: Map required keys of type String.", element);
+            }
         }
         return true;
-    }
-
-    private void addIfFound(Set<TypeMirror> types, String clazz) {
-        TypeElement elem = this.elements.getTypeElement(clazz);
-        if (elem != null && elem.asType() != null) {
-            types.add(elem.asType());
-        }
     }
 }
