@@ -5,7 +5,10 @@ import net.minecraft.block.Block;
 import net.minecraft.data.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -15,7 +18,12 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// TODO add javadoc
+/**
+ * A provider for {@link BlockTags block}, {@link ItemTags item} and {@link FluidTags fluid} tags.
+ * You can set your tags in {@link #setup() setup}. With {@link #defaultItemTags(Item) defualtItemTags},
+ * {@link #defaultBlockTags(Block) defualtBlockTags} and {@link #defaultFluidTags(Fluid) defualtFluidTags},
+ * you can add default tags that can be retrieved from the element.
+ */
 public abstract class CommonTagsProviderBase implements IDataProvider {
 
     protected final ModX mod;
@@ -29,6 +37,9 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
     private boolean isSetup = false;
     private final List<Pair<ITag.INamedTag<Fluid>, ITag.INamedTag<Block>>> fluidCopies = new ArrayList<>();
 
+    /**
+     * Creates a new CommonTagsProviderBase
+     */
     public CommonTagsProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
         this.mod = mod;
         this.generator = generator;
@@ -56,41 +67,65 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
                 .forEach(CommonTagsProviderBase.this::defaultFluidTags);
     }
 
+    /**
+     * Adds default {@link ItemTags item tags} to an {@link Item}
+     */
     public void defaultItemTags(Item item) {
 
     }
 
+    /**
+     * Adds default {@link BlockTags item tags} to a {@link Block}
+     */
     public void defaultBlockTags(Block item) {
 
     }
 
+    /**
+     * Adds default {@link FluidTags item tags} to a {@link Fluid}
+     */
     public void defaultFluidTags(Fluid item) {
 
     }
 
+    /**
+     * Gets a {@link TagsProvider.Builder tag builder} for an {@link Item}
+     */
     public TagsProvider.Builder<Item> item(ITag.INamedTag<Item> tag) {
         return this.itemTags.getOrCreateBuilder(tag);
     }
 
+    /**
+     * Gets a {@link TagsProvider.Builder tag builder} for a {@link Block}
+     */
     public TagsProvider.Builder<Block> block(ITag.INamedTag<Block> tag) {
         return this.blockTags.getOrCreateBuilder(tag);
     }
 
+    /**
+     * Gets a {@link TagsProvider.Builder tag builder} for a {@link Fluid}
+     */
     public TagsProvider.Builder<Fluid> fluid(ITag.INamedTag<Fluid> tag) {
         return this.fluidTags.getOrCreateBuilder(tag);
     }
 
+    /**
+     * Copies all entries from a block tag to an item tag.
+     */
     public void copyBlock(ITag.INamedTag<Block> from, ITag.INamedTag<Item> to) {
         this.itemTags.copy(from, to);
     }
 
+    /**
+     * Copies all entries from a fluid tag to a block tag.
+     */
     public void copyFluid(ITag.INamedTag<Fluid> from, ITag.INamedTag<Block> to) {
         this.fluidCopies.add(Pair.of(from, to));
     }
 
     @Nonnull
     @Override
-    public String getName() {
+    public final String getName() {
         return this.mod.modid + " common tags";
     }
 
