@@ -5,12 +5,13 @@ import net.minecraft.util.text.*;
 import java.util.function.BiConsumer;
 
 /**
- * Utilities for text components.
+ * Utilities for {@link ITextComponent text components}.
  */
 public class TextComponentUtil {
 
     /**
-     * Gets a text component as a string formatted with ANSI escape codes to be printed on the log.
+     * Gets a {@link ITextComponent text component} as a string formatted with ANSI escape codes to
+     * be printed on the console.
      */
     public static String getConsoleString(ITextComponent tc) {
         StringBuilder sb = new StringBuilder();

@@ -1,7 +1,12 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
 import io.github.noeppi_noeppi.libx.annotation.*;
+import io.github.noeppi_noeppi.libx.annotation.codec.Param;
+import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
 import io.github.noeppi_noeppi.libx.annotation.processor.Processor;
+import io.github.noeppi_noeppi.libx.annotation.registration.NoReg;
+import io.github.noeppi_noeppi.libx.annotation.registration.RegName;
+import io.github.noeppi_noeppi.libx.annotation.registration.RegisterClass;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 
 import javax.annotation.processing.Filer;

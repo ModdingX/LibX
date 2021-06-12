@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+/**
+ * A {@link Registerable} that registers a {@link Fluid fluid}, a flowing fluid,
+ * a {@link FlowingFluidBlock fluid block} and a {@link BucketItem bucket item}.
+ */
 public class FluidBase implements Registerable, IItemProvider {
 
     protected final ModX mod;

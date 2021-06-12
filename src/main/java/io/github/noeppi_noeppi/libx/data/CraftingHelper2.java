@@ -3,14 +3,15 @@ package io.github.noeppi_noeppi.libx.data;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.util.NbtToJson;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.crafting.CraftingHelper;
 
 /**
- * Contains some methods that are missing in forges CraftingHelper
+ * Contains some methods that are missing in Forges' {@link CraftingHelper}
  */
 public class CraftingHelper2 {
 
     /**
-     * Writes an ItemStack the way it's expected in a recipe json.
+     * Writes an {@link ItemStack} the way it's expected in a recipe json.
      *
      * @param writeNbt Whether the stacks nbt tag should be written.
      */

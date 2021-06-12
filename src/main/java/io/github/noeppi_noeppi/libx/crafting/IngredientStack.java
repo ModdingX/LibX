@@ -8,7 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import java.util.function.Predicate;
 
 /**
- * An ingredient with an amount.
+ * An {@link Ingredient} with an amount.
  */
 public class IngredientStack implements Predicate<ItemStack> {
     
@@ -24,7 +24,7 @@ public class IngredientStack implements Predicate<ItemStack> {
     }
 
     /**
-     * Gets the ingredient for this ingredient stack.
+     * Gets the {@link Ingredient} for this ingredient stack.
      */
     public Ingredient getIngredient() {
         return this.ingredient;
@@ -64,7 +64,7 @@ public class IngredientStack implements Predicate<ItemStack> {
     }
 
     /**
-     * Writes this IngredientStack to a PacketBuffer
+     * Writes this IngredientStack to a {@link PacketBuffer}
      */
     public void write(PacketBuffer buffer) {
         buffer.writeVarInt(this.count);
@@ -81,7 +81,7 @@ public class IngredientStack implements Predicate<ItemStack> {
     }
     
     /**
-     * Reads an IngredientStack from a PacketBuffer
+     * Reads an IngredientStack from a {@link PacketBuffer}
      */
     public static IngredientStack read(PacketBuffer buffer) {
         int count = buffer.readVarInt();

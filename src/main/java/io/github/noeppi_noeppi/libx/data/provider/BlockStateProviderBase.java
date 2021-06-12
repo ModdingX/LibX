@@ -20,10 +20,13 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
- * A base class for block state and model provider. When overriding this you should call the {@code manualState}
- * and {@code manualModel} methods in {@code setup}. Unlike the other provider this has an extra method
- * because custom models would not generate if not done there. Another thing you can do is override {@code defaultState} and
- * {@code defaultModel} to adjust the state and model depending on the block.
+ * A base class for block state and model providers. When overriding this, you should call the
+ * {@link #manualState(Block) manualState} and {@link #manualModel(Block) manualModel} methods in
+ * {@link #setup() setup}. Unlike the other provider this has an extra method because custom models
+ * would not generate if not done there. Another thing you can do is override
+ * {@link #defaultState(ResourceLocation, Block, ModelFile) defaultState} and
+ * {@link #defaultModel(ResourceLocation, Block) defaultModel} to adjust the state and model depending
+ * on the block.
  */
 public abstract class BlockStateProviderBase extends BlockStateProvider {
 
@@ -88,9 +91,9 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     protected abstract void setup();
 
     /**
-     * Creates a block state for the given block using the given model. The default implementation checks whether
-     * the block has the properties {@code BlockStateProperties.HORIZONTAL_FACING} or
-     * {@code BlockStateProperties.FACING} and creates block states matching those.
+     * Creates a block state for the given block using the given model. The default implementation checks
+     * whether the block has the properties {@link BlockStateProperties#HORIZONTAL_FACING} or
+     * {@link BlockStateProperties#FACING} and creates block states matching those.
      */
     protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
         if (block.getStateContainer().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
@@ -111,7 +114,8 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     }
 
     /**
-     * Creates a model for the given block. The default implementation always creates cube_all models.
+     * Creates a model for the given block. The default implementation creates special models for blocks
+     * of type {@link FlowingFluidBlock} and {@link LeavesBlock}.
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateContainer().getValidStates().stream().allMatch(state -> state.getRenderType() != BlockRenderType.MODEL)) {

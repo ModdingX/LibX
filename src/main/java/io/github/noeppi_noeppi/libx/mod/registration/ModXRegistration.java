@@ -48,6 +48,9 @@ import java.util.function.Predicate;
  * that has a forge registry such as items, block, biomes, enchantments... And if other mods add things
  * to register via forge registries you can register those as well. Another thing you can register are
  * thing that implement {@link Registerable}. See there for more info.
+ * 
+ * With registry transformers you can register literally everything. See {@link #initRegistration(RegistrationBuilder)}
+ * for this.
  */
 public abstract class ModXRegistration extends ModX {
 

@@ -35,7 +35,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a blast furnace.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
     protected void blasting(Consumer<IFinishedRecipe> consumer, IItemProvider in, IItemProvider out, float exp, int time) {
@@ -44,7 +44,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a smoker.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
     protected void cooking(Consumer<IFinishedRecipe> consumer, IItemProvider in, IItemProvider out, float exp, int time) {
@@ -53,7 +53,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
     protected void campfire(Consumer<IFinishedRecipe> consumer, IItemProvider in, IItemProvider out, float exp, int time) {
@@ -69,7 +69,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a blast furnace.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
     protected void blasting(Consumer<IFinishedRecipe> consumer, ITag<Item> in, IItemProvider out, float exp, int time) {
@@ -78,7 +78,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a smoker.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
     protected void cooking(Consumer<IFinishedRecipe> consumer, ITag<Item> in, IItemProvider out, float exp, int time) {
@@ -87,7 +87,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
     protected void campfire(Consumer<IFinishedRecipe> consumer, ITag<Item> in, IItemProvider out, float exp, int time) {
@@ -105,7 +105,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a blast furnace.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
     protected void blasting(Consumer<IFinishedRecipe> consumer, ResourceLocation outputId, IItemProvider in, IItemProvider out, float exp, int time) {
@@ -117,7 +117,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a smoker.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
     protected void cooking(Consumer<IFinishedRecipe> consumer, ResourceLocation outputId, IItemProvider in, IItemProvider out, float exp, int time) {
@@ -129,7 +129,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
     protected void campfire(Consumer<IFinishedRecipe> consumer, ResourceLocation outputId, IItemProvider in, IItemProvider out, float exp, int time) {
@@ -150,7 +150,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a blast furnace.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
     protected void blasting(Consumer<IFinishedRecipe> consumer, ResourceLocation outputId, ITag<Item> in, IItemProvider out, float exp, int time) {
@@ -162,7 +162,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a smoker.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
     protected void cooking(Consumer<IFinishedRecipe> consumer, ResourceLocation outputId, ITag<Item> in, IItemProvider out, float exp, int time) {
@@ -174,7 +174,7 @@ public abstract class SmeltingProviderBase extends AnyRecipeProvider {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
-     * {@code time} and {@code} exp should be the values for the normal furnace. They'll be
+     * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
     protected void campfire(Consumer<IFinishedRecipe> consumer, ResourceLocation outputId, ITag<Item> in, IItemProvider out, float exp, int time) {

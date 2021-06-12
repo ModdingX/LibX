@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
  * A list of rules that will be applied one after another. The first rule that matches
  * a resource location determines the result.
  * The resource list can either be a white list or a black list. If it is a whitelist,
- * by default a matching rule will make the {@code test} function return true. If it's
- * a blacklist it'll return false by default for matching rules.
+ * by default a matching rule will make the {@link #test(ResourceLocation) test} function
+ * return true. If it's a blacklist it'll return false by default for matching rules.
  * For whitelists if no rule matches {@code false} is returned. For blacklists it's
  * {@code true}.
  * Rules on a whitelist can also make the {@code test} method false and the other
@@ -54,6 +54,7 @@ public class ResourceList {
 
     /**
      * Creates a new resource list.
+     * 
      * @param whitelist Whether this is a whitelist or a blacklist
      * @param rules A consumer that gets a {@code RuleBuilder} and should build the rules.
      */
@@ -88,7 +89,7 @@ public class ResourceList {
     }
 
     /**
-     * Reads a resource list from a packet buffer.
+     * Reads a resource list from a {@link PacketBuffer}.
      */
     public ResourceList(PacketBuffer buffer) {
         this.whitelist = buffer.readBoolean();
@@ -115,7 +116,7 @@ public class ResourceList {
     }
     
     /**
-     * Writes this resource list to a packet buffer.
+     * Writes this resource list to a {@link PacketBuffer}.
      */
     public void write(PacketBuffer buffer) {
         buffer.writeBoolean(this.whitelist);
@@ -124,7 +125,7 @@ public class ResourceList {
     }
 
     /**
-     * Tests whether the given resource location is on this resource list.
+     * Tests whether the given {@link ResourceLocation} is on this resource list.
      */
     public boolean test(ResourceLocation rl) {
         for (Rule rule : this.rules) {
@@ -360,7 +361,7 @@ public class ResourceList {
         }
 
         /**
-         * Adds a simple rule that only matches the given resource location.
+         * Adds a simple rule that only matches the given {@link ResourceLocation}.
          * When this rule matches it will return the whitelist state of the resource list
          * as result.
          */
@@ -369,7 +370,7 @@ public class ResourceList {
         }
         
         /**
-         * Adds a simple rule that only matches the given resource location.
+         * Adds a simple rule that only matches the given {@link ResourceLocation}.
          * When this rule matches it will return the value of {@code allow} as result.
          */
         public void simple(boolean allow, ResourceLocation rl) {
@@ -377,10 +378,10 @@ public class ResourceList {
         }
 
         /**
-         * Parses a simple rule. This allows for a resource location string where asterisks (*) can
-         * match any amount of characters in the resource location. However an asterisk can never
+         * Parses a simple rule. This allows for a {@link ResourceLocation} string where asterisks (*) can
+         * match any amount of characters in the {@link ResourceLocation}. However an asterisk can never
          * match a colon.
-         * The special case '*' matches every resource location.
+         * The special case '*' matches every {@link ResourceLocation}.
          * By default this will return the whitelist state of the resource list as result.
          * To change this prepend a plus (+) to make it return true or a minus (-) to make
          * it return false on a match.

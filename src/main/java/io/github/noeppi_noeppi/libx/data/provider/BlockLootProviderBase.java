@@ -34,8 +34,8 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * A base class for block loot provider. When overriding this you should call the {@code customLootTable} methods in
- * {@code setup} to adjust the loot tables. Every block of you mod that is left untouched will get a default loot table.
+ * A base class for block loot provider. When overriding this you should call the {@link #customLootTable(Block)} customLootTable} methods in
+ * {@link #setup() setup} to adjust the loot tables. Every block of you mod that is left untouched will get a default loot table.
  */
 public abstract class BlockLootProviderBase implements IDataProvider {
 
@@ -115,7 +115,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
     /**
      * Creates a loot modifier that copies NBT-Data from a tile entity into the dropped item. Use this
-     * with one of the {@code drops} methods.
+     * with one of the {@link #drops(Block, SilkModifier, LootFactory...) drops} methods.
      *
      * @param tags The toplevel tags of the tile entity to be copied.
      */
@@ -131,7 +131,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
     /**
      * Creates a loot modifier that copies properties from a block state into the dropped item. Use this
-     * with one of the {@code drops} methods.
+     * with one of the {@link #drops(Block, SilkModifier, LootFactory...) drops} methods.
      *
      * @param properties The properties of the block state to be copied.
      */
@@ -226,7 +226,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     
     /**
      * Turns a generic loot modifier into a silk modifier. This exists to reduce ambiguity.
-     * A silk modifier does not extend {@code GenericLootModifier} for this reason.
+     * A silk modifier does not extend {@link GenericLootModifier} for this reason.
      */
     public SilkModifier silk(GenericLootModifier modifier) {
         return new SilkModifier(modifier);

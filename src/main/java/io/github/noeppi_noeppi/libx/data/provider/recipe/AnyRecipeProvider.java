@@ -28,7 +28,7 @@ public abstract class AnyRecipeProvider extends RecipeProvider {
     protected abstract void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer);
 
     /**
-     * Gets a resource location with the namespace being the modid of the mod given in constructor
+     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
      * and the path being the registry path of the given item.
      */
     protected ResourceLocation loc(IItemProvider item) {
@@ -36,7 +36,7 @@ public abstract class AnyRecipeProvider extends RecipeProvider {
     }
 
     /**
-     * Gets a resource location with the namespace being the modid of the mod given in constructor
+     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
      * and the path being the registry path of the given item followed by an underscore and the
      * given suffix.
      */

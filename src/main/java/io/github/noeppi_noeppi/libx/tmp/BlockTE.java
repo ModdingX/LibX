@@ -22,12 +22,13 @@ import java.lang.reflect.Constructor;
 import java.util.Set;
 
 /**
- * Base class for blocks with tile entities for mods using {@link ModXRegistration}. This will automatically
- * set the creative tab if it's defined in the mod and register a block item and a tile entity type..
+ * Base class for blocks with {@link TileEntity tile entities} for mods using {@link ModXRegistration}.
+ * This will automatically set the creative tab if it's defined in the mod and register a block item and
+ * a tile entity type.
  * <p>
- * The constructor requires a TileEntity class. The tile entity class  <b>must</b> define a public constructor
- * with one argument of type {@code TileEntityType} for this to create a tile entity type. This class will do
- * the magic to wire the tile entity to the block and invoke the constructor.
+ * The constructor requires a {@link TileEntity} class. The tile entity class  <b>must</b> define a public
+ * constructor with one argument of type {@code TileEntityType} for this to create a tile entity type.
+ * This class will do the magic to wire the tile entity to the block and invoke the constructor.
  */
 public class BlockTE<T extends TileEntity> extends BlockBase {
 
@@ -115,7 +116,7 @@ public class BlockTE<T extends TileEntity> extends BlockBase {
     /**
      * Override this to prevent the inventory of the tile entity to be dropped when the block is
      * broken. To automatically drop the inventory the tile entity must provide an item handler
-     * capability that is an instance of {@code IItemHandlerModifiable}
+     * capability that is an instance of {@link IItemHandlerModifiable}
      */
     protected boolean shouldDropInventory(World world, BlockPos pos, BlockState state) {
         return true;

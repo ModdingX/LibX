@@ -33,10 +33,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * base provider for custom advancements. If you want to have multiple advancement tabs, use multiple
- * providers. Every provider has one root advancement all advancements with no explicit parent will
- * be added to. You should configure your advancements with the {@code root} and {@code advancement}
- * methods in {@link #setup()}.
+ * base provider for custom {@link Advancement advancements}. If you want to have multiple advancement
+ * tabs, use multiple providers. Every provider has one root advancement all advancements with no
+ * explicit parent will be added to. You should configure your advancements with the {@code root}
+ * and {@code advancement} methods in {@link #setup() setup}.
  */
 public abstract class AdvancementProviderBase implements IDataProvider {
 
@@ -72,7 +72,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Gets an {@link AdvancementFactory} to customise the root advancement for
+     * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
      * this provider. It's id will be the modid.
      * 
      * @see #root(String, String)
@@ -82,7 +82,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Gets an {@link AdvancementFactory} to customise the root advancement for
+     * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
      * this provider.
      * 
      * @param id The id for the root advancement.
@@ -94,7 +94,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Gets an {@link AdvancementFactory} to customise the root advancement for
+     * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
      * this provider.
      * 
      * @param namespace The namespace of the root advancement.
@@ -122,7 +122,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Adds a built advancement to the provider.
+     * Adds a built {@link Advancement advancement} to the provider.
      */
     public void advancement(Advancement advancement) {
         if (this.advancements.put(advancement.getId(), () -> advancement) != null) {
@@ -131,7 +131,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Adds an advancement to the provider identified by its resource location. Returns
+     * Adds an advancement to the provider identified by its {@link ResourceLocation}. Returns
      * an {@link AdvancementFactory} to customise the advancement.
      */
     public AdvancementFactory advancement(ResourceLocation id) {
@@ -143,25 +143,25 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Adds an advancement to the provider identified by an id. The resource location is built with
-     * the modid and the root advancement id. Returns an {@link AdvancementFactory} to customise
-     * the advancement.
+     * Adds an {@link Advancement advancement} to the provider identified by an id. The
+     * {@link ResourceLocation} is built with the modid and the root advancement id. Returns an
+     * {@link AdvancementFactory} to customise the advancement.
      */
     public AdvancementFactory advancement(String id) {
         return this.advancement(this.idFor(id));
     }
 
     /**
-     * Creates a dummy advancement with a given id to be used as a parent if your advancement should have
-     * another advancement from another mod as parent.
+     * Creates a dummy {@link Advancement advancement} with a given id to be used as a parent if your
+     * advancement should have another advancement from another mod as parent.
      */
     public Advancement dummy(ResourceLocation id) {
         return this.dummy(id, false);
     }
 
     /**
-     * Creates a dummy advancement with a given id to be used as a parent if your advancement should have
-     * another advancement from another mod as parent.
+     * Creates a dummy {@link Advancement advancement} with a given id to be used as a parent if your
+     * advancement should have another advancement from another mod as parent.
      * 
      * @param hidden Whether the advancement is hidden.
      */
@@ -224,63 +224,63 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Gets criterion that requires a player to consume (eat/drink) an item.
+     * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
      */
     public ICriterionInstance eat(IItemProvider food) {
         return this.eat(ItemPredicate.Builder.create().item(food).build());
     }
 
     /**
-     * Gets criterion that requires a player to consume (eat/drink) an item.
+     * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
      */
     public ICriterionInstance eat(ITag<Item> food) {
         return this.eat(ItemPredicate.Builder.create().tag(food).build());
     }
 
     /**
-     * Gets criterion that requires a player to consume (eat/drink) an item.
+     * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
      */
     public ICriterionInstance eat(ItemPredicate food) {
         return new ConsumeItemTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND, food);
     }
 
     /**
-     * Gets criterion that requires a player to leave a dimension.
+     * Gets a {@link ICriterionInstance criterion} that requires a player to leave a dimension.
      */
     public ICriterionInstance leave(RegistryKey<World> dimension) {
         return new ChangeDimensionTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND, dimension, null);
     }
 
     /**
-     * Gets criterion that requires a player to enter a dimension.
+     * Gets a {@link ICriterionInstance criterion} that requires a player to enter a dimension.
      */
     public ICriterionInstance enter(RegistryKey<World> dimension) {
         return ChangeDimensionTrigger.Instance.toWorld(dimension);
     }
 
     /**
-     * Gets criterion that requires a player to perform a specific dimension change.
+     * Gets a {@link ICriterionInstance criterion} that requires a player to perform a specific dimension change.
      */
     public ICriterionInstance changeDim(RegistryKey<World> from, RegistryKey<World> to) {
         return new ChangeDimensionTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND, from, to);
     }
 
     /**
-     * Gets the given {@code EntityPredicate} as an {@code EntityPredicate.AndPredicate}.
+     * Gets the given {@link EntityPredicate} as an {@link EntityPredicate.AndPredicate}.
      */
     public EntityPredicate.AndPredicate entity(EntityPredicate entity) {
         return EntityPredicate.AndPredicate.serializePredicate(EntityHasProperty.builder(LootContext.EntityTarget.THIS, entity).build());
     }
 
     /**
-     * Gets an {@code EntityPredicate.AndPredicate} that matches for a specific entity type.
+     * Gets an {@link EntityPredicate.AndPredicate} that matches for a specific entity type.
      */
     public EntityPredicate.AndPredicate entity(EntityType<?> type) {
         return this.entity(EntityPredicate.Builder.create().type(type).build());
     }
 
     /**
-     * Gets an item predicate for an item and optionally some enchantments.
+     * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
     public ItemPredicate stack(IItemProvider item, Enchantment... enchs) {
         ItemPredicate.Builder builder = ItemPredicate.Builder.create().item(item);
@@ -291,7 +291,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Gets an item predicate for an item and optionally some enchantments.
+     * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
     public ItemPredicate stack(ITag<Item> item, Enchantment... enchs) {
         ItemPredicate.Builder builder = ItemPredicate.Builder.create().tag(item);
@@ -302,7 +302,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Gets an item predicate some enchantments.
+     * Gets an {@link ItemPredicate} for some enchantments.
      */
     public ItemPredicate stack(Enchantment... enchs) {
         if (enchs.length == 0) {
@@ -316,7 +316,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     /**
-     * Gets an item predicate for an enchantment with a minimum level.
+     * Gets an {@link ItemPredicate} for an enchantment with a minimum level.
      */
     public ItemPredicate stack(Enchantment ench, int min) {
         return ItemPredicate.Builder.create().enchantment(new EnchantmentPredicate(ench, MinMaxBounds.IntBound.atLeast(min))).build();

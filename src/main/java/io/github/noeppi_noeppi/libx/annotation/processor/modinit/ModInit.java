@@ -16,6 +16,7 @@ import java.io.Writer;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// TODO Check ModInit as things have been refactored. Verify that code generates correctly.
 public class ModInit  {
     
     public static final String CODEC_FQN = "com.mojang.serialization.Codec";

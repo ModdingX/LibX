@@ -9,17 +9,20 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.IArgumentSerializer;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.server.command.EnumArgument;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * As the enum argument is a bit buggy because it only works if all enum values are
+ * As the {@link EnumArgument} is a bit buggy because it only works if all enum values are
  * lowercase where they are uppercase in most cases, here's a variant that will only
  * work if all enum names are uppercase.
+ * 
  * @param <T>
  */
 public class UppercaseEnumArgument<T extends Enum<T>> implements ArgumentType<T> {
@@ -36,7 +39,7 @@ public class UppercaseEnumArgument<T extends Enum<T>> implements ArgumentType<T>
 
     @Override
     public T parse(final StringReader reader) {
-        return Enum.valueOf(this.enumClass, reader.readUnquotedString().toUpperCase());
+        return Enum.valueOf(this.enumClass, reader.readUnquotedString().toUpperCase(Locale.ROOT));
     }
 
     @Override

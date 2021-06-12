@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * base class for containers. provides some utilities that are useful for any type of container
- * When using this it's important to register the player inventory slots through
+ * base class for {@link Container containers}. provides some utilities that are useful for any type
+ * of container. When using this it's important to register the player inventory slots through
  * {@link CommonContainer#layoutPlayerInventorySlots(int, int)} and after all other slots.
  */
 public abstract class CommonContainer extends Container {

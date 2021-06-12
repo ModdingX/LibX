@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 /**
  * Utilities for rendering in the world.
@@ -11,7 +12,7 @@ import net.minecraft.util.math.vector.Vector3d;
 public class RenderHelperWorld {
 
     /**
-     * This is meant to be called in {@code RenderWorldLastEvent}. This will move the matrix stack to the
+     * This is meant to be called in {@link RenderWorldLastEvent}. This will move the matrix stack to the
      * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
      * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
      */
@@ -20,7 +21,7 @@ public class RenderHelperWorld {
     }
     
     /**
-     * This is meant to be called in {@code RenderWorldLastEvent}. This will move the matrix stack to the
+     * This is meant to be called in {@link RenderWorldLastEvent}. This will move the matrix stack to the
      * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
      * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
      */
@@ -29,7 +30,7 @@ public class RenderHelperWorld {
     }
 
     /**
-     * This is meant to be called in {@code RenderWorldLastEvent}. This will move the matrix stack to the
+     * This is meant to be called in {@link RenderWorldLastEvent}. This will move the matrix stack to the
      * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
      * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
      */

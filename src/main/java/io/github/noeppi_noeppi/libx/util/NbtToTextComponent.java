@@ -9,16 +9,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Translates Named Binary Tag into text components.
+ * Translates {@link INBT Named Binary Tag} into {@link IFormattableTextComponent text components}.
  */
 public class NbtToTextComponent {
 
     private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("libx.misc.copy_nbt"));
 
     /**
-     * As the fancy colored nbt text components are only available for blocks, entities
-     * and world storage by default, this translates a piece of NBT to a colored text
-     * component.
+     * As the fancy colored {@link NBTTextComponent nbt text components} are only available for
+     * {@link NBTTextComponent.Block blocks}, {@link NBTTextComponent.Entity entities}
+     * and {@link NBTTextComponent.Storage world storage} by default, this translates a piece of NBT
+     * to a colored {@link IFormattableTextComponent text component}.
      */
     public static IFormattableTextComponent toText(INBT nbt) {
         Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, nbt.toString())).setHoverEvent(COPY_NBT);

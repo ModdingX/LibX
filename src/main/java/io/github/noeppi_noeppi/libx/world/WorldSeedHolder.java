@@ -1,9 +1,10 @@
 package io.github.noeppi_noeppi.libx.world;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.world.World;
 
 /**
- * Provides a way to get the world seed in codecs.
+ * Provides a way to get the {@link World} seed in {@link Codec codecs}.
  */
 public class WorldSeedHolder {
     

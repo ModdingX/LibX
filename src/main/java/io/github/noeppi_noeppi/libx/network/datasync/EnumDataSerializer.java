@@ -6,7 +6,7 @@ import net.minecraft.network.datasync.IDataSerializer;
 import javax.annotation.Nonnull;
 
 /**
- * Data serializers for enums. You need to register it manually tough.
+ * {@link IDataSerializer Data serializers} for enums. You need to register them manually tough.
  */
 public class EnumDataSerializer<T extends Enum<T>> implements IDataSerializer<T> {
     

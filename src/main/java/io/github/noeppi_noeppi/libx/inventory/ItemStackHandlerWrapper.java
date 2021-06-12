@@ -16,7 +16,9 @@ import java.util.function.Supplier;
  *
  * A wrapper for an IItemHandlerModifiable to be used as capability with extra slot limitations. Meant to be used as capability.
  */
+// TODO move to impl package so its only created from BaseItemStackHandler and the user has no guarantee on whet type of IItemHandlerModifiable he gets.
 public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
+    
     private final IItemHandlerModifiable inventory;
     private final BiFunction<Integer, ItemStack, Boolean> canInsert;
     private final Function<Integer, Boolean> canExtract;

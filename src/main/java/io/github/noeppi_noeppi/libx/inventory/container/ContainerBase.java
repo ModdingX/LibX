@@ -32,6 +32,8 @@ import java.util.concurrent.atomic.AtomicReference;
  * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number. <br>
  * </p>
  */
+// TODO delete (but retain functionality somewhere else)
+@Deprecated
 public abstract class ContainerBase<T extends TileEntity> extends CommonContainer {
 
     public final T tile;

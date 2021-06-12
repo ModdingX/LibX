@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -30,7 +31,7 @@ import java.util.*;
  * <p>
  * Then in {@code registerClient} call {@link ItemStackRenderer#addRenderTile(TileEntityType, boolean)}
  * <p>
- * The required models will generate automatically if you're using {@link io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase}.
+ * The required models will generate automatically if you're using {@link ItemModelProviderBase}.
  */
 public class ItemStackRenderer extends ItemStackTileEntityRenderer {
 
@@ -45,7 +46,7 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
     }
 
     /**
-     * Registers a Tile Entity Type to be rendered with the ItemStackRenderer.
+     * Registers a {@link TileEntityType} to be rendered with the ItemStackRenderer.
      *
      * @param teType             The Tile Entity Type.
      * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the tile

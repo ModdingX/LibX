@@ -9,14 +9,14 @@ import net.minecraft.util.text.event.HoverEvent;
 import java.util.Map;
 
 /**
- * Translates JSON into text components.
+ * Translates JSON into {@link IFormattableTextComponent text components}.
  */
 public class JsonToTextComponent {
 
     private static final HoverEvent COPY_JSON = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("libx.misc.copy_json"));
 
     /**
-     * This translates a piece of NBT to a colored text component in JSON style.
+     * This translates JSON to a colored text component.
      */
     public static IFormattableTextComponent toText(JsonElement element) {
         Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, element.toString())).setHoverEvent(COPY_JSON);

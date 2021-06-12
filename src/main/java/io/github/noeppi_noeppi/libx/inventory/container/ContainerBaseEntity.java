@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Just like {@link ContainerBase} but for entities instead of tiles.
  */
+// TODO delete (but retain functionality somewhere else)
+@Deprecated
 public abstract class ContainerBaseEntity<T extends Entity> extends CommonContainer {
 
     public final T entity;

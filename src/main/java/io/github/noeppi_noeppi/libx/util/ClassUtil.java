@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.util;
 
+// TODO add javadoc
 public class ClassUtil {
 
     public static Class<?> boxed(Class<?> clazz) {

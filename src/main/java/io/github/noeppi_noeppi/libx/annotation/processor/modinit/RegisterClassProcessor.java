@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
-import io.github.noeppi_noeppi.libx.annotation.NoReg;
-import io.github.noeppi_noeppi.libx.annotation.RegName;
-import io.github.noeppi_noeppi.libx.annotation.RegisterClass;
+import io.github.noeppi_noeppi.libx.annotation.registration.NoReg;
+import io.github.noeppi_noeppi.libx.annotation.registration.RegName;
+import io.github.noeppi_noeppi.libx.annotation.registration.RegisterClass;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 
 import javax.lang.model.element.*;

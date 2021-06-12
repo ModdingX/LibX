@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 
+// TODO add javadoc
 public class BoundingBoxUtils {
     
     public static AxisAlignedBB expand(Entity center, double radius) {

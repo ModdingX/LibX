@@ -1,10 +1,12 @@
-package io.github.noeppi_noeppi.libx.annotation;
+package io.github.noeppi_noeppi.libx.annotation.codec;
+
+import net.minecraft.util.registry.Registry;
 
 import java.lang.annotation.*;
 
 /**
  * Marks a parameter to be supplied by a registry lookup codec. Can only
- * be used on parameters of type {@code Registry}.
+ * be used on parameters of type {@link Registry}.
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)

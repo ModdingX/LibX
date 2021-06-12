@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+// TODO add javadoc
 public abstract class TagProviderBase<T extends IForgeRegistryEntry<T>> extends ForgeRegistryTagsProvider<T> {
 
     protected final ModX mod;
@@ -43,8 +44,8 @@ public abstract class TagProviderBase<T extends IForgeRegistryEntry<T>> extends 
     protected abstract void setup();
 
     /**
-     * Called for every T element from your mod. You should add tags here,
-     * that can be inferred from the element type.
+     * Called for every element from your mod. You should add tags here,
+     * that can be inferred from the element itself.
      */
     public void defaultTags(T element) {
 

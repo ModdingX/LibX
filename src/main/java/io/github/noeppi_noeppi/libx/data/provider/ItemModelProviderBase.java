@@ -18,8 +18,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A base class for item model provider. When overriding this you should call the {@code handheld} and
- * {@code manualModel} methods in {@code setup}.
+ * A base class for item model provider. When overriding this you should call the
+ * {@link #handheld(Item) handheld} and {@link #manualModel(Item) manualModel} methods
+ * in {@link #setup() setup}.
  */
 public abstract class ItemModelProviderBase extends ItemModelProvider {
 

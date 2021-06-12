@@ -23,7 +23,7 @@ public interface RegistryTransformer {
      * not available for custom transformers.</b>
      * 
      * The new object is registered with the same id as the old one. If this is not wanted,
-     * wrap it into a {@link Registerable} via {@link Registerable#getNamedAdditionalRegisters()}.
+     * wrap it into a {@link Registerable} via {@link Registerable#getNamedAdditionalRegisters(ResourceLocation)}.
      */
     @Nullable
     Object getAdditional(ResourceLocation id, Object object);

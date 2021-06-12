@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 /**
- * A base class for recipe provider
+ * A base class for recipe providers
  */
 public abstract class RecipeProviderBase extends AnyRecipeProvider {
     

@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("ALL")
+// TODO add javadoc
 public abstract class CommonTagsProviderBase implements IDataProvider {
 
     protected final ModX mod;
@@ -33,10 +33,9 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         this.mod = mod;
         this.generator = generator;
         this.fileHelper = fileHelper;
-        // blockTags must be assigned before itemTags
-        this.blockTags = new BlockTagProviderBase(generator);
-        this.itemTags = new ItemTagProviderBase(generator);
-        this.fluidTags = new FluidTagProviderBase(generator);
+        this.blockTags = new BlockTagProviderBase(generator, mod.modid, fileHelper);
+        this.itemTags = new ItemTagProviderBase(generator, mod.modid, fileHelper, this.blockTags);
+        this.fluidTags = new FluidTagProviderBase(generator, mod.modid, fileHelper);
         generator.addProvider(this.blockTags);
         generator.addProvider(this.itemTags);
         generator.addProvider(this.fluidTags);
@@ -45,7 +44,7 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
     public abstract void setup();
 
     private void doSetup() {
-        setup();
+        this.setup();
         ForgeRegistries.BLOCKS.getValues().stream()
                 .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
                 .forEach(CommonTagsProviderBase.this::defaultBlockTags);
@@ -95,6 +94,7 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         return this.mod.modid + " common tags";
     }
 
+    @Override
     public void act(@Nonnull DirectoryCache cache) {
         // We don't do anything here, everything is done by the three child providers
     }
@@ -103,8 +103,8 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
 
         private Map<ResourceLocation, ITag.Builder> tagCache;
 
-        protected BlockTagProviderBase(DataGenerator generator) {
-            super(generator);
+        protected BlockTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
+            super(generator, modid, fileHelper);
         }
 
         @Override
@@ -116,9 +116,9 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
                 this.tagToBuilder.putAll(this.tagCache);
             }
             // Add fluid copies
-            for (Pair<ITag.INamedTag<Fluid>, ITag.INamedTag<Block>> copy : fluidCopies) {
-                TagsProvider.Builder<Block> builder = getOrCreateBuilder(copy.getRight());
-                for (ResourceLocation entry : fluidTags.getTagInfo(copy.getLeft())) {
+            for (Pair<ITag.INamedTag<Fluid>, ITag.INamedTag<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
+                TagsProvider.Builder<Block> builder = this.getOrCreateBuilder(copy.getRight());
+                for (ResourceLocation entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
                     Fluid fluid = ForgeRegistries.FLUIDS.getValue(entry);
                     if (fluid != null) {
                         builder.add(fluid.getDefaultState().getBlockState().getBlock());
@@ -128,19 +128,21 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         }
 
         @Override
-        public void act(DirectoryCache cache) {
+        public void act(@Nonnull DirectoryCache cache) {
             this.tagCache = new HashMap<>(this.tagToBuilder);
             super.act(cache);
         }
 
+        @Override
         @Nonnull
         public TagsProvider.Builder<Block> getOrCreateBuilder(@Nonnull ITag.INamedTag<Block> tag) {
             return super.getOrCreateBuilder(tag);
         }
 
+        @Nonnull
         @Override
         public String getName() {
-            return mod.modid + " common block tags";
+            return CommonTagsProviderBase.this.mod.modid + " common block tags";
         }
     }
 
@@ -148,8 +150,8 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
 
         private Map<ResourceLocation, ITag.Builder> tagCache;
 
-        protected ItemTagProviderBase(DataGenerator generator) {
-            super(generator, CommonTagsProviderBase.this.blockTags);
+        protected ItemTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
+            super(generator, blockTags, modid, fileHelper);
         }
 
         @Override
@@ -163,24 +165,26 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         }
 
         @Override
-        public void act(DirectoryCache cache) {
+        public void act(@Nonnull DirectoryCache cache) {
             this.tagCache = new HashMap<>(this.tagToBuilder);
             super.act(cache);
         }
 
+        @Override
         @Nonnull
         public TagsProvider.Builder<Item> getOrCreateBuilder(@Nonnull ITag.INamedTag<Item> tag) {
             return super.getOrCreateBuilder(tag);
         }
 
         @Override
-        public void copy(ITag.INamedTag<Block> blockTag, ITag.INamedTag<Item> itemTag) {
+        public void copy(@Nonnull ITag.INamedTag<Block> blockTag, @Nonnull ITag.INamedTag<Item> itemTag) {
             super.copy(blockTag, itemTag);
         }
 
+        @Nonnull
         @Override
         public String getName() {
-            return mod.modid + " common item tags";
+            return CommonTagsProviderBase.this.mod.modid + " common item tags";
         }
     }
 
@@ -188,8 +192,8 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
 
         private Map<ResourceLocation, ITag.Builder> tagCache;
 
-        protected FluidTagProviderBase(DataGenerator generator) {
-            super(generator);
+        protected FluidTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
+            super(generator, modid, fileHelper);
         }
 
         @Override
@@ -203,27 +207,29 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
         }
 
         @Override
-        public void act(DirectoryCache cache) {
+        public void act(@Nonnull DirectoryCache cache) {
             this.tagCache = new HashMap<>(this.tagToBuilder);
             super.act(cache);
         }
 
+        @Override
         @Nonnull
         public TagsProvider.Builder<Fluid> getOrCreateBuilder(@Nonnull ITag.INamedTag<Fluid> tag) {
             return super.getOrCreateBuilder(tag);
         }
 
         public List<ResourceLocation> getTagInfo(ITag.INamedTag<Fluid> tag) {
-            TagsProvider.Builder<Fluid> builder = getOrCreateBuilder(tag);
+            TagsProvider.Builder<Fluid> builder = this.getOrCreateBuilder(tag);
             return builder.getInternalBuilder().getProxyStream()
                     .filter(p -> p.getEntry() instanceof ITag.ItemEntry)
                     .map(p -> new ResourceLocation(((ITag.ItemEntry) p.getEntry()).toString()))
                     .collect(Collectors.toList());
         }
 
+        @Nonnull
         @Override
         public String getName() {
-            return mod.modid + " common fluid tags";
+            return CommonTagsProviderBase.this.mod.modid + " common fluid tags";
         }
     }
 }

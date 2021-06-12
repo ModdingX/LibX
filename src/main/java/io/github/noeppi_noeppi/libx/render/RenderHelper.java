@@ -154,8 +154,8 @@ public class RenderHelper {
     }
 
     /**
-     * Works like {@code IVertexBuilder#addQuad} but allows you to modify alpha values as well. Like
-     * {@code IVertexBuilder#addQuad} this uses {@code DefaultVertexFormats.BLOCK}.
+     * Works like {@link IVertexBuilder#addQuad} but allows you to modify alpha values as well. Like
+     * {@link IVertexBuilder#addQuad} this uses {@link DefaultVertexFormats#BLOCK}.
      *
      * @param alpha    The alpha value to use.
      * @param mulAlpha If set to true the given alpha value is multiplied with the value set in

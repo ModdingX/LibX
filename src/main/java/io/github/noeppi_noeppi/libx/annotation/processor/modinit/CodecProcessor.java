@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
-import io.github.noeppi_noeppi.libx.annotation.PrimaryConstructor;
+import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.*;
 
 import javax.annotation.Nullable;

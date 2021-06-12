@@ -1,12 +1,13 @@
 package io.github.noeppi_noeppi.libx.event;
 
+import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.nio.file.Path;
 
 /**
- * Fired whenever a LibX config is loaded. Is fired on both client and server.
+ * Fired whenever a {@link ConfigManager LibX config} is loaded. Is fired on both client and server.
  * The event is not cancelable.
  */
 public class ConfigLoadedEvent extends Event {

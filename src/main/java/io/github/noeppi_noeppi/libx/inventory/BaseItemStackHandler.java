@@ -19,7 +19,7 @@ import java.util.function.Consumer;
  * Copied from <a href = "https://github.com/BlakeBr0/Cucumber/blob/1.15/src/main/java/com/blakebr0/cucumber/inventory/BaseItemStackHandler.java">Cucumber</a>
  * and modified.
  * <p>
- * An ItemStackHandler with some extra features.
+ * An {@link ItemStackHandler} with some extra features.
  */
 public class BaseItemStackHandler extends ItemStackHandler {
 

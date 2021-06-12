@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.tmp;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -20,7 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * Base class for items which have an inventory. This will provide a capability to the item.
+ * Base class for {@link Item items} which have an inventory. This will provide the capability to the item.
  */
 public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<CompoundNBT>> extends ItemBase {
 
@@ -65,8 +66,8 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
     }
 
     /**
-     * Gets the inventory of an ItemStack or null if the ItemStack doesn't have tha item handler capability
-     * or the item handler is not an instance of {@code IItemHandlerModifiable}.
+     * Gets the inventory of an {@link ItemStack} or null if the ItemStack doesn't have the item handler capability
+     * or the item handler is not an instance of {@link IItemHandlerModifiable}.
      */
     @Nullable
     public static IItemHandlerModifiable getInventory(ItemStack stack) {
@@ -79,9 +80,9 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
     }
     
     /**
-     * Gets a stream containing the inventory of an ItemStack or an empty stream if the ItemStack
-     * doesn't have tha item handler capability or the item handler is not an instance of
-     * {@code IItemHandlerModifiable}.
+     * Gets a stream containing the inventory of an {@link ItemStack} or an empty stream if the ItemStack
+     * doesn't have the item handler capability or the item handler is not an instance of
+     * {@link IItemHandlerModifiable}.
      */
     public static Stream<IItemHandlerModifiable> getInventoryStream(ItemStack stack) {
         IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve().orElse(null);

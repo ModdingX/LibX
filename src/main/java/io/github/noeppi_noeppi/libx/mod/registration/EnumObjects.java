@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 /**
  * A {@link Registerable} that multiple objects, one for each value of an enum. This is
- * done via {@link Registerable#getNamedAdditionalRegisters()} so the enum names will be
+ * done via {@link Registerable#getNamedAdditionalRegisters(ResourceLocation)} so the enum names will be
  * applied automatically.
  *
  * @param <E> The type of the enum to use.

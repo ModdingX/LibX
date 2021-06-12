@@ -1,10 +1,14 @@
-package io.github.noeppi_noeppi.libx.annotation;
+package io.github.noeppi_noeppi.libx.annotation.codec;
+
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.noeppi_noeppi.libx.annotation.Codecs;
+import net.minecraft.util.registry.Registry;
 
 import java.lang.annotation.*;
 
 /**
  * This is used to create very simple Codecs for classes. It will always create
- * {@code RecordBuilderCodec} s that fill values. Default values are not directly
+ * {@link RecordCodecBuilder} s that fill values. Default values are not directly
  * supported but can be easily added by creating custom smaller sub-codecs.
  * 
  * Can be added to exactly one public constructor of a class. This class will
@@ -25,7 +29,7 @@ import java.lang.annotation.*;
  * 
  * <ul>
  *     <li>
- *         {@link Lookup} for registry lookup codecs. Fields with type {@code Registry&lt;?&gt;}
+ *         {@link Lookup} for registry lookup codecs. Fields with type {@link Registry Registry&lt;?&gt;}
  *         default to this type.
  *     </li>
  * </ul>

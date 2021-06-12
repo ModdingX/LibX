@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.annotation;
+package io.github.noeppi_noeppi.libx.annotation.codec;
 
 import java.lang.annotation.*;
 

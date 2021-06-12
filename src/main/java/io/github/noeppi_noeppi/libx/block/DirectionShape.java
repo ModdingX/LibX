@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Holds 6 different VoxelShapes, one for each facing. Those are all created by rotating
+ * Holds 6 different {@link VoxelShape VoxelShapes}, one for each facing. Those are all created by rotating
  * one original VoxelShape.
  */
 public class DirectionShape extends RotationShape {

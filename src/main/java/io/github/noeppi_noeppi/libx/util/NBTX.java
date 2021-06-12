@@ -16,14 +16,14 @@ import javax.annotation.Nullable;
 public class NBTX {
 
     /**
-     * Store a block pos in a compound nbt with a given key.
+     * Store a {@link BlockPos} in a {@link CompoundNBT} with a given key.
      */
     public static void putPos(CompoundNBT nbt, String key, BlockPos pos) {
         nbt.put(key, new IntArrayNBT(new int[]{ pos.getX(), pos.getY(), pos.getZ() }));
     }
 
     /**
-     * Get a block pos from a compound nbt stored with a given key or null if there's no such
+     * Get a {@link BlockPos} from a {@link CompoundNBT} stored with a given key or null if there's no such
      * block pos.
      */
     @Nullable
@@ -38,7 +38,7 @@ public class NBTX {
     }
 
     /**
-     * Get a block pos from a compound nbt stored with a given key or the default value if there's
+     * Get a {@link BlockPos} from a {@link CompoundNBT} stored with a given key or the default value if there's
      * no such block pos.
      */
     public static BlockPos getPos(CompoundNBT nbt, String key, BlockPos defaultValue) {
@@ -47,14 +47,14 @@ public class NBTX {
     }
 
     /**
-     * Stores a resource location in a compound nbt with a given key.
+     * Stores a {@link ResourceLocation} in a {@link CompoundNBT} with a given key.
      */
     public static void putRL(CompoundNBT nbt, String key, ResourceLocation rl) {
         nbt.putString(key, rl.toString());
     }
 
     /**
-     * Gets a resource location from a compound nbt stored with a given key or null if there's no
+     * Gets a {@link ResourceLocation} from a {@link CompoundNBT} stored with a given key or null if there's no
      * such resource location.
      */
     @Nullable
@@ -67,7 +67,7 @@ public class NBTX {
     }
     
     /**
-     * Gets a resource location from a compound nbt stored with a given key or the default value if 
+     * Gets a {@link ResourceLocation} from a {@link CompoundNBT} stored with a given key or the default value if 
      * there's no such resource location.
      */
     public static ResourceLocation getRL(CompoundNBT nbt, String key, ResourceLocation defaultValue) {
@@ -76,7 +76,7 @@ public class NBTX {
     }
 
     /**
-     * Stores the location of a registry key. This will <b>not</b> store the registry.
+     * Stores the location of a {@link RegistryKey}. This will <b>not</b> store the registry.
      * 
      * @see NBTX#putRL(CompoundNBT, String, ResourceLocation)
      */
@@ -85,7 +85,7 @@ public class NBTX {
     }
     
     /**
-     * Gets a registry key. This will only load the location, the registry must be provided by yourself.
+     * Gets a {@link RegistryKey}. This will only load the location, the {@link Registry} must be provided by yourself.
      * 
      * @see NBTX#getRL(CompoundNBT, String) 
      */
@@ -100,7 +100,7 @@ public class NBTX {
     }
     
     /**
-     * Gets a registry key. This will only load the location, the registry must be provided by yourself.
+     * Gets a {@link RegistryKey}. This will only load the location, the {@link Registry} must be provided by yourself.
      * 
      * @see NBTX#getRL(CompoundNBT, String, ResourceLocation)
      */

@@ -14,6 +14,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -28,8 +29,8 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
- * This block registers a container to it'S tile entity and handles the gui opening when the
- * block is right clicked. You still need to manually register the screen on the client.
+ * This class registers a container to it's {@link TileEntityType tile entity type} and handles the gui
+ * opening when the block is right clicked. You still need to manually register the screen on the client.
  */
 public class BlockGUI<T extends TileEntity, C extends ContainerBase<T>> extends BlockTE<T> {
 
@@ -57,6 +58,7 @@ public class BlockGUI<T extends TileEntity, C extends ContainerBase<T>> extends 
     public ActionResultType onBlockActivated(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
         if (!world.isRemote) {
             INamedContainerProvider containerProvider = new INamedContainerProvider() {
+                @Nonnull
                 @Override
                 public ITextComponent getDisplayName() {
                     //noinspection ConstantConditions

@@ -30,12 +30,12 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 /**
- * A common container with a variable amount of slots. You should not use this with more than 154 slots.
- * To show a container to a player call
+ * A common {@link Container} with a variable amount of slots. You should not use this with more than 154 slots.
+ * To show a container to a {@link PlayerEntity player}, call
  * {@link GenericContainer#open(ServerPlayerEntity, IItemHandlerModifiable, ITextComponent, ResourceLocation) open}
  * on the logical server.
  * As there's no way to synchronise the item validator method from the item handler modifiable, you should
- * register the validator during setup. The slot validation method in our item handler will be ignored by this.
+ * register the validator during setup. The slot validation method in your item handler will be ignored by this.
  */
 public class GenericContainer extends CommonContainer {
 
@@ -127,7 +127,7 @@ public class GenericContainer extends CommonContainer {
     }
 
     /**
-     * Opens a container for a player.
+     * Opens a container for a {@link PlayerEntity player}.
      *
      * @param player      The player that should see the container.
      * @param inventory   The inventory of the container. The

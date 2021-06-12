@@ -3,11 +3,11 @@ package io.github.noeppi_noeppi.libx.tmp;
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
- * A base class for tile entities. This provides some useful methods for tile entities.
+ * A base class for {@link TileEntity tile entities}. This provides some useful methods for tile entities.
  */
 public class TileEntityBase extends TileEntity {
 
@@ -47,8 +47,8 @@ public class TileEntityBase extends TileEntity {
     }
 
     /**
-     * This will update the tile entity when on the client
-     * using {@link io.github.noeppi_noeppi.libx.impl.network.NetworkImpl#requestTE(World, BlockPos)}.
+     * This will update the tile entity when on the client using {@link #getUpdateTag()}
+     * and {@link #handleUpdateTag(BlockState, CompoundNBT)}.
      */
     @Override
     public void onLoad() {
@@ -60,7 +60,7 @@ public class TileEntityBase extends TileEntity {
 
     /**
      * This will update the tile entity to all clients that are tracking it when called on the server
-     * using {@link io.github.noeppi_noeppi.libx.impl.network.NetworkImpl#updateTE(World, BlockPos)}
+     * using {@link #getUpdateTag()} and {@link #handleUpdateTag(BlockState, CompoundNBT)}
      * at the end of this tick.
      */
     public void markDispatchable() {
