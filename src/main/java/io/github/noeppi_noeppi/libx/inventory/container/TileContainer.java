@@ -2,15 +2,23 @@ package io.github.noeppi_noeppi.libx.inventory.container;
 
 import io.github.noeppi_noeppi.libx.fi.Function5;
 import io.github.noeppi_noeppi.libx.fi.Function6;
+import io.github.noeppi_noeppi.libx.tmp.BlockGUI;
+import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,5 +81,26 @@ public class TileContainer<T extends TileEntity> extends DefaultContainer {
         });
         typeRef.set(type);
         return type;
+    }
+
+    /**
+     * Opens a TileContainer for a player.
+     */
+    public static void openContainer(ServerPlayerEntity player, ContainerType<? extends TileContainer<?>> container, ITextComponent title, BlockPos pos) {
+        INamedContainerProvider containerProvider = new INamedContainerProvider() {
+            @Nonnull
+            @Override
+            public ITextComponent getDisplayName() {
+                return title;
+            }
+
+            @Override
+            public Container createMenu(int windowId, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
+                PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+                buffer.writeBlockPos(pos);
+                return container.create(windowId, playerInventory, buffer);
+            }
+        };
+        NetworkHooks.openGui(player, containerProvider, pos);
     }
 }

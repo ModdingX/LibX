@@ -57,22 +57,8 @@ public class BlockGUI<T extends TileEntity, C extends TileContainer<T>> extends 
 
     public ActionResultType onBlockActivated(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
         if (!world.isRemote) {
-            INamedContainerProvider containerProvider = new INamedContainerProvider() {
-                @Nonnull
-                @Override
-                public ITextComponent getDisplayName() {
-                    //noinspection ConstantConditions
-                    return new TranslationTextComponent("screen." + BlockGUI.this.mod.modid + "." + BlockGUI.this.getRegistryName().getPath());
-                }
-
-                @Override
-                public Container createMenu(int windowId, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
-                    PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-                    buffer.writeBlockPos(pos);
-                    return BlockGUI.this.container.create(windowId, playerInventory, buffer);
-                }
-            };
-            NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
+            //noinspection ConstantConditions
+            TileContainer.openContainer((ServerPlayerEntity) player, this.container, new TranslationTextComponent("screen." + BlockGUI.this.mod.modid + "." + BlockGUI.this.getRegistryName().getPath()), pos);
         }
         return ActionResultType.SUCCESS;
     }

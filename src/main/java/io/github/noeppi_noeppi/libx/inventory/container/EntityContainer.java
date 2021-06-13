@@ -2,14 +2,21 @@ package io.github.noeppi_noeppi.libx.inventory.container;
 
 import com.mojang.datafixers.util.Function5;
 import io.github.noeppi_noeppi.libx.fi.Function6;
+import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,11 +65,32 @@ public abstract class EntityContainer<T extends Entity> extends DefaultContainer
     public static <T extends Container> ContainerType<T> createContainerType(Function6<ContainerType<T>, Integer, World, Integer, PlayerInventory, PlayerEntity, T> constructor) {
         AtomicReference<ContainerType<T>> typeRef = new AtomicReference<>(null);
         ContainerType<T> type = IForgeContainerType.create((windowId1, inv, data) -> {
-            int entityId1 = data.readInt();
-            World world1 = inv.player.getEntityWorld();
-            return constructor.apply(typeRef.get(), windowId1, world1, entityId1, inv, inv.player);
+            int entityId = data.readInt();
+            World world = inv.player.getEntityWorld();
+            return constructor.apply(typeRef.get(), windowId1, world, entityId, inv, inv.player);
         });
         typeRef.set(type);
         return type;
+    }
+
+    /**
+     * Opens an EntityContainer for a player.
+     */
+    public static void openContainer(ServerPlayerEntity player, ContainerType<? extends TileContainer<?>> container, ITextComponent title, Entity entity) {
+        INamedContainerProvider containerProvider = new INamedContainerProvider() {
+            @Nonnull
+            @Override
+            public ITextComponent getDisplayName() {
+                return title;
+            }
+
+            @Override
+            public Container createMenu(int windowId, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
+                PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+                buffer.writeInt(entity.getEntityId());
+                return container.create(windowId, playerInventory, buffer);
+            }
+        };
+        NetworkHooks.openGui(player, containerProvider, buffer -> buffer.writeInt(entity.getEntityId()));
     }
 }
