@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.tmp;
 
 import com.google.common.collect.ImmutableSet;
-import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
+import io.github.noeppi_noeppi.libx.inventory.container.TileContainer;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
@@ -32,7 +32,7 @@ import java.util.Set;
  * This class registers a container to it's {@link TileEntityType tile entity type} and handles the gui
  * opening when the block is right clicked. You still need to manually register the screen on the client.
  */
-public class BlockGUI<T extends TileEntity, C extends ContainerBase<T>> extends BlockTE<T> {
+public class BlockGUI<T extends TileEntity, C extends TileContainer<T>> extends BlockTE<T> {
 
     public final ContainerType<C> container;
 

@@ -37,7 +37,7 @@ import java.util.function.BiPredicate;
  * As there's no way to synchronise the item validator method from the item handler modifiable, you should
  * register the validator during setup. The slot validation method in your item handler will be ignored by this.
  */
-public class GenericContainer extends CommonContainer {
+public class GenericContainer extends ContainerBase {
 
     private static final ResourceLocation EMPTY_VALIDATOR = new ResourceLocation(LibX.getInstance().modid, "nothing");
     private static final Map<ResourceLocation, BiPredicate<Integer, ItemStack>> validators = new HashMap<>(ImmutableMap.of(
