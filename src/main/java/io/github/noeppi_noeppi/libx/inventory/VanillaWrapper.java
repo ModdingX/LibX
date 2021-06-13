@@ -21,7 +21,8 @@ public class VanillaWrapper implements IInventory {
     /**
      * Wraps the given {@link IItemHandlerModifiable} to a vanilla {@link IInventory}.
      *
-     * @param dirty A runnable which is always called when {@code markDirty();} is called on the vanilla inventory.
+     * @param dirty A runnable which is always called when {@link IInventory#markDirty() markDirty()}
+     *              is called on the vanilla inventory.
      */
     public VanillaWrapper(IItemHandlerModifiable handler, @Nullable Runnable dirty) {
         this.handler = handler;
