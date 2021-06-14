@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * base class for {@link Container containers}. provides some utilities that are useful for any type
+ * A base class for {@link Container containers}. Provides some utilities that are useful for any type
  * of container. When using this it's important to register the player inventory slots through
  * {@link ContainerBase#layoutPlayerInventorySlots(int, int)} and after all other slots.
  */
@@ -31,7 +31,7 @@ public abstract class ContainerBase extends Container {
      * Places the player inventory slots into the container.
      *
      * @param leftCol The x coordinate of the top left slot
-     * @param topRow  The y coordinate of the top left lot
+     * @param topRow  The y coordinate of the top left slot
      */
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
         this.addSlotBox(this.playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
@@ -45,12 +45,12 @@ public abstract class ContainerBase extends Container {
      * @param handler   The inventory of the slot
      * @param index     The index of the first slot
      * @param x         The x coordinate of the top left slot
-     * @param y         The y coordinate of the top left lot
+     * @param y         The y coordinate of the top left slot
      * @param horAmount The amount of slots in horizontal direction
-     * @param dx        The space between two slots in horizontal direction. Should not be less that 16 or
+     * @param dx        The space between two slots in horizontal direction. Should not be less than 16 or
      *                  you create overlapping slots. Most of the time this is 18
      * @param verAmount The amount of slots in vertical direction
-     * @param dy        The space between two slots in vertical direction. Should not be less that 16 or
+     * @param dy        The space between two slots in vertical direction. Should not be less than 16 or
      *                  you create overlapping slots. Most of the time this is 18
      * @return The next index to be used to create a slot
      */
@@ -64,9 +64,9 @@ public abstract class ContainerBase extends Container {
      * @param handler The inventory of the slot
      * @param index   The index of the first slot
      * @param x       The x coordinate of the top left slot
-     * @param y       The y coordinate of the top left lot
+     * @param y       The y coordinate of the top left slot
      * @param amount  The amount of slots
-     * @param dx      The space between two slots. Should not be less that 16 or
+     * @param dx      The space between two slots. Should not be less than 16 or
      *                you create overlapping slots. Most of the time this is 18
      * @return The next index to be used to create a slot
      */
@@ -80,12 +80,12 @@ public abstract class ContainerBase extends Container {
      * @param handler     The inventory of the slot
      * @param index       The index of the first slot
      * @param x           The x coordinate of the top left slot
-     * @param y           The y coordinate of the top left lot
+     * @param y           The y coordinate of the top left slot
      * @param horAmount   The amount of slots in horizontal direction
-     * @param dx          The space between two slots in horizontal direction. Should not be less that 16 or
+     * @param dx          The space between two slots in horizontal direction. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
      * @param verAmount   The amount of slots in vertical direction
-     * @param dy          The space between two slots in vertical direction. Should not be less that 16 or
+     * @param dy          The space between two slots in vertical direction. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
      * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
      *                    or {@code SlotOutputOnly::new} for output slots.
@@ -105,9 +105,9 @@ public abstract class ContainerBase extends Container {
      * @param handler     The inventory of the slot
      * @param index       The index of the first slot
      * @param x           The x coordinate of the top left slot
-     * @param y           The y coordinate of the top left lot
+     * @param y           The y coordinate of the top left slot
      * @param amount      The amount of slots
-     * @param dx          The space between two slots. Should not be less that 16 or
+     * @param dx          The space between two slots. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
      * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
      *                    or {@code SlotOutputOnly::new} for output slots.

@@ -82,7 +82,7 @@ public interface IAdvancedItemHandler extends IItemHandler {
     }
 
     /**
-     * Works like {@link IItemHandler#extractItem(int, int, boolean)} but without a predicate instead of a slot.
+     * Works like {@link IItemHandler#extractItem(int, int, boolean)} but with a predicate instead of a slot.
      */
     default ItemStack extractItem(Predicate<ItemStack> predicate, int amount, boolean simulate) {
         ItemStack extracted = ItemStack.EMPTY;
