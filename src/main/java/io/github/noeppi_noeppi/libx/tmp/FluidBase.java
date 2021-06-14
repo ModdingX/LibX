@@ -24,7 +24,6 @@ import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -272,11 +271,6 @@ public class FluidBase implements Registerable, IItemProvider {
                 "flowing", this.flowing,
                 "bucket", this.bucket
         );
-    }
-
-    @Override
-    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
-        Registerable.super.registerClient(id, defer);
     }
 
     private void init(ResourceLocation id) {
