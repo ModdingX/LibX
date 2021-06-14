@@ -75,11 +75,6 @@ public class PotionIngredient extends Ingredient {
     }
 
     @Override
-    protected void invalidate() {
-        //
-    }
-
-    @Override
     public boolean isSimple() {
         return false;
     }

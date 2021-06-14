@@ -1,228 +1,89 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
+import net.minecraft.data.RecipeProvider;
+import net.minecraft.item.Item;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
-import net.minecraftforge.common.Tags;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * A base class for recipe providers
+ * Provider for all kinds of recipes. By itself does not add support for any recipes. However you can
+ * add extensions by implementing the interface. All extensions must implement {@link RecipeExtension}.
+ * As this class implements {@link RecipeExtension} as well, you don't need to implement any methods when
+ * adding an extension. For a list of available extensions, see the subclasses of {@link RecipeExtension}.
  */
-public abstract class RecipeProviderBase extends AnyRecipeProvider {
-    
+public abstract class RecipeProviderBase extends RecipeProvider implements RecipeExtension {
+
+    protected final ModX mod;
+    private Consumer<IFinishedRecipe> consumer;
+
     public RecipeProviderBase(ModX mod, DataGenerator generator) {
-        super(mod, generator);
+        super(generator);
+        this.mod = mod;
     }
 
     @Nonnull
     @Override
-    public String getName() {
+    public final String getName() {
         return this.mod.modid + " recipes";
     }
+    
+    protected abstract void setup();
 
-    /**
-     * Creates four recipes like it's done with blocks, ingots and nuggets.
-     */
-    protected void makeBlockItemNugget(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot, IItemProvider nugget) {
-
-        this.makeBlockItem(consumer, block, ingot);
-
-        ShapedRecipeBuilder.shapedRecipe(ingot)
-                .key('a', nugget)
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .setGroup(ingot.asItem().getRegistryName() + "_from_nuggets")
-                .addCriterion("has_item", hasItem(nugget))
-                .build(consumer, this.loc(ingot, "from_nuggets"));
-
-        ShapelessRecipeBuilder.shapelessRecipe(nugget, 9)
-                .addIngredient(ingot)
-                .setGroup(nugget.asItem().getRegistryName() + "_from_ingot")
-                .addCriterion("has_item", hasItem(ingot))
-                .build(consumer, this.loc(nugget, "from_ingot"));
+    @Override
+    protected final void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+        this.consumer = consumer;
+        this.setup();
     }
 
     /**
-     * Creates two recipes like it's done with blocks and ingots or ingots and nuggets
+     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
+     * and the path being the registry path of the given item.
      */
-    protected void makeBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot) {
-
-        ShapedRecipeBuilder.shapedRecipe(block)
-                .key('a', ingot)
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .setGroup(block.asItem().getRegistryName() + "_from_ingots")
-                .addCriterion("has_item", hasItem(ingot))
-                .build(consumer, this.loc(block, "from_ingots"));
-
-        ShapelessRecipeBuilder.shapelessRecipe(ingot, 9)
-                .addIngredient(block)
-                .setGroup(ingot.asItem().getRegistryName() + "_from_block")
-                .addCriterion("has_item", hasItem(block))
-                .build(consumer, this.loc(ingot, "from_block"));
+    public ResourceLocation loc(IItemProvider item) {
+        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
     }
 
     /**
-     * Calls {@link RecipeProviderBase#makeSmallBlockItem(Consumer, IItemProvider, IItemProvider, boolean)} with default value true for {@code revert}
+     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
+     * and the path being the registry path of the given item followed by an underscore and the
+     * given suffix.
      */
-    protected void makeSmallBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot) {
-
-        this.makeSmallBlockItem(consumer, block, ingot, true);
+    public ResourceLocation loc(IItemProvider item, String suffix) {
+        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath() + "_" + suffix);
     }
 
-    /**
-     * Creates one or two recipes like it's done with blocks with 2x2 ingots
-     *
-     * @param revert Whether the block can be crafted back or not
-     */
-    protected void makeSmallBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot, boolean revert) {
-
-        ShapedRecipeBuilder.shapedRecipe(block)
-                .key('a', ingot)
-                .patternLine("aa")
-                .patternLine("aa")
-                .setGroup(block.asItem().getRegistryName() + "_from_ingots")
-                .addCriterion("has_item", hasItem(ingot))
-                .build(consumer, this.loc(block, "from_ingots"));
-
-        if (revert) {
-            ShapelessRecipeBuilder.shapelessRecipe(ingot, 4)
-                    .addIngredient(block)
-                    .setGroup(ingot.asItem().getRegistryName() + "_from_block")
-                    .addCriterion("has_item", hasItem(block))
-                    .build(consumer, this.loc(ingot, "from_block"));
-        }
+    @Override
+    public RecipeProviderBase provider() {
+        return this;
     }
 
-    /**
-     * Creates tool recipes for a material. All the tool items may be null in which case the recipe is not created.
-     */
-    protected void makeTools(Consumer<IFinishedRecipe> consumer, IItemProvider material, @Nullable IItemProvider sword,
-                          @Nullable IItemProvider axe, @Nullable IItemProvider pick, @Nullable IItemProvider shovel,
-                          @Nullable IItemProvider hoe) {
-        
-        if (sword != null) {
-            ShapedRecipeBuilder.shapedRecipe(sword)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("m")
-                    .patternLine("m")
-                    .patternLine("s")
-                    .setGroup(material.asItem().getRegistryName() + "_sword")
-                    .addCriterion("has_item0", hasItem(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", hasItem(material))
-                    .build(consumer, this.loc(material, "sword"));
-        }
-
-        if (axe != null) {
-            ShapedRecipeBuilder.shapedRecipe(axe)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("mm")
-                    .patternLine("sm")
-                    .patternLine("s ")
-                    .setGroup(material.asItem().getRegistryName() + "_axe")
-                    .addCriterion("has_item0", hasItem(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", hasItem(material))
-                    .build(consumer, this.loc(material, "axe"));
-        }
-
-        if (pick != null) {
-            ShapedRecipeBuilder.shapedRecipe(pick)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("mmm")
-                    .patternLine(" s ")
-                    .patternLine(" s ")
-                    .setGroup(material.asItem().getRegistryName() + "_pick")
-                    .addCriterion("has_item0", hasItem(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", hasItem(material))
-                    .build(consumer, this.loc(material, "pick"));
-        }
-
-        if (shovel != null) {
-            ShapedRecipeBuilder.shapedRecipe(shovel)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("m")
-                    .patternLine("s")
-                    .patternLine("s")
-                    .setGroup(material.asItem().getRegistryName() + "_shovel")
-                    .addCriterion("has_item0", hasItem(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", hasItem(material))
-                    .build(consumer, this.loc(material, "shovel"));
-        }
-
-        if (hoe != null) {
-            ShapedRecipeBuilder.shapedRecipe(hoe)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("mm")
-                    .patternLine("s ")
-                    .patternLine("s ")
-                    .setGroup(material.asItem().getRegistryName() + "_hoe")
-                    .addCriterion("has_item0", hasItem(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", hasItem(material))
-                    .build(consumer, this.loc(material, "hoe"));
-        }
+    @Override
+    public Consumer<IFinishedRecipe> consumer() {
+        return this.consumer;
     }
 
-    /**
-     * Creates armor recipes for a material. All the armor items may be null in which case the recipe is not created.
-     */
-    protected void makeArmor(Consumer<IFinishedRecipe> consumer, IItemProvider material, @Nullable IItemProvider helmet,
-                          @Nullable IItemProvider chestplate, @Nullable IItemProvider leggings,
-                          @Nullable IItemProvider boots) {
-        
-        if (helmet != null) {
-            ShapedRecipeBuilder.shapedRecipe(helmet)
-                    .key('m', material)
-                    .patternLine("mmm")
-                    .patternLine("m m")
-                    .setGroup(material.asItem().getRegistryName() + "_helmet")
-                    .addCriterion("has_item", hasItem(material))
-                    .build(consumer, this.loc(material.asItem(), "helmet"));
-        }
+    @Override
+    public CriterionInstance criterion(IItemProvider item) {
+        return hasItem(item);
+    }
 
-        if (chestplate != null) {
-            ShapedRecipeBuilder.shapedRecipe(chestplate)
-                    .key('m', material)
-                    .patternLine("m m")
-                    .patternLine("mmm")
-                    .patternLine("mmm")
-                    .setGroup(material.asItem().getRegistryName() + "_chestplate")
-                    .addCriterion("has_item", hasItem(material))
-                    .build(consumer, this.loc(material.asItem(), "chestplate"));
-        }
+    @Override
+    public CriterionInstance criterion(ITag<Item> item) {
+        return hasItem(item);
+    }
 
-        if (leggings != null) {
-            ShapedRecipeBuilder.shapedRecipe(leggings)
-                    .key('m', material)
-                    .patternLine("mmm")
-                    .patternLine("m m")
-                    .patternLine("m m")
-                    .setGroup(material.asItem().getRegistryName() + "_leggings")
-                    .addCriterion("has_item", hasItem(material))
-                    .build(consumer, this.loc(material.asItem(), "leggings"));
-        }
-
-        if (boots != null) {
-            ShapedRecipeBuilder.shapedRecipe(boots)
-                    .key('m', material)
-                    .patternLine("m m")
-                    .patternLine("m m")
-                    .setGroup(material.asItem().getRegistryName() + "_boots")
-                    .addCriterion("has_item", hasItem(material))
-                    .build(consumer, this.loc(material.asItem(), "boots"));
-        }
+    @Override
+    public CriterionInstance criterion(ItemPredicate... items) {
+        return hasItem(items);
     }
 }

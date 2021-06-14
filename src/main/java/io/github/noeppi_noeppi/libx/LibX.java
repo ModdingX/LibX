@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
 import io.github.noeppi_noeppi.libx.command.UppercaseEnumArgument;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient;
+import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient;
 import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
@@ -28,6 +29,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/*
+ * TODO
+ * Things that really need to be tested before publishing a 1.17 version:
+ *   - CraftingExtension
+ *   - All mixins need to be tested again with 1.17
+ *   - The new registration system
+ */
 @Mod("libx")
 public class LibX extends ModX {
 
@@ -53,6 +61,7 @@ public class LibX extends ModX {
         CraftingHelper.register(new ResourceLocation(this.modid, "effect"), EffectIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(this.modid, "potion"), PotionIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(this.modid, "nbt"), NbtIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(this.modid, "merged"), MergedIngredient.Serializer.INSTANCE);
     }
 
     @Override
