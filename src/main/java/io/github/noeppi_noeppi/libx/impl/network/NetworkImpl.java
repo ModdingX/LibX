@@ -10,18 +10,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-/**
- * The network implementation of LibX. Allows for some networking functions that are required very often.
- */
+import javax.annotation.Nonnull;
+
 public final class NetworkImpl extends NetworkX {
 
+    private static NetworkImpl impl = null;
+    
     public NetworkImpl(ModX mod) {
         super(mod);
+        if (impl != null) throw new IllegalStateException("NetworkImpl created twice.");
+        impl = this;
+    }
+
+    @Nonnull
+    public static NetworkImpl getImpl() {
+        if (impl == null) throw new IllegalStateException("NetworkImpl not yet created.");
+        return impl;
     }
 
     @Override
     protected String getProtocolVersion() {
-        return "2";
+        return "6";
     }
 
     @Override
@@ -31,12 +40,7 @@ public final class NetworkImpl extends NetworkX {
        
         this.register(new TeRequestSerializer(), () -> TeRequestHandler::handle, NetworkDirection.PLAY_TO_SERVER);
     }
-
-    /**
-     * Sends the nbt tag retrieved from {@code TileEntity#getUpdateTag} from the tile entity at the given
-     * position to all clients tracking the chunk. On the client the tag is passed
-     * to {@code TileEntity#handleUpdateTag}. Does nothing when called on the client.
-     */
+    
     public void updateTE(World world, BlockPos pos) {
         if (!world.isRemote) {
             this.updateTE(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), world, pos);
@@ -59,12 +63,6 @@ public final class NetworkImpl extends NetworkX {
         }
     }
 
-    /**
-     * Requests the tile entity at the given position from the server. This is automatically done when
-     * a {@link io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase} is loaded. The server will
-     * send an update packet as described in {@link NetworkImpl#updateTE(World, BlockPos)} to the client.
-     * Does nothing when called on the server.
-     */
     public void requestTE(World world, BlockPos pos) {
         if (world.isRemote) {
             this.instance.sendToServer(new TeRequestSerializer.TeRequestMessage(pos));

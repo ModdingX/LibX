@@ -8,47 +8,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Holds 4 different VoxelShapes, one for each horizontal facing. Those are all created by rotating
+ * Holds 6 different {@link VoxelShape VoxelShapes}, one for each facing. Those are all created by rotating
  * one original VoxelShape.
  */
-public class DirectionShape {
-
-    private final VoxelShape north;
-    private final VoxelShape south;
-    private final VoxelShape east;
-    private final VoxelShape west;
+public class DirectionShape extends RotationShape {
+    
+    protected final VoxelShape up;
+    protected final VoxelShape down;
 
     /**
-     * Creates a new DirectionShape with the given base shape.
+     * Creates a new RotationShape with the given base shape. The base shape should be the shape
+     * facing up.
      */
     public DirectionShape(VoxelShape baseShape) {
-        this.north = baseShape.simplify();
-        this.east = rotated(this.north);
-        this.south = rotated(this.east);
-        this.west = rotated(this.south);
+        super(rotatedV(baseShape));
+        this.up = baseShape;
+        this.down = rotatedV(this.north);
     }
 
     /**
-     * Gets the VoxelShape for the given direction. If the direction is not a horizontal
-     * direction the base shape is returned.
+     * @inheritDoc
      */
+    @Override
     public VoxelShape getShape(Direction direction) {
         switch (direction) {
-            case SOUTH:
-                return this.south;
-            case WEST:
-                return this.west;
-            case EAST:
-                return this.east;
-            case NORTH:
+            case UP:
+                return this.up;
+            case DOWN:
+                return this.down;
             default:
-                return this.north;
+                return super.getShape(direction);
         }
     }
 
-    private static VoxelShape rotated(VoxelShape src) {
+    private static VoxelShape rotatedV(VoxelShape src) {
         List<VoxelShape> boxes = new ArrayList<>();
-        src.forEachBox((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(VoxelShapes.create(1 - fromZ, fromY, fromX, 1 - toZ, toY, toX)));
+        src.forEachBox((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(VoxelShapes.create(fromX, fromZ, 1 - fromY, toX, toZ, 1 - toY)));
         return VoxelShapes.or(VoxelShapes.empty(), boxes.toArray(new VoxelShape[]{})).simplify();
     }
 }

@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.impl.network;
 
-import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -18,7 +17,7 @@ public class TeRequestHandler {
             ServerWorld world = sender.getServerWorld();
             //noinspection deprecation
             if (world.isBlockLoaded(msg.pos)) {
-                LibX.getNetwork().updateTE(PacketDistributor.PLAYER.with(() -> sender), world, msg.pos);
+                NetworkImpl.getImpl().updateTE(PacketDistributor.PLAYER.with(() -> sender), world, msg.pos);
             }
         });
         ctx.get().setPacketHandled(true);

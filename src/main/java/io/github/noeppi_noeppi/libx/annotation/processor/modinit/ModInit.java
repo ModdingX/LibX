@@ -16,13 +16,18 @@ import java.io.Writer;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// TODO Check ModInit as things have been refactored. Verify that code generates correctly.
 public class ModInit  {
+    
+    public static final String CODEC_FQN = "com.mojang.serialization.Codec";
+    public static final String RECORD_CODEC_BUILDER_FQN = "com.mojang.serialization.codecs.RecordCodecBuilder";
     
     public final String modid;
     public final Element modClass;
     private final Map<Integer, List<RegistrationEntry>> registration = new HashMap<>();
     private final List<LoadableModel> models = new ArrayList<>();
     private final List<RegisteredConfig> configs = new ArrayList<>();
+    private final List<GeneratedCodec> codecs = new ArrayList<>();
 
     public ModInit(String modid, Element modClass, Messager messager) {
         this.modid = modid;
@@ -48,6 +53,10 @@ public class ModInit  {
         this.configs.add(new RegisteredConfig(name, client, classFqn));
     }
     
+    public void addCodec(GeneratedCodec codec) {
+        this.codecs.add(codec);
+    }
+    
     public void write(Filer filer, Messager messager) {
         try {
             List<RegistrationEntry> allReg = this.registration.entrySet().stream()
@@ -60,11 +69,54 @@ public class ModInit  {
             writer.write("package " + ((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + ";");
             writer.write("public class " + this.modClass.getSimpleName() + "${");
             writer.write("private static " + ModX.class.getCanonicalName() + " mod=null;");
+            if (!this.codecs.isEmpty()) {
+                writer.write("public static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_FQN + "<?>>codecs=buildCodecs();");
+                writer.write("private static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_FQN + "<?>>buildCodecs(){");
+                //noinspection deprecation
+                writer.write(ProcessorInterface.LazyMapBuilder.class.getCanonicalName() + " builder=" + ProcessorInterface.class.getCanonicalName() + ".lazyMapBuilder();");
+                for (GeneratedCodec codec : this.codecs) {
+                    writer.write("builder.put(" + codec.fqn + ".class,");
+                    writer.write("() -> " + RECORD_CODEC_BUILDER_FQN + ".<" + codec.fqn + ">create(instance->");
+                    writer.write("instance.group(");
+                    for (int i = 0; i < codec.params.size(); i++) {
+                        GeneratedCodec.CodecElement param = codec.params.get(i);
+                        writer.write("(");
+                        param.writeCode(writer);
+                        writer.write(")");
+                        if (i < codec.params.size() - 1) {
+                            writer.write(",");
+                        }
+                    }
+                    writer.write(").apply(instance,instance.stable(");
+                    writer.write("(");
+                    for (int i = 0; i < codec.params.size(); i++) {
+                        GeneratedCodec.CodecElement param = codec.params.get(i);
+                        writer.write(param.typeFqnBoxed + " ctorArg" + i);
+                        if (i < codec.params.size() - 1) {
+                            writer.write(",");
+                        }
+                    }
+                    writer.write(")->{");
+                    writer.write("return new " + codec.fqn + "(");
+                    for (int i = 0; i < codec.params.size(); i++) {
+                        writer.write("ctorArg" + i);
+                        if (i < codec.params.size() - 1) {
+                            writer.write(",");
+                        }
+                    }
+                    writer.write(");");
+                    writer.write("}");
+                    writer.write("))");
+                    writer.write("));");
+                }
+                writer.write("return builder.build();");
+                writer.write("}");
+            }
             writer.write("public static void init(" + ModX.class.getCanonicalName() + " mod){");
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
             for (RegisteredConfig config : this.configs) {
                 //noinspection deprecation
-                writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + this.quote(this.modid) + "\",\"" + this.quote(config.name) + "\")," + config.classFqn + ".class," + config.client + ");");
+                writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name) + "\")," + config.classFqn + ".class," + config.client + ");");
             }
             if (!allReg.isEmpty()) {
                 writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
@@ -81,7 +133,7 @@ public class ModInit  {
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
                 for (RegistrationEntry entry : allReg) {
-                    writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).register(\"" + this.quote(entry.registryName) + "\"," + entry.fqn + ");");
+                    writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).register(\"" + quote(entry.registryName) + "\"," + entry.fqn + ");");
                 }
                 writer.write("}");
             }
@@ -90,14 +142,14 @@ public class ModInit  {
                 writer.write("private static void registerModels(net.minecraftforge.client.event.ModelRegistryEvent event){");
                 for (LoadableModel model : this.models) {
                     //noinspection deprecation
-                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + this.quote(model.modelNamespace) + "\",\"" + this.quote(model.modelPath) + "\"));");
+                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
                 }
                 writer.write("}");
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void bakeModels(net.minecraftforge.client.event.ModelBakeEvent event){");
                 for (LoadableModel model : this.models) {
                     //noinspection deprecation
-                    writer.write(model.classFqn + "." + this.quote(model.fieldName) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + this.quote(model.modelNamespace) + "\",\"" + this.quote(model.modelPath) + "\"));");
+                    writer.write(model.classFqn + "." + quote(model.fieldName) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
                 }
                 writer.write("}");
             }
@@ -108,7 +160,7 @@ public class ModInit  {
         }
     }
     
-    private String quote(String str) {
+    public static String quote(String str) {
         StringBuilder sb = new StringBuilder();
         for (char chr : str.toCharArray()) {
             if (chr == '\\') {

@@ -7,7 +7,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 /**
- * A slot that only no items can be inserted in.
+ * A {@link SlotItemHandler slot} that no items can be inserted in.
  */
 public class SlotOutputOnly extends SlotItemHandler {
 

@@ -9,14 +9,14 @@ import net.minecraft.util.text.event.HoverEvent;
 import java.util.Map;
 
 /**
- * Translates JSON into text components.
+ * Translates JSON into {@link IFormattableTextComponent text components}.
  */
 public class JsonToTextComponent {
 
     private static final HoverEvent COPY_JSON = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent("libx.misc.copy_json"));
 
     /**
-     * This translates a piece of NBT to a colored text component in JSON style.
+     * This translates JSON to a colored text component.
      */
     public static IFormattableTextComponent toText(JsonElement element) {
         Style copyTag = Style.EMPTY.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, element.toString())).setHoverEvent(COPY_JSON);
@@ -34,8 +34,8 @@ public class JsonToTextComponent {
                 return new StringTextComponent(primitive.getAsNumber().toString()).mergeStyle(TextFormatting.GOLD);
             } else if (primitive.isString()) {
                 return new StringTextComponent("\"")
-                        .append(new StringTextComponent(escape(primitive.getAsString())).mergeStyle(TextFormatting.GREEN))
-                        .append(new StringTextComponent("\""));
+                        .appendSibling(new StringTextComponent(escape(primitive.getAsString())).mergeStyle(TextFormatting.GREEN))
+                        .appendSibling(new StringTextComponent("\""));
             } else {
                 return toTextInternal(primitive);
             }
@@ -46,11 +46,11 @@ public class JsonToTextComponent {
                 if (first) {
                     first = false;
                 } else {
-                    tc.append(new StringTextComponent(", "));
+                    tc.appendSibling(new StringTextComponent(", "));
                 }
-                tc = tc.append(toTextInternal(entry));
+                tc = tc.appendSibling(toTextInternal(entry));
             }
-            tc = tc.append(new StringTextComponent("]"));
+            tc = tc.appendSibling(new StringTextComponent("]"));
             return tc;
         } else if (element.isJsonObject()) {
             IFormattableTextComponent tc = new StringTextComponent("{");
@@ -59,15 +59,15 @@ public class JsonToTextComponent {
                 if (first) {
                     first = false;
                 } else {
-                    tc.append(new StringTextComponent(", "));
+                    tc.appendSibling(new StringTextComponent(", "));
                 }
-                tc = tc.append(new StringTextComponent("\"")
-                        .append(new StringTextComponent(entry.getKey()).mergeStyle(TextFormatting.AQUA))
-                        .append(new StringTextComponent("\"")))
-                        .append(new StringTextComponent(": "))
-                        .append(toTextInternal(entry.getValue()));
+                tc = tc.appendSibling(new StringTextComponent("\"")
+                        .appendSibling(new StringTextComponent(entry.getKey()).mergeStyle(TextFormatting.AQUA))
+                        .appendSibling(new StringTextComponent("\"")))
+                        .appendSibling(new StringTextComponent(": "))
+                        .appendSibling(toTextInternal(entry.getValue()));
             }
-            tc = tc.append(new StringTextComponent("}"));
+            tc = tc.appendSibling(new StringTextComponent("}"));
             return tc;
         } else {
             throw new IllegalArgumentException("JSON type unknown: " + element.getClass());

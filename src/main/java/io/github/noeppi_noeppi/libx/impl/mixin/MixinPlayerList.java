@@ -14,7 +14,10 @@ public class MixinPlayerList {
 
     @Inject(
             method = "Lnet/minecraft/server/management/PlayerList;reloadResources()V",
-            at = @At("RETURN")
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/management/PlayerList;sendPacketToAllPlayers(Lnet/minecraft/network/IPacket;)V"
+            )
     )
     public void reloadResources(CallbackInfo ci) {
         //noinspection ConstantConditions

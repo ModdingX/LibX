@@ -1,36 +1,48 @@
 package io.github.noeppi_noeppi.libx.config;
 
-import com.google.common.collect.*;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.crafting.IngredientStack;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
-import io.github.noeppi_noeppi.libx.impl.config.*;
+import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
+import io.github.noeppi_noeppi.libx.impl.config.ConfigState;
+import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer;
-import io.github.noeppi_noeppi.libx.util.ClassUtil;
+import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
+import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.OnlyIns;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Provides a config system for configuration files that is meant to be more easy and powerful than
- * the system by forge based on nightconfig. This system creates json files with comments based on
- * a class. That class may contain fields with {@link Config @Config} annotations. Each field with a
- * config annotation will get one value in the config file. To create sub groups, you can create static
- * nested classes inside the base class. Suppose you have the following class structure:
+ * the system by forge based on {@link com.electronwill.nightconfig NightConfig}. This system creates
+ * json files with comments based on a class. That class may contain fields with {@link Config @Config}
+ * annotations. Each field with a config annotation will get one value in the config file. To create sub
+ * groups, you can create static nested classes inside the base class. Suppose you have the following
+ * class structure:
  * 
  * <pre>
  * {@code 
@@ -85,11 +97,13 @@ import java.util.function.Function;
  * 
  * The values of the fields are the default values for the config.
  * Fields can have any type you want as long as you provide a {@link ValueMapper} for that type.
- * First you need to register that type via
- * {@link ConfigManager#registerValueMapper(ResourceLocation, ValueMapper) registerValueMapper()}.
- * Then you must provide the resource location in the {@link Config @Config} annotation of that field.
+ * You need to register that type via {@link ConfigManager#registerValueMapper(String, ValueMapper)} (or
+ * {@link ConfigManager#registerValueMapper(String, GenericValueMapper)} for generic value mappers).
+ * Then you can use that type in a config. Custom registered value mappers are unique for each mod, so
+ * yo uand another mod can add different value mappers for the same class. However you can't add two
+ * value mappers for the same class in one mod.
  * 
- * For all builtin types you can leave that value out. Fields of the following types are supported:
+ * By default the following types are supported:
  * 
  * <ul>
  *     <li>boolean</li>
@@ -99,20 +113,20 @@ import java.util.function.Function;
  *     <li>long</li>
  *     <li>float</li>
  *     <li>double</li>
- *     <li>String</li>
- *     <li>Optional&lt;T&gt;</li>
- *     <li>List&lt;T&gt;</li>
- *     <li>Map&lt;String, T&gt;</li>
- *     <li>ResourceLocation</li>
- *     <li>Ingredient</li>
- *     <li>IFormattableTextComponent</li>
+ *     <li>{@link String String}</li>
+ *     <li>{@link Optional Optional&lt;?&gt;}</li>
+ *     <li>{@link List List&lt;?&gt;}</li>
+ *     <li>{@link Map Map&lt;String, ?&gt;}</li>
+ *     <li>{@link ResourceLocation}</li>
+ *     <li>{@link Ingredient}</li>
+ *     <li>{@link IngredientStack}</li>
+ *     <li>{@link IFormattableTextComponent}</li>
+ *     <li>{@link ResourceList}</li>
+ *     <li>{@link UUID UUID}</li>
+ *     <li>Any enum</li>
+ *     <li>Any {@link Pair Pair&lt;?, ?&gt;}</li>
+ *     <li>Any {@link Triple Triple&lt;?, ?, ?&gt;}</li>
  * </ul>
- * 
- * The type {@code T} can be any of the builtin types. It must be provided to the {@link Config @Config}
- * annotation because of the type erasure.
- * 
- * Custom Value Mappers can be registered with
- * {@link ConfigManager#registerValueMapper(ResourceLocation, ValueMapper) registerValueMapper()}.
  * 
  * Configs come in two different types: Common configs and client configs. Common configs are loaded on
  * both the dedicated server and the client and are synced from server to client. Client configs are
@@ -122,149 +136,33 @@ import java.util.function.Function;
  * are unpredictable.
  * 
  * Config values may never be null in the code. However value mappers are allowed to produce json-null
- * values.If you need a nullable value in the config, use an Optional. Empty Optionals will translate
+ * values. If you need a nullable value in the config, use an Optional. Empty Optionals will translate
  * to null in the JSON.
  */
 public class ConfigManager {
-
-    // Whenever a mapper is added here, add the class to `ConfigProcessor`
-    // `ConfigProcessor` can not just access this because of class loading.
-    @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<?>, ValueMapper<?, ?>> globalMappers = ImmutableSet.of(
-            SimpleValueMappers.BOOLEAN,
-            SimpleValueMappers.BYTE,
-            SimpleValueMappers.SHORT,
-            SimpleValueMappers.INTEGER,
-            SimpleValueMappers.LONG,
-            SimpleValueMappers.FLOAT,
-            SimpleValueMappers.DOUBLE,
-            SimpleValueMappers.STRING,
-            SimpleValueMappers.OPTION,
-            SimpleValueMappers.LIST,
-            SimpleValueMappers.MAP,
-            AdvancedValueMappers.RESOURCE,
-            AdvancedValueMappers.INGREDIENT,
-            AdvancedValueMappers.TEXT_COMPONENT
-    ).stream().collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
-    @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<?>, ResourceLocation> globalMappersToRL = globalMappers.keySet().stream().map(key -> Pair.of(key, new ResourceLocation("minecraft", ClassUtil.boxed(key).getSimpleName().toLowerCase()))).collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
-    private static final Map<ResourceLocation, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
-    
-    @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = ImmutableSet.of(
-            SimpleValidators.SHORT,
-            SimpleValidators.INTEGER,
-            SimpleValidators.LONG,
-            SimpleValidators.FLOAT,
-            SimpleValidators.DOUBLE
-    ).stream().collect(ImmutableMap.toImmutableMap(ConfigValidator::annotation, Function.identity()));
-    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> validators = Collections.synchronizedMap(new HashMap<>());
     
     private static final BiMap<ResourceLocation, Class<?>> configIds = Maps.synchronizedBiMap(HashBiMap.create());
     private static final Map<Class<?>, Path> configs = Collections.synchronizedMap(new HashMap<>());
-    
-    static {
-        globalMappers.forEach((key, value) -> registerValueMapper(globalMappersToRL.get(key), value));
-    }
 
     /**
      * Registers a new {@link ValueMapper} that can be used to serialise config values.
      */
-    public static void registerValueMapper(ResourceLocation id, ValueMapper<?, ?> mapper) {
-        if (mappers.containsKey(id)) {
-            throw new IllegalStateException("Config mapper '" + id + "' is already registered.");
-        }
-        mappers.put(id, mapper);
+    public static void registerValueMapper(String modid, ValueMapper<?, ?> mapper) {
+        ModMappers.get(modid).registerValueMapper(mapper);
     }
-
+    
     /**
-     * Gets a value mapper by values of the {@link Config @Config} annotation.
+     * Registers a new {@link GenericValueMapper} that can be used to serialise config values.
      */
-    public static ResourceLocation getMapperByAnnotationValue(String annotationValue, Class<?> typeClass) {
-        if (annotationValue.isEmpty()) {
-            Class<?> boxed = ClassUtil.boxed(typeClass);
-            if (globalMappersToRL.containsKey(boxed)) {
-                return globalMappersToRL.get(boxed);
-            } else if (typeClass != boxed){
-                throw new IllegalStateException("No builtin JSON mapper for type " + typeClass + " (" + boxed + "). You must provide one yourself.");
-            } else {
-                throw new IllegalStateException("No builtin JSON mapper for type " + typeClass + ". You must provide one yourself.");
-            }
-        } else {
-            return new ResourceLocation(annotationValue);
-        }
-    }
-
-    /**
-     * Resolves a value mapper. If {@code id} is null, a value mapper is detected from the builtin
-     * mappers. If no mapper exits, an exception is thrown.
-     */
-    public static <T> ValueMapper<T, ?> getMapper(@Nullable ResourceLocation id, Class<T> fieldClass) {
-        if (fieldClass == void.class) {
-            throw new IllegalStateException("No mapper registered for void type. Probably the element type was omitted for a list or a map. If you are trying to create nested lists or maps, create a custom mapper.");
-        }
-        Class<?> boxed = ClassUtil.boxed(fieldClass);
-        if (id == null) {
-            if (globalMappers.containsKey(boxed)) {
-                //noinspection unchecked
-                return (ValueMapper<T, ?>) globalMappers.get(boxed);
-            } else if (fieldClass != boxed){
-                throw new IllegalStateException("No builtin JSON mapper for type " + fieldClass + " (" + boxed + "). You must provide one yourself.");
-            } else {
-                throw new IllegalStateException("No builtin JSON mapper for type " + fieldClass + ". You must provide one yourself.");
-            }
-        } else {
-            if (mappers.containsKey(id)) {
-                ValueMapper<?, ?> mapper = mappers.get(id);
-                if (mapper.type() == boxed) {
-                    //noinspection unchecked
-                    return (ValueMapper<T, ?>) mapper;
-                } else {
-                    throw new IllegalStateException("Config mapper '" + id + "' can not be used on values of type " + fieldClass);
-                }
-            } else {
-                throw new IllegalStateException("No config mapper registered for id '" + id + "'.");
-            }
-        }
+    public static void registerValueMapper(String modid, GenericValueMapper<?, ?, ?> mapper) {
+        ModMappers.get(modid).registerValueMapper(mapper);
     }
     
     /**
      * Registers a new {@link ConfigValidator} that can be used to validate config values.
      */
-    public static void registerConfigValidator(ConfigValidator<?, ?> validator) {
-        if (validators.containsKey(validator.annotation())) {
-            throw new IllegalStateException("Config validator '" + validator.annotation() + "' is already registered.");
-        }
-        validators.put(validator.annotation(), validator);
-    }
-    
-    /**
-     * Gets a config validator by an annotation class or null if the annotation is not registered as
-     * a validator.
-     */
-    public static <A extends Annotation> ConfigValidator<?, A> getValidatorByAnnotation(Class<A> validatorClass) {
-        // Annotations will be proxies at runtime so we can't check classes for equality.
-        if (Config.class.isAssignableFrom(validatorClass) || Group.class.isAssignableFrom(validatorClass)
-                || OnlyIn.class.isAssignableFrom(validatorClass) || OnlyIns.class.isAssignableFrom(validatorClass)) {
-            // Just in case someone register those...
-            return null;
-        } else {
-            Optional<? extends ConfigValidator<?, ?>> validator = globalValidators.entrySet().stream()
-                    .filter(e -> e.getKey().isAssignableFrom(validatorClass))
-                    .map(Map.Entry::getValue)
-                    .findFirst();
-            if (validator.isPresent()) {
-                //noinspection unchecked
-                return (ConfigValidator<?, A>) validator.get();
-            } else {
-                validator = validators.entrySet().stream()
-                        .filter(e -> e.getKey().isAssignableFrom(validatorClass))
-                        .map(Map.Entry::getValue)
-                        .findFirst();
-                //noinspection unchecked
-                return (ConfigValidator<?, A>) validator.orElse(null);
-            }
-        }
+    public static void registerConfigValidator(String modid, ConfigValidator<?, ?> validator) {
+        ModMappers.get(modid).registerConfigValidator(validator);
     }
 
     /**
@@ -366,7 +264,7 @@ public class ConfigManager {
             ConfigImpl config = ConfigImpl.getConfig(id);
             if (!config.clientConfig) {
                 PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                LibX.getNetwork().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                NetworkImpl.getImpl().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
             }
         } else {
             LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
@@ -382,7 +280,7 @@ public class ConfigManager {
                 ConfigImpl config = ConfigImpl.getConfig(id);
                 if (!config.clientConfig) {
                     PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                    LibX.getNetwork().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                    NetworkImpl.getImpl().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
                 }
             }
         } else {

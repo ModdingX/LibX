@@ -26,7 +26,7 @@ public abstract class ModX {
     public final String modid;
 
     /**
-     * A logger for the mod.
+     * A {@link Logger} for the mod.
      */
     public final Logger logger;
 
@@ -35,7 +35,7 @@ public abstract class ModX {
     private final List<Runnable> setupTasks = new ArrayList<>();
 
     /**
-     * Overriding classes should provide a public no-arg constructor hat calls this with
+     * Overriding classes should provide a public no-arg constructor that calls this with
      * the values needed.
      */
     protected ModX(String modid, @Nullable ItemGroup tab) {
@@ -86,6 +86,13 @@ public abstract class ModX {
     }
     
     protected final void callGeneratedCode() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        if (stackTrace.length > 2) {
+            StackTraceElement element = stackTrace[2];
+            if (!element.getClassName().startsWith("io.github.noeppi_noeppi.libx")) {
+                this.logger.warn("ModX#callGeneratedCode was called from outside the library. This might fail future versions. Caller was: " + element.getClassName() + " Please report to mod author.");
+            }
+        }
         try {
             Class<?> clazz;
             try {

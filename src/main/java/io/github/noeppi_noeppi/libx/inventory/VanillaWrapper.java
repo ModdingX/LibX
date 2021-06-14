@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Wraps an IItemHandlerModifiable to a vanilla IInventory.
+ * Wraps an {@link IItemHandlerModifiable} to a vanilla {@link IInventory}.
  */
 public class VanillaWrapper implements IInventory {
 
@@ -19,9 +19,10 @@ public class VanillaWrapper implements IInventory {
     public final Runnable dirty;
 
     /**
-     * Wraps the given IItemHandlerModifiable to a vanilla IInventory.
+     * Wraps the given {@link IItemHandlerModifiable} to a vanilla {@link IInventory}.
      *
-     * @param dirty A runnable which is always called when {@code markDirty();} is called on the vanilla inventory.
+     * @param dirty A runnable which is always called when {@link IInventory#markDirty() markDirty()}
+     *              is called on the vanilla inventory.
      */
     public VanillaWrapper(IItemHandlerModifiable handler, @Nullable Runnable dirty) {
         this.handler = handler;

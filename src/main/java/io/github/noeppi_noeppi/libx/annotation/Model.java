@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 public @interface Model {
 
     /**
-     * The namespace of the model .Deaults to the modid inferred for this element. See {@link ForMod}.
+     * The namespace of the model. Defaults to the modid inferred for this element. See {@link ForMod}.
      */
     String namespace() default "";
 

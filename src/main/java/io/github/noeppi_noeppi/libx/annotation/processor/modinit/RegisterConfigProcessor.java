@@ -11,7 +11,7 @@ public class RegisterConfigProcessor {
     
     public static void processRegisterConfig(Element element, ModEnv env) {
         if (!(element instanceof QualifiedNameable)) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for element annotaed with @RegisterConfig", element);
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for element annotated with @RegisterConfig", element);
             return;
         }
         if (!(element.getEnclosingElement() instanceof PackageElement)) {

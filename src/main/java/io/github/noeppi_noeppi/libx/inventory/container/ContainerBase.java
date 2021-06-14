@@ -1,81 +1,40 @@
 package io.github.noeppi_noeppi.libx.inventory.container;
 
 import com.mojang.datafixers.util.Function4;
-import com.mojang.datafixers.util.Function5;
-import io.github.noeppi_noeppi.libx.fi.Function6;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A base class for containers that handles basic container logic such as shift-clicks,
- * and laying out slots.
- * <p>
- * There are some things you need to pay attention to if you want to use this: <br>
- * Always register player inventory slots with layoutPlayerInventorySlots <br>
- * Register input slots, THEN output slots and THEN player inventory. <br>
- * </p>
- * <p>
- * Call the super constructor with <br>
- * firstOutputSlot    =  the number of input slot you have / the first output slot number <br>
- * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number. <br>
- * </p>
+ * A base class for {@link Container containers}. Provides some utilities that are useful for any type
+ * of container. When using this it's important to register the player inventory slots through
+ * {@link ContainerBase#layoutPlayerInventorySlots(int, int)} and after all other slots.
  */
-public abstract class ContainerBase<T extends TileEntity> extends Container {
-
-    public final T tile;
-    public final PlayerEntity player;
+public abstract class ContainerBase extends Container {
+    
     public final IItemHandler playerInventory;
-    public final BlockPos pos;
-    public final World world;
-
-    // Used for automatic transferStackInSlot. To further restrict this use Slot#isItemValid.
-    public final int firstOutputSlot;
-    public final int firstInventorySlot;
-
-    protected ContainerBase(@Nullable ContainerType<?> type, int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player, int firstOutputSlot, int firstInventorySlot) {
-        super(type, windowId);
-        // This should always work. If it doesn't something is very wrong.
-        //noinspection unchecked
-        this.tile = (T) world.getTileEntity(pos);
-        this.player = player;
+    
+    protected ContainerBase(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory) {
+        super(type, id);
         this.playerInventory = new InvWrapper(playerInventory);
-        this.pos = pos;
-        this.world = world;
-        this.firstOutputSlot = firstOutputSlot;
-        this.firstInventorySlot = firstInventorySlot;
-    }
-
-    @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
-        //noinspection ConstantConditions
-        return isWithinUsableDistance(IWorldPosCallable.of(this.tile.getWorld(), this.tile.getPos()), this.player, this.tile.getBlockState().getBlock());
     }
 
     /**
      * Places the player inventory slots into the container.
      *
      * @param leftCol The x coordinate of the top left slot
-     * @param topRow  The y coordinate of the top left lot
+     * @param topRow  The y coordinate of the top left slot
      */
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
         this.addSlotBox(this.playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
-
         topRow += 58;
         this.addSlotRange(this.playerInventory, 0, leftCol, topRow, 9, 18);
     }
@@ -86,12 +45,12 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
      * @param handler   The inventory of the slot
      * @param index     The index of the first slot
      * @param x         The x coordinate of the top left slot
-     * @param y         The y coordinate of the top left lot
+     * @param y         The y coordinate of the top left slot
      * @param horAmount The amount of slots in horizontal direction
-     * @param dx        The space between two slots in horizontal direction. Should not be less that 16 or
+     * @param dx        The space between two slots in horizontal direction. Should not be less than 16 or
      *                  you create overlapping slots. Most of the time this is 18
      * @param verAmount The amount of slots in vertical direction
-     * @param dy        The space between two slots in vertical direction. Should not be less that 16 or
+     * @param dy        The space between two slots in vertical direction. Should not be less than 16 or
      *                  you create overlapping slots. Most of the time this is 18
      * @return The next index to be used to create a slot
      */
@@ -105,9 +64,9 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
      * @param handler The inventory of the slot
      * @param index   The index of the first slot
      * @param x       The x coordinate of the top left slot
-     * @param y       The y coordinate of the top left lot
+     * @param y       The y coordinate of the top left slot
      * @param amount  The amount of slots
-     * @param dx      The space between two slots. Should not be less that 16 or
+     * @param dx      The space between two slots. Should not be less than 16 or
      *                you create overlapping slots. Most of the time this is 18
      * @return The next index to be used to create a slot
      */
@@ -121,12 +80,12 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
      * @param handler     The inventory of the slot
      * @param index       The index of the first slot
      * @param x           The x coordinate of the top left slot
-     * @param y           The y coordinate of the top left lot
+     * @param y           The y coordinate of the top left slot
      * @param horAmount   The amount of slots in horizontal direction
-     * @param dx          The space between two slots in horizontal direction. Should not be less that 16 or
+     * @param dx          The space between two slots in horizontal direction. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
      * @param verAmount   The amount of slots in vertical direction
-     * @param dy          The space between two slots in vertical direction. Should not be less that 16 or
+     * @param dy          The space between two slots in vertical direction. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
      * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
      *                    or {@code SlotOutputOnly::new} for output slots.
@@ -146,9 +105,9 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
      * @param handler     The inventory of the slot
      * @param index       The index of the first slot
      * @param x           The x coordinate of the top left slot
-     * @param y           The y coordinate of the top left lot
+     * @param y           The y coordinate of the top left slot
      * @param amount      The amount of slots
-     * @param dx          The space between two slots. Should not be less that 16 or
+     * @param dx          The space between two slots. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
      * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
      *                    or {@code SlotOutputOnly::new} for output slots.
@@ -161,59 +120,6 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
             index++;
         }
         return index;
-    }
-
-    public BlockPos getPos() {
-        return this.pos;
-    }
-
-    public World getWorld() {
-        return this.world;
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity player, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack = slot.getStack();
-            itemstack = stack.copy();
-
-            final int inventorySize = this.firstInventorySlot;
-            final int playerInventoryEnd = inventorySize + 27;
-            final int playerHotBarEnd = playerInventoryEnd + 9;
-
-            if (index < this.firstOutputSlot) {
-                if (!this.mergeItemStack(stack, inventorySize, playerHotBarEnd, true)) {
-                    return ItemStack.EMPTY;
-                }
-
-                slot.onSlotChange(stack, itemstack);
-            } else if (index >= inventorySize) {
-                if (!this.mergeItemStack(stack, 0, this.firstOutputSlot, false)) {
-                    return ItemStack.EMPTY;
-                } else if (index < playerInventoryEnd) {
-                    if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotBarEnd, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index < playerHotBarEnd && !this.mergeItemStack(stack, inventorySize, playerInventoryEnd, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.mergeItemStack(stack, inventorySize, playerHotBarEnd, false)) {
-                return ItemStack.EMPTY;
-            }
-            if (stack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
-            } else {
-                slot.onSlotChanged();
-            }
-            if (stack.getCount() == itemstack.getCount()) {
-                return ItemStack.EMPTY;
-            }
-            slot.onTake(player, stack);
-        }
-        return itemstack;
     }
 
     // As opposed to the super method this checks for Slot#isValid(ItemStack)
@@ -300,34 +206,5 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
         }
 
         return flag;
-    }
-
-    /**
-     * Creates a container type for a container.
-     *
-     * @param constructor A method reference to the container's constructor.
-     */
-    public static <T extends Container> ContainerType<T> createContainerType(Function5<Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
-        return IForgeContainerType.create((windowId1, inv, data) -> {
-            BlockPos pos1 = data.readBlockPos();
-            World world1 = inv.player.getEntityWorld();
-            return constructor.apply(windowId1, world1, pos1, inv, inv.player);
-        });
-    }
-
-    /**
-     * Creates a container type for a container.
-     *
-     * @param constructor A method reference to the container's constructor.
-     */
-    public static <T extends Container> ContainerType<T> createContainerType(Function6<ContainerType<T>, Integer, World, BlockPos, PlayerInventory, PlayerEntity, T> constructor) {
-        AtomicReference<ContainerType<T>> typeRef = new AtomicReference<>(null);
-        ContainerType<T> type = IForgeContainerType.create((windowId1, inv, data) -> {
-            BlockPos pos1 = data.readBlockPos();
-            World world1 = inv.player.getEntityWorld();
-            return constructor.apply(typeRef.get(), windowId1, world1, pos1, inv, inv.player);
-        });
-        typeRef.set(type);
-        return type;
     }
 }

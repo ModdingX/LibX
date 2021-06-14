@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.render;
 import net.minecraftforge.event.TickEvent;
 
 /**
- * On client this counts the ticks in game. Useful for render code.
+ * On the client this counts the ticks in game. Useful for render code.
  */
 public class ClientTickHandler {
 

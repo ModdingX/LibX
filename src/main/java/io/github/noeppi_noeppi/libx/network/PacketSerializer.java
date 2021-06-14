@@ -5,7 +5,6 @@ import net.minecraft.network.PacketBuffer;
 
 /**
  * An interface implementing the logic on how to serialise and deserialise a message and how to handle it.
- * For an example see {@link TeUpdateSerializer}.
  */
 public interface PacketSerializer<T> {
 

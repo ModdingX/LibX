@@ -5,12 +5,13 @@ import net.minecraft.util.text.*;
 import java.util.function.BiConsumer;
 
 /**
- * Utilities for text components.
+ * Utilities for {@link ITextComponent text components}.
  */
 public class TextComponentUtil {
 
     /**
-     * Gets a text component as a string formatted with ANSI escape codes to be printed on the log.
+     * Gets a {@link ITextComponent text component} as a string formatted with ANSI escape codes to
+     * be printed on the console.
      */
     public static String getConsoleString(ITextComponent tc) {
         StringBuilder sb = new StringBuilder();
@@ -25,7 +26,7 @@ public class TextComponentUtil {
     
     private static void formattingCodes(StringBuilder sb, Style style) {
         if (style.getColor() != null) {
-            int color = style.getColor().getColor();
+            int color = style.getColor().color;
             sb.append("\u001B[38;2;").append((color >> 16) & 0xFF).append(";").append((color >> 8) & 0xFF).append(";").append(color & 0xFF).append("m");
         }
         if (style.bold != null) {
@@ -87,7 +88,7 @@ public class TextComponentUtil {
                 traverseComponent(child, style, consumer);
             }
         } else if (tc instanceof KeybindTextComponent) {
-            traverseComponent(((KeybindTextComponent) tc).func_240698_i_(), style, consumer);
+            traverseComponent(((KeybindTextComponent) tc).getDisplayComponent(), style, consumer);
         } else if (tc instanceof ITextComponent) {
             consumer.accept(((ITextComponent) tc).getUnformattedComponentText(), style);
         } else {

@@ -8,7 +8,9 @@
   "server": [],
   "mixins": [
     "MixinAbstractBlockState",
+    "MixinDimensionGeneratorSettings",
     "MixinFluidState",
+    "MixinPlayerInteractionManager",
     "MixinPlayerList",
     "MixinResourcePackList"
   ]

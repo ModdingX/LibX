@@ -22,3 +22,7 @@ dependencies {
 ```
 
 **Javadoc can be found here: https://git.io/libx**
+
+### LibX 2
+
+LibX 2 will be the version of LibX for 1.17. This branch is used to implement breaking changes on top of LibX 1 in minecraft 1.16 to make porting faster.

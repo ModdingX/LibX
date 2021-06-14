@@ -26,7 +26,7 @@ import java.util.Random;
 public class RenderHelperItem {
 
     /**
-     * Renders an item tinted in the given color.
+     * Renders an {@link ItemStack item} tinted in the given color.
      */
     public static void renderItemTinted(ItemStack stack, ItemCameraTransforms.TransformType transformType, int light, int overlay, MatrixStack matrixStack, IRenderTypeBuffer buffer, float r, float g, float b, float alpha) {
         if (!stack.isEmpty()) {
@@ -45,7 +45,7 @@ public class RenderHelperItem {
             }
 
             if (!model.isBuiltInRenderer() && (stack.getItem() != Items.TRIDENT || isFixed)) {
-                RenderType type = RenderTypeLookup.func_239219_a_(stack, true);
+                RenderType type = RenderTypeLookup.getItemRenderType(stack, true);
                 if (isGui && Objects.equals(type, Atlases.getTranslucentCullBlockType())) {
                     type = Atlases.getTranslucentCullBlockType();
                 }
@@ -66,7 +66,7 @@ public class RenderHelperItem {
             } else {
                 //noinspection deprecation
                 GlStateManager.color4f(r, g, b, alpha);
-                stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, transformType, matrixStack, buffer, light, overlay);
+                stack.getItem().getItemStackTileEntityRenderer().render(stack, transformType, matrixStack, buffer, light, overlay);
                 //noinspection deprecation
                 GlStateManager.color4f(1, 1, 1, 1);
             }
@@ -110,7 +110,7 @@ public class RenderHelperItem {
     }
 
     /**
-     * Renders an item into a gui. This allows to set the size of the item and whether the
+     * Renders an {@link ItemStack item} into a gui. This allows to set the size of the item and whether the
      * amount should be included.
      */
     public static void renderItemGui(MatrixStack matrixStack, IRenderTypeBuffer buffer, ItemStack stack, int x, int y, int size, boolean includeAmount) {
@@ -118,7 +118,7 @@ public class RenderHelperItem {
     }
 
     /**
-     * Renders an item into a gui. This allows to set the size of the item and whether the
+     * Renders an {@link ItemStack item} into a gui. This allows to set the size of the item and whether the
      * amount should be included.
      */
     public static void renderItemGui(MatrixStack matrixStack, IRenderTypeBuffer buffer, ItemStack stack, int x, int y, int size, boolean includeAmount, float r, float g, float b, float alpha) {

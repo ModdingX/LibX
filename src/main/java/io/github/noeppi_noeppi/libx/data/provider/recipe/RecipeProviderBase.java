@@ -1,19 +1,30 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.data.*;
+import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.RecipeProvider;
+import net.minecraft.item.Item;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * A base class for recipe provider
+ * Provider for all kinds of recipes. By itself does not add support for any recipes. However you can
+ * add extensions by implementing the interface. All extensions must implement {@link RecipeExtension}.
+ * As this class implements {@link RecipeExtension} as well, you don't need to implement any methods when
+ * adding an extension. For a list of available extensions, see the subclasses of {@link RecipeExtension}.
  */
-public abstract class RecipeProviderBase extends RecipeProvider {
+public abstract class RecipeProviderBase extends RecipeProvider implements RecipeExtension {
 
     protected final ModX mod;
+    private Consumer<IFinishedRecipe> consumer;
 
     public RecipeProviderBase(ModX mod, DataGenerator generator) {
         super(generator);
@@ -22,107 +33,57 @@ public abstract class RecipeProviderBase extends RecipeProvider {
 
     @Nonnull
     @Override
-    public String getName() {
+    public final String getName() {
         return this.mod.modid + " recipes";
     }
+    
+    protected abstract void setup();
 
-    protected abstract void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer);
-
-    /**
-     * Gets a resource location with the namespace being the modid of the mod given in constructor
-     * and the path being the registry path of the given item.
-     */
-    protected ResourceLocation loc(IItemProvider item) {
-        //noinspection ConstantConditions
-        return new ResourceLocation(this.mod.modid, item.asItem().getRegistryName().getPath());
+    @Override
+    protected final void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+        this.consumer = consumer;
+        this.setup();
     }
 
     /**
-     * Gets a resource location with the namespace being the modid of the mod given in constructor
+     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
+     * and the path being the registry path of the given item.
+     */
+    public ResourceLocation loc(IItemProvider item) {
+        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+    }
+
+    /**
+     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
      * and the path being the registry path of the given item followed by an underscore and the
      * given suffix.
      */
-    protected ResourceLocation loc(IItemProvider item, String suffix) {
-        //noinspection ConstantConditions
-        return new ResourceLocation(this.mod.modid, item.asItem().getRegistryName().getPath() + "_" + suffix);
+    public ResourceLocation loc(IItemProvider item, String suffix) {
+        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath() + "_" + suffix);
     }
 
-    /**
-     * Creates four recipes like it's done with blocks, ingots and nuggets.
-     */
-    @SuppressWarnings("ConstantConditions")
-    public void makeBlockItemNugget(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot, IItemProvider nugget) {
-
-        this.makeBlockItem(consumer, block, ingot);
-
-        ShapedRecipeBuilder.shapedRecipe(ingot)
-                .key('a', nugget)
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .setGroup(ingot.asItem().getRegistryName() + "_from_nuggets")
-                .addCriterion("has_item", hasItem(nugget))
-                .build(consumer, new ResourceLocation(this.mod.modid, ingot.asItem().getRegistryName().getPath() + "_from_nuggets"));
-
-        ShapelessRecipeBuilder.shapelessRecipe(nugget, 9)
-                .addIngredient(ingot)
-                .setGroup(nugget.asItem().getRegistryName() + "_from_ingot")
-                .addCriterion("has_item", hasItem(ingot))
-                .build(consumer, new ResourceLocation(this.mod.modid, nugget.asItem().getRegistryName().getPath() + "_from_ingot"));
+    @Override
+    public RecipeProviderBase provider() {
+        return this;
     }
 
-    /**
-     * Creates two recipes like it's done with blocks and ingots or ingots and nuggets
-     */
-    @SuppressWarnings("ConstantConditions")
-    public void makeBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot) {
-
-        ShapedRecipeBuilder.shapedRecipe(block)
-                .key('a', ingot)
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .setGroup(block.asItem().getRegistryName() + "_from_ingots")
-                .addCriterion("has_item", hasItem(ingot))
-                .build(consumer, new ResourceLocation(this.mod.modid, block.asItem().getRegistryName().getPath() + "_from_ingots"));
-
-        ShapelessRecipeBuilder.shapelessRecipe(ingot, 9)
-                .addIngredient(block)
-                .setGroup(ingot.asItem().getRegistryName() + "_from_block")
-                .addCriterion("has_item", hasItem(block))
-                .build(consumer, new ResourceLocation(this.mod.modid, ingot.asItem().getRegistryName().getPath() + "_from_block"));
+    @Override
+    public Consumer<IFinishedRecipe> consumer() {
+        return this.consumer;
     }
 
-    /**
-     * Calls {@link RecipeProviderBase#makeSmallBlockItem(Consumer, IItemProvider, IItemProvider, boolean)} with default value true for {@code revert}
-     */
-    public void makeSmallBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot) {
-
-        this.makeSmallBlockItem(consumer, block, ingot, true);
+    @Override
+    public CriterionInstance criterion(IItemProvider item) {
+        return hasItem(item);
     }
 
-    /**
-     * Creates one or two recipes like it's done with blocks with 2x2 ingots
-     *
-     * @param revert Whether the block can be crafted back or not
-     */
-    @SuppressWarnings("ConstantConditions")
-    public void makeSmallBlockItem(Consumer<IFinishedRecipe> consumer, IItemProvider block, IItemProvider ingot, boolean revert) {
+    @Override
+    public CriterionInstance criterion(ITag<Item> item) {
+        return hasItem(item);
+    }
 
-        ShapedRecipeBuilder.shapedRecipe(block)
-                .key('a', ingot)
-                .patternLine("aa")
-                .patternLine("aa")
-                .setGroup(block.asItem().getRegistryName() + "_from_ingots")
-                .addCriterion("has_item", hasItem(ingot))
-                .build(consumer, new ResourceLocation(this.mod.modid, block.asItem().getRegistryName().getPath() + "_from_ingots"));
-
-        if (revert) {
-            ShapelessRecipeBuilder.shapelessRecipe(ingot, 4)
-                    .addIngredient(block)
-                    .setGroup(ingot.asItem().getRegistryName() + "_from_block")
-                    .addCriterion("has_item", hasItem(block))
-                    .build(consumer, new ResourceLocation(this.mod.modid, ingot.asItem().getRegistryName().getPath() + "_from_block"));
-        }
+    @Override
+    public CriterionInstance criterion(ItemPredicate... items) {
+        return hasItem(items);
     }
 }

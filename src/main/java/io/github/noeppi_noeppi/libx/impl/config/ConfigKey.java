@@ -2,11 +2,10 @@ package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.config.Config;
-import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import io.github.noeppi_noeppi.libx.config.ConfigValidator;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.impl.config.validators.ConfiguredValidator;
 import io.github.noeppi_noeppi.libx.util.ClassUtil;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
@@ -21,21 +20,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ConfigKey {
     
     public final Field field;
-    public final ResourceLocation mapperId;
     public final ValueMapper<?, ?> mapper;
-    public final Class<?> elementType;
     public final List<String> path;
     public final List<String> comment;
     private final ConfiguredValidator<?, ?> validator;
 
-    private ConfigKey(Field field, ResourceLocation mapperId, ValueMapper<?, ?> mapper, Class<?> elementType, ImmutableList<String> path, ImmutableList<String> comment, ConfiguredValidator<?, ?> validator) {
+    private ConfigKey(Field field, ValueMapper<?, ?> mapper, ImmutableList<String> path, ImmutableList<String> comment, ConfiguredValidator<?, ?> validator) {
         this.field = field;
-        this.mapperId = mapperId;
         this.mapper = mapper;
-        this.elementType = elementType;
         this.path = path;
         ImmutableList.Builder<String> commentBuilder = ImmutableList.builder();
         commentBuilder.addAll(comment);
+        commentBuilder.addAll(mapper.comment());
         if (validator != null) {
             commentBuilder.addAll(validator.comment());
         }
@@ -48,12 +44,12 @@ public class ConfigKey {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         ConfigKey configKey = (ConfigKey) o;
-        return this.field.equals(configKey.field) && this.mapperId.equals(configKey.mapperId) && this.elementType.equals(configKey.elementType);
+        return this.field.equals(configKey.field);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.field, this.mapperId, this.elementType);
+        return Objects.hash(this.field);
     }
     
     public Object validate(Object value, String action, @Nullable AtomicBoolean needsCorrection) {
@@ -73,7 +69,7 @@ public class ConfigKey {
     }
 
     @Nullable
-    public static ConfigKey create(Field field, Class<?> configBaseClass) {
+    public static ConfigKey create(String modid, Field field, Class<?> configBaseClass) {
         try {
             if (!Modifier.isStatic(field.getModifiers())) {
                 return null;
@@ -83,7 +79,6 @@ public class ConfigKey {
                 return null;
             }
             field.setAccessible(true);
-            ResourceLocation mapperId = ConfigManager.getMapperByAnnotationValue(config.mapper(), field.getType());
             List<String> path = new ArrayList<>();
             path.add(0, field.getName());
             Class<?> currentStep = field.getDeclaringClass();
@@ -96,7 +91,7 @@ public class ConfigKey {
             }
             ConfiguredValidator<?, ?> validator = null;
             for (Annotation annotation : field.getAnnotations()) {
-                ConfigValidator<?, ?> v = ConfigManager.getValidatorByAnnotation(annotation.getClass());
+                ConfigValidator<?, ?> v = ModMappers.get(modid).getValidatorByAnnotation(annotation.getClass());
                 if (v != null) {
                     if (validator != null) {
                         throw new IllegalStateException("A config key may only have one validator annotation but two are given: " + validator.getAnnotationClass().getName() + " and " + annotation.getClass().getName());
@@ -108,7 +103,7 @@ public class ConfigKey {
                     }
                 }
             }
-            return new ConfigKey(field, mapperId, ConfigManager.getMapper(mapperId, field.getType()), config.elementType(), ImmutableList.copyOf(path), ImmutableList.copyOf(config.value()), validator);
+            return new ConfigKey(field, ModMappers.get(modid).getMapper(field), ImmutableList.copyOf(path), ImmutableList.copyOf(config.value()), validator);
         } catch (SecurityException e) {
             throw new IllegalStateException("Failed to create config key for field " + field, e);
         }

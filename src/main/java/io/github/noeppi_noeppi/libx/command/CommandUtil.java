@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 public class CommandUtil {
 
     /**
-     * As the normal register method in ArgumentTypes does not work with
+     * As the normal register method in {@link ArgumentTypes} does not work with
      * generic arguments because of javas bad type inference here you can
      * register your generic argument types. Just make sure you don't
      * register something that breaks type safety.
@@ -27,6 +27,7 @@ public class CommandUtil {
 
     /**
      * Gets an argument for a command and if it's not present a default value.
+     * 
      * @param name The argument's name
      * @param clazz The argument's class
      * @param defaultValue A default value when the argument is not present.

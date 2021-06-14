@@ -16,7 +16,7 @@ import java.util.List;
 public class RecipeHelper {
 
     /**
-     * Gets whether an ItemStack is a valid input for at least one recipe of a given recipe type.
+     * Gets whether an {@link ItemStack} is a valid input for at least one recipe of a given recipe type.
      *
      * @param rm The recipe manager to use. You can get one from a world.
      */
@@ -34,8 +34,8 @@ public class RecipeHelper {
     }
 
     /**
-     * Checks whether all the ingredients of a recipe are present in a list of ItemStacks. This
-     * does not check that all ingredients are on different slots.
+     * Checks whether all the ingredients of a recipe are present in a list of {@link ItemStack ItemStacks}.
+     * This does not check that all ingredients are on different slots.
      *
      * @param exactMatch When this is true this will return false if the stack list contains
      *                   more items than the recipe requires.
@@ -63,13 +63,13 @@ public class RecipeHelper {
     }
 
     /**
-     * Takes a list of ItemStacks and stacks them up so multiple ItemStacks that can be
+     * Takes a list of {@link ItemStack ItemStacks} and stacks them up so multiple ItemStacks that can be
      * stacked are transformed into one.
      *
      * @param ignoreMaxStackSize Whether this should create ItemStacks with a stack size
      *                           greater than the maximum.
      */
-    public List<ItemStack> stackUp(List<ItemStack> stacks, boolean ignoreMaxStackSize) {
+    public static List<ItemStack> stackUp(List<ItemStack> stacks, boolean ignoreMaxStackSize) {
         List<ItemStack> stacked = new ArrayList<>();
         for (ItemStack stack : stacks) {
             if (!stack.isEmpty()) {

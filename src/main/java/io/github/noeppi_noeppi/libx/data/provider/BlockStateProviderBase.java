@@ -3,6 +3,8 @@ package io.github.noeppi_noeppi.libx.data.provider;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
@@ -15,18 +17,20 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * A base class for block state and model provider. When overriding this you should call the {@code manualState}
- * and {@code manualModel} methods in {@code setup}. Unlike the other provider this has an extra method
- * because custom models would not generate if not done there. Another thing you can do is override {@code defaultState} and
- * {@code defaultModel} to adjust the state and model depending on the block.
+ * A base class for block state and model providers. When overriding this, you should call the
+ * {@link #manualState(Block) manualState} and {@link #manualModel(Block) manualModel} methods in
+ * {@link #setup() setup}. Unlike the other provider this has an extra method because custom models
+ * would not generate if not done there. Another thing you can do is override
+ * {@link #defaultState(ResourceLocation, Block, ModelFile) defaultState} and
+ * {@link #defaultModel(ResourceLocation, Block) defaultModel} to adjust the state and model depending
+ * on the block.
  */
 public abstract class BlockStateProviderBase extends BlockStateProvider {
+
+    public static final ResourceLocation LEAVES_PARENT = new ResourceLocation("minecraft", "block/leaves");
 
     protected final ModX mod;
 
@@ -87,22 +91,22 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     protected abstract void setup();
 
     /**
-     * Creates a block state for the given block using the given model. The default implementation checks whether
-     * the block has the properties {@code BlockStateProperties.HORIZONTAL_FACING} or
-     * {@code BlockStateProperties.FACING} and creates block states matching those.
+     * Creates a block state for the given block using the given model. The default implementation checks
+     * whether the block has the properties {@link BlockStateProperties#HORIZONTAL_FACING} or
+     * {@link BlockStateProperties#FACING} and creates block states matching those.
      */
     protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
         if (block.getStateContainer().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
                 builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
-                        .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+                        .addModels(new ConfiguredModel(model, 0, (int) direction.getOpposite().getHorizontalAngle(), false));
             }
         } else if (block.getStateContainer().getProperties().contains(BlockStateProperties.FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.FACING.getAllowedValues()) {
                 builder.partialState().with(BlockStateProperties.FACING, direction)
-                        .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+                        .addModels(new ConfiguredModel(model, direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0, direction.getAxis().isVertical() ? 0 : (int) direction.getOpposite().getHorizontalAngle(), false));
             }
         } else {
             this.simpleBlock(block, model);
@@ -110,11 +114,19 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     }
 
     /**
-     * Creates a model for the given block. The default implementation always creates cube_all models.
+     * Creates a model for the given block. The default implementation creates special models for blocks
+     * of type {@link FlowingFluidBlock} and {@link LeavesBlock}.
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateContainer().getValidStates().stream().allMatch(state -> state.getRenderType() != BlockRenderType.MODEL)) {
-            return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
+            if (block instanceof FlowingFluidBlock) {
+                return this.models().getBuilder(id.getPath()).texture("particle", ((FlowingFluidBlock) block).getFluid().getAttributes().getStillTexture());
+            } else {
+                return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
+            }
+        } else if (block instanceof LeavesBlock) {
+            return this.models().withExistingParent(Objects.requireNonNull(block.getRegistryName()).getPath(), LEAVES_PARENT)
+                    .texture("all", this.blockTexture(block));
         } else {
             return this.cubeAll(block);
         }

@@ -24,7 +24,7 @@ public interface ConfigValidator<T, A extends Annotation> {
     Class<A> annotation();
 
     /**
-     * Validates a value. For a correct value this should retuen an empty Optional.
+     * Validates a value. For a correct value this should return an empty Optional.
      * For an incorrect value this should return an Optional containing the corrected value.
      */
     Optional<T> validate(T value, A validator);
