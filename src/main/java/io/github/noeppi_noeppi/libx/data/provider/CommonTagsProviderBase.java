@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 /**
  * A provider for {@link BlockTags block}, {@link ItemTags item} and {@link FluidTags fluid} tags.
- * You can set your tags in {@link #setup() setup}. With {@link #defaultItemTags(Item) defualtItemTags},
- * {@link #defaultBlockTags(Block) defualtBlockTags} and {@link #defaultFluidTags(Fluid) defualtFluidTags},
+ * You can set your tags in {@link #setup() setup}. With {@link #defaultItemTags(Item) defaultItemTags},
+ * {@link #defaultBlockTags(Block) defaultBlockTags} and {@link #defaultFluidTags(Fluid) defaultFluidTags},
  * you can add default tags that can be retrieved from the element.
  */
 public abstract class CommonTagsProviderBase implements IDataProvider {
