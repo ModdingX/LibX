@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class LibXDatapack extends ModFileResourcePack {
 
     public static final String PREFIX = "libxdata";
-    public static final int PACK_VERSION = 6;
+    public static final int PACK_VERSION = 6; // TODO update in 1.17
     
     private final ModFile modFile;
     private final String packId;
@@ -34,15 +34,16 @@ public class LibXDatapack extends ModFileResourcePack {
             Writer writer = new OutputStreamWriter(bout);
             JsonObject packFile = new JsonObject();
             JsonObject packSection = new JsonObject();
-            packSection.addProperty("description", "Fake Datapack: " + modFile.getFileName() + "/" + packId);
+            packSection.addProperty("description", "Dynamic Datapack: " + modFile.getFileName() + "/" + packId);
             packSection.addProperty("pack_format", PACK_VERSION);
             packFile.add("pack", packSection);
+            //noinspection UnnecessaryToStringCall
             writer.write(packFile.toString() + "\n");
             writer.close();
             bout.close();
             this.packMcmeta = bout.toByteArray();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to create virtual datapack", e);
+            throw new RuntimeException("Failed to create dynamic datapack", e);
         }
     }
 
@@ -104,6 +105,7 @@ public class LibXDatapack extends ModFileResourcePack {
                     .filter(path -> path.getNameCount() > 0)
                     .map(Path::toString)
                     .map(p -> p.endsWith(File.separator) ? p.substring(0, p.length() - File.separator.length()) : p)
+                    .map(p -> p.endsWith("/") ? p.substring(0, p.length() - 1) : p)
                     .filter(p -> !p.isEmpty())
                     .collect(Collectors.toSet());
         } catch (IOException e) {

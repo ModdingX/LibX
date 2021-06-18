@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.impl.datapack;
 
 import io.github.noeppi_noeppi.libx.LibX;
-import io.github.noeppi_noeppi.libx.datapack.FakeDatapacks;
+import io.github.noeppi_noeppi.libx.datapack.DynamicDatapacks;
 import net.minecraft.resources.IPackFinder;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
@@ -23,11 +23,11 @@ public class LibXDatapackFinder implements IPackFinder {
     
     @Override
     public void findPacks(@Nonnull Consumer<ResourcePackInfo> consumer, @Nonnull ResourcePackInfo.IFactory factory) {
-        for (ResourceLocation pack : FakeDatapacks.getEnabledPacks()) {
+        for (ResourceLocation pack : DynamicDatapacks.getEnabledPacks()) {
             String name = LibXDatapack.PREFIX + "/" + pack.getNamespace() + ":" + pack.getPath();
             ModFileInfo fileInfo = ModList.get().getModFileById(pack.getNamespace());
             if (fileInfo == null || fileInfo.getFile() == null) {
-                LibX.logger.warn("Can't create fake datapack " + pack + ": Invalid mod file: " + fileInfo);
+                LibX.logger.warn("Can't create dynamic datapack " + pack + ": Invalid mod file: " + fileInfo);
             } else {
                 ResourcePackInfo info = ResourcePackInfo.createResourcePack(name, false,
                         () -> new LibXDatapack(fileInfo.getFile(), pack.getPath()), factory,

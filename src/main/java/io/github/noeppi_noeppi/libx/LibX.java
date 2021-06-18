@@ -35,6 +35,7 @@ import org.apache.logging.log4j.Logger;
  *   - CraftingExtension
  *   - All mixins need to be tested again with 1.17
  *   - The new registration system
+ *   - Dynamic datapacks need to be tested again
  */
 @Mod("libx")
 public class LibX extends ModX {
