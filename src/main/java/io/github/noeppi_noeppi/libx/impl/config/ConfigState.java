@@ -156,7 +156,7 @@ public class ConfigState {
                 if (Math.abs(f) >= 1e-5 && Math.abs(f) < 1e9) {
                     // We can't use BigDecimal.valueOf here as the float would be cast to
                     // a double which might change the value.
-                    // e.g. 0.5f gets 4.999999873689376E-5
+                    // e.g. 5.0e-5f gets 4.999999873689376e-5
                     return new BigDecimal(Float.toString(f)).stripTrailingZeros().toPlainString();
                 }
             } else if (number instanceof Double) {
