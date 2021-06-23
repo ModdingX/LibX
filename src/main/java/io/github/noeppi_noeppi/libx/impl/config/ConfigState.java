@@ -11,6 +11,7 @@ import net.minecraft.network.PacketBuffer;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
@@ -147,6 +148,23 @@ public class ConfigState {
                     .map(this::specialString)
                     .collect(Collectors.joining(",\n")).trim();
             return "[\n" + this.applyIndent(content, "  ") + "\n]";
+        }
+        if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber()) {
+            Number number = json.getAsJsonPrimitive().getAsNumber();
+            if (number instanceof Float) {
+                float f = (float) (Float) number;
+                if (Math.abs(f) >= 1e-5 && Math.abs(f) < 1e9) {
+                    // We can't use BigDecimal.valueOf here as the float would be cast to
+                    // a double which might change the value.
+                    // e.g. 0.5f gets 4.999999873689376E-5
+                    return new BigDecimal(Float.toString(f)).stripTrailingZeros().toPlainString();
+                }
+            } else if (number instanceof Double) {
+                double d = (double) (Double) number;
+                if (Math.abs(d) >= 1e-5 && Math.abs(d) < 1e9) {
+                    return BigDecimal.valueOf(d).stripTrailingZeros().toPlainString();
+                }
+            } 
         }
         return ConfigImpl.GSON.toJson(json);
     }
