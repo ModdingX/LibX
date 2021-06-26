@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
-import io.github.noeppi_noeppi.libx.tmp.TileEntityBase;
+import io.github.noeppi_noeppi.libx.base.TileEntityBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.tmp;
+package io.github.noeppi_noeppi.libx.base;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;

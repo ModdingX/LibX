@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.inventory.container;
 
 import io.github.noeppi_noeppi.libx.fi.Function5;
 import io.github.noeppi_noeppi.libx.fi.Function6;
-import io.github.noeppi_noeppi.libx.tmp.BlockGUI;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -15,7 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.network.NetworkHooks;

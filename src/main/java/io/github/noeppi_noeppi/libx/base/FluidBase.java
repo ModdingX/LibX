@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.tmp;
+package io.github.noeppi_noeppi.libx.base;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;

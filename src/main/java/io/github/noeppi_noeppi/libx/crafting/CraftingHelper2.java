@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.crafting.recipe;
+package io.github.noeppi_noeppi.libx.crafting;
 
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.util.NbtToJson;
