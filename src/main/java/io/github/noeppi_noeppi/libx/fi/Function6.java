@@ -6,6 +6,7 @@ import java.util.function.Function;
 /**
  * A function that takes 6 parameters and returns a value.
  */
+@FunctionalInterface
 public interface Function6<A, B, C, D, E, F, R> {
 
     R apply(A a, B b, C c, D d, E e, F f);

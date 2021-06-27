@@ -6,6 +6,7 @@ import java.util.function.Function;
 /**
  * A function that takes 5 parameters and returns a value.
  */
+@FunctionalInterface
 public interface Function5<A, B, C, D, E, R> {
 
     R apply(A a, B b, C c, D d, E e);

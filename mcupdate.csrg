@@ -1,4 +1,4 @@
-io/github/noeppi_noeppi/libx/impl/network/NetworkImpl io.github.noeppi_noeppi.libx/CommonNetwork
+io/github/noeppi_noeppi/libx/impl/network/NetworkImpl io/github/noeppi_noeppi/libx/CommonNetwork
 io/github/noeppi_noeppi/libx/annotation/Lookup io/github/noeppi_noeppi/libx/annotation/codec/Lookup
 io/github/noeppi_noeppi/libx/annotation/Param io/github/noeppi_noeppi/libx/annotation/codec/Param
 io/github/noeppi_noeppi/libx/annotation/PrimaryConstructor io/github/noeppi_noeppi/libx/annotation/codec/PrimaryConstructor
