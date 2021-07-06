@@ -9,10 +9,14 @@ import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nonnull;
@@ -57,6 +61,10 @@ public class ConfigImpl {
         return configs.getOrDefault(id, null);
     }
 
+    public static Set<ConfigImpl> getAllConfigs() {
+        return Collections.unmodifiableSet(new HashSet<>(configs.values()));
+    }
+    
     public final ResourceLocation id;
     public final Class<?> baseClass;
     public final Path path;
@@ -65,6 +73,7 @@ public class ConfigImpl {
     public final boolean clientConfig;
     
     private boolean shadowed;
+    private boolean shadowedLocal;
     private ConfigState savedState;
     private ConfigState defaultState;
 
@@ -147,46 +156,73 @@ public class ConfigImpl {
     public ConfigState readFromFileOrCreateBy(ConfigState state) throws IOException {
         if (!Files.isRegularFile(this.path)) {
             LibX.logger.info("Config '" + this.id + "' does not exist. Creating default.");
-            state.writeToFile();
+            state.writeToFile(null, null);
             return state;
         } else {
-            return this.readFromFile();
+            return this.readFromFile(null, null);
         }
     }
-
-    public ConfigState readFromFile() throws IOException {
+    
+    public ConfigState readFromFile(@Nullable Path path, @Nullable ConfigState parent) throws IOException {
+        Path filePath = path == null ? this.path : path;
+        ConfigState parentConfig = parent == null ? this.defaultState : parent;
         if (this.defaultState == null) {
+            // Even with other parent, a default state should always be available.
             throw new IllegalStateException("Can't read config from file: Default state not set.");
         }
-        if (!Files.isRegularFile(this.path) || !Files.isReadable(this.path)) {
-            throw new IllegalStateException("Config '" + this.id + "' does not exist or is not readable.");
+        if (!Files.isRegularFile(filePath) || !Files.isReadable(filePath)) {
+            if (parent == null) {
+                if (path != null) {
+                    throw new IllegalStateException("Config '" + this.id + "' at '" + path.toAbsolutePath().normalize().toString() + "' does not exist or is not readable.");
+                } else {
+                    throw new IllegalStateException("Config '" + this.id + "' does not exist or is not readable.");
+                }
+            } else {
+                // File not found, we just return parent
+                return parent;
+            }
         }
-        Reader reader = Files.newBufferedReader(this.path);
+        Reader reader = Files.newBufferedReader(filePath);
         JsonObject config = GSON.fromJson(reader, JsonObject.class);
         ImmutableMap.Builder<ConfigKey, Object> values = ImmutableMap.builder();
         AtomicBoolean needsCorrection = new AtomicBoolean(false);
+        Set<ConfigKey> keysToCorrect = parent == null ? null : new HashSet<>();
         for (ConfigKey key : this.keys.values()) {
             JsonElement elem = getInObjectKeyPath(config, key, needsCorrection);
-            if (elem != null && key.mapper.element().isAssignableFrom(elem.getClass())) {
+            if (elem != null) {
+                if (keysToCorrect != null) keysToCorrect.add(key);
                 try {
+                    if (!key.mapper.element().isAssignableFrom(elem.getClass())) {
+                        throw new IllegalStateException("Json element has invalid type for key '" + String.join(".", key.path) + "': Expected: " + key.mapper.element().getSimpleName() + " Got: " + elem.getClass().getSimpleName());
+                    }
                     //noinspection unchecked
                     Object value = ((ValueMapper<?, JsonElement>) key.mapper).fromJSON(elem);
                     values.put(key, key.validate(value, "Invalid value in config file", needsCorrection));
                 } catch (Exception e) {
                     LibX.logger.warn("Failed to read config value " + String.join(".", key.path) + ". Using default. Error: " + e.getMessage());
-                    values.put(key, this.defaultState.getValue(key));
+                    values.put(key, parentConfig.getValue(key));
                     needsCorrection.set(true);
                 }
             } else {
-                values.put(key, this.defaultState.getValue(key));
-                needsCorrection.set(true);
+                values.put(key, parentConfig.getValue(key));
+                if (parent == null) {
+                    // No need for correction when there's a parent
+                    // as in that case we'Re reading a partial state
+                    //noinspection ConstantConditions
+                    if (keysToCorrect != null) keysToCorrect.add(key);
+                    needsCorrection.set(true);
+                }
             }
         }
         reader.close();
         ConfigState state = new ConfigState(this, values.build(), ImmutableSet.copyOf(this.groups));
         if (needsCorrection.get()) {
-            LibX.logger.info("Correcting config '" + this.id + "'");
-            state.writeToFile();
+            if (path != null) {
+                LibX.logger.info("Correcting config '" + this.id + "' at " + path.toAbsolutePath().normalize().toString());
+            } else {
+                LibX.logger.info("Correcting config '" + this.id + "'");
+            }
+            state.writeToFile(path, keysToCorrect);
         }
         return state;
     }
@@ -238,7 +274,11 @@ public class ConfigImpl {
         return current.get(key.path.get(key.path.size() - 1));
     }
     
-    public void shadowBy(ConfigState state) {
+    public  void shadowBy(ConfigState state) {
+        this.shadowBy(state, false, null);
+    }
+    
+    private void shadowBy(ConfigState state, boolean local, @Nullable Path loadPath) {
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             LibX.logger.error("Config shadow was called on a dedicated server. This should not happen!");
         }
@@ -247,8 +287,10 @@ public class ConfigImpl {
             this.savedState = this.stateFromValues();
         }
         this.shadowed = true;
+        this.shadowedLocal = local;
         state.apply();
-        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.SHADOW, this.clientConfig, this.path));
+        ConfigLoadedEvent.LoadReason reason = local ? ConfigLoadedEvent.LoadReason.LOCAL_SHADOW : ConfigLoadedEvent.LoadReason.SHADOW;
+        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, reason, this.clientConfig, this.path, loadPath));
     }
     
     public void restore() {
@@ -258,7 +300,34 @@ public class ConfigImpl {
             LibX.logger.warn("Could not restore config: No saved state");
         }
         this.shadowed = false;
-        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.RESTORE, this.clientConfig, this.path));
+        this.shadowedLocal = false;
+        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.RESTORE, this.clientConfig, this.path, this.path));
+    }
+    
+    public void reloadClientWorldState() {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            if (!this.shadowed || this.shadowedLocal) {
+                World clientWorld = DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().world, () -> () -> null);
+                MinecraftServer server = DistExecutor.unsafeRunForDist(() -> Minecraft.getInstance()::getIntegratedServer, () -> () -> null);
+                if (clientWorld != null && server != null) {
+                    Path configDir = server.anvilConverterForAnvilFile.getWorldDir().resolve("config");
+                    Path configPath = resolveConfigPath(configDir, this.id);
+                    if (this.savedState == null) {
+                        LibX.logger.warn("Can't load world specific config for '" + this.id + "': No captured state. This should never happen.");
+                    } else {
+                        try {
+                            if (Files.isRegularFile(configPath)) {
+                                ConfigState state = this.readFromFile(configPath, this.savedState);
+                                this.shadowBy(state, true, configPath);
+                            }
+                        } catch (IOException e) {
+                            LibX.logger.warn("Can't load world specific config for '" + this.id + "': " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
     }
     
     public void saveState(ConfigState state) {
@@ -285,5 +354,9 @@ public class ConfigImpl {
     
     public boolean isShadowed() {
         return this.shadowed;
+    }
+    
+    public static Path resolveConfigPath(Path configDir, ResourceLocation id) {
+        return id.getPath().equals("config") ? configDir.resolve(id.getNamespace() + ".json5") : configDir.resolve(id.getNamespace()).resolve(id.getPath() + ".json5");
     }
 }

@@ -9,10 +9,12 @@ import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import net.minecraft.network.PacketBuffer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Map;
@@ -63,12 +65,13 @@ public class ConfigState {
         }
     }
 
-    public void writeToFile() throws IOException {
-        if (!Files.isDirectory(this.config.path.getParent())) {
-            Files.createDirectories(this.config.path.getParent());
+    public void writeToFile(@Nullable Path path, @Nullable Set<ConfigKey> keys) throws IOException {
+        if (path == null) path = this.config.path;
+        if (!Files.isDirectory(path.getParent())) {
+            Files.createDirectories(path.getParent());
         }
-        Writer writer = Files.newBufferedWriter(this.config.path, StandardOpenOption.CREATE);
-        writer.write("{\n" + this.applyIndent(this.writeObject(this.values.keySet(), this.groups, 0), "  ") + "\n}\n");
+        Writer writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        writer.write("{\n" + this.applyIndent(this.writeObject(keys == null ? this.values.keySet() : keys, this.groups, 0), "  ") + "\n}\n");
         writer.close();
     }
     

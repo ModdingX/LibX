@@ -15,9 +15,19 @@ public class ConfigEvents {
     
     @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void playerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+    public void serverPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getPlayer().world.isRemote && event.getPlayer() instanceof ServerPlayerEntity && FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             ConfigManager.forceResync((ServerPlayerEntity) event.getPlayer());
+        }
+    }
+    
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void clientPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!event.getPlayer().world.isRemote && FMLEnvironment.dist == Dist.CLIENT) {
+            for (ConfigImpl config : ConfigImpl.getAllConfigs()) {
+                config.reloadClientWorldState();
+            }
         }
     }
     

@@ -190,12 +190,7 @@ public class ConfigManager {
         } else if (configIds.containsValue(configClass)) {
             throw new IllegalArgumentException("Class " + configClass + " is already registered as '" + configIds.inverse().get(configClass) + "'");
         }
-        Path path;
-        if (location.getPath().equals("config")) {
-            path = FMLPaths.GAMEDIR.get().resolve("config").resolve(location.getNamespace() + ".json5");
-        } else {
-            path = FMLPaths.GAMEDIR.get().resolve("config").resolve(location.getNamespace()).resolve(location.getPath() + ".json5");
-        }
+        Path path = ConfigImpl.resolveConfigPath(FMLPaths.GAMEDIR.get().resolve("config"), location);
         configIds.put(location, configClass);
         configs.put(configClass, path);
         new ConfigImpl(location, configClass, path, clientConfig);
@@ -223,7 +218,7 @@ public class ConfigManager {
                 ConfigState state = config.readFromFileOrCreateBy(defaultState);
                 config.saveState(state);
                 state.apply();
-                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.INITIAL, config.clientConfig, config.path));
+                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.INITIAL, config.clientConfig, config.path, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
             LibX.logger.error("Failed to load config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
@@ -245,7 +240,8 @@ public class ConfigManager {
                 if (!config.isShadowed()) {
                     state.apply();
                 }
-                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path));
+                config.reloadClientWorldState();
+                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
             LibX.logger.error("Failed to reload config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
