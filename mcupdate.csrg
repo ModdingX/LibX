@@ -28,3 +28,4 @@ io/github/noeppi_noeppi/libx/mod/registration/ItemInventory io/github/noeppi_noe
 io/github/noeppi_noeppi/libx/mod/registration/TileEntityBase io/github/noeppi_noeppi/libx/base/TileEntityBase
 io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent path configPath
 io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent getPath ()Ljava/nio/file/Path; getConfigPath
+io/github/noeppi_noeppi/libx/command/UppercaseEnumArgument io/github/noeppi_noeppi/libx/command/EnumArgument2

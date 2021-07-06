@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
-import io.github.noeppi_noeppi.libx.command.UppercaseEnumArgument;
+import io.github.noeppi_noeppi.libx.command.EnumArgument2;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
@@ -69,7 +69,7 @@ public class LibX extends ModX {
     protected void setup(FMLCommonSetupEvent event) {
         //noinspection CodeBlock2Expr
         event.enqueueWork(() -> {
-            CommandUtil.registerGenericCommandArgument(this.modid + "_upperenum", UppercaseEnumArgument.class, new UppercaseEnumArgument.Serializer());
+            CommandUtil.registerGenericCommandArgument(this.modid + "_enum", EnumArgument2.class, new EnumArgument2.Serializer());
         });
     }
 

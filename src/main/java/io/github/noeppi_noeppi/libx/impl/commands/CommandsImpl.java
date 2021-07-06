@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.commands;
 
 import net.minecraftforge.event.RegisterCommandsEvent;
 
-import static io.github.noeppi_noeppi.libx.command.UppercaseEnumArgument.enumArgument;
+import static io.github.noeppi_noeppi.libx.command.EnumArgument2.enumArgument;
 import static net.minecraft.command.Commands.argument;
 import static net.minecraft.command.Commands.literal;
 import static net.minecraft.command.arguments.EntityArgument.entities;
