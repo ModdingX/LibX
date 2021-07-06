@@ -72,7 +72,7 @@ public class IngredientStack implements Predicate<ItemStack> {
     }
     
     /**
-     * Deserialises and IngredientStack from json.
+     * Deserializes and IngredientStack from json.
      */
     public static IngredientStack deserialize(JsonObject json) {
         Ingredient ingredient = json.has("Ingredient") ? Ingredient.deserialize(json.get("Ingredient")) : Ingredient.EMPTY;

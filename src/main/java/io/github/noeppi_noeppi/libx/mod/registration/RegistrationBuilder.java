@@ -11,7 +11,7 @@ import java.util.List;
  * A registration builder is used to configure the registration system for a mod.
  * You must set the version of the registration system that is used for your mod here.
  * This is because LibX keeps adding new registry transformers in newer versions. However
- * these my break mods that are not made for it. Thats why you'll need to set the version.
+ * these my break mods that are not made for it. That's why you'll need to set the version.
  * LibX will then only load its transformers made for that version.
  * 
  * You can also add custom conditions and transformers that are used for you registration.

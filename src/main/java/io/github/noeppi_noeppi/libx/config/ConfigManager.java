@@ -100,7 +100,7 @@ import java.util.UUID;
  * You need to register that type via {@link ConfigManager#registerValueMapper(String, ValueMapper)} (or
  * {@link ConfigManager#registerValueMapper(String, GenericValueMapper)} for generic value mappers).
  * Then you can use that type in a config. Custom registered value mappers are unique for each mod, so
- * yo uand another mod can add different value mappers for the same class. However you can't add two
+ * you and another mod can add different value mappers for the same class. However you can't add two
  * value mappers for the same class in one mod.
  * 
  * By default the following types are supported:

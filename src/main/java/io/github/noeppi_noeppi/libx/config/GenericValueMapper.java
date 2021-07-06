@@ -7,7 +7,7 @@ import net.minecraft.network.PacketBuffer;
 /**
  * A value mapper for a generic type. This will get the value mapper for the generic
  * that has been used to declare the config field. For example you could create a
- * value mapper for lists that would then get pased a value mapper for the elements
+ * value mapper for lists that would then get passed a value mapper for the elements
  * of the list so it can fully serialise it.
  * 
  * A limitation with these is that you can only have one generic parameter for

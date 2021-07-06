@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public class LibXDatapackFinder implements IPackFinder {
 
-    public static LibXDatapackFinder INSTANCE = new LibXDatapackFinder();
+    public static final LibXDatapackFinder INSTANCE = new LibXDatapackFinder();
     
     
     private LibXDatapackFinder() {

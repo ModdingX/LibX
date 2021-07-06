@@ -15,7 +15,7 @@ public interface RegistryTransformer {
 
     /**
      * Gets an object that should be passed to the system in addition to the given object.
-     * This method will et called for that registerable and all things it registers again, so
+     * This method will et called for that {@link Registerable} and all things it registers again, so
      * be careful to not create infinite loops.
      * 
      * <b>IMPORTANT: The transformers created by LibX may also consume the original object

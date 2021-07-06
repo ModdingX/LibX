@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.event;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockRayTraceResult;

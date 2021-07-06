@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 public interface Registerable {
 
     /**
-     * Gets additional items that should be registered. Those may be Registerable,
+     * Gets additional items that should be registered. Those may be {@link Registerable},
      * Items, Block TileEntities, Biomes ...
      */
     default Set<Object> getAdditionalRegisters(ResourceLocation id) {
@@ -24,10 +24,10 @@ public interface Registerable {
     }
 
     /**
-     * Gets additional items that should be registered. Those may be Registerable,
+     * Gets additional items that should be registered. Those may be {@link Registerable},
      * Items, Block TileEntities, Biomes ... The ones here may have a postfix.
      * That allows to register multiple thing to the same registry. The new id is created
-     * from the id of this registerable, an underscore and the key in the map.
+     * from the id of this {@link Registerable}, an underscore and the key in the map.
      */
     default Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
         return Collections.emptyMap();

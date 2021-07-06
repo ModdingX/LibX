@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * As the "new" /data merge entity command can only merge data to one enttiy at a time and you always have to
+ * As the "new" /data merge entity command can only merge data to one entity at a time and you always have to
  * prefix ist with a /execute here's a version that can merge data into multiple entities at once.
  * This command can also merge data into players. Be careful with this.
  */

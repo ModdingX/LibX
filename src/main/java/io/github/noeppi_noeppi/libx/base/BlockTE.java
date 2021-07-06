@@ -27,7 +27,7 @@ import java.util.Set;
  * a tile entity type.
  * <p>
  * The constructor requires a {@link TileEntity} class. The tile entity class  <b>must</b> define a public
- * constructor with one argument of type {@code TileEntityType} for this to create a tile entity type.
+ * constructor with one argument of type {@link TileEntityType} for this to create a tile entity type.
  * This class will do the magic to wire the tile entity to the block and invoke the constructor.
  */
 public class BlockTE<T extends TileEntity> extends BlockBase {

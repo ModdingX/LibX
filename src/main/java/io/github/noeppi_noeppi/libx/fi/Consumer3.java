@@ -1,8 +1,6 @@
 package io.github.noeppi_noeppi.libx.fi;
 
 import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * A consumer that takes 3 parameters.

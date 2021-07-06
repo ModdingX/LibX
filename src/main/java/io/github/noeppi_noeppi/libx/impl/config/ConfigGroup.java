@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableList;
-import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.Group;
 
 import javax.annotation.Nullable;
