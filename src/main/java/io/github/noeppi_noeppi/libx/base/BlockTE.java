@@ -82,7 +82,7 @@ public class BlockTE<T extends TileEntity> extends BlockBase {
     @Override
     @SuppressWarnings("deprecation")
     public void onReplaced(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
-        if (!world.isRemote && this.shouldDropInventory(world, pos, state)) {
+        if (!world.isRemote && (!state.matchesBlock(newState.getBlock()) || !newState.hasTileEntity()) && this.shouldDropInventory(world, pos, state)) {
             TileEntity te = world.getTileEntity(pos);
             if (te != null) {
                 te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {

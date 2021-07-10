@@ -207,7 +207,7 @@ public class ConfigImpl {
                 values.put(key, parentConfig.getValue(key));
                 if (parent == null) {
                     // No need for correction when there's a parent
-                    // as in that case we'Re reading a partial state
+                    // as in that case we're reading a partial state
                     //noinspection ConstantConditions
                     if (keysToCorrect != null) keysToCorrect.add(key);
                     needsCorrection.set(true);
