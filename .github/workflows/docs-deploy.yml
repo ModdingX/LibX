@@ -2,7 +2,7 @@ name: 'Deploy Javadoc 📖'
 on:
   push:
     branches:
-      - '1.16.3'
+      - '1.17'
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
       - name: 'Deploy 🚀'
         uses: 'JamesIves/github-pages-deploy-action@3.7.1'
         with:
-          BASE_BRANCH: '1.16.3'
+          BASE_BRANCH: '1.17'
           BRANCH: gh-pages
           FOLDER: 'build/docs/javadoc'
           CLEAN: true
