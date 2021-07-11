@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -251,8 +250,8 @@ public class ResourceList {
         @Nullable
         @Override
         public Boolean test(ResourceLocation rl) {
-            if (this.namespace.matcher.getValue().test(rl.getNamespace())
-                    && this.path.matcher.getValue().test(rl.getPath())) {
+            if (this.namespace.matcher.get().test(rl.getNamespace())
+                    && this.path.matcher.get().test(rl.getPath())) {
                 return this.allow;
             } else {
                 return null;
@@ -300,7 +299,7 @@ public class ResourceList {
 
         @Override
         public Boolean test(ResourceLocation rl) {
-            return this.matcher.getValue().test(rl.toString()) ? this.allow : null;
+            return this.matcher.get().test(rl.toString()) ? this.allow : null;
         }
 
         @Override

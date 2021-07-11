@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.annotation;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import io.github.noeppi_noeppi.libx.util.LazyImmutableMap;
-import net.minecraft.util.LazyValue;
+import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -25,6 +25,7 @@ import java.util.function.Supplier;
  * are not remapped.
  * <b>THIS IS NOT MEANT TO BE USED BY ANYTHING ELSE BUT THE ANNOTATION PROCESSOR AND THEREFORE MARKED DEPRECATED.</b>
  */
+// TODO move in extra package that can be excluded from javadoc
 @Deprecated
 public class ProcessorInterface {
 

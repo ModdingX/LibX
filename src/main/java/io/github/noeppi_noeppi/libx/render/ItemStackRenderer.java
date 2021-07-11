@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
+import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -16,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.LazyValue;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.tuple.Pair;
@@ -65,7 +65,7 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
                 if (teType.isValidBlock(block)) {
                     Pair<LazyValue<TileEntity>, Boolean> pair = tiles.get(teType);
                     BlockState state = block.getDefaultState();
-                    TileEntity tile = pair.getLeft().getValue();
+                    TileEntity tile = pair.getLeft().get();
 
                     TileEntityRenderer<TileEntity> renderer = TileEntityRendererDispatcher.instance.getRenderer(tile);
                     if (renderer != null) {
