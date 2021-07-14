@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
+import io.github.noeppi_noeppi.libx.impl.data.LootData;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
@@ -30,12 +30,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
- * A base class for block loot provider. When overriding this you should call the {@link #customLootTable(Block)} customLootTable} methods in
- * {@link #setup() setup} to adjust the loot tables. Every block of you mod that is left untouched will get a default loot table.
+ * A base class for block loot providers. When overriding this you should call the
+ * {@link #customLootTable(Block) customLootTable} methods in {@link #setup() setup}
+ * to adjust the loot tables. Every block of you mod that is left untouched will get
+ * a default loot table.
  */
 public abstract class BlockLootProviderBase implements IDataProvider {
 
@@ -377,86 +382,66 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * A builder for loot groups where every member is selected.
      */
-    public AllLootBuilder all() {
-        return new AllLootBuilder();
+    public LootBuilders.AllLootBuilder all() {
+        return new LootBuilders.AllLootBuilder();
     }
     
     /**
      * Minecraft does not seem to have a loot builder for groups. So here you have one.
      * This will select only one element per roll.
      */
-    public GroupLootBuilder group() {
-        return new GroupLootBuilder();
+    public LootBuilders.GroupLootBuilder group() {
+        return new LootBuilders.GroupLootBuilder();
     }
     
     /**
      * Minecraft does not seem to have a loot builder for sequences. So here you have one.
      * This will select only one element per roll.
      */
-    public SequenceLootBuilder sequence() {
-        return new SequenceLootBuilder();
-    }
-
-    private LootEntry.Builder<?> combineBy(Function<LootEntry.Builder<?>[], LootEntry.Builder<?>> combineFunc, LootEntry.Builder<?>[] loot) {
-        if (loot.length == 0) {
-            return EmptyLootEntry.builder();
-        } else if (loot.length == 1) {
-            return loot[0];
-        } else {
-            return combineFunc.apply(loot);
-        }
-    }
-
-    private LootFactory combineBy(Function<LootEntry.Builder<?>[], LootEntry.Builder<?>> combineFunc, LootFactory[] loot) {
-        if (loot.length == 0) {
-            return b -> EmptyLootEntry.builder();
-        } else if (loot.length == 1) {
-            return loot[0];
-        } else {
-            return b -> combineFunc.apply(LootFactory.resolve(b, loot));
-        }
+    public LootBuilders.SequenceLootBuilder sequence() {
+        return new LootBuilders.SequenceLootBuilder();
     }
 
     /**
      * Combines the given loot builders into one. (All loot builders will be applied).
      */
     public LootEntry.Builder<?> combine(LootEntry.Builder<?>... loot) {
-        return this.combineBy(AllLootBuilder::new, loot);
+        return LootData.combineBy(LootBuilders.AllLootBuilder::new, loot);
     }
 
     /**
      * Combines the given loot factories into one. (All loot factories will be applied).
      */
     public LootFactory combine(LootFactory... loot) {
-        return this.combineBy(AllLootBuilder::new, loot);
+        return e -> LootData.combineBy(LootBuilders.AllLootBuilder::new, l -> l.build(e), loot);
     }
     
     /**
      * Combines the given loot builders into one. (One loot builder will be applied).
      */
     public LootEntry.Builder<?> random(LootEntry.Builder<?>... loot) {
-        return this.combineBy(GroupLootBuilder::new, loot);
+        return LootData.combineBy(LootBuilders.GroupLootBuilder::new, loot);
     }
 
     /**
      * Combines the given loot factories into one. (One loot factory will be applied).
      */
     public LootFactory random(LootFactory... loot) {
-        return this.combineBy(GroupLootBuilder::new, loot);
+        return e -> LootData.combineBy(LootBuilders.GroupLootBuilder::new, l -> l.build(e), loot);
     }
 
     /**
      * Combines the given loot builders into one. Only the first matching builder is applied.
      */
     public LootEntry.Builder<?> first(LootEntry.Builder<?>... loot) {
-        return this.combineBy(AlternativesLootEntry::builder, loot);
+        return LootData.combineBy(AlternativesLootEntry::builder, loot);
     }
 
     /**
      * Combines the given loot factories into one. Only the first matching factory is applied.
      */
     public LootFactory first(LootFactory... loot) {
-        return this.combineBy(AlternativesLootEntry::builder, loot);
+        return e -> LootData.combineBy(AlternativesLootEntry::builder, l -> l.build(e), loot);
     }
     
     /**
@@ -464,7 +449,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * From all the loot entries until the first one not matching, one is selected.
      */
     public LootEntry.Builder<?> whileMatch(LootEntry.Builder<?>... loot) {
-        return this.combineBy(SequenceLootBuilder::new, loot);
+        return LootData.combineBy(LootBuilders.SequenceLootBuilder::new, loot);
     }
 
     /**
@@ -472,7 +457,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * From all the loot factories until the first one not matching, one is selected.
      */
     public LootFactory whileMatch(LootFactory... loot) {
-        return this.combineBy(SequenceLootBuilder::new, loot);
+        return e -> LootData.combineBy(LootBuilders.SequenceLootBuilder::new, l -> l.build(e), loot);
     }
 
     /**
@@ -509,18 +494,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * Tries to create the best possible representation of stack in a loot entry.
      */
     public WrappedLootEntry stack(ItemStack stack) {
-        StandaloneLootEntry.Builder<?> entry = ItemLootEntry.builder(stack.getItem());
-        if (stack.getCount() != 1) {
-            entry.acceptFunction(SetCount.builder(ConstantRange.of(stack.getCount())));
-        }
-        if (stack.getDamage() != 0) {
-            float damage = (stack.getMaxDamage() - stack.getDamage()) / (float) stack.getMaxDamage();
-            entry.acceptFunction(SetDamage.builder(new RandomValueRange(damage)));
-        }
-        if (stack.hasTag()) {
-            entry.acceptFunction(SetNBT.builder(stack.getOrCreateTag()));
-        }
-        return new WrappedLootEntry(entry);
+        return new WrappedLootEntry(LootData.stack(stack));
     }
 
     /**
@@ -550,93 +524,6 @@ public abstract class BlockLootProviderBase implements IDataProvider {
                 && !LootTables.EMPTY.equals(state.getBlock().getLootTable());
     }
 
-    // Builder for our own loot entry type
-    public static class AllLootBuilder extends LootEntry.Builder<AllLootBuilder> {
-
-        private final List<LootEntry> lootEntries = new ArrayList<>();
-
-        private AllLootBuilder(LootEntry.Builder<?>... entries) {
-            for (LootEntry.Builder<?> builder : entries) {
-                this.lootEntries.add(builder.build());
-            }
-        }
-
-        @Nonnull
-        @Override
-        protected AllLootBuilder getSelf() {
-            return this;
-        }
-
-        public AllLootBuilder add(LootEntry.Builder<?> entry) {
-            this.lootEntries.add(entry.build());
-            return this;
-        }
-
-        @Nonnull
-        @Override
-        public LootEntry build() {
-            return new AllLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
-        }
-    }
-    
-    // Weirdly mc has no builder for this
-    public static class GroupLootBuilder extends LootEntry.Builder<GroupLootBuilder> {
-
-        private final List<LootEntry> lootEntries = new ArrayList<>();
-
-        private GroupLootBuilder(LootEntry.Builder<?>... entries) {
-            for (LootEntry.Builder<?> builder : entries) {
-                this.lootEntries.add(builder.build());
-            }
-        }
-
-        @Nonnull
-        @Override
-        protected GroupLootBuilder getSelf() {
-            return this;
-        }
-
-        public GroupLootBuilder add(LootEntry.Builder<?> entry) {
-            this.lootEntries.add(entry.build());
-            return this;
-        }
-
-        @Nonnull
-        @Override
-        public LootEntry build() {
-            return new GroupLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
-        }
-    }
-    
-    // Weirdly mc has no builder for this
-    public static class SequenceLootBuilder extends LootEntry.Builder<SequenceLootBuilder> {
-
-        private final List<LootEntry> lootEntries = new ArrayList<>();
-
-        private SequenceLootBuilder(LootEntry.Builder<?>... entries) {
-            for (LootEntry.Builder<?> builder : entries) {
-                this.lootEntries.add(builder.build());
-            }
-        }
-
-        @Nonnull
-        @Override
-        protected SequenceLootBuilder getSelf() {
-            return this;
-        }
-
-        public SequenceLootBuilder add(LootEntry.Builder<?> entry) {
-            this.lootEntries.add(entry.build());
-            return this;
-        }
-
-        @Nonnull
-        @Override
-        public LootEntry build() {
-            return new SequenceLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
-        }
-    }
-
     /**
      * Interface to get a loot entry from a block.
      */
@@ -663,7 +550,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         /**
-         * Calls {@code build} on all factories with the given block and returns a new array.
+         * Calls {@link #build(Block)} on all factories with the given block and returns a new array.
          */
         static LootEntry.Builder<?>[] resolve(Block b, LootFactory[] factories) {
             LootEntry.Builder<?>[] entries = new LootEntry.Builder<?>[factories.length];
@@ -687,7 +574,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     }
 
     /**
-     * Interface to get a standalone loot entry fro ma block.
+     * Interface to get a standalone loot entry from a block.
      */
     @FunctionalInterface
     public interface StandaloneLootFactory extends LootFactory {
@@ -719,7 +606,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         /**
-         * Calls {@code build} on all factories with the given block and returns a new array.
+         * Calls {@link #build(Block)} on all factories with the given block and returns a new array.
          */
         static StandaloneLootEntry.Builder<?>[] resolve(Block b, StandaloneLootFactory[] factories) {
             StandaloneLootEntry.Builder<?>[] entries = new StandaloneLootEntry.Builder<?>[factories.length];
@@ -780,7 +667,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * Interface to modify a standalone loot entry to a new loot entry. This can also be used
      * as a {@link LootFactory} in which case the default item entry obtained from
-     * {@link StandaloneLootFactory#item()} is passed to the {@code apply} method.
+     * {@link StandaloneLootFactory#item()} is passed to the {@link #apply(Block, StandaloneLootEntry.Builder) apply} method.
      */
     @FunctionalInterface
     public interface GenericLootModifier extends LootFactory {
@@ -803,7 +690,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * Interface to modify a standalone loot entry to a new standalone loot entry. This can also be
      * used as a {@link StandaloneLootFactory} in which case the default item entry obtained from
-     * {@link StandaloneLootFactory#item()} is passed to the {@code apply} method.
+     * {@link StandaloneLootFactory#item()} is passed to the {@link #apply(Block, StandaloneLootEntry.Builder) apply} method.
      */
     @FunctionalInterface
     public interface LootModifier extends GenericLootModifier, StandaloneLootFactory {
@@ -844,7 +731,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         /**
-         * Same as {@code chain(this, other)}
+         * Same as {@link #chain(LootModifier...)}
          */
         default LootModifier andThen(LootModifier other) {
             return chain(this, other);
@@ -853,8 +740,8 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
     /**
      * A class used in the drops method to reduce ambiguity and make the code more readable. Just call
-     * the {@code silk} method wih a generic loot modifier to get a silk modifier.
-     * A silk modifier does not extend {@code GenericLootModifier} for this reason.
+     * the {@link #silk(GenericLootModifier)} method wih a generic loot modifier to get a silk modifier.
+     * A silk modifier does not extend {@link GenericLootModifier} for this reason.
      */
     public static class SilkModifier {
         
