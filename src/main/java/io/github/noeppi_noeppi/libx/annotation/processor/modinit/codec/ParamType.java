@@ -17,8 +17,6 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class ParamType implements CodecType {
-
-    private static final List<String> DEFAULT_FIELDS = null; // TODO use List.of here
     
     @Override
     public boolean matchesDirect(VariableElement param, String name, ModEnv env) {
@@ -78,38 +76,38 @@ public class ParamType implements CodecType {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for the void, null or none type.", paramElement);
             return null;
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.BOOLEAN) {
-            return ModInit.CODEC_FQN + ".BOOL";
+            return ModInit.CODEC_TYPE + ".BOOL";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.BYTE) {
-            return ModInit.CODEC_FQN + ".BYTE";
+            return ModInit.CODEC_TYPE + ".BYTE";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.CHAR) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for the char type.", paramElement);
             return null;
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.SHORT) {
-            return ModInit.CODEC_FQN + ".SHORT";
+            return ModInit.CODEC_TYPE + ".SHORT";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.INT) {
-            return ModInit.CODEC_FQN + ".INT";
+            return ModInit.CODEC_TYPE + ".INT";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.LONG) {
-            return ModInit.CODEC_FQN + ".LONG";
+            return ModInit.CODEC_TYPE + ".LONG";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.FLOAT) {
-            return ModInit.CODEC_FQN + ".FLOAT";
+            return ModInit.CODEC_TYPE + ".FLOAT";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.DOUBLE) {
-            return ModInit.CODEC_FQN + ".DOUBLE";
+            return ModInit.CODEC_TYPE + ".DOUBLE";
         } else {
             if (fieldName == null && env.sameErasure(codecClass, env.forClass(String.class))) {
-                return ModInit.CODEC_FQN + ".STRING";
+                return ModInit.CODEC_TYPE + ".STRING";
             } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(ByteBuffer.class))) {
-                return ModInit.CODEC_FQN + ".BYTE_BUFFER";
+                return ModInit.CODEC_TYPE + ".BYTE_BUFFER";
             } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(IntStream.class))) {
-                return ModInit.CODEC_FQN + ".INT_STREAM";
+                return ModInit.CODEC_TYPE + ".INT_STREAM";
             } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(LongStream.class))) {
-                return ModInit.CODEC_FQN + ".LONG_STREAM";
+                return ModInit.CODEC_TYPE + ".LONG_STREAM";
             } else {
                 if (fieldName == null) {
-                    for (String name : DEFAULT_FIELDS) {
+                    for (String name : ModInit.DEFAULT_PARAM_CODEC_FIELDS) {
                         String result = tryDetect(paramElement, boxed, codecClass, name, env, false);
                         if (result != null) return result;
                     }
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: No default codec field found. Tried [ " + String.join(", ", DEFAULT_FIELDS) + " ] in class " + codecClass + ".");
+                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: No default codec field found. Tried [ " + String.join(", ", ModInit.DEFAULT_PARAM_CODEC_FIELDS) + " ] in class " + codecClass + ".");
                     return null;
                 } else {
                     return tryDetect(paramElement, boxed, codecClass, fieldName, env, true);
@@ -142,7 +140,7 @@ public class ParamType implements CodecType {
             }
             return null;
         }
-        if (!env.sameErasure(fieldElem.asType(), env.elements().getTypeElement(ModInit.CODEC_FQN).asType())) {
+        if (!env.sameErasure(fieldElem.asType(), env.elements().getTypeElement(ModInit.CODEC_TYPE).asType())) {
             if (fail) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is defined but not a Codec.", paramElement);
             }

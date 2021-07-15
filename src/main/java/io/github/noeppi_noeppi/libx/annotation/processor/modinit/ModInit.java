@@ -23,11 +23,15 @@ public class ModInit  {
     public static final String MOD_ANNOTATION_TYPE = "net.minecraftforge.fml.common.Mod";
     public static final String MODEL_TYPE = "net.minecraft.client.renderer.model.IBakedModel";
     public static final String REGISTRY_TYPE = "net.minecraft.util.registry.Registry";
-    public static final String CODEC_FQN = "com.mojang.serialization.Codec";
-    public static final String RECORD_CODEC_BUILDER_FQN = "com.mojang.serialization.codecs.RecordCodecBuilder";
+    public static final String CODEC_TYPE = "com.mojang.serialization.Codec";
+    public static final String RECORD_CODEC_BUILDER_TYPE = "com.mojang.serialization.codecs.RecordCodecBuilder";
+
+    public static final List<String> DEFAULT_PARAM_CODEC_FIELDS = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
+            "CODEC", "DIRECT_CODEC"
+    )));
 
     // When something is added here, also add it to ProcessorInterface.getCodecDefaultRegistryKey
-    public static final Set<String> ALLOWED_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+    public static final Set<String> ALLOWED_REGISTRY_CODEC_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
             "net.minecraft.world.biome.Biome",
             "net.minecraft.world.gen.DimensionSettings"
             // TODO Add everything from RegistryAccess to the list.
@@ -81,13 +85,13 @@ public class ModInit  {
             writer.write("public class " + this.modClass.getSimpleName() + "${");
             writer.write("private static " + ModX.class.getCanonicalName() + " mod=null;");
             if (!this.codecs.isEmpty()) {
-                writer.write("public static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_FQN + "<?>>codecs=buildCodecs();");
-                writer.write("private static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_FQN + "<?>>buildCodecs(){");
+                writer.write("public static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_TYPE + "<?>>codecs=buildCodecs();");
+                writer.write("private static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_TYPE + "<?>>buildCodecs(){");
                 //noinspection deprecation
                 writer.write(ProcessorInterface.LazyMapBuilder.class.getCanonicalName() + " builder=" + ProcessorInterface.class.getCanonicalName() + ".lazyMapBuilder();");
                 for (GeneratedCodec codec : this.codecs) {
                     writer.write("builder.put(" + codec.fqn + ".class,");
-                    writer.write("() -> " + RECORD_CODEC_BUILDER_FQN + ".<" + codec.fqn + ">create(instance->");
+                    writer.write("() -> " + RECORD_CODEC_BUILDER_TYPE + ".<" + codec.fqn + ">create(instance->");
                     writer.write("instance.group(");
                     for (int i = 0; i < codec.params.size(); i++) {
                         GeneratedCodec.CodecElement param = codec.params.get(i);

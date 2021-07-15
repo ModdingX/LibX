@@ -59,7 +59,7 @@ public class RegistryType implements CodecType {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Could not infer registry type for registry codec.", param);
             throw new FailureException();
         }
-        if (path == null && !ModInit.ALLOWED_TYPES.contains(generic.getQualifiedName().toString())) {
+        if (path == null && !ModInit.ALLOWED_REGISTRY_CODEC_TYPES.contains(generic.getQualifiedName().toString())) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't infer registry key for type '" + generic.getQualifiedName() + "'. Set it by annotation value.", param);
             throw new FailureException();
         }
