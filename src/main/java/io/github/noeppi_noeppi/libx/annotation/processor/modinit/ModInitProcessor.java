@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class ModInitProcessor extends Processor {
-
+    
     @Override
     public Class<?>[] getTypes() {
         return new Class[]{
@@ -43,7 +43,8 @@ public class ModInitProcessor extends Processor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new HashSet<>(super.getSupportedAnnotationTypes());
-        set.add("net.minecraftforge.fml.common.Mod");
+        // TODO check whether that has changed because of the peel
+        set.add(ModInit.MOD_ANNOTATION_TYPE);
         return set;
     }
 
@@ -53,7 +54,7 @@ public class ModInitProcessor extends Processor {
         String defaultModid = null;
         Element defaultMod = null;
         {
-            TypeElement modAnnotation = this.elements.getTypeElement("net.minecraftforge.fml.common.Mod");
+            TypeElement modAnnotation = this.elements.getTypeElement(ModInit.MOD_ANNOTATION_TYPE);
             Set<? extends Element> elems = roundEnv.getElementsAnnotatedWith(modAnnotation);
             if (elems.size() == 1) {
                 Element elem = elems.iterator().next();
@@ -194,7 +195,7 @@ public class ModInitProcessor extends Processor {
     
      private String modidFromAnnotation(Element element) {
         for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
-            if (this.sameErasure(this.elements.getTypeElement("net.minecraftforge.fml.common.Mod").asType(), mirror.getAnnotationType())) {
+            if (this.sameErasure(this.elements.getTypeElement(ModInit.MOD_ANNOTATION_TYPE).asType(), mirror.getAnnotationType())) {
                 //noinspection OptionalGetWithoutIsPresent
                 return mirror.getElementValues().entrySet().stream()
                         .filter(e -> e.getKey().getSimpleName().contentEquals("value"))

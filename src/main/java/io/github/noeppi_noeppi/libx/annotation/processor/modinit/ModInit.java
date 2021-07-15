@@ -18,9 +18,20 @@ import java.util.stream.Collectors;
 
 // TODO Check ModInit as things have been refactored. Verify that code generates correctly.
 public class ModInit  {
-    
+
+    // TODO check all the classes in 1.17
+    public static final String MOD_ANNOTATION_TYPE = "net.minecraftforge.fml.common.Mod";
+    public static final String MODEL_TYPE = "net.minecraft.client.renderer.model.IBakedModel";
+    public static final String REGISTRY_TYPE = "net.minecraft.util.registry.Registry";
     public static final String CODEC_FQN = "com.mojang.serialization.Codec";
     public static final String RECORD_CODEC_BUILDER_FQN = "com.mojang.serialization.codecs.RecordCodecBuilder";
+
+    // When something is added here, also add it to ProcessorInterface.getCodecDefaultRegistryKey
+    public static final Set<String> ALLOWED_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            "net.minecraft.world.biome.Biome",
+            "net.minecraft.world.gen.DimensionSettings"
+            // TODO Add everything from RegistryAccess to the list.
+    )));
     
     public final String modid;
     public final Element modClass;

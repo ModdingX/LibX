@@ -6,7 +6,7 @@ import javax.lang.model.element.*;
 import javax.tools.Diagnostic;
 
 public class ModelProcessor {
-
+    
     public static void processModel(Element element, ModEnv env) {
         if (element.getKind() != ElementKind.FIELD || !(element instanceof VariableElement) || !(element.getEnclosingElement() instanceof QualifiedNameable)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@Model can only be used on fields.");
@@ -17,14 +17,11 @@ public class ModelProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@Model can only be used on public static non-final fields.");
             return;
         }
-        Element typeElement = env.elements().getTypeElement("net.minecraft.client.renderer.model.IBakedModel");
-        if (typeElement != null) {
-            if (!env.sameErasure(element.asType(), typeElement.asType())) {
-                env.messager().printMessage(Diagnostic.Kind.ERROR, "Field annotated @Model needs a type of IBakedModel.");
-                return;
-            }
+        Element typeElement = env.elements().getTypeElement(ModInit.MODEL_TYPE);
+        if (typeElement == null) {
+            throw new IllegalStateException("Model base class not found: " + ModInit.MODEL_TYPE);
         } else {
-            if (!env.types().isSubtype(element.asType(), env.elements().getTypeElement("net.minecraftforge.client.extensions.IForgeBakedModel").asType())) {
+            if (!env.sameErasure(element.asType(), typeElement.asType())) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Field annotated @Model needs a type of IBakedModel.");
                 return;
             }
