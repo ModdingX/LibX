@@ -21,5 +21,5 @@ public @interface Param {
     /**
      * Field name of the codec field.
      */
-    String field() default "CODEC";
+    String field() default "";
 }

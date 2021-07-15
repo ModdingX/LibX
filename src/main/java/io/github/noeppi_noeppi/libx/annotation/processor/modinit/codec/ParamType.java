@@ -18,6 +18,8 @@ import java.util.stream.LongStream;
 
 public class ParamType implements CodecType {
 
+    private static final List<String> DEFAULT_FIELDS = null; // TODO use List.of here
+    
     @Override
     public boolean matchesDirect(VariableElement param, String name, ModEnv env) {
         return param.getAnnotation(Param.class) != null;
@@ -58,80 +60,107 @@ public class ParamType implements CodecType {
     private static String getCodecFqn(TypeMirror type, Element paramElement, ModEnv env) {
         TypeMirror boxed = env.boxed(type);
         TypeMirror codecClass;
+        @Nullable
         String fieldName;
         Param annotation = paramElement.getAnnotation(Param.class);
         if (annotation == null) {
             codecClass = boxed;
-            fieldName = "CODEC";
+            fieldName = null;
         } else {
             codecClass = env.classType(annotation::value);
             if (codecClass.getKind() == TypeKind.VOID) {
                 codecClass = boxed;
             }
-            fieldName = annotation.field();
+            fieldName = annotation.field().isEmpty() ? null : annotation.field();
         }
         TypeMirror codecClassUnboxed = env.unboxed(codecClass);
-        if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.VOID || codecClassUnboxed.getKind() == TypeKind.NULL || codecClassUnboxed.getKind() == TypeKind.NONE) {
+        if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.VOID || codecClassUnboxed.getKind() == TypeKind.NULL || codecClassUnboxed.getKind() == TypeKind.NONE) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for the void, null or none type.", paramElement);
             return null;
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.BOOLEAN) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.BOOLEAN) {
             return ModInit.CODEC_FQN + ".BOOL";
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.BYTE) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.BYTE) {
             return ModInit.CODEC_FQN + ".BYTE";
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.CHAR) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.CHAR) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for the char type.", paramElement);
             return null;
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.SHORT) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.SHORT) {
             return ModInit.CODEC_FQN + ".SHORT";
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.INT) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.INT) {
             return ModInit.CODEC_FQN + ".INT";
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.LONG) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.LONG) {
             return ModInit.CODEC_FQN + ".LONG";
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.FLOAT) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.FLOAT) {
             return ModInit.CODEC_FQN + ".FLOAT";
-        } else if ("CODEC".equals(fieldName) && codecClassUnboxed.getKind() == TypeKind.DOUBLE) {
+        } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.DOUBLE) {
             return ModInit.CODEC_FQN + ".DOUBLE";
         } else {
-            if ("CODEC".equals(fieldName) && env.sameErasure(codecClass, env.forClass(String.class))) {
+            if (fieldName == null && env.sameErasure(codecClass, env.forClass(String.class))) {
                 return ModInit.CODEC_FQN + ".STRING";
-            } else if ("CODEC".equals(fieldName) && env.sameErasure(codecClass, env.forClass(ByteBuffer.class))) {
+            } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(ByteBuffer.class))) {
                 return ModInit.CODEC_FQN + ".BYTE_BUFFER";
-            } else if ("CODEC".equals(fieldName) && env.sameErasure(codecClass, env.forClass(IntStream.class))) {
+            } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(IntStream.class))) {
                 return ModInit.CODEC_FQN + ".INT_STREAM";
-            } else if ("CODEC".equals(fieldName) && env.sameErasure(codecClass, env.forClass(LongStream.class))) {
+            } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(LongStream.class))) {
                 return ModInit.CODEC_FQN + ".LONG_STREAM";
             } else {
-                Element typeElem = env.types().asElement(codecClass);
-                if (typeElem == null) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get type element of parameter: " + codecClass + ".", paramElement);
+                if (fieldName == null) {
+                    for (String name : DEFAULT_FIELDS) {
+                        String result = tryDetect(paramElement, boxed, codecClass, name, env, false);
+                        if (result != null) return result;
+                    }
+                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: No default codec field found. Tried [ " + String.join(", ", DEFAULT_FIELDS) + " ] in class " + codecClass + ".");
                     return null;
+                } else {
+                    return tryDetect(paramElement, boxed, codecClass, fieldName, env, true);
                 }
-                VariableElement fieldElem = typeElem.getEnclosedElements().stream()
-                        .filter(e -> e.getKind() == ElementKind.FIELD)
-                        .filter(e -> e.getModifiers().contains(Modifier.PUBLIC) && e.getModifiers().contains(Modifier.STATIC))
-                        .filter(e -> e instanceof VariableElement)
-                        .map(e -> (VariableElement) e)
-                        .filter(e -> e.getSimpleName().contentEquals(fieldName))
-                        .findFirst().orElse(null);
-                if (fieldElem == null) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is not defined or inaccessible.", paramElement);
-                    return null;
-                }
-                if (!env.sameErasure(fieldElem.asType(), env.elements().getTypeElement(ModInit.CODEC_FQN).asType())) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is defined but not a Codec.", paramElement);
-                    return null;
-                }
-                if (!genericMatches(fieldElem.asType(), boxed, env)) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is not compatible with type " + type + ".", paramElement);
-                    return null;
-                }
-                if (!(fieldElem.getEnclosingElement() instanceof QualifiedNameable)) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Codec field is not nameable.", paramElement);
-                    return null;
-                }
-                return ((QualifiedNameable) fieldElem.getEnclosingElement()).getQualifiedName().toString() + "." + fieldElem.getSimpleName().toString();
             }
         }
+    }
+    
+    @Nullable
+    private static String tryDetect(Element paramElement, TypeMirror type, TypeMirror codecClass, String fieldName, ModEnv env, boolean fail) {
+        TypeMirror boxed = env.boxed(type);
+        Element typeElem = env.types().asElement(codecClass);
+        if (typeElem == null) {
+            if (fail) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get type element of parameter: " + codecClass + ".", paramElement);
+            }
+            return null;
+        }
+        VariableElement fieldElem = typeElem.getEnclosedElements().stream()
+                .filter(e -> e.getKind() == ElementKind.FIELD)
+                .filter(e -> e.getModifiers().contains(Modifier.PUBLIC) && e.getModifiers().contains(Modifier.STATIC))
+                .filter(e -> e instanceof VariableElement)
+                .map(e -> (VariableElement) e)
+                .filter(e -> e.getSimpleName().contentEquals(fieldName))
+                .findFirst().orElse(null);
+        
+        if (fieldElem == null) {
+            if (fail) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is not defined or inaccessible.", paramElement);
+            }
+            return null;
+        }
+        if (!env.sameErasure(fieldElem.asType(), env.elements().getTypeElement(ModInit.CODEC_FQN).asType())) {
+            if (fail) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is defined but not a Codec.", paramElement);
+            }
+            return null;
+        }
+        if (!genericMatches(fieldElem.asType(), boxed, env)) {
+            if (fail) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is not compatible with type " + type + ".", paramElement);
+            }
+            return null;
+        }
+        if (!(fieldElem.getEnclosingElement() instanceof QualifiedNameable)) {
+            if (fail) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Codec field is not nameable.", paramElement);
+            }
+            return null;
+        }
+        return ((QualifiedNameable) fieldElem.getEnclosingElement()).getQualifiedName().toString() + "." + fieldElem.getSimpleName().toString();
     }
 
     private static boolean genericMatches(TypeMirror typeWithGeneric, TypeMirror compare, ModEnv env) {
