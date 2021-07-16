@@ -22,26 +22,23 @@ public class TeUpdateSerializer implements PacketSerializer<TeUpdateSerializer.T
 
     @Override
     public TeUpdateMessage decode(PacketBuffer buffer) {
-        TeUpdateMessage msg = new TeUpdateMessage();
-        msg.pos = buffer.readBlockPos();
-        msg.id = buffer.readResourceLocation();
-        msg.nbt = buffer.readCompoundTag();
-        return msg;
+        BlockPos pos = buffer.readBlockPos();
+        ResourceLocation id = buffer.readResourceLocation();
+        CompoundNBT nbt = buffer.readCompoundTag();
+        
+        return new TeUpdateMessage(pos, id, nbt);
     }
 
     public static class TeUpdateMessage {
 
-        public TeUpdateMessage() {
-        }
+        public BlockPos pos;
+        public ResourceLocation id;
+        public CompoundNBT nbt;
 
         public TeUpdateMessage(BlockPos pos, ResourceLocation id, CompoundNBT nbt) {
             this.pos = pos;
             this.id = id;
             this.nbt = nbt;
         }
-
-        public BlockPos pos;
-        public ResourceLocation id;
-        public CompoundNBT nbt;
     }
 }

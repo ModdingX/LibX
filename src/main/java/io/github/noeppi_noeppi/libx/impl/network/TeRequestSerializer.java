@@ -18,21 +18,15 @@ public class TeRequestSerializer implements PacketSerializer<TeRequestSerializer
 
     @Override
     public TeRequestMessage decode(PacketBuffer buffer) {
-        TeRequestMessage msg = new TeRequestMessage();
-        msg.pos = buffer.readBlockPos();
-        return msg;
+        return new TeRequestMessage(buffer.readBlockPos());
     }
 
     public static class TeRequestMessage {
 
-        public TeRequestMessage() {
-
-        }
+        public BlockPos pos;
 
         public TeRequestMessage(BlockPos pos) {
             this.pos = pos;
         }
-
-        public BlockPos pos;
     }
 }

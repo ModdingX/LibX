@@ -56,6 +56,7 @@ public abstract class ModXRegistration extends ModX {
 
     private final List<Runnable> registrationHandlers = new ArrayList<>();
     private boolean registered = false;
+    private final Object registrationLock = new Object();
     private final List<Pair<String, Object>> registerables = new ArrayList<>();
     private final List<RegistryCondition> registryConditions;
     private final List<RegistryTransformer> registryReplacers;
@@ -71,7 +72,7 @@ public abstract class ModXRegistration extends ModX {
             method.setAccessible(true);
             method.invoke(FMLJavaModLoadingContext.get().getModEventBus(), EventPriority.NORMAL, (Predicate<Object>) obj -> true, RegistryEvent.Register.class, (Consumer<RegistryEvent.Register<?>>) this::onRegistry);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("could not add generic listener to listen all registry events for mod " + modid + ".", e);
+            throw new RuntimeException("Could not add generic listener to listen to all registry events for mod " + modid + ".", e);
         }
         
         // Initialise the registration system.
@@ -130,8 +131,12 @@ public abstract class ModXRegistration extends ModX {
 
     private void runRegistration() {
         if (!this.registered) {
-            this.registered = true;
-            this.registrationHandlers.forEach(Runnable::run);
+            synchronized (this.registrationLock) {
+                if (!this.registered) {
+                    this.registered = true;
+                    this.registrationHandlers.forEach(Runnable::run);
+                }
+            }
         }
     }
     
