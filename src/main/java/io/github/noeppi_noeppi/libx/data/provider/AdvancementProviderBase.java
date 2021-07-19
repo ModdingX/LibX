@@ -334,6 +334,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
         private final boolean root;
         private Supplier<Advancement> parent;
         private DisplayInfo display;
+        private ResourceLocation background;
         private final List<List<Criterion>> criteria = new ArrayList<>();
         private AdvancementRewards reward = AdvancementRewards.EMPTY;
 
@@ -482,6 +483,17 @@ public abstract class AdvancementProviderBase implements IDataProvider {
         }
 
         /**
+         * Sets the background of the advancement tab. Must be used on the root advancement as is not allowed on others.
+         */
+        public AdvancementFactory background(ResourceLocation background) {
+            if (!this.root) {
+                throw new IllegalStateException("Can't set background on non-root advancement.");
+            }
+            this.background = background;
+            return this;
+        }
+
+        /**
          * Adds a task to the advancement. A task can consist of multiple criteria. In this case
          * <b>one</b> of the criteria must be completed to complete the whole task.
          */
@@ -562,13 +574,22 @@ public abstract class AdvancementProviderBase implements IDataProvider {
                     throw new IllegalStateException("This advancement provider has no default root and the advancement " + this.id + " has no root specified.");
                 }
             }
-            if (parentAdv != null && parentAdv.getDisplay() == null && this.display != null) {
+            DisplayInfo displayInfo = this.display;
+            if (this.root) {
+                if (this.display == null) {
+                    throw new IllegalStateException("Can't build root advancement without display.");
+                } else if (this.background == null) {
+                    throw new IllegalStateException("Can't build root advancement without background.");
+                }
+                displayInfo = new DisplayInfo(this.display.getIcon(), this.display.getTitle(), this.display.getDescription(), this.background, this.display.getFrame(), this.display.shouldShowToast(), this.display.shouldAnnounceToChat(), this.display.isHidden());
+            }
+            if (parentAdv != null && parentAdv.getDisplay() == null && displayInfo != null) {
                 throw new IllegalStateException("Can't build advancement with display and display-less parent.");
             }
-            if (parentAdv != null && parentAdv.getDisplay() != null && this.display != null && parentAdv.getDisplay().isHidden() && !this.display.isHidden()) {
+            if (parentAdv != null && parentAdv.getDisplay() != null && displayInfo != null && parentAdv.getDisplay().isHidden() && !displayInfo.isHidden()) {
                 throw new IllegalStateException("Can't build visible advancement with hidden parent.");
             }
-            return new Advancement(this.id, parentAdv, this.display, this.reward, criteriaMap, criteriaIds);
+            return new Advancement(this.id, parentAdv, displayInfo, this.reward, criteriaMap, criteriaIds);
         }
     }
 
