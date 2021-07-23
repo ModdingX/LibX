@@ -126,7 +126,7 @@ public class RenderHelper {
         RenderSystem.defaultBlendFunc();
         // TODO change and add colored blit methods to remove direct OpenGL calls
         GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.8f);
-        Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE_WHITE);
+        RenderSystem.setShaderTexture(0, TEXTURE_WHITE);
         GuiComponent.blit(poseStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
         GL11.glColor4f(1, 1, 1, 1);
         RenderSystem.disableBlend();
@@ -204,7 +204,7 @@ public class RenderHelper {
      * @param height The height of the GUI background
      */
     public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
-        Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE_CHEST_GUI);
+        RenderSystem.setShaderTexture(0, TEXTURE_CHEST_GUI);
         // Background
         repeatBlit(poseStack, x + 2, y + 2,
                 162, 14, width - 4, height - 4,

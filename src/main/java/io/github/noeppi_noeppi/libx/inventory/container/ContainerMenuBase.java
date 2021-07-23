@@ -125,87 +125,61 @@ public abstract class ContainerMenuBase extends AbstractContainerMenu {
     // As opposed to the super method this checks for Slot#isValid(ItemStack)
     @Override
     protected boolean moveItemStackTo(@Nonnull ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
-        // TODO fix
-        boolean flag = false;
-        int i = startIndex;
-        if (reverseDirection) {
-            i = endIndex - 1;
-        }
-
+        boolean success = false;
+        
         if (stack.isStackable()) {
-            while (!stack.isEmpty()) {
-                if (reverseDirection) {
-                    if (i < startIndex) {
-                        break;
-                    }
-                } else if (i >= endIndex) {
+            int idx = reverseDirection ? endIndex - 1 : startIndex;
+            while(!stack.isEmpty()) {
+                if (reverseDirection ? idx < startIndex : idx >= endIndex) {
                     break;
                 }
 
-                Slot slot = this.slots.get(i);
-                ItemStack itemstack = slot.getItem();
-                if (!itemstack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack) && slot.mayPlace(stack)) {
-                    int j = itemstack.getCount() + stack.getCount();
+                Slot slot = this.slots.get(idx);
+                ItemStack content = slot.getItem();
+                if (!content.isEmpty() && ItemStack.isSameItemSameTags(stack, content)) {
+                    int totalCount = content.getCount() + stack.getCount();
                     int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
-                    if (j <= maxSize) {
+                    if (totalCount <= maxSize) {
                         stack.setCount(0);
-                        itemstack.setCount(j);
+                        content.setCount(totalCount);
                         slot.setChanged();
-                        flag = true;
-                    } else if (itemstack.getCount() < maxSize) {
-                        stack.shrink(maxSize - itemstack.getCount());
-                        itemstack.setCount(maxSize);
+                        success = true;
+                    } else if (content.getCount() < maxSize) {
+                        stack.shrink(maxSize - content.getCount());
+                        content.setCount(maxSize);
                         slot.setChanged();
-                        flag = true;
+                        success = true;
                     }
                 }
 
-                if (reverseDirection) {
-                    --i;
-                } else {
-                    ++i;
-                }
+                idx += (reverseDirection ? -1 : 1);
             }
         }
 
         if (!stack.isEmpty()) {
-            if (reverseDirection) {
-                i = endIndex - 1;
-            } else {
-                i = startIndex;
-            }
-
-            while (true) {
-                if (reverseDirection) {
-                    if (i < startIndex) {
-                        break;
-                    }
-                } else if (i >= endIndex) {
+            int idx = reverseDirection ? endIndex - 1 : startIndex;
+            while(true) {
+                if (reverseDirection ? idx < startIndex : idx >= endIndex) {
                     break;
                 }
 
-                Slot slot1 = this.slots.get(i);
-                ItemStack itemstack1 = slot1.getItem();
-                if (itemstack1.isEmpty() && slot1.mayPlace(stack)) {
-                    if (stack.getCount() > slot1.getMaxStackSize()) {
-                        slot1.set(stack.split(slot1.getMaxStackSize()));
+                Slot slot = this.slots.get(idx);
+                ItemStack content = slot.getItem();
+                if (content.isEmpty() && slot.mayPlace(stack)) {
+                    if (stack.getCount() > slot.getMaxStackSize()) {
+                        slot.set(stack.split(slot.getMaxStackSize()));
                     } else {
-                        slot1.set(stack.split(stack.getCount()));
+                        slot.set(stack.split(stack.getCount()));
                     }
-
-                    slot1.setChanged();
-                    flag = true;
+                    slot.setChanged();
+                    success = true;
                     break;
                 }
 
-                if (reverseDirection) {
-                    --i;
-                } else {
-                    ++i;
-                }
+                idx += (reverseDirection ? -1 : 1);
             }
         }
 
-        return flag;
+        return success;
     }
 }

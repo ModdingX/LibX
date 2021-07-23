@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,7 +33,7 @@ public class RenderHelperFluid {
     private static void renderFluid(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite, int color, int x, int y, int width, int height) {
         poseStack.pushPose();
         poseStack.translate(0, 0, 100);
-        Minecraft.getInstance().getTextureManager().bindForSetup(sprite.atlas().location());
+        RenderSystem.setShaderTexture(0, sprite.atlas().location());
         // TODO use colorBlit when done. Commented out for now
 //        RenderHelper.color(color);
         RenderHelper.repeatBlit(poseStack, x, y, width, height, sprite);
