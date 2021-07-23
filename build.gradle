@@ -7,7 +7,7 @@ apply from: 'https://raw.githubusercontent.com/noeppi-noeppi/ModUtils/master/mod
 javadoc {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.destinationDirectory(file("build/docs/javadoc"))
-    title("LibX ${base_version} JavDoc")
+    title("LibX ${base_version} JavaDoc")
     options.windowTitle("LibX ${base_version} JavDoc")
     options.footer('<h3><a href="https://www.curseforge.com/minecraft/mc-mods/libx" target="_blank">CurseForge</a>' \
             + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \

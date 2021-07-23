@@ -1,0 +1,7 @@
+{
+  "datapacks": "coremods/datapacks.js",
+  "interact": "coremods/interact.js",
+  "pack_repository": "coremods/pack_repository.js",
+  "random_tick": "coremods/random_tick.js",
+  "world_seed": "coremods/world_seed.js"
+}
