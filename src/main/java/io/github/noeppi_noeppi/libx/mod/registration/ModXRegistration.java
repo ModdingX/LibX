@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.base.BlockTE;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;

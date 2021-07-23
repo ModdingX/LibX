@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.network;
 
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

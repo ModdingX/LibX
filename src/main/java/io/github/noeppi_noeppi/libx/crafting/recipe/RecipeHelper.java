@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.crafting.recipe;
 
 import net.minecraft.world.Container;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -75,7 +74,7 @@ public class RecipeHelper {
             if (!stack.isEmpty()) {
                 int itemsLeft = stack.getCount();
                 for (ItemStack used : stacked) {
-                    if (AbstractContainerMenu.consideredTheSameItem(stack, used)) {
+                    if (ItemStack.isSameItemSameTags(stack, used)) {
                         int stackTransfer = ignoreMaxStackSize ? itemsLeft : Math.min(itemsLeft, used.getMaxStackSize() - used.getCount());
                         if (stackTransfer < 0) {
                             stackTransfer = 0;

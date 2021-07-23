@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.criterion.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;

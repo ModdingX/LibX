@@ -88,10 +88,11 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     }
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
-        if (item.getItemStackTileEntityRenderer() == ItemStackRenderer.get()) {
-            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(TEISR_PARENT));
-        } else {
+        // FIXME wait for a forge hook
+//        if (item.getItemStackTileEntityRenderer() == ItemStackRenderer.get()) {
+//            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(TEISR_PARENT));
+//        } else {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
-        }
+//        }
     }
 }

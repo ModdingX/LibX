@@ -53,16 +53,18 @@ public class BlockBE<T extends BlockEntity> extends BlockBase {
                 e.getCause().printStackTrace();
             throw new RuntimeException("Could not get constructor for tile entity " + beClass + ".", e);
         }
-        //noinspection ConstantConditions
-        this.beType = new BlockEntityType<>(() -> {
-            try {
-                return this.beConstructor.newInstance(this.getTileType());
-            } catch (ReflectiveOperationException e) {
-                if (e.getCause() != null)
-                    e.getCause().printStackTrace();
-                throw new RuntimeException("Could not create TileEntity of type " + beClass + ".", e);
-            }
-        }, ImmutableSet.of(this), null);
+        // FIXME
+        this.beType = null;
+//        //noinspection ConstantConditions
+//        this.beType = new BlockEntityType<>(() -> {
+//            try {
+//                return this.beConstructor.newInstance(this.getTileType());
+//            } catch (ReflectiveOperationException e) {
+//                if (e.getCause() != null)
+//                    e.getCause().printStackTrace();
+//                throw new RuntimeException("Could not create TileEntity of type " + beClass + ".", e);
+//            }
+//        }, ImmutableSet.of(this), null);
     }
 
     @Override
@@ -71,20 +73,9 @@ public class BlockBE<T extends BlockEntity> extends BlockBase {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public T createTileEntity(BlockState state, BlockGetter level) {
-        return this.beType.create();
-    }
-
-    @Override
     @SuppressWarnings("deprecation")
     public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
-        if (!level.isClientSide && (!state.is(newState.getBlock()) || !newState.hasTileEntity()) && this.shouldDropInventory(level, pos, state)) {
+        if (!level.isClientSide && (!state.is(newState.getBlock()) /*||  !newState.hasTileEntity() FIXME find a way for this */) && this.shouldDropInventory(level, pos, state)) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be != null) {
                 be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {

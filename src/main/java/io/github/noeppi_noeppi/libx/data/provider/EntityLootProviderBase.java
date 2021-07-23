@@ -9,7 +9,6 @@ import net.minecraft.data.HashCache;
 import net.minecraft.data.DataProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.loot.*;
 import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
@@ -18,6 +17,9 @@ import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -28,12 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import net.minecraft.world.level.storage.loot.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.ConstantIntValue;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.RandomValueBounds;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -147,7 +146,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
     public void drops(EntityType<?> e, LootFactory... loot) {
         LootPoolEntryContainer.Builder<?> entry = this.combine(LootFactory.resolve(e, loot));
         LootPool.Builder pool = LootPool.lootPool().name("main")
-                .setRolls(ConstantIntValue.exactly(1)).add(entry);
+                .setRolls(ConstantValue.exactly(1)).add(entry);
         this.customLootTable(e, LootTable.lootTable().withPool(pool));
     }
     
@@ -199,7 +198,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
      * @param max The maximum amount of additional drops.
      */
     public LootModifier looting(int min, int max) {
-        return (b, e) -> e.apply(LootingEnchantFunction.lootingMultiplier(RandomValueBounds.between(min, max)));
+        return (b, e) -> e.apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(min, max)));
     }
 
     /**
@@ -213,7 +212,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
      * A loot modifier that sets the count of a stack.
      */
     public LootModifier count(int count) {
-        return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(count)));
+        return this.from(SetItemCountFunction.setCount(ConstantValue.exactly(count)));
     }
     
     /**
@@ -221,9 +220,9 @@ public abstract class EntityLootProviderBase implements DataProvider {
      */
     public LootModifier count(int min, int max) {
         if (min == max) {
-            return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(min)));
+            return this.from(SetItemCountFunction.setCount(ConstantValue.exactly(min)));
         } else {
-            return this.from(SetItemCountFunction.setCount(RandomValueBounds.between(min, max)));
+            return this.from(SetItemCountFunction.setCount(UniformGenerator.between(min, max)));
         }
     }
     

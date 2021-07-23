@@ -14,14 +14,12 @@ import io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 

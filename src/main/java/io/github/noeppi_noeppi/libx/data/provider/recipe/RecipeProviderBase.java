@@ -40,7 +40,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     protected abstract void setup();
 
     @Override
-    protected final void buildShapelessRecipes(@Nonnull Consumer<FinishedRecipe> consumer) {
+    protected final void buildCraftingRecipes(@Nonnull Consumer<FinishedRecipe> consumer) {
         this.consumer = consumer;
         this.setup();
     }

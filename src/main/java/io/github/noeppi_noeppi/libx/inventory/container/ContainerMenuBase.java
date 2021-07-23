@@ -125,6 +125,7 @@ public abstract class ContainerMenuBase extends AbstractContainerMenu {
     // As opposed to the super method this checks for Slot#isValid(ItemStack)
     @Override
     protected boolean moveItemStackTo(@Nonnull ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
+        // TODO fix
         boolean flag = false;
         int i = startIndex;
         if (reverseDirection) {
@@ -143,7 +144,7 @@ public abstract class ContainerMenuBase extends AbstractContainerMenu {
 
                 Slot slot = this.slots.get(i);
                 ItemStack itemstack = slot.getItem();
-                if (!itemstack.isEmpty() && consideredTheSameItem(stack, itemstack) && slot.mayPlace(stack)) {
+                if (!itemstack.isEmpty() && ItemStack.isSameItemSameTags(stack, itemstack) && slot.mayPlace(stack)) {
                     int j = itemstack.getCount() + stack.getCount();
                     int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
                     if (j <= maxSize) {

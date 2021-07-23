@@ -1,7 +1,5 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import net.minecraft.util.text.*;
-
 import java.util.function.BiConsumer;
 
 import net.minecraft.network.chat.Component;

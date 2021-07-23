@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.libxcore;
 
 import io.github.noeppi_noeppi.libx.world.WorldSeedHolder;
-import net.minecraft.world.gen.settings.DimensionGeneratorSettings;
 
 public class CoreWorldSeed {
 

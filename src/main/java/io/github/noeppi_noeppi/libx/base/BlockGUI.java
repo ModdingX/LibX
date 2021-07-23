@@ -9,7 +9,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +19,6 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * This class registers a container to it's {@link TileEntityType tile entity type} and handles the gui

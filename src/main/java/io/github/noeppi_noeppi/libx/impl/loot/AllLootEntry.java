@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.impl.loot;
 
 import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.loot.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-// A loot entry that merges multiple entries into one to be found in one roll.
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.entries.ComposableEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
@@ -19,6 +17,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 
+// A loot entry that merges multiple entries into one to be found in one roll.
 public class AllLootEntry extends CompositeEntryBase {
 
     public static final ResourceLocation ID = new ResourceLocation(LibX.getInstance().modid, "all");

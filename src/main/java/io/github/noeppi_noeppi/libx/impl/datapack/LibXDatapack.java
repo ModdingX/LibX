@@ -3,8 +3,8 @@ package io.github.noeppi_noeppi.libx.impl.datapack;
 import com.google.gson.JsonObject;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.loading.moddiscovery.ModFile;
-import net.minecraftforge.fml.packs.ModFileResourcePack;
+import net.minecraftforge.fmllegacy.packs.ModFileResourcePack;
+import net.minecraftforge.forgespi.locating.IModFile;
 
 import javax.annotation.Nonnull;
 import java.io.*;
@@ -21,11 +21,11 @@ public class LibXDatapack extends ModFileResourcePack {
     public static final String PREFIX = "libxdata";
     public static final int PACK_VERSION = 6; // TODO update in 1.17
     
-    private final ModFile modFile;
+    private final IModFile modFile;
     private final String packId;
     private final byte[] packMcmeta;
 
-    public LibXDatapack(ModFile modFile, String packId) {
+    public LibXDatapack(IModFile modFile, String packId) {
         super(modFile);
         this.modFile = modFile;
         this.packId = packId;
@@ -76,7 +76,7 @@ public class LibXDatapack extends ModFileResourcePack {
     @Override
     public Collection<ResourceLocation> getResources(PackType type, @Nonnull String namespace, @Nonnull String path, int maxDepth, @Nonnull Predicate<String> filter) {
         try {
-            Path root = this.modFile.getLocator().findPath(this.modFile, PREFIX + "/" + this.packId + "/" + type.getDirectory()).toAbsolutePath();
+            Path root = this.modFile.findResource(PREFIX, this.packId, type.getDirectory()).toAbsolutePath();
             Path comparingPath = root.getFileSystem().getPath(path);
             return Files.walk(root)
                     .map(p -> root.relativize(p.toAbsolutePath()))
@@ -99,7 +99,7 @@ public class LibXDatapack extends ModFileResourcePack {
     @Override
     public Set<String> getNamespaces(PackType type) {
         try {
-            Path root = this.modFile.getLocator().findPath(this.modFile, PREFIX + "/" + this.packId + "/" + type.getDirectory()).toAbsolutePath();
+            Path root = this.modFile.findResource(PREFIX, this.packId, type.getDirectory()).toAbsolutePath();
             return Files.walk(root,1)
                     .map(path -> root.relativize(path.toAbsolutePath()))
                     .filter(path -> path.getNameCount() > 0)

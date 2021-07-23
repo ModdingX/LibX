@@ -2,11 +2,6 @@ package io.github.noeppi_noeppi.libx.data.provider.recipe.crafting;
 
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import io.github.noeppi_noeppi.libx.impl.data.recipe.ObjectCraftingBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * A {@link RecipeExtension} for shaped and shapeless recipes.

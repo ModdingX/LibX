@@ -12,6 +12,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.Direction;
@@ -31,11 +32,12 @@ public class RenderHelperItem {
      * Renders an {@link ItemStack item} tinted in the given color.
      */
     public static void renderItemTinted(ItemStack stack, ItemTransforms.TransformType transformType, int light, int overlay, PoseStack poseStack, MultiBufferSource buffer, float r, float g, float b, float alpha) {
+        // TODO fix
         if (!stack.isEmpty()) {
             boolean isGui = transformType == ItemTransforms.TransformType.GUI;
             boolean isFixed = isGui || transformType == ItemTransforms.TransformType.GROUND || transformType == ItemTransforms.TransformType.FIXED;
-
-            BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, null);
+            
+            BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, null, 0);
             model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(poseStack, model, transformType, false);
 
             poseStack.pushPose();
@@ -66,11 +68,12 @@ public class RenderHelperItem {
                 VertexConsumer ivertexconsumer = ItemRenderer.getFoilBuffer(buffer, type, true, stack.hasFoil());
                 renderTintedModel(model, stack, light, overlay, poseStack, ivertexconsumer, r, g, b, alpha);
             } else {
-                //noinspection deprecation
-                GlStateManager._color4f(r, g, b, alpha);
-                stack.getItem().getItemStackTileEntityRenderer().renderByItem(stack, transformType, poseStack, buffer, light, overlay);
-                //noinspection deprecation
-                GlStateManager._color4f(1, 1, 1, 1);
+                // FIXME commented out as there's no renderer field in the item any longer
+//                //noinspection deprecation
+//                GlStateManager.color4f(r, g, b, alpha);
+//                stack.getItem().().renderByItem(stack, transformType, poseStack, buffer, light, overlay);
+//                //noinspection deprecation
+//                GlStateManager.color4f(1, 1, 1, 1);
             }
 
             if (alpha < 1) {
@@ -104,9 +107,9 @@ public class RenderHelperItem {
                 float ir = (float)(mixColor >> 16 & 255) / 255f;
                 float ig = (float)(mixColor >> 8 & 255) / 255f;
                 float ib = (float)(mixColor & 255) / 255f;
-                buffer.addVertexData(pose, bakedquad, r * ir, g * ig, b * ib, alpha, light, overlay, true);
+                buffer.putBulkData(pose, bakedquad, r * ir, g * ig, b * ib, alpha, light, overlay, true);
             } else {
-                buffer.addVertexData(pose, bakedquad, r, g, b, alpha, light, overlay, true);
+                buffer.putBulkData(pose, bakedquad, r, g, b, alpha, light, overlay, true);
             }
         }
     }
@@ -125,20 +128,22 @@ public class RenderHelperItem {
      */
     public static void renderItemGui(PoseStack poseStack, MultiBufferSource buffer, ItemStack stack, int x, int y, int size, boolean includeAmount, float r, float g, float b, float alpha) {
         if (!stack.isEmpty()) {
-            BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, Minecraft.getInstance().player);
+            BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, Minecraft.getInstance().player, 0);
 
             poseStack.pushPose();
-            Minecraft.getInstance().getTextureManager().bind(InventoryMenu.BLOCK_ATLAS);
+            Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
             //noinspection ConstantConditions
             Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS).setFilter(false, false);
 
-            //noinspection deprecation
-            RenderSystem.enableAlphaTest();
-            RenderSystem.defaultAlphaFunc();
+            // FIXME find a solution
+//            //noinspection deprecation
+//            RenderSystem.enableAlphaTest();
+//            RenderSystem.defaultAlphaFunc();
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             //noinspection deprecation
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            // FIXME find a solution
+//            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             poseStack.translate(x, y, 50);
             poseStack.scale(size / 16f, size / 16f, 1);
@@ -159,10 +164,11 @@ public class RenderHelperItem {
                 com.mojang.blaze3d.platform.Lighting.setupFor3DItems();
             }
 
-            //noinspection deprecation
-            RenderSystem.disableAlphaTest();
-            //noinspection deprecation
-            RenderSystem.disableRescaleNormal();
+            // FIXME find a solution
+//            //noinspection deprecation
+//            RenderSystem.disableAlphaTest();
+//            //noinspection deprecation
+//            RenderSystem.disableRescaleNormal();
 
             poseStack.popPose();
 

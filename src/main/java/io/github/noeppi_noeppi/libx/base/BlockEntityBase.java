@@ -3,11 +3,11 @@ package io.github.noeppi_noeppi.libx.base;
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -22,16 +22,16 @@ public class BlockEntityBase extends BlockEntity {
 
     private final Set<Capability<?>> caps;
 
-    public BlockEntityBase(BlockEntityType<?> blockEntityTypeIn) {
-        this(blockEntityTypeIn, new Capability[0]);
+    public BlockEntityBase(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        this(type, pos, state, new Capability[0]);
     }
 
     /**
      * This constructor accepts some capabilities that this tile entity will have. Just make sure that
      * the class also implements the required capability types or you might crash the game.
      */
-    public BlockEntityBase(BlockEntityType<?> blockEntityTypeIn, Capability<?>... caps) {
-        super(blockEntityTypeIn);
+    public BlockEntityBase(BlockEntityType<?> type, BlockPos pos, BlockState state, Capability<?>... caps) {
+        super(type, pos, state);
         this.caps = ImmutableSet.copyOf(caps);
     }
 

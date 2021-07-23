@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.util;
 
 import net.minecraft.nbt.*;
-import net.minecraft.util.text.*;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.HoverEvent;
 

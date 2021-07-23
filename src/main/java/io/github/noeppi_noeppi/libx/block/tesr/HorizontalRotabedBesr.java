@@ -15,11 +15,7 @@ import javax.annotation.Nonnull;
  * on the horizontal facing. This may only be used with blocks that have the property
  * {@link BlockStateProperties#HORIZONTAL_FACING}
  */
-public abstract class HorizontalRotabedBesr<T extends BlockEntity> extends BlockEntityRenderer<T> {
-
-    public HorizontalRotabedBesr(BlockEntityRenderDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
-    }
+public abstract class HorizontalRotabedBesr<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
     @Override
     public final void render(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay) {

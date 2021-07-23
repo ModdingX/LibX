@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.util.text.*;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.HoverEvent;
 

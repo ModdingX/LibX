@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -66,7 +66,7 @@ public class GenericContainerMenu extends ContainerMenuBase {
     public final int height;
     public final int invX;
     public final int invY;
-    public final List<Pair<Integer, Integer>> slots;
+    public final List<Pair<Integer, Integer>> slotList;
 
     private GenericContainerMenu(int id, IItemHandlerModifiable handler, Inventory playerContainer) {
         super(TYPE, id, playerContainer);
@@ -75,9 +75,9 @@ public class GenericContainerMenu extends ContainerMenuBase {
         this.height = layout.getLeft().getRight();
         this.invX = layout.getMiddle().getLeft();
         this.invY = layout.getMiddle().getRight();
-        this.slots = layout.getRight();
-        for (int i = 0; i < this.slots.size(); i++) {
-            this.addSlot(new SlotItemHandler(handler, i, this.slots.get(i).getLeft(), this.slots.get(i).getRight()));
+        this.slotList = layout.getRight();
+        for (int i = 0; i < this.slotList.size(); i++) {
+            this.addSlot(new SlotItemHandler(handler, i, this.slotList.get(i).getLeft(), this.slotList.get(i).getRight()));
         }
         this.layoutPlayerInventorySlots(layout.getMiddle().getLeft(), layout.getMiddle().getRight());
     }
@@ -92,11 +92,11 @@ public class GenericContainerMenu extends ContainerMenuBase {
     public ItemStack quickMoveStack(@Nonnull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack stack = slot.getItem();
             itemstack = stack.copy();
 
-            final int inventorySize = this.slots.size();
+            final int inventorySize = this.slotList.size();
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotBarEnd = playerInventoryEnd + 9;
 
@@ -148,7 +148,7 @@ public class GenericContainerMenu extends ContainerMenuBase {
             }
 
             @Override
-            public AbstractContainerMenu createMenu(int containerId, @Nonnull Inventory inventory, @Nonnull Player player) {
+            public AbstractContainerMenu createMenu(int containerId, @Nonnull Inventory inv, @Nonnull Player player) {
                 BiPredicate<Integer, ItemStack> validator;
                 if (validators.containsKey(validatorId == null ? EMPTY_VALIDATOR : validatorId)) {
                     validator = validators.get(validatorId);
@@ -156,7 +156,7 @@ public class GenericContainerMenu extends ContainerMenuBase {
                     LibX.logger.warn("Generic container created with invalid validator. Validator ID: " + validatorId);
                     validator = validators.get(EMPTY_VALIDATOR);
                 }
-                return new GenericContainerMenu(containerId, new GenericContainerSlotValidationWrapper(inventory, validator, null), inventory);
+                return new GenericContainerMenu(containerId, new GenericContainerSlotValidationWrapper(inventory, validator, null), inv);
             }
         };
         NetworkHooks.openGui(player, provider, buffer -> {

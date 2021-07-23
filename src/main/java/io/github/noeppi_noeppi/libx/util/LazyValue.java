@@ -10,14 +10,14 @@ import java.util.function.Supplier;
  */
 public class LazyValue<T> {
 
-    private Supplier<T> supplier;
+    private Supplier<? extends T> supplier;
     private T value;
 
     /**
      * Creates a new lazy value. the supplier will be called once when
      * the value is first retrieved.
      */
-    public LazyValue(Supplier<T> supplier) {
+    public LazyValue(Supplier<? extends T> supplier) {
         this.supplier = supplier;
         this.value = null;
     }

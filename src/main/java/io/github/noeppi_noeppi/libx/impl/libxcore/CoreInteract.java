@@ -3,12 +3,9 @@ package io.github.noeppi_noeppi.libx.impl.libxcore;
 import io.github.noeppi_noeppi.libx.event.ClickBlockEmptyHandEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.server.management.PlayerInteractionManager;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 

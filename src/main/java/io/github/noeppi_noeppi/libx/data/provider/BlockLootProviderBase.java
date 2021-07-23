@@ -16,14 +16,15 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.*;
-import net.minecraft.loot.functions.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -36,13 +37,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import net.minecraft.world.level.storage.loot.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.ConstantIntValue;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.RandomValueBounds;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -151,7 +149,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
      */
     public LootModifier copyNBT(String... tags) {
         return (b, entry) -> {
-            CopyNbtFunction.Builder func = CopyNbtFunction.copyData(CopyNbtFunction.DataSource.BLOCK_ENTITY);
+            CopyNbtFunction.Builder func = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY);
             for (String tag : tags) {
                 func = func.copy(tag, "BlockEntityTag." + tag);
             }
@@ -242,7 +240,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
             entry = AlternativesEntry.alternatives(silkBuilder, entry);
         }
         LootPool.Builder pool = LootPool.lootPool().name("main")
-                .setRolls(ConstantIntValue.exactly(1)).add(entry)
+                .setRolls(ConstantValue.exactly(1)).add(entry)
                 .when(ExplosionCondition.survivesExplosion());
         this.customLootTable(b, LootTable.lootTable().withPool(pool));
     }
@@ -369,7 +367,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
      * A loot modifier that sets the count of a stack.
      */
     public LootModifier count(int count) {
-        return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(count)));
+        return this.from(SetItemCountFunction.setCount(ConstantValue.exactly(count)));
     }
     
     /**
@@ -377,9 +375,9 @@ public abstract class BlockLootProviderBase implements DataProvider {
      */
     public LootModifier count(int min, int max) {
         if (min == max) {
-            return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(min)));
+            return this.from(SetItemCountFunction.setCount(ConstantValue.exactly(min)));
         } else {
-            return this.from(SetItemCountFunction.setCount(RandomValueBounds.between(min, max)));
+            return this.from(SetItemCountFunction.setCount(UniformGenerator.between(min, max)));
         }
     }
     
@@ -530,7 +528,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
     protected LootTable.Builder defaultBehavior(Block b) {
         if (b.getStateDefinition().getPossibleStates().stream().anyMatch(this::needsLootTable)) {
             LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(b);
-            LootPool.Builder pool = LootPool.lootPool().name("main").setRolls(ConstantIntValue.exactly(1)).add(entry)
+            LootPool.Builder pool = LootPool.lootPool().name("main").setRolls(ConstantValue.exactly(1)).add(entry)
                     .when(ExplosionCondition.survivesExplosion());
             return LootTable.lootTable().withPool(pool);
         } else {

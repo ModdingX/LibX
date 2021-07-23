@@ -7,8 +7,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 
@@ -52,11 +52,11 @@ public final class NetworkImpl extends NetworkX {
             BlockEntity be = level.getBlockEntity(pos);
             if (be == null)
                 return;
-            CompoundTag nbt = te.getUpdateTag();
+            CompoundTag nbt = be.getUpdateTag();
             //noinspection ConstantConditions
             if (nbt == null)
                 return;
-            ResourceLocation id = te.getType().getRegistryName();
+            ResourceLocation id = be.getType().getRegistryName();
             if (id == null)
                 return;
             this.instance.send(target, new TeUpdateSerializer.TeUpdateMessage(pos, id, nbt));

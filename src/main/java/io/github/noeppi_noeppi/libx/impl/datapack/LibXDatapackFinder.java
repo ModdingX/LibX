@@ -8,6 +8,7 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
+import net.minecraftforge.forgespi.language.IModFileInfo;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -25,7 +26,7 @@ public class LibXDatapackFinder implements RepositorySource {
     public void loadPacks(@Nonnull Consumer<Pack> infoConsumer, @Nonnull Pack.PackConstructor infoFactory) {
         for (ResourceLocation pack : DynamicDatapacks.getEnabledPacks()) {
             String name = LibXDatapack.PREFIX + "/" + pack.getNamespace() + ":" + pack.getPath();
-            ModFileInfo fileInfo = ModList.get().getModFileById(pack.getNamespace());
+            IModFileInfo fileInfo = ModList.get().getModFileById(pack.getNamespace());
             if (fileInfo == null || fileInfo.getFile() == null) {
                 LibX.logger.warn("Can't create dynamic datapack " + pack + ": Invalid mod file: " + fileInfo);
             } else {

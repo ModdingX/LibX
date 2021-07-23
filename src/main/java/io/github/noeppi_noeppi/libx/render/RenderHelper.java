@@ -115,16 +115,18 @@ public class RenderHelper {
      * Sets the color to the given RGB color in format 0xRRGGBB
      */
     public static void color(int color) {
-        //noinspection deprecation
-        RenderSystem.color3f(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f);
+        // FIXME find a solution for this
+//        //noinspection deprecation
+//        RenderSystem.color3f(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f);
     }
 
     /**
      * Resets the color to white.
      */
     public static void resetColor() {
-        //noinspection deprecation
-        RenderSystem.color3f(1, 1, 1);
+        // FIXME find a solution for this
+//        //noinspection deprecation
+//        RenderSystem.color3f(1, 1, 1);
     }
 
     /**
@@ -138,14 +140,16 @@ public class RenderHelper {
         poseStack.translate(-(widthHalf + 2), -(heightHalf + 2), 0);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        //noinspection deprecation
-        GlStateManager._color4f(0.2f, 0.2f, 0.2f, 0.8f);
-        Minecraft.getInstance().getTextureManager().bind(TEXTURE_WHITE);
+        // FIXME find a solution for this
+//        //noinspection deprecation
+//        GlStateManager._color4f(0.2f, 0.2f, 0.2f, 0.8f);
+        Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE_WHITE);
 
         GuiComponent.blit(poseStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
 
-        //noinspection deprecation
-        GlStateManager._color4f(1, 1, 1, 1);
+        // FIXME find a solution for this
+//        //noinspection deprecation
+//        GlStateManager._color4f(1, 1, 1, 1);
         RenderSystem.disableBlend();
         poseStack.translate(widthHalf + 2, heightHalf + 2, 10);
 
@@ -221,9 +225,10 @@ public class RenderHelper {
      * @param height The height of the GUI background
      */
     public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
-        //noinspection deprecation
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getInstance().getTextureManager().bind(TEXTURE_CHEST_GUI);
+        // FIXME find a solution for this
+//        //noinspection deprecation
+//        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE_CHEST_GUI);
         // Background
         repeatBlit(poseStack, x + 2, y + 2,
                 162, 14, width - 4, height - 4,

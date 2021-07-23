@@ -3,11 +3,11 @@ package io.github.noeppi_noeppi.libx.impl.commands;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
 import static io.github.noeppi_noeppi.libx.command.EnumArgument2.enumArgument;
-import static net.minecraft.command.Commands.argument;
-import static net.minecraft.command.Commands.literal;
-import staticnet.minecraft.commands.Commandsts.EntityArgument.entities;
-import static net.minecraft.command.arguments.NBTCompoundTagArgument.nbt;
-import staticnet.minecraft.commands.arguments.CompoundTagArgumentth;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
+import static net.minecraft.commands.arguments.CompoundTagArgument.compoundTag;
+import static net.minecraft.commands.arguments.EntityArgument.entities;
+import static net.minecraft.commands.arguments.NbtPathArgument.nbtPath;
 
 public class CommandsImpl {
 

@@ -4,7 +4,6 @@ import com.google.common.collect.Streams;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.util.text.*;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraftforge.fml.ModList;
@@ -21,6 +20,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.forgespi.language.IModInfo;
 
 public class ModListCommand implements Command<CommandSourceStack> {
 
@@ -35,11 +35,11 @@ public class ModListCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) {
         Stream<MutableComponent> lineStream = ModList.get().getMods().stream()
-                .sorted(Comparator.comparing(ModInfo::getDisplayName))
+                .sorted(Comparator.comparing(IModInfo::getDisplayName))
                 .filter(mod -> !mod.getModId().equalsIgnoreCase("minecraft"))
                 .map(mod -> "" 
                     + mod.getDisplayName()
-                    + mod.getConfigElement("authors")
+                    + mod.getConfig().getConfigElement("authors")
                         .map(a -> " (by " + a.toString().trim() + ")")
                         .orElse("")
                     + (this.detailed && !mod.getDescription().trim().isEmpty() ?

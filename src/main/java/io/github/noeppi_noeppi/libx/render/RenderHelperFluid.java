@@ -32,7 +32,7 @@ public class RenderHelperFluid {
     private static void renderFluid(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite, int color, int x, int y, int width, int height) {
         poseStack.pushPose();
         poseStack.translate(0, 0, 100);
-        Minecraft.getInstance().getTextureManager().bind(sprite.atlas().location());
+        Minecraft.getInstance().getTextureManager().bindForSetup(sprite.atlas().location());
         RenderHelper.color(color);
         RenderHelper.repeatBlit(poseStack, x, y, width, height, sprite);
         RenderHelper.resetColor();

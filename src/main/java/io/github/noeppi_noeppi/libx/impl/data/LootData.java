@@ -1,30 +1,28 @@
 package io.github.noeppi_noeppi.libx.impl.data;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.loot.*;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 
 import java.util.function.Function;
 
-import net.minecraft.world.level.storage.loot.ConstantIntValue;
-import net.minecraft.world.level.storage.loot.RandomValueBounds;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class LootData {
 
     public static LootPoolSingletonContainer.Builder<?> stack(ItemStack stack) {
         LootPoolSingletonContainer.Builder<?> entry = LootItem.lootTableItem(stack.getItem());
         if (stack.getCount() != 1) {
-            entry.apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(stack.getCount())));
+            entry.apply(SetItemCountFunction.setCount(ConstantValue.exactly(stack.getCount())));
         }
         if (stack.getDamageValue() != 0) {
             float damage = (stack.getMaxDamage() - stack.getDamageValue()) / (float) stack.getMaxDamage();
-            entry.apply(SetItemDamageFunction.setDamage(new RandomValueBounds(damage)));
+            entry.apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(damage)));
         }
         if (stack.hasTag()) {
             entry.apply(SetNbtFunction.setTag(stack.getOrCreateTag()));

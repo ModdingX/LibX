@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.libxcore;
 
 import io.github.noeppi_noeppi.libx.event.DatapacksReloadedEvent;
-import net.minecraft.network.IPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,8 +15,8 @@ public class CoreDatapacks {
     public static void fireReload(PlayerList list) {
         MinecraftServer server = list.getServer();
         //noinspection ConstantConditions
-        if (server != null && server.getDataPackRegistries() != null) {
-            MinecraftForge.EVENT_BUS.post(new DatapacksReloadedEvent(server, server.getDataPackRegistries()));
+        if (server != null && server.getServerResources() != null) {
+            MinecraftForge.EVENT_BUS.post(new DatapacksReloadedEvent(server, server.getServerResources()));
         }
     }
 }
