@@ -71,13 +71,13 @@ public class BlockBE<T extends BlockEntity> extends BlockBase {
     }
 
     @Override
-    public boolean hasTileEntity(BlockState stabe) {
+    public boolean hasTileEntity(BlockState state) {
         return true;
     }
 
     @Nullable
     @Override
-    public T createTileEntity(BlockState stabe, BlockGetter level) {
+    public T createTileEntity(BlockState state, BlockGetter level) {
         return this.beType.create();
     }
 
@@ -120,7 +120,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase {
      * broken. To automatically drop the inventory the tile entity must provide an item handler
      * capability that is an instance of {@link IItemHandlerModifiable}
      */
-    protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState stabe) {
+    protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState state) {
         return true;
     }
 }
