@@ -12,11 +12,13 @@ import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.inventory.screen.GenericScreen;
 import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
+import io.github.noeppi_noeppi.libx.impl.recipe.EmptyRecipe;
 import io.github.noeppi_noeppi.libx.inventory.container.GenericContainer;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
@@ -53,6 +55,7 @@ public class LibX extends ModX {
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::registerContainers);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipes);
 
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
         MinecraftForge.EVENT_BUS.addListener(TileEntityUpdateQueue::tick);
@@ -97,5 +100,10 @@ public class LibX extends ModX {
     private void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
         GenericContainer.TYPE.setRegistryName(new ResourceLocation(this.modid, "generic"));
         event.getRegistry().register(GenericContainer.TYPE);
+    }
+
+    private void registerRecipes(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        EmptyRecipe.Serializer.INSTANCE.setRegistryName(EmptyRecipe.ID);
+        event.getRegistry().register(EmptyRecipe.Serializer.INSTANCE);
     }
 }
