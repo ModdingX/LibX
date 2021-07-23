@@ -72,12 +72,12 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
 
                         if (pair.getRight()) {
                             if (!defaultTags.containsKey(teType)) {
-                                setWorldPosStabe(tile, state);
+                                setWorldPosState(tile, state);
                                 defaultTags.put(teType, tile.save(new CompoundTag()));
                             }
 
                             CompoundTag nbt = stack.getTag();
-                            setWorldPosStabe(tile, state);
+                            setWorldPosState(tile, state);
                             tile.load(state, defaultTags.get(teType));
                             if (nbt != null && nbt.contains("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
                                 CompoundTag blockTag = nbt.getCompound("BlockEntityTag");
@@ -107,7 +107,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
         }
     }
 
-    private static void setWorldPosStabe(BlockEntity tile, BlockState state) {
+    private static void setWorldPosState(BlockEntity tile, BlockState state) {
         if (Minecraft.getInstance().level != null) {
             tile.setLevelAndPosition(Minecraft.getInstance().level, BlockPos.ZERO);
         }
