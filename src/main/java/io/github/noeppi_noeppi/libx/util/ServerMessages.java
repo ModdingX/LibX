@@ -1,9 +1,9 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
@@ -12,23 +12,23 @@ public class ServerMessages {
     /**
      * Sends a {@link ITextComponent text component} to every player on the server.
      */
-    public static void broadcast(World world, ITextComponent message) {
-        MinecraftServer server = world.getServer();
+    public static void broadcast(Level level, Component message) {
+        MinecraftServer server = level.getServer();
         if (server != null) {
-            server.getPlayerList().getPlayers().forEach(player -> player.sendMessage(message, player.getUniqueID()));
+            server.getPlayerList().getPlayers().forEach(player -> player.sendMessage(message, player.getUUID()));
         }
     }
 
     /**
      * Sends a {@link ITextComponent text component} to every player on the server except one.
      */
-    public static void broadcastExcept(World world, PlayerEntity exclude, ITextComponent message) {
+    public static void broadcastExcept(Level level, Player exclude, Component message) {
         UUID uid = exclude.getGameProfile().getId();
-        MinecraftServer server = world.getServer();
+        MinecraftServer server = level.getServer();
         if (server != null) {
             server.getPlayerList().getPlayers().forEach(player -> {
                 if (!uid.equals(player.getGameProfile().getId()))
-                    player.sendMessage(message, player.getUniqueID());
+                    player.sendMessage(message, player.getUUID());
             });
         }
     }

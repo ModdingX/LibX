@@ -1,61 +1,61 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe.crafting;
 
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.level.ItemLike;
 
 /**
  * A {@link RecipeExtension} with default methods for compressing things.
  */
 public interface CompressionExtension extends RecipeExtension {
 
-    default void compress(IItemProvider item, IItemProvider compressed) {
+    default void compress(ItemLike item, ItemLike compressed) {
         this.compress(item, compressed, true);
     }
     
-    default void compress(IItemProvider item, IItemProvider compressed, boolean canRevert) {
-        ShapedRecipeBuilder.shapedRecipe(compressed)
-                .key('a', item)
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .patternLine("aaa")
-                .addCriterion("has_item", this.criterion(item))
-                .build(this.consumer(), this.provider().loc(item, "compress"));
+    default void compress(ItemLike item, ItemLike compressed, boolean canRevert) {
+        ShapedRecipeBuilder.shaped(compressed)
+                .define('a', item)
+                .pattern("aaa")
+                .pattern("aaa")
+                .pattern("aaa")
+                .unlockedBy("has_item", this.criterion(item))
+                .save(this.consumer(), this.provider().loc(item, "compress"));
 
         if (canRevert) {
-            ShapelessRecipeBuilder.shapelessRecipe(item, 9)
-                    .addIngredient(compressed)
-                    .addCriterion("has_item", this.criterion(compressed))
-                    .build(this.consumer(), this.provider().loc(compressed, "decompress"));
+            ShapelessRecipeBuilder.shapeless(item, 9)
+                    .requires(compressed)
+                    .unlockedBy("has_item", this.criterion(compressed))
+                    .save(this.consumer(), this.provider().loc(compressed, "decompress"));
         }
     }
 
-    default void smallCompress(IItemProvider item, IItemProvider compressed) {
+    default void smallCompress(ItemLike item, ItemLike compressed) {
         this.smallCompress(item, compressed, true);
     }
     
-    default void smallCompress(IItemProvider item, IItemProvider compressed, boolean canRevert) {
-        ShapedRecipeBuilder.shapedRecipe(compressed)
-                .key('a', item)
-                .patternLine("aa")
-                .patternLine("aa")
-                .addCriterion("has_item", this.criterion(item))
-                .build(this.consumer(), this.provider().loc(item, "small_compress"));
+    default void smallCompress(ItemLike item, ItemLike compressed, boolean canRevert) {
+        ShapedRecipeBuilder.shaped(compressed)
+                .define('a', item)
+                .pattern("aa")
+                .pattern("aa")
+                .unlockedBy("has_item", this.criterion(item))
+                .save(this.consumer(), this.provider().loc(item, "small_compress"));
 
         if (canRevert) {
-            ShapelessRecipeBuilder.shapelessRecipe(item, 4)
-                    .addIngredient(compressed)
-                    .addCriterion("has_item", this.criterion(compressed))
-                    .build(this.consumer(), this.provider().loc(compressed, "small_decompress"));
+            ShapelessRecipeBuilder.shapeless(item, 4)
+                    .requires(compressed)
+                    .unlockedBy("has_item", this.criterion(compressed))
+                    .save(this.consumer(), this.provider().loc(compressed, "small_decompress"));
         }
     }
 
-    default void doubleCompress(IItemProvider item, IItemProvider compressed, IItemProvider doubleCompressed) {
+    default void doubleCompress(ItemLike item, ItemLike compressed, ItemLike doubleCompressed) {
         this.doubleCompress(item, compressed, doubleCompressed, true);
     }
 
-    default void doubleCompress(IItemProvider item, IItemProvider compressed, IItemProvider doubleCompressed, boolean canRevert) {
+    default void doubleCompress(ItemLike item, ItemLike compressed, ItemLike doubleCompressed, boolean canRevert) {
         this.compress(item, compressed, canRevert);
         this.compress(compressed, doubleCompressed, canRevert);
     }

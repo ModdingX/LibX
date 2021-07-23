@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
 
@@ -38,12 +38,12 @@ public class WrappedGenericMapper<T, E extends JsonElement, C> implements ValueM
     }
 
     @Override
-    public T read(PacketBuffer buffer) {
+    public T read(FriendlyByteBuf buffer) {
         return this.parent.read(buffer, this.mapper);
     }
 
     @Override
-    public void write(T value, PacketBuffer buffer) {
+    public void write(T value, FriendlyByteBuf buffer) {
         this.parent.write(value, buffer, this.mapper);
     }
 

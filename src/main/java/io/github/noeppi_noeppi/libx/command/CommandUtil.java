@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.command;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.command.arguments.ArgumentTypes;
-import net.minecraft.command.arguments.IArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Method;
@@ -15,9 +15,9 @@ public class CommandUtil {
      * register your generic argument types. Just make sure you don't
      * register something that breaks type safety.
      */
-    public static void registerGenericCommandArgument(String name, Class<?> clazz, IArgumentSerializer<?> ias) {
+    public static void registerGenericCommandArgument(String name, Class<?> clazz, ArgumentSerializer<?> ias) {
         try {
-            Method method = ObfuscationReflectionHelper.findMethod(ArgumentTypes.class, "func_218136_a", String.class, Class.class, IArgumentSerializer.class);
+            Method method = ObfuscationReflectionHelper.findMethod(ArgumentTypes.class, "m_121601_", String.class, Class.class, ArgumentSerializer.class);
             method.setAccessible(true);
             method.invoke(null, name, clazz, ias);
         } catch (ReflectiveOperationException e) {

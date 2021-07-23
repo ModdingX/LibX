@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.data;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ModelFile;
 
 /**

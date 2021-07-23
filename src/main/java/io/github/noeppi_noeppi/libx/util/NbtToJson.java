@@ -15,50 +15,50 @@ public class NbtToJson {
      *                   the resulting json. This is here because nbt has no boolean
      *                   type and uses byte instead.
      */
-    public static JsonElement getJson(INBT nbt, boolean byteToBool) {
-        if (nbt instanceof EndNBT) {
+    public static JsonElement getJson(Tag nbt, boolean byteToBool) {
+        if (nbt instanceof EndTag) {
             return JsonNull.INSTANCE;
-        } else if (nbt instanceof CompoundNBT) {
+        } else if (nbt instanceof CompoundTag) {
             JsonObject obj = new JsonObject();
-            for (String key : ((CompoundNBT) nbt).keySet())
-                obj.add(key, getJson(((CompoundNBT) nbt).get(key), byteToBool));
+            for (String key : ((CompoundTag) nbt).getAllKeys())
+                obj.add(key, getJson(((CompoundTag) nbt).get(key), byteToBool));
             return obj;
-        } else if (nbt instanceof ListNBT) {
+        } else if (nbt instanceof ListTag) {
             JsonArray arr = new JsonArray();
-            for (int i = 0; i < ((ListNBT) nbt).size(); i++)
-                arr.add(getJson(((ListNBT) nbt).get(i), byteToBool));
+            for (int i = 0; i < ((ListTag) nbt).size(); i++)
+                arr.add(getJson(((ListTag) nbt).get(i), byteToBool));
             return arr;
-        } else if (nbt instanceof ByteNBT) {
-            if (byteToBool && (((ByteNBT) nbt).getByte() == 0 || ((ByteNBT) nbt).getByte() == 1)) {
-                return ((ByteNBT) nbt).getByte() == 0 ? new JsonPrimitive(false) : new JsonPrimitive(true);
+        } else if (nbt instanceof ByteTag) {
+            if (byteToBool && (((ByteTag) nbt).getAsByte() == 0 || ((ByteTag) nbt).getAsByte() == 1)) {
+                return ((ByteTag) nbt).getAsByte() == 0 ? new JsonPrimitive(false) : new JsonPrimitive(true);
             } else {
-                return new JsonPrimitive(((ByteNBT) nbt).getByte());
+                return new JsonPrimitive(((ByteTag) nbt).getAsByte());
             }
-        } else if (nbt instanceof DoubleNBT) {
-            return new JsonPrimitive(((DoubleNBT) nbt).getDouble());
-        } else if (nbt instanceof FloatNBT) {
-            return new JsonPrimitive(((FloatNBT) nbt).getFloat());
-        } else if (nbt instanceof IntNBT) {
-            return new JsonPrimitive(((IntNBT) nbt).getInt());
-        } else if (nbt instanceof LongNBT) {
-            return new JsonPrimitive(((LongNBT) nbt).getLong());
-        } else if (nbt instanceof ShortNBT) {
-            return new JsonPrimitive(((ShortNBT) nbt).getShort());
-        } else if (nbt instanceof StringNBT) {
-            return new JsonPrimitive(nbt.getString());
-        } else if (nbt instanceof ByteArrayNBT) {
+        } else if (nbt instanceof DoubleTag) {
+            return new JsonPrimitive(((DoubleTag) nbt).getAsDouble());
+        } else if (nbt instanceof FloatTag) {
+            return new JsonPrimitive(((FloatTag) nbt).getAsFloat());
+        } else if (nbt instanceof IntTag) {
+            return new JsonPrimitive(((IntTag) nbt).getAsInt());
+        } else if (nbt instanceof LongTag) {
+            return new JsonPrimitive(((LongTag) nbt).getAsLong());
+        } else if (nbt instanceof ShortTag) {
+            return new JsonPrimitive(((ShortTag) nbt).getAsShort());
+        } else if (nbt instanceof StringTag) {
+            return new JsonPrimitive(nbt.getAsString());
+        } else if (nbt instanceof ByteArrayTag) {
             JsonArray arr = new JsonArray();
-            for (byte b : ((ByteArrayNBT) nbt).getByteArray())
+            for (byte b : ((ByteArrayTag) nbt).getAsByteArray())
                 arr.add(b);
             return arr;
-        } else if (nbt instanceof IntArrayNBT) {
+        } else if (nbt instanceof IntArrayTag) {
             JsonArray arr = new JsonArray();
-            for (int i : ((IntArrayNBT) nbt).getIntArray())
+            for (int i : ((IntArrayTag) nbt).getAsIntArray())
                 arr.add(i);
             return arr;
-        } else if (nbt instanceof LongArrayNBT) {
+        } else if (nbt instanceof LongArrayTag) {
             JsonArray arr = new JsonArray();
-            for (long l : ((LongArrayNBT) nbt).getAsLongArray())
+            for (long l : ((LongArrayTag) nbt).getAsLongArray())
                 arr.add(l);
             return arr;
         } else  {

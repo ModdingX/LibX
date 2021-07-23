@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.inventory.slot;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -16,7 +16,7 @@ public class SlotOutputOnly extends SlotItemHandler {
     }
 
     @Override
-    public boolean isItemValid(@Nonnull ItemStack stack) {
+    public boolean mayPlace(@Nonnull ItemStack stack) {
         return false;
     }
 }

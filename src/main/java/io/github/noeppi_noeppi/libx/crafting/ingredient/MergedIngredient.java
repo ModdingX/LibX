@@ -6,9 +6,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
@@ -49,15 +49,15 @@ public class MergedIngredient extends Ingredient {
             return ingredients.get(0);
         } else if (ingredients.stream().allMatch(Ingredient::isVanilla)) {
             // Only vanilla ingredients, we can use vanilla merging
-            return Ingredient.fromItemListStream(ingredients.stream()
-                    .flatMap(i -> Arrays.stream(i.acceptedItems))
+            return Ingredient.fromValues(ingredients.stream()
+                    .flatMap(i -> Arrays.stream(i.values))
             );
         } else if (ingredients.stream().anyMatch(Ingredient::isVanilla)) {
             // We ave at least some vanilla ingredients.
             // Merge them first
-            Ingredient vanilla = Ingredient.fromItemListStream(ingredients.stream()
+            Ingredient vanilla = Ingredient.fromValues(ingredients.stream()
                     .filter(Ingredient::isVanilla)
-                    .flatMap(i -> Arrays.stream(i.acceptedItems))
+                    .flatMap(i -> Arrays.stream(i.values))
             );
             List<Ingredient> list = new ArrayList<>();
             list.add(vanilla);
@@ -76,9 +76,9 @@ public class MergedIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         return this.ingredients.stream()
-                .flatMap(i -> Arrays.stream(i.getMatchingStacks()))
+                .flatMap(i -> Arrays.stream(i.getItems()))
                 .toArray(ItemStack[]::new);
     }
 
@@ -89,10 +89,10 @@ public class MergedIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public IntList getValidItemStacksPacked() {
+    public IntList getStackingIds() {
         IntArrayList ial = new IntArrayList();
         for (Ingredient i : this.ingredients) {
-            ial.addAll(i.getValidItemStacksPacked());
+            ial.addAll(i.getStackingIds());
         }
         return ial;
     }
@@ -109,19 +109,19 @@ public class MergedIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
-        return this.ingredients.stream().allMatch(Ingredient::hasNoMatchingItems);
+    public boolean isEmpty() {
+        return this.ingredients.stream().allMatch(Ingredient::isEmpty);
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("ConstantConditions")
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", CraftingHelper.getID(MergedIngredient.Serializer.INSTANCE).toString());
         JsonArray array = new JsonArray();
         for (Ingredient i : this.ingredients) {
-            array.add(i.serialize());
+            array.add(i.toJson());
         }
         json.add("ingredients", array);
         return json;
@@ -137,11 +137,11 @@ public class MergedIngredient extends Ingredient {
 
         @Nonnull
         @Override
-        public MergedIngredient parse(@Nonnull PacketBuffer buffer) {
+        public MergedIngredient parse(@Nonnull FriendlyByteBuf buffer) {
             int size = buffer.readVarInt();
             List<Ingredient> list = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                list.add(Ingredient.read(buffer));
+                list.add(Ingredient.fromNetwork(buffer));
             }
             return new MergedIngredient(list);
         }
@@ -152,16 +152,16 @@ public class MergedIngredient extends Ingredient {
             JsonArray array = json.get("ingredients").getAsJsonArray();
             List<Ingredient> list = new ArrayList<>();
             for (JsonElement elem : array) {
-                list.add(Ingredient.deserialize(elem));
+                list.add(Ingredient.fromJson(elem));
             }
             return new MergedIngredient(list);
         }
 
         @Override
-        public void write(@Nonnull PacketBuffer buffer, @Nonnull MergedIngredient ingredient) {
+        public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull MergedIngredient ingredient) {
             buffer.writeVarInt(ingredient.ingredients.size());
             for (Ingredient i : ingredient.ingredients) {
-                i.write(buffer);
+                i.toNetwork(buffer);
             }
         }
     }

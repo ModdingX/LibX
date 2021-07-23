@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.impl.datapack;
 
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourcePackType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.moddiscovery.ModFile;
 import net.minecraftforge.fml.packs.ModFileResourcePack;
 
@@ -55,28 +55,28 @@ public class LibXDatapack extends ModFileResourcePack {
 
     @Nonnull
     @Override
-    protected InputStream getInputStream(@Nonnull String name) throws IOException {
+    protected InputStream getResource(@Nonnull String name) throws IOException {
         if (name.equals("pack.mcmeta")) {
             return new ByteArrayInputStream(this.packMcmeta);
         } else {
-            return super.getInputStream(PREFIX + "/" + this.packId + "/" + name);
+            return super.getResource(PREFIX + "/" + this.packId + "/" + name);
         }
     }
 
     @Override
-    protected boolean resourceExists(@Nonnull String name) {
+    protected boolean hasResource(@Nonnull String name) {
         if (name.equals("pack.mcmeta")) {
             return true;
         } else {
-            return super.resourceExists(PREFIX + "/" + this.packId + "/" + name);
+            return super.hasResource(PREFIX + "/" + this.packId + "/" + name);
         }
     }
 
     @Nonnull
     @Override
-    public Collection<ResourceLocation> getAllResourceLocations(ResourcePackType type, @Nonnull String namespace, @Nonnull String path, int maxDepth, @Nonnull Predicate<String> filter) {
+    public Collection<ResourceLocation> getResources(PackType type, @Nonnull String namespace, @Nonnull String path, int maxDepth, @Nonnull Predicate<String> filter) {
         try {
-            Path root = this.modFile.getLocator().findPath(this.modFile, PREFIX + "/" + this.packId + "/" + type.getDirectoryName()).toAbsolutePath();
+            Path root = this.modFile.getLocator().findPath(this.modFile, PREFIX + "/" + this.packId + "/" + type.getDirectory()).toAbsolutePath();
             Path comparingPath = root.getFileSystem().getPath(path);
             return Files.walk(root)
                     .map(p -> root.relativize(p.toAbsolutePath()))
@@ -97,9 +97,9 @@ public class LibXDatapack extends ModFileResourcePack {
 
     @Nonnull
     @Override
-    public Set<String> getResourceNamespaces(ResourcePackType type) {
+    public Set<String> getNamespaces(PackType type) {
         try {
-            Path root = this.modFile.getLocator().findPath(this.modFile, PREFIX + "/" + this.packId + "/" + type.getDirectoryName()).toAbsolutePath();
+            Path root = this.modFile.getLocator().findPath(this.modFile, PREFIX + "/" + this.packId + "/" + type.getDirectory()).toAbsolutePath();
             return Files.walk(root,1)
                     .map(path -> root.relativize(path.toAbsolutePath()))
                     .filter(path -> path.getNameCount() > 0)

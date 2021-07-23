@@ -6,17 +6,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,7 +43,7 @@ public class EffectIngredient extends Ingredient {
     /**
      * A list of effects that an ItemStack needs.
      */
-    public final List<EffectInstance> effects;
+    public final List<MobEffectInstance> effects;
 
     /**
      * Whether potions with more effects than the ones specified in this ingredient are matched.
@@ -61,18 +61,18 @@ public class EffectIngredient extends Ingredient {
     public final boolean higherDuration;
 
     public EffectIngredient(ItemStack potionStack) {
-        this(potionStack.getItem(), PotionUtils.getEffectsFromStack(potionStack), false, true, true);
+        this(potionStack.getItem(), PotionUtils.getMobEffects(potionStack), false, true, true);
     }
 
     public EffectIngredient(ItemStack potionStack, boolean extraEffects, boolean higherAmplifier, boolean higherDuration) {
-        this(potionStack.getItem(), PotionUtils.getEffectsFromStack(potionStack), extraEffects, higherAmplifier, higherDuration);
+        this(potionStack.getItem(), PotionUtils.getMobEffects(potionStack), extraEffects, higherAmplifier, higherDuration);
     }
 
-    public EffectIngredient(Item potionItem, List<EffectInstance> effects) {
+    public EffectIngredient(Item potionItem, List<MobEffectInstance> effects) {
         this(potionItem, effects, false, true, true);
     }
 
-    public EffectIngredient(Item potionItem, List<EffectInstance> effects, boolean extraEffects, boolean higherAmplifier, boolean higherDuration) {
+    public EffectIngredient(Item potionItem, List<MobEffectInstance> effects, boolean extraEffects, boolean higherAmplifier, boolean higherDuration) {
         super(Stream.empty());
         this.potionItem = potionItem;
         this.effects = ImmutableList.copyOf(effects);
@@ -83,9 +83,9 @@ public class EffectIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         ItemStack potion = new ItemStack(this.potionItem);
-        PotionUtils.appendEffects(potion, this.effects);
+        PotionUtils.setCustomEffects(potion, this.effects);
         return new ItemStack[]{potion};
     }
 
@@ -94,11 +94,11 @@ public class EffectIngredient extends Ingredient {
         if (stack == null || stack.isEmpty() || stack.getItem() != this.potionItem) {
             return false;
         }
-        List<EffectInstance> effectsLeft = new ArrayList<>(PotionUtils.getEffectsFromStack(stack));
-        for (EffectInstance effect : this.effects) {
-            if (!effectsLeft.removeIf(left -> (left.getPotion() == effect.getPotion())
+        List<MobEffectInstance> effectsLeft = new ArrayList<>(PotionUtils.getMobEffects(stack));
+        for (MobEffectInstance effect : this.effects) {
+            if (!effectsLeft.removeIf(left -> (left.getEffect() == effect.getEffect())
                     && (left.getAmplifier() == effect.getAmplifier() || (this.higherAmplifier && left.getAmplifier() > effect.getAmplifier()))
-                    && (left.getPotion().isInstant() || left.getDuration() == effect.getDuration() || (this.higherDuration && left.getDuration() > effect.getDuration())))) {
+                    && (left.getEffect().isInstantenous() || left.getDuration() == effect.getDuration() || (this.higherDuration && left.getDuration() > effect.getDuration())))) {
                 return false;
             }
         }
@@ -107,11 +107,11 @@ public class EffectIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public IntList getValidItemStacksPacked() {
-        ItemStack[] stacks = this.getMatchingStacks();
+    public IntList getStackingIds() {
+        ItemStack[] stacks = this.getItems();
         IntArrayList ial = new IntArrayList(stacks.length);
         for (ItemStack stack : stacks)
-            ial.add(RecipeItemHelper.pack(stack));
+            ial.add(StackedContents.getStackingIndex(stack));
         return ial;
     }
 
@@ -127,21 +127,21 @@ public class EffectIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return this.potionItem == Items.AIR;
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("ConstantConditions")
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", CraftingHelper.getID(Serializer.INSTANCE).toString());
         json.addProperty("item", this.potionItem.getRegistryName().toString());
         JsonArray jsonEffects = new JsonArray();
-        for (EffectInstance effect : this.effects) {
+        for (MobEffectInstance effect : this.effects) {
             JsonObject effectJson = new JsonObject();
-            effectJson.addProperty("potion", effect.getPotion().getRegistryName().toString());
+            effectJson.addProperty("potion", effect.getEffect().getRegistryName().toString());
             effectJson.addProperty("amplifier", effect.getAmplifier());
             effectJson.addProperty("duration", effect.getDuration());
             jsonEffects.add(effectJson);
@@ -163,22 +163,22 @@ public class EffectIngredient extends Ingredient {
 
         @Nonnull
         @Override
-        public EffectIngredient parse(@Nonnull PacketBuffer buffer) {
+        public EffectIngredient parse(@Nonnull FriendlyByteBuf buffer) {
             Item potionItem = ForgeRegistries.ITEMS.getValue(buffer.readResourceLocation());
             if (potionItem == null) {
                 potionItem = Items.AIR;
             }
 
-            List<EffectInstance> effects = new ArrayList<>();
+            List<MobEffectInstance> effects = new ArrayList<>();
             int effectsSize = buffer.readInt();
             for (int i = 0; i < effectsSize; i++) {
-                Effect potion = ForgeRegistries.POTIONS.getValue(buffer.readResourceLocation());
+                MobEffect potion = ForgeRegistries.POTIONS.getValue(buffer.readResourceLocation());
                 if (potion == null) {
-                    potion = Effects.SPEED;
+                    potion = MobEffects.MOVEMENT_SPEED;
                 }
                 int amplifier = buffer.readInt();
                 int duration = buffer.readInt();
-                effects.add(new EffectInstance(potion, duration, amplifier));
+                effects.add(new MobEffectInstance(potion, duration, amplifier));
             }
 
             boolean extraEffects = buffer.readBoolean();
@@ -196,16 +196,16 @@ public class EffectIngredient extends Ingredient {
                 potionItem = Items.AIR;
             }
 
-            List<EffectInstance> effects = new ArrayList<>();
+            List<MobEffectInstance> effects = new ArrayList<>();
             for (JsonElement effectJson : json.get("effects").getAsJsonArray()) {
                 JsonObject effect = effectJson.getAsJsonObject();
-                Effect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effect.get("potion").getAsString()));
+                MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effect.get("potion").getAsString()));
                 if (potion == null) {
-                    potion = Effects.SPEED;
+                    potion = MobEffects.MOVEMENT_SPEED;
                 }
                 int amplifier = effect.get("amplifier").getAsInt();
                 int duration = effect.get("duration").getAsInt();
-                effects.add(new EffectInstance(potion, duration, amplifier));
+                effects.add(new MobEffectInstance(potion, duration, amplifier));
             }
 
             boolean extraEffects = false;
@@ -228,11 +228,11 @@ public class EffectIngredient extends Ingredient {
 
         @Override
         @SuppressWarnings("ConstantConditions")
-        public void write(@Nonnull PacketBuffer buffer, @Nonnull EffectIngredient ingredient) {
+        public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull EffectIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.potionItem.getRegistryName());
             buffer.writeInt(ingredient.effects.size());
-            for (EffectInstance effect : ingredient.effects) {
-                buffer.writeResourceLocation(effect.getPotion().getRegistryName());
+            for (MobEffectInstance effect : ingredient.effects) {
+                buffer.writeResourceLocation(effect.getEffect().getRegistryName());
                 buffer.writeInt(effect.getAmplifier());
                 buffer.writeInt(effect.getDuration());
             }

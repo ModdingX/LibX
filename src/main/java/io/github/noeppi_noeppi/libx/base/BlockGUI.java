@@ -1,58 +1,60 @@
 package io.github.noeppi_noeppi.libx.base;
 
 import com.google.common.collect.ImmutableSet;
-import io.github.noeppi_noeppi.libx.inventory.container.TileContainer;
+import io.github.noeppi_noeppi.libx.inventory.container.TileContainerMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * This class registers a container to it's {@link TileEntityType tile entity type} and handles the gui
  * opening when the block is right clicked. You still need to manually register the screen on the client.
  */
-public class BlockGUI<T extends TileEntity, C extends TileContainer<T>> extends BlockTE<T> {
+public class BlockGUI<T extends BlockEntity, C extends TileContainerMenu<T>> extends BlockBE<T> {
 
-    public final ContainerType<C> container;
+    public final MenuType<C> menu;
 
-    public BlockGUI(ModX mod, Class<T> teClass, ContainerType<C> container, Properties properties) {
+    public BlockGUI(ModX mod, Class<T> teClass, MenuType<C> menu, Properties properties) {
         super(mod, teClass, properties);
-        this.container = container;
+        this.menu = menu;
     }
 
-    public BlockGUI(ModX mod, Class<T> teClass, ContainerType<C> container, Properties properties, Item.Properties itemProperties) {
+    public BlockGUI(ModX mod, Class<T> teClass, MenuType<C> menu, Properties properties, Item.Properties itemProperties) {
         super(mod, teClass, properties, itemProperties);
-        this.container = container;
+        this.menu = menu;
     }
 
     @Override
     public Set<Object> getAdditionalRegisters(ResourceLocation id) {
-        return ImmutableSet.builder().addAll(super.getAdditionalRegisters(id)).add(this.container).build();
+        return ImmutableSet.builder().addAll(super.getAdditionalRegisters(id)).add(this.menu).build();
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
 
-    public ActionResultType onBlockActivated(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
-        if (!world.isRemote) {
+    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
+        if (!level.isClientSide) {
             //noinspection ConstantConditions
-            TileContainer.openContainer((ServerPlayerEntity) player, this.container, new TranslationTextComponent("screen." + BlockGUI.this.mod.modid + "." + BlockGUI.this.getRegistryName().getPath()), pos);
+            TileContainerMenu.openMenu((ServerPlayer) player, this.menu, new TranslatableComponent("screen." + BlockGUI.this.mod.modid + "." + BlockGUI.this.getRegistryName().getPath()), pos);
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

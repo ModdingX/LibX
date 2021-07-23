@@ -35,7 +35,7 @@ public abstract class TagProviderBase<T extends IForgeRegistryEntry<T>> extends 
     }
 
     @Override
-    protected final void registerTags() {
+    protected final void addTags() {
         this.setup();
 
         this.registry.getValues().stream()

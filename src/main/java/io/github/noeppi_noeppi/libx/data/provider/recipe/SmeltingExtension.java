@@ -1,12 +1,12 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
-import net.minecraft.data.CookingRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * A {@link RecipeExtension} for smelting, blast furnace, smoker and campfire recipes.
@@ -16,7 +16,7 @@ public interface SmeltingExtension extends RecipeExtension {
     /**
      * Adds a smelting recipe.
      */
-    default void smelting(IItemProvider in, IItemProvider out, float exp, int time) {
+    default void smelting(ItemLike in, ItemLike out, float exp, int time) {
         this.smelting(this.provider().loc(out), in, out, exp, time);
     }
 
@@ -25,7 +25,7 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
-    default void blasting(IItemProvider in, IItemProvider out, float exp, int time) {
+    default void blasting(ItemLike in, ItemLike out, float exp, int time) {
         this.blasting(this.provider().loc(out), in, out, exp, time);
     }
 
@@ -34,7 +34,7 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
-    default void cooking(IItemProvider in, IItemProvider out, float exp, int time) {
+    default void cooking(ItemLike in, ItemLike out, float exp, int time) {
         this.cooking(this.provider().loc(out), in, out, exp, time);
     }
 
@@ -43,14 +43,14 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
-    default void campfire(IItemProvider in, IItemProvider out, float exp, int time) {
+    default void campfire(ItemLike in, ItemLike out, float exp, int time) {
         this.campfire(this.provider().loc(out), in, out, exp, time);
     }
 
     /**
      * Adds a smelting recipe.
      */
-    default void smelting(ITag<Item> in, IItemProvider out, float exp, int time) {
+    default void smelting(Tag<Item> in, ItemLike out, float exp, int time) {
         this.smelting(this.provider().loc(out), in, out, exp, time);
     }
 
@@ -59,7 +59,7 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
-    default void blasting(ITag<Item> in, IItemProvider out, float exp, int time) {
+    default void blasting(Tag<Item> in, ItemLike out, float exp, int time) {
         this.blasting(this.provider().loc(out), in, out, exp, time);
     }
 
@@ -68,7 +68,7 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
-    default void cooking(ITag<Item> in, IItemProvider out, float exp, int time) {
+    default void cooking(Tag<Item> in, ItemLike out, float exp, int time) {
         this.cooking(this.provider().loc(out), in, out, exp, time);
     }
 
@@ -77,17 +77,17 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
-    default void campfire(ITag<Item> in, IItemProvider out, float exp, int time) {
+    default void campfire(Tag<Item> in, ItemLike out, float exp, int time) {
         this.campfire(this.provider().loc(out), in, out, exp, time);
     }
 
     /**
      * Adds a smelting recipe.
      */
-    default void smelting(ResourceLocation outputId, IItemProvider in, IItemProvider out, float exp, int time) {
-        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(in), out, exp, time)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
+    default void smelting(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), out, exp, time)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
     }
 
     /**
@@ -95,11 +95,11 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
-    default void blasting(ResourceLocation outputId, IItemProvider in, IItemProvider out, float exp, int time) {
+    default void blasting(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(in), out, exp / 2, time / 2)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), out, exp / 2, time / 2)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
     }
 
     /**
@@ -107,11 +107,11 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
-    default void cooking(ResourceLocation outputId, IItemProvider in, IItemProvider out, float exp, int time) {
+    default void cooking(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(in), out, exp / 2, time / 2, IRecipeSerializer.SMOKING)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp / 2, time / 2, RecipeSerializer.SMOKING_RECIPE)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
     }
 
     /**
@@ -119,20 +119,20 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
-    default void campfire(ResourceLocation outputId, IItemProvider in, IItemProvider out, float exp, int time) {
+    default void campfire(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
         this.cooking(outputId, in, out, exp, time);
-        CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(in), out, exp / 2, time * 3, IRecipeSerializer.CAMPFIRE_COOKING)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp / 2, time * 3, RecipeSerializer.CAMPFIRE_COOKING_RECIPE)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
     }
 
     /**
      * Adds a smelting recipe.
      */
-    default void smelting(ResourceLocation outputId, ITag<Item> in, IItemProvider out, float exp, int time) {
-        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(in), out, exp, time)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
+    default void smelting(ResourceLocation outputId, Tag<Item> in, ItemLike out, float exp, int time) {
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), out, exp, time)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
     }
 
     /**
@@ -140,11 +140,11 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the blast furnace automatically.
      */
-    default void blasting(ResourceLocation outputId, ITag<Item> in, IItemProvider out, float exp, int time) {
+    default void blasting(ResourceLocation outputId, Tag<Item> in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(in), out, exp / 2, time / 2)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), out, exp / 2, time / 2)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
     }
 
     /**
@@ -152,11 +152,11 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker automatically.
      */
-    default void cooking(ResourceLocation outputId, ITag<Item> in, IItemProvider out, float exp, int time) {
+    default void cooking(ResourceLocation outputId, Tag<Item> in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(in), out, exp / 2, time / 2, IRecipeSerializer.SMOKING)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp / 2, time / 2, RecipeSerializer.SMOKING_RECIPE)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
     }
 
     /**
@@ -164,10 +164,10 @@ public interface SmeltingExtension extends RecipeExtension {
      * {@code time} and {@code exp} should be the values for the normal furnace. They'll be
      * adjusted for the smoker and the campfire automatically.
      */
-    default void campfire(ResourceLocation outputId, ITag<Item> in, IItemProvider out, float exp, int time) {
+    default void campfire(ResourceLocation outputId, Tag<Item> in, ItemLike out, float exp, int time) {
         this.cooking(outputId, in, out, exp, time);
-        CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(in), out, exp / 2, time * 3, IRecipeSerializer.CAMPFIRE_COOKING)
-                .addCriterion("has_item", this.criterion(in))
-                .build(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
+        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp / 2, time * 3, RecipeSerializer.CAMPFIRE_COOKING_RECIPE)
+                .unlockedBy("has_item", this.criterion(in))
+                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
     }
 }

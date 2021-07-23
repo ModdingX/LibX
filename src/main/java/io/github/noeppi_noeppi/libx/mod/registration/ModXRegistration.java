@@ -2,8 +2,8 @@ package io.github.noeppi_noeppi.libx.mod.registration;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.base.BlockTE;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.EventBus;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -62,7 +62,7 @@ public abstract class ModXRegistration extends ModX {
     private final List<RegistryTransformer> registryReplacers;
     private final List<RegistryTransformer> registryTransformers;
 
-    protected ModXRegistration(String modid, ItemGroup tab) {
+    protected ModXRegistration(String modid, CreativeModeTab tab) {
         super(modid, tab);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonRegistration);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistration);
@@ -99,7 +99,7 @@ public abstract class ModXRegistration extends ModX {
      * prefixed with the mod id.
      */
     public final void register(String id, Object obj) {
-        if (!ResourceLocation.isPathValid(id)) {
+        if (!ResourceLocation.isValidPath(id)) {
             throw new IllegalArgumentException("ModXRegistration#register called with invalid id argument.");
         }
         ResourceLocation rl = new ResourceLocation(this.modid, id);

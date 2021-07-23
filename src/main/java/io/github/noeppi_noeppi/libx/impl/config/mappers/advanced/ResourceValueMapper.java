@@ -2,8 +2,8 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPrimitive> {
 
@@ -34,12 +34,12 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
     }
 
     @Override
-    public ResourceLocation read(PacketBuffer buffer) {
+    public ResourceLocation read(FriendlyByteBuf buffer) {
         return buffer.readResourceLocation();
     }
 
     @Override
-    public void write(ResourceLocation value, PacketBuffer buffer) {
+    public void write(ResourceLocation value, FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(value);
     }
 }

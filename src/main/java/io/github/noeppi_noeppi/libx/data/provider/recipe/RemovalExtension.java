@@ -2,9 +2,9 @@ package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.impl.recipe.EmptyRecipe;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -12,34 +12,34 @@ import javax.annotation.Nullable;
 public interface RemovalExtension extends RecipeExtension {
 
     default void remove(ResourceLocation recipe) {
-        this.consumer().accept(new IFinishedRecipe() {
+        this.consumer().accept(new FinishedRecipe() {
             
             @Override
-            public void serialize(@Nonnull JsonObject json) {
+            public void serializeRecipeData(@Nonnull JsonObject json) {
                 //
             }
 
             @Nonnull
             @Override
-            public ResourceLocation getID() {
+            public ResourceLocation getId() {
                 return recipe;
             }
 
             @Nonnull
             @Override
-            public IRecipeSerializer<?> getSerializer() {
+            public RecipeSerializer<?> getType() {
                 return EmptyRecipe.Serializer.INSTANCE;
             }
 
             @Nullable
             @Override
-            public JsonObject getAdvancementJson() {
+            public JsonObject serializeAdvancement() {
                 return null;
             }
 
             @Nullable
             @Override
-            public ResourceLocation getAdvancementID() {
+            public ResourceLocation getAdvancementId() {
                 return null;
             }
         });

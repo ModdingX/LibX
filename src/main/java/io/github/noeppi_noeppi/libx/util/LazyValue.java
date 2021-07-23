@@ -26,8 +26,8 @@ public class LazyValue<T> {
      * Wraps a {@link net.minecraft.util.LazyValue} to a lazy value.
      */
     // TODO currently weird javadoc, will change after the mapping update (LazyValue -> LazyLoadedValue), remove fully qualified names then.
-    public static <T> LazyValue<T> wrap(net.minecraft.util.LazyValue<T> value) {
-        return new LazyValue<>(value::getValue);
+    public static <T> LazyValue<T> wrap(net.minecraft.util.LazyLoadedValue<T> value) {
+        return new LazyValue<>(value::get);
     }
 
     /**

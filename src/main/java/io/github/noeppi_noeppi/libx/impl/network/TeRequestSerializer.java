@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.impl.network;
 
 import io.github.noeppi_noeppi.libx.network.PacketSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 
 public class TeRequestSerializer implements PacketSerializer<TeRequestSerializer.TeRequestMessage> {
 
@@ -12,12 +12,12 @@ public class TeRequestSerializer implements PacketSerializer<TeRequestSerializer
     }
 
     @Override
-    public void encode(TeRequestMessage msg, PacketBuffer buffer) {
+    public void encode(TeRequestMessage msg, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(msg.pos);
     }
 
     @Override
-    public TeRequestMessage decode(PacketBuffer buffer) {
+    public TeRequestMessage decode(FriendlyByteBuf buffer) {
         return new TeRequestMessage(buffer.readBlockPos());
     }
 

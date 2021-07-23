@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
 
@@ -40,12 +40,12 @@ public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
     }
 
     @Override
-    public C read(PacketBuffer buffer) {
+    public C read(FriendlyByteBuf buffer) {
         return this.wrapped.read(buffer);
     }
 
     @Override
-    public void write(C value, PacketBuffer buffer) {
+    public void write(C value, FriendlyByteBuf buffer) {
         this.wrapped.write(value, buffer);
     }
 

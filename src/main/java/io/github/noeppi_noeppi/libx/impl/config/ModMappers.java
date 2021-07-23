@@ -62,7 +62,7 @@ public class ModMappers {
             MapValueMapper.INSTANCE,
             ResourceValueMapper.INSTANCE,
             IngredientValueMapper.INSTANCE,
-            TextComponentValueMapper.INSTANCE,
+            ComponentValueMapper.INSTANCE,
             ResourceListValueMapper.INSTANCE,
             IngredientStackValueMapper.INSTANCE,
             UidValueMapper.INSTANCE

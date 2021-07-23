@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.config.validators;
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.config.ConfigValidator;
 import io.github.noeppi_noeppi.libx.config.validator.*;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ public class SimpleValidators {
 
         @Override
         public Optional<Short> validate(Short value, ShortRange validator) {
-            short clamped = (short) MathHelper.clamp(value, validator.min(), validator.max());
+            short clamped = (short) Mth.clamp(value, validator.min(), validator.max());
             return value == clamped ? Optional.empty() : Optional.of(clamped);
         }
 
@@ -54,7 +54,7 @@ public class SimpleValidators {
 
         @Override
         public Optional<Integer> validate(Integer value, IntRange validator) {
-            int clamped = MathHelper.clamp(value, validator.min(), validator.max());
+            int clamped = Mth.clamp(value, validator.min(), validator.max());
             return value == clamped ? Optional.empty() : Optional.of(clamped);
         }
 
@@ -85,7 +85,7 @@ public class SimpleValidators {
 
         @Override
         public Optional<Long> validate(Long value, LongRange validator) {
-            long clamped = MathHelper.clamp(value, validator.min(), validator.max());
+            long clamped = Mth.clamp(value, validator.min(), validator.max());
             return value == clamped ? Optional.empty() : Optional.of(clamped);
         }
 
@@ -116,7 +116,7 @@ public class SimpleValidators {
 
         @Override
         public Optional<Float> validate(Float value, FloatRange validator) {
-            float clamped = MathHelper.clamp(value, validator.min(), validator.max());
+            float clamped = Mth.clamp(value, validator.min(), validator.max());
             return value == clamped ? Optional.empty() : Optional.of(clamped);
         }
 
@@ -147,7 +147,7 @@ public class SimpleValidators {
 
         @Override
         public Optional<Double> validate(Double value, DoubleRange validator) {
-            double clamped = MathHelper.clamp(value, validator.min(), validator.max());
+            double clamped = Mth.clamp(value, validator.min(), validator.max());
             return value == clamped ? Optional.empty() : Optional.of(clamped);
         }
 

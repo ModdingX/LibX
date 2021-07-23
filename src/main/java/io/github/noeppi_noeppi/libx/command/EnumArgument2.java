@@ -8,10 +8,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.IArgumentSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.server.command.EnumArgument;
 
 import javax.annotation.Nonnull;
@@ -43,7 +43,7 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
             throw new IllegalArgumentException("Can't create enum argument for non-enum class.");
         }
         this.enumClass = enumClass;
-        this.invalidValue = new DynamicCommandExceptionType((name) -> new TranslationTextComponent("libx.command.argument.enum.invalid", enumClass.getSimpleName(), name));
+        this.invalidValue = new DynamicCommandExceptionType((name) -> new TranslatableComponent("libx.command.argument.enum.invalid", enumClass.getSimpleName(), name));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
-        return ISuggestionProvider.suggest(Stream.of(this.enumClass.getEnumConstants()).map(Enum::name).map(str -> str.toLowerCase(Locale.ROOT)), builder);
+        return SharedSuggestionProvider.suggest(Stream.of(this.enumClass.getEnumConstants()).map(Enum::name).map(str -> str.toLowerCase(Locale.ROOT)), builder);
     }
 
     @Override
@@ -68,17 +68,17 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static class Serializer implements IArgumentSerializer<EnumArgument2<?>> {
+    public static class Serializer implements ArgumentSerializer<EnumArgument2<?>> {
 
         @Override
-        public void write(EnumArgument2 argument, PacketBuffer buffer) {
-            buffer.writeString(argument.enumClass.getName());
+        public void serializeToNetwork(EnumArgument2 argument, FriendlyByteBuf buffer) {
+            buffer.writeUtf(argument.enumClass.getName());
         }
 
         @Nonnull
         @Override
-        public EnumArgument2 read(PacketBuffer buffer) {
-            String name = buffer.readString();
+        public EnumArgument2 deserializeFromNetwork(FriendlyByteBuf buffer) {
+            String name = buffer.readUtf();
             try {
                 return new EnumArgument2(Class.forName(name));
             } catch (ClassNotFoundException e) {
@@ -89,7 +89,7 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
         }
 
         @Override
-        public void write(EnumArgument2 argument, JsonObject json) {
+        public void serializeToJson(EnumArgument2 argument, JsonObject json) {
             json.addProperty("enum", argument.enumClass.getName());
         }
     }

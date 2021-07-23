@@ -2,9 +2,9 @@ package io.github.noeppi_noeppi.libx.base;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
@@ -20,10 +20,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import net.minecraft.world.item.Item.Properties;
+
 /**
  * Base class for {@link Item items} which have an inventory. This will provide the capability to the item.
  */
-public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<CompoundNBT>> extends ItemBase {
+public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<CompoundTag>> extends ItemBase {
 
     private final Function<Runnable, T> inventoryFactory;
 
@@ -40,15 +42,15 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
     
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT capTag) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag capTag) {
         LazyOptional<IItemHandlerModifiable> inventoryCapability = LazyOptional.of(() -> {
             AtomicReference<T> handler = new AtomicReference<>(null);
             handler.set(this.inventoryFactory.apply(() -> {
-                CompoundNBT nbt = stack.getOrCreateTag();
+                CompoundTag nbt = stack.getOrCreateTag();
                 nbt.put("Inventory", handler.get().serializeNBT());
                 stack.setTag(nbt);
             }));
-            CompoundNBT nbt = stack.getTag();
+            CompoundTag nbt = stack.getTag();
             if (nbt != null && nbt.contains("Inventory", Constants.NBT.TAG_COMPOUND)) {
                 handler.get().deserializeNBT(nbt.getCompound("Inventory"));
             }

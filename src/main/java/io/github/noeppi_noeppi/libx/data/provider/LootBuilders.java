@@ -1,9 +1,9 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
 import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
-import net.minecraft.loot.GroupLootEntry;
-import net.minecraft.loot.LootEntry;
-import net.minecraft.loot.SequenceLootEntry;
+import net.minecraft.world.level.storage.loot.entries.EntryGroup;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.SequentialEntry;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -11,87 +11,87 @@ import java.util.List;
 
 public class LootBuilders {
 
-    public static class AllLootBuilder extends LootEntry.Builder<AllLootBuilder> {
+    public static class AllLootBuilder extends LootPoolEntryContainer.Builder<AllLootBuilder> {
 
-        private final List<LootEntry> lootEntries = new ArrayList<>();
+        private final List<LootPoolEntryContainer> lootEntries = new ArrayList<>();
 
-        public AllLootBuilder(LootEntry.Builder<?>... entries) {
-            for (LootEntry.Builder<?> builder : entries) {
+        public AllLootBuilder(LootPoolEntryContainer.Builder<?>... entries) {
+            for (LootPoolEntryContainer.Builder<?> builder : entries) {
                 this.lootEntries.add(builder.build());
             }
         }
 
         @Nonnull
         @Override
-        protected AllLootBuilder getSelf() {
+        protected AllLootBuilder getThis() {
             return this;
         }
 
-        public AllLootBuilder add(LootEntry.Builder<?> entry) {
+        public AllLootBuilder add(LootPoolEntryContainer.Builder<?> entry) {
             this.lootEntries.add(entry.build());
             return this;
         }
 
         @Nonnull
         @Override
-        public LootEntry build() {
-            return new AllLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
+        public LootPoolEntryContainer build() {
+            return new AllLootEntry(this.lootEntries.toArray(new LootPoolEntryContainer[0]), this.getConditions());
         }
     }
 
-    public static class GroupLootBuilder extends LootEntry.Builder<GroupLootBuilder> {
+    public static class GroupLootBuilder extends LootPoolEntryContainer.Builder<GroupLootBuilder> {
 
-        private final List<LootEntry> lootEntries = new ArrayList<>();
+        private final List<LootPoolEntryContainer> lootEntries = new ArrayList<>();
 
-        public GroupLootBuilder(LootEntry.Builder<?>... entries) {
-            for (LootEntry.Builder<?> builder : entries) {
+        public GroupLootBuilder(LootPoolEntryContainer.Builder<?>... entries) {
+            for (LootPoolEntryContainer.Builder<?> builder : entries) {
                 this.lootEntries.add(builder.build());
             }
         }
 
         @Nonnull
         @Override
-        protected GroupLootBuilder getSelf() {
+        protected GroupLootBuilder getThis() {
             return this;
         }
 
-        public GroupLootBuilder add(LootEntry.Builder<?> entry) {
+        public GroupLootBuilder add(LootPoolEntryContainer.Builder<?> entry) {
             this.lootEntries.add(entry.build());
             return this;
         }
 
         @Nonnull
         @Override
-        public LootEntry build() {
-            return new GroupLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
+        public LootPoolEntryContainer build() {
+            return new EntryGroup(this.lootEntries.toArray(new LootPoolEntryContainer[0]), this.getConditions());
         }
     }
 
-    public static class SequenceLootBuilder extends LootEntry.Builder<SequenceLootBuilder> {
+    public static class SequenceLootBuilder extends LootPoolEntryContainer.Builder<SequenceLootBuilder> {
 
-        private final List<LootEntry> lootEntries = new ArrayList<>();
+        private final List<LootPoolEntryContainer> lootEntries = new ArrayList<>();
 
-        public SequenceLootBuilder(LootEntry.Builder<?>... entries) {
-            for (LootEntry.Builder<?> builder : entries) {
+        public SequenceLootBuilder(LootPoolEntryContainer.Builder<?>... entries) {
+            for (LootPoolEntryContainer.Builder<?> builder : entries) {
                 this.lootEntries.add(builder.build());
             }
         }
 
         @Nonnull
         @Override
-        protected SequenceLootBuilder getSelf() {
+        protected SequenceLootBuilder getThis() {
             return this;
         }
 
-        public SequenceLootBuilder add(LootEntry.Builder<?> entry) {
+        public SequenceLootBuilder add(LootPoolEntryContainer.Builder<?> entry) {
             this.lootEntries.add(entry.build());
             return this;
         }
 
         @Nonnull
         @Override
-        public LootEntry build() {
-            return new SequenceLootEntry(this.lootEntries.toArray(new LootEntry[0]), this.getConditions());
+        public LootPoolEntryContainer build() {
+            return new SequentialEntry(this.lootEntries.toArray(new LootPoolEntryContainer[0]), this.getConditions());
         }
     }
 }

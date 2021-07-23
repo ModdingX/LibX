@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.UUID;
 
@@ -35,14 +35,14 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     }
 
     @Override
-    public UUID read(PacketBuffer buffer) {
+    public UUID read(FriendlyByteBuf buffer) {
         long mostSignificantBits = buffer.readLong();
         long leastSignificantBits = buffer.readLong();
         return new UUID(mostSignificantBits, leastSignificantBits);
     }
 
     @Override
-    public void write(UUID value, PacketBuffer buffer) {
+    public void write(UUID value, FriendlyByteBuf buffer) {
         buffer.writeLong(value.getMostSignificantBits());
         buffer.writeLong(value.getLeastSignificantBits());
     }

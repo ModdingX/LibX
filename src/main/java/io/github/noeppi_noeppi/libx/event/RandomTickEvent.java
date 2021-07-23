@@ -1,10 +1,10 @@
 package io.github.noeppi_noeppi.libx.event;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
@@ -15,12 +15,12 @@ import java.util.Random;
  */
 public abstract class RandomTickEvent extends Event {
 
-    private final World world;
+    private final Level level;
     private final BlockPos pos;
     private final Random rand;
 
-    private RandomTickEvent(World world, BlockPos pos, Random rand) {
-        this.world = world;
+    private RandomTickEvent(Level level, BlockPos pos, Random rand) {
+        this.level = level;
         this.pos = pos;
         this.rand = rand;
     }
@@ -28,8 +28,8 @@ public abstract class RandomTickEvent extends Event {
     /**
      * Gets the world where the block / fluid is about to be ticked randomly.
      */
-    public World getWorld() {
-        return this.world;
+    public Level getLevel() {
+        return this.level;
     }
 
     /**
@@ -57,12 +57,12 @@ public abstract class RandomTickEvent extends Event {
     public static class Block extends RandomTickEvent {
 
         private final BlockState state;
-        private final ServerWorld serverWorld;
+        private final ServerLevel serverLevel;
         
-        public Block(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-            super(world, pos, rand);
+        public Block(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
+            super(level, pos, rand);
             this.state = state;
-            this.serverWorld = world;
+            this.serverLevel = level;
         }
 
         /**
@@ -75,8 +75,8 @@ public abstract class RandomTickEvent extends Event {
         /**
          * Gets the world as a server world.
          */
-        public ServerWorld getServerWorld() {
-            return this.serverWorld;
+        public ServerLevel getServerLevel() {
+            return this.serverLevel;
         }
     }
     
@@ -87,8 +87,8 @@ public abstract class RandomTickEvent extends Event {
 
         private final FluidState state;
 
-        public Fluid(FluidState state, World world, BlockPos pos, Random rand) {
-            super(world, pos, rand);
+        public Fluid(FluidState state, Level level, BlockPos pos, Random rand) {
+            super(level, pos, rand);
             this.state = state;
         }
         

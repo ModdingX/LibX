@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
 
@@ -50,12 +50,12 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
     }
 
     @Override
-    public ResourceList read(PacketBuffer buffer) {
+    public ResourceList read(FriendlyByteBuf buffer) {
         return new ResourceList(buffer);
     }
 
     @Override
-    public void write(ResourceList value, PacketBuffer buffer) {
+    public void write(ResourceList value, FriendlyByteBuf buffer) {
         value.write(buffer);
     }
 

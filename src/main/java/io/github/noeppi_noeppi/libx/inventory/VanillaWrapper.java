@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * Wraps an {@link IItemHandlerModifiable} to a vanilla {@link IInventory}.
  */
-public class VanillaWrapper implements IInventory {
+public class VanillaWrapper implements Container {
 
     public final IItemHandlerModifiable handler;
 
@@ -30,7 +30,7 @@ public class VanillaWrapper implements IInventory {
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.handler.getSlots();
     }
 
@@ -45,67 +45,67 @@ public class VanillaWrapper implements IInventory {
 
     @Override
     @Nonnull
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.handler.getStackInSlot(index);
     }
 
     @Override
     @Nonnull
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
         ItemStack stack = this.handler.extractItem(index, count, false);
-        this.markDirty();
+        this.setChanged();
         return stack;
     }
 
     @Override
     @Nonnull
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
         ItemStack stack = this.handler.getStackInSlot(index).copy();
         this.handler.setStackInSlot(index, ItemStack.EMPTY);
-        this.markDirty();
+        this.setChanged();
         return stack;
     }
 
     @Override
-    public void setInventorySlotContents(int index, @Nonnull ItemStack stack) {
+    public void setItem(int index, @Nonnull ItemStack stack) {
         this.handler.setStackInSlot(index, stack);
-        this.markDirty();
+        this.setChanged();
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
         return 64;
     }
 
     @Override
-    public void markDirty() {
+    public void setChanged() {
         if (this.dirty != null) {
             this.dirty.run();
         }
     }
 
     @Override
-    public boolean isUsableByPlayer(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
         return true;
     }
 
     @Override
-    public void openInventory(@Nonnull PlayerEntity player) {
+    public void startOpen(@Nonnull Player player) {
 
     }
 
     @Override
-    public void closeInventory(@Nonnull PlayerEntity player) {
+    public void stopOpen(@Nonnull Player player) {
 
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, @Nonnull ItemStack stack) {
+    public boolean canPlaceItem(int index, @Nonnull ItemStack stack) {
         return this.handler.isItemValid(index, stack);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         for (int i = 0; i < this.handler.getSlots(); i++) {
             this.handler.setStackInSlot(i, ItemStack.EMPTY);
         }

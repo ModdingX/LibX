@@ -1,14 +1,14 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.LeavesBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -96,17 +96,17 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * {@link BlockStateProperties#FACING} and creates block states matching those.
      */
     protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
-        if (block.getStateContainer().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
+        if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
-            for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
+            for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
                 builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
-                        .addModels(new ConfiguredModel(model, 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+                        .addModels(new ConfiguredModel(model, 0, (int) direction.getOpposite().toYRot(), false));
             }
-        } else if (block.getStateContainer().getProperties().contains(BlockStateProperties.FACING)) {
+        } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
-            for (Direction direction : BlockStateProperties.FACING.getAllowedValues()) {
+            for (Direction direction : BlockStateProperties.FACING.getPossibleValues()) {
                 builder.partialState().with(BlockStateProperties.FACING, direction)
-                        .addModels(new ConfiguredModel(model, direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0, direction.getAxis().isVertical() ? 0 : (int) direction.getOpposite().getHorizontalAngle(), false));
+                        .addModels(new ConfiguredModel(model, direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0, direction.getAxis().isVertical() ? 0 : (int) direction.getOpposite().toYRot(), false));
             }
         } else {
             this.simpleBlock(block, model);
@@ -118,9 +118,9 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * of type {@link FlowingFluidBlock} and {@link LeavesBlock}.
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
-        if (block.getStateContainer().getValidStates().stream().allMatch(state -> state.getRenderType() != BlockRenderType.MODEL)) {
-            if (block instanceof FlowingFluidBlock) {
-                return this.models().getBuilder(id.getPath()).texture("particle", ((FlowingFluidBlock) block).getFluid().getAttributes().getStillTexture());
+        if (block.getStateDefinition().getPossibleStates().stream().allMatch(state -> state.getRenderShape() != RenderShape.MODEL)) {
+            if (block instanceof LiquidBlock) {
+                return this.models().getBuilder(id.getPath()).texture("particle", ((LiquidBlock) block).getFluid().getAttributes().getStillTexture());
             } else {
                 return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
             }

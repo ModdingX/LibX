@@ -1,12 +1,12 @@
 package io.github.noeppi_noeppi.libx.crafting.recipe;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,10 +20,10 @@ public class RecipeHelper {
      *
      * @param rm The recipe manager to use. You can get one from a world.
      */
-    public static boolean isItemValidInput(RecipeManager rm, IRecipeType<?> recipeType, ItemStack stack) {
+    public static boolean isItemValidInput(RecipeManager rm, RecipeType<?> recipeType, ItemStack stack) {
         //noinspection unchecked
-        Collection<? extends IRecipe<?>> recipes = rm.getRecipes((IRecipeType<IRecipe<IInventory>>) recipeType).values();
-        for (IRecipe<?> recipe : recipes) {
+        Collection<? extends Recipe<?>> recipes = rm.byType((RecipeType<Recipe<Container>>) recipeType).values();
+        for (Recipe<?> recipe : recipes) {
             for (Ingredient ingredient : recipe.getIngredients()) {
                 if (ingredient.test(stack)) {
                     return true;
@@ -40,7 +40,7 @@ public class RecipeHelper {
      * @param exactMatch When this is true this will return false if the stack list contains
      *                   more items than the recipe requires.
      */
-    public static boolean matches(IRecipe<?> recipe, List<ItemStack> stacks, boolean exactMatch) {
+    public static boolean matches(Recipe<?> recipe, List<ItemStack> stacks, boolean exactMatch) {
 
         ArrayList<Integer> countsLeft = new ArrayList<>();
         for (ItemStack stack : stacks) {
@@ -75,7 +75,7 @@ public class RecipeHelper {
             if (!stack.isEmpty()) {
                 int itemsLeft = stack.getCount();
                 for (ItemStack used : stacked) {
-                    if (Container.areItemsAndTagsEqual(stack, used)) {
+                    if (AbstractContainerMenu.consideredTheSameItem(stack, used)) {
                         int stackTransfer = ignoreMaxStackSize ? itemsLeft : Math.min(itemsLeft, used.getMaxStackSize() - used.getCount());
                         if (stackTransfer < 0) {
                             stackTransfer = 0;

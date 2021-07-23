@@ -1,14 +1,14 @@
 package io.github.noeppi_noeppi.libx.network.datasync;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.IDataSerializer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataSerializer;
 
 import javax.annotation.Nonnull;
 
 /**
  * {@link IDataSerializer Data serializers} for enums. You need to register them manually tough.
  */
-public class EnumDataSerializer<T extends Enum<T>> implements IDataSerializer<T> {
+public class EnumDataSerializer<T extends Enum<T>> implements EntityDataSerializer<T> {
     
     private final Class<T> enumClass;
 
@@ -17,19 +17,19 @@ public class EnumDataSerializer<T extends Enum<T>> implements IDataSerializer<T>
     }
 
     @Override
-    public void write(@Nonnull PacketBuffer buf, @Nonnull T value) {
-        buf.writeEnumValue(value);
+    public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull T value) {
+        buffer.writeEnum(value);
     }
 
     @Nonnull
     @Override
-    public T read(@Nonnull PacketBuffer buf) {
-        return buf.readEnumValue(this.enumClass);
+    public T read(@Nonnull FriendlyByteBuf buffer) {
+        return buffer.readEnum(this.enumClass);
     }
 
     @Nonnull
     @Override
-    public T copyValue(@Nonnull T value) {
+    public T copy(@Nonnull T value) {
         return value;
     }
 }

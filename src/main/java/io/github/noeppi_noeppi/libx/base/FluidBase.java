@@ -4,18 +4,18 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -31,7 +31,7 @@ import java.util.function.UnaryOperator;
  * A {@link Registerable} that registers a {@link Fluid fluid}, a flowing fluid,
  * a {@link FlowingFluidBlock fluid block} and a {@link BucketItem bucket item}.
  */
-public class FluidBase implements Registerable, IItemProvider {
+public class FluidBase implements Registerable, ItemLike {
 
     protected final ModX mod;
 
@@ -42,7 +42,7 @@ public class FluidBase implements Registerable, IItemProvider {
     private ForgeFlowingFluid.Source source;
     private ForgeFlowingFluid.Flowing flowing;
     private ForgeFlowingFluid.Properties properties;
-    private final FlowingFluidBlock block;
+    private final LiquidBlock block;
     private final BucketItem bucket;
 
     /**
@@ -51,7 +51,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), AbstractBlock.Properties.from(Blocks.WATER), defaultItemProps(mod));
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
     }
 
     /**
@@ -60,7 +60,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory) {
-        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), AbstractBlock.Properties.from(Blocks.WATER), defaultItemProps(mod));
+        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
     }
 
     /**
@@ -69,7 +69,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, AbstractBlock.Properties.from(Blocks.WATER), defaultItemProps(mod));
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
     }
 
     /**
@@ -78,7 +78,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes) {
-        this(mod, sourceFactory, flowingFactory, attributes, AbstractBlock.Properties.from(Blocks.WATER), defaultItemProps(mod));
+        this(mod, sourceFactory, flowingFactory, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
     }
 
     /**
@@ -87,7 +87,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Item.Properties itemProperties) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), AbstractBlock.Properties.from(Blocks.WATER), itemProperties);
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
@@ -96,7 +96,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, Item.Properties itemProperties) {
-        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), AbstractBlock.Properties.from(Blocks.WATER), itemProperties);
+        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
@@ -105,7 +105,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, Item.Properties itemProperties) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, AbstractBlock.Properties.from(Blocks.WATER), itemProperties);
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
@@ -114,7 +114,7 @@ public class FluidBase implements Registerable, IItemProvider {
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, Item.Properties itemProperties) {
-        this(mod, sourceFactory, flowingFactory, attributes, AbstractBlock.Properties.from(Blocks.WATER), itemProperties);
+        this(mod, sourceFactory, flowingFactory, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
@@ -122,7 +122,7 @@ public class FluidBase implements Registerable, IItemProvider {
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
-    public FluidBase(ModX mod, AbstractBlock.Properties blockProperties) {
+    public FluidBase(ModX mod, BlockBehaviour.Properties blockProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), blockProperties, defaultItemProps(mod));
     }
 
@@ -131,7 +131,7 @@ public class FluidBase implements Registerable, IItemProvider {
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
-    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, AbstractBlock.Properties blockProperties) {
+    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, BlockBehaviour.Properties blockProperties) {
         this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), blockProperties, defaultItemProps(mod));
     }
 
@@ -140,7 +140,7 @@ public class FluidBase implements Registerable, IItemProvider {
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
-    public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, AbstractBlock.Properties blockProperties) {
+    public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, blockProperties, defaultItemProps(mod));
     }
 
@@ -149,7 +149,7 @@ public class FluidBase implements Registerable, IItemProvider {
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
-    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, AbstractBlock.Properties blockProperties) {
+    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties) {
         this(mod, sourceFactory, flowingFactory, attributes, blockProperties, defaultItemProps(mod));
     }
 
@@ -158,7 +158,7 @@ public class FluidBase implements Registerable, IItemProvider {
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
-    public FluidBase(ModX mod, AbstractBlock.Properties blockProperties, Item.Properties itemProperties) {
+    public FluidBase(ModX mod, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), blockProperties, itemProperties);
     }
 
@@ -167,7 +167,7 @@ public class FluidBase implements Registerable, IItemProvider {
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
-    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, AbstractBlock.Properties blockProperties, Item.Properties itemProperties) {
+    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), blockProperties, itemProperties);
     }
 
@@ -176,7 +176,7 @@ public class FluidBase implements Registerable, IItemProvider {
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
      */
-    public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, AbstractBlock.Properties blockProperties, Item.Properties itemProperties) {
+    public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, blockProperties, itemProperties);
     }
 
@@ -189,13 +189,13 @@ public class FluidBase implements Registerable, IItemProvider {
      * @param blockProperties The properties for the fluids block
      * @param itemProperties  The properties for the bucket item
      */
-    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, AbstractBlock.Properties blockProperties, Item.Properties itemProperties) {
+    public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this.mod = mod;
         this.sourceFactory = sourceFactory;
         this.flowingFactory = flowingFactory;
         this.attributes = attributes;
-        this.block = new FlowingFluidBlock(this::getSource, AbstractBlock.Properties.from(Blocks.WATER));
-        this.bucket = new BucketItem(this::getSource, new Item.Properties().maxStackSize(1).group(mod.tab)) {
+        this.block = new LiquidBlock(this::getSource, BlockBehaviour.Properties.copy(Blocks.WATER));
+        this.bucket = new BucketItem(this::getSource, new Item.Properties().stacksTo(1).tab(mod.tab)) {
 
             @Override
             public ItemStack getContainerItem(ItemStack stack) {
@@ -204,20 +204,20 @@ public class FluidBase implements Registerable, IItemProvider {
 
             @Nonnull
             @Override
-            protected String getDefaultTranslationKey() {
+            protected String getOrCreateDescriptionId() {
                 return "libx.tooltip.fluidbase.bucket";
             }
 
             @Nonnull
             @Override
-            public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-                return new TranslationTextComponent("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
+            public Component getName(@Nonnull ItemStack stack) {
+                return new TranslatableComponent("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
             }
 
             @Nonnull
             @Override
-            public ITextComponent getName() {
-                return new TranslationTextComponent("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
+            public Component getDescription() {
+                return new TranslatableComponent("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
             }
         };
     }
@@ -238,7 +238,7 @@ public class FluidBase implements Registerable, IItemProvider {
     }
 
     @Nonnull
-    public FlowingFluidBlock getBlock() {
+    public LiquidBlock getBlock() {
         return Objects.requireNonNull(this.block, "FluidBase has not yet been registered.");
     }
 
@@ -290,7 +290,7 @@ public class FluidBase implements Registerable, IItemProvider {
 
     private static Item.Properties defaultItemProps(ModX mod) {
         if (mod.tab != null) {
-            return new Item.Properties().group(mod.tab);
+            return new Item.Properties().tab(mod.tab);
         } else {
             return new Item.Properties();
         }

@@ -4,8 +4,8 @@ function initializeCoreMod() {
       'target': {
         'type': 'METHOD',
         'class': 'net.minecraft.block.AbstractBlock$AbstractBlockState',
-        'methodName': 'func_227034_b_',
-        'methodDesc': '(Lnet/minecraft/world/server/ServerWorld;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V'
+        'methodName': 'm_60735_',
+        'methodDesc': '(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)V'
       },
       'transformer': function(method) {
         var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
@@ -24,7 +24,7 @@ function initializeCoreMod() {
         target.add(new VarInsnNode(Opcodes.ALOAD, 3));
         target.add(ASMAPI.buildMethodCall(
             'io/github/noeppi_noeppi/libx/impl/libxcore/CoreRandomTick',
-            'processBlockTick', '(Lnet/minecraft/block/AbstractBlock$AbstractBlockState;Lnet/minecraft/world/server/ServerWorld;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)Z',
+            'processBlockTick', '(Lnet/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)Z',
             ASMAPI.MethodType.STATIC
         ));
         target.add(new JumpInsnNode(Opcodes.IFEQ, label));
@@ -39,9 +39,9 @@ function initializeCoreMod() {
     'random_tick_fluid': {
       'target': {
         'type': 'METHOD',
-        'class': 'net.minecraft.fluid.FluidState',
-        'methodName': 'func_206891_b',
-        'methodDesc': '(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V'
+        'class': 'net.minecraft.world.level.material.FluidState',
+        'methodName': 'm_76174_',
+        'methodDesc': '(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)V'
       },
       'transformer': function(method) {
         var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
@@ -60,7 +60,7 @@ function initializeCoreMod() {
         target.add(new VarInsnNode(Opcodes.ALOAD, 3));
         target.add(ASMAPI.buildMethodCall(
             'io/github/noeppi_noeppi/libx/impl/libxcore/CoreRandomTick',
-            'processFluidTick', '(Lnet/minecraft/fluid/FluidState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)Z',
+            'processFluidTick', '(Lnet/minecraft/world/level/material/FluidState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)Z',
             ASMAPI.MethodType.STATIC
         ));
         target.add(new JumpInsnNode(Opcodes.IFEQ, label));

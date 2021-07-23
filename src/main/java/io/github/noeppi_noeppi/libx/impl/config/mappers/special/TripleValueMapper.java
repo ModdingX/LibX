@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, JsonArray> {
@@ -48,12 +48,12 @@ public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, 
     }
 
     @Override
-    public Triple<A, B, C> read(PacketBuffer buffer) {
+    public Triple<A, B, C> read(FriendlyByteBuf buffer) {
         return Triple.of(this.mapper1.read(buffer), this.mapper2.read(buffer), this.mapper3.read(buffer));
     }
 
     @Override
-    public void write(Triple<A, B, C> value, PacketBuffer buffer) {
+    public void write(Triple<A, B, C> value, FriendlyByteBuf buffer) {
         this.mapper1.write(value.getLeft(), buffer);
         this.mapper2.write(value.getMiddle(), buffer);
         this.mapper3.write(value.getRight(), buffer);

@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.crafting;
 
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.util.NbtToJson;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
 
 /**

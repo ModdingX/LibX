@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.inventory;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -55,7 +55,7 @@ public interface IAdvancedItemHandler extends IItemHandler {
                                 modifiableStack.setCount(amountLeft);
                                 copies.put(slot, modifiableStack);
                                 break;
-                            } else if (ItemStack.areItemsEqual(stack, content) && ItemStack.areItemStackTagsEqual(stack, content)) {
+                            } else if (ItemStack.isSame(stack, content) && ItemStack.tagMatches(stack, content)) {
                                 int reduce = Math.max(0, Math.min(content.getMaxStackSize() - content.getCount(), amountLeft));
                                 amountLeft -= reduce;
                                 ItemStack modifiableStack = copies.getOrDefault(slot, this.getStackInSlot(slot).copy());
@@ -97,7 +97,7 @@ public interface IAdvancedItemHandler extends IItemHandler {
                     }
                 }
             } else {
-                if (ItemStack.areItemsEqual(extracted, content) && ItemStack.areItemStackTagsEqual(extracted, content)) {
+                if (ItemStack.isSame(extracted, content) && ItemStack.tagMatches(extracted, content)) {
                     extracted.grow(content.getCount());
                 }
                 if (!simulate) {

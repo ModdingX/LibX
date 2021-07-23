@@ -1,15 +1,15 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public abstract class RecipeProviderBase extends RecipeProvider implements RecipeExtension {
 
     protected final ModX mod;
-    private Consumer<IFinishedRecipe> consumer;
+    private Consumer<FinishedRecipe> consumer;
 
     public RecipeProviderBase(ModX mod, DataGenerator generator) {
         super(generator);
@@ -40,7 +40,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     protected abstract void setup();
 
     @Override
-    protected final void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+    protected final void buildShapelessRecipes(@Nonnull Consumer<FinishedRecipe> consumer) {
         this.consumer = consumer;
         this.setup();
     }
@@ -49,7 +49,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
      * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
      * and the path being the registry path of the given item.
      */
-    public ResourceLocation loc(IItemProvider item) {
+    public ResourceLocation loc(ItemLike item) {
         return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
     }
 
@@ -58,7 +58,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
      * and the path being the registry path of the given item followed by an underscore and the
      * given suffix.
      */
-    public ResourceLocation loc(IItemProvider item, String suffix) {
+    public ResourceLocation loc(ItemLike item, String suffix) {
         return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath() + "_" + suffix);
     }
 
@@ -68,22 +68,22 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     }
 
     @Override
-    public Consumer<IFinishedRecipe> consumer() {
+    public Consumer<FinishedRecipe> consumer() {
         return this.consumer;
     }
 
     @Override
-    public CriterionInstance criterion(IItemProvider item) {
-        return hasItem(item);
+    public AbstractCriterionTriggerInstance criterion(ItemLike item) {
+        return has(item);
     }
 
     @Override
-    public CriterionInstance criterion(ITag<Item> item) {
-        return hasItem(item);
+    public AbstractCriterionTriggerInstance criterion(Tag<Item> item) {
+        return has(item);
     }
 
     @Override
-    public CriterionInstance criterion(ItemPredicate... items) {
-        return hasItem(items);
+    public AbstractCriterionTriggerInstance criterion(ItemPredicate... items) {
+        return inventoryTrigger(items);
     }
 }

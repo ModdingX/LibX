@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.inventory.container;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;

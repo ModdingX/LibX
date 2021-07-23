@@ -5,19 +5,19 @@ import com.google.gson.GsonBuilder;
 import io.github.noeppi_noeppi.libx.impl.data.LootData;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.Alternative;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.conditions.Inverted;
-import net.minecraft.loot.conditions.RandomChance;
-import net.minecraft.loot.functions.LootingEnchantBonus;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -28,12 +28,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import net.minecraft.world.level.storage.loot.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.RandomValueBounds;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+
 /**
  * A base class for entity loot providers. When overriding this you should call the
  * {@link #customLootTable(EntityType, LootTable.Builder) customLootTable} methods in
  * {@link #setup() setup} to adjust the loot tables.
  */
-public abstract class EntityLootProviderBase implements IDataProvider {
+public abstract class EntityLootProviderBase implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -68,7 +81,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
     }
 
     @Override
-    public void act(@Nonnull DirectoryCache cache) throws IOException {
+    public void run(@Nonnull HashCache cache) throws IOException {
         this.setup();
 
         Map<ResourceLocation, LootTable.Builder> tables = new HashMap<>();
@@ -91,7 +104,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
 
         for (Map.Entry<ResourceLocation, LootTable.Builder> e : tables.entrySet()) {
             Path path = getPath(this.generator.getOutputFolder(), e.getKey());
-            IDataProvider.save(GSON, cache, LootTableManager.toJson(e.getValue().setParameterSet(LootParameterSets.ENTITY).build()), path);
+            DataProvider.save(GSON, cache, LootTables.serialize(e.getValue().setParamSet(LootContextParamSets.ENTITY).build()), path);
         }
     }
 
@@ -121,7 +134,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
      * @param e    The entity to add the loot table to.
      * @param loot A list of loot builders that will all be applied.
      */
-    public void drops(EntityType<?> e, LootEntry.Builder<?>... loot) {
+    public void drops(EntityType<?> e, LootPoolEntryContainer.Builder<?>... loot) {
         this.drops(e, LootFactory.from(loot));
     }
     
@@ -132,10 +145,10 @@ public abstract class EntityLootProviderBase implements IDataProvider {
      * @param loot A list of loot factories that will all be applied.
      */
     public void drops(EntityType<?> e, LootFactory... loot) {
-        LootEntry.Builder<?> entry = this.combine(LootFactory.resolve(e, loot));
-        LootPool.Builder pool = LootPool.builder().name("main")
-                .rolls(ConstantRange.of(1)).addEntry(entry);
-        this.customLootTable(e, LootTable.builder().addLootPool(pool));
+        LootPoolEntryContainer.Builder<?> entry = this.combine(LootFactory.resolve(e, loot));
+        LootPool.Builder pool = LootPool.lootPool().name("main")
+                .setRolls(ConstantIntValue.exactly(1)).add(entry);
+        this.customLootTable(e, LootTable.lootTable().withPool(pool));
     }
     
     /**
@@ -152,22 +165,22 @@ public abstract class EntityLootProviderBase implements IDataProvider {
     /**
      * Turns a standalone loot entry into a standalone loot factory.
      */
-    public WrappedLootEntry from(StandaloneLootEntry.Builder<?> entry) {
+    public WrappedLootEntry from(LootPoolSingletonContainer.Builder<?> entry) {
         return new WrappedLootEntry(entry);
     }
     
     /**
      * Turns a loot entry into a loot factory.
      */
-    public LootFactory from(LootEntry.Builder<?> entry) {
+    public LootFactory from(LootPoolEntryContainer.Builder<?> entry) {
         return LootFactory.from(entry);
     }
     
     /**
      * Turns a loot function into a loot modifier.
      */
-    public LootModifier from(LootFunction.Builder<?> function) {
-        return (b, e) -> e.acceptFunction(function);
+    public LootModifier from(LootItemConditionalFunction.Builder<?> function) {
+        return (b, e) -> e.apply(function);
     }
 
     /**
@@ -186,21 +199,21 @@ public abstract class EntityLootProviderBase implements IDataProvider {
      * @param max The maximum amount of additional drops.
      */
     public LootModifier looting(int min, int max) {
-        return (b, e) -> e.acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(min, max)));
+        return (b, e) -> e.apply(LootingEnchantFunction.lootingMultiplier(RandomValueBounds.between(min, max)));
     }
 
     /**
      * A condition that is random with a chance.
      */
-    public ILootCondition.IBuilder random(float chance) {
-        return RandomChance.builder(chance);
+    public LootItemCondition.Builder random(float chance) {
+        return LootItemRandomChanceCondition.randomChance(chance);
     }
 
     /**
      * A loot modifier that sets the count of a stack.
      */
     public LootModifier count(int count) {
-        return this.from(SetCount.builder(ConstantRange.of(count)));
+        return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(count)));
     }
     
     /**
@@ -208,9 +221,9 @@ public abstract class EntityLootProviderBase implements IDataProvider {
      */
     public LootModifier count(int min, int max) {
         if (min == max) {
-            return this.from(SetCount.builder(ConstantRange.of(min)));
+            return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(min)));
         } else {
-            return this.from(SetCount.builder(RandomValueRange.of(min, max)));
+            return this.from(SetItemCountFunction.setCount(RandomValueBounds.between(min, max)));
         }
     }
     
@@ -218,21 +231,21 @@ public abstract class EntityLootProviderBase implements IDataProvider {
      * A loot modifier that sets the count of a stack based on a binomial formula.
      */
     public LootModifier countBinomial(float chance, int num) {
-        return this.from(SetCount.builder(BinomialRange.of(num, chance)));
+        return this.from(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(num, chance)));
     }
     
     /**
      * Inverts a loot condition
      */
-    public ILootCondition.IBuilder not(ILootCondition.IBuilder condition) {
-        return Inverted.builder(condition);
+    public LootItemCondition.Builder not(LootItemCondition.Builder condition) {
+        return InvertedLootItemCondition.invert(condition);
     }
     
     /**
      * Joins conditions with OR.
      */
-    public ILootCondition.IBuilder or(ILootCondition.IBuilder... conditions) {
-        return Alternative.builder(conditions);
+    public LootItemCondition.Builder or(LootItemCondition.Builder... conditions) {
+        return AlternativeLootItemCondition.alternative(conditions);
     }
 
     /**
@@ -261,7 +274,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
     /**
      * Combines the given loot builders into one. (All loot builders will be applied).
      */
-    public LootEntry.Builder<?> combine(LootEntry.Builder<?>... loot) {
+    public LootPoolEntryContainer.Builder<?> combine(LootPoolEntryContainer.Builder<?>... loot) {
         return LootData.combineBy(LootBuilders.AllLootBuilder::new, loot);
     }
 
@@ -275,7 +288,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
     /**
      * Combines the given loot builders into one. (One loot builder will be applied).
      */
-    public LootEntry.Builder<?> random(LootEntry.Builder<?>... loot) {
+    public LootPoolEntryContainer.Builder<?> random(LootPoolEntryContainer.Builder<?>... loot) {
         return LootData.combineBy(LootBuilders.GroupLootBuilder::new, loot);
     }
 
@@ -289,22 +302,22 @@ public abstract class EntityLootProviderBase implements IDataProvider {
     /**
      * Combines the given loot builders into one. Only the first matching builder is applied.
      */
-    public LootEntry.Builder<?> first(LootEntry.Builder<?>... loot) {
-        return LootData.combineBy(AlternativesLootEntry::builder, loot);
+    public LootPoolEntryContainer.Builder<?> first(LootPoolEntryContainer.Builder<?>... loot) {
+        return LootData.combineBy(AlternativesEntry::alternatives, loot);
     }
 
     /**
      * Combines the given loot factories into one. Only the first matching factory is applied.
      */
     public LootFactory first(LootFactory... loot) {
-        return e -> LootData.combineBy(AlternativesLootEntry::builder, l -> l.build(e), loot);
+        return e -> LootData.combineBy(AlternativesEntry::alternatives, l -> l.build(e), loot);
     }
 
     /**
      * Combines the given loot builders into one.
      * From all the loot entries until the first one not matching, one is selected.
      */
-    public LootEntry.Builder<?> whileMatch(LootEntry.Builder<?>... loot) {
+    public LootPoolEntryContainer.Builder<?> whileMatch(LootPoolEntryContainer.Builder<?>... loot) {
         return LootData.combineBy(LootBuilders.SequenceLootBuilder::new, loot);
     }
 
@@ -319,8 +332,8 @@ public abstract class EntityLootProviderBase implements IDataProvider {
     /**
      * A loot factory for a specific item.
      */
-    public WrappedLootEntry stack(IItemProvider item) {
-        return new WrappedLootEntry(ItemLootEntry.builder(item));
+    public WrappedLootEntry stack(ItemLike item) {
+        return new WrappedLootEntry(LootItem.lootTableItem(item));
     }
     
     /**
@@ -348,17 +361,17 @@ public abstract class EntityLootProviderBase implements IDataProvider {
         /**
          * Gets a loot factory that will always return the given loot entry.
          */
-        static LootFactory from(LootEntry.Builder<?> builder) {
+        static LootFactory from(LootPoolEntryContainer.Builder<?> builder) {
             return b -> builder;
         }
 
         /**
          * Gets an array of loot factories that will always return the given loot entries.
          */
-        static LootFactory[] from(LootEntry.Builder<?>[] builders) {
+        static LootFactory[] from(LootPoolEntryContainer.Builder<?>[] builders) {
             LootFactory[] factories = new LootFactory[builders.length];
             for (int i = 0; i < builders.length; i++) {
-                LootEntry.Builder<?> builder = builders[i];
+                LootPoolEntryContainer.Builder<?> builder = builders[i];
                 factories[i] = b -> builder;
             }
             return factories;
@@ -367,21 +380,21 @@ public abstract class EntityLootProviderBase implements IDataProvider {
         /**
          * Calls {@link #build(EntityType)} on all factories with the given entity and returns a new array.
          */
-        static LootEntry.Builder<?>[] resolve(EntityType<?> e, LootFactory[] factories) {
-            LootEntry.Builder<?>[] entries = new LootEntry.Builder<?>[factories.length];
+        static LootPoolEntryContainer.Builder<?>[] resolve(EntityType<?> e, LootFactory[] factories) {
+            LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder<?>[factories.length];
             for (int i = 0; i < factories.length; i++) {
                 entries[i] = factories[i].build(e);
             }
             return entries;
         }
 
-        LootEntry.Builder<?> build(EntityType<?> entity);
+        LootPoolEntryContainer.Builder<?> build(EntityType<?> entity);
         
-        default LootFactory with(ILootCondition.IBuilder... conditions) {
+        default LootFactory with(LootItemCondition.Builder... conditions) {
             return e -> {
-                LootEntry.Builder<?> entry = this.build(e);
-                for (ILootCondition.IBuilder condition : conditions) {
-                    entry.acceptCondition(condition);
+                LootPoolEntryContainer.Builder<?> entry = this.build(e);
+                for (LootItemCondition.Builder condition : conditions) {
+                    entry.when(condition);
                 }
                 return entry;
             };
@@ -397,17 +410,17 @@ public abstract class EntityLootProviderBase implements IDataProvider {
         /**
          * Gets a standalone loot factory that will always return the given loot entry.
          */
-        static StandaloneLootFactory from(StandaloneLootEntry.Builder<?> builder) {
+        static StandaloneLootFactory from(LootPoolSingletonContainer.Builder<?> builder) {
             return b -> builder;
         }
 
         /**
          * Gets an array of standalone loot factories that will always return the given loot entries.
          */
-        static StandaloneLootFactory[] from(StandaloneLootEntry.Builder<?>[] builders) {
+        static StandaloneLootFactory[] from(LootPoolSingletonContainer.Builder<?>[] builders) {
             StandaloneLootFactory[] factories = new StandaloneLootFactory[builders.length];
             for (int i = 0; i < builders.length; i++) {
-                StandaloneLootEntry.Builder<?> builder = builders[i];
+                LootPoolSingletonContainer.Builder<?> builder = builders[i];
                 factories[i] = e -> builder;
             }
             return factories;
@@ -416,8 +429,8 @@ public abstract class EntityLootProviderBase implements IDataProvider {
         /**
          * Calls {@link #build(EntityType)} on all factories with the given entity and returns a new array.
          */
-        static StandaloneLootEntry.Builder<?>[] resolve(EntityType<?> e, StandaloneLootFactory[] factories) {
-            StandaloneLootEntry.Builder<?>[] entries = new StandaloneLootEntry.Builder<?>[factories.length];
+        static LootPoolSingletonContainer.Builder<?>[] resolve(EntityType<?> e, StandaloneLootFactory[] factories) {
+            LootPoolSingletonContainer.Builder<?>[] entries = new LootPoolSingletonContainer.Builder<?>[factories.length];
             for (int i = 0; i < factories.length; i++) {
                 entries[i] = factories[i].build(e);
             }
@@ -425,7 +438,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
         }
 
         @Override
-        StandaloneLootEntry.Builder<?> build(EntityType<?> entity);
+        LootPoolSingletonContainer.Builder<?> build(EntityType<?> entity);
         
         default LootFactory withFinal(GenericLootModifier finalModifier) {
             return e -> finalModifier.apply(e, this.build(e));
@@ -437,21 +450,21 @@ public abstract class EntityLootProviderBase implements IDataProvider {
         }
 
         @Override
-        default StandaloneLootFactory with(ILootCondition.IBuilder... conditions) {
+        default StandaloneLootFactory with(LootItemCondition.Builder... conditions) {
             return e -> {
-                StandaloneLootEntry.Builder<?> entry = this.build(e);
-                for (ILootCondition.IBuilder condition : conditions) {
-                    entry.acceptCondition(condition);
+                LootPoolSingletonContainer.Builder<?> entry = this.build(e);
+                for (LootItemCondition.Builder condition : conditions) {
+                    entry.when(condition);
                 }
                 return entry;
             };
         }
         
-        default StandaloneLootFactory with(LootFunction.Builder<?>... functions) {
+        default StandaloneLootFactory with(LootItemConditionalFunction.Builder<?>... functions) {
             LootModifier[] modifiers = new LootModifier[functions.length];
             for (int i = 0; i < functions.length; i++) {
-                LootFunction.Builder<?> function = functions[i];
-                modifiers[i] = (e, b) -> b.acceptFunction(function);
+                LootItemConditionalFunction.Builder<?> function = functions[i];
+                modifiers[i] = (e, b) -> b.apply(function);
             }
             LootModifier chained = LootModifier.chain(modifiers);
             return e -> chained.apply(e, this.build(e));
@@ -460,14 +473,14 @@ public abstract class EntityLootProviderBase implements IDataProvider {
     
     public static class WrappedLootEntry implements StandaloneLootFactory {
         
-        public final StandaloneLootEntry.Builder<?> entry;
+        public final LootPoolSingletonContainer.Builder<?> entry;
 
-        private WrappedLootEntry(StandaloneLootEntry.Builder<?> entry) {
+        private WrappedLootEntry(LootPoolSingletonContainer.Builder<?> entry) {
             this.entry = entry;
         }
 
         @Override
-        public StandaloneLootEntry.Builder<?> build(EntityType<?> entity) {
+        public LootPoolSingletonContainer.Builder<?> build(EntityType<?> entity) {
             return this.entry;
         }
     }
@@ -485,7 +498,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
             return (b, e) -> e;
         }
 
-        LootEntry.Builder<?> apply(EntityType<?> entity, StandaloneLootEntry.Builder<?> entry);
+        LootPoolEntryContainer.Builder<?> apply(EntityType<?> entity, LootPoolSingletonContainer.Builder<?> entry);
     }
 
     /**
@@ -512,7 +525,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
                 return children[0];
             } else {
                 return (b, e) -> {
-                    StandaloneLootEntry.Builder<?> entry = e;
+                    LootPoolSingletonContainer.Builder<?> entry = e;
                     for (LootModifier modifier : children) {
                         entry = modifier.apply(b, entry);
                     }
@@ -522,7 +535,7 @@ public abstract class EntityLootProviderBase implements IDataProvider {
         }
 
         @Override
-        StandaloneLootEntry.Builder<?> apply(EntityType<?> entity, StandaloneLootEntry.Builder<?> entry);
+        LootPoolSingletonContainer.Builder<?> apply(EntityType<?> entity, LootPoolSingletonContainer.Builder<?> entry);
 
         /**
          * Same as {@link #chain(LootModifier...)}

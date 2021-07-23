@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Optional;
 
@@ -51,7 +51,7 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
     }
 
     @Override
-    public Optional<T> read(PacketBuffer buffer, ValueMapper<T, JsonElement> mapper) {
+    public Optional<T> read(FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
         if (!buffer.readBoolean()) {
             return Optional.empty();
         } else {
@@ -60,7 +60,7 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
     }
 
     @Override
-    public void write(Optional<T> value, PacketBuffer buffer, ValueMapper<T, JsonElement> mapper) {
+    public void write(Optional<T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
         if (!value.isPresent()) {
             buffer.writeBoolean(false);
         } else {

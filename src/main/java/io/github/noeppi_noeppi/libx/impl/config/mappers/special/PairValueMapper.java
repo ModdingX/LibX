@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class PairValueMapper<A, B> implements ValueMapper<Pair<A, B>, JsonArray> {
@@ -45,12 +45,12 @@ public class PairValueMapper<A, B> implements ValueMapper<Pair<A, B>, JsonArray>
     }
 
     @Override
-    public Pair<A, B> read(PacketBuffer buffer) {
+    public Pair<A, B> read(FriendlyByteBuf buffer) {
         return Pair.of(this.mapper1.read(buffer), this.mapper2.read(buffer));
     }
 
     @Override
-    public void write(Pair<A, B> value, PacketBuffer buffer) {
+    public void write(Pair<A, B> value, FriendlyByteBuf buffer) {
         this.mapper1.write(value.getLeft(), buffer);
         this.mapper2.write(value.getRight(), buffer);
     }

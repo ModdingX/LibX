@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.util;
 
 import io.github.noeppi_noeppi.libx.capability.LongEnergyStorage;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.minecraftforge.energy.IEnergyStorage;
 
 /**
@@ -24,14 +24,14 @@ public class LongAmountToIntUtil {
             long freeEnergy = max - stored;
             if (freeEnergy < (Integer.MAX_VALUE / 2)) {
                 return Math.min(
-                        (int) MathHelper.clamp(stored, 0, Integer.MAX_VALUE),
+                        (int) Mth.clamp(stored, 0, Integer.MAX_VALUE),
                         Integer.MAX_VALUE - ((int) freeEnergy)
                 );
             } else {
                 return Integer.MAX_VALUE / 2;
             }
         } else {
-            return (int) MathHelper.clamp(stored, 0, Integer.MAX_VALUE);
+            return (int) Mth.clamp(stored, 0, Integer.MAX_VALUE);
         }
     }
 
@@ -39,6 +39,6 @@ public class LongAmountToIntUtil {
      * Gets a maximum value stored as a long as an int value. For more info see class description.
      */
     public static int getMaxValue(long max) {
-        return (int) MathHelper.clamp(max, 0, Integer.MAX_VALUE);
+        return (int) Mth.clamp(max, 0, Integer.MAX_VALUE);
     }
 }

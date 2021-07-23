@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe.crafting;
 
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
@@ -15,121 +15,121 @@ public interface ToolExtension extends RecipeExtension {
     /**
      * Creates tool recipes for a material. All the tool items may be null in which case the recipe is not created.
      */
-    default void makeTools(IItemProvider material, @Nullable IItemProvider sword, @Nullable IItemProvider axe,
-                             @Nullable IItemProvider pick, @Nullable IItemProvider shovel, @Nullable IItemProvider hoe) {
+    default void makeTools(ItemLike material, @Nullable ItemLike sword, @Nullable ItemLike axe,
+                             @Nullable ItemLike pick, @Nullable ItemLike shovel, @Nullable ItemLike hoe) {
 
         if (sword != null) {
-            ShapedRecipeBuilder.shapedRecipe(sword)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("m")
-                    .patternLine("m")
-                    .patternLine("s")
-                    .setGroup(material.asItem().getRegistryName() + "_sword")
-                    .addCriterion("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material, "sword"));
+            ShapedRecipeBuilder.shaped(sword)
+                    .define('m', material)
+                    .define('s', Tags.Items.RODS_WOODEN)
+                    .pattern("m")
+                    .pattern("m")
+                    .pattern("s")
+                    .group(material.asItem().getRegistryName() + "_sword")
+                    .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
+                    .unlockedBy("has_item1", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material, "sword"));
         }
 
         if (axe != null) {
-            ShapedRecipeBuilder.shapedRecipe(axe)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("mm")
-                    .patternLine("sm")
-                    .patternLine("s ")
-                    .setGroup(material.asItem().getRegistryName() + "_axe")
-                    .addCriterion("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material, "axe"));
+            ShapedRecipeBuilder.shaped(axe)
+                    .define('m', material)
+                    .define('s', Tags.Items.RODS_WOODEN)
+                    .pattern("mm")
+                    .pattern("sm")
+                    .pattern("s ")
+                    .group(material.asItem().getRegistryName() + "_axe")
+                    .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
+                    .unlockedBy("has_item1", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material, "axe"));
         }
 
         if (pick != null) {
-            ShapedRecipeBuilder.shapedRecipe(pick)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("mmm")
-                    .patternLine(" s ")
-                    .patternLine(" s ")
-                    .setGroup(material.asItem().getRegistryName() + "_pick")
-                    .addCriterion("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material, "pick"));
+            ShapedRecipeBuilder.shaped(pick)
+                    .define('m', material)
+                    .define('s', Tags.Items.RODS_WOODEN)
+                    .pattern("mmm")
+                    .pattern(" s ")
+                    .pattern(" s ")
+                    .group(material.asItem().getRegistryName() + "_pick")
+                    .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
+                    .unlockedBy("has_item1", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material, "pick"));
         }
 
         if (shovel != null) {
-            ShapedRecipeBuilder.shapedRecipe(shovel)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("m")
-                    .patternLine("s")
-                    .patternLine("s")
-                    .setGroup(material.asItem().getRegistryName() + "_shovel")
-                    .addCriterion("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material, "shovel"));
+            ShapedRecipeBuilder.shaped(shovel)
+                    .define('m', material)
+                    .define('s', Tags.Items.RODS_WOODEN)
+                    .pattern("m")
+                    .pattern("s")
+                    .pattern("s")
+                    .group(material.asItem().getRegistryName() + "_shovel")
+                    .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
+                    .unlockedBy("has_item1", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material, "shovel"));
         }
 
         if (hoe != null) {
-            ShapedRecipeBuilder.shapedRecipe(hoe)
-                    .key('m', material)
-                    .key('s', Tags.Items.RODS_WOODEN)
-                    .patternLine("mm")
-                    .patternLine("s ")
-                    .patternLine("s ")
-                    .setGroup(material.asItem().getRegistryName() + "_hoe")
-                    .addCriterion("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
-                    .addCriterion("has_item1", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material, "hoe"));
+            ShapedRecipeBuilder.shaped(hoe)
+                    .define('m', material)
+                    .define('s', Tags.Items.RODS_WOODEN)
+                    .pattern("mm")
+                    .pattern("s ")
+                    .pattern("s ")
+                    .group(material.asItem().getRegistryName() + "_hoe")
+                    .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
+                    .unlockedBy("has_item1", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material, "hoe"));
         }
     }
 
     /**
      * Creates armor recipes for a material. All the armor items may be null in which case the recipe is not created.
      */
-    default void makeArmor(IItemProvider material, @Nullable IItemProvider helmet, @Nullable IItemProvider chestplate,
-                             @Nullable IItemProvider leggings, @Nullable IItemProvider boots) {
+    default void makeArmor(ItemLike material, @Nullable ItemLike helmet, @Nullable ItemLike chestplate,
+                             @Nullable ItemLike leggings, @Nullable ItemLike boots) {
 
         if (helmet != null) {
-            ShapedRecipeBuilder.shapedRecipe(helmet)
-                    .key('m', material)
-                    .patternLine("mmm")
-                    .patternLine("m m")
-                    .setGroup(material.asItem().getRegistryName() + "_helmet")
-                    .addCriterion("has_item", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material.asItem(), "helmet"));
+            ShapedRecipeBuilder.shaped(helmet)
+                    .define('m', material)
+                    .pattern("mmm")
+                    .pattern("m m")
+                    .group(material.asItem().getRegistryName() + "_helmet")
+                    .unlockedBy("has_item", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material.asItem(), "helmet"));
         }
 
         if (chestplate != null) {
-            ShapedRecipeBuilder.shapedRecipe(chestplate)
-                    .key('m', material)
-                    .patternLine("m m")
-                    .patternLine("mmm")
-                    .patternLine("mmm")
-                    .setGroup(material.asItem().getRegistryName() + "_chestplate")
-                    .addCriterion("has_item", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material.asItem(), "chestplate"));
+            ShapedRecipeBuilder.shaped(chestplate)
+                    .define('m', material)
+                    .pattern("m m")
+                    .pattern("mmm")
+                    .pattern("mmm")
+                    .group(material.asItem().getRegistryName() + "_chestplate")
+                    .unlockedBy("has_item", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material.asItem(), "chestplate"));
         }
 
         if (leggings != null) {
-            ShapedRecipeBuilder.shapedRecipe(leggings)
-                    .key('m', material)
-                    .patternLine("mmm")
-                    .patternLine("m m")
-                    .patternLine("m m")
-                    .setGroup(material.asItem().getRegistryName() + "_leggings")
-                    .addCriterion("has_item", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material.asItem(), "leggings"));
+            ShapedRecipeBuilder.shaped(leggings)
+                    .define('m', material)
+                    .pattern("mmm")
+                    .pattern("m m")
+                    .pattern("m m")
+                    .group(material.asItem().getRegistryName() + "_leggings")
+                    .unlockedBy("has_item", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material.asItem(), "leggings"));
         }
 
         if (boots != null) {
-            ShapedRecipeBuilder.shapedRecipe(boots)
-                    .key('m', material)
-                    .patternLine("m m")
-                    .patternLine("m m")
-                    .setGroup(material.asItem().getRegistryName() + "_boots")
-                    .addCriterion("has_item", this.criterion(material))
-                    .build(this.consumer(), this.provider().loc(material.asItem(), "boots"));
+            ShapedRecipeBuilder.shaped(boots)
+                    .define('m', material)
+                    .pattern("m m")
+                    .pattern("m m")
+                    .group(material.asItem().getRegistryName() + "_boots")
+                    .unlockedBy("has_item", this.criterion(material))
+                    .save(this.consumer(), this.provider().loc(material.asItem(), "boots"));
         }
     }
 }

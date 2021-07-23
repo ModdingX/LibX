@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.block;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class RotationShape {
      * facing north.
      */
     public RotationShape(VoxelShape baseShape) {
-        this.north = baseShape.simplify();
+        this.north = baseShape.optimize();
         this.east = rotated(this.north);
         this.south = rotated(this.east);
         this.west = rotated(this.south);
@@ -49,7 +49,7 @@ public class RotationShape {
 
     private static VoxelShape rotated(VoxelShape src) {
         List<VoxelShape> boxes = new ArrayList<>();
-        src.forEachBox((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(VoxelShapes.create(1 - fromZ, fromY, fromX, 1 - toZ, toY, toX)));
-        return VoxelShapes.or(VoxelShapes.empty(), boxes.toArray(new VoxelShape[]{})).simplify();
+        src.forAllBoxes((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(Shapes.box(1 - fromZ, fromY, fromX, 1 - toZ, toY, toX)));
+        return Shapes.or(Shapes.empty(), boxes.toArray(new VoxelShape[]{})).optimize();
     }
 }

@@ -1,23 +1,23 @@
 package io.github.noeppi_noeppi.libx.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -33,13 +33,13 @@ import java.util.*;
  * <p>
  * The required models will generate automatically if you're using {@link ItemModelProviderBase}.
  */
-public class ItemStackRenderer extends ItemStackTileEntityRenderer {
+public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
 
     private static final ItemStackRenderer INSTANCE = new ItemStackRenderer();
 
-    private static final List<TileEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
-    private static final Map<TileEntityType<?>, Pair<LazyValue<TileEntity>, Boolean>> tiles = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<TileEntityType<?>, CompoundNBT> defaultTags = new HashMap<>();
+    private static final List<BlockEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
+    private static final Map<BlockEntityType<?>, Pair<LazyValue<BlockEntity>, Boolean>> tiles = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<BlockEntityType<?>, CompoundTag> defaultTags = new HashMap<>();
 
     private ItemStackRenderer() {
         super();
@@ -52,53 +52,53 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
      * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the tile
      *                           entities {@code read} method will get called before rendering.
      */
-    public static <T extends TileEntity> void addRenderTile(TileEntityType<T> teType, boolean readBlockEntityTag) {
+    public static <T extends BlockEntity> void addRenderTile(BlockEntityType<T> teType, boolean readBlockEntityTag) {
         types.add(teType);
         tiles.put(teType, Pair.of(new LazyValue<>(teType::create), readBlockEntityTag));
     }
 
     @Override
-    public void render(ItemStack stack, @Nonnull ItemCameraTransforms.TransformType type, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
-        Block block = Block.getBlockFromItem(stack.getItem());
+    public void renderByItem(ItemStack stack, @Nonnull ItemTransforms.TransformType type, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
+        Block block = Block.byItem(stack.getItem());
         if (block != Blocks.AIR) {
-            for (TileEntityType<?> teType : types) {
-                if (teType.isValidBlock(block)) {
-                    Pair<LazyValue<TileEntity>, Boolean> pair = tiles.get(teType);
-                    BlockState state = block.getDefaultState();
-                    TileEntity tile = pair.getLeft().get();
+            for (BlockEntityType<?> teType : types) {
+                if (teType.isValid(block)) {
+                    Pair<LazyValue<BlockEntity>, Boolean> pair = tiles.get(teType);
+                    BlockState state = block.defaultBlockState();
+                    BlockEntity tile = pair.getLeft().get();
 
-                    TileEntityRenderer<TileEntity> renderer = TileEntityRendererDispatcher.instance.getRenderer(tile);
+                    BlockEntityRenderer<BlockEntity> renderer = BlockEntityRenderDispatcher.instance.getRenderer(tile);
                     if (renderer != null) {
 
                         if (pair.getRight()) {
                             if (!defaultTags.containsKey(teType)) {
-                                setWorldPosState(tile, state);
-                                defaultTags.put(teType, tile.write(new CompoundNBT()));
+                                setWorldPosStabe(tile, state);
+                                defaultTags.put(teType, tile.save(new CompoundTag()));
                             }
 
-                            CompoundNBT nbt = stack.getTag();
-                            setWorldPosState(tile, state);
-                            tile.read(state, defaultTags.get(teType));
+                            CompoundTag nbt = stack.getTag();
+                            setWorldPosStabe(tile, state);
+                            tile.load(state, defaultTags.get(teType));
                             if (nbt != null && nbt.contains("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
-                                CompoundNBT blockTag = nbt.getCompound("BlockEntityTag");
-                                tile.read(state, blockTag);
+                                CompoundTag blockTag = nbt.getCompound("BlockEntityTag");
+                                tile.load(state, blockTag);
                             }
                         }
 
-                        if (Minecraft.getInstance().world != null) {
-                            tile.setWorldAndPos(Minecraft.getInstance().world, BlockPos.ZERO);
+                        if (Minecraft.getInstance().level != null) {
+                            tile.setLevelAndPosition(Minecraft.getInstance().level, BlockPos.ZERO);
                         }
-                        tile.cachedBlockState = state;
+                        tile.blockState = state;
 
-                        matrixStack.push();
+                        poseStack.pushPose();
 
-                        if (state.getRenderType() != BlockRenderType.ENTITYBLOCK_ANIMATED) {
+                        if (state.getRenderShape() != RenderShape.ENTITYBLOCK_ANIMATED) {
                             //noinspection deprecation
-                            Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(block.getDefaultState(), matrixStack, buffer, light, overlay);
+                            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay);
                         }
-                        renderer.render(tile, Minecraft.getInstance().getRenderPartialTicks(), matrixStack, buffer, light, overlay);
+                        renderer.render(tile, Minecraft.getInstance().getFrameTime(), poseStack, buffer, light, overlay);
 
-                        matrixStack.pop();
+                        poseStack.popPose();
 
                         break;
                     }
@@ -107,11 +107,11 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer {
         }
     }
 
-    private static void setWorldPosState(TileEntity tile, BlockState state) {
-        if (Minecraft.getInstance().world != null) {
-            tile.setWorldAndPos(Minecraft.getInstance().world, BlockPos.ZERO);
+    private static void setWorldPosStabe(BlockEntity tile, BlockState state) {
+        if (Minecraft.getInstance().level != null) {
+            tile.setLevelAndPosition(Minecraft.getInstance().level, BlockPos.ZERO);
         }
-        tile.cachedBlockState = state;
+        tile.blockState = state;
     }
 
     /**

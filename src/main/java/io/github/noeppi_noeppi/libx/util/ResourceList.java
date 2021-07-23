@@ -6,8 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.LibX;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import javax.annotation.RegEx;
@@ -90,7 +90,7 @@ public class ResourceList {
     /**
      * Reads a resource list from a {@link PacketBuffer}.
      */
-    public ResourceList(PacketBuffer buffer) {
+    public ResourceList(FriendlyByteBuf buffer) {
         this.whitelist = buffer.readBoolean();
         int ruleSize = buffer.readVarInt();
         ImmutableList.Builder<Rule> rules = ImmutableList.builder();
@@ -117,7 +117,7 @@ public class ResourceList {
     /**
      * Writes this resource list to a {@link PacketBuffer}.
      */
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeBoolean(this.whitelist);
         buffer.writeVarInt(this.rules.size());
         this.rules.forEach(rule -> rule.write(buffer));
@@ -153,24 +153,24 @@ public class ResourceList {
         }
     }
     
-    private Rule readRule(PacketBuffer buffer) {
+    private Rule readRule(FriendlyByteBuf buffer) {
         byte id = buffer.readByte();
         if (id == 0) {
             boolean allow = buffer.readBoolean();
             int namespaceSize = buffer.readVarInt();
             List<String> namespace = new ArrayList<>();
             for (int i = 0; i < namespaceSize; i++) {
-                namespace.add(buffer.readString(32767));
+                namespace.add(buffer.readUtf(32767));
             }
             int pathSize = buffer.readVarInt();
             List<String> path = new ArrayList<>();
             for (int i = 0; i < pathSize; i++) {
-                path.add(buffer.readString(32767));
+                path.add(buffer.readUtf(32767));
             }
             return new SimpleRule(allow, new WildcardString(namespace), new WildcardString(path));
         } else if (id == 1) {
             boolean allow = buffer.readBoolean();
-            String regex = buffer.readString(32767);
+            String regex = buffer.readUtf(32767);
             return new RegexRule(allow, regex);
         } else {
             throw new IllegalStateException("Invalid packet: Unknown rule id: " + id);
@@ -207,7 +207,7 @@ public class ResourceList {
     }
     
     private static List<String> parseString(String str) {
-        if (!ResourceLocation.isPathValid(str.replace("*", ""))) {
+        if (!ResourceLocation.isValidPath(str.replace("*", ""))) {
             throw new IllegalStateException("Failed to build rule for resource list: Invalid resource location identifier: " + str);
         }
         List<String> parts = new ArrayList<>();
@@ -232,7 +232,7 @@ public class ResourceList {
 
         Boolean test(ResourceLocation rl);
         JsonElement toJSON();
-        void write(PacketBuffer buffer);
+        void write(FriendlyByteBuf buffer);
     }
 
     private class SimpleRule implements Rule {
@@ -275,13 +275,13 @@ public class ResourceList {
         }
 
         @Override
-        public void write(PacketBuffer buffer) {
+        public void write(FriendlyByteBuf buffer) {
             buffer.writeByte(0);
             buffer.writeBoolean(this.allow);
             buffer.writeVarInt(this.namespace.parts.size());
-            this.namespace.parts.forEach(str -> buffer.writeString(str, 32767));
+            this.namespace.parts.forEach(str -> buffer.writeUtf(str, 32767));
             buffer.writeVarInt(this.path.parts.size());
-            this.path.parts.forEach(str -> buffer.writeString(str, 32767));
+            this.path.parts.forEach(str -> buffer.writeUtf(str, 32767));
         }
     }
     
@@ -313,10 +313,10 @@ public class ResourceList {
         }
 
         @Override
-        public void write(PacketBuffer buffer) {
+        public void write(FriendlyByteBuf buffer) {
             buffer.writeByte(1);
             buffer.writeBoolean(this.allow);
-            buffer.writeString(this.regex, 32767);
+            buffer.writeUtf(this.regex, 32767);
         }
     }
 

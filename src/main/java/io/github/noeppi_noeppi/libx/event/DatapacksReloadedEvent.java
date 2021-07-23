@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.event;
 
-import net.minecraft.resources.DataPackRegistries;
+import net.minecraft.server.ServerResources;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
@@ -16,9 +16,9 @@ import net.minecraftforge.eventbus.api.Event;
 public class DatapacksReloadedEvent extends Event {
     
     private final MinecraftServer server;
-    private final DataPackRegistries datapacks;
+    private final ServerResources datapacks;
 
-    public DatapacksReloadedEvent(MinecraftServer server, DataPackRegistries datapacks) {
+    public DatapacksReloadedEvent(MinecraftServer server, ServerResources datapacks) {
         this.server = server;
         this.datapacks = datapacks;
     }
@@ -33,7 +33,7 @@ public class DatapacksReloadedEvent extends Event {
     /**
      * Gets the new datapack registries.
      */
-    public DataPackRegistries getDatapacks() {
+    public ServerResources getDatapacks() {
         return this.datapacks;
     }
 }

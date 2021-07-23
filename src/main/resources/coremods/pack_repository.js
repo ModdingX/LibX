@@ -3,9 +3,9 @@ function initializeCoreMod() {
     'pack_repository': {
       'target': {
         'type': 'METHOD',
-        'class': 'net.minecraft.resources.ResourcePackList',
+        'class': 'net.minecraft.server.packs.repository.PackRepository',
         'methodName': '<init>',
-        'methodDesc': '(Lnet/minecraft/resources/ResourcePackInfo$IFactory;[Lnet/minecraft/resources/IPackFinder;)V'
+        'methodDesc': '(Lnet/minecraft/server/packs/repository/Pack$PackConstructor;[Lnet/minecraft/server/packs/repository/RepositorySource;)V'
       },
       'transformer': function(method) {
         var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
@@ -17,7 +17,7 @@ function initializeCoreMod() {
         target.add(new VarInsnNode(Opcodes.ALOAD, 0));
         target.add(ASMAPI.buildMethodCall(
             'io/github/noeppi_noeppi/libx/impl/libxcore/CorePackRepository',
-            'initRepository', '(Lnet/minecraft/resources/ResourcePackList;)V',
+            'initRepository', '(Lnet/minecraft/server/packs/repository/PackRepository;)V',
             ASMAPI.MethodType.STATIC
         ));
         

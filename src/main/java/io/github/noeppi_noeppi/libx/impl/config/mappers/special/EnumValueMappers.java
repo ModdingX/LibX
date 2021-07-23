@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,12 +59,12 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
     }
 
     @Override
-    public Enum<?> read(PacketBuffer buffer) {
+    public Enum<?> read(FriendlyByteBuf buffer) {
         return this.clazz.getEnumConstants()[buffer.readVarInt()];
     }
 
     @Override
-    public void write(Enum<?> value, PacketBuffer buffer) {
+    public void write(Enum<?> value, FriendlyByteBuf buffer) {
         buffer.writeVarInt(value.ordinal());
     }
 

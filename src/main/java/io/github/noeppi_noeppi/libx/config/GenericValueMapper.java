@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.config;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 /**
  * A value mapper for a generic type. This will get the value mapper for the generic
@@ -44,14 +44,14 @@ public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonV
     /**
      * @see ValueMapper#read(PacketBuffer)
      */
-    default T read(PacketBuffer buffer, ValueMapper<C, JsonElement> mapper) {
-        return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readString(0x40000), this.element()), mapper);
+    default T read(FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
+        return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readUtf(0x40000), this.element()), mapper);
     }
     
     /**
      * @see ValueMapper#write(Object, PacketBuffer)
      */
-    default void write(T value, PacketBuffer buffer, ValueMapper<C, JsonElement> mapper) {
-        buffer.writeString(ConfigImpl.INTERNAL.toJson(this.toJSON(value, mapper)), 0x40000);
+    default void write(T value, FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
+        buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJSON(value, mapper)), 0x40000);
     }
 }

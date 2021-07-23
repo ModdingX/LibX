@@ -2,11 +2,11 @@ package io.github.noeppi_noeppi.libx.impl.network;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.network.NetworkX;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.PacketDistributor;
 
@@ -41,18 +41,18 @@ public final class NetworkImpl extends NetworkX {
         this.register(new TeRequestSerializer(), () -> TeRequestHandler::handle, NetworkDirection.PLAY_TO_SERVER);
     }
     
-    public void updateTE(World world, BlockPos pos) {
-        if (!world.isRemote) {
-            this.updateTE(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), world, pos);
+    public void updateTE(Level level, BlockPos pos) {
+        if (!level.isClientSide) {
+            this.updateTE(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), level, pos);
         }
     }
 
-    void updateTE(PacketDistributor.PacketTarget target, World world, BlockPos pos) {
-        if (!world.isRemote) {
-            TileEntity te = world.getTileEntity(pos);
-            if (te == null)
+    void updateTE(PacketDistributor.PacketTarget target, Level level, BlockPos pos) {
+        if (!level.isClientSide) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be == null)
                 return;
-            CompoundNBT nbt = te.getUpdateTag();
+            CompoundTag nbt = te.getUpdateTag();
             //noinspection ConstantConditions
             if (nbt == null)
                 return;
@@ -63,8 +63,8 @@ public final class NetworkImpl extends NetworkX {
         }
     }
 
-    public void requestTE(World world, BlockPos pos) {
-        if (world.isRemote) {
+    public void requestTE(Level level, BlockPos pos) {
+        if (level.isClientSide) {
             this.instance.sendToServer(new TeRequestSerializer.TeRequestMessage(pos));
         }
     }

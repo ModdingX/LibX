@@ -1,11 +1,11 @@
 package io.github.noeppi_noeppi.libx.inventory.container;
 
 import com.mojang.datafixers.util.Function4;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -18,13 +18,13 @@ import javax.annotation.Nullable;
  * of container. When using this it's important to register the player inventory slots through
  * {@link ContainerBase#layoutPlayerInventorySlots(int, int)} and after all other slots.
  */
-public abstract class ContainerBase extends Container {
+public abstract class ContainerMenuBase extends AbstractContainerMenu {
     
     public final IItemHandler playerInventory;
     
-    protected ContainerBase(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory) {
+    protected ContainerMenuBase(@Nullable MenuType<?> type, int id, Inventory playerContainer) {
         super(type, id);
-        this.playerInventory = new InvWrapper(playerInventory);
+        this.playerInventory = new InvWrapper(playerContainer);
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class ContainerBase extends Container {
 
     // As opposed to the super method this checks for Slot#isValid(ItemStack)
     @Override
-    protected boolean mergeItemStack(@Nonnull ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
+    protected boolean moveItemStackTo(@Nonnull ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
         boolean flag = false;
         int i = startIndex;
         if (reverseDirection) {
@@ -141,20 +141,20 @@ public abstract class ContainerBase extends Container {
                     break;
                 }
 
-                Slot slot = this.inventorySlots.get(i);
-                ItemStack itemstack = slot.getStack();
-                if (!itemstack.isEmpty() && areItemsAndTagsEqual(stack, itemstack) && slot.isItemValid(stack)) {
+                Slot slot = this.slots.get(i);
+                ItemStack itemstack = slot.getItem();
+                if (!itemstack.isEmpty() && consideredTheSameItem(stack, itemstack) && slot.mayPlace(stack)) {
                     int j = itemstack.getCount() + stack.getCount();
-                    int maxSize = Math.min(slot.getSlotStackLimit(), stack.getMaxStackSize());
+                    int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
                     if (j <= maxSize) {
                         stack.setCount(0);
                         itemstack.setCount(j);
-                        slot.onSlotChanged();
+                        slot.setChanged();
                         flag = true;
                     } else if (itemstack.getCount() < maxSize) {
                         stack.shrink(maxSize - itemstack.getCount());
                         itemstack.setCount(maxSize);
-                        slot.onSlotChanged();
+                        slot.setChanged();
                         flag = true;
                     }
                 }
@@ -183,16 +183,16 @@ public abstract class ContainerBase extends Container {
                     break;
                 }
 
-                Slot slot1 = this.inventorySlots.get(i);
-                ItemStack itemstack1 = slot1.getStack();
-                if (itemstack1.isEmpty() && slot1.isItemValid(stack)) {
-                    if (stack.getCount() > slot1.getSlotStackLimit()) {
-                        slot1.putStack(stack.split(slot1.getSlotStackLimit()));
+                Slot slot1 = this.slots.get(i);
+                ItemStack itemstack1 = slot1.getItem();
+                if (itemstack1.isEmpty() && slot1.mayPlace(stack)) {
+                    if (stack.getCount() > slot1.getMaxStackSize()) {
+                        slot1.set(stack.split(slot1.getMaxStackSize()));
                     } else {
-                        slot1.putStack(stack.split(stack.getCount()));
+                        slot1.set(stack.split(stack.getCount()));
                     }
 
-                    slot1.onSlotChanged();
+                    slot1.setChanged();
                     flag = true;
                     break;
                 }

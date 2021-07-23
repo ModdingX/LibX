@@ -2,10 +2,10 @@ package io.github.noeppi_noeppi.libx.crafting.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
@@ -33,7 +33,7 @@ public class NbtIngredient extends Ingredient {
     }
 
     public NbtIngredient(ItemStack stack, boolean exactMatch) {
-        super(Stream.of(new Ingredient.SingleItemList(stack)));
+        super(Stream.of(new Ingredient.ItemValue(stack)));
         this.stack = stack.copy();
         this.exactMatch = exactMatch;
         this.matchingStacks = new ItemStack[] { stack.copy() };
@@ -43,24 +43,24 @@ public class NbtIngredient extends Ingredient {
     public boolean test(@Nullable ItemStack input) {
         if (input == null || this.stack.isEmpty() || input.getItem() != this.stack.getItem())
             return false;
-        if (input.isDamageable() != this.stack.isDamageable() || (this.stack.isDamageable() && input.getDamage() != this.stack.getDamage())) {
+        if (input.isDamageableItem() != this.stack.isDamageableItem() || (this.stack.isDamageableItem() && input.getDamageValue() != this.stack.getDamageValue())) {
             return false;
         }
 
-        CompoundNBT nbt = this.stack.getTag();
+        CompoundTag nbt = this.stack.getTag();
         if (nbt == null) {
-            nbt = new CompoundNBT();
+            nbt = new CompoundTag();
         }
 
-        CompoundNBT inputNbt = input.getTag();
+        CompoundTag inputNbt = input.getTag();
         if (inputNbt == null) {
-            inputNbt = new CompoundNBT();
+            inputNbt = new CompoundTag();
         }
 
         if (this.exactMatch) {
             return inputNbt.equals(nbt);
         } else {
-            CompoundNBT merged = inputNbt.copy();
+            CompoundTag merged = inputNbt.copy();
             merged = merged.merge(nbt);
 
             return merged.equals(inputNbt);
@@ -69,7 +69,7 @@ public class NbtIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         return this.matchingStacks;
     }
 
@@ -87,7 +87,7 @@ public class NbtIngredient extends Ingredient {
     @Nonnull
     @Override
     @SuppressWarnings("ConstantConditions")
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", CraftingHelper.getID(NbtIngredient.Serializer.INSTANCE).toString());
         json.addProperty("item", this.stack.getItem().getRegistryName().toString());
@@ -107,8 +107,8 @@ public class NbtIngredient extends Ingredient {
 
         @Nonnull
         @Override
-        public NbtIngredient parse(PacketBuffer buffer) {
-            return new NbtIngredient(buffer.readItemStack(), buffer.readBoolean());
+        public NbtIngredient parse(FriendlyByteBuf buffer) {
+            return new NbtIngredient(buffer.readItem(), buffer.readBoolean());
         }
 
         @Nonnull
@@ -124,8 +124,8 @@ public class NbtIngredient extends Ingredient {
         }
 
         @Override
-        public void write(PacketBuffer buffer, NbtIngredient ingredient) {
-            buffer.writeItemStack(ingredient.stack);
+        public void write(FriendlyByteBuf buffer, NbtIngredient ingredient) {
+            buffer.writeItem(ingredient.stack);
             buffer.writeBoolean(ingredient.exactMatch);
         }
     }

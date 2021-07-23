@@ -13,9 +13,9 @@ import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -251,7 +251,7 @@ public class ConfigManager {
     /**
      * Forces a resync of one config to one player.
      */
-    public static void forceResync(@Nullable ServerPlayerEntity player, Class<?> configClass) {
+    public static void forceResync(@Nullable ServerPlayer player, Class<?> configClass) {
         if (!configIds.containsValue(configClass)) {
             throw new IllegalArgumentException("Class " + configClass + " is not registered as a config.");
         }
@@ -270,7 +270,7 @@ public class ConfigManager {
     /**
      * Forces a resync of all configs to one player.
      */
-    public static void forceResync(@Nullable ServerPlayerEntity player) {
+    public static void forceResync(@Nullable ServerPlayer player) {
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             for (ResourceLocation id : ConfigManager.configs()) {
                 ConfigImpl config = ConfigImpl.getConfig(id);

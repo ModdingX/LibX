@@ -1,15 +1,15 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.*;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -18,13 +18,18 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+
 /**
  * A provider for {@link BlockTags block}, {@link ItemTags item} and {@link FluidTags fluid} tags.
  * You can set your tags in {@link #setup() setup}. With {@link #defaultItemTags(Item) defaultItemTags},
  * {@link #defaultBlockTags(Block) defaultBlockTags} and {@link #defaultFluidTags(Fluid) defaultFluidTags},
  * you can add default tags that can be retrieved from the element.
  */
-public abstract class CommonTagsProviderBase implements IDataProvider {
+public abstract class CommonTagsProviderBase implements DataProvider {
 
     protected final ModX mod;
     protected final DataGenerator generator;
@@ -35,7 +40,7 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
     private final FluidTagProviderBase fluidTags;
 
     private boolean isSetup = false;
-    private final List<Pair<ITag.INamedTag<Fluid>, ITag.INamedTag<Block>>> fluidCopies = new ArrayList<>();
+    private final List<Pair<Tag.Named<Fluid>, Tag.Named<Block>>> fluidCopies = new ArrayList<>();
 
     /**
      * Creates a new CommonTagsProviderBase
@@ -91,35 +96,35 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
     /**
      * Gets a {@link TagsProvider.Builder tag builder} for an {@link Item}
      */
-    public TagsProvider.Builder<Item> item(ITag.INamedTag<Item> tag) {
-        return this.itemTags.getOrCreateBuilder(tag);
+    public TagsProvider.TagAppender<Item> item(Tag.Named<Item> tag) {
+        return this.itemTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.Builder tag builder} for a {@link Block}
      */
-    public TagsProvider.Builder<Block> block(ITag.INamedTag<Block> tag) {
-        return this.blockTags.getOrCreateBuilder(tag);
+    public TagsProvider.TagAppender<Block> block(Tag.Named<Block> tag) {
+        return this.blockTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.Builder tag builder} for a {@link Fluid}
      */
-    public TagsProvider.Builder<Fluid> fluid(ITag.INamedTag<Fluid> tag) {
-        return this.fluidTags.getOrCreateBuilder(tag);
+    public TagsProvider.TagAppender<Fluid> fluid(Tag.Named<Fluid> tag) {
+        return this.fluidTags.tag(tag);
     }
 
     /**
      * Copies all entries from a block tag to an item tag.
      */
-    public void copyBlock(ITag.INamedTag<Block> from, ITag.INamedTag<Item> to) {
+    public void copyBlock(Tag.Named<Block> from, Tag.Named<Item> to) {
         this.itemTags.copy(from, to);
     }
 
     /**
      * Copies all entries from a fluid tag to a block tag.
      */
-    public void copyFluid(ITag.INamedTag<Fluid> from, ITag.INamedTag<Block> to) {
+    public void copyFluid(Tag.Named<Fluid> from, Tag.Named<Block> to) {
         this.fluidCopies.add(Pair.of(from, to));
     }
 
@@ -130,48 +135,48 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
     }
 
     @Override
-    public void act(@Nonnull DirectoryCache cache) {
+    public void run(@Nonnull HashCache cache) {
         // We don't do anything here, everything is done by the three child providers
     }
 
     private class BlockTagProviderBase extends BlockTagsProvider {
 
-        private Map<ResourceLocation, ITag.Builder> tagCache;
+        private Map<ResourceLocation, Tag.Builder> tagCache;
 
         protected BlockTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
             super(generator, modid, fileHelper);
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
                 CommonTagsProviderBase.this.doSetup();
             } else if (this.tagCache != null) {
-                this.tagToBuilder.putAll(this.tagCache);
+                this.builders.putAll(this.tagCache);
             }
             // Add fluid copies
-            for (Pair<ITag.INamedTag<Fluid>, ITag.INamedTag<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
-                TagsProvider.Builder<Block> builder = this.getOrCreateBuilder(copy.getRight());
+            for (Pair<Tag.Named<Fluid>, Tag.Named<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
+                TagsProvider.TagAppender<Block> builder = this.tag(copy.getRight());
                 for (ResourceLocation entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
                     Fluid fluid = ForgeRegistries.FLUIDS.getValue(entry);
                     if (fluid != null) {
-                        builder.add(fluid.getDefaultState().getBlockState().getBlock());
+                        builder.add(fluid.defaultFluidState().createLegacyBlock().getBlock());
                     }
                 }
             }
         }
 
         @Override
-        public void act(@Nonnull DirectoryCache cache) {
-            this.tagCache = new HashMap<>(this.tagToBuilder);
-            super.act(cache);
+        public void run(@Nonnull HashCache cache) {
+            this.tagCache = new HashMap<>(this.builders);
+            super.run(cache);
         }
 
         @Override
         @Nonnull
-        public TagsProvider.Builder<Block> getOrCreateBuilder(@Nonnull ITag.INamedTag<Block> tag) {
-            return super.getOrCreateBuilder(tag);
+        public TagsProvider.TagAppender<Block> tag(@Nonnull Tag.Named<Block> tag) {
+            return super.tag(tag);
         }
 
         @Nonnull
@@ -183,36 +188,36 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
 
     private class ItemTagProviderBase extends ItemTagsProvider {
 
-        private Map<ResourceLocation, ITag.Builder> tagCache;
+        private Map<ResourceLocation, Tag.Builder> tagCache;
 
         protected ItemTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
             super(generator, blockTags, modid, fileHelper);
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
                 CommonTagsProviderBase.this.doSetup();
             } else if (this.tagCache != null) {
-                this.tagToBuilder.putAll(this.tagCache);
+                this.builders.putAll(this.tagCache);
             }
         }
 
         @Override
-        public void act(@Nonnull DirectoryCache cache) {
-            this.tagCache = new HashMap<>(this.tagToBuilder);
-            super.act(cache);
+        public void run(@Nonnull HashCache cache) {
+            this.tagCache = new HashMap<>(this.builders);
+            super.run(cache);
         }
 
         @Override
         @Nonnull
-        public TagsProvider.Builder<Item> getOrCreateBuilder(@Nonnull ITag.INamedTag<Item> tag) {
-            return super.getOrCreateBuilder(tag);
+        public TagsProvider.TagAppender<Item> tag(@Nonnull Tag.Named<Item> tag) {
+            return super.tag(tag);
         }
 
         @Override
-        public void copy(@Nonnull ITag.INamedTag<Block> blockTag, @Nonnull ITag.INamedTag<Item> itemTag) {
+        public void copy(@Nonnull Tag.Named<Block> blockTag, @Nonnull Tag.Named<Item> itemTag) {
             super.copy(blockTag, itemTag);
         }
 
@@ -225,39 +230,39 @@ public abstract class CommonTagsProviderBase implements IDataProvider {
 
     private class FluidTagProviderBase extends FluidTagsProvider {
 
-        private Map<ResourceLocation, ITag.Builder> tagCache;
+        private Map<ResourceLocation, Tag.Builder> tagCache;
 
         protected FluidTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
             super(generator, modid, fileHelper);
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
                 CommonTagsProviderBase.this.doSetup();
             } else if (this.tagCache != null) {
-                this.tagToBuilder.putAll(this.tagCache);
+                this.builders.putAll(this.tagCache);
             }
         }
 
         @Override
-        public void act(@Nonnull DirectoryCache cache) {
-            this.tagCache = new HashMap<>(this.tagToBuilder);
-            super.act(cache);
+        public void run(@Nonnull HashCache cache) {
+            this.tagCache = new HashMap<>(this.builders);
+            super.run(cache);
         }
 
         @Override
         @Nonnull
-        public TagsProvider.Builder<Fluid> getOrCreateBuilder(@Nonnull ITag.INamedTag<Fluid> tag) {
-            return super.getOrCreateBuilder(tag);
+        public TagsProvider.TagAppender<Fluid> tag(@Nonnull Tag.Named<Fluid> tag) {
+            return super.tag(tag);
         }
 
-        public List<ResourceLocation> getTagInfo(ITag.INamedTag<Fluid> tag) {
-            TagsProvider.Builder<Fluid> builder = this.getOrCreateBuilder(tag);
-            return builder.getInternalBuilder().getProxyStream()
-                    .filter(p -> p.getEntry() instanceof ITag.ItemEntry)
-                    .map(p -> new ResourceLocation(((ITag.ItemEntry) p.getEntry()).toString()))
+        public List<ResourceLocation> getTagInfo(Tag.Named<Fluid> tag) {
+            TagsProvider.TagAppender<Fluid> builder = this.tag(tag);
+            return builder.getInternalBuilder().getEntries()
+                    .filter(p -> p.getEntry() instanceof Tag.ElementEntry)
+                    .map(p -> new ResourceLocation(((Tag.ElementEntry) p.getEntry()).toString()))
                     .collect(Collectors.toList());
         }
 

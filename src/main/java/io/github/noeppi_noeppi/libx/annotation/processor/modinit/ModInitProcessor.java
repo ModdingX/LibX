@@ -67,7 +67,7 @@ public class ModInitProcessor extends Processor {
         }
         String effectiveFinalDefaultModid = defaultModid;
         Element effectiveFinalDefaultMod = defaultMod;
-        class Local implements ModEnv {
+        class 1Local implements ModEnv {
 
             @Override
             public Types types() {
@@ -171,7 +171,7 @@ public class ModInitProcessor extends Processor {
                 }
             }
         }
-        Local local = new Local();
+        1Local local = new 1Local();
         for (Element element : roundEnv.getElementsAnnotatedWith(RegisterClass.class)) {
             RegisterClassProcessor.processRegisterClass(element, local);
         }

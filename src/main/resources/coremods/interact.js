@@ -3,8 +3,8 @@ function initializeCoreMod() {
     'interact': {
       'target': {
         'type': 'METHOD',
-        'class': 'net.minecraft.server.management.PlayerInteractionManager',
-        'methodName': 'func_219441_a',
+        'class': 'net.minecraft.server.level.ServerPlayerGameMode',
+        'methodName': 'm_7179_',
         'methodDesc': '(Lnet/minecraft/entity/player/ServerPlayerEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Hand;Lnet/minecraft/util/math/BlockRayTraceResult;)Lnet/minecraft/util/ActionResultType;'
       },
       'transformer': function(method) {
@@ -40,7 +40,7 @@ function initializeCoreMod() {
           if (!hasReturn && inst.getOpcode() == Opcodes.ARETURN) {
             hasReturn = true;
           } else if (hasReturn && inst.getOpcode() == Opcodes.GETSTATIC
-              && inst.owner == 'net/minecraft/util/ActionResultType') {
+              && inst.owner == 'net/minecraft/world/InteractionResult') {
             // Need to insert before the getstatic
             method.instructions.insertBefore(inst, target)
             return method;

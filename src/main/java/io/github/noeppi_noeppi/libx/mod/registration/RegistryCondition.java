@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * A registry condition is used by the LibX registration system to prevent things

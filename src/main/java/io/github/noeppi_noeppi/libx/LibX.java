@@ -13,14 +13,14 @@ import io.github.noeppi_noeppi.libx.impl.inventory.screen.GenericScreen;
 import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.impl.recipe.EmptyRecipe;
-import io.github.noeppi_noeppi.libx.inventory.container.GenericContainer;
+import io.github.noeppi_noeppi.libx.inventory.container.GenericContainerMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -54,8 +54,8 @@ public class LibX extends ModX {
         networkWrapper = new CommonNetwork(network);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::registerContainers);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipes);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(MenuType.class, this::registerContainers);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, this::registerRecipes);
 
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
         MinecraftForge.EVENT_BUS.addListener(TileEntityUpdateQueue::tick);
@@ -80,7 +80,7 @@ public class LibX extends ModX {
     protected void clientSetup(FMLClientSetupEvent event) {
         //noinspection CodeBlock2Expr
         event.enqueueWork(() -> {
-            ScreenManager.registerFactory(GenericContainer.TYPE, GenericScreen::new);
+            MenuScreens.register(GenericContainerMenu.TYPE, GenericScreen::new);
         });
     }
 
@@ -97,12 +97,12 @@ public class LibX extends ModX {
         Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, AllLootEntry.TYPE);
     }
     
-    private void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
-        GenericContainer.TYPE.setRegistryName(new ResourceLocation(this.modid, "generic"));
-        event.getRegistry().register(GenericContainer.TYPE);
+    private void registerContainers(RegistryEvent.Register<MenuType<?>> event) {
+        GenericContainerMenu.TYPE.setRegistryName(new ResourceLocation(this.modid, "generic"));
+        event.getRegistry().register(GenericContainerMenu.TYPE);
     }
 
-    private void registerRecipes(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+    private void registerRecipes(RegistryEvent.Register<RecipeSerializer<?>> event) {
         EmptyRecipe.Serializer.INSTANCE.setRegistryName(EmptyRecipe.ID);
         event.getRegistry().register(EmptyRecipe.Serializer.INSTANCE);
     }

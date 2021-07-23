@@ -3,15 +3,15 @@ package io.github.noeppi_noeppi.libx.impl.data.recipe;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -27,37 +27,37 @@ public class ObjectCraftingBuilder {
     public static void buildShaped(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
-        Pair<IItemProvider, Integer> output = getOutput(reader);
+        Pair<ItemLike, Integer> output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shapedRecipe(output.getLeft(), output.getRight());
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(output.getLeft(), output.getRight());
         for (String line : reader.consumeWhile(String.class)) {
-            builder.patternLine(line);
+            builder.pattern(line);
         }
         addShapedIngredients(ext, builder, reader);
-        builder.build(ext.consumer(), id);
+        builder.save(ext.consumer(), id);
     }
 
     public static void buildShapeless(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
-        Pair<IItemProvider, Integer> output = getOutput(reader);
+        Pair<ItemLike, Integer> output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapelessRecipe(output.getLeft(), output.getRight());
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(output.getLeft(), output.getRight());
         addShapelessIngredients(ext, builder, reader);
-        builder.build(ext.consumer(), id);
+        builder.save(ext.consumer(), id);
     }
 
     private static void addShapedIngredients(RecipeExtension ext, ShapedRecipeBuilder builder, ObjectReader reader) {
         int nextId = 0;
         RecipeRequirementStrategy strategy = new RecipeRequirementStrategy();
-        builder.advancementBuilder.withRequirementsStrategy(strategy);
+        builder.advancement.requirements(strategy);
         while (true) {
             Optional<Character> value = reader.expect(Character.class);
             if (value.isPresent()) {
                 char key = value.get();
                 Ingredient ingredient = getIngredient(reader);
-                builder.key(key, ingredient);
-                nextId = addCriteriaToBuilder(builder.advancementBuilder, strategy, ext.criteria(ingredient), nextId);
+                builder.define(key, ingredient);
+                nextId = addCriteriaToBuilder(builder.advancement, strategy, ext.criteria(ingredient), nextId);
             } else {
                 return;
             }
@@ -67,19 +67,19 @@ public class ObjectCraftingBuilder {
     private static void addShapelessIngredients(RecipeExtension ext, ShapelessRecipeBuilder builder, ObjectReader reader) {
         int nextId = 0;
         RecipeRequirementStrategy strategy = new RecipeRequirementStrategy();
-        builder.advancementBuilder.withRequirementsStrategy(strategy);
+        builder.advancement.requirements(strategy);
         while (reader.hasNext()) {
             Ingredient ingredient = getIngredient(reader);
-            builder.addIngredient(ingredient);
-            nextId = addCriteriaToBuilder(builder.advancementBuilder, strategy, ext.criteria(ingredient), nextId);
+            builder.requires(ingredient);
+            nextId = addCriteriaToBuilder(builder.advancement, strategy, ext.criteria(ingredient), nextId);
         }
     }
 
-    private static int addCriteriaToBuilder(Advancement.Builder builder, RecipeRequirementStrategy strategy, List<CriterionInstance> criteria, int nextId) {
+    private static int addCriteriaToBuilder(Advancement.Builder builder, RecipeRequirementStrategy strategy, List<AbstractCriterionTriggerInstance> criteria, int nextId) {
         List<String> criteriaIds = new ArrayList<>();
-        for (CriterionInstance criterion : criteria) {
+        for (AbstractCriterionTriggerInstance criterion : criteria) {
             String id = "criterion" + (nextId++);
-            builder.withCriterion(id, criterion);
+            builder.addCriterion(id, criterion);
             criteriaIds.add(id);
         }
         strategy.addGroup(criteriaIds);
@@ -92,8 +92,8 @@ public class ObjectCraftingBuilder {
         // TODO check if the java 16 compiler will work without it
         //noinspection RedundantTypeArguments
         return ObjectCraftingBuilder.<Ingredient>first(
-                () -> reader.optConsume(IItemProvider.class).map(Ingredient::fromItems),
-                () -> reader.optConsume(ITag.class).map(Ingredient::fromTag),
+                () -> reader.optConsume(ItemLike.class).map(Ingredient::of),
+                () -> reader.optConsume(Tag.class).map(Ingredient::of),
                 () -> reader.optConsume(Ingredient.class),
                 () -> reader.optConsume(List.class).map(list -> {
                     ObjectReader sub = new ObjectReader(list.toArray());
@@ -110,9 +110,9 @@ public class ObjectCraftingBuilder {
     }
 
     @Nonnull
-    private static Pair<IItemProvider, Integer> getOutput(ObjectReader reader) {
-        return ObjectCraftingBuilder.<Pair<IItemProvider, Integer>>first(
-                () -> reader.optConsume(IItemProvider.class).map(item -> Pair.of(item, reader.optConsume(Integer.class).orElse(1))),
+    private static Pair<ItemLike, Integer> getOutput(ObjectReader reader) {
+        return ObjectCraftingBuilder.<Pair<ItemLike, Integer>>first(
+                () -> reader.optConsume(ItemLike.class).map(item -> Pair.of(item, reader.optConsume(Integer.class).orElse(1))),
                 () -> reader.optConsume(ItemStack.class).map(stack -> Pair.of(stack.getItem(), stack.getCount()))
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid output at position " + reader.pos()));
     }
@@ -128,7 +128,7 @@ public class ObjectCraftingBuilder {
         return Optional.empty();
     }
 
-    private static class RecipeRequirementStrategy implements IRequirementsStrategy {
+    private static class RecipeRequirementStrategy implements RequirementsStrategy {
 
         private final List<String[]> groups = new ArrayList<>();
 

@@ -1,10 +1,10 @@
 package io.github.noeppi_noeppi.libx.impl.network;
 
 import io.github.noeppi_noeppi.libx.network.PacketSerializer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 
 public class TeUpdateSerializer implements PacketSerializer<TeUpdateSerializer.TeUpdateMessage> {
 
@@ -14,17 +14,17 @@ public class TeUpdateSerializer implements PacketSerializer<TeUpdateSerializer.T
     }
 
     @Override
-    public void encode(TeUpdateMessage msg, PacketBuffer buffer) {
+    public void encode(TeUpdateMessage msg, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(msg.pos);
         buffer.writeResourceLocation(msg.id);
-        buffer.writeCompoundTag(msg.nbt);
+        buffer.writeNbt(msg.nbt);
     }
 
     @Override
-    public TeUpdateMessage decode(PacketBuffer buffer) {
+    public TeUpdateMessage decode(FriendlyByteBuf buffer) {
         BlockPos pos = buffer.readBlockPos();
         ResourceLocation id = buffer.readResourceLocation();
-        CompoundNBT nbt = buffer.readCompoundTag();
+        CompoundTag nbt = buffer.readNbt();
         
         return new TeUpdateMessage(pos, id, nbt);
     }
@@ -33,9 +33,9 @@ public class TeUpdateSerializer implements PacketSerializer<TeUpdateSerializer.T
 
         public BlockPos pos;
         public ResourceLocation id;
-        public CompoundNBT nbt;
+        public CompoundTag nbt;
 
-        public TeUpdateMessage(BlockPos pos, ResourceLocation id, CompoundNBT nbt) {
+        public TeUpdateMessage(BlockPos pos, ResourceLocation id, CompoundTag nbt) {
             this.pos = pos;
             this.id = id;
             this.nbt = nbt;

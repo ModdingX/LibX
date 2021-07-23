@@ -10,10 +10,10 @@ import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConfigImpl {
 
-    public static final Gson GSON = net.minecraft.util.Util.make(() -> {
+    public static final Gson GSON = net.minecraft.Util.make(() -> {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.disableHtmlEscaping();
         gsonbuilder.setLenient();
@@ -39,7 +39,7 @@ public class ConfigImpl {
         return gsonbuilder.create();
     });
 
-    public static final Gson INTERNAL = net.minecraft.util.Util.make(() -> {
+    public static final Gson INTERNAL = net.minecraft.Util.make(() -> {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.disableHtmlEscaping();
         return gsonbuilder.create();
@@ -116,16 +116,16 @@ public class ConfigImpl {
         }
     }
 
-    public ConfigState readState(PacketBuffer buffer) {
+    public ConfigState readState(FriendlyByteBuf buffer) {
         try {
             Set<ConfigKey> keysLeft = new HashSet<>(this.keys.values());
             ImmutableMap.Builder<ConfigKey, Object> values = ImmutableMap.builder();
             int size = buffer.readVarInt();
             for (int i = 0; i < size; i++) {
-                Class<?> declaringClass = Class.forName(buffer.readString(0x7fff));
+                Class<?> declaringClass = Class.forName(buffer.readUtf(0x7fff));
                 Field field;
                 try {
-                    field = declaringClass.getDeclaredField(buffer.readString(0x7fff));
+                    field = declaringClass.getDeclaredField(buffer.readUtf(0x7fff));
                 } catch (NoSuchFieldException e) {
                     field = null;
                 }
@@ -307,10 +307,10 @@ public class ConfigImpl {
     public void reloadClientWorldState() {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             if (!this.shadowed || this.shadowedLocal) {
-                World clientWorld = DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().world, () -> () -> null);
-                MinecraftServer server = DistExecutor.unsafeRunForDist(() -> Minecraft.getInstance()::getIntegratedServer, () -> () -> null);
-                if (clientWorld != null && server != null) {
-                    Path configDir = server.anvilConverterForAnvilFile.getWorldDir().resolve("config");
+                Level clientLevel = DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().level, () -> () -> null);
+                MinecraftServer server = DistExecutor.unsafeRunForDist(() -> Minecraft.getInstance()::getSingleplayerServer, () -> () -> null);
+                if (clientLevel != null && server != null) {
+                    Path configDir = server.storageSource.getWorldDir().resolve("config");
                     Path configPath = resolveConfigPath(configDir, this.id);
                     if (this.savedState == null) {
                         LibX.logger.warn("Can't load world specific config for '" + this.id + "': No captured state. This should never happen.");

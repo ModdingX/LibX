@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 /**
  * A way to serialise values of a specific type for a config file. See {@link ConfigManager} for
@@ -37,15 +37,15 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
      * Reads a value from a {@link PacketBuffer}. The default implementation expects a
      * JSON string and gives this string to {@link ValueMapper#fromJSON(JsonElement) fromJSON}.
      */
-    default T read(PacketBuffer buffer) {
-        return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readString(0x40000), this.element()));
+    default T read(FriendlyByteBuf buffer) {
+        return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readUtf(0x40000), this.element()));
     }
 
     /**
      * Writes a value to a {@link PacketBuffer}. The default implementation calls
      * {@link ValueMapper#toJSON(Object) toJSON} and writes the resulting JSON as a string.
      */
-    default void write(T value, PacketBuffer buffer) {
-        buffer.writeString(ConfigImpl.INTERNAL.toJson(this.toJSON(value)), 0x40000);
+    default void write(T value, FriendlyByteBuf buffer) {
+        buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJSON(value)), 0x40000);
     }
 }

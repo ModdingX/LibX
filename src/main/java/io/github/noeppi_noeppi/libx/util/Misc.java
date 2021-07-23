@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Some miscellaneous stuff that does not fit anywhere else.

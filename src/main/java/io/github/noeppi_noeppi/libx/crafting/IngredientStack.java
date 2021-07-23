@@ -1,9 +1,9 @@
 package io.github.noeppi_noeppi.libx.crafting;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.Predicate;
 
@@ -50,7 +50,7 @@ public class IngredientStack implements Predicate<ItemStack> {
      * Returns whether the count is 0 or Ingredient#hasNoMatchingItems return true.
      */
     public boolean isEmpty() {
-        return this.count == 0 || this.ingredient.hasNoMatchingItems();
+        return this.count == 0 || this.ingredient.isEmpty();
     }
 
     /**
@@ -58,7 +58,7 @@ public class IngredientStack implements Predicate<ItemStack> {
      */
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
-        json.add("Ingredient", this.ingredient.serialize());
+        json.add("Ingredient", this.ingredient.toJson());
         json.addProperty("Count", this.count);
         return json;
     }
@@ -66,16 +66,16 @@ public class IngredientStack implements Predicate<ItemStack> {
     /**
      * Writes this IngredientStack to a {@link PacketBuffer}
      */
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeVarInt(this.count);
-        this.ingredient.write(buffer);
+        this.ingredient.toNetwork(buffer);
     }
     
     /**
      * Deserializes and IngredientStack from json.
      */
     public static IngredientStack deserialize(JsonObject json) {
-        Ingredient ingredient = json.has("Ingredient") ? Ingredient.deserialize(json.get("Ingredient")) : Ingredient.EMPTY;
+        Ingredient ingredient = json.has("Ingredient") ? Ingredient.fromJson(json.get("Ingredient")) : Ingredient.EMPTY;
         int count = json.has("Count") && json.get("Count").isJsonPrimitive() ? json.get("Count").getAsInt() : 0;
         return new IngredientStack(ingredient, count);
     }
@@ -83,9 +83,9 @@ public class IngredientStack implements Predicate<ItemStack> {
     /**
      * Reads an IngredientStack from a {@link PacketBuffer}
      */
-    public static IngredientStack read(PacketBuffer buffer) {
+    public static IngredientStack read(FriendlyByteBuf buffer) {
         int count = buffer.readVarInt();
-        Ingredient ingredient = Ingredient.read(buffer);
+        Ingredient ingredient = Ingredient.fromNetwork(buffer);
         return new IngredientStack(ingredient, count);
     }
 }

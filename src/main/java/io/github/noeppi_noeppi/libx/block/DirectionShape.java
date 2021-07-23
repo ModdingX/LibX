@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.block;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class DirectionShape extends RotationShape {
 
     private static VoxelShape rotatedV(VoxelShape src) {
         List<VoxelShape> boxes = new ArrayList<>();
-        src.forEachBox((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(VoxelShapes.create(fromX, fromZ, 1 - fromY, toX, toZ, 1 - toY)));
-        return VoxelShapes.or(VoxelShapes.empty(), boxes.toArray(new VoxelShape[]{})).simplify();
+        src.forAllBoxes((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(Shapes.box(fromX, fromZ, 1 - fromY, toX, toZ, 1 - toY)));
+        return Shapes.or(Shapes.empty(), boxes.toArray(new VoxelShape[]{})).optimize();
     }
 }

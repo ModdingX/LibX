@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.mod;
 
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -30,7 +30,7 @@ public abstract class ModX {
      */
     public final Logger logger;
 
-    public final ItemGroup tab;
+    public final CreativeModeTab tab;
 
     private final List<Runnable> setupTasks = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public abstract class ModX {
      * Overriding classes should provide a public no-arg constructor that calls this with
      * the values needed.
      */
-    protected ModX(String modid, @Nullable ItemGroup tab) {
+    protected ModX(String modid, @Nullable CreativeModeTab tab) {
         this.modid = modid;
         this.logger = LogManager.getLogger(modid);
         this.tab = tab;

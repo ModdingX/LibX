@@ -4,12 +4,14 @@ import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Set;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * Base class for {@link Block blocks} for mods using {@link ModXRegistration}. This will automatically set the
@@ -28,7 +30,7 @@ public class BlockBase extends Block implements Registerable {
         super(properties);
         this.mod = mod;
         if (mod.tab != null) {
-            itemProperties.group(mod.tab);
+            itemProperties.tab(mod.tab);
         }
         this.item = new BlockItem(this, itemProperties);
     }

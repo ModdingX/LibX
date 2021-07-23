@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Map;
 
@@ -52,20 +52,20 @@ public class MapValueMapper<T> implements GenericValueMapper<Map<String, T>, Jso
     }
 
     @Override
-    public Map<String, T> read(PacketBuffer buffer, ValueMapper<T, JsonElement> mapper) {
+    public Map<String, T> read(FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
         int size = buffer.readVarInt();
         ImmutableMap.Builder<String, T> builder = ImmutableMap.builder();
         for (int i = 0; i < size; i++) {
-            builder.put(buffer.readString(0x7fff), mapper.read(buffer));
+            builder.put(buffer.readUtf(0x7fff), mapper.read(buffer));
         }
         return builder.build();
     }
 
     @Override
-    public void write(Map<String, T> value, PacketBuffer buffer, ValueMapper<T, JsonElement> mapper) {
+    public void write(Map<String, T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
         buffer.writeVarInt(value.size());
         for (Map.Entry<String, T> entry : value.entrySet()) {
-            buffer.writeString(entry.getKey(), 0x7fff);
+            buffer.writeUtf(entry.getKey(), 0x7fff);
             mapper.write(entry.getValue(), buffer);
         }
     }

@@ -1,10 +1,10 @@
 package io.github.noeppi_noeppi.libx.event;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 
@@ -19,42 +19,42 @@ import net.minecraftforge.eventbus.api.Event;
  */
 public class ClickBlockEmptyHandEvent extends Event {
 
-    private final ServerPlayerEntity player;
-    private final World world;
-    private final Hand hand;
-    private final BlockRayTraceResult hit;
+    private final ServerPlayer player;
+    private final Level level;
+    private final InteractionHand hand;
+    private final BlockHitResult hit;
     
-    private ActionResultType cancellationResult;
+    private InteractionResult cancellationResult;
 
-    public ClickBlockEmptyHandEvent(ServerPlayerEntity player, World world, Hand hand, BlockRayTraceResult hit) {
+    public ClickBlockEmptyHandEvent(ServerPlayer player, Level level, InteractionHand hand, BlockHitResult hit) {
         this.player = player;
-        this.world = world;
+        this.level = level;
         this.hand = hand;
         this.hit = hit;
-        this.cancellationResult = ActionResultType.PASS;
+        this.cancellationResult = InteractionResult.PASS;
     }
 
-    public ServerPlayerEntity getPlayer() {
+    public ServerPlayer getPlayer() {
         return this.player;
     }
 
-    public World getWorld() {
-        return this.world;
+    public Level getLevel() {
+        return this.level;
     }
 
-    public Hand getHand() {
+    public InteractionHand getHand() {
         return this.hand;
     }
 
-    public BlockRayTraceResult getHit() {
+    public BlockHitResult getHit() {
         return this.hit;
     }
 
-    public ActionResultType getCancellationResult() {
+    public InteractionResult getCancellationResult() {
         return this.cancellationResult;
     }
 
-    public void setCancellationResult(ActionResultType cancellationResult) {
+    public void setCancellationResult(InteractionResult cancellationResult) {
         this.cancellationResult = cancellationResult;
     }
 

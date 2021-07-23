@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.network;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;

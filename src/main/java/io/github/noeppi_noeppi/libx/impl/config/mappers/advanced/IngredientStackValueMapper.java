@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.crafting.IngredientStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class IngredientStackValueMapper implements ValueMapper<IngredientStack, JsonObject> {
 
@@ -34,12 +34,12 @@ public class IngredientStackValueMapper implements ValueMapper<IngredientStack, 
     }
 
     @Override
-    public IngredientStack read(PacketBuffer buffer) {
+    public IngredientStack read(FriendlyByteBuf buffer) {
         return IngredientStack.read(buffer);
     }
 
     @Override
-    public void write(IngredientStack value, PacketBuffer buffer) {
+    public void write(IngredientStack value, FriendlyByteBuf buffer) {
         value.write(buffer);
     }
 }

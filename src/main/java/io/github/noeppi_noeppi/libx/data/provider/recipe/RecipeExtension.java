@@ -1,14 +1,14 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,36 +24,36 @@ public interface RecipeExtension {
     /**
      * Gets the {@link Consumer} for {@link IFinishedRecipe finished recipes} to add recipes to.
      */
-    Consumer<IFinishedRecipe> consumer();
+    Consumer<FinishedRecipe> consumer();
 
     /**
      * Builds an {@link CriterionInstance advancement criterion} for the given {@link IItemProvider item}.
      */
-    CriterionInstance criterion(IItemProvider item);
+    AbstractCriterionTriggerInstance criterion(ItemLike item);
     
     /**
      * Builds an {@link CriterionInstance advancement criterion} for the given {@link ITag tag}.
      */
-    CriterionInstance criterion(ITag<Item> item);
+    AbstractCriterionTriggerInstance criterion(Tag<Item> item);
     
     /**
      * Builds an {@link CriterionInstance advancement criterion} that requires all of the given
      * {@link ItemPredicate items}.
      */
-    CriterionInstance criterion(ItemPredicate... items);
+    AbstractCriterionTriggerInstance criterion(ItemPredicate... items);
 
     /**
      * Gets a list of criteria that should be ORed, meaning that the recipe should unlock when one of
      * them is completed instead of all of them.
      */
-    default List<CriterionInstance> criteria(Ingredient item) {
-        List<CriterionInstance> instances = new ArrayList<>();
+    default List<AbstractCriterionTriggerInstance> criteria(Ingredient item) {
+        List<AbstractCriterionTriggerInstance> instances = new ArrayList<>();
         if (item.isVanilla()) {
-            for (Ingredient.IItemList entry : item.acceptedItems) {
-                if (entry instanceof Ingredient.SingleItemList) {
-                    instances.add(this.criterion(ItemPredicate.Builder.create().item(((Ingredient.SingleItemList) entry).stack.getItem()).build()));
-                } else if (entry instanceof Ingredient.TagList) {
-                    instances.add(this.criterion(ItemPredicate.Builder.create().tag(((Ingredient.TagList) entry).tag).build()));
+            for (Ingredient.Value entry : item.values) {
+                if (entry instanceof Ingredient.ItemValue) {
+                    instances.add(this.criterion(ItemPredicate.Builder.item().of(((Ingredient.ItemValue) entry).item.getItem()).build()));
+                } else if (entry instanceof Ingredient.TagValue) {
+                    instances.add(this.criterion(ItemPredicate.Builder.item().of(((Ingredient.TagValue) entry).tag).build()));
                 }
             }
         } else if (item instanceof MergedIngredient) {
@@ -61,8 +61,8 @@ public interface RecipeExtension {
                 instances.addAll(this.criteria(i));
             }
         } else {
-            for (ItemStack stack : item.getMatchingStacks()) {
-                instances.add(this.criterion(ItemPredicate.Builder.create().item(stack.getItem()).build()));
+            for (ItemStack stack : item.getItems()) {
+                instances.add(this.criterion(ItemPredicate.Builder.item().of(stack.getItem()).build()));
             }
         }
         return instances;

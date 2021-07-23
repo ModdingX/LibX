@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.event;
 
 import io.github.noeppi_noeppi.libx.config.ConfigManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;

@@ -4,26 +4,26 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.noeppi_noeppi.libx.impl.data.LootData;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.advancements.criterion.EnchantmentPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.*;
 import net.minecraft.loot.functions.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.Property;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -36,13 +36,38 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import net.minecraft.world.level.storage.loot.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.RandomValueBounds;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+
 /**
  * A base class for block loot providers. When overriding this you should call the
  * {@link #customLootTable(Block) customLootTable} methods in {@link #setup() setup}
  * to adjust the loot tables. Every block of you mod that is left untouched will get
  * a default loot table.
  */
-public abstract class BlockLootProviderBase implements IDataProvider {
+public abstract class BlockLootProviderBase implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -85,7 +110,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     }
 
     @Override
-    public void act(@Nonnull DirectoryCache cache) throws IOException {
+    public void run(@Nonnull HashCache cache) throws IOException {
         this.setup();
 
         Map<ResourceLocation, LootTable.Builder> tables = new HashMap<>();
@@ -108,7 +133,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
         for (Map.Entry<ResourceLocation, LootTable.Builder> e : tables.entrySet()) {
             Path path = getPath(this.generator.getOutputFolder(), e.getKey());
-            IDataProvider.save(GSON, cache, LootTableManager.toJson(e.getValue().setParameterSet(LootParameterSets.BLOCK).build()), path);
+            DataProvider.save(GSON, cache, LootTables.serialize(e.getValue().setParamSet(LootContextParamSets.BLOCK).build()), path);
         }
     }
 
@@ -126,11 +151,11 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      */
     public LootModifier copyNBT(String... tags) {
         return (b, entry) -> {
-            CopyNbt.Builder func = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);
+            CopyNbtFunction.Builder func = CopyNbtFunction.copyData(CopyNbtFunction.DataSource.BLOCK_ENTITY);
             for (String tag : tags) {
-                func = func.replaceOperation(tag, "BlockEntityTag." + tag);
+                func = func.copy(tag, "BlockEntityTag." + tag);
             }
-            return entry.acceptFunction(func);
+            return entry.apply(func);
         };
     }
 
@@ -142,11 +167,11 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      */
     public LootModifier copyProperties(Property<?>... properties) {
         return (b, entry) -> {
-            CopyBlockState.Builder func = CopyBlockState.builder(b);
+            CopyBlockState.Builder func = CopyBlockState.copyState(b);
             for (Property<?> property : properties) {
-                func = func.with(property);
+                func = func.copy(property);
             }
-            return entry.acceptFunction(func);
+            return entry.apply(func);
         };
     }
 
@@ -174,7 +199,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * @param loot A list of loot factories that will all be applied if silk touch is false or the block
      *             is mined without silk touch.
      */
-    public void drops(Block b, boolean silk, LootEntry.Builder<?>... loot) {
+    public void drops(Block b, boolean silk, LootPoolEntryContainer.Builder<?>... loot) {
         this.drops(b, silk, LootFactory.from(loot));
     }
     
@@ -210,16 +235,16 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      *             without silk touch. All of them will be applied.
      */
     public void drops(Block b, SilkModifier silk, LootFactory... loot) {
-        LootEntry.Builder<?> entry = this.combine(LootFactory.resolve(b, loot));
+        LootPoolEntryContainer.Builder<?> entry = this.combine(LootFactory.resolve(b, loot));
         if (silk.modifier != null) {
-            LootEntry.Builder<?> silkBuilder = silk.modifier.apply(b, ItemLootEntry.builder(b)
-                    .acceptCondition(this.silkCondition()));
-            entry = AlternativesLootEntry.builder(silkBuilder, entry);
+            LootPoolEntryContainer.Builder<?> silkBuilder = silk.modifier.apply(b, LootItem.lootTableItem(b)
+                    .when(this.silkCondition()));
+            entry = AlternativesEntry.alternatives(silkBuilder, entry);
         }
-        LootPool.Builder pool = LootPool.builder().name("main")
-                .rolls(ConstantRange.of(1)).addEntry(entry)
-                .acceptCondition(SurvivesExplosion.builder());
-        this.customLootTable(b, LootTable.builder().addLootPool(pool));
+        LootPool.Builder pool = LootPool.lootPool().name("main")
+                .setRolls(ConstantIntValue.exactly(1)).add(entry)
+                .when(ExplosionCondition.survivesExplosion());
+        this.customLootTable(b, LootTable.lootTable().withPool(pool));
     }
 
     /**
@@ -258,29 +283,29 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * Turns a standalone loot entry into a standalone loot factory.
      */
-    public WrappedLootEntry from(StandaloneLootEntry.Builder<?> entry) {
+    public WrappedLootEntry from(LootPoolSingletonContainer.Builder<?> entry) {
         return new WrappedLootEntry(entry);
     }
     
     /**
      * Turns a loot entry into a loot factory.
      */
-    public LootFactory from(LootEntry.Builder<?> entry) {
+    public LootFactory from(LootPoolEntryContainer.Builder<?> entry) {
         return LootFactory.from(entry);
     }
     
     /**
      * Turns a loot function into a loot modifier.
      */
-    public LootModifier from(LootFunction.Builder<?> function) {
-        return (b, e) -> e.acceptFunction(function);
+    public LootModifier from(LootItemConditionalFunction.Builder<?> function) {
+        return (b, e) -> e.apply(function);
     }
 
     /**
      * A loot modifier to apply fortune based on the formula used for ores.
      */
     public LootModifier fortuneOres() {
-        return (b, e) -> e.acceptFunction(ApplyBonus.oreDrops(Enchantments.FORTUNE));
+        return (b, e) -> e.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE));
     }
     
     /**
@@ -294,7 +319,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * A loot modifier to apply fortune based on a uniform formula.
      */
     public LootModifier fortuneUniform(int multiplier) {
-        return (b, e) -> e.acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE, multiplier));
+        return (b, e) -> e.apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, multiplier));
     }
 
     /**
@@ -308,21 +333,21 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * A loot modifier to apply fortune based on a binomial formula.
      */
     public LootModifier fortuneBinomial(float probability, int bonus) {
-        return (b, e) -> e.acceptFunction(ApplyBonus.binomialWithBonusCount(Enchantments.FORTUNE, probability, bonus));
+        return (b, e) -> e.apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, probability, bonus));
     }
 
     /**
      * A condition that is random with a chance.
      */
-    public ILootCondition.IBuilder random(float chance) {
-        return RandomChance.builder(chance);
+    public LootItemCondition.Builder random(float chance) {
+        return LootItemRandomChanceCondition.randomChance(chance);
     }
 
     /**
      * A condition that is random with a chance and optionally different chances for
      * different fortune levels. Chances for different levels are computed automatically.
      */
-    public ILootCondition.IBuilder randomFortune(float baseChance) {
+    public LootItemCondition.Builder randomFortune(float baseChance) {
         return this.randomFortune(baseChance, baseChance * (10/9f), baseChance * 1.25f, baseChance * (5/3f), baseChance * 5);
     }
     
@@ -333,18 +358,18 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * @param baseChance The chance without fortune.
      * @param levelChances the chances with fortune.
      */
-    public ILootCondition.IBuilder randomFortune(float baseChance, float... levelChances) {
+    public LootItemCondition.Builder randomFortune(float baseChance, float... levelChances) {
         float[] chances = new float[levelChances.length + 1];
         chances[0] = baseChance;
         System.arraycopy(levelChances, 0, chances, 1, levelChances.length);
-        return TableBonus.builder(Enchantments.FORTUNE, chances);
+        return BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances);
     }
 
     /**
      * A loot modifier that sets the count of a stack.
      */
     public LootModifier count(int count) {
-        return this.from(SetCount.builder(ConstantRange.of(count)));
+        return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(count)));
     }
     
     /**
@@ -352,9 +377,9 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      */
     public LootModifier count(int min, int max) {
         if (min == max) {
-            return this.from(SetCount.builder(ConstantRange.of(min)));
+            return this.from(SetItemCountFunction.setCount(ConstantIntValue.exactly(min)));
         } else {
-            return this.from(SetCount.builder(RandomValueRange.of(min, max)));
+            return this.from(SetItemCountFunction.setCount(RandomValueBounds.between(min, max)));
         }
     }
     
@@ -362,21 +387,21 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * A loot modifier that sets the count of a stack based on a binomial formula.
      */
     public LootModifier countBinomial(float chance, int num) {
-        return this.from(SetCount.builder(BinomialRange.of(num, chance)));
+        return this.from(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(num, chance)));
     }
     
     /**
      * Inverts a loot condition
      */
-    public ILootCondition.IBuilder not(ILootCondition.IBuilder condition) {
-        return Inverted.builder(condition);
+    public LootItemCondition.Builder not(LootItemCondition.Builder condition) {
+        return InvertedLootItemCondition.invert(condition);
     }
     
     /**
      * Joins conditions with OR.
      */
-    public ILootCondition.IBuilder or(ILootCondition.IBuilder... conditions) {
-        return Alternative.builder(conditions);
+    public LootItemCondition.Builder or(LootItemCondition.Builder... conditions) {
+        return AlternativeLootItemCondition.alternative(conditions);
     }
 
     /**
@@ -405,7 +430,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * Combines the given loot builders into one. (All loot builders will be applied).
      */
-    public LootEntry.Builder<?> combine(LootEntry.Builder<?>... loot) {
+    public LootPoolEntryContainer.Builder<?> combine(LootPoolEntryContainer.Builder<?>... loot) {
         return LootData.combineBy(LootBuilders.AllLootBuilder::new, loot);
     }
 
@@ -419,7 +444,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * Combines the given loot builders into one. (One loot builder will be applied).
      */
-    public LootEntry.Builder<?> random(LootEntry.Builder<?>... loot) {
+    public LootPoolEntryContainer.Builder<?> random(LootPoolEntryContainer.Builder<?>... loot) {
         return LootData.combineBy(LootBuilders.GroupLootBuilder::new, loot);
     }
 
@@ -433,22 +458,22 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * Combines the given loot builders into one. Only the first matching builder is applied.
      */
-    public LootEntry.Builder<?> first(LootEntry.Builder<?>... loot) {
-        return LootData.combineBy(AlternativesLootEntry::builder, loot);
+    public LootPoolEntryContainer.Builder<?> first(LootPoolEntryContainer.Builder<?>... loot) {
+        return LootData.combineBy(AlternativesEntry::alternatives, loot);
     }
 
     /**
      * Combines the given loot factories into one. Only the first matching factory is applied.
      */
     public LootFactory first(LootFactory... loot) {
-        return e -> LootData.combineBy(AlternativesLootEntry::builder, l -> l.build(e), loot);
+        return e -> LootData.combineBy(AlternativesEntry::alternatives, l -> l.build(e), loot);
     }
     
     /**
      * Combines the given loot builders into one.
      * From all the loot entries until the first one not matching, one is selected.
      */
-    public LootEntry.Builder<?> whileMatch(LootEntry.Builder<?>... loot) {
+    public LootPoolEntryContainer.Builder<?> whileMatch(LootPoolEntryContainer.Builder<?>... loot) {
         return LootData.combineBy(LootBuilders.SequenceLootBuilder::new, loot);
     }
 
@@ -463,31 +488,31 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     /**
      * A loot factory for a specific item.
      */
-    public WrappedLootEntry stack(IItemProvider item) {
-        return new WrappedLootEntry(ItemLootEntry.builder(item));
+    public WrappedLootEntry stack(ItemLike item) {
+        return new WrappedLootEntry(LootItem.lootTableItem(item));
     }
     
     /**
      * Gets a loot condition builder for a match tool condition.
      */
-    public MatchToolBuilder matchTool(IItemProvider item) {
-        return new MatchToolBuilder(ItemPredicate.Builder.create().item(item));
+    public MatchToolBuilder matchTool(ItemLike item) {
+        return new MatchToolBuilder(ItemPredicate.Builder.item().of(item));
     }
     
     /**
      * Gets a loot condition builder for a match tool condition.
      */
-    public MatchToolBuilder matchTool(ITag<Item> item) {
-        return new MatchToolBuilder(ItemPredicate.Builder.create().tag(item));
+    public MatchToolBuilder matchTool(Tag<Item> item) {
+        return new MatchToolBuilder(ItemPredicate.Builder.item().of(item));
     }
 
     /**
      * Gets a loot condition for silk touch tools.
      */
-    public ILootCondition.IBuilder silkCondition() {
-        ItemPredicate.Builder predicate = ItemPredicate.Builder.create()
-                .enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1)));
-        return MatchTool.builder(predicate);
+    public LootItemCondition.Builder silkCondition() {
+        ItemPredicate.Builder predicate = ItemPredicate.Builder.item()
+                .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)));
+        return MatchTool.toolMatches(predicate);
     }
     
     /**
@@ -503,11 +528,11 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      */
     @Nullable
     protected LootTable.Builder defaultBehavior(Block b) {
-        if (b.getStateContainer().getValidStates().stream().anyMatch(this::needsLootTable)) {
-            LootEntry.Builder<?> entry = ItemLootEntry.builder(b);
-            LootPool.Builder pool = LootPool.builder().name("main").rolls(ConstantRange.of(1)).addEntry(entry)
-                    .acceptCondition(SurvivesExplosion.builder());
-            return LootTable.builder().addLootPool(pool);
+        if (b.getStateDefinition().getPossibleStates().stream().anyMatch(this::needsLootTable)) {
+            LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(b);
+            LootPool.Builder pool = LootPool.lootPool().name("main").setRolls(ConstantIntValue.exactly(1)).add(entry)
+                    .when(ExplosionCondition.survivesExplosion());
+            return LootTable.lootTable().withPool(pool);
         } else {
             return null;
         }
@@ -520,8 +545,8 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      */
     protected boolean needsLootTable(BlockState state) {
         //noinspection deprecation
-        return !state.isAir() && state.getFluidState().getBlockState().getBlock() != state.getBlock()
-                && !LootTables.EMPTY.equals(state.getBlock().getLootTable());
+        return !state.isAir() && state.getFluidState().createLegacyBlock().getBlock() != state.getBlock()
+                && !BuiltInLootTables.EMPTY.equals(state.getBlock().getLootTable());
     }
 
     /**
@@ -533,17 +558,17 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         /**
          * Gets a loot factory that will always return the given loot entry.
          */
-        static LootFactory from(LootEntry.Builder<?> builder) {
+        static LootFactory from(LootPoolEntryContainer.Builder<?> builder) {
             return b -> builder;
         }
 
         /**
          * Gets an array of loot factories that will always return the given loot entries.
          */
-        static LootFactory[] from(LootEntry.Builder<?>[] builders) {
+        static LootFactory[] from(LootPoolEntryContainer.Builder<?>[] builders) {
             LootFactory[] factories = new LootFactory[builders.length];
             for (int i = 0; i < builders.length; i++) {
-                LootEntry.Builder<?> builder = builders[i];
+                LootPoolEntryContainer.Builder<?> builder = builders[i];
                 factories[i] = b -> builder;
             }
             return factories;
@@ -552,21 +577,21 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         /**
          * Calls {@link #build(Block)} on all factories with the given block and returns a new array.
          */
-        static LootEntry.Builder<?>[] resolve(Block b, LootFactory[] factories) {
-            LootEntry.Builder<?>[] entries = new LootEntry.Builder<?>[factories.length];
+        static LootPoolEntryContainer.Builder<?>[] resolve(Block b, LootFactory[] factories) {
+            LootPoolEntryContainer.Builder<?>[] entries = new LootPoolEntryContainer.Builder<?>[factories.length];
             for (int i = 0; i < factories.length; i++) {
                 entries[i] = factories[i].build(b);
             }
             return entries;
         }
 
-        LootEntry.Builder<?> build(Block block);
+        LootPoolEntryContainer.Builder<?> build(Block block);
         
-        default LootFactory with(ILootCondition.IBuilder... conditions) {
+        default LootFactory with(LootItemCondition.Builder... conditions) {
             return b -> {
-                LootEntry.Builder<?> entry = this.build(b);
-                for (ILootCondition.IBuilder condition : conditions) {
-                    entry.acceptCondition(condition);
+                LootPoolEntryContainer.Builder<?> entry = this.build(b);
+                for (LootItemCondition.Builder condition : conditions) {
+                    entry.when(condition);
                 }
                 return entry;
             };
@@ -583,23 +608,23 @@ public abstract class BlockLootProviderBase implements IDataProvider {
          * Gets a standalone loot factory that always returns the given block as item.
          */
         static StandaloneLootFactory item() {
-            return ItemLootEntry::builder;
+            return LootItem::lootTableItem;
         }
 
         /**
          * Gets a standalone loot factory that will always return the given loot entry.
          */
-        static StandaloneLootFactory from(StandaloneLootEntry.Builder<?> builder) {
+        static StandaloneLootFactory from(LootPoolSingletonContainer.Builder<?> builder) {
             return b -> builder;
         }
 
         /**
          * Gets an array of standalone loot factories that will always return the given loot entries.
          */
-        static StandaloneLootFactory[] from(StandaloneLootEntry.Builder<?>[] builders) {
+        static StandaloneLootFactory[] from(LootPoolSingletonContainer.Builder<?>[] builders) {
             StandaloneLootFactory[] factories = new StandaloneLootFactory[builders.length];
             for (int i = 0; i < builders.length; i++) {
-                StandaloneLootEntry.Builder<?> builder = builders[i];
+                LootPoolSingletonContainer.Builder<?> builder = builders[i];
                 factories[i] = b -> builder;
             }
             return factories;
@@ -608,8 +633,8 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         /**
          * Calls {@link #build(Block)} on all factories with the given block and returns a new array.
          */
-        static StandaloneLootEntry.Builder<?>[] resolve(Block b, StandaloneLootFactory[] factories) {
-            StandaloneLootEntry.Builder<?>[] entries = new StandaloneLootEntry.Builder<?>[factories.length];
+        static LootPoolSingletonContainer.Builder<?>[] resolve(Block b, StandaloneLootFactory[] factories) {
+            LootPoolSingletonContainer.Builder<?>[] entries = new LootPoolSingletonContainer.Builder<?>[factories.length];
             for (int i = 0; i < factories.length; i++) {
                 entries[i] = factories[i].build(b);
             }
@@ -617,7 +642,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         @Override
-        StandaloneLootEntry.Builder<?> build(Block block);
+        LootPoolSingletonContainer.Builder<?> build(Block block);
         
         default LootFactory withFinal(GenericLootModifier finalModifier) {
             return b -> finalModifier.apply(b, this.build(b));
@@ -629,21 +654,21 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         @Override
-        default StandaloneLootFactory with(ILootCondition.IBuilder... conditions) {
+        default StandaloneLootFactory with(LootItemCondition.Builder... conditions) {
             return b -> {
-                StandaloneLootEntry.Builder<?> entry = this.build(b);
-                for (ILootCondition.IBuilder condition : conditions) {
-                    entry.acceptCondition(condition);
+                LootPoolSingletonContainer.Builder<?> entry = this.build(b);
+                for (LootItemCondition.Builder condition : conditions) {
+                    entry.when(condition);
                 }
                 return entry;
             };
         }
         
-        default StandaloneLootFactory with(LootFunction.Builder<?>... functions) {
+        default StandaloneLootFactory with(LootItemConditionalFunction.Builder<?>... functions) {
             LootModifier[] modifiers = new LootModifier[functions.length];
             for (int i = 0; i < functions.length; i++) {
-                LootFunction.Builder<?> function = functions[i];
-                modifiers[i] = (b, e) -> e.acceptFunction(function);
+                LootItemConditionalFunction.Builder<?> function = functions[i];
+                modifiers[i] = (b, e) -> e.apply(function);
             }
             LootModifier chained = LootModifier.chain(modifiers);
             return b -> chained.apply(b, this.build(b));
@@ -652,14 +677,14 @@ public abstract class BlockLootProviderBase implements IDataProvider {
     
     public static class WrappedLootEntry implements StandaloneLootFactory {
         
-        public final StandaloneLootEntry.Builder<?> entry;
+        public final LootPoolSingletonContainer.Builder<?> entry;
 
-        private WrappedLootEntry(StandaloneLootEntry.Builder<?> entry) {
+        private WrappedLootEntry(LootPoolSingletonContainer.Builder<?> entry) {
             this.entry = entry;
         }
 
         @Override
-        public StandaloneLootEntry.Builder<?> build(Block block) {
+        public LootPoolSingletonContainer.Builder<?> build(Block block) {
             return this.entry;
         }
     }
@@ -679,10 +704,10 @@ public abstract class BlockLootProviderBase implements IDataProvider {
             return (b, e) -> e;
         }
 
-        LootEntry.Builder<?> apply(Block block, StandaloneLootEntry.Builder<?> entry);
+        LootPoolEntryContainer.Builder<?> apply(Block block, LootPoolSingletonContainer.Builder<?> entry);
 
         @Override
-        default LootEntry.Builder<?> build(Block block) {
+        default LootPoolEntryContainer.Builder<?> build(Block block) {
             return this.apply(block, StandaloneLootFactory.item().build(block));
         }
     }
@@ -713,7 +738,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
                 return children[0];
             } else {
                 return (b, e) -> {
-                    StandaloneLootEntry.Builder<?> entry = e;
+                    LootPoolSingletonContainer.Builder<?> entry = e;
                     for (LootModifier modifier : children) {
                         entry = modifier.apply(b, entry);
                     }
@@ -723,10 +748,10 @@ public abstract class BlockLootProviderBase implements IDataProvider {
         }
 
         @Override
-        StandaloneLootEntry.Builder<?> apply(Block block, StandaloneLootEntry.Builder<?> entry);
+        LootPoolSingletonContainer.Builder<?> apply(Block block, LootPoolSingletonContainer.Builder<?> entry);
 
         @Override
-        default StandaloneLootEntry.Builder<?> build(Block block) {
+        default LootPoolSingletonContainer.Builder<?> build(Block block) {
             return this.apply(block, StandaloneLootFactory.item().build(block));
         }
 
@@ -757,7 +782,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
      * This serves as a builder for a loot condition and a builder for a match tool predicate
      * in one.
      */
-    public static class MatchToolBuilder implements ILootCondition.IBuilder {
+    public static class MatchToolBuilder implements LootItemCondition.Builder {
         
         private final ItemPredicate.Builder builder;
 
@@ -767,15 +792,15 @@ public abstract class BlockLootProviderBase implements IDataProvider {
 
         @Nonnull
         @Override
-        public ILootCondition build() {
-            return MatchTool.builder(this.builder).build();
+        public LootItemCondition build() {
+            return MatchTool.toolMatches(this.builder).build();
         }
 
         /**
          * Adds a required enchantment to this builder.
          */
         public MatchToolBuilder ench(Enchantment ench) {
-            return this.ench(ench, MinMaxBounds.IntBound.atLeast(1));
+            return this.ench(ench, MinMaxBounds.Ints.atLeast(1));
         }
         
         /**
@@ -784,7 +809,7 @@ public abstract class BlockLootProviderBase implements IDataProvider {
          * @param minLevel The minimum level of the enchantment that must be present.
          */
         public MatchToolBuilder ench(Enchantment ench, int minLevel) {
-            return this.ench(ench, MinMaxBounds.IntBound.atLeast(minLevel));
+            return this.ench(ench, MinMaxBounds.Ints.atLeast(minLevel));
         }
         
         /**
@@ -793,19 +818,19 @@ public abstract class BlockLootProviderBase implements IDataProvider {
          * @param level The exact level of the enchantment that must be present.
          */
         public MatchToolBuilder enchExact(Enchantment ench, int level) {
-            return this.ench(ench, MinMaxBounds.IntBound.exactly(level));
+            return this.ench(ench, MinMaxBounds.Ints.exactly(level));
         }
         
-        private MatchToolBuilder ench(Enchantment ench, MinMaxBounds.IntBound bounds) {
-            this.builder.enchantment(new EnchantmentPredicate(ench, bounds));
+        private MatchToolBuilder ench(Enchantment ench, MinMaxBounds.Ints bounds) {
+            this.builder.hasEnchantment(new EnchantmentPredicate(ench, bounds));
             return this;
         }
 
         /**
          * Adds required NBT data to this builder.
          */
-        public MatchToolBuilder nbt(CompoundNBT nbt) {
-            this.builder.nbt(nbt);
+        public MatchToolBuilder nbt(CompoundTag nbt) {
+            this.builder.hasNbt(nbt);
             return this;
         }
     }

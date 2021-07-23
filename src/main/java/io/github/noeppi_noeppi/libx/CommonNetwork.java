@@ -3,8 +3,8 @@ package io.github.noeppi_noeppi.libx;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.base.TileEntityBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /**
  * A wrapper for the network implementation of LibX. Allows for some networking functions that
@@ -23,8 +23,8 @@ public class CommonNetwork {
      * position to all clients tracking the chunk. On the client the tag is passed
      * to {@link TileEntity#handleUpdateTag}. Does nothing when called on the client.
      */
-    public void updateTE(World world, BlockPos pos) {
-        this.network.updateTE(world, pos);
+    public void updateTE(Level level, BlockPos pos) {
+        this.network.updateTE(level, pos);
     }
 
     /**
@@ -33,7 +33,7 @@ public class CommonNetwork {
      * send an update packet as described in {@link NetworkImpl#updateTE(World, BlockPos)} to the client.
      * Does nothing when called on the server.
      */
-    public void requestTE(World world, BlockPos pos) {
-        this.network.requestTE(world, pos);
+    public void requestTE(Level level, BlockPos pos) {
+        this.network.requestTE(level, pos);
     }
 }

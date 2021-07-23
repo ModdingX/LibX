@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.impl.registration;
 
 import io.github.noeppi_noeppi.libx.mod.registration.RegistryTransformer;
-import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DataSerializerEntry;
 
 import javax.annotation.Nullable;
@@ -14,8 +14,8 @@ public class BuiltinTransformers {
         @Nullable
         @Override
         public Object getAdditional(ResourceLocation id, Object object) {
-            if (object instanceof IDataSerializer<?>) {
-                return new DataSerializerEntry((IDataSerializer<?>) object);
+            if (object instanceof EntityDataSerializer<?>) {
+                return new DataSerializerEntry((EntityDataSerializer<?>) object);
             } else {
                 return null;
             }

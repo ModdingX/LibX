@@ -2,8 +2,8 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class IngredientValueMapper implements ValueMapper<Ingredient, JsonElement> {
 
@@ -25,21 +25,21 @@ public class IngredientValueMapper implements ValueMapper<Ingredient, JsonElemen
 
     @Override
     public Ingredient fromJSON(JsonElement json) {
-        return Ingredient.deserialize(json);
+        return Ingredient.fromJson(json);
     }
 
     @Override
     public JsonElement toJSON(Ingredient value) {
-        return value.serialize();
+        return value.toJson();
     }
 
     @Override
-    public Ingredient read(PacketBuffer buffer) {
-        return Ingredient.read(buffer);
+    public Ingredient read(FriendlyByteBuf buffer) {
+        return Ingredient.fromNetwork(buffer);
     }
 
     @Override
-    public void write(Ingredient value, PacketBuffer buffer) {
-        value.write(buffer);
+    public void write(Ingredient value, FriendlyByteBuf buffer) {
+        value.toNetwork(buffer);
     }
 }

@@ -2,17 +2,17 @@ package io.github.noeppi_noeppi.libx.impl.datapack;
 
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.datapack.DynamicDatapacks;
-import net.minecraft.resources.IPackFinder;
-import net.minecraft.resources.IPackNameDecorator;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.server.packs.repository.RepositorySource;
+import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-public class LibXDatapackFinder implements IPackFinder {
+public class LibXDatapackFinder implements RepositorySource {
 
     public static final LibXDatapackFinder INSTANCE = new LibXDatapackFinder();
     
@@ -22,18 +22,18 @@ public class LibXDatapackFinder implements IPackFinder {
     }
     
     @Override
-    public void findPacks(@Nonnull Consumer<ResourcePackInfo> consumer, @Nonnull ResourcePackInfo.IFactory factory) {
+    public void loadPacks(@Nonnull Consumer<Pack> infoConsumer, @Nonnull Pack.PackConstructor infoFactory) {
         for (ResourceLocation pack : DynamicDatapacks.getEnabledPacks()) {
             String name = LibXDatapack.PREFIX + "/" + pack.getNamespace() + ":" + pack.getPath();
             ModFileInfo fileInfo = ModList.get().getModFileById(pack.getNamespace());
             if (fileInfo == null || fileInfo.getFile() == null) {
                 LibX.logger.warn("Can't create dynamic datapack " + pack + ": Invalid mod file: " + fileInfo);
             } else {
-                ResourcePackInfo info = ResourcePackInfo.createResourcePack(name, false,
-                        () -> new LibXDatapack(fileInfo.getFile(), pack.getPath()), factory,
-                        ResourcePackInfo.Priority.BOTTOM, IPackNameDecorator.PLAIN);
+                Pack info = Pack.create(name, false,
+                        () -> new LibXDatapack(fileInfo.getFile(), pack.getPath()), infoFactory,
+                        Pack.Position.BOTTOM, PackSource.DEFAULT);
                 if (info != null) {
-                    consumer.accept(info);
+                    infoConsumer.accept(info);
                 }
             }
         }

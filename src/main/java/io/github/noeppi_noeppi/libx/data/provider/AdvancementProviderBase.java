@@ -7,23 +7,23 @@ import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.EntityHasProperty;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -32,13 +32,21 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import net.minecraft.advancements.critereon.ChangeDimensionTrigger;
+import net.minecraft.advancements.critereon.ConsumeItemTrigger;
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+
 /**
  * base provider for custom {@link Advancement advancements}. If you want to have multiple advancement
  * tabs, use multiple providers. Every provider has one root advancement all advancements with no
  * explicit parent will be added to. You should configure your advancements with the {@code root}
  * and {@code advancement} methods in {@link #setup() setup}.
  */
-public abstract class AdvancementProviderBase implements IDataProvider {
+public abstract class AdvancementProviderBase implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -62,12 +70,12 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     }
 
     @Override
-    public void act(@Nonnull DirectoryCache cache) throws IOException {
+    public void run(@Nonnull HashCache cache) throws IOException {
         this.setup();
         for (Supplier<Advancement> supplier : this.advancements.values()) {
             Advancement advancement = supplier.get();
             Path path = this.generator.getOutputFolder().resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
-            IDataProvider.save(GSON, cache, advancement.copy().serialize(), path);
+            DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path);
         }
     }
 
@@ -166,7 +174,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
      * @param hidden Whether the advancement is hidden.
      */
     public Advancement dummy(ResourceLocation id, boolean hidden) {
-        return new Advancement(id, null, new DisplayInfo(new ItemStack(Items.BARRIER), new StringTextComponent(""), new StringTextComponent(""), null, FrameType.TASK, true, true, hidden), AdvancementRewards.EMPTY, new HashMap<>(), new String[][]{});
+        return new Advancement(id, null, new DisplayInfo(new ItemStack(Items.BARRIER), new TextComponent(""), new TextComponent(""), null, FrameType.TASK, true, true, hidden), AdvancementRewards.EMPTY, new HashMap<>(), new String[][]{});
     }
 
     private ResourceLocation idFor(String id) {
@@ -180,8 +188,8 @@ public abstract class AdvancementProviderBase implements IDataProvider {
      * Gets a criterion that requires all of the given items to be in the inventory at
      * the same time.
      */
-    public ICriterionInstance items(IItemProvider... items) {
-        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.create().item(item).build()).toArray(ItemPredicate[]::new));
+    public CriterionTriggerInstance items(ItemLike... items) {
+        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
     
     /**
@@ -189,103 +197,103 @@ public abstract class AdvancementProviderBase implements IDataProvider {
      * the same time.
      */
     @SafeVarargs
-    public final ICriterionInstance items(ITag<Item>... items) {
-        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.create().tag(item).build()).toArray(ItemPredicate[]::new));
+    public final CriterionTriggerInstance items(Tag<Item>... items) {
+        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
         
     /**
      * Gets a criterion that requires all of the given items to be in the inventory at
      * the same time.
      */
-    public ICriterionInstance items(ItemPredicate... items) {
-        return InventoryChangeTrigger.Instance.forItems(items);
+    public CriterionTriggerInstance items(ItemPredicate... items) {
+        return InventoryChangeTrigger.TriggerInstance.hasItems(items);
     }
 
     /**
      * Gets a {@link TaskFactory} that adds a task for every item given to this method.
      */
-    public TaskFactory itemTasks(IItemProvider... items) {
-        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.create().item(item).build()).toArray(ItemPredicate[]::new));
+    public TaskFactory itemTasks(ItemLike... items) {
+        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
 
     /**
      * Gets a {@link TaskFactory} that adds a task for every item given to this method.
      */
     @SafeVarargs
-    public final TaskFactory itemTasks(ITag<Item>... items) {
-        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.create().tag(item).build()).toArray(ItemPredicate[]::new));
+    public final TaskFactory itemTasks(Tag<Item>... items) {
+        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
 
     /**
      * Gets a {@link TaskFactory} that adds a task for every item given to this method.
      */
     public TaskFactory itemTasks(ItemPredicate... items) {
-        return () -> Arrays.stream(items).map(item -> new ICriterionInstance[]{this.items(item) }).toArray(ICriterionInstance[][]::new);
+        return () -> Arrays.stream(items).map(item -> new CriterionTriggerInstance[]{this.items(item) }).toArray(CriterionTriggerInstance[][]::new);
     }
 
     /**
      * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
      */
-    public ICriterionInstance eat(IItemProvider food) {
-        return this.eat(ItemPredicate.Builder.create().item(food).build());
+    public CriterionTriggerInstance eat(ItemLike food) {
+        return this.eat(ItemPredicate.Builder.item().of(food).build());
     }
 
     /**
      * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
      */
-    public ICriterionInstance eat(ITag<Item> food) {
-        return this.eat(ItemPredicate.Builder.create().tag(food).build());
+    public CriterionTriggerInstance eat(Tag<Item> food) {
+        return this.eat(ItemPredicate.Builder.item().of(food).build());
     }
 
     /**
      * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
      */
-    public ICriterionInstance eat(ItemPredicate food) {
-        return new ConsumeItemTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND, food);
+    public CriterionTriggerInstance eat(ItemPredicate food) {
+        return new ConsumeItemTrigger.TriggerInstance(EntityPredicate.Composite.ANY, food);
     }
 
     /**
      * Gets a {@link ICriterionInstance criterion} that requires a player to leave a dimension.
      */
-    public ICriterionInstance leave(RegistryKey<World> dimension) {
-        return new ChangeDimensionTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND, dimension, null);
+    public CriterionTriggerInstance leave(ResourceKey<Level> dimension) {
+        return new ChangeDimensionTrigger.TriggerInstance(EntityPredicate.Composite.ANY, dimension, null);
     }
 
     /**
      * Gets a {@link ICriterionInstance criterion} that requires a player to enter a dimension.
      */
-    public ICriterionInstance enter(RegistryKey<World> dimension) {
-        return ChangeDimensionTrigger.Instance.toWorld(dimension);
+    public CriterionTriggerInstance enter(ResourceKey<Level> dimension) {
+        return ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(dimension);
     }
 
     /**
      * Gets a {@link ICriterionInstance criterion} that requires a player to perform a specific dimension change.
      */
-    public ICriterionInstance changeDim(RegistryKey<World> from, RegistryKey<World> to) {
-        return new ChangeDimensionTrigger.Instance(EntityPredicate.AndPredicate.ANY_AND, from, to);
+    public CriterionTriggerInstance changeDim(ResourceKey<Level> from, ResourceKey<Level> to) {
+        return new ChangeDimensionTrigger.TriggerInstance(EntityPredicate.Composite.ANY, from, to);
     }
 
     /**
      * Gets the given {@link EntityPredicate} as an {@link EntityPredicate.AndPredicate}.
      */
-    public EntityPredicate.AndPredicate entity(EntityPredicate entity) {
-        return EntityPredicate.AndPredicate.serializePredicate(EntityHasProperty.builder(LootContext.EntityTarget.THIS, entity).build());
+    public EntityPredicate.Composite entity(EntityPredicate entity) {
+        return EntityPredicate.Composite.create(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, entity).build());
     }
 
     /**
      * Gets an {@link EntityPredicate.AndPredicate} that matches for a specific entity type.
      */
-    public EntityPredicate.AndPredicate entity(EntityType<?> type) {
-        return this.entity(EntityPredicate.Builder.create().type(type).build());
+    public EntityPredicate.Composite entity(EntityType<?> type) {
+        return this.entity(EntityPredicate.Builder.entity().of(type).build());
     }
 
     /**
      * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
-    public ItemPredicate stack(IItemProvider item, Enchantment... enchs) {
-        ItemPredicate.Builder builder = ItemPredicate.Builder.create().item(item);
+    public ItemPredicate stack(ItemLike item, Enchantment... enchs) {
+        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(item);
         for (Enchantment ench : enchs) {
-            builder.enchantment(new EnchantmentPredicate(ench, MinMaxBounds.IntBound.atLeast(1)));
+            builder.hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(1)));
         }
         return builder.build();
     }
@@ -293,10 +301,10 @@ public abstract class AdvancementProviderBase implements IDataProvider {
     /**
      * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
-    public ItemPredicate stack(ITag<Item> item, Enchantment... enchs) {
-        ItemPredicate.Builder builder = ItemPredicate.Builder.create().tag(item);
+    public ItemPredicate stack(Tag<Item> item, Enchantment... enchs) {
+        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(item);
         for (Enchantment ench : enchs) {
-            builder.enchantment(new EnchantmentPredicate(ench, MinMaxBounds.IntBound.atLeast(1)));
+            builder.hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(1)));
         }
         return builder.build();
     }
@@ -308,9 +316,9 @@ public abstract class AdvancementProviderBase implements IDataProvider {
         if (enchs.length == 0) {
             throw new IllegalStateException("Don't use stack() for an any predicate. Use ItemPredicate.ANY instead.");
         }
-        ItemPredicate.Builder builder = ItemPredicate.Builder.create();
+        ItemPredicate.Builder builder = ItemPredicate.Builder.item();
         for (Enchantment ench : enchs) {
-            builder.enchantment(new EnchantmentPredicate(ench, MinMaxBounds.IntBound.atLeast(1)));
+            builder.hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(1)));
         }
         return builder.build();
     }
@@ -319,7 +327,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
      * Gets an {@link ItemPredicate} for an enchantment with a minimum level.
      */
     public ItemPredicate stack(Enchantment ench, int min) {
-        return ItemPredicate.Builder.create().enchantment(new EnchantmentPredicate(ench, MinMaxBounds.IntBound.atLeast(min))).build();
+        return ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(min))).build();
     }
 
     /**
@@ -385,7 +393,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(IItemProvider icon) {
+        public AdvancementFactory display(ItemLike icon) {
             return this.display(new ItemStack(icon));
         }
 
@@ -393,7 +401,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(IItemProvider icon, FrameType frame) {
+        public AdvancementFactory display(ItemLike icon, FrameType frame) {
             return this.display(new ItemStack(icon), frame);
         }
         
@@ -401,7 +409,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(IItemProvider icon, FrameType frame, boolean toast, boolean chat, boolean hidden) {
+        public AdvancementFactory display(ItemLike icon, FrameType frame, boolean toast, boolean chat, boolean hidden) {
             return this.display(new ItemStack(icon), frame, toast, chat, hidden);
         }
 
@@ -427,8 +435,8 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          */
         public AdvancementFactory display(ItemStack icon, FrameType frame, boolean toast, boolean chat, boolean hidden) {
             return this.display(icon,
-                    new TranslationTextComponent("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".title"),
-                    new TranslationTextComponent("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".description"),
+                    new TranslatableComponent("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".title"),
+                    new TranslatableComponent("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".description"),
                     frame, toast, chat, hidden
             );
         }
@@ -437,7 +445,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(IItemProvider icon, ITextComponent title, ITextComponent description) {
+        public AdvancementFactory display(ItemLike icon, Component title, Component description) {
             return this.display(new ItemStack(icon), title, description);
         }
         
@@ -445,7 +453,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(IItemProvider icon, ITextComponent title, ITextComponent description, FrameType frame) {
+        public AdvancementFactory display(ItemLike icon, Component title, Component description, FrameType frame) {
             return this.display(new ItemStack(icon), title, description, frame);
         }
         
@@ -453,7 +461,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(IItemProvider icon, ITextComponent title, ITextComponent description, FrameType frame, boolean toast, boolean chat, boolean hidden) {
+        public AdvancementFactory display(ItemLike icon, Component title, Component description, FrameType frame, boolean toast, boolean chat, boolean hidden) {
             return this.display(new ItemStack(icon), title, description, frame, toast, chat, hidden);
         }
         
@@ -461,7 +469,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, ITextComponent title, ITextComponent description) {
+        public AdvancementFactory display(ItemStack icon, Component title, Component description) {
             return this.display(icon, title, description, FrameType.TASK);
         }
         
@@ -469,7 +477,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, ITextComponent title, ITextComponent description, FrameType frame) {
+        public AdvancementFactory display(ItemStack icon, Component title, Component description, FrameType frame) {
             return this.display(icon, title, description, frame, !this.root, !this.root, false);
         }
         
@@ -477,7 +485,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, ITextComponent title, ITextComponent description, FrameType frame, boolean toast, boolean chat, boolean hidden) {
+        public AdvancementFactory display(ItemStack icon, Component title, Component description, FrameType frame, boolean toast, boolean chat, boolean hidden) {
             this.display = new DisplayInfo(icon, title, description, null, frame, toast, chat, hidden);
             return this;
         }
@@ -497,7 +505,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Adds a task to the advancement. A task can consist of multiple criteria. In this case
          * <b>one</b> of the criteria must be completed to complete the whole task.
          */
-        public AdvancementFactory task(ICriterionInstance... criteria) {
+        public AdvancementFactory task(CriterionTriggerInstance... criteria) {
             if (criteria.length == 0) {
                 throw new IllegalStateException("Can not add empty task to advancement.");
             }
@@ -509,11 +517,11 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Adds multiple tasks to the advancement. Here <b>all</b> criteria must be completed to
          * complete the advancement.
          */
-        public AdvancementFactory tasks(ICriterionInstance... criteria) {
+        public AdvancementFactory tasks(CriterionTriggerInstance... criteria) {
             if (criteria.length == 0) {
                 throw new IllegalStateException("Can not add empty task to advancement.");
             }
-            for (ICriterionInstance instance : criteria) {
+            for (CriterionTriggerInstance instance : criteria) {
                 this.criteria.add(ImmutableList.of(new Criterion(instance)));
             }
             this.criteria.add(Arrays.stream(criteria).map(Criterion::new).collect(Collectors.toList()));
@@ -524,7 +532,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
          * Adds multiple tasks to this advancement defined by the given {@link TaskFactory}.
          */
         public AdvancementFactory tasks(TaskFactory factory) {
-            for (ICriterionInstance[] task : factory.apply()) {
+            for (CriterionTriggerInstance[] task : factory.apply()) {
                 this.task(task);
             }
             return this;
@@ -548,7 +556,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
             for (int i = 0; i < this.criteria.size(); i++) {
                 String[] criterionGroup = new String[this.criteria.get(i).size()];
                 for (int j = 0; j < this.criteria.get(i).size(); j++) {
-                    String baseName = Objects.requireNonNull(this.criteria.get(i).get(j).getCriterionInstance(), "Can't build advancement: Empty criterion").getId().getPath();
+                    String baseName = Objects.requireNonNull(this.criteria.get(i).get(j).getTrigger(), "Can't build advancement: Empty criterion").getCriterion().getPath();
                     baseName = baseName.replace('.', '_').replace('/', '_');
                     String nextId = baseName;
                     int num = 2;
@@ -581,7 +589,7 @@ public abstract class AdvancementProviderBase implements IDataProvider {
                 } else if (this.background == null) {
                     throw new IllegalStateException("Can't build root advancement without background.");
                 }
-                displayInfo = new DisplayInfo(this.display.getIcon(), this.display.getTitle(), this.display.getDescription(), this.background, this.display.getFrame(), this.display.shouldShowToast(), this.display.shouldAnnounceToChat(), this.display.isHidden());
+                displayInfo = new DisplayInfo(this.display.getIcon(), this.display.getTitle(), this.display.getDescription(), this.background, this.display.getFrame(), this.display.shouldShowToast(), this.display.shouldAnnounceChat(), this.display.isHidden());
             }
             if (parentAdv != null && parentAdv.getDisplay() == null && displayInfo != null) {
                 throw new IllegalStateException("Can't build advancement with display and display-less parent.");
@@ -598,6 +606,6 @@ public abstract class AdvancementProviderBase implements IDataProvider {
      */
     public interface TaskFactory {
 
-        ICriterionInstance[][] apply();
+        CriterionTriggerInstance[][] apply();
     }
 }

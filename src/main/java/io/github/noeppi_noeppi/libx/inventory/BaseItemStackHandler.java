@@ -2,8 +2,8 @@ package io.github.noeppi_noeppi.libx.inventory;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -27,7 +27,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     private final Map<Integer, Predicate<ItemStack>> slotValidators;
     private final Consumer<Integer> contentsChanged;
 
-    private IInventory vanilla = null;
+    private Container vanilla = null;
     private Unrestricted unrestricted = null;
 
     private BaseItemStackHandler(int size, int defaultSlotLimit, Set<Integer> insertionOnlySlots, Set<Integer> outputSlots, Map<Integer, Integer> slotLimits, Map<Integer, Predicate<ItemStack>> slotValidators, Consumer<Integer> contentsChanged) {
@@ -71,7 +71,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
      * Gets a vanilla inventory that wraps around this inventory. Marking the vanilla inventory dirty
      * will notify an content change for every slot of this item handler.
      */
-    public IInventory toVanilla() {
+    public Container toVanilla() {
         if (this.vanilla == null) this.vanilla = new VanillaWrapper(this, null);
         return this.vanilla;
     }

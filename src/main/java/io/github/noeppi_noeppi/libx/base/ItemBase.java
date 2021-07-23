@@ -2,9 +2,11 @@ package io.github.noeppi_noeppi.libx.base;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
+
+import net.minecraft.world.item.Item.Properties;
 
 /**
  * Base class for {@link Item items} for mods using {@link ModXRegistration}. This will automatically set the
@@ -17,7 +19,7 @@ public class ItemBase extends Item {
     public ItemBase(ModX mod, Properties properties) {
         super(((Supplier<Properties>) () -> {
             if (mod.tab != null) {
-                properties.group(mod.tab);
+                properties.tab(mod.tab);
             }
             return properties;
         }).get());

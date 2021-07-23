@@ -1,11 +1,11 @@
 package io.github.noeppi_noeppi.libx.inventory.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,34 +24,34 @@ import javax.annotation.Nullable;
  * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number. <br>
  * </p>
  */
-public abstract class DefaultContainer extends ContainerBase {
+public abstract class DefaultContainerMenu extends ContainerMenuBase {
 
-    protected final PlayerEntity player;
-    protected final World world;
+    protected final Player player;
+    protected final Level level;
 
     // Used for automatic transferStackInSlot. To further restrict this use Slot#isItemValid.
     public final int firstOutputSlot;
     public final int firstInventorySlot;
 
-    protected DefaultContainer(@Nullable ContainerType<?> type, int windowId, World world, PlayerInventory playerInventory, PlayerEntity player, int firstOutputSlot, int firstInventorySlot) {
-        super(type, windowId, playerInventory);
+    protected DefaultContainerMenu(@Nullable MenuType<?> type, int windowId, Level level, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
+        super(type, windowId, playerContainer);
         this.player = player;
-        this.world = world;
+        this.level = level;
         this.firstOutputSlot = firstOutputSlot;
         this.firstInventorySlot = firstInventorySlot;
     }
 
-    public World getWorld() {
-        return this.world;
+    public Level getLevel() {
+        return this.level;
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack stack = slot.getItem();
             itemstack = stack.copy();
 
             final int inventorySize = this.firstInventorySlot;
@@ -59,28 +59,28 @@ public abstract class DefaultContainer extends ContainerBase {
             final int playerHotBarEnd = playerInventoryEnd + 9;
 
             if (index < this.firstOutputSlot) {
-                if (!this.mergeItemStack(stack, inventorySize, playerHotBarEnd, true)) {
+                if (!this.moveItemStackTo(stack, inventorySize, playerHotBarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(stack, itemstack);
+                slot.onQuickCraft(stack, itemstack);
             } else if (index >= inventorySize) {
-                if (!this.mergeItemStack(stack, 0, this.firstOutputSlot, false)) {
+                if (!this.moveItemStackTo(stack, 0, this.firstOutputSlot, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
-                    if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotBarEnd, false)) {
+                    if (!this.moveItemStackTo(stack, playerInventoryEnd, playerHotBarEnd, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < playerHotBarEnd && !this.mergeItemStack(stack, inventorySize, playerInventoryEnd, false)) {
+                } else if (index < playerHotBarEnd && !this.moveItemStackTo(stack, inventorySize, playerInventoryEnd, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(stack, inventorySize, playerHotBarEnd, false)) {
+            } else if (!this.moveItemStackTo(stack, inventorySize, playerHotBarEnd, false)) {
                 return ItemStack.EMPTY;
             }
             if (stack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (stack.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;

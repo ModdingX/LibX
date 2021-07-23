@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import io.github.noeppi_noeppi.libx.util.LazyImmutableMap;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryLookupCodec;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.DimensionSettings;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryLookupCodec;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -37,20 +37,20 @@ public class ProcessorInterface {
         return new ResourceLocation(namespace, path);
     }
     
-    public static <T> RegistryKey<Registry<T>> rootKey(ResourceLocation id) {
-        return RegistryKey.getOrCreateRootKey(id);
+    public static <T> ResourceKey<Registry<T>> rootKey(ResourceLocation id) {
+        return ResourceKey.createRegistryKey(id);
     }
     
-    public static <T> MapCodec<Registry<T>> registryCodec(RegistryKey<Registry<T>> registry) {
-        return RegistryLookupCodec.getLookUpCodec(registry);
+    public static <T> MapCodec<Registry<T>> registryCodec(ResourceKey<Registry<T>> registry) {
+        return RegistryLookupCodec.create(registry);
     }
     
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> RegistryKey<Registry<T>> getCodecDefaultRegistryKey(Class<T> clazz) {
+    public static <T> ResourceKey<Registry<T>> getCodecDefaultRegistryKey(Class<T> clazz) {
         if (clazz.equals(Biome.class)) {
-            return (RegistryKey<Registry<T>>) (RegistryKey) Registry.BIOME_KEY;
-        } else if (clazz.equals(DimensionSettings.class)) {
-            return (RegistryKey<Registry<T>>) (RegistryKey) Registry.NOISE_SETTINGS_KEY;
+            return (ResourceKey<Registry<T>>) (ResourceKey) Registry.BIOME_REGISTRY;
+        } else if (clazz.equals(NoiseGeneratorSettings.class)) {
+            return (ResourceKey<Registry<T>>) (ResourceKey) Registry.NOISE_GENERATOR_SETTINGS_REGISTRY;
         } else {
             throw new IllegalStateException("Failed to get registry codec key for type: " + clazz);
         }

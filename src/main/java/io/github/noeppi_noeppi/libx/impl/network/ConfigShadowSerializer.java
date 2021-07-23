@@ -5,8 +5,8 @@ import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigState;
 import io.github.noeppi_noeppi.libx.network.PacketSerializer;
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class ConfigShadowSerializer implements PacketSerializer<ConfigShadowSerializer.ConfigShadowMessage> {
 
@@ -16,16 +16,16 @@ public class ConfigShadowSerializer implements PacketSerializer<ConfigShadowSeri
     }
 
     @Override
-    public void encode(ConfigShadowMessage msg, PacketBuffer buffer) {
+    public void encode(ConfigShadowMessage msg, FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(msg.config.id);
-        PacketBuffer b = new PacketBuffer(Unpooled.buffer());
+        FriendlyByteBuf b = new FriendlyByteBuf(Unpooled.buffer());
         msg.state.write(b);
         buffer.writeVarInt(b.writerIndex());
         buffer.writeBytes(b);
     }
 
     @Override
-    public ConfigShadowMessage decode(PacketBuffer buffer) {
+    public ConfigShadowMessage decode(FriendlyByteBuf buffer) {
         ResourceLocation configId = buffer.readResourceLocation();
         ConfigImpl config = ConfigImpl.getConfigNullable(configId);
         int size = buffer.readVarInt();

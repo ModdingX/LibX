@@ -4,16 +4,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -49,9 +49,9 @@ public class PotionIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         ItemStack stack = new ItemStack(this.potionItem);
-        PotionUtils.addPotionToItemStack(stack, this.potion);
+        PotionUtils.setPotion(stack, this.potion);
         return new ItemStack[]{stack};
     }
 
@@ -60,17 +60,17 @@ public class PotionIngredient extends Ingredient {
         if (stack == null || stack.isEmpty() || stack.getItem() != this.potionItem) {
             return false;
         }
-        Potion itemPotion = PotionUtils.getPotionFromItem(stack);
+        Potion itemPotion = PotionUtils.getPotion(stack);
         return itemPotion == this.potion;
     }
 
     @Nonnull
     @Override
-    public IntList getValidItemStacksPacked() {
-        ItemStack[] stacks = this.getMatchingStacks();
+    public IntList getStackingIds() {
+        ItemStack[] stacks = this.getItems();
         IntArrayList ial = new IntArrayList(stacks.length);
         for (ItemStack stack : stacks)
-            ial.add(RecipeItemHelper.pack(stack));
+            ial.add(StackedContents.getStackingIndex(stack));
         return ial;
     }
 
@@ -86,14 +86,14 @@ public class PotionIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return this.potionItem == Items.AIR;
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("ConstantConditions")
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", CraftingHelper.getID(PotionIngredient.Serializer.INSTANCE).toString());
         json.addProperty("item", this.potionItem.getRegistryName().toString());
@@ -111,13 +111,13 @@ public class PotionIngredient extends Ingredient {
 
         @Nonnull
         @Override
-        public PotionIngredient parse(@Nonnull PacketBuffer buffer) {
+        public PotionIngredient parse(@Nonnull FriendlyByteBuf buffer) {
             Item potionItem = ForgeRegistries.ITEMS.getValue(buffer.readResourceLocation());
             if (potionItem == null) {
                 potionItem = Items.AIR;
             }
 
-            Potion potion = ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(buffer.readString()));
+            Potion potion = ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(buffer.readUtf()));
             if (potion == null) {
                 potion = Potions.EMPTY;
             }
@@ -143,7 +143,7 @@ public class PotionIngredient extends Ingredient {
 
         @Override
         @SuppressWarnings("ConstantConditions")
-        public void write(@Nonnull PacketBuffer buffer, @Nonnull PotionIngredient ingredient) {
+        public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull PotionIngredient ingredient) {
             buffer.writeResourceLocation(ingredient.potionItem.getRegistryName());
             buffer.writeResourceLocation(ingredient.potion.getRegistryName());
         }

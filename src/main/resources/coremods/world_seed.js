@@ -3,9 +3,9 @@ function initializeCoreMod() {
     'world_seed': {
       'target': {
         'type': 'METHOD',
-        'class': 'net.minecraft.world.gen.settings.DimensionGeneratorSettings',
+        'class': 'net.minecraft.world.level.levelgen.WorldGenSettings',
         'methodName': '<init>',
-        'methodDesc': '(JZZLnet/minecraft/util/registry/SimpleRegistry;Ljava/util/Optional;)V'
+        'methodDesc': '(JZZLnet/minecraft/core/MappedRegistry;Ljava/util/Optional;)V'
       },
       'transformer': function(method) {
         var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');

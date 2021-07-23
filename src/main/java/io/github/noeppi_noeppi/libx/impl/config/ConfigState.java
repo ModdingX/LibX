@@ -6,7 +6,7 @@ import com.google.common.collect.Streams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,13 +53,13 @@ public class ConfigState {
         }
     }
     
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeVarInt(this.values.size());
         for (Map.Entry<ConfigKey, Object> entry : this.values.entrySet()) {
             ConfigKey key = entry.getKey();
             Object value = entry.getValue();
-            buffer.writeString(key.field.getDeclaringClass().getName(), 0x7fff);
-            buffer.writeString(key.field.getName(), 0x7fff);
+            buffer.writeUtf(key.field.getDeclaringClass().getName(), 0x7fff);
+            buffer.writeUtf(key.field.getName(), 0x7fff);
             //noinspection unchecked
             ((ValueMapper<Object, ?>) key.mapper).write(value, buffer);
         }

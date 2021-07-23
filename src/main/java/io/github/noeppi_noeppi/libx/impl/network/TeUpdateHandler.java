@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.impl.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -11,12 +11,12 @@ public class TeUpdateHandler {
 
     public static void handle(TeUpdateSerializer.TeUpdateMessage msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            World world = Minecraft.getInstance().world;
-            if (world == null)
+            Level level = Minecraft.getInstance().level;
+            if (level == null)
                 return;
-            TileEntity te = world.getTileEntity(msg.pos);
-            if (te != null && msg.id.equals(te.getType().getRegistryName())) {
-                te.handleUpdateTag(world.getBlockState(msg.pos), msg.nbt);
+            BlockEntity be = world.getBlockEntity(msg.pos);
+            if (be != null && msg.id.equals(be.getType().getRegistryName())) {
+                be.handleUpdateTag(level.getBlockState(msg.pos), msg.nbt);
             }
         });
         ctx.get().setPacketHandled(true);

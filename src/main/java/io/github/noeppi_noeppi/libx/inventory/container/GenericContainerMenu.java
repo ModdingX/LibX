@@ -4,16 +4,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.impl.inventory.container.GenericContainerSlotValidationWrapper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -37,14 +37,14 @@ import java.util.function.BiPredicate;
  * As there's no way to synchronise the item validator method from the item handler modifiable, you should
  * register the validator during setup. The slot validation method in your item handler will be ignored by this.
  */
-public class GenericContainer extends ContainerBase {
+public class GenericContainerMenu extends ContainerMenuBase {
 
     private static final ResourceLocation EMPTY_VALIDATOR = new ResourceLocation(LibX.getInstance().modid, "nothing");
     private static final Map<ResourceLocation, BiPredicate<Integer, ItemStack>> validators = new HashMap<>(ImmutableMap.of(
             EMPTY_VALIDATOR, (slot, stack) -> true
     ));
 
-    public static final ContainerType<GenericContainer> TYPE = IForgeContainerType.create((id, playerInv, buffer) -> {
+    public static final MenuType<GenericContainerMenu> TYPE = IForgeContainerType.create((id, playerInv, buffer) -> {
         int size = buffer.readVarInt();
         ResourceLocation validatorId = buffer.readResourceLocation();
         BiPredicate<Integer, ItemStack> validator;
@@ -59,7 +59,7 @@ public class GenericContainer extends ContainerBase {
             slotLimits[i] = buffer.readVarInt();
         }
         IItemHandlerModifiable handler = new GenericContainerSlotValidationWrapper(new ItemStackHandler(size), validator, slotLimits);
-        return new GenericContainer(id, handler, playerInv);
+        return new GenericContainerMenu(id, handler, playerInv);
     });
 
     public final int width;
@@ -68,8 +68,8 @@ public class GenericContainer extends ContainerBase {
     public final int invY;
     public final List<Pair<Integer, Integer>> slots;
 
-    private GenericContainer(int id, IItemHandlerModifiable handler, PlayerInventory playerInventory) {
-        super(TYPE, id, playerInventory);
+    private GenericContainerMenu(int id, IItemHandlerModifiable handler, Inventory playerContainer) {
+        super(TYPE, id, playerContainer);
         Triple<Pair<Integer, Integer>, Pair<Integer, Integer>, List<Pair<Integer, Integer>>> layout = layoutSlots(handler.getSlots());
         this.width = layout.getLeft().getLeft();
         this.height = layout.getLeft().getRight();
@@ -83,17 +83,17 @@ public class GenericContainer extends ContainerBase {
     }
 
     @Override
-    public boolean canInteractWith(@Nonnull PlayerEntity player) {
+    public boolean stillValid(@Nonnull Player player) {
         return true;
     }
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack stack = slot.getItem();
             itemstack = stack.copy();
 
             final int inventorySize = this.slots.size();
@@ -101,22 +101,22 @@ public class GenericContainer extends ContainerBase {
             final int playerHotBarEnd = playerInventoryEnd + 9;
 
             if (index >= inventorySize) {
-                if (!this.mergeItemStack(stack, 0, inventorySize, false)) {
+                if (!this.moveItemStackTo(stack, 0, inventorySize, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
-                    if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotBarEnd, false)) {
+                    if (!this.moveItemStackTo(stack, playerInventoryEnd, playerHotBarEnd, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < playerHotBarEnd && !this.mergeItemStack(stack, inventorySize, playerInventoryEnd, false)) {
+                } else if (index < playerHotBarEnd && !this.moveItemStackTo(stack, inventorySize, playerInventoryEnd, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(stack, inventorySize, playerHotBarEnd, false)) {
+            } else if (!this.moveItemStackTo(stack, inventorySize, playerHotBarEnd, false)) {
                 return ItemStack.EMPTY;
             }
             if (stack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             if (stack.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
@@ -138,17 +138,17 @@ public class GenericContainer extends ContainerBase {
      *                    {@code null} disables slot validation. This will override the item handlers slot validation, so null
      *                    means no slot validation even if the item handler has the feature.
      */
-    public static void open(ServerPlayerEntity player, IItemHandlerModifiable inventory, ITextComponent name, @Nullable ResourceLocation validatorId) {
-        INamedContainerProvider provider = new INamedContainerProvider() {
+    public static void open(ServerPlayer player, IItemHandlerModifiable inventory, Component name, @Nullable ResourceLocation validatorId) {
+        MenuProvider provider = new MenuProvider() {
 
             @Nonnull
             @Override
-            public ITextComponent getDisplayName() {
+            public Component getDisplayName() {
                 return name;
             }
 
             @Override
-            public Container createMenu(int id, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
+            public AbstractContainerMenu createMenu(int containerId, @Nonnull Inventory inventory, @Nonnull Player player) {
                 BiPredicate<Integer, ItemStack> validator;
                 if (validators.containsKey(validatorId == null ? EMPTY_VALIDATOR : validatorId)) {
                     validator = validators.get(validatorId);
@@ -156,7 +156,7 @@ public class GenericContainer extends ContainerBase {
                     LibX.logger.warn("Generic container created with invalid validator. Validator ID: " + validatorId);
                     validator = validators.get(EMPTY_VALIDATOR);
                 }
-                return new GenericContainer(id, new GenericContainerSlotValidationWrapper(inventory, validator, null), playerInventory);
+                return new GenericContainerMenu(containerId, new GenericContainerSlotValidationWrapper(inventory, validator, null), inventory);
             }
         };
         NetworkHooks.openGui(player, provider, buffer -> {

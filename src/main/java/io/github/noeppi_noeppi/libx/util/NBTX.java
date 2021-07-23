@@ -1,11 +1,11 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
@@ -18,8 +18,8 @@ public class NBTX {
     /**
      * Store a {@link BlockPos} in a {@link CompoundNBT} with a given key.
      */
-    public static void putPos(CompoundNBT nbt, String key, BlockPos pos) {
-        nbt.put(key, new IntArrayNBT(new int[]{ pos.getX(), pos.getY(), pos.getZ() }));
+    public static void putPos(CompoundTag nbt, String key, BlockPos pos) {
+        nbt.put(key, new IntArrayTag(new int[]{ pos.getX(), pos.getY(), pos.getZ() }));
     }
 
     /**
@@ -27,7 +27,7 @@ public class NBTX {
      * block pos.
      */
     @Nullable
-    public static BlockPos getPos(CompoundNBT nbt, String key) {
+    public static BlockPos getPos(CompoundTag nbt, String key) {
         if (nbt.contains(key, Constants.NBT.TAG_INT_ARRAY)) {
             int[] list = nbt.getIntArray(key);
             if (list.length == 3) {
@@ -41,7 +41,7 @@ public class NBTX {
      * Get a {@link BlockPos} from a {@link CompoundNBT} stored with a given key or the default value if there's
      * no such block pos.
      */
-    public static BlockPos getPos(CompoundNBT nbt, String key, BlockPos defaultValue) {
+    public static BlockPos getPos(CompoundTag nbt, String key, BlockPos defaultValue) {
         BlockPos pos = getPos(nbt, key);
         return pos == null ? defaultValue : pos;
     }
@@ -49,7 +49,7 @@ public class NBTX {
     /**
      * Stores a {@link ResourceLocation} in a {@link CompoundNBT} with a given key.
      */
-    public static void putRL(CompoundNBT nbt, String key, ResourceLocation rl) {
+    public static void putRL(CompoundTag nbt, String key, ResourceLocation rl) {
         nbt.putString(key, rl.toString());
     }
 
@@ -58,9 +58,9 @@ public class NBTX {
      * such resource location.
      */
     @Nullable
-    public static ResourceLocation getRL(CompoundNBT nbt, String key) {
+    public static ResourceLocation getRL(CompoundTag nbt, String key) {
         if (nbt.contains(key, Constants.NBT.TAG_STRING)) {
-            return ResourceLocation.tryCreate(nbt.getString(key));
+            return ResourceLocation.tryParse(nbt.getString(key));
         } else {
             return null;
         }
@@ -70,7 +70,7 @@ public class NBTX {
      * Gets a {@link ResourceLocation} from a {@link CompoundNBT} stored with a given key or the default value if 
      * there's no such resource location.
      */
-    public static ResourceLocation getRL(CompoundNBT nbt, String key, ResourceLocation defaultValue) {
+    public static ResourceLocation getRL(CompoundTag nbt, String key, ResourceLocation defaultValue) {
         ResourceLocation rl = getRL(nbt, key);
         return rl == null ? defaultValue : rl;
     }
@@ -80,8 +80,8 @@ public class NBTX {
      * 
      * @see NBTX#putRL(CompoundNBT, String, ResourceLocation)
      */
-    public static void putKey(CompoundNBT nbt, String key, RegistryKey<?> rl) {
-        putRL(nbt, key, rl.getLocation());
+    public static void putKey(CompoundTag nbt, String key, ResourceKey<?> rl) {
+        putRL(nbt, key, rl.location());
     }
     
     /**
@@ -90,10 +90,10 @@ public class NBTX {
      * @see NBTX#getRL(CompoundNBT, String) 
      */
     @Nullable
-    public static <T> RegistryKey<T> getKey(CompoundNBT nbt, String key, RegistryKey<Registry<T>> registry) {
+    public static <T> ResourceKey<T> getKey(CompoundTag nbt, String key, ResourceKey<Registry<T>> registry) {
         ResourceLocation rl = getRL(nbt, key);
         if (rl != null) {
-            return RegistryKey.getOrCreateKey(registry, rl);
+            return ResourceKey.create(registry, rl);
         } else {
             return null;
         }
@@ -104,8 +104,8 @@ public class NBTX {
      * 
      * @see NBTX#getRL(CompoundNBT, String, ResourceLocation)
      */
-    public static <T> RegistryKey<T> getKey(CompoundNBT nbt, String key, RegistryKey<Registry<T>> registry, RegistryKey<T> defaultValue) {
-        RegistryKey<T> rl = getKey(nbt, key, registry);
+    public static <T> ResourceKey<T> getKey(CompoundTag nbt, String key, ResourceKey<Registry<T>> registry, ResourceKey<T> defaultValue) {
+        ResourceKey<T> rl = getKey(nbt, key, registry);
         return rl == null ? defaultValue : rl;
     }
 }
