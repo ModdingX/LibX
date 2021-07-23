@@ -17,6 +17,7 @@ import com.mojang.math.Vector3f;
 import net.minecraft.core.Vec3i;
 import com.mojang.math.Vector4f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
@@ -83,6 +84,7 @@ public class RenderHelper {
                 pixelsRenderedY += pixelsNowY;
             }
             pixelsRenderedX += pixelsNowX;
+            
         }
     }
 
@@ -112,24 +114,6 @@ public class RenderHelper {
     }
 
     /**
-     * Sets the color to the given RGB color in format 0xRRGGBB
-     */
-    public static void color(int color) {
-        // FIXME find a solution for this
-//        //noinspection deprecation
-//        RenderSystem.color3f(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f);
-    }
-
-    /**
-     * Resets the color to white.
-     */
-    public static void resetColor() {
-        // FIXME find a solution for this
-//        //noinspection deprecation
-//        RenderSystem.color3f(1, 1, 1);
-    }
-
-    /**
      * Renders a text with a gray semi-transparent background.
      */
     public static void renderText(String text, PoseStack poseStack, MultiBufferSource buffer) {
@@ -139,17 +123,12 @@ public class RenderHelper {
         poseStack.pushPose();
         poseStack.translate(-(widthHalf + 2), -(heightHalf + 2), 0);
         RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        // FIXME find a solution for this
-//        //noinspection deprecation
-//        GlStateManager._color4f(0.2f, 0.2f, 0.2f, 0.8f);
+        RenderSystem.defaultBlendFunc();
+        // TODO change and add colored blit methods to remove direct OpenGL calls
+        GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.8f);
         Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE_WHITE);
-
         GuiComponent.blit(poseStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
-
-        // FIXME find a solution for this
-//        //noinspection deprecation
-//        GlStateManager._color4f(1, 1, 1, 1);
+        GL11.glColor4f(1, 1, 1, 1);
         RenderSystem.disableBlend();
         poseStack.translate(widthHalf + 2, heightHalf + 2, 10);
 
@@ -225,9 +204,6 @@ public class RenderHelper {
      * @param height The height of the GUI background
      */
     public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
-        // FIXME find a solution for this
-//        //noinspection deprecation
-//        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE_CHEST_GUI);
         // Background
         repeatBlit(poseStack, x + 2, y + 2,

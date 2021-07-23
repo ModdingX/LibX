@@ -4,9 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -34,17 +36,14 @@ import java.util.*;
  */
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
 
-    private static final ItemStackRenderer INSTANCE = new ItemStackRenderer();
+    private static final LazyValue<ItemStackRenderer> INSTANCE = new LazyValue<>(() -> new ItemStackRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
     private static final List<BlockEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
     private static final Map<Block, Pair<LazyValue<BlockEntity>, Boolean>> tiles = Collections.synchronizedMap(new HashMap<>());
     private static final Map<BlockEntityType<?>, CompoundTag> defaultTags = new HashMap<>();
 
-    private ItemStackRenderer() {
-        super(null, null);
-        throw new IllegalStateException("Currently unsupported: ItemStackRenderer");
-        // FIXME hopefully forge ill do sth about this
-//        super();
+    public ItemStackRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
+        super(dispatcher, modelSet);
     }
 
     /**
@@ -118,6 +117,6 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
      * Gets the instance of the ItemStackRenderer.
      */
     public static ItemStackRenderer get() {
-        return INSTANCE;
+        return INSTANCE.get();
     }
 }

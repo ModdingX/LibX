@@ -26,13 +26,13 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 /**
  * Helper to deal with item rendering.
  */
+// FIXME rewrite
 public class RenderHelperItem {
 
     /**
      * Renders an {@link ItemStack item} tinted in the given color.
      */
     public static void renderItemTinted(ItemStack stack, ItemTransforms.TransformType transformType, int light, int overlay, PoseStack poseStack, MultiBufferSource buffer, float r, float g, float b, float alpha) {
-        // TODO fix
         if (!stack.isEmpty()) {
             boolean isGui = transformType == ItemTransforms.TransformType.GUI;
             boolean isFixed = isGui || transformType == ItemTransforms.TransformType.GROUND || transformType == ItemTransforms.TransformType.FIXED;
@@ -68,7 +68,7 @@ public class RenderHelperItem {
                 VertexConsumer ivertexconsumer = ItemRenderer.getFoilBuffer(buffer, type, true, stack.hasFoil());
                 renderTintedModel(model, stack, light, overlay, poseStack, ivertexconsumer, r, g, b, alpha);
             } else {
-                // FIXME commented out as there's no renderer field in the item any longer
+                // TODO commented out as there's no renderer field in the item any longer
 //                //noinspection deprecation
 //                GlStateManager.color4f(r, g, b, alpha);
 //                stack.getItem().().renderByItem(stack, transformType, poseStack, buffer, light, overlay);
@@ -135,14 +135,14 @@ public class RenderHelperItem {
             //noinspection ConstantConditions
             Minecraft.getInstance().getTextureManager().getTexture(InventoryMenu.BLOCK_ATLAS).setFilter(false, false);
 
-            // FIXME find a solution
+            // TODO find a solution
 //            //noinspection deprecation
 //            RenderSystem.enableAlphaTest();
 //            RenderSystem.defaultAlphaFunc();
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             //noinspection deprecation
-            // FIXME find a solution
+            // TODO find a solution
 //            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             poseStack.translate(x, y, 50);
@@ -164,7 +164,7 @@ public class RenderHelperItem {
                 com.mojang.blaze3d.platform.Lighting.setupFor3DItems();
             }
 
-            // FIXME find a solution
+            // TODO find a solution
 //            //noinspection deprecation
 //            RenderSystem.disableAlphaTest();
 //            //noinspection deprecation

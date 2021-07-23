@@ -88,10 +88,7 @@ public class ObjectCraftingBuilder {
 
     @Nonnull
     public static Ingredient getIngredient(ObjectReader reader) {
-        // Don't remove type notice. The compiler will fail even though IntelliJ marks it as not required.
-        // TODO check if the java 16 compiler will work without it
-        //noinspection RedundantTypeArguments
-        return ObjectCraftingBuilder.<Ingredient>first(
+        return ObjectCraftingBuilder.first(
                 () -> reader.optConsume(ItemLike.class).map(Ingredient::of),
                 () -> reader.optConsume(Tag.class).map(Ingredient::of),
                 () -> reader.optConsume(Ingredient.class),

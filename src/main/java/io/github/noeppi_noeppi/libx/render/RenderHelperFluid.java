@@ -33,9 +33,10 @@ public class RenderHelperFluid {
         poseStack.pushPose();
         poseStack.translate(0, 0, 100);
         Minecraft.getInstance().getTextureManager().bindForSetup(sprite.atlas().location());
-        RenderHelper.color(color);
+        // TODO use colorBlit when done. Commented out for now
+//        RenderHelper.color(color);
         RenderHelper.repeatBlit(poseStack, x, y, width, height, sprite);
-        RenderHelper.resetColor();
+//        RenderHelper.resetColor();
         poseStack.popPose();
     }
 }

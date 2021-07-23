@@ -1,18 +1,25 @@
-package io.github.noeppi_noeppi.libx.base;
+package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -21,9 +28,8 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 /**
+ * TODO fix doc with new ctor arg requirements
  * Base class for blocks with {@link TileEntity tile entities} for mods using {@link ModXRegistration}.
  * This will automatically set the creative tab if it's defined in the mod and register a block item and
  * a tile entity type.
@@ -32,7 +38,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
  * constructor with one argument of type {@link TileEntityType} for this to create a tile entity type.
  * This class will do the magic to wire the tile entity to the block and invoke the constructor.
  */
-public class BlockBE<T extends BlockEntity> extends BlockBase {
+public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityBlock {
 
     private final Class<T> beClass;
     private final Constructor<T> beConstructor;
@@ -47,24 +53,22 @@ public class BlockBE<T extends BlockEntity> extends BlockBase {
         this.beClass = beClass;
 
         try {
-            this.beConstructor = beClass.getConstructor(BlockEntityType.class);
+            this.beConstructor = beClass.getConstructor(BlockEntityType.class, BlockPos.class, BlockState.class);
         } catch (ReflectiveOperationException e) {
             if (e.getCause() != null)
                 e.getCause().printStackTrace();
             throw new RuntimeException("Could not get constructor for tile entity " + beClass + ".", e);
         }
-        // FIXME
-        this.beType = null;
-//        //noinspection ConstantConditions
-//        this.beType = new BlockEntityType<>(() -> {
-//            try {
-//                return this.beConstructor.newInstance(this.getTileType());
-//            } catch (ReflectiveOperationException e) {
-//                if (e.getCause() != null)
-//                    e.getCause().printStackTrace();
-//                throw new RuntimeException("Could not create TileEntity of type " + beClass + ".", e);
-//            }
-//        }, ImmutableSet.of(this), null);
+        //noinspection ConstantConditions
+        this.beType = new BlockEntityType<>((pos, state) -> {
+            try {
+                return this.beConstructor.newInstance(this.getTileType(), pos, state);
+            } catch (ReflectiveOperationException e) {
+                if (e.getCause() != null)
+                    e.getCause().printStackTrace();
+                throw new RuntimeException("Could not create TileEntity of type " + beClass + ".", e);
+            }
+        }, ImmutableSet.of(this), null);
     }
 
     @Override
@@ -72,10 +76,62 @@ public class BlockBE<T extends BlockEntity> extends BlockBase {
         return ImmutableSet.builder().addAll(super.getAdditionalRegisters(id)).add(this.beType).build();
     }
 
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+        return this.beType.create(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <X extends BlockEntity> BlockEntityTicker<X> getTicker(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockEntityType<X> beType) {
+        if (this.beType.isValid(state) && TickableBlock.class.isAssignableFrom(this.beClass)) {
+            //noinspection Convert2Lambda
+            return new BlockEntityTicker<>() {
+
+                @Override
+                public void tick(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull X tile) {
+                    if (tile instanceof TickableBlock) {
+                        ((TickableBlock) tile).tick();
+                    }
+                }
+            };
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public <X extends BlockEntity> GameEventListener getListener(@Nonnull Level level, @Nonnull X blockEntity) {
+        if (blockEntity instanceof GameEventBlock) {
+            PositionSource source = new BlockPositionSource(blockEntity.getBlockPos());
+            return new GameEventListener() {
+                
+                @Nonnull
+                @Override
+                public PositionSource getListenerSource() {
+                    return source;
+                }
+
+                @Override
+                public int getListenerRadius() {
+                    return ((GameEventBlock) blockEntity).gameEventRange();
+                }
+
+                @Override
+                public boolean handleGameEvent(@Nonnull Level level, @Nonnull GameEvent event, @Nullable Entity cause, @Nonnull BlockPos pos) {
+                    return ((GameEventBlock) blockEntity).notifyGameEvent(event, cause);
+                }
+            };
+        } else {
+            return null;
+        }
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
-        if (!level.isClientSide && (!state.is(newState.getBlock()) /*||  !newState.hasTileEntity() FIXME find a way for this */) && this.shouldDropInventory(level, pos, state)) {
+        if (!level.isClientSide && (!state.is(newState.getBlock()) ||  !newState.hasBlockEntity()) && this.shouldDropInventory(level, pos, state)) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be != null) {
                 be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {

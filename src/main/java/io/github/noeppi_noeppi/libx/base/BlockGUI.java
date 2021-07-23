@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.base;
 
 import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.inventory.container.TileContainerMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.world.level.block.state.BlockState;
