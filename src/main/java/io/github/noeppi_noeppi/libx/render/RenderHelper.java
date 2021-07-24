@@ -137,65 +137,6 @@ public class RenderHelper {
     }
 
     /**
-     * Works like {@link VertexConsumer#putBulkData} but allows you to modify alpha values as well. Like
-     * {@link VertexConsumer#putBulkData} this uses {@link DefaultVertexFormat#BLOCK}.
-     *
-     * @param alpha    The alpha value to use.
-     * @param mulAlpha If set to true the given alpha value is multiplied with the value set in
-     *                 the four byte of {@code COLOR_4UB} assuming it is stored as {@code RGBA}.
-     *                 If set to false just the given alpha value will be used.
-     */
-    // TODO copy vanilla again and make changes
-    public static void addQuadWithAlpha(VertexConsumer vertex, PoseStack.Pose pose, BakedQuad quad, float red, float green, float blue, float alpha, int light, int overlay, boolean mulColor, boolean mulAlpha) {
-        int[] vertexData = quad.getVertices();
-        Vec3i vector3i = quad.getDirection().getNormal();
-        Vector3f vector3f = new Vector3f((float) vector3i.getX(), (float) vector3i.getY(), (float) vector3i.getZ());
-        Matrix4f matrix4f = pose.pose();
-        vector3f.transform(pose.normal());
-
-        try (MemoryStack memorystack = MemoryStack.stackPush()) {
-            ByteBuffer bytebuffer = memorystack.malloc(DefaultVertexFormat.BLOCK.getVertexSize());
-            IntBuffer intbuffer = bytebuffer.asIntBuffer();
-
-            for (int i = 0; i < vertexData.length / 8; i++) {
-                intbuffer.clear();
-                intbuffer.put(vertexData, i * 8, 8);
-                float x = bytebuffer.getFloat(0);
-                float y = bytebuffer.getFloat(4);
-                float z = bytebuffer.getFloat(8);
-                float a;
-                float r;
-                float g;
-                float b;
-
-                if (mulAlpha) {
-                    a = (float) (bytebuffer.get(15) & 255) / 255.0F * alpha;
-                } else {
-                    a = alpha;
-                }
-
-                if (mulColor) {
-                    r = (float) (bytebuffer.get(12) & 255) / 255.0F * red;
-                    g = (float) (bytebuffer.get(13) & 255) / 255.0F * green;
-                    b = (float) (bytebuffer.get(14) & 255) / 255.0F * blue;
-                } else {
-                    r = red;
-                    g = green;
-                    b = blue;
-                }
-
-                int l = vertex.applyBakedLighting(light, bytebuffer);
-                float u = bytebuffer.getFloat(16);
-                float v = bytebuffer.getFloat(20);
-                Vector4f vector4f = new Vector4f(x, y, z, 1.0F);
-                vector4f.transform(matrix4f);
-                vertex.applyBakedNormals(vector3f, bytebuffer, pose.normal());
-                vertex.vertex(vector4f.x(), vector4f.y(), vector4f.z(), r, g, b, a, u, v, overlay, l, vector3f.x(), vector3f.y(), vector3f.z());
-            }
-        }
-    }
-
-    /**
      * Renders a gui background of any size. This is created from the chest GUI texture and should
      * work with texture packs. The width and height must be at least 9.
      *

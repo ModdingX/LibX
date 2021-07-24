@@ -34,7 +34,6 @@ import org.apache.logging.log4j.Logger;
 /*
  * TODO
  * Things that really need to be tested before publishing a 1.17 version:
- *   - CraftingExtension
  *   - All mixins need to be tested again with 1.17
  *   - The new registration system
  *   - Dynamic datapacks need to be tested again
