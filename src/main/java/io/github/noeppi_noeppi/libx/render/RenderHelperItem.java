@@ -32,7 +32,7 @@ public class RenderHelperItem {
             
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderHelper.resetColor();
 
             poseStack.translate(x, y, 50);
             poseStack.scale(size / 16f, size / 16f, 1);

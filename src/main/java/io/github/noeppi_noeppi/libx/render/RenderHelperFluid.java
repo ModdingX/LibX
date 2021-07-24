@@ -34,10 +34,14 @@ public class RenderHelperFluid {
         poseStack.pushPose();
         poseStack.translate(0, 0, 100);
         RenderSystem.setShaderTexture(0, sprite.atlas().location());
-        // TODO use colorBlit when done. Commented out for now
-//        RenderHelper.color(color);
+        // Some mods set alpha, other leave it 0 so we use the alpha whenever it is not 0.
+        if (((color >>> 24) & 0xFF) > 0) {
+            RenderHelper.argb(color);
+        } else {
+            RenderHelper.rgb(color);
+        }
         RenderHelper.repeatBlit(poseStack, x, y, width, height, sprite);
-//        RenderHelper.resetColor();
+        RenderHelper.resetColor();
         poseStack.popPose();
     }
 }

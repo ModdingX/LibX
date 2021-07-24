@@ -1,27 +1,15 @@
 package io.github.noeppi_noeppi.libx.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import net.minecraft.core.Vec3i;
-import com.mojang.math.Vector4f;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.system.MemoryStack;
-
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 /**
  * Some utilities for rendering in general.
@@ -29,8 +17,8 @@ import java.nio.IntBuffer;
 public class RenderHelper {
 
     /**
-     * ResourceLocation of a texture with the size 512x512 that is purely white.
-     * // TODO add color notice as soon as we find out how to color textures in 1.17
+     * ResourceLocation of a texture with the size 512x512 that is purely white. If can be colored with
+     * {@link RenderSystem#setShaderColor(float, float, float, float)}.
      */
     public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation(LibX.getInstance().modid, "textures/white.png");
     private static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
@@ -114,6 +102,27 @@ public class RenderHelper {
     }
 
     /**
+     * Sets the color to the given RGB color in format 0xRRGGBB
+     */
+    public static void rgb(int color) {
+        RenderSystem.setShaderColor(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f, 1);
+    }
+    
+    /**
+     * Sets the color to the given ARGB color in format 0xAARRGGBB
+     */
+    public static void argb(int color) {
+        RenderSystem.setShaderColor(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f, ((color >>> 24) & 0xFF) / 255f);
+    }
+
+    /**
+     * Resets the color to white.
+     */
+    public static void resetColor() {
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+    }
+
+    /**
      * Renders a text with a gray semi-transparent background.
      */
     public static void renderText(String text, PoseStack poseStack, MultiBufferSource buffer) {
@@ -124,11 +133,10 @@ public class RenderHelper {
         poseStack.translate(-(widthHalf + 2), -(heightHalf + 2), 0);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        // TODO change and add colored blit methods to remove direct OpenGL calls
-        GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.8f);
         RenderSystem.setShaderTexture(0, TEXTURE_WHITE);
+        RenderSystem.setShaderColor(0.2f, 0.2f, 0.2f, 0.8f);
         GuiComponent.blit(poseStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
-        GL11.glColor4f(1, 1, 1, 1);
+        resetColor();
         RenderSystem.disableBlend();
         poseStack.translate(widthHalf + 2, heightHalf + 2, 10);
 
