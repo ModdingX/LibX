@@ -14,5 +14,5 @@ javadoc {
             + '<a href="https://github.com/noeppi-noeppi/LibX" target="_blank">GitHub</a></h2>')
     options.memberLevel = JavadocMemberLevel.PROTECTED
     // TODO use https://github.com/noeppi-noeppi/MinecraftUtilities
-    // TODO check that the output path and the path in github action match hup after java update
+    // TODO check that the output path and the path in github action match up after java update
 }
