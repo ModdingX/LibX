@@ -84,7 +84,6 @@ public class NbtIngredient extends Ingredient {
         return NbtIngredient.Serializer.INSTANCE;
     }
 
-    // TODO make toJson and parse safer regarding handling of the nbt.
     @Nonnull
     @Override
     @SuppressWarnings("ConstantConditions")
@@ -92,8 +91,9 @@ public class NbtIngredient extends Ingredient {
         JsonObject json = new JsonObject();
         json.addProperty("type", CraftingHelper.getID(NbtIngredient.Serializer.INSTANCE).toString());
         json.addProperty("item", this.stack.getItem().getRegistryName().toString());
-        if (this.stack.hasTag())
+        if (this.stack.hasTag() && !this.stack.getOrCreateTag().isEmpty()) {
             json.addProperty("nbt", this.stack.getTag().toString());
+        }
         json.addProperty("exactMatch", this.exactMatch);
         return json;
     }
@@ -116,12 +116,7 @@ public class NbtIngredient extends Ingredient {
         @Override
         public NbtIngredient parse(@Nonnull JsonObject json) {
             ItemStack stack = CraftingHelper.getItemStack(json, true);
-            boolean exactMatch = false;
-            if (json.has("exactMatch")) {
-                exactMatch = json.get("exactMatch").getAsBoolean();
-            }
-
-            return new NbtIngredient(stack, exactMatch);
+            return new NbtIngredient(stack, json.has("exactMatch") && json.get("exactMatch").getAsBoolean());
         }
 
         @Override
