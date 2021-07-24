@@ -25,12 +25,12 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * A {@link DefaultContainerMenu} for blocks with block entities.
  */
-public class TileContainerMenu<T extends BlockEntity> extends DefaultContainerMenu {
+public class BlockEntityMenu<T extends BlockEntity> extends DefaultContainerMenu {
 
     protected final BlockPos pos;
     protected final T tile;
     
-    public TileContainerMenu(@Nullable MenuType<?> type, int windowId, Level level, BlockPos pos, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
+    public BlockEntityMenu(@Nullable MenuType<?> type, int windowId, Level level, BlockPos pos, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
         super(type, windowId, level, playerContainer, player, firstOutputSlot, firstInventorySlot);
         this.pos = pos;
         //noinspection unchecked
@@ -57,7 +57,7 @@ public class TileContainerMenu<T extends BlockEntity> extends DefaultContainerMe
      *
      * @param constructor A method reference to the container's constructor.
      */
-    public static <T extends TileContainerMenu<?>> MenuType<T> createMenuType(Function5<Integer, Level, BlockPos, Inventory, Player, T> constructor) {
+    public static <T extends BlockEntityMenu<?>> MenuType<T> createMenuType(Function5<Integer, Level, BlockPos, Inventory, Player, T> constructor) {
         return IForgeContainerType.create((windowId1, inv, data) -> {
             BlockPos pos = data.readBlockPos();
             Level level = inv.player.getCommandSenderWorld();
@@ -84,7 +84,7 @@ public class TileContainerMenu<T extends BlockEntity> extends DefaultContainerMe
     /**
      * Opens a TileContainer for a player.
      */
-    public static void openMenu(ServerPlayer player, MenuType<? extends TileContainerMenu<?>> menu, Component title, BlockPos pos) {
+    public static void openMenu(ServerPlayer player, MenuType<? extends BlockEntityMenu<?>> menu, Component title, BlockPos pos) {
         MenuProvider containerProvider = new MenuProvider() {
             @Nonnull
             @Override

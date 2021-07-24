@@ -8,8 +8,8 @@ io/github/noeppi_noeppi/libx/annotation/RegName io/github/noeppi_noeppi/libx/ann
 io/github/noeppi_noeppi/libx/block/DirectionShape io/github/noeppi_noeppi/libx/block/RotationShape
 io/github/noeppi_noeppi/libx/data/CraftingHelper2 io/github/noeppi_noeppi/libx/crafting/CraftingHelper2
 io/github/noeppi_noeppi/libx/data/provider/recipe/AnyRecipeProvider io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase
-io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase io/github/noeppi_noeppi/libx/data.provider/recipe/crafting/CraftingExtension
-io/github/noeppi_noeppi/libx/data/provider/recipe/SmeltingProviderBase io/github/noeppi_noeppi/libx/data.provider/recipe/crafting/SmeltingExtension
+io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeProviderBase io/github/noeppi_noeppi/libx/data/provider/recipe/crafting/CraftingExtension
+io/github/noeppi_noeppi/libx/data/provider/recipe/SmeltingProviderBase io/github/noeppi_noeppi/libx/data/provider/recipe/crafting/SmeltingExtension
 io/github/noeppi_noeppi/libx/impl/config/SimpleValueMappers io/github/noeppi_noeppi/libx/impl/config/mappers/SimpleValueMappers
 io/github/noeppi_noeppi/libx/impl/config/EnumConfigMapper io/github/noeppi_noeppi/libx/impl/config/mappers/special/EnumValueMappers
 io/github/noeppi_noeppi/libx/impl/config/ConfiguredValidator io/github/noeppi_noeppi/libx/impl/config/validators/ConfiguredValidator
@@ -49,7 +49,7 @@ io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerTy
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lcom/mojang/datafixers/util/Function5;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
-
+io/github/noeppi_noeppi/libx/base/tile/BlockBE getTile (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity; getBlockEntity
 
 
 

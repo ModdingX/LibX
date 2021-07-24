@@ -17,7 +17,6 @@ public class LibXDatapackFinder implements RepositorySource {
 
     public static final LibXDatapackFinder INSTANCE = new LibXDatapackFinder();
     
-    
     private LibXDatapackFinder() {
         
     }

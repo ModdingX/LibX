@@ -31,14 +31,14 @@ import java.util.Set;
 /**
  * Base class for blocks with {@link BlockEntity block entities} for mods using {@link ModXRegistration}.
  * This will automatically set the creative tab if it's defined in the mod and register a block item and
- * a tile entity type.
+ * a block entity type.
  * <p>
  * The constructor requires a {@link BlockEntity} class. The block entity class  <b>must</b> define a public
  * constructor with three arguments of types {@link BlockEntityType}, {@link BlockPos} and {@link BlockState}
- * for this to create a tile entity type. This class will do the magic to wire the tile entity to the block
+ * for this to create a block entity type. This class will do the magic to wire the block entity to the block
  * and invoke the constructor.
  * <p>
- * The tile entity class can implement {@link TickableBlock} and {@link GameEventBlock}. This class will then
+ * The block entity class can implement {@link TickableBlock} and {@link GameEventBlock}. This class will then
  * generate a matching {@link BlockEntityTicker} and a {@link GameEventListener} if required.
  */
 public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityBlock {
@@ -51,8 +51,8 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
         this(mod, beClass, properties, new Item.Properties());
     }
 
-    public BlockBE(ModX mod, Class<T> beClass, Properties properties, Item.Properties ibemProperties) {
-        super(mod, properties, ibemProperties);
+    public BlockBE(ModX mod, Class<T> beClass, Properties properties, Item.Properties itemProperties) {
+        super(mod, properties, itemProperties);
         this.beClass = beClass;
 
         try {
@@ -60,16 +60,16 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
         } catch (ReflectiveOperationException e) {
             if (e.getCause() != null)
                 e.getCause().printStackTrace();
-            throw new RuntimeException("Could not get constructor for tile entity " + beClass + ".", e);
+            throw new RuntimeException("Could not get constructor for block entity " + beClass + ".", e);
         }
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> {
             try {
-                return this.beConstructor.newInstance(this.getTileType(), pos, state);
+                return this.beConstructor.newInstance(this.getBlockEntityType(), pos, state);
             } catch (ReflectiveOperationException e) {
                 if (e.getCause() != null)
                     e.getCause().printStackTrace();
-                throw new RuntimeException("Could not create TileEntity of type " + beClass + ".", e);
+                throw new RuntimeException("Could not create BlockEntity of type " + beClass + ".", e);
             }
         }, ImmutableSet.of(this), null);
     }
@@ -93,9 +93,9 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
             return new BlockEntityTicker<>() {
 
                 @Override
-                public void tick(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull X tile) {
-                    if (tile instanceof TickableBlock) {
-                        ((TickableBlock) tile).tick();
+                public void tick(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull X blockEntity) {
+                    if (blockEntity instanceof TickableBlock) {
+                        ((TickableBlock) blockEntity).tick();
                     }
                 }
             };
@@ -152,22 +152,22 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    public T getTile(Level level, BlockPos pos) {
+    public T getBlockEntity(Level level, BlockPos pos) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be == null || !this.beClass.isAssignableFrom(be.getClass())) {
-            throw new IllegalStateException("Expected a tile entity of type " + this.beClass + " at " + level + " " + pos + ", got" + be);
+            throw new IllegalStateException("Expected a block entity of type " + this.beClass + " at " + level + " " + pos + ", got" + be);
         }
         //noinspection unchecked
         return (T) be;
     }
 
-    public BlockEntityType<T> getTileType() {
+    public BlockEntityType<T> getBlockEntityType() {
         return this.beType;
     }
 
     /**
      * Override this to prevent the inventory of the block entity to be dropped when the block is
-     * broken. To automatically drop the inventory the tile entity must provide an item handler
+     * broken. To automatically drop the inventory the block entity must provide an item handler
      * capability that is an instance of {@link IItemHandlerModifiable}
      */
     protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState state) {

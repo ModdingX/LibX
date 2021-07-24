@@ -179,7 +179,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
      * Turns a loot function into a loot modifier.
      */
     public LootModifier from(LootItemConditionalFunction.Builder<?> function) {
-        return (b, e) -> e.apply(function);
+        return (e, b) -> b.apply(function);
     }
 
     /**
@@ -198,7 +198,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
      * @param max The maximum amount of additional drops.
      */
     public LootModifier looting(int min, int max) {
-        return (b, e) -> e.apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(min, max)));
+        return (e, b) -> b.apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(min, max)));
     }
 
     /**
@@ -494,7 +494,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
          * Gets a loot modifier that does nothing.
          */
         static GenericLootModifier identity() {
-            return (b, e) -> e;
+            return (e, b) -> b;
         }
 
         LootPoolEntryContainer.Builder<?> apply(EntityType<?> entity, LootPoolSingletonContainer.Builder<?> entry);

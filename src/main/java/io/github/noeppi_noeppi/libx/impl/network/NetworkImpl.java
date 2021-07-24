@@ -35,19 +35,19 @@ public final class NetworkImpl extends NetworkX {
 
     @Override
     protected void registerPackets() {
-        this.register(new TeUpdateSerializer(), () -> TeUpdateHandler::handle, NetworkDirection.PLAY_TO_CLIENT);
+        this.register(new BeUpdateSerializer(), () -> BeUpdateHandler::handle, NetworkDirection.PLAY_TO_CLIENT);
         this.register(new ConfigShadowSerializer(), () -> ConfigShadowHandler::handle, NetworkDirection.PLAY_TO_CLIENT);
        
-        this.register(new TeRequestSerializer(), () -> TeRequestHandler::handle, NetworkDirection.PLAY_TO_SERVER);
+        this.register(new BeRequestSerializer(), () -> BeRequestHandler::handle, NetworkDirection.PLAY_TO_SERVER);
     }
     
-    public void updateTE(Level level, BlockPos pos) {
+    public void updateBE(Level level, BlockPos pos) {
         if (!level.isClientSide) {
-            this.updateTE(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), level, pos);
+            this.updateBE(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), level, pos);
         }
     }
 
-    void updateTE(PacketDistributor.PacketTarget target, Level level, BlockPos pos) {
+    void updateBE(PacketDistributor.PacketTarget target, Level level, BlockPos pos) {
         if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be == null)
@@ -59,13 +59,13 @@ public final class NetworkImpl extends NetworkX {
             ResourceLocation id = be.getType().getRegistryName();
             if (id == null)
                 return;
-            this.instance.send(target, new TeUpdateSerializer.TeUpdateMessage(pos, id, nbt));
+            this.instance.send(target, new BeUpdateSerializer.BeUpdateMessage(pos, id, nbt));
         }
     }
 
-    public void requestTE(Level level, BlockPos pos) {
+    public void requestBE(Level level, BlockPos pos) {
         if (level.isClientSide) {
-            this.instance.sendToServer(new TeRequestSerializer.TeRequestMessage(pos));
+            this.instance.sendToServer(new BeRequestSerializer.BeRequestMessage(pos));
         }
     }
 }

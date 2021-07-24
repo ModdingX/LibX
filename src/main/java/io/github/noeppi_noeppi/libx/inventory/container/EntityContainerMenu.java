@@ -75,7 +75,7 @@ public abstract class EntityContainerMenu<T extends Entity> extends DefaultConta
     /**
      * Opens an EntityContainer for a player.
      */
-    public static void openMenu(ServerPlayer player, MenuType<? extends TileContainerMenu<?>> menu, Component title, Entity entity) {
+    public static void openMenu(ServerPlayer player, MenuType<? extends BlockEntityMenu<?>> menu, Component title, Entity entity) {
         MenuProvider containerProvider = new MenuProvider() {
             @Nonnull
             @Override

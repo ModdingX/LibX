@@ -142,10 +142,10 @@ public abstract class BlockLootProviderBase implements DataProvider {
     }
 
     /**
-     * Creates a loot modifier that copies NBT-Data from a tile entity into the dropped item. Use this
+     * Creates a loot modifier that copies NBT-Data from a block entity into the dropped item. Use this
      * with one of the {@link #drops(Block, SilkModifier, LootFactory...) drops} methods.
      *
-     * @param tags The toplevel tags of the tile entity to be copied.
+     * @param tags The toplevel tags of the block entity to be copied.
      */
     public LootModifier copyNBT(String... tags) {
         return (b, entry) -> {

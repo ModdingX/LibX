@@ -7,9 +7,9 @@ import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class TeUpdateHandler {
+public class BeUpdateHandler {
 
-    public static void handle(TeUpdateSerializer.TeUpdateMessage msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(BeUpdateSerializer.BeUpdateMessage msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             Level level = Minecraft.getInstance().level;
             if (level == null)
