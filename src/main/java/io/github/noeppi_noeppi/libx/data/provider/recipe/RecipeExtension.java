@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
+import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -22,32 +23,32 @@ public interface RecipeExtension {
     RecipeProviderBase provider();
     
     /**
-     * Gets the {@link Consumer} for {@link IFinishedRecipe finished recipes} to add recipes to.
+     * Gets the {@link Consumer} for {@link FinishedRecipe finished recipes} to add recipes to.
      */
     Consumer<FinishedRecipe> consumer();
 
     /**
-     * Builds an {@link CriterionInstance advancement criterion} for the given {@link IItemProvider item}.
+     * Builds an {@link CriterionTriggerInstance advancement criterion} for the given {@link ItemLike item}.
      */
-    AbstractCriterionTriggerInstance criterion(ItemLike item);
+    CriterionTriggerInstance criterion(ItemLike item);
     
     /**
-     * Builds an {@link CriterionInstance advancement criterion} for the given {@link ITag tag}.
+     * Builds an {@link CriterionTriggerInstance advancement criterion} for the given {@link Tag tag}.
      */
-    AbstractCriterionTriggerInstance criterion(Tag<Item> item);
+    CriterionTriggerInstance criterion(Tag<Item> item);
     
     /**
-     * Builds an {@link CriterionInstance advancement criterion} that requires all of the given
+     * Builds an {@link CriterionTriggerInstance advancement criterion} that requires all of the given
      * {@link ItemPredicate items}.
      */
-    AbstractCriterionTriggerInstance criterion(ItemPredicate... items);
+    CriterionTriggerInstance criterion(ItemPredicate... items);
 
     /**
      * Gets a list of criteria that should be ORed, meaning that the recipe should unlock when one of
      * them is completed instead of all of them.
      */
-    default List<AbstractCriterionTriggerInstance> criteria(Ingredient item) {
-        List<AbstractCriterionTriggerInstance> instances = new ArrayList<>();
+    default List<CriterionTriggerInstance> criteria(Ingredient item) {
+        List<CriterionTriggerInstance> instances = new ArrayList<>();
         if (item.isVanilla()) {
             for (Ingredient.Value entry : item.values) {
                 if (entry instanceof Ingredient.ItemValue) {

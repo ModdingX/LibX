@@ -1,9 +1,10 @@
 package io.github.noeppi_noeppi.libx.world;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.world.level.Level;
 
 /**
- * Provides a way to get the {@link World} seed in {@link Codec codecs}.
+ * Provides a way to get the {@link Level} seed in a {@link Codec codec}.
  */
 public class WorldSeedHolder {
     

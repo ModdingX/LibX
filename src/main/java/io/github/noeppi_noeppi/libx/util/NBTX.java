@@ -16,14 +16,14 @@ import javax.annotation.Nullable;
 public class NBTX {
 
     /**
-     * Store a {@link BlockPos} in a {@link CompoundNBT} with a given key.
+     * Store a {@link BlockPos} in a {@link CompoundTag} with a given key.
      */
     public static void putPos(CompoundTag nbt, String key, BlockPos pos) {
         nbt.put(key, new IntArrayTag(new int[]{ pos.getX(), pos.getY(), pos.getZ() }));
     }
 
     /**
-     * Get a {@link BlockPos} from a {@link CompoundNBT} stored with a given key or null if there's no such
+     * Get a {@link BlockPos} from a {@link CompoundTag} stored with a given key or null if there's no such
      * block pos.
      */
     @Nullable
@@ -38,7 +38,7 @@ public class NBTX {
     }
 
     /**
-     * Get a {@link BlockPos} from a {@link CompoundNBT} stored with a given key or the default value if there's
+     * Get a {@link BlockPos} from a {@link CompoundTag} stored with a given key or the default value if there's
      * no such block pos.
      */
     public static BlockPos getPos(CompoundTag nbt, String key, BlockPos defaultValue) {
@@ -47,14 +47,14 @@ public class NBTX {
     }
 
     /**
-     * Stores a {@link ResourceLocation} in a {@link CompoundNBT} with a given key.
+     * Stores a {@link ResourceLocation} in a {@link CompoundTag} with a given key.
      */
     public static void putRL(CompoundTag nbt, String key, ResourceLocation rl) {
         nbt.putString(key, rl.toString());
     }
 
     /**
-     * Gets a {@link ResourceLocation} from a {@link CompoundNBT} stored with a given key or null if there's no
+     * Gets a {@link ResourceLocation} from a {@link CompoundTag} stored with a given key or null if there's no
      * such resource location.
      */
     @Nullable
@@ -67,7 +67,7 @@ public class NBTX {
     }
     
     /**
-     * Gets a {@link ResourceLocation} from a {@link CompoundNBT} stored with a given key or the default value if 
+     * Gets a {@link ResourceLocation} from a {@link CompoundTag} stored with a given key or the default value if 
      * there's no such resource location.
      */
     public static ResourceLocation getRL(CompoundTag nbt, String key, ResourceLocation defaultValue) {
@@ -76,18 +76,18 @@ public class NBTX {
     }
 
     /**
-     * Stores the location of a {@link RegistryKey}. This will <b>not</b> store the registry.
+     * Stores the location of a {@link ResourceKey}. This will <b>not</b> store the registry.
      * 
-     * @see NBTX#putRL(CompoundNBT, String, ResourceLocation)
+     * @see NBTX#putRL(CompoundTag, String, ResourceLocation)
      */
     public static void putKey(CompoundTag nbt, String key, ResourceKey<?> rl) {
         putRL(nbt, key, rl.location());
     }
     
     /**
-     * Gets a {@link RegistryKey}. This will only load the location, the {@link Registry} must be provided by yourself.
+     * Gets a {@link ResourceKey}. This will only load the location, the {@link Registry} must be provided by yourself.
      * 
-     * @see NBTX#getRL(CompoundNBT, String) 
+     * @see NBTX#getRL(CompoundTag, String) 
      */
     @Nullable
     public static <T> ResourceKey<T> getKey(CompoundTag nbt, String key, ResourceKey<Registry<T>> registry) {
@@ -100,9 +100,9 @@ public class NBTX {
     }
     
     /**
-     * Gets a {@link RegistryKey}. This will only load the location, the {@link Registry} must be provided by yourself.
+     * Gets a {@link ResourceKey}. This will only load the location, the {@link Registry} must be provided by yourself.
      * 
-     * @see NBTX#getRL(CompoundNBT, String, ResourceLocation)
+     * @see NBTX#getRL(CompoundTag, String, ResourceLocation)
      */
     public static <T> ResourceKey<T> getKey(CompoundTag nbt, String key, ResourceKey<Registry<T>> registry, ResourceKey<T> defaultValue) {
         ResourceKey<T> rl = getKey(nbt, key, registry);

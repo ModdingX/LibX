@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.annotation;
+package io.github.noeppi_noeppi.libx.annotation.impl;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
@@ -19,14 +19,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * Contains methods the annotation processor code generator uses that rely on minecraft
- * classes. This is here to ensure compatibility between different mappings as these methods
- * are not remapped.
- * <b>THIS IS NOT MEANT TO BE USED BY ANYTHING ELSE BUT THE ANNOTATION PROCESSOR AND THEREFORE MARKED DEPRECATED.</b>
- */
-// TODO move in extra package that can be excluded from javadoc
-@Deprecated
 public class ProcessorInterface {
 
     public static ResourceLocation newRL(String rl) {

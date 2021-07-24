@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A {@link DefaultContainer} for blocks with tile entities.
+ * A {@link DefaultContainerMenu} for blocks with block entities.
  */
 public class TileContainerMenu<T extends BlockEntity> extends DefaultContainerMenu {
 

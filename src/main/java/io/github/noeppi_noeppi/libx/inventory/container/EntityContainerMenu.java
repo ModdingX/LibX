@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A {@link DefaultContainer} for entities.
+ * A {@link DefaultContainerMenu} for entities.
  */
 public abstract class EntityContainerMenu<T extends Entity> extends DefaultContainerMenu {
 

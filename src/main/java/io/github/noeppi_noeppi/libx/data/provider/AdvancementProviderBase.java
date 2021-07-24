@@ -231,56 +231,56 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
      */
     public CriterionTriggerInstance eat(ItemLike food) {
         return this.eat(ItemPredicate.Builder.item().of(food).build());
     }
 
     /**
-     * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
      */
     public CriterionTriggerInstance eat(Tag<Item> food) {
         return this.eat(ItemPredicate.Builder.item().of(food).build());
     }
 
     /**
-     * Gets a {@link ICriterionInstance criterion} that requires a player to consume (eat/drink) an item.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
      */
     public CriterionTriggerInstance eat(ItemPredicate food) {
         return new ConsumeItemTrigger.TriggerInstance(EntityPredicate.Composite.ANY, food);
     }
 
     /**
-     * Gets a {@link ICriterionInstance criterion} that requires a player to leave a dimension.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to leave a dimension.
      */
     public CriterionTriggerInstance leave(ResourceKey<Level> dimension) {
         return new ChangeDimensionTrigger.TriggerInstance(EntityPredicate.Composite.ANY, dimension, null);
     }
 
     /**
-     * Gets a {@link ICriterionInstance criterion} that requires a player to enter a dimension.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to enter a dimension.
      */
     public CriterionTriggerInstance enter(ResourceKey<Level> dimension) {
         return ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(dimension);
     }
 
     /**
-     * Gets a {@link ICriterionInstance criterion} that requires a player to perform a specific dimension change.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to perform a specific dimension change.
      */
     public CriterionTriggerInstance changeDim(ResourceKey<Level> from, ResourceKey<Level> to) {
         return new ChangeDimensionTrigger.TriggerInstance(EntityPredicate.Composite.ANY, from, to);
     }
 
     /**
-     * Gets the given {@link EntityPredicate} as an {@link EntityPredicate.AndPredicate}.
+     * Gets the given {@link EntityPredicate} as an {@link EntityPredicate.Composite}.
      */
     public EntityPredicate.Composite entity(EntityPredicate entity) {
         return EntityPredicate.Composite.create(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, entity).build());
     }
 
     /**
-     * Gets an {@link EntityPredicate.AndPredicate} that matches for a specific entity type.
+     * Gets an {@link EntityPredicate.Composite} that matches for a specific entity type.
      */
     public EntityPredicate.Composite entity(EntityType<?> type) {
         return this.entity(EntityPredicate.Builder.entity().of(type).build());

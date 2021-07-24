@@ -3,8 +3,8 @@ package io.github.noeppi_noeppi.libx.impl.data.recipe;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+// TODO test that the advancement hack with OR-ing things still works
 public class ObjectCraftingBuilder {
 
     public static void buildShaped(RecipeExtension ext, Object[] objects) {
@@ -75,9 +76,9 @@ public class ObjectCraftingBuilder {
         }
     }
 
-    private static int addCriteriaToBuilder(Advancement.Builder builder, RecipeRequirementStrategy strategy, List<AbstractCriterionTriggerInstance> criteria, int nextId) {
+    private static int addCriteriaToBuilder(Advancement.Builder builder, RecipeRequirementStrategy strategy, List<CriterionTriggerInstance> criteria, int nextId) {
         List<String> criteriaIds = new ArrayList<>();
-        for (AbstractCriterionTriggerInstance criterion : criteria) {
+        for (CriterionTriggerInstance criterion : criteria) {
             String id = "criterion" + (nextId++);
             builder.addCriterion(id, criterion);
             criteriaIds.add(id);

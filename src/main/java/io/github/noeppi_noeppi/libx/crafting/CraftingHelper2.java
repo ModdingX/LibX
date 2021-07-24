@@ -8,6 +8,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 /**
  * Contains some methods that are missing in Forges' {@link CraftingHelper}
  */
+// TODO do we still need this?
 public class CraftingHelper2 {
 
     /**

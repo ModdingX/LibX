@@ -34,7 +34,7 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
     E toJSON(T value);
 
     /**
-     * Reads a value from a {@link PacketBuffer}. The default implementation expects a
+     * Reads a value from a {@link FriendlyByteBuf}. The default implementation expects a
      * JSON string and gives this string to {@link ValueMapper#fromJSON(JsonElement) fromJSON}.
      */
     default T read(FriendlyByteBuf buffer) {
@@ -42,7 +42,7 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
     }
 
     /**
-     * Writes a value to a {@link PacketBuffer}. The default implementation calls
+     * Writes a value to a {@link FriendlyByteBuf}. The default implementation calls
      * {@link ValueMapper#toJSON(Object) toJSON} and writes the resulting JSON as a string.
      */
     default void write(T value, FriendlyByteBuf buffer) {

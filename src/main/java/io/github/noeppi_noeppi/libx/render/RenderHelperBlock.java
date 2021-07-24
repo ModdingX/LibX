@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
@@ -55,7 +56,7 @@ public class RenderHelperBlock {
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link PlayerContainer#LOCATION_BLOCKS_TEXTURE})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, TextureAtlasSprite sprite) {
         renderBlockOverlaySprite(state, poseStack, buffer, light, overlay, sprite, state.getSeed(BlockPos.ZERO));
@@ -63,7 +64,7 @@ public class RenderHelperBlock {
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link PlayerContainer#LOCATION_BLOCKS_TEXTURE})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, TextureAtlasSprite sprite, long positionRandom) {
         renderBlockOverlaySprite(state, poseStack, buffer, light, overlay, sprite, positionRandom, dir -> true);
@@ -71,7 +72,7 @@ public class RenderHelperBlock {
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link PlayerContainer#LOCATION_BLOCKS_TEXTURE})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, TextureAtlasSprite sprite, Predicate<Direction> dirs) {
         renderBlockOverlaySprite(state, poseStack, buffer, light, overlay, sprite, state.getSeed(BlockPos.ZERO), dirs);
@@ -79,7 +80,7 @@ public class RenderHelperBlock {
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link PlayerContainer#LOCATION_BLOCKS_TEXTURE})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, TextureAtlasSprite sprite, long positionRandom, Predicate<Direction> dirs) {
         if (state.getRenderShape() == RenderShape.MODEL) {

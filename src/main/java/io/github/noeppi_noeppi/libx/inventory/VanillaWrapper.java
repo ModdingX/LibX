@@ -9,24 +9,24 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Wraps an {@link IItemHandlerModifiable} to a vanilla {@link IInventory}.
+ * Wraps an {@link IItemHandlerModifiable} to a vanilla {@link Container}.
  */
 public class VanillaWrapper implements Container {
 
     public final IItemHandlerModifiable handler;
 
     @Nullable
-    public final Runnable dirty;
+    public final Runnable changed;
 
     /**
-     * Wraps the given {@link IItemHandlerModifiable} to a vanilla {@link IInventory}.
+     * Wraps the given {@link IItemHandlerModifiable} to a vanilla {@link Container}.
      *
-     * @param dirty A runnable which is always called when {@link IInventory#markDirty() markDirty()}
+     * @param changed A runnable which is always called when {@link Container#setChanged()} () markDirty()}
      *              is called on the vanilla inventory.
      */
-    public VanillaWrapper(IItemHandlerModifiable handler, @Nullable Runnable dirty) {
+    public VanillaWrapper(IItemHandlerModifiable handler, @Nullable Runnable changed) {
         this.handler = handler;
-        this.dirty = dirty;
+        this.changed = changed;
     }
 
     @Override
@@ -79,8 +79,8 @@ public class VanillaWrapper implements Container {
 
     @Override
     public void setChanged() {
-        if (this.dirty != null) {
-            this.dirty.run();
+        if (this.changed != null) {
+            this.changed.run();
         }
     }
 

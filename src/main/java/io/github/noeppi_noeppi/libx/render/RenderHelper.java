@@ -29,14 +29,14 @@ import java.nio.IntBuffer;
 public class RenderHelper {
 
     /**
-     * ResourceLocation of a texture with the size 512x512 that is purely white and because of this can
-     * be colored via {@link RenderHelper#color(int)}
+     * ResourceLocation of a texture with the size 512x512 that is purely white.
+     * // TODO add color notice as soon as we find out how to color textures in 1.17
      */
     public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation(LibX.getInstance().modid, "textures/white.png");
     private static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
 
     /**
-     * Same as {@link RenderHelper#repeatBlit(MatrixStack, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
+     * Same as {@link #repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
      */
     public static void repeatBlit(PoseStack poseStack, int x, int y, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
         repeatBlit(poseStack, x, y, sprite.getWidth(), sprite.getHeight(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
@@ -58,7 +58,7 @@ public class RenderHelper {
     }
 
     /**
-     * Same as {@link RenderHelper#repeatBlit(MatrixStack, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
+     * Same as {@link #repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
      */
     public static void repeatBlit(PoseStack ms, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
         int pixelsRenderedX = 0;
@@ -137,14 +137,15 @@ public class RenderHelper {
     }
 
     /**
-     * Works like {@link IVertexBuilder#addQuad} but allows you to modify alpha values as well. Like
-     * {@link IVertexBuilder#addQuad} this uses {@link DefaultVertexFormats#BLOCK}.
+     * Works like {@link VertexConsumer#putBulkData} but allows you to modify alpha values as well. Like
+     * {@link VertexConsumer#putBulkData} this uses {@link DefaultVertexFormat#BLOCK}.
      *
      * @param alpha    The alpha value to use.
      * @param mulAlpha If set to true the given alpha value is multiplied with the value set in
      *                 the four byte of {@code COLOR_4UB} assuming it is stored as {@code RGBA}.
      *                 If set to false just the given alpha value will be used.
      */
+    // TODO copy vanilla again and make changes
     public static void addQuadWithAlpha(VertexConsumer vertex, PoseStack.Pose pose, BakedQuad quad, float red, float green, float blue, float alpha, int light, int overlay, boolean mulColor, boolean mulAlpha) {
         int[] vertexData = quad.getVertices();
         Vec3i vector3i = quad.getDirection().getNormal();

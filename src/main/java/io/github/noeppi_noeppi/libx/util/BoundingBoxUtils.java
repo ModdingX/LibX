@@ -5,12 +5,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Utilities for instances of {@link AxisAlignedBB}. 
+ * Utilities for instances of {@link AABB}. 
  */
 public class BoundingBoxUtils {
 
     /**
-     * Creates a new {@link AxisAlignedBB} that centers at the given entity
+     * Creates a new {@link AABB} that centers at the given entity
      * and has the given radius in all directions.
      */
     public static AABB expand(Entity center, double radius) {
@@ -18,7 +18,7 @@ public class BoundingBoxUtils {
     }
     
     /**
-     * Creates a new {@link AxisAlignedBB} that centers at the given vector
+     * Creates a new {@link AABB} that centers at the given vector
      * and has the given radius in all directions.
      */
     public static AABB expand(Vec3 center, double radius) {

@@ -115,7 +115,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
 
     /**
      * Creates a model for the given block. The default implementation creates special models for blocks
-     * of type {@link FlowingFluidBlock} and {@link LeavesBlock}.
+     * of type {@link LiquidBlock} and {@link LeavesBlock}.
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateDefinition().getPossibleStates().stream().allMatch(state -> state.getRenderShape() != RenderShape.MODEL)) {

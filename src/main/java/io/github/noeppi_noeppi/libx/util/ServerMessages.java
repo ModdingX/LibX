@@ -10,7 +10,7 @@ import java.util.UUID;
 public class ServerMessages {
 
     /**
-     * Sends a {@link ITextComponent text component} to every player on the server.
+     * Sends a {@link Component text component} to every player on the server.
      */
     public static void broadcast(Level level, Component message) {
         MinecraftServer server = level.getServer();
@@ -20,7 +20,7 @@ public class ServerMessages {
     }
 
     /**
-     * Sends a {@link ITextComponent text component} to every player on the server except one.
+     * Sends a {@link Component text component} to every player on the server except one.
      */
     public static void broadcastExcept(Level level, Player exclude, Component message) {
         UUID uid = exclude.getGameProfile().getId();

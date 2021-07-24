@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
-import io.github.noeppi_noeppi.libx.annotation.ProcessorInterface;
+import io.github.noeppi_noeppi.libx.annotation.impl.ProcessorInterface;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

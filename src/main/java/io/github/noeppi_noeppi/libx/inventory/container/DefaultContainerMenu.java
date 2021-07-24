@@ -50,6 +50,7 @@ public abstract class DefaultContainerMenu extends ContainerMenuBase {
     public ItemStack quickMoveStack(@Nonnull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
+        //noinspection ConstantConditions
         if (slot != null && slot.hasItem()) {
             ItemStack stack = slot.getItem();
             itemstack = stack.copy();
@@ -62,7 +63,6 @@ public abstract class DefaultContainerMenu extends ContainerMenuBase {
                 if (!this.moveItemStackTo(stack, inventorySize, playerHotBarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
-
                 slot.onQuickCraft(stack, itemstack);
             } else if (index >= inventorySize) {
                 if (!this.moveItemStackTo(stack, 0, this.firstOutputSlot, false)) {

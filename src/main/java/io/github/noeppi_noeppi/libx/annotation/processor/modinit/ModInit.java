@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
-import io.github.noeppi_noeppi.libx.annotation.ProcessorInterface;
+import io.github.noeppi_noeppi.libx.annotation.impl.ProcessorInterface;
 import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;

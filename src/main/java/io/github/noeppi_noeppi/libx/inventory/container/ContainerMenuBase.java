@@ -14,9 +14,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * A base class for {@link Container containers}. Provides some utilities that are useful for any type
+ * A base class for {@link AbstractContainerMenu containers}. Provides some utilities that are useful for any type
  * of container. When using this it's important to register the player inventory slots through
- * {@link ContainerBase#layoutPlayerInventorySlots(int, int)} and after all other slots.
+ * {@link ContainerMenuBase#layoutPlayerInventorySlots(int, int)} and after all other slots.
  */
 public abstract class ContainerMenuBase extends AbstractContainerMenu {
     
@@ -122,7 +122,7 @@ public abstract class ContainerMenuBase extends AbstractContainerMenu {
         return index;
     }
 
-    // As opposed to the super method this checks for Slot#isValid(ItemStack)
+    // As opposed to the super method this checks for Slot#mayPlace(ItemStack)
     @Override
     protected boolean moveItemStackTo(@Nonnull ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
         boolean success = false;
@@ -136,7 +136,7 @@ public abstract class ContainerMenuBase extends AbstractContainerMenu {
 
                 Slot slot = this.slots.get(idx);
                 ItemStack content = slot.getItem();
-                if (!content.isEmpty() && ItemStack.isSameItemSameTags(stack, content)) {
+                if (!content.isEmpty() && ItemStack.isSameItemSameTags(stack, content) && slot.mayPlace(stack)) {
                     int totalCount = content.getCount() + stack.getCount();
                     int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
                     if (totalCount <= maxSize) {

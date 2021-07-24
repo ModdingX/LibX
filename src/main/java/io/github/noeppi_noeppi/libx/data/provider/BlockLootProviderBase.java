@@ -246,10 +246,10 @@ public abstract class BlockLootProviderBase implements DataProvider {
     }
 
     /**
-     * Gets a standalone loot factory to always drop the block as item.
+     * Gets a simple loot factory to always drop the block as item.
      */
-    public StandaloneLootFactory item() {
-        return StandaloneLootFactory.item();
+    public SimpleLootFactory item() {
+        return SimpleLootFactory.item();
     }
     
     /**
@@ -279,7 +279,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
     }
 
     /**
-     * Turns a standalone loot entry into a standalone loot factory.
+     * Turns a singleton loot entry into a simple loot factory.
      */
     public WrappedLootEntry from(LootPoolSingletonContainer.Builder<?> entry) {
         return new WrappedLootEntry(entry);
@@ -597,30 +597,30 @@ public abstract class BlockLootProviderBase implements DataProvider {
     }
 
     /**
-     * Interface to get a standalone loot entry from a block.
+     * Interface to get a singleton loot entry from a block.
      */
     @FunctionalInterface
-    public interface StandaloneLootFactory extends LootFactory {
+    public interface SimpleLootFactory extends LootFactory {
 
         /**
-         * Gets a standalone loot factory that always returns the given block as item.
+         * Gets a simple loot factory that always returns the given block as item.
          */
-        static StandaloneLootFactory item() {
+        static SimpleLootFactory item() {
             return LootItem::lootTableItem;
         }
 
         /**
-         * Gets a standalone loot factory that will always return the given loot entry.
+         * Gets a simple loot factory that will always return the given loot entry.
          */
-        static StandaloneLootFactory from(LootPoolSingletonContainer.Builder<?> builder) {
+        static SimpleLootFactory from(LootPoolSingletonContainer.Builder<?> builder) {
             return b -> builder;
         }
 
         /**
-         * Gets an array of standalone loot factories that will always return the given loot entries.
+         * Gets an array of simple loot factories that will always return the given loot entries.
          */
-        static StandaloneLootFactory[] from(LootPoolSingletonContainer.Builder<?>[] builders) {
-            StandaloneLootFactory[] factories = new StandaloneLootFactory[builders.length];
+        static SimpleLootFactory[] from(LootPoolSingletonContainer.Builder<?>[] builders) {
+            SimpleLootFactory[] factories = new SimpleLootFactory[builders.length];
             for (int i = 0; i < builders.length; i++) {
                 LootPoolSingletonContainer.Builder<?> builder = builders[i];
                 factories[i] = b -> builder;
@@ -631,7 +631,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
         /**
          * Calls {@link #build(Block)} on all factories with the given block and returns a new array.
          */
-        static LootPoolSingletonContainer.Builder<?>[] resolve(Block b, StandaloneLootFactory[] factories) {
+        static LootPoolSingletonContainer.Builder<?>[] resolve(Block b, SimpleLootFactory[] factories) {
             LootPoolSingletonContainer.Builder<?>[] entries = new LootPoolSingletonContainer.Builder<?>[factories.length];
             for (int i = 0; i < factories.length; i++) {
                 entries[i] = factories[i].build(b);
@@ -646,13 +646,13 @@ public abstract class BlockLootProviderBase implements DataProvider {
             return b -> finalModifier.apply(b, this.build(b));
         }
         
-        default StandaloneLootFactory with(LootModifier... modifiers) {
+        default SimpleLootFactory with(LootModifier... modifiers) {
             LootModifier chained = LootModifier.chain(modifiers);
             return b -> chained.apply(b, this.build(b));
         }
 
         @Override
-        default StandaloneLootFactory with(LootItemCondition.Builder... conditions) {
+        default SimpleLootFactory with(LootItemCondition.Builder... conditions) {
             return b -> {
                 LootPoolSingletonContainer.Builder<?> entry = this.build(b);
                 for (LootItemCondition.Builder condition : conditions) {
@@ -662,7 +662,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
             };
         }
         
-        default StandaloneLootFactory with(LootItemConditionalFunction.Builder<?>... functions) {
+        default SimpleLootFactory with(LootItemConditionalFunction.Builder<?>... functions) {
             LootModifier[] modifiers = new LootModifier[functions.length];
             for (int i = 0; i < functions.length; i++) {
                 LootItemConditionalFunction.Builder<?> function = functions[i];
@@ -673,7 +673,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
         }
     }
     
-    public static class WrappedLootEntry implements StandaloneLootFactory {
+    public static class WrappedLootEntry implements SimpleLootFactory {
         
         public final LootPoolSingletonContainer.Builder<?> entry;
 
@@ -688,9 +688,9 @@ public abstract class BlockLootProviderBase implements DataProvider {
     }
 
     /**
-     * Interface to modify a standalone loot entry to a new loot entry. This can also be used
+     * Interface to modify a singleton loot entry to a new loot entry. This can also be used
      * as a {@link LootFactory} in which case the default item entry obtained from
-     * {@link StandaloneLootFactory#item()} is passed to the {@link #apply(Block, StandaloneLootEntry.Builder) apply} method.
+     * {@link SimpleLootFactory#item()} is passed to the {@link #apply(Block, LootPoolSingletonContainer.Builder) apply} method.
      */
     @FunctionalInterface
     public interface GenericLootModifier extends LootFactory {
@@ -706,17 +706,17 @@ public abstract class BlockLootProviderBase implements DataProvider {
 
         @Override
         default LootPoolEntryContainer.Builder<?> build(Block block) {
-            return this.apply(block, StandaloneLootFactory.item().build(block));
+            return this.apply(block, SimpleLootFactory.item().build(block));
         }
     }
 
     /**
-     * Interface to modify a standalone loot entry to a new standalone loot entry. This can also be
-     * used as a {@link StandaloneLootFactory} in which case the default item entry obtained from
-     * {@link StandaloneLootFactory#item()} is passed to the {@link #apply(Block, StandaloneLootEntry.Builder) apply} method.
+     * Interface to modify a singleton loot entry to a new singleton loot entry. This can also be
+     * used as a {@link SimpleLootFactory} in which case the default item entry obtained from
+     * {@link SimpleLootFactory#item()} is passed to the {@link #apply(Block, LootPoolSingletonContainer.Builder) apply} method.
      */
     @FunctionalInterface
-    public interface LootModifier extends GenericLootModifier, StandaloneLootFactory {
+    public interface LootModifier extends GenericLootModifier, SimpleLootFactory {
 
         /**
          * Gets a loot modifier that does nothing.
@@ -750,7 +750,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
 
         @Override
         default LootPoolSingletonContainer.Builder<?> build(Block block) {
-            return this.apply(block, StandaloneLootFactory.item().build(block));
+            return this.apply(block, SimpleLootFactory.item().build(block));
         }
 
         /**

@@ -30,9 +30,9 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 /**
- * A common {@link Container} with a variable amount of slots. You should not use this with more than 154 slots.
- * To show a container to a {@link PlayerEntity player}, call
- * {@link GenericContainer#open(ServerPlayerEntity, IItemHandlerModifiable, ITextComponent, ResourceLocation) open}
+ * A common {@link AbstractContainerMenu} with a variable amount of slots. You should not use this with more than 154 slots.
+ * To show a container to a {@link Player player}, call
+ * {@link #open(ServerPlayer, IItemHandlerModifiable, Component, ResourceLocation) open}
  * on the logical server.
  * As there's no way to synchronise the item validator method from the item handler modifiable, you should
  * register the validator during setup. The slot validation method in your item handler will be ignored by this.
@@ -127,14 +127,14 @@ public class GenericContainerMenu extends ContainerMenuBase {
     }
 
     /**
-     * Opens a container for a {@link PlayerEntity player}.
+     * Opens a container for a {@link Player player}.
      *
      * @param player      The player that should see the container.
      * @param inventory   The inventory of the container. The
      *                    slot amount of this determines how big the container is. This should not have more than 154 slots.
      * @param name        The name of the container.
      * @param validatorId The id of the slot validator registered
-     *                    with {@link GenericContainer#registerSlotValidator(ResourceLocation, BiPredicate) registerSlotValidator}.
+     *                    with {@link #registerSlotValidator(ResourceLocation, BiPredicate) registerSlotValidator}.
      *                    {@code null} disables slot validation. This will override the item handlers slot validation, so null
      *                    means no slot validation even if the item handler has the feature.
      */

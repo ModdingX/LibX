@@ -2,6 +2,10 @@ package io.github.noeppi_noeppi.libx.data.provider.recipe.crafting;
 
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import io.github.noeppi_noeppi.libx.impl.data.recipe.ObjectCraftingBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 
 /**
  * A {@link RecipeExtension} for shaped and shapeless recipes.
@@ -17,7 +21,7 @@ public interface CraftingExtension extends RecipeExtension {
      * <ul>
      *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
      *     <ul>
-     *         <li>An {@link IItemProvider} for the output optionally followed by an {@link Integer} for the amount.</li>
+     *         <li>An {@link ItemLike} for the output optionally followed by an {@link Integer} for the amount.</li>
      *         <li>An {@link ItemStack} that is used to determine the output item and count.</li>
      *     </ul>
      *     <li>A set of strings which are the pattern lines for the recipe.</li>
@@ -27,8 +31,8 @@ public interface CraftingExtension extends RecipeExtension {
      * An ingredient identifier is one of the following:
      * 
      * <ul>
-     *     <li>An {@link IItemProvider}</li>
-     *     <li>An {@link ITag ITag&lt;Item&gt;}</li>
+     *     <li>An {@link ItemLike}</li>
+     *     <li>An {@link net.minecraft.tags.Tag Tag&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>
@@ -46,7 +50,7 @@ public interface CraftingExtension extends RecipeExtension {
      * <ul>
      *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
      *     <ul>
-     *         <li>An {@link IItemProvider} for the output optionally followed by an {@link Integer} for the amount.</li>
+     *         <li>An {@link ItemLike} for the output optionally followed by an {@link Integer} for the amount.</li>
      *         <li>An {@link ItemStack} that is used to determine the output item and count.</li>
      *     </ul>
      *     <li>The rest of the input must be ingredient identifiers which set the required items.</li>
@@ -55,8 +59,8 @@ public interface CraftingExtension extends RecipeExtension {
      * An ingredient identifier is one of the following:
      *
      * <ul>
-     *     <li>An {@link IItemProvider}</li>
-     *     <li>An {@link ITag ITag&lt;Item&gt;}</li>
+     *     <li>An {@link ItemLike}</li>
+     *     <li>An {@link net.minecraft.tags.Tag Tag&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>

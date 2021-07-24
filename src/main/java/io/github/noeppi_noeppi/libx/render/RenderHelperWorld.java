@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 /**
  * Utilities for rendering in the world.
  */
+// TODO check if that still works or the values to translate need to be retrieved from somewhere else
 public class RenderHelperWorld {
 
     /**

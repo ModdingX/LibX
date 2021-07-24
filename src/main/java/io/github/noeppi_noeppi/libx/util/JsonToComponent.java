@@ -14,7 +14,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 /**
- * Translates JSON into {@link IFormattableTextComponent text components}.
+ * Translates JSON into {@link MutableComponent text components}.
  */
 public class JsonToComponent {
 

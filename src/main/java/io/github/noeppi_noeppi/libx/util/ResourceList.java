@@ -88,7 +88,7 @@ public class ResourceList {
     }
 
     /**
-     * Reads a resource list from a {@link PacketBuffer}.
+     * Reads a resource list from a {@link FriendlyByteBuf}.
      */
     public ResourceList(FriendlyByteBuf buffer) {
         this.whitelist = buffer.readBoolean();
@@ -115,7 +115,7 @@ public class ResourceList {
     }
     
     /**
-     * Writes this resource list to a {@link PacketBuffer}.
+     * Writes this resource list to a {@link FriendlyByteBuf}.
      */
     public void write(FriendlyByteBuf buffer) {
         buffer.writeBoolean(this.whitelist);

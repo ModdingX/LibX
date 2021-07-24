@@ -1,5 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.codec;
 
+import net.minecraft.core.Registry;
+
 import java.lang.annotation.*;
 
 /**

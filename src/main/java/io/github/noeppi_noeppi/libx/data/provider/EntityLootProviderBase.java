@@ -162,7 +162,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
     }
 
     /**
-     * Turns a standalone loot entry into a standalone loot factory.
+     * Turns a singleton loot entry into a simple loot factory.
      */
     public WrappedLootEntry from(LootPoolSingletonContainer.Builder<?> entry) {
         return new WrappedLootEntry(entry);
@@ -401,23 +401,23 @@ public abstract class EntityLootProviderBase implements DataProvider {
     }
 
     /**
-     * Interface to get a standalone loot entry from an entity.
+     * Interface to get a singleton loot entry from an entity.
      */
     @FunctionalInterface
-    public interface StandaloneLootFactory extends LootFactory {
+    public interface SimpleLootFactory extends LootFactory {
 
         /**
-         * Gets a standalone loot factory that will always return the given loot entry.
+         * Gets a simple loot factory that will always return the given loot entry.
          */
-        static StandaloneLootFactory from(LootPoolSingletonContainer.Builder<?> builder) {
+        static SimpleLootFactory from(LootPoolSingletonContainer.Builder<?> builder) {
             return b -> builder;
         }
 
         /**
-         * Gets an array of standalone loot factories that will always return the given loot entries.
+         * Gets an array of simple loot factories that will always return the given loot entries.
          */
-        static StandaloneLootFactory[] from(LootPoolSingletonContainer.Builder<?>[] builders) {
-            StandaloneLootFactory[] factories = new StandaloneLootFactory[builders.length];
+        static SimpleLootFactory[] from(LootPoolSingletonContainer.Builder<?>[] builders) {
+            SimpleLootFactory[] factories = new SimpleLootFactory[builders.length];
             for (int i = 0; i < builders.length; i++) {
                 LootPoolSingletonContainer.Builder<?> builder = builders[i];
                 factories[i] = e -> builder;
@@ -428,7 +428,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
         /**
          * Calls {@link #build(EntityType)} on all factories with the given entity and returns a new array.
          */
-        static LootPoolSingletonContainer.Builder<?>[] resolve(EntityType<?> e, StandaloneLootFactory[] factories) {
+        static LootPoolSingletonContainer.Builder<?>[] resolve(EntityType<?> e, SimpleLootFactory[] factories) {
             LootPoolSingletonContainer.Builder<?>[] entries = new LootPoolSingletonContainer.Builder<?>[factories.length];
             for (int i = 0; i < factories.length; i++) {
                 entries[i] = factories[i].build(e);
@@ -443,13 +443,13 @@ public abstract class EntityLootProviderBase implements DataProvider {
             return e -> finalModifier.apply(e, this.build(e));
         }
         
-        default StandaloneLootFactory with(LootModifier... modifiers) {
+        default SimpleLootFactory with(LootModifier... modifiers) {
             LootModifier chained = LootModifier.chain(modifiers);
             return e -> chained.apply(e, this.build(e));
         }
 
         @Override
-        default StandaloneLootFactory with(LootItemCondition.Builder... conditions) {
+        default SimpleLootFactory with(LootItemCondition.Builder... conditions) {
             return e -> {
                 LootPoolSingletonContainer.Builder<?> entry = this.build(e);
                 for (LootItemCondition.Builder condition : conditions) {
@@ -459,7 +459,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
             };
         }
         
-        default StandaloneLootFactory with(LootItemConditionalFunction.Builder<?>... functions) {
+        default SimpleLootFactory with(LootItemConditionalFunction.Builder<?>... functions) {
             LootModifier[] modifiers = new LootModifier[functions.length];
             for (int i = 0; i < functions.length; i++) {
                 LootItemConditionalFunction.Builder<?> function = functions[i];
@@ -470,7 +470,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
         }
     }
     
-    public static class WrappedLootEntry implements StandaloneLootFactory {
+    public static class WrappedLootEntry implements SimpleLootFactory {
         
         public final LootPoolSingletonContainer.Builder<?> entry;
 
@@ -485,7 +485,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
     }
 
     /**
-     * Interface to modify a standalone loot entry to a new loot entry.
+     * Interface to modify a singleton loot entry to a new loot entry.
      */
     @FunctionalInterface
     public interface GenericLootModifier {
@@ -501,7 +501,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
     }
 
     /**
-     * Interface to modify a standalone loot entry to a new standalone loot entry.
+     * Interface to modify a singleton loot entry to a new singleton loot entry.
      */
     @FunctionalInterface
     public interface LootModifier extends GenericLootModifier {

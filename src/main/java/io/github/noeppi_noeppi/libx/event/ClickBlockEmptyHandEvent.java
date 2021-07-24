@@ -10,10 +10,10 @@ import net.minecraftforge.eventbus.api.Event;
 
 /**
  * Fired on right click with an empty hand but after the block action was processed. If this
- * is not canceled, {@link ActionResultType#PASS} is returned from the click. If this is canceled,
+ * is not canceled, {@link InteractionResult#PASS} is returned from the click. If this is canceled,
  * the value of {@link #cancellationResult} is returned.
  * This is only fired on the server.
- * IMPORTANT: Canceling this with {@link ActionResultType#CONSUME} for the main hand does not mean
+ * IMPORTANT: Canceling this with {@link InteractionResult#CONSUME} for the main hand does not mean
  * it won't be posted for the offhand. For this cancel {@link PlayerInteractEvent.RightClickBlock}
  * on the client.
  */

@@ -15,6 +15,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -28,7 +29,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * A {@link Registerable} that registers a {@link Fluid fluid}, a flowing fluid,
- * a {@link FlowingFluidBlock fluid block} and a {@link BucketItem bucket item}.
+ * a {@link LiquidBlock liquid block} and a {@link BucketItem bucket item}.
  */
 public class FluidBase implements Registerable, ItemLike {
 
@@ -45,142 +46,142 @@ public class FluidBase implements Registerable, ItemLike {
     private final BucketItem bucket;
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory) {
-        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
+        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes) {
-        this(mod, sourceFactory, flowingFactory, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProps(mod));
+        this(mod, sourceFactory, flowingFactory, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Item.Properties itemProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, Item.Properties itemProperties) {
         this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, Item.Properties itemProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, Item.Properties itemProperties) {
         this(mod, sourceFactory, flowingFactory, attributes, BlockBehaviour.Properties.copy(Blocks.WATER), itemProperties);
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, BlockBehaviour.Properties blockProperties) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), blockProperties, defaultItemProps(mod));
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), blockProperties, defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, BlockBehaviour.Properties blockProperties) {
-        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), blockProperties, defaultItemProps(mod));
+        this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), blockProperties, defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties) {
-        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, blockProperties, defaultItemProps(mod));
+        this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, blockProperties, defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties) {
-        this(mod, sourceFactory, flowingFactory, attributes, blockProperties, defaultItemProps(mod));
+        this(mod, sourceFactory, flowingFactory, attributes, blockProperties, defaultItemProperties(mod));
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, UnaryOperator.identity(), blockProperties, itemProperties);
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this(mod, sourceFactory, flowingFactory, UnaryOperator.identity(), blockProperties, itemProperties);
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
-     * @see #FluidBase(ModX, Function, Function, UnaryOperator, AbstractBlock.Properties, Item.Properties)
+     * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
     public FluidBase(ModX mod, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this(mod, ForgeFlowingFluid.Source::new, ForgeFlowingFluid.Flowing::new, attributes, blockProperties, itemProperties);
     }
 
     /**
-     * Creates a new Instance of FluidBase
+     * Creates a new instance of FluidBase
      *
      * @param sourceFactory   A factory to create a still fluid from the fluids properties. In most cases this will just be a constructor reference.
      * @param flowingFactory  A factory to create a flowing fluid from the fluids properties. In most cases this will just be a constructor reference.
@@ -193,7 +194,7 @@ public class FluidBase implements Registerable, ItemLike {
         this.sourceFactory = sourceFactory;
         this.flowingFactory = flowingFactory;
         this.attributes = attributes;
-        this.block = new LiquidBlock(this::getSource, BlockBehaviour.Properties.copy(Blocks.WATER));
+        this.block = new LiquidBlock(this::getSource, blockProperties);
         this.bucket = new BucketItem(this::getSource, new Item.Properties().stacksTo(1).tab(mod.tab)) {
 
             @Override
@@ -222,7 +223,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     @Nonnull
-    public ForgeFlowingFluid.Source getFluid() {
+    public Fluid getFluid() {
         return this.getSource();
     }
 
@@ -287,7 +288,7 @@ public class FluidBase implements Registerable, ItemLike {
         }
     }
 
-    private static Item.Properties defaultItemProps(ModX mod) {
+    private static Item.Properties defaultItemProperties(ModX mod) {
         if (mod.tab != null) {
             return new Item.Properties().tab(mod.tab);
         } else {

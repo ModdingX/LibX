@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.annotation.codec;
 
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.noeppi_noeppi.libx.annotation.Codecs;
+import net.minecraft.core.Registry;
 
 import java.lang.annotation.*;
 
@@ -12,7 +13,7 @@ import java.lang.annotation.*;
  * 
  * Can be added to exactly one public constructor of a class. This class will
  * have a codec generated based on the parameters. The parameters can be
- * customized with {@link Param}.
+ * customised with {@link Param}.
  * 
  * For each parameter, there must either be a public field with the same name,
  * a method with no arguments and the name of the parameter, or a java bean
@@ -35,8 +36,7 @@ import java.lang.annotation.*;
  * 
  * To force a parameter to generate a field codec, add an empty {@link Param} annotation
  * to it. This for example allows for registries to be used as normal fields in codecs.
- *  
- * 
+ *
  * You can also use Lists of any of the supported codec types.
  * 
  * To get your codec, use {@link Codecs#get(Class, Class)}.

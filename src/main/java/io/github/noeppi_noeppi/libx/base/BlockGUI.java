@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.inventory.container.TileContainerMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,10 +22,11 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
- * This class registers a container to it's {@link TileEntityType tile entity type} and handles the gui
+ * This class registers a menu to it's {@link BlockEntityType block entity type} and handles the gui
  * opening when the block is right clicked. You still need to manually register the screen on the client.
  */
 public class BlockGUI<T extends BlockEntity, C extends TileContainerMenu<T>> extends BlockBE<T> {
@@ -47,7 +51,6 @@ public class BlockGUI<T extends BlockEntity, C extends TileContainerMenu<T>> ext
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         if (!level.isClientSide) {
             //noinspection ConstantConditions

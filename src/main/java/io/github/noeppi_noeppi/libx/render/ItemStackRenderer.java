@@ -30,7 +30,7 @@ import java.util.*;
  * <p>
  * Add this to your item properties: {@code .setISTER(() -> ItemStackRenderer::get)}
  * <p>
- * Then in {@code registerClient} call {@link ItemStackRenderer#addRenderTile(TileEntityType, boolean)}
+ * Then in {@code registerClient} call {@link ItemStackRenderer#addRenderTile(BlockEntityType, boolean)}
  * <p>
  * The required models will generate automatically if you're using {@link ItemModelProviderBase}.
  */
@@ -47,7 +47,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     }
 
     /**
-     * Registers a {@link TileEntityType} to be rendered with the ItemStackRenderer.
+     * Registers a {@link BlockEntityType} to be rendered with the ItemStackRenderer.
      *
      * @param teType             The Tile Entity Type.
      * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the tile

@@ -13,8 +13,10 @@ import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -118,7 +120,7 @@ import java.util.UUID;
  *     <li>{@link ResourceLocation}</li>
  *     <li>{@link Ingredient}</li>
  *     <li>{@link IngredientStack}</li>
- *     <li>{@link IFormattableTextComponent}</li>
+ *     <li>{@link Component}</li>
  *     <li>{@link ResourceList}</li>
  *     <li>{@link UUID UUID}</li>
  *     <li>Any enum</li>

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
@@ -16,7 +17,7 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
- * A base class for {@link TileEntity tile entities}. This provides some useful methods for tile entities.
+ * A base class for {@link BlockEntity block entities}. This provides some useful methods.
  */
 public class BlockEntityBase extends BlockEntity {
 
@@ -27,7 +28,7 @@ public class BlockEntityBase extends BlockEntity {
     }
 
     /**
-     * This constructor accepts some capabilities that this tile entity will have. Just make sure that
+     * This constructor accepts some capabilities that this block entity will have. Just make sure that
      * the class also implements the required capability types or you might crash the game.
      */
     public BlockEntityBase(BlockEntityType<?> type, BlockPos pos, BlockState state, Capability<?>... caps) {
@@ -48,23 +49,22 @@ public class BlockEntityBase extends BlockEntity {
 
     /**
      * This will update the tile entity when on the client using {@link #getUpdateTag()}
-     * and {@link #handleUpdateTag(BlockState, CompoundNBT)}.
+     * and {@link #handleUpdateTag(CompoundTag)}.
      */
     @Override
     public void onLoad() {
         super.onLoad();
-        if (this.level != null && this.worldPosition != null && this.level.isClientSide) {
+        if (this.level != null && this.level.isClientSide) {
             LibX.getNetwork().requestTE(this.level, this.worldPosition);
         }
     }
 
     /**
      * This will update the tile entity to all clients that are tracking it when called on the server
-     * using {@link #getUpdateTag()} and {@link #handleUpdateTag(BlockState, CompoundNBT)}
-     * at the end of this tick.
+     * using {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)} at the end of this tick.
      */
     public void markDispatchable() {
-        if (this.level != null && this.worldPosition != null && !this.level.isClientSide) {
+        if (this.level != null && !this.level.isClientSide) {
             TileEntityUpdateQueue.scheduleUpdate(this.level, this.worldPosition);
         }
     }

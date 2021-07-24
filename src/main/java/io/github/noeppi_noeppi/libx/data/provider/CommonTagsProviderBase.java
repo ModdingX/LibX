@@ -94,21 +94,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     }
 
     /**
-     * Gets a {@link TagsProvider.Builder tag builder} for an {@link Item}
+     * Gets a {@link TagsProvider.TagAppender tag builder} for an {@link Item}
      */
     public TagsProvider.TagAppender<Item> item(Tag.Named<Item> tag) {
         return this.itemTags.tag(tag);
     }
 
     /**
-     * Gets a {@link TagsProvider.Builder tag builder} for a {@link Block}
+     * Gets a {@link TagsProvider.TagAppender tag builder} for a {@link Block}
      */
     public TagsProvider.TagAppender<Block> block(Tag.Named<Block> tag) {
         return this.blockTags.tag(tag);
     }
 
     /**
-     * Gets a {@link TagsProvider.Builder tag builder} for a {@link Fluid}
+     * Gets a {@link TagsProvider.TagAppender tag builder} for a {@link Fluid}
      */
     public TagsProvider.TagAppender<Fluid> fluid(Tag.Named<Fluid> tag) {
         return this.fluidTags.tag(tag);

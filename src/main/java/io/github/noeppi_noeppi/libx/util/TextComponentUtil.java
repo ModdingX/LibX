@@ -9,12 +9,12 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
 
 /**
- * Utilities for {@link ITextComponent text components}.
+ * Utilities for {@link Component text components}.
  */
 public class TextComponentUtil {
 
     /**
-     * Gets a {@link ITextComponent text component} as a string formatted with ANSI escape codes to
+     * Gets a {@link Component text component} as a string formatted with ANSI escape codes to
      * be printed on the console.
      */
     public static String getConsoleString(Component tc) {

@@ -9,22 +9,23 @@ import java.util.stream.Collectors;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.NbtComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 /**
- * Translates {@link INBT Named Binary Tag} into {@link IFormattableTextComponent text components}.
+ * Translates {@link Tag Named Binary Tag} into {@link MutableComponent text components}.
  */
 public class NbtToComponent {
 
     private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("libx.misc.copy_nbt"));
 
     /**
-     * As the fancy colored {@link NBTTextComponent nbt text components} are only available for
-     * {@link NBTTextComponent.Block blocks}, {@link NBTTextComponent.Entity entities}
-     * and {@link NBTTextComponent.Storage world storage} by default, this translates a piece of NBT
-     * to a colored {@link IFormattableTextComponent text component}.
+     * As the fancy colored {@link NbtComponent nbt text components} are only available for
+     * {@link NbtComponent.BlockNbtComponent blocks}, {@link NbtComponent.EntityNbtComponent entities}
+     * and {@link NbtComponent.StorageNbtComponent world storage} by default, this translates a piece of NBT
+     * to a colored {@link MutableComponent text component}.
      */
     public static MutableComponent toText(Tag nbt) {
         Style copyTag = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, nbt.toString())).withHoverEvent(COPY_NBT);

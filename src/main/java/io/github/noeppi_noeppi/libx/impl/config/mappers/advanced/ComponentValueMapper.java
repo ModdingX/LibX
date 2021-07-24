@@ -2,10 +2,9 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 
-public class ComponentValueMapper implements ValueMapper<MutableComponent, JsonElement> {
+public class ComponentValueMapper implements ValueMapper<Component, JsonElement> {
 
     public static final ComponentValueMapper INSTANCE = new ComponentValueMapper();
 
@@ -14,8 +13,8 @@ public class ComponentValueMapper implements ValueMapper<MutableComponent, JsonE
     }
 
     @Override
-    public Class<MutableComponent> type() {
-        return MutableComponent.class;
+    public Class<Component> type() {
+        return Component.class;
     }
 
     @Override
@@ -24,12 +23,12 @@ public class ComponentValueMapper implements ValueMapper<MutableComponent, JsonE
     }
 
     @Override
-    public MutableComponent fromJSON(JsonElement json) {
+    public Component fromJSON(JsonElement json) {
         return Component.Serializer.fromJson(json);
     }
 
     @Override
-    public JsonElement toJSON(MutableComponent value) {
+    public JsonElement toJSON(Component value) {
         return Component.Serializer.toJsonTree(value);
     }
 }

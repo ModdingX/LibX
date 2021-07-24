@@ -64,7 +64,7 @@ public class IngredientStack implements Predicate<ItemStack> {
     }
 
     /**
-     * Writes this IngredientStack to a {@link PacketBuffer}
+     * Writes this IngredientStack to a {@link FriendlyByteBuf}
      */
     public void write(FriendlyByteBuf buffer) {
         buffer.writeVarInt(this.count);
@@ -81,7 +81,7 @@ public class IngredientStack implements Predicate<ItemStack> {
     }
     
     /**
-     * Reads an IngredientStack from a {@link PacketBuffer}
+     * Reads an IngredientStack from a {@link FriendlyByteBuf}
      */
     public static IngredientStack read(FriendlyByteBuf buffer) {
         int count = buffer.readVarInt();

@@ -16,6 +16,7 @@ public class CommandUtil {
      * register something that breaks type safety.
      */
     public static void registerGenericCommandArgument(String name, Class<?> clazz, ArgumentSerializer<?> ias) {
+        // TODO test
         try {
             Method method = ObfuscationReflectionHelper.findMethod(ArgumentTypes.class, "m_121601_", String.class, Class.class, ArgumentSerializer.class);
             method.setAccessible(true);

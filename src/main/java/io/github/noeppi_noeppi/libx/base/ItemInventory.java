@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.base;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
