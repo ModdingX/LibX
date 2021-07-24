@@ -84,6 +84,7 @@ public class NbtIngredient extends Ingredient {
         return NbtIngredient.Serializer.INSTANCE;
     }
 
+    // TODO make toJson and parse safer regarding handling of the nbt.
     @Nonnull
     @Override
     @SuppressWarnings("ConstantConditions")

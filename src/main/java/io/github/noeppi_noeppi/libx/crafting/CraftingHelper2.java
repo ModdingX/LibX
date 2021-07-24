@@ -8,7 +8,6 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 /**
  * Contains some methods that are missing in Forges' {@link CraftingHelper}
  */
-// TODO do we still need this?
 public class CraftingHelper2 {
 
     /**
@@ -16,6 +15,10 @@ public class CraftingHelper2 {
      *
      * @param writeNbt Whether the stacks nbt tag should be written.
      */
+    // TODO
+    //  delete. Need to find out for which use it was made to find a good replacement
+    //  but the json to nbt conversion used here is not really safe and should not be used
+    //  if not really required. This should definitely be deleted.
     public static JsonObject serializeItemStack(ItemStack stack, boolean writeNbt) {
         JsonObject json = new JsonObject();
         //noinspection ConstantConditions
