@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 // TODO Check ModInit as things have been refactored. Verify that code generates correctly.
 public class ModInit  {
 
+    // TODO check all the classes in 1.17
     public static final String MOD_ANNOTATION_TYPE = "net.minecraftforge.fml.common.Mod";
     public static final String MODEL_TYPE = "net.minecraft.client.resources.model.IBakedModel";
     public static final String REGISTRY_TYPE = "net.minecraft.core.Registry";
