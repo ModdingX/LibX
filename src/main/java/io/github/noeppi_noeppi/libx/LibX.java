@@ -31,11 +31,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/*
- * TODO
- *  Things that really need to be tested before publishing a 1.17 version
- *   - Dynamic datapacks need to be tested again
- */
 @Mod("libx")
 public class LibX extends ModX {
 
