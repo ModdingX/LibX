@@ -3,7 +3,7 @@ function initializeCoreMod() {
     'random_tick_block': {
       'target': {
         'type': 'METHOD',
-        'class': 'net.minecraft.block.AbstractBlock$AbstractBlockState',
+        'class': 'net.minecraft.world.level.block.state.BlockBehaviour$BlockStateBase',
         'methodName': 'm_60735_',
         'methodDesc': '(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)V'
       },

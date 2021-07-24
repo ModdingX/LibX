@@ -36,7 +36,7 @@ function initializeCoreMod() {
           }
           return method;
         } else {
-          throw new Error("Failed to patch DimensionGeneratorSettings.class");
+          throw new Error("Failed to patch CoreWorldSeed.class");
         }
       }
     }
