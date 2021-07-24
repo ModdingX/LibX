@@ -26,7 +26,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
-    public static final ResourceLocation BEISR_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/beisr");
+    public static final ResourceLocation SPECIAL_BLOCK = new ResourceLocation(LibX.getInstance().modid, "item/base/special_block");
     public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
 
     protected final ModX mod;

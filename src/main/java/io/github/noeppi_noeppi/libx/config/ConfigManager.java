@@ -240,7 +240,7 @@ public class ConfigManager {
                 if (!config.isShadowed()) {
                     state.apply();
                 }
-                config.reloadClientLevelState();
+                config.reloadClientWorldState();
                 MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {

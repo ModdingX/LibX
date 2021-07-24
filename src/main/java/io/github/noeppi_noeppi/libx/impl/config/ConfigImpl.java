@@ -304,7 +304,7 @@ public class ConfigImpl {
         MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.RESTORE, this.clientConfig, this.path, this.path));
     }
     
-    public void reloadClientLevelState() {
+    public void reloadClientWorldState() {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             if (!this.shadowed || this.shadowedLocal) {
                 Level clientLevel = DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().level, () -> () -> null);

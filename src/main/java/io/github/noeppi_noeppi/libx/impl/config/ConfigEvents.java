@@ -26,7 +26,7 @@ public class ConfigEvents {
     public void clientPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getPlayer().level.isClientSide && FMLEnvironment.dist == Dist.CLIENT) {
             for (ConfigImpl config : ConfigImpl.getAllConfigs()) {
-                config.reloadClientLevelState();
+                config.reloadClientWorldState();
             }
         }
     }
