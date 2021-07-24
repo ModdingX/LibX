@@ -6,9 +6,9 @@ import net.minecraft.world.level.Level;
 /**
  * Provides a way to get the {@link Level} seed in a {@link Codec codec}.
  */
-public class WorldSeedHolder {
+public class LevelSeedHolder {
     
-    public static final Codec<Long> CODEC = Codec.LONG.orElseGet(WorldSeedHolder::getSeed);
+    public static final Codec<Long> CODEC = Codec.LONG.orElseGet(LevelSeedHolder::getSeed);
     
     private static long seed = 0;
 

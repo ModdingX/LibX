@@ -42,14 +42,14 @@ public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonV
     E toJSON(T value, ValueMapper<C, JsonElement> mapper);
 
     /**
-     * @see ValueMapper#read(PacketBuffer)
+     * @see ValueMapper#read(FriendlyByteBuf)
      */
     default T read(FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
         return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readUtf(0x40000), this.element()), mapper);
     }
     
     /**
-     * @see ValueMapper#write(Object, PacketBuffer)
+     * @see ValueMapper#write(Object, FriendlyByteBuf)
      */
     default void write(T value, FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
         buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJSON(value, mapper)), 0x40000);

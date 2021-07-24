@@ -109,7 +109,7 @@ public class ModMappers {
         if (this.validators.containsKey(validator.annotation())) {
             throw new IllegalStateException("Config validator for annotation '" + validator.annotation() + "' is already registered.");
         } else if (globalValidators.containsKey(validator.annotation())) {
-            throw new IllegalStateException("Config validator for annotation '" + validator.annotation() + "' is global, can't be changed Add your own annotation.");
+            throw new IllegalStateException("Config validator for annotation '" + validator.annotation() + "' is global, can't be changed. Add your own annotation.");
         } else {
             this.validators.put(validator.annotation(), validator);
         }

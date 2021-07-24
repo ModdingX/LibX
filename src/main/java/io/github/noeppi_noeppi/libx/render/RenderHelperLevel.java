@@ -7,9 +7,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 /**
- * Utilities for rendering in the world.
+ * Utilities for rendering in the level.
  */
-public class RenderHelperWorld {
+public class RenderHelperLevel {
 
     /**
      * This is meant to be called in {@link RenderWorldLastEvent}. This will move the matrix stack to the

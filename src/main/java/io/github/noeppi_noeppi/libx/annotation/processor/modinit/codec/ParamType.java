@@ -35,8 +35,7 @@ public class ParamType implements CodecType {
         String typeFqnBoxed = env.boxed(param.asType()).toString();
         String codecFqn;
         boolean list;
-        if (param.asType() instanceof DeclaredType && env.sameErasure(param.asType(), env.forClass(List.class))) {
-            DeclaredType listType = (DeclaredType) param.asType();
+        if (param.asType() instanceof DeclaredType listType && env.sameErasure(param.asType(), env.forClass(List.class))) {
             List<? extends TypeMirror> generics = listType.getTypeArguments();
             if (generics.size() != 1) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for parameterized list type.");
