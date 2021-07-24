@@ -4,25 +4,22 @@ import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-// TODO test that the advancement hack with OR-ing things still works
 public class ObjectCraftingBuilder {
 
     public static void buildShaped(RecipeExtension ext, Object[] objects) {
@@ -50,40 +47,33 @@ public class ObjectCraftingBuilder {
 
     private static void addShapedIngredients(RecipeExtension ext, ShapedRecipeBuilder builder, ObjectReader reader) {
         int nextId = 0;
-        RecipeRequirementStrategy strategy = new RecipeRequirementStrategy();
-        builder.advancement.requirements(strategy);
         while (true) {
-            Optional<Character> value = reader.expect(Character.class);
+            Optional<Character> value = reader.expectConsume(Character.class);
             if (value.isPresent()) {
                 char key = value.get();
                 Ingredient ingredient = getIngredient(reader);
                 builder.define(key, ingredient);
-                nextId = addCriteriaToBuilder(builder.advancement, strategy, ext.criteria(ingredient), nextId);
+                nextId = addCriteriaToBuilder(builder.advancement, ext.criteria(ingredient), nextId);
             } else {
-                return;
+                break;
             }
         }
     }
 
     private static void addShapelessIngredients(RecipeExtension ext, ShapelessRecipeBuilder builder, ObjectReader reader) {
         int nextId = 0;
-        RecipeRequirementStrategy strategy = new RecipeRequirementStrategy();
-        builder.advancement.requirements(strategy);
         while (reader.hasNext()) {
             Ingredient ingredient = getIngredient(reader);
             builder.requires(ingredient);
-            nextId = addCriteriaToBuilder(builder.advancement, strategy, ext.criteria(ingredient), nextId);
+            nextId = addCriteriaToBuilder(builder.advancement, ext.criteria(ingredient), nextId);
         }
     }
 
-    private static int addCriteriaToBuilder(Advancement.Builder builder, RecipeRequirementStrategy strategy, List<CriterionTriggerInstance> criteria, int nextId) {
-        List<String> criteriaIds = new ArrayList<>();
+    private static int addCriteriaToBuilder(Advancement.Builder builder, List<CriterionTriggerInstance> criteria, int nextId) {
         for (CriterionTriggerInstance criterion : criteria) {
             String id = "criterion" + (nextId++);
             builder.addCriterion(id, criterion);
-            criteriaIds.add(id);
         }
-        strategy.addGroup(criteriaIds);
         return nextId;
     }
 
@@ -124,21 +114,6 @@ public class ObjectCraftingBuilder {
             }
         }
         return Optional.empty();
-    }
-
-    private static class RecipeRequirementStrategy implements RequirementsStrategy {
-
-        private final List<String[]> groups = new ArrayList<>();
-
-        public void addGroup(List<String> group) {
-            this.groups.add(group.toArray(new String[]{}));
-        }
-
-        @Nonnull
-        @Override
-        public String[][] createRequirements(@Nonnull Collection<String> criterionKeys) {
-            return this.groups.toArray(new String[][]{});
-        }
     }
 
     @SuppressWarnings("unused")
