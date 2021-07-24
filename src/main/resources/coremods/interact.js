@@ -5,7 +5,7 @@ function initializeCoreMod() {
         'type': 'METHOD',
         'class': 'net.minecraft.server.level.ServerPlayerGameMode',
         'methodName': 'm_7179_',
-        'methodDesc': '(Lnet/minecraft/entity/player/ServerPlayerEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Hand;Lnet/minecraft/util/math/BlockRayTraceResult;)Lnet/minecraft/util/ActionResultType;'
+        'methodDesc': '(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;'
       },
       'transformer': function(method) {
         var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
@@ -25,7 +25,7 @@ function initializeCoreMod() {
         target.add(new VarInsnNode(Opcodes.ALOAD, 5));
         target.add(ASMAPI.buildMethodCall(
             'io/github/noeppi_noeppi/libx/impl/libxcore/CoreInteract',
-            'processItemUsage', '(Lnet/minecraft/entity/player/ServerPlayerEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Hand;Lnet/minecraft/util/math/BlockRayTraceResult;)Lnet/minecraft/util/ActionResultType;',
+            'useItemOn', '(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;',
             ASMAPI.MethodType.STATIC
         ));
         target.add(new InsnNode(Opcodes.DUP));
@@ -34,19 +34,14 @@ function initializeCoreMod() {
         target.add(label);
         target.add(new InsnNode(Opcodes.POP));
         
-        var hasReturn = false;
         for (var i = method.instructions.size() - 1; i >= 0; i--) {
           var inst = method.instructions.get(i);
-          if (!hasReturn && inst.getOpcode() == Opcodes.ARETURN) {
-            hasReturn = true;
-          } else if (hasReturn && inst.getOpcode() == Opcodes.GETSTATIC
-              && inst.owner == 'net/minecraft/world/InteractionResult') {
-            // Need to insert before the getstatic
+          if (inst.getOpcode() == Opcodes.ARETURN) {
             method.instructions.insertBefore(inst, target)
             return method;
           }
         }
-        throw new Error("Failed to patch PlayerInteractionManager.class");
+        throw new Error("Failed to patch ServerPlayerGameMode.class");
       }
     }
   }
