@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class LibXDatapack extends ModFileResourcePack {
 
     public static final String PREFIX = "libxdata";
-    public static final int PACK_VERSION = 6; // TODO update in 1.17
+    public static final int PACK_VERSION = 7;
     
     private final IModFile modFile;
     private final String packId;
