@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.crafting.ingredient;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -34,6 +35,7 @@ public class PotionIngredient extends Ingredient {
     /**
      * The item required for the potion.
      */
+    @Nullable
     public final Item potionItem;
 
     /**
@@ -41,7 +43,7 @@ public class PotionIngredient extends Ingredient {
      */
     public final Potion potion;
 
-    public PotionIngredient(Item potionItem, Potion potion) {
+    public PotionIngredient(@Nullable Item potionItem, Potion potion) {
         super(Stream.empty());
         this.potionItem = potionItem;
         this.potion = potion;
@@ -50,18 +52,19 @@ public class PotionIngredient extends Ingredient {
     @Nonnull
     @Override
     public ItemStack[] getItems() {
-        ItemStack stack = new ItemStack(this.potionItem);
+        ItemStack stack = new ItemStack(this.potionItem == null ? Items.POTION : this.potionItem);
         PotionUtils.setPotion(stack, this.potion);
         return new ItemStack[]{stack};
     }
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
-        if (stack == null || stack.isEmpty() || stack.getItem() != this.potionItem) {
+        if (stack != null && !stack.isEmpty() && (this.potionItem == null || stack.getItem() == this.potionItem)) {
+            Potion itemPotion = PotionUtils.getPotion(stack);
+            return itemPotion == this.potion;
+        } else {
             return false;
         }
-        Potion itemPotion = PotionUtils.getPotion(stack);
-        return itemPotion == this.potion;
     }
 
     @Nonnull
@@ -96,7 +99,11 @@ public class PotionIngredient extends Ingredient {
     public JsonElement toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("type", CraftingHelper.getID(PotionIngredient.Serializer.INSTANCE).toString());
-        json.addProperty("item", this.potionItem.getRegistryName().toString());
+        if (this.potionItem == null) {
+            json.add("item", JsonNull.INSTANCE);
+        } else {
+            json.addProperty("item", this.potionItem.getRegistryName().toString());
+        }
         json.addProperty("potion", this.potion.getRegistryName().toString());
         return json;
     }
@@ -112,9 +119,14 @@ public class PotionIngredient extends Ingredient {
         @Nonnull
         @Override
         public PotionIngredient parse(@Nonnull FriendlyByteBuf buffer) {
-            Item potionItem = ForgeRegistries.ITEMS.getValue(buffer.readResourceLocation());
-            if (potionItem == null) {
-                potionItem = Items.AIR;
+            Item potionItem;
+            if (buffer.readBoolean()) {
+                potionItem = ForgeRegistries.ITEMS.getValue(buffer.readResourceLocation());
+                if (potionItem == null) {
+                    potionItem = Items.AIR;
+                }
+            } else {
+                potionItem = null;
             }
 
             Potion potion = ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(buffer.readUtf()));
@@ -128,11 +140,16 @@ public class PotionIngredient extends Ingredient {
         @Nonnull
         @Override
         public PotionIngredient parse(JsonObject json) {
-            Item potionItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(json.get("item").getAsString()));
-            if (potionItem == null) {
-                potionItem = Items.AIR;
+            JsonElement itemJson = json.get("item");
+            Item potionItem;
+            if (itemJson.isJsonNull()) {
+                potionItem = null;
+            } else {
+                ResourceLocation potionRl = ResourceLocation.tryParse(itemJson.getAsString());
+                potionItem = potionRl == null ? null : ForgeRegistries.ITEMS.getValue(potionRl);
+                if (potionItem == null) potionItem = Items.AIR;
             }
-
+            
             Potion potion = ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(json.get("potion").getAsString()));
             if (potion == null) {
                 potion = Potions.EMPTY;
@@ -144,7 +161,8 @@ public class PotionIngredient extends Ingredient {
         @Override
         @SuppressWarnings("ConstantConditions")
         public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull PotionIngredient ingredient) {
-            buffer.writeResourceLocation(ingredient.potionItem.getRegistryName());
+            buffer.writeBoolean(ingredient.potionItem != null);
+            if (ingredient.potionItem != null) buffer.writeResourceLocation(ingredient.potionItem.getRegistryName());
             buffer.writeResourceLocation(ingredient.potion.getRegistryName());
         }
     }

@@ -1,27 +1,15 @@
 package io.github.noeppi_noeppi.libx.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import net.minecraft.core.Vec3i;
-import com.mojang.math.Vector4f;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.system.MemoryStack;
-
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 /**
  * Some utilities for rendering in general.
@@ -29,8 +17,8 @@ import java.nio.IntBuffer;
 public class RenderHelper {
 
     /**
-     * ResourceLocation of a texture with the size 512x512 that is purely white.
-     * // TODO add color notice as soon as we find out how to color textures in 1.17
+     * ResourceLocation of a texture with the size 512x512 that is purely white. If can be colored with
+     * {@link RenderSystem#setShaderColor(float, float, float, float)}.
      */
     public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation(LibX.getInstance().modid, "textures/white.png");
     private static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
@@ -114,6 +102,27 @@ public class RenderHelper {
     }
 
     /**
+     * Sets the color to the given RGB color in format 0xRRGGBB
+     */
+    public static void rgb(int color) {
+        RenderSystem.setShaderColor(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f, 1);
+    }
+    
+    /**
+     * Sets the color to the given ARGB color in format 0xAARRGGBB
+     */
+    public static void argb(int color) {
+        RenderSystem.setShaderColor(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f, ((color >>> 24) & 0xFF) / 255f);
+    }
+
+    /**
+     * Resets the color to white.
+     */
+    public static void resetColor() {
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+    }
+
+    /**
      * Renders a text with a gray semi-transparent background.
      */
     public static void renderText(String text, PoseStack poseStack, MultiBufferSource buffer) {
@@ -124,75 +133,15 @@ public class RenderHelper {
         poseStack.translate(-(widthHalf + 2), -(heightHalf + 2), 0);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        // TODO change and add colored blit methods to remove direct OpenGL calls
-        GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.8f);
         RenderSystem.setShaderTexture(0, TEXTURE_WHITE);
+        RenderSystem.setShaderColor(0.2f, 0.2f, 0.2f, 0.8f);
         GuiComponent.blit(poseStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
-        GL11.glColor4f(1, 1, 1, 1);
+        resetColor();
         RenderSystem.disableBlend();
         poseStack.translate(widthHalf + 2, heightHalf + 2, 10);
 
         Minecraft.getInstance().font.draw(poseStack, text, -widthHalf, -heightHalf, 0xFFFFFF);
         poseStack.popPose();
-    }
-
-    /**
-     * Works like {@link VertexConsumer#putBulkData} but allows you to modify alpha values as well. Like
-     * {@link VertexConsumer#putBulkData} this uses {@link DefaultVertexFormat#BLOCK}.
-     *
-     * @param alpha    The alpha value to use.
-     * @param mulAlpha If set to true the given alpha value is multiplied with the value set in
-     *                 the four byte of {@code COLOR_4UB} assuming it is stored as {@code RGBA}.
-     *                 If set to false just the given alpha value will be used.
-     */
-    // TODO copy vanilla again and make changes
-    public static void addQuadWithAlpha(VertexConsumer vertex, PoseStack.Pose pose, BakedQuad quad, float red, float green, float blue, float alpha, int light, int overlay, boolean mulColor, boolean mulAlpha) {
-        int[] vertexData = quad.getVertices();
-        Vec3i vector3i = quad.getDirection().getNormal();
-        Vector3f vector3f = new Vector3f((float) vector3i.getX(), (float) vector3i.getY(), (float) vector3i.getZ());
-        Matrix4f matrix4f = pose.pose();
-        vector3f.transform(pose.normal());
-
-        try (MemoryStack memorystack = MemoryStack.stackPush()) {
-            ByteBuffer bytebuffer = memorystack.malloc(DefaultVertexFormat.BLOCK.getVertexSize());
-            IntBuffer intbuffer = bytebuffer.asIntBuffer();
-
-            for (int i = 0; i < vertexData.length / 8; i++) {
-                intbuffer.clear();
-                intbuffer.put(vertexData, i * 8, 8);
-                float x = bytebuffer.getFloat(0);
-                float y = bytebuffer.getFloat(4);
-                float z = bytebuffer.getFloat(8);
-                float a;
-                float r;
-                float g;
-                float b;
-
-                if (mulAlpha) {
-                    a = (float) (bytebuffer.get(15) & 255) / 255.0F * alpha;
-                } else {
-                    a = alpha;
-                }
-
-                if (mulColor) {
-                    r = (float) (bytebuffer.get(12) & 255) / 255.0F * red;
-                    g = (float) (bytebuffer.get(13) & 255) / 255.0F * green;
-                    b = (float) (bytebuffer.get(14) & 255) / 255.0F * blue;
-                } else {
-                    r = red;
-                    g = green;
-                    b = blue;
-                }
-
-                int l = vertex.applyBakedLighting(light, bytebuffer);
-                float u = bytebuffer.getFloat(16);
-                float v = bytebuffer.getFloat(20);
-                Vector4f vector4f = new Vector4f(x, y, z, 1.0F);
-                vector4f.transform(matrix4f);
-                vertex.applyBakedNormals(vector3f, bytebuffer, pose.normal());
-                vertex.vertex(vector4f.x(), vector4f.y(), vector4f.z(), r, g, b, a, u, v, overlay, l, vector3f.x(), vector3f.y(), vector3f.z());
-            }
-        }
     }
 
     /**

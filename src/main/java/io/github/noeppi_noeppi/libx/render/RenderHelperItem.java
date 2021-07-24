@@ -22,7 +22,6 @@ public class RenderHelperItem {
      * Renders an {@link ItemStack item} into a gui. This allows to set the size of the item and whether the
      * amount should be included.
      */
-    // TODO needs to be tested
     public static void renderItemGui(PoseStack poseStack, MultiBufferSource buffer, ItemStack stack, int x, int y, int size, boolean includeAmount) {
         if (!stack.isEmpty()) {
             BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, Minecraft.getInstance().player, 0);
@@ -33,7 +32,7 @@ public class RenderHelperItem {
             
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderHelper.resetColor();
 
             poseStack.translate(x, y, 50);
             poseStack.scale(size / 16f, size / 16f, 1);
@@ -58,6 +57,7 @@ public class RenderHelperItem {
             if (includeAmount && stack.getCount() > 1) {
                 poseStack.pushPose();
                 poseStack.translate(x, y, 90);
+                poseStack.scale(size / 16f, size / 16f, 1);
 
                 Font fr = Minecraft.getInstance().font;
                 String text = Integer.toString(stack.getCount());
