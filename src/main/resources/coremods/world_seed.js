@@ -36,7 +36,7 @@ function initializeCoreMod() {
           }
           return method;
         } else {
-          throw new Error("Failed to patch CoreWorldSeed.class");
+          throw new Error("Failed to patch WorldGenSettings.class");
         }
       }
     }
