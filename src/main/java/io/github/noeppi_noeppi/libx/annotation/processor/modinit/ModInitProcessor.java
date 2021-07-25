@@ -1,9 +1,19 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
-import io.github.noeppi_noeppi.libx.annotation.*;
+import io.github.noeppi_noeppi.libx.annotation.ForMod;
 import io.github.noeppi_noeppi.libx.annotation.codec.Param;
 import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
+import io.github.noeppi_noeppi.libx.annotation.config.RegisterConfig;
+import io.github.noeppi_noeppi.libx.annotation.config.RegisterMapper;
+import io.github.noeppi_noeppi.libx.annotation.data.Datagen;
+import io.github.noeppi_noeppi.libx.annotation.model.Model;
 import io.github.noeppi_noeppi.libx.annotation.processor.Processor;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.CodecProcessor;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.config.RegisterConfigProcessor;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.config.RegisterMapperProcessor;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.data.DatagenProcessor;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.model.ModelProcessor;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.register.RegisterClassProcessor;
 import io.github.noeppi_noeppi.libx.annotation.registration.NoReg;
 import io.github.noeppi_noeppi.libx.annotation.registration.RegName;
 import io.github.noeppi_noeppi.libx.annotation.registration.RegisterClass;
@@ -25,7 +35,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class ModInitProcessor extends Processor {
-    
+
     @Override
     public Class<?>[] getTypes() {
         return new Class[]{
@@ -35,8 +45,10 @@ public class ModInitProcessor extends Processor {
                 RegName.class,
                 Model.class,
                 RegisterConfig.class,
+                RegisterMapper.class,
                 Param.class,
-                PrimaryConstructor.class
+                PrimaryConstructor.class,
+                Datagen.class
         };
     }
 
@@ -114,6 +126,11 @@ public class ModInitProcessor extends Processor {
             }
 
             @Override
+            public boolean subTypeErasure(TypeMirror child, TypeMirror parent) {
+                return ModInitProcessor.this.subTypeErasure(child, parent);
+            }
+
+            @Override
             public TypeMirror classType(Supplier<Class<?>> accessor) {
                 return ModInitProcessor.this.classType(accessor);
             }
@@ -137,7 +154,7 @@ public class ModInitProcessor extends Processor {
             public ModInit getMod(Element element) {
                 return this.getMod(element, element);
             }
-            
+
             private ModInit getMod(Element element, Element root) {
                 ForMod forMod = element.getAnnotation(ForMod.class);
                 if (forMod != null) {
@@ -172,27 +189,61 @@ public class ModInitProcessor extends Processor {
         }
         Local local = new Local();
         for (Element element : roundEnv.getElementsAnnotatedWith(RegisterClass.class)) {
-            RegisterClassProcessor.processRegisterClass(element, local);
+            try {
+                RegisterClassProcessor.processRegisterClass(element, local);
+            } catch (FailureException e) {
+                //
+            }
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(Model.class)) {
-            ModelProcessor.processModel(element, local);
+            try {
+                ModelProcessor.processModel(element, local);
+            } catch (FailureException e) {
+                //
+            }
+        }
+        for (Element element : roundEnv.getElementsAnnotatedWith(RegisterMapper.class)) {
+            try {
+                RegisterMapperProcessor.processRegisterMapper(element, local);
+            } catch (FailureException e) {
+                //
+            }
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(RegisterConfig.class)) {
-            RegisterConfigProcessor.processRegisterConfig(element, local);
+            try {
+                RegisterConfigProcessor.processRegisterConfig(element, local);
+            } catch (FailureException e) {
+                //
+            }
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(Param.class)) {
-            CodecProcessor.processParam(element, local);
+            try {
+                CodecProcessor.processParam(element, local);
+            } catch (FailureException e) {
+                //
+            }
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(PrimaryConstructor.class)) {
-            CodecProcessor.processPrimaryConstructor(element, local);
+            try {
+                CodecProcessor.processPrimaryConstructor(element, local);
+            } catch (FailureException e) {
+                //
+            }
+        }
+        for (Element element : roundEnv.getElementsAnnotatedWith(Datagen.class)) {
+            try {
+                DatagenProcessor.processDatagen(element, local);
+            } catch (FailureException e) {
+                //
+            }
         }
         for (ModInit mod : modInits.values()) {
             mod.write(this.filer, this.messager);
         }
         return true;
     }
-    
-     private String modidFromAnnotation(Element element) {
+
+    private String modidFromAnnotation(Element element) {
         for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
             if (this.sameErasure(this.elements.getTypeElement(ModInit.MOD_ANNOTATION_TYPE).asType(), mirror.getAnnotationType())) {
                 //noinspection OptionalGetWithoutIsPresent

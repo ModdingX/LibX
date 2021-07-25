@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 
 import io.github.noeppi_noeppi.libx.annotation.codec.Lookup;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureException;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 

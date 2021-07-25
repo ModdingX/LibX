@@ -1,4 +1,6 @@
-package io.github.noeppi_noeppi.libx.annotation;
+package io.github.noeppi_noeppi.libx.annotation.model;
+
+import io.github.noeppi_noeppi.libx.annotation.ForMod;
 
 import java.lang.annotation.*;
 

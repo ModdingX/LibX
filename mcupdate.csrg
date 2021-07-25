@@ -67,7 +67,7 @@ io/github/noeppi_noeppi/libx/render/RenderHelperWorld io/github/noeppi_noeppi/li
 io/github/noeppi_noeppi/libx/crafting/IngredientStack getIngredient ()Lnet/minecraft/item/crafting/Ingredient; ingredient
 io/github/noeppi_noeppi/libx/crafting/IngredientStack getCount ()I count
 io/github/noeppi_noeppi/libx/crafting/IngredientStack isEmpty ()Z empty
-
+io/github/noeppi_noeppi/libx/annotation/RegisterConfig io/github/noeppi_noeppi/libx/annotation/config/RegisterConfig
 
 
 

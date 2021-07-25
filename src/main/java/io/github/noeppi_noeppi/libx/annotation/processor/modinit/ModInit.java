@@ -2,6 +2,11 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
 import io.github.noeppi_noeppi.libx.annotation.impl.ProcessorInterface;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.config.RegisteredConfig;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.config.RegisteredMapper;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.data.DatagenEntry;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.model.LoadableModel;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.register.RegistrationEntry;
 import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
@@ -24,6 +29,9 @@ public class ModInit  {
     public static final String REGISTRY_TYPE = "net.minecraft.core.Registry";
     public static final String CODEC_TYPE = "com.mojang.serialization.Codec";
     public static final String RECORD_CODEC_BUILDER_TYPE = "com.mojang.serialization.codecs.RecordCodecBuilder";
+    public static final String DATA_PROVIDER_TYPE = "net.minecraft.data.DataProvider";
+    public static final String DATA_GENERATOR_TYPE = "net.minecraft.data.DataGenerator";
+    public static final String DATA_FILE_HELPER_TYPE = "net.minecraftforge.common.data.ExistingFileHelper";
 
     public static final List<String> DEFAULT_PARAM_CODEC_FIELDS = List.of("CODEC", "DIRECT_CODEC");
 
@@ -44,8 +52,10 @@ public class ModInit  {
     public final Element modClass;
     private final Map<Integer, List<RegistrationEntry>> registration = new HashMap<>();
     private final List<LoadableModel> models = new ArrayList<>();
+    private final List<RegisteredMapper> configMappers = new ArrayList<>();
     private final List<RegisteredConfig> configs = new ArrayList<>();
     private final List<GeneratedCodec> codecs = new ArrayList<>();
+    private final List<DatagenEntry> datagen = new ArrayList<>();
 
     public ModInit(String modid, Element modClass, Messager messager) {
         this.modid = modid;
@@ -67,12 +77,20 @@ public class ModInit  {
         this.models.add(new LoadableModel(classFqn, fieldName, modelNamespace.isEmpty() ? this.modid : modelNamespace, modelPath));
     }
     
+    public void addConfigMapper(String classFqn, boolean genericType) {
+        this.configMappers.add(new RegisteredMapper(classFqn, genericType));
+    }
+    
     public void addConfig(String name, boolean client, String classFqn) {
         this.configs.add(new RegisteredConfig(name, client, classFqn));
     }
     
     public void addCodec(GeneratedCodec codec) {
         this.codecs.add(codec);
+    }
+    
+    public void addDatagen(String classFqn, List<DatagenEntry.Arg> ctorArgs) {
+        this.datagen.add(new DatagenEntry(classFqn, ctorArgs));
     }
     
     public void write(Filer filer, Messager messager) {
@@ -131,6 +149,9 @@ public class ModInit  {
             }
             writer.write("public static void init(" + ModX.class.getCanonicalName() + " mod){");
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
+            for (RegisteredMapper mapper : this.configMappers) {
+                writer.write(ConfigManager.class.getCanonicalName() + ".registerValueMapper(\"" + quote(this.modid) + "\",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
+            }
             for (RegisteredConfig config : this.configs) {
                 writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
             }
@@ -142,6 +163,9 @@ public class ModInit  {
                 writer.write( ProcessorInterface.class.getCanonicalName() + ".addModListener(net.minecraftforge.client.event.ModelRegistryEvent.class," + this.modClass.getSimpleName() + "$::registerModels);");
                 writer.write( ProcessorInterface.class.getCanonicalName() + ".addModListener(net.minecraftforge.client.event.ModelBakeEvent.class," + this.modClass.getSimpleName() + "$::bakeModels);");
                 writer.write("});");
+            }
+            if (!this.datagen.isEmpty()) {
+                writer.write( ProcessorInterface.class.getCanonicalName() + ".addModListener(net.minecraftforge.forge.event.lifecycle.GatherDataEvent.class," + this.modClass.getSimpleName() + "$::gatherData);");
             }
             writer.write("}");
             if (!allReg.isEmpty()) {
@@ -162,6 +186,18 @@ public class ModInit  {
                 writer.write("private static void bakeModels(net.minecraftforge.client.event.ModelBakeEvent event){");
                 for (LoadableModel model : this.models) {
                     writer.write(model.classFqn() + "." + quote(model.fieldName()) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
+                }
+                writer.write("}");
+            }
+            if (!this.datagen.isEmpty()) {
+                writer.write("private static void gatherData(net.minecraftforge.forge.event.lifecycle.GatherDataEvent event){");
+                for (DatagenEntry entry : this.datagen) {
+                    String ctorArgs = entry.ctorArgs().stream().map(t -> switch (t) {
+                                case MOD -> this.modClass.getSimpleName() + "$.mod";
+                                case GENERATOR -> ProcessorInterface.class.getCanonicalName() + ".getDataGenerator(event)";
+                                case FILE_HELPER -> ProcessorInterface.class.getCanonicalName() + ".getDataFileHelper(event)";
+                            }).collect(Collectors.joining(","));
+                    writer.write(ProcessorInterface.class.getCanonicalName() + ".addDataProvider(event,new " + entry.classFqn() + "(" + ctorArgs + "));");
                 }
                 writer.write("}");
             }

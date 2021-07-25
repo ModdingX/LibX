@@ -1,7 +1,8 @@
-package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
+package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 
 import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
-import io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.*;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureException;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.*;
@@ -24,7 +25,7 @@ public class CodecProcessor {
         }
     }
 
-    public static void processPrimaryConstructor(Element rawElement, ModEnv env) {
+    public static void processPrimaryConstructor(Element rawElement, ModEnv env) throws FailureException {
         if (rawElement.getKind() != ElementKind.CONSTRUCTOR || !(rawElement instanceof ExecutableElement element)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@PrimaryConstructor can only be used on constructors.", rawElement);
             return;
@@ -96,11 +97,7 @@ public class CodecProcessor {
                     return;
                 }
             }
-            try {
-                params.add(codecType.generate(param, codecFieldName, getter, env));
-            } catch (FailureException e) {
-                return;
-            }
+            params.add(codecType.generate(param, codecFieldName, getter, env));
         }
         GeneratedCodec codec = new GeneratedCodec(type.getQualifiedName().toString(), params);
         env.getMod(element).addCodec(codec);

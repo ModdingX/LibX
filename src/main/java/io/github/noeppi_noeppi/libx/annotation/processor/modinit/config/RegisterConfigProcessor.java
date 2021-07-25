@@ -1,6 +1,8 @@
-package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
+package io.github.noeppi_noeppi.libx.annotation.processor.modinit.config;
 
-import io.github.noeppi_noeppi.libx.annotation.RegisterConfig;
+import io.github.noeppi_noeppi.libx.annotation.config.RegisterConfig;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;

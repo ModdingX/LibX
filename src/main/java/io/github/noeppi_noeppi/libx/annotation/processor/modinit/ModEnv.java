@@ -24,6 +24,7 @@ public interface ModEnv {
     <T extends Element> Optional<T> contained(Element element, Class<T> clazz);
     <T extends Element> Optional<T> contained(Element element, Class<T> clazz, Predicate<T> filter);
     boolean sameErasure(TypeMirror type1, TypeMirror type2);
+    boolean subTypeErasure(TypeMirror child, TypeMirror parent);
     TypeMirror classType(Supplier<Class<?>> accessor);
     List<? extends TypeMirror> classTypes(Supplier<List<Class<?>>> accessor);
     TypeMirror boxed(TypeMirror type);

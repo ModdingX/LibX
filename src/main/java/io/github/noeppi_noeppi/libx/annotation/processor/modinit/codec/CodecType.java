@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureException;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 
 import javax.lang.model.element.VariableElement;

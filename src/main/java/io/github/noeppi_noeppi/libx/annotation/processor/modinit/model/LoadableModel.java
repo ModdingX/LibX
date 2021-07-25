@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
+package io.github.noeppi_noeppi.libx.annotation.processor.modinit.model;
 
 import java.util.Objects;
 

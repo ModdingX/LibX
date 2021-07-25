@@ -49,7 +49,7 @@ public abstract class Processor extends AbstractProcessor {
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.RELEASE_8;
+        return SourceVersion.RELEASE_16;
     }
 
     protected TypeMirror forClass(Class<?> clazz) {
@@ -104,6 +104,14 @@ public abstract class Processor extends AbstractProcessor {
     
     protected boolean sameErasure(TypeMirror type1, TypeMirror type2) {
         return this.types.isSameType(this.types.erasure(type1), this.types.erasure(type2));
+    }
+    
+    protected boolean subTypeErasure(TypeMirror child, TypeMirror parent) {
+        try {
+            return this.types.isSubtype(this.types.erasure(child), this.types.erasure(parent));
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
     
     protected TypeMirror classType(Supplier<Class<?>> accessor) {

@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
+package io.github.noeppi_noeppi.libx.annotation.processor.modinit.register;
 
 import io.github.noeppi_noeppi.libx.annotation.registration.NoReg;
 import io.github.noeppi_noeppi.libx.annotation.registration.RegName;
