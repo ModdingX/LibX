@@ -43,7 +43,6 @@ public class ModInitProcessor extends Processor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new HashSet<>(super.getSupportedAnnotationTypes());
-        // TODO check whether that has changed because of the peel
         set.add(ModInit.MOD_ANNOTATION_TYPE);
         return set;
     }

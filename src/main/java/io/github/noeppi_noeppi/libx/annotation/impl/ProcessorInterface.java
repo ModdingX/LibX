@@ -9,7 +9,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryLookupCodec;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.level.levelgen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -39,13 +46,16 @@ public class ProcessorInterface {
     
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> ResourceKey<Registry<T>> getCodecDefaultRegistryKey(Class<T> clazz) {
-        if (clazz.equals(Biome.class)) {
-            return (ResourceKey<Registry<T>>) (ResourceKey) Registry.BIOME_REGISTRY;
-        } else if (clazz.equals(NoiseGeneratorSettings.class)) {
-            return (ResourceKey<Registry<T>>) (ResourceKey) Registry.NOISE_GENERATOR_SETTINGS_REGISTRY;
-        } else {
-            throw new IllegalStateException("Failed to get registry codec key for type: " + clazz);
-        }
+        if (clazz.equals(DimensionType.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.DIMENSION_TYPE_REGISTRY;
+        if (clazz.equals(Biome.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.BIOME_REGISTRY;
+        if (clazz.equals(ConfiguredSurfaceBuilder.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_SURFACE_BUILDER_REGISTRY;
+        if (clazz.equals(ConfiguredWorldCarver.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_CARVER_REGISTRY;
+        if (clazz.equals(ConfiguredFeature.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_FEATURE_REGISTRY;
+        if (clazz.equals(ConfiguredStructureFeature.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY;
+        if (clazz.equals(StructureProcessorList.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.PROCESSOR_LIST_REGISTRY;
+        if (clazz.equals(StructureTemplatePool.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.TEMPLATE_POOL_REGISTRY;
+        if (clazz.equals(NoiseGeneratorSettings.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.NOISE_GENERATOR_SETTINGS_REGISTRY;
+        throw new IllegalStateException("Failed to get registry codec key for type: " + clazz);
     }
     
     public static <T extends Event> void addModListener(Class<T> event, Consumer<T> listener) {

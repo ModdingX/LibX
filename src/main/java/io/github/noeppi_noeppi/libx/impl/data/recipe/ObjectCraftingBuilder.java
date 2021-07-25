@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.impl.data.recipe;
 
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -18,6 +17,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class ObjectCraftingBuilder {
@@ -53,7 +53,7 @@ public class ObjectCraftingBuilder {
                 char key = value.get();
                 Ingredient ingredient = getIngredient(reader);
                 builder.define(key, ingredient);
-                nextId = addCriteriaToBuilder(builder.advancement, ext.criteria(ingredient), nextId);
+                nextId = addCriteriaToBuilder(builder::unlockedBy, ext.criteria(ingredient), nextId);
             } else {
                 break;
             }
@@ -65,14 +65,13 @@ public class ObjectCraftingBuilder {
         while (reader.hasNext()) {
             Ingredient ingredient = getIngredient(reader);
             builder.requires(ingredient);
-            nextId = addCriteriaToBuilder(builder.advancement, ext.criteria(ingredient), nextId);
+            nextId = addCriteriaToBuilder(builder::unlockedBy, ext.criteria(ingredient), nextId);
         }
     }
 
-    private static int addCriteriaToBuilder(Advancement.Builder builder, List<CriterionTriggerInstance> criteria, int nextId) {
+    private static int addCriteriaToBuilder(BiConsumer<String, CriterionTriggerInstance> triggers, List<CriterionTriggerInstance> criteria, int nextId) {
         for (CriterionTriggerInstance criterion : criteria) {
-            String id = "criterion" + (nextId++);
-            builder.addCriterion(id, criterion);
+            triggers.accept("criterion" + (nextId++), criterion);
         }
         return nextId;
     }

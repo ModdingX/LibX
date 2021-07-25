@@ -19,21 +19,25 @@ import java.util.stream.Collectors;
 // TODO Check ModInit as things have been refactored. Verify that code generates correctly.
 public class ModInit  {
 
-    // TODO check all the classes in 1.17
     public static final String MOD_ANNOTATION_TYPE = "net.minecraftforge.fml.common.Mod";
-    public static final String MODEL_TYPE = "net.minecraft.client.resources.model.IBakedModel";
+    public static final String MODEL_TYPE = "net.minecraft.client.resources.model.BakedModel";
     public static final String REGISTRY_TYPE = "net.minecraft.core.Registry";
     public static final String CODEC_TYPE = "com.mojang.serialization.Codec";
     public static final String RECORD_CODEC_BUILDER_TYPE = "com.mojang.serialization.codecs.RecordCodecBuilder";
 
     public static final List<String> DEFAULT_PARAM_CODEC_FIELDS = List.of("CODEC", "DIRECT_CODEC");
 
-    // TODO Add everything from RegistryAccess to the list.
     // When something is added here, also add it to ProcessorInterface.getCodecDefaultRegistryKey
     public static final Set<String> ALLOWED_REGISTRY_CODEC_TYPES = Set.of(
-            "net.minecraft.world.biome.Biome",
-            "net.minecraft.world.gen.DimensionSettings"
-            // TODO Add everything from RegistryAccess to the list.
+            "net.minecraft.world.level.dimension.DimensionType",
+            "net.minecraft.world.level.biome.Biome",
+            "net.minecraft.world.level.levelgen.surfacebuilders.ConfiguredSurfaceBuilder",
+            "net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver",
+            "net.minecraft.world.level.levelgen.feature.ConfiguredFeature",
+            "net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature",
+            "net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList",
+            "net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool",
+            "net.minecraft.world.level.levelgen.NoiseGeneratorSettings"
     );
     
     public final String modid;
