@@ -13,11 +13,11 @@ import java.util.List;
 public class DatagenProcessor {
     
     public static void processDatagen(Element element, ModEnv env) {
-        if (!(element instanceof TypeElement)) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't use @Datagen on element that is not a type.", element);
+        if (element.getEnclosingElement().getKind() != ElementKind.CLASS || !(element instanceof TypeElement)) {
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't use @Datagen on element that is not a class.", element);
             return;
         }
-        if (!(element.getEnclosingElement() instanceof PackageElement)) {
+        if (element.getEnclosingElement().getKind() != ElementKind.PACKAGE || !(element.getEnclosingElement() instanceof PackageElement parent)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Parent of element annotated with @Datagen is not a package", element);
             return;
         }
@@ -43,7 +43,7 @@ public class DatagenProcessor {
                     .toList();
         }
         ModInit mod = env.getMod(element);
-        mod.addDatagen(((QualifiedNameable) element.getEnclosingElement()).getQualifiedName() + "." + element.getSimpleName(), args);
+        mod.addDatagen(parent.getQualifiedName() + "." + element.getSimpleName(), args);
     }
     
     private static DatagenEntry.Arg getArg(VariableElement param, ModEnv env) {

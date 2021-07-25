@@ -169,8 +169,8 @@ public class ModInitProcessor extends Processor {
                     return modInits.get(modid);
                 } else if (element.getEnclosingElement() != null) {
                     return this.getMod(element.getEnclosingElement(), root);
-                } else if (element instanceof PackageElement && !((PackageElement) element).isUnnamed()) {
-                    String name = ((PackageElement) element).getQualifiedName().toString();
+                } else if (element instanceof PackageElement pkgElem && !pkgElem.isUnnamed()) {
+                    String name = pkgElem.getQualifiedName().toString();
                     if (!name.contains(".")) {
                         return this.getMod(ModInitProcessor.this.elements.getPackageElement(""), root);
                     } else {

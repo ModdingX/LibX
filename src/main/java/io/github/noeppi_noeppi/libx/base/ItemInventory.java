@@ -74,8 +74,8 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
     @Nullable
     public static IItemHandlerModifiable getInventory(ItemStack stack) {
         IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve().orElse(null);
-        if (handler instanceof IItemHandlerModifiable) {
-            return (IItemHandlerModifiable) handler;
+        if (handler instanceof IItemHandlerModifiable modifiable) {
+            return modifiable;
         } else {
             return null;
         }
@@ -88,8 +88,8 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
      */
     public static Stream<IItemHandlerModifiable> getInventoryStream(ItemStack stack) {
         IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve().orElse(null);
-        if (handler instanceof IItemHandlerModifiable) {
-            return Stream.of((IItemHandlerModifiable) handler);
+        if (handler instanceof IItemHandlerModifiable modifiable) {
+            return Stream.of(modifiable);
         } else {
             return Stream.empty();
         }

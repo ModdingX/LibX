@@ -16,8 +16,8 @@ public class ConfigEvents {
     @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void serverPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (!event.getPlayer().level.isClientSide && event.getPlayer() instanceof ServerPlayer && FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-            ConfigManager.forceResync((ServerPlayer) event.getPlayer());
+        if (!event.getPlayer().level.isClientSide && event.getPlayer() instanceof ServerPlayer serverPlayer && FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
+            ConfigManager.forceResync(serverPlayer);
         }
     }
     

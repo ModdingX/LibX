@@ -50,14 +50,14 @@ public interface RecipeExtension {
         List<CriterionTriggerInstance> instances = new ArrayList<>();
         if (item.isVanilla()) {
             for (Ingredient.Value entry : item.values) {
-                if (entry instanceof Ingredient.ItemValue) {
-                    instances.add(this.criterion(ItemPredicate.Builder.item().of(((Ingredient.ItemValue) entry).item.getItem()).build()));
-                } else if (entry instanceof Ingredient.TagValue) {
-                    instances.add(this.criterion(ItemPredicate.Builder.item().of(((Ingredient.TagValue) entry).tag).build()));
+                if (entry instanceof Ingredient.ItemValue value) {
+                    instances.add(this.criterion(ItemPredicate.Builder.item().of(value.item.getItem()).build()));
+                } else if (entry instanceof Ingredient.TagValue value) {
+                    instances.add(this.criterion(ItemPredicate.Builder.item().of(value.tag).build()));
                 }
             }
-        } else if (item instanceof MergedIngredient) {
-            for (Ingredient i : ((MergedIngredient) item).getIngredients()) {
+        } else if (item instanceof MergedIngredient merged) {
+            for (Ingredient i : merged.getIngredients()) {
                 instances.addAll(this.criteria(i));
             }
         } else {

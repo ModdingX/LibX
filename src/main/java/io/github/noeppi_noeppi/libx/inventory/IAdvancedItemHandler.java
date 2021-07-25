@@ -113,8 +113,8 @@ public interface IAdvancedItemHandler extends IItemHandler {
      * Creates a new IAdvancedItemHandler from an {@link IItemHandler}.
      */
     static IAdvancedItemHandler wrap(IItemHandler handler) {
-        if (handler instanceof IAdvancedItemHandler) {
-            return (IAdvancedItemHandler) handler;
+        if (handler instanceof IAdvancedItemHandler advanced) {
+            return advanced;
         } else {
             return new IAdvancedItemHandler() {
 

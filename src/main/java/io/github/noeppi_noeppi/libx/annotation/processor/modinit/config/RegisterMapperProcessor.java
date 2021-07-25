@@ -5,20 +5,17 @@ import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.QualifiedNameable;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.tools.Diagnostic;
 
 public class RegisterMapperProcessor {
     
     public static void processRegisterMapper(Element element, ModEnv env) {
-        if (!(element instanceof TypeElement)) {
+        if (!(element instanceof TypeElement typeElem)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for element annotated with @RegisterMapper", element);
             return;
         }
-        if (!(element.getEnclosingElement() instanceof PackageElement)) {
+        if (element.getKind() != ElementKind.PACKAGE || !(element.getEnclosingElement() instanceof PackageElement parent)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Parent of element annotated with @RegisterMapper is not a package", element);
             return;
         }
@@ -32,6 +29,6 @@ public class RegisterMapperProcessor {
             return;
         }
         ModInit mod = env.getMod(element);
-        mod.addConfigMapper(((QualifiedNameable) element.getEnclosingElement()).getQualifiedName() + "." + element.getSimpleName(), !((TypeElement) element).getTypeParameters().isEmpty());
+        mod.addConfigMapper(parent.getQualifiedName() + "." + element.getSimpleName(), !typeElem.getTypeParameters().isEmpty());
     }
 }

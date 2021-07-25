@@ -65,8 +65,8 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys()) {
             Item item = ForgeRegistries.ITEMS.getValue(id);
             if (item != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
-                if (item instanceof BlockItem) {
-                    this.defaultBlock(id, (BlockItem) item);
+                if (item instanceof BlockItem blockItem) {
+                    this.defaultBlock(id, blockItem);
                 } else if (this.handheld.contains(item)) {
                     this.withExistingParent(id.getPath(), HANDHELD).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
                 } else {

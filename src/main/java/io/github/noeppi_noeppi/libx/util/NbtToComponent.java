@@ -35,9 +35,9 @@ public class NbtToComponent {
     private static MutableComponent toTextInternal(Tag nbt) {
         if (nbt instanceof EndTag) {
             return new TextComponent("");
-        } else if (nbt instanceof CompoundTag) {
+        } else if (nbt instanceof CompoundTag tag) {
             MutableComponent tc = new TextComponent("{");
-            List<String> keys = ((CompoundTag) nbt).getAllKeys().stream().sorted().collect(Collectors.toList());
+            List<String> keys = tag.getAllKeys().stream().sorted().collect(Collectors.toList());
             for (int i = 0; i < keys.size(); i++) {
                 if (quotesRequired(keys.get(i))) {
                     tc = tc.append(new TextComponent("\""));
@@ -48,75 +48,75 @@ public class NbtToComponent {
                 } else {
                     tc = tc.append(new TextComponent(": "));
                 }
-                tc = tc.append(toTextInternal(((CompoundTag) nbt).get(keys.get(i))));
+                tc = tc.append(toTextInternal(tag.get(keys.get(i))));
                 if (i + 1 < keys.size()) {
                     tc = tc.append(new TextComponent(", "));
                 }
             }
             tc = tc.append(new TextComponent("}"));
             return tc;
-        } else if (nbt instanceof ListTag) {
+        } else if (nbt instanceof ListTag tag) {
             MutableComponent tc = new TextComponent("[");
-            for (int i = 0; i < ((ListTag) nbt).size(); i++) {
-                tc = tc.append(toTextInternal(((ListTag) nbt).get(i)));
-                if (i + 1 < ((ListTag) nbt).size()) {
+            for (int i = 0; i < tag.size(); i++) {
+                tc = tc.append(toTextInternal(tag.get(i)));
+                if (i + 1 < tag.size()) {
                     tc = tc.append(new TextComponent(", "));
                 }
             }
             tc = tc.append(new TextComponent("]"));
             return tc;
-        } else if (nbt instanceof ByteTag) {
-            return new TextComponent(Integer.toString(((ByteTag) nbt).getAsByte())).withStyle(ChatFormatting.GOLD)
+        } else if (nbt instanceof ByteTag tag) {
+            return new TextComponent(Integer.toString(tag.getAsByte())).withStyle(ChatFormatting.GOLD)
                     .append(new TextComponent("b").withStyle(ChatFormatting.RED));
-        } else if (nbt instanceof DoubleTag) {
-            return new TextComponent(Double.toString(((DoubleTag) nbt).getAsDouble())).withStyle(ChatFormatting.GOLD)
+        } else if (nbt instanceof DoubleTag tag) {
+            return new TextComponent(Double.toString(tag.getAsDouble())).withStyle(ChatFormatting.GOLD)
                     .append(new TextComponent("d").withStyle(ChatFormatting.RED));
-        } else if (nbt instanceof FloatTag) {
-            return new TextComponent(Float.toString(((FloatTag) nbt).getAsFloat())).withStyle(ChatFormatting.GOLD)
+        } else if (nbt instanceof FloatTag tag) {
+            return new TextComponent(Float.toString(tag.getAsFloat())).withStyle(ChatFormatting.GOLD)
                     .append(new TextComponent("f").withStyle(ChatFormatting.RED));
-        } else if (nbt instanceof IntTag) {
-            return new TextComponent(Integer.toString(((IntTag) nbt).getAsInt())).withStyle(ChatFormatting.GOLD);
-        } else if (nbt instanceof LongTag) {
-            return new TextComponent(Long.toString(((LongTag) nbt).getAsLong())).withStyle(ChatFormatting.GOLD)
+        } else if (nbt instanceof IntTag tag) {
+            return new TextComponent(Integer.toString(tag.getAsInt())).withStyle(ChatFormatting.GOLD);
+        } else if (nbt instanceof LongTag tag) {
+            return new TextComponent(Long.toString(tag.getAsLong())).withStyle(ChatFormatting.GOLD)
                     .append(new TextComponent("l").withStyle(ChatFormatting.RED));
-        } else if (nbt instanceof ShortTag) {
-            return new TextComponent(Integer.toString(((ShortTag) nbt).getAsShort())).withStyle(ChatFormatting.GOLD)
+        } else if (nbt instanceof ShortTag tag) {
+            return new TextComponent(Integer.toString(tag.getAsShort())).withStyle(ChatFormatting.GOLD)
                     .append(new TextComponent("s").withStyle(ChatFormatting.RED));
-        } else if (nbt instanceof StringTag) {
+        } else if (nbt instanceof StringTag tag) {
             return new TextComponent("\"")
-                    .append(new TextComponent(escape(nbt.getAsString())).withStyle(ChatFormatting.GREEN))
+                    .append(new TextComponent(escape(tag.getAsString())).withStyle(ChatFormatting.GREEN))
                     .append(new TextComponent("\""));
-        } else if (nbt instanceof ByteArrayTag) {
+        } else if (nbt instanceof ByteArrayTag tag) {
             MutableComponent tc = new TextComponent("[");
             tc = tc.append(new TextComponent("B").withStyle(ChatFormatting.LIGHT_PURPLE));
             tc = tc.append(new TextComponent("; "));
-            for (int i = 0; i < ((ByteArrayTag) nbt).size(); i++) {
-                tc = tc.append(toTextInternal(((ByteArrayTag) nbt).get(i)));
-                if (i + 1 < ((ByteArrayTag) nbt).size()) {
+            for (int i = 0; i < tag.size(); i++) {
+                tc = tc.append(toTextInternal(tag.get(i)));
+                if (i + 1 < tag.size()) {
                     tc = tc.append(new TextComponent(", "));
                 }
             }
             tc = tc.append(new TextComponent("]"));
             return tc;
-        } else if (nbt instanceof IntArrayTag) {
+        } else if (nbt instanceof IntArrayTag tag) {
             MutableComponent tc = new TextComponent("[");
             tc = tc.append(new TextComponent("I").withStyle(ChatFormatting.LIGHT_PURPLE));
             tc = tc.append(new TextComponent("; "));
-            for (int i = 0; i < ((IntArrayTag) nbt).size(); i++) {
-                tc = tc.append(toTextInternal(((IntArrayTag) nbt).get(i)));
-                if (i + 1 < ((IntArrayTag) nbt).size()) {
+            for (int i = 0; i < tag.size(); i++) {
+                tc = tc.append(toTextInternal(tag.get(i)));
+                if (i + 1 < tag.size()) {
                     tc = tc.append(new TextComponent(", "));
                 }
             }
             tc = tc.append(new TextComponent("]"));
             return tc;
-        } else if (nbt instanceof LongArrayTag) {
+        } else if (nbt instanceof LongArrayTag tag) {
             MutableComponent tc = new TextComponent("[");
             tc = tc.append(new TextComponent("L").withStyle(ChatFormatting.LIGHT_PURPLE));
             tc = tc.append(new TextComponent("; "));
-            for (int i = 0; i < ((LongArrayTag) nbt).size(); i++) {
-                tc = tc.append(toTextInternal(((LongArrayTag) nbt).get(i)));
-                if (i + 1 < ((LongArrayTag) nbt).size()) {
+            for (int i = 0; i < tag.size(); i++) {
+                tc = tc.append(toTextInternal(tag.get(i)));
+                if (i + 1 < tag.size()) {
                     tc = tc.append(new TextComponent(", "));
                 }
             }

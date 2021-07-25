@@ -42,8 +42,8 @@ public interface IAdvancedItemHandlerModifiable extends IItemHandlerModifiable, 
      * Creates a new IAdvancedItemHandlerModifiable from an {@link IItemHandlerModifiable}.
      */
     static IAdvancedItemHandlerModifiable wrap(IItemHandlerModifiable handler) {
-        if (handler instanceof IAdvancedItemHandlerModifiable) {
-            return (IAdvancedItemHandlerModifiable) handler;
+        if (handler instanceof IAdvancedItemHandlerModifiable advanced) {
+            return advanced;
         } else {
             return new IAdvancedItemHandlerModifiable() {
 

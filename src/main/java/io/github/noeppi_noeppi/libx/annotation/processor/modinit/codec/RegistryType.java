@@ -47,13 +47,13 @@ public class RegistryType implements CodecType {
         TypeMirror mirror = param.asType();
         TypeElement generic = null;
         TypeMirror genericType = null;
-        if (mirror instanceof DeclaredType) {
-            List<? extends TypeMirror> generics = ((DeclaredType) mirror).getTypeArguments();
+        if (mirror instanceof DeclaredType declared) {
+            List<? extends TypeMirror> generics = declared.getTypeArguments();
             if (generics != null && generics.size() == 1) {
                 genericType = generics.get(0);
                 Element elem = env.types().asElement(genericType);
-                if (elem instanceof TypeElement) {
-                    generic = (TypeElement) elem;
+                if (elem instanceof TypeElement typeElem) {
+                    generic = typeElem;
                 }
             }
         }

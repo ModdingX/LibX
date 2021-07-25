@@ -76,25 +76,25 @@ public class TextComponentUtil {
     
     // We partially recreate getComponentWithStyle here as it's client only
     private static void traverseComponent(FormattedText tc, Style parent, BiConsumer<String, Style> consumer) {
-        Style style = tc instanceof Component ? ((Component) tc).getStyle().applyTo(parent) : parent;
+        Style style = tc instanceof Component comp ? comp.getStyle().applyTo(parent) : parent;
         consumeComponent(tc, style, consumer);
-        if (tc instanceof Component) {
-            for (Component sibling : ((Component) tc).getSiblings()) {
+        if (tc instanceof Component comp) {
+            for (Component sibling : comp.getSiblings()) {
                 traverseComponent(sibling, style, consumer);
             }
         }
     }
     
     private static void consumeComponent(FormattedText tc, Style style, BiConsumer<String, Style> consumer) {
-        if (tc instanceof TranslatableComponent) {
-            ((TranslatableComponent) tc).decompose();
-            for (FormattedText child : ((TranslatableComponent) tc).decomposedParts) {
+        if (tc instanceof TranslatableComponent translation) {
+            translation.decompose();
+            for (FormattedText child : translation.decomposedParts) {
                 traverseComponent(child, style, consumer);
             }
-        } else if (tc instanceof KeybindComponent) {
-            traverseComponent(((KeybindComponent) tc).getNestedComponent(), style, consumer);
-        } else if (tc instanceof Component) {
-            consumer.accept(((Component) tc).getContents(), style);
+        } else if (tc instanceof KeybindComponent keybind) {
+            traverseComponent(keybind.getNestedComponent(), style, consumer);
+        } else if (tc instanceof Component comp) {
+            consumer.accept(comp.getContents(), style);
         } else {
             consumer.accept(tc.getString(), style);
         }

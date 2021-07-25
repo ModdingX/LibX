@@ -14,8 +14,8 @@ public class BuiltinTransformers {
         @Nullable
         @Override
         public Object getAdditional(ResourceLocation id, Object object) {
-            if (object instanceof EntityDataSerializer<?>) {
-                return new DataSerializerEntry((EntityDataSerializer<?>) object);
+            if (object instanceof EntityDataSerializer<?> serializer) {
+                return new DataSerializerEntry(serializer);
             } else {
                 return null;
             }

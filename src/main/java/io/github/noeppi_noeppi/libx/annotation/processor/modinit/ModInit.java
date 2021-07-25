@@ -14,6 +14,7 @@ import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -60,7 +61,7 @@ public class ModInit  {
     public ModInit(String modid, Element modClass, Messager messager) {
         this.modid = modid;
         this.modClass = modClass;
-        if (!(modClass.getEnclosingElement() instanceof PackageElement)) {
+        if (modClass.getEnclosingElement().getKind() != ElementKind.PACKAGE || !(modClass.getEnclosingElement() instanceof PackageElement)) {
             messager.printMessage(Diagnostic.Kind.ERROR, "Parent element of mod class is not a package", modClass);
         }
     }

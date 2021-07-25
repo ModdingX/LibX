@@ -6,6 +6,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.*;
@@ -47,8 +48,8 @@ public class ConfigProcessor extends Processor {
             }
 
             TypeMirror firstGeneric = this.forClass(String.class);
-            if (element.asType() instanceof DeclaredType) {
-                List<? extends TypeMirror> parameters = ((DeclaredType) element.asType()).getTypeArguments();
+            if (element.asType().getKind() == TypeKind.DECLARED && element.asType() instanceof DeclaredType declared) {
+                List<? extends TypeMirror> parameters = declared.getTypeArguments();
                 if (!parameters.isEmpty()) {
                     firstGeneric = parameters.get(0);
                 }

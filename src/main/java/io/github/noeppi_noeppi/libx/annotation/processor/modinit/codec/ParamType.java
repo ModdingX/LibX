@@ -35,7 +35,7 @@ public class ParamType implements CodecType {
         String typeFqnBoxed = env.boxed(param.asType()).toString();
         String codecFqn;
         boolean list;
-        if (param.asType() instanceof DeclaredType listType && env.sameErasure(param.asType(), env.forClass(List.class))) {
+        if (param.asType().getKind() == TypeKind.DECLARED && param.asType() instanceof DeclaredType listType && env.sameErasure(param.asType(), env.forClass(List.class))) {
             List<? extends TypeMirror> generics = listType.getTypeArguments();
             if (generics.size() != 1) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for parameterized list type.");
@@ -151,23 +151,24 @@ public class ParamType implements CodecType {
             }
             return null;
         }
-        if (!(fieldElem.getEnclosingElement() instanceof QualifiedNameable)) {
+        if (fieldElem.getEnclosingElement() instanceof QualifiedNameable parent) {
+            return parent.getQualifiedName().toString() + "." + fieldElem.getSimpleName().toString();
+        } else {
             if (fail) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Codec field is not nameable.", paramElement);
             }
             return null;
         }
-        return ((QualifiedNameable) fieldElem.getEnclosingElement()).getQualifiedName().toString() + "." + fieldElem.getSimpleName().toString();
     }
 
     private static boolean genericMatches(TypeMirror typeWithGeneric, TypeMirror compare, ModEnv env) {
-        if (!(typeWithGeneric instanceof DeclaredType) || ((DeclaredType) typeWithGeneric).getTypeArguments().size() != 1) {
+        if (typeWithGeneric.getKind() == TypeKind.DECLARED && typeWithGeneric instanceof DeclaredType declared && declared.getTypeArguments().size() == 1) {
+            TypeMirror generic = declared.getTypeArguments().get(0);
+            return env.sameErasure(generic, compare);
+        } else {
             // Something is wrong. We assume true to let it run. It might fail later on when
             // compiling generated code but there might be cases where it succeeds.
             return true;
-        } else {
-            TypeMirror generic = ((DeclaredType) typeWithGeneric).getTypeArguments().get(0);
-            return env.sameErasure(generic, compare);
         }
     }
 }

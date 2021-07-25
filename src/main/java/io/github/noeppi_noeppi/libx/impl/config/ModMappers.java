@@ -135,19 +135,19 @@ public class ModMappers {
         } else if (globalMappers.containsKey(cls)) {
             mapper = globalMappers.get(cls);
         }
-        if (mapper instanceof ValueMapper<?, ?>) {
-            return (ValueMapper<?, ?>) mapper;
-        } else if (mapper instanceof GenericValueMapper<?, ?, ?>) {
+        if (mapper instanceof ValueMapper<?, ?> valueMapper) {
+            return valueMapper;
+        } else if (mapper instanceof GenericValueMapper<?, ?, ?> genericMapper) {
             if (!(type instanceof ParameterizedType)) {
                 throw new IllegalStateException("Generic value mapper used on type without generics.");
             }
             Type[] args = ((ParameterizedType) type).getActualTypeArguments();
-            if (args.length <= ((GenericValueMapper<?, ?, ?>) mapper).getGenericElementPosition()) {
-                throw new IllegalStateException("Generic value mapper used on type with too less generics: Expected at least " + (((GenericValueMapper<?, ?, ?>) mapper).getGenericElementPosition() + 1) + ", got " + args.length);
+            if (args.length <= genericMapper.getGenericElementPosition()) {
+                throw new IllegalStateException("Generic value mapper used on type with too less generics: Expected at least " + (genericMapper.getGenericElementPosition() + 1) + ", got " + args.length);
             }
-            ValueMapper<Object, JsonElement> childMapper = this.getWrappedMapperUnsafe(type, ((GenericValueMapper<?, ?, ?>) mapper).getGenericElementPosition());
+            ValueMapper<Object, JsonElement> childMapper = this.getWrappedMapperUnsafe(type, genericMapper.getGenericElementPosition());
             //noinspection unchecked
-            return new WrappedGenericMapper<>((GenericValueMapper<Object, JsonElement, Object>) mapper, childMapper);
+            return new WrappedGenericMapper<>((GenericValueMapper<Object, JsonElement, Object>) genericMapper, childMapper);
         } else {
             throw new IllegalStateException("No config mapper found for type " + type + " (" + cls + ")");
         }
@@ -167,10 +167,10 @@ public class ModMappers {
     }
     
     private static Class<?> getTypeClass(Type type) {
-        if (type instanceof Class<?>) {
-            return (Class<?>) type;
-        } else if (type instanceof ParameterizedType) {
-            return getTypeClass(((ParameterizedType) type).getRawType());
+        if (type instanceof Class<?> cls) {
+            return cls;
+        } else if (type instanceof ParameterizedType ptype) {
+            return getTypeClass(ptype.getRawType());
         } else if (type instanceof TypeVariable) {
             throw new IllegalStateException("Type variables are not allowed in config field types.");
         } else if (type instanceof WildcardType) {

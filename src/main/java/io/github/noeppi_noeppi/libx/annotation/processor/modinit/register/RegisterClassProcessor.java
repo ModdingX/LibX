@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 public class RegisterClassProcessor {
 
     public static void processRegisterClass(Element element, ModEnv env) {
-        if (!(element instanceof QualifiedNameable)) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for element annotated with @RegisterClass", element);
+        if (element.getKind() != ElementKind.CLASS || !(element instanceof QualifiedNameable)) {
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for element annotated with @RegisterClass or element is not a class.", element);
             return;
         }
-        if (!(element.getEnclosingElement() instanceof PackageElement)) {
+        if (element.getEnclosingElement().getKind() != ElementKind.PACKAGE || !(element.getEnclosingElement() instanceof PackageElement)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Parent of element annotated with @RegisterClass is not a package", element);
             return;
         }

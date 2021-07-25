@@ -94,8 +94,8 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
 
                 @Override
                 public void tick(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull X blockEntity) {
-                    if (blockEntity instanceof TickableBlock) {
-                        ((TickableBlock) blockEntity).tick();
+                    if (blockEntity instanceof TickableBlock tickable) {
+                        tickable.tick();
                     }
                 }
             };
@@ -106,7 +106,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
     @Nullable
     @Override
     public <X extends BlockEntity> GameEventListener getListener(@Nonnull Level level, @Nonnull X blockEntity) {
-        if (blockEntity instanceof GameEventBlock) {
+        if (blockEntity instanceof GameEventBlock eventBlock) {
             PositionSource source = new BlockPositionSource(blockEntity.getBlockPos());
             return new GameEventListener() {
                 
@@ -118,12 +118,12 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
 
                 @Override
                 public int getListenerRadius() {
-                    return ((GameEventBlock) blockEntity).gameEventRange();
+                    return eventBlock.gameEventRange();
                 }
 
                 @Override
                 public boolean handleGameEvent(@Nonnull Level level, @Nonnull GameEvent event, @Nullable Entity cause, @Nonnull BlockPos pos) {
-                    return ((GameEventBlock) blockEntity).notifyGameEvent(event, cause);
+                    return eventBlock.notifyGameEvent(event, cause);
                 }
             };
         } else {
@@ -138,12 +138,12 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
             BlockEntity be = level.getBlockEntity(pos);
             if (be != null) {
                 be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {
-                    if (handler instanceof IItemHandlerModifiable) {
-                        for (int i = 0; i < handler.getSlots(); i++) {
-                            ItemStack stack = handler.getStackInSlot(i);
+                    if (handler instanceof IItemHandlerModifiable modifiable) {
+                        for (int i = 0; i < modifiable.getSlots(); i++) {
+                            ItemStack stack = modifiable.getStackInSlot(i);
                             ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, stack.copy());
                             level.addFreshEntity(entity);
-                            ((IItemHandlerModifiable) handler).setStackInSlot(i, ItemStack.EMPTY);
+                            modifiable.setStackInSlot(i, ItemStack.EMPTY);
                         }
                     }
                 });

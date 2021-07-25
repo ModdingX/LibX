@@ -30,7 +30,7 @@ public class CodecProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@PrimaryConstructor can only be used on constructors.", rawElement);
             return;
         }
-        if (!(element.getEnclosingElement() instanceof TypeElement type)) {
+        if (!(element.getEnclosingElement() instanceof TypeElement typeElem)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Element annotated with @PrimaryConstructor is not a TypeElement.", element);
             return;
         }
@@ -38,15 +38,15 @@ public class CodecProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "The primary constructor of a class must be public.", element);
             return;
         }
-        if (type.getEnclosedElements().stream()
+        if (typeElem.getEnclosedElements().stream()
                 .filter(e -> e.getKind() == ElementKind.CONSTRUCTOR)
                 .filter(e -> e.getAnnotation(PrimaryConstructor.class) != null)
                 .count() >= 2) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "A class can only have one primary constructor.", type);
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "A class can only have one primary constructor.", typeElem);
             return;
         }
         if (element.getParameters().size() > 16) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "The primary constructor may not have more than 16 parameters. This is a limitation of DataFixerUpper.", type);
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "The primary constructor may not have more than 16 parameters. This is a limitation of DataFixerUpper.", typeElem);
             return;
         }
         List<GeneratedCodec.CodecElement> params = new ArrayList<>();
@@ -99,7 +99,7 @@ public class CodecProcessor {
             }
             params.add(codecType.generate(param, codecFieldName, getter, env));
         }
-        GeneratedCodec codec = new GeneratedCodec(type.getQualifiedName().toString(), params);
+        GeneratedCodec codec = new GeneratedCodec(typeElem.getQualifiedName().toString(), params);
         env.getMod(element).addCodec(codec);
     }
 

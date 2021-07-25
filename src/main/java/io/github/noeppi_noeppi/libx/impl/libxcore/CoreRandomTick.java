@@ -18,9 +18,9 @@ public class CoreRandomTick {
      * method passing the {@code this} reference and all parameters. Return {@code true} to stop further
      * processing.
      */
-    public static boolean processBlockTick(BlockStateBase state, ServerLevel level, BlockPos pos, Random rand) {
-        if (state instanceof BlockState) {
-            return MinecraftForge.EVENT_BUS.post(new RandomTickEvent.Block((BlockState) state, level, pos, rand));
+    public static boolean processBlockTick(BlockStateBase stateBase, ServerLevel level, BlockPos pos, Random rand) {
+        if (stateBase instanceof BlockState state) {
+            return MinecraftForge.EVENT_BUS.post(new RandomTickEvent.Block(state, level, pos, rand));
         }
         return false;
     }

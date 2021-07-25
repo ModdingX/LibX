@@ -119,14 +119,13 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateDefinition().getPossibleStates().stream().allMatch(state -> state.getRenderShape() != RenderShape.MODEL)) {
-            if (block instanceof LiquidBlock) {
-                return this.models().getBuilder(id.getPath()).texture("particle", ((LiquidBlock) block).getFluid().getAttributes().getStillTexture());
+            if (block instanceof LiquidBlock fluidBlock) {
+                return this.models().getBuilder(id.getPath()).texture("particle", fluidBlock.getFluid().getAttributes().getStillTexture());
             } else {
                 return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
             }
         } else if (block instanceof LeavesBlock) {
-            return this.models().withExistingParent(Objects.requireNonNull(block.getRegistryName()).getPath(), LEAVES_PARENT)
-                    .texture("all", this.blockTexture(block));
+            return this.models().withExistingParent(Objects.requireNonNull(block.getRegistryName()).getPath(), LEAVES_PARENT).texture("all", this.blockTexture(block));
         } else {
             return this.cubeAll(block);
         }
