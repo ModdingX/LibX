@@ -1,10 +1,10 @@
 package io.github.noeppi_noeppi.libx.impl.network;
 
 import io.github.noeppi_noeppi.libx.network.PacketSerializer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 
 public class BeUpdateSerializer implements PacketSerializer<BeUpdateSerializer.BeUpdateMessage> {
 

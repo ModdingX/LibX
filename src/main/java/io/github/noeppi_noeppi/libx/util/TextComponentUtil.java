@@ -1,12 +1,8 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import java.util.function.BiConsumer;
+import net.minecraft.network.chat.*;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.KeybindComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
+import java.util.function.BiConsumer;
 
 /**
  * Utilities for {@link Component text components}.

@@ -1,18 +1,11 @@
 package io.github.noeppi_noeppi.libx.util;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.*;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.NbtComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * Translates {@link Tag Named Binary Tag} into {@link MutableComponent text components}.

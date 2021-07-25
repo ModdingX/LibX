@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.impl.datapack;
 
 import com.google.gson.JsonObject;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraftforge.fmllegacy.packs.ModFileResourcePack;
 import net.minecraftforge.forgespi.locating.IModFile;
 

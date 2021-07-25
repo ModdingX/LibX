@@ -1,10 +1,10 @@
 package io.github.noeppi_noeppi.libx.base;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
@@ -19,8 +19,6 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import net.minecraft.world.item.Item.Properties;
 
 /**
  * Base class for {@link Item items} which have an inventory. This will provide the capability to the item.

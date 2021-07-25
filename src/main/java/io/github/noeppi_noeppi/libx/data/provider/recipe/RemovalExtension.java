@@ -3,8 +3,8 @@ package io.github.noeppi_noeppi.libx.data.provider.recipe;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.impl.recipe.EmptyRecipe;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

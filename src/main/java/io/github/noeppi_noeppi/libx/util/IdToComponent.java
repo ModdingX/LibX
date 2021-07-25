@@ -1,12 +1,7 @@
 package io.github.noeppi_noeppi.libx.util;
 
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.HoverEvent;
 
 /**
  * Translates {@link ResourceLocation resource locations} into {@link MutableComponent text components}.

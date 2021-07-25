@@ -2,16 +2,10 @@ package io.github.noeppi_noeppi.libx.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
 
 import java.util.Map;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * Translates JSON into {@link MutableComponent text components}.

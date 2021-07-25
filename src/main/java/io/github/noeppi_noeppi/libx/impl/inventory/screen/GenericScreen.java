@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.noeppi_noeppi.libx.inventory.container.GenericContainerMenu;
 import io.github.noeppi_noeppi.libx.render.RenderHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;

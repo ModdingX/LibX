@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.UUID;

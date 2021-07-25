@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.event;
 
-import net.minecraft.server.ServerResources;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.ServerResources;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 

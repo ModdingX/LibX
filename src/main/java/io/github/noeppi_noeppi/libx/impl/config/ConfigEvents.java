@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.impl.config;
 
 import io.github.noeppi_noeppi.libx.config.ConfigManager;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;

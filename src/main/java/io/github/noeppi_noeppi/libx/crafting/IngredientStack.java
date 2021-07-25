@@ -1,9 +1,9 @@
 package io.github.noeppi_noeppi.libx.crafting;
 
 import com.google.gson.JsonObject;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.Predicate;
 

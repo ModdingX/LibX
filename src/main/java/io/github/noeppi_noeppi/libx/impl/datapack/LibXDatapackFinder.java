@@ -2,10 +2,10 @@ package io.github.noeppi_noeppi.libx.impl.datapack;
 
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.datapack.DynamicDatapacks;
-import net.minecraft.server.packs.repository.RepositorySource;
-import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModFileInfo;
 

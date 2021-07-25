@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.impl.network;
 
 import io.github.noeppi_noeppi.libx.network.PacketSerializer;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class BeRequestSerializer implements PacketSerializer<BeRequestSerializer.BeRequestMessage> {
 

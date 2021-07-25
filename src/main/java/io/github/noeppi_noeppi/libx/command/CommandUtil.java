@@ -1,8 +1,8 @@
 package io.github.noeppi_noeppi.libx.command;
 
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Method;

@@ -6,8 +6,6 @@ import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
 
-import net.minecraft.world.item.Item.Properties;
-
 /**
  * Base class for {@link Item items} for mods using {@link ModXRegistration}. This will automatically set the
  * creative tab if it's defined in the mod.
