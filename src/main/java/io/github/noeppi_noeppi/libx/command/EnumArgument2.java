@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -82,7 +83,7 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
             try {
                 return new EnumArgument2(Class.forName(name));
             } catch (ClassNotFoundException e) {
-                System.err.println("Can't get enum value of type " + name + ". " + e.getMessage());
+                LibX.logger.warn("Can't get enum value of type " + name + "in command argument. " + e.getMessage());
                 //noinspection ConstantConditions
                 return null;
             }

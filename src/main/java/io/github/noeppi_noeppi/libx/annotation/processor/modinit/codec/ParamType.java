@@ -19,18 +19,18 @@ import java.util.stream.LongStream;
 public class ParamType implements CodecType {
     
     @Override
-    public boolean matchesDirect(VariableElement param, String name, ModEnv env) {
+    public boolean matchesDirect(Element param, String name, ModEnv env) {
         return param.getAnnotation(Param.class) != null;
     }
 
     @Override
-    public boolean matches(VariableElement param, String name, ModEnv env) {
+    public boolean matches(Element param, String name, ModEnv env) {
         // Last one in the list. Matches everything
         return true;
     }
 
     @Override
-    public GeneratedCodec.CodecElement generate(VariableElement param, String name, GetterSupplier getter, ModEnv env) throws FailureException {
+    public GeneratedCodec.CodecElement generate(Element param, String name, GetterSupplier getter, ModEnv env) throws FailureException {
         String typeFqn = param.asType().toString();
         String typeFqnBoxed = env.boxed(param.asType()).toString();
         String codecFqn;
@@ -107,6 +107,10 @@ public class ParamType implements CodecType {
                         if (result != null) return result;
                     }
                     env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: No default codec field found. Tried [ " + String.join(", ", ModInit.DEFAULT_PARAM_CODEC_FIELDS) + " ] in class " + codecClass + ".");
+                    // Run tryDetect on the all fields again to get error messages as all of them failed.
+                    for (String name : ModInit.DEFAULT_PARAM_CODEC_FIELDS) {
+                        tryDetect(paramElement, boxed, codecClass, name, env, true);
+                    }
                     return null;
                 } else {
                     return tryDetect(paramElement, boxed, codecClass, fieldName, env, true);
@@ -145,7 +149,7 @@ public class ParamType implements CodecType {
             }
             return null;
         }
-        if (!genericMatches(fieldElem.asType(), boxed, env)) {
+        if (!genericMatches(env.boxed(fieldElem.asType()), boxed, env)) {
             if (fail) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is not compatible with type " + type + ".", paramElement);
             }

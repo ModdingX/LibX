@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
+import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.*;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.SimpleValueMappers;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.*;
@@ -97,7 +98,7 @@ public class ModMappers {
             throw new IllegalStateException("Config mapper for type '" + mapper.type() + "' is already registered.");
         } else {
             if (globalMappers.containsKey(mapper.type())) {
-                System.out.println(this.modid + " registers a custom value mapper for type " + mapper.type() + " even if there'S a builtin one. This is discouraged.");
+                LibX.logger.warn(this.modid + " registers a custom value mapper for type " + mapper.type() + " even if there's a builtin one. This is discouraged.");
             }
             this.mappers.put(mapper.type(), mapper);
         }

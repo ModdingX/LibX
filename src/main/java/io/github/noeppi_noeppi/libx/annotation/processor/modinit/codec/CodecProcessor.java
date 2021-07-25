@@ -11,6 +11,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class CodecProcessor {
 
@@ -19,88 +20,112 @@ public class CodecProcessor {
             new ParamType()
     );
     
-    public static void processParam(Element element, ModEnv env) {
-        if (element.getEnclosingElement().getKind() != ElementKind.CONSTRUCTOR || element.getEnclosingElement().getAnnotation(PrimaryConstructor.class) == null) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "@Param can only be used on parameters of the primary constructor.");
+    public static void processAnyParam(Element element, String name, ModEnv env) {
+        if (element.getEnclosingElement().getKind() != ElementKind.CONSTRUCTOR || element.getEnclosingElement().getEnclosingElement().getKind() != ElementKind.RECORD) {
+            // Ignore constructors of records as the primary record constructor als is reported but without annotations.
+            if ((element.getEnclosingElement().getKind() != ElementKind.CONSTRUCTOR && element.getEnclosingElement().getKind() != ElementKind.RECORD) || element.getEnclosingElement().getAnnotation(PrimaryConstructor.class) == null) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "@" + name + " can only be used on parameters of the primary constructor.", element);
+            }
         }
     }
 
     public static void processPrimaryConstructor(Element rawElement, ModEnv env) throws FailureException {
-        if (rawElement.getKind() != ElementKind.CONSTRUCTOR || !(rawElement instanceof ExecutableElement element)) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "@PrimaryConstructor can only be used on constructors.", rawElement);
+        TypeElement typeElem;
+        List<? extends Element> elems;
+        BiFunction<Element, String, String> getterFunc;
+        List<GeneratedCodec.CodecElement> params = new ArrayList<>();
+        int maxMatchingCtors;
+        if (rawElement.getKind() == ElementKind.CONSTRUCTOR && rawElement.getEnclosingElement().getKind() != ElementKind.RECORD && rawElement instanceof ExecutableElement element) {
+            if (!(element.getEnclosingElement() instanceof TypeElement)) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Element annotated with @PrimaryConstructor is not a TypeElement.", element);
+                return;
+            }
+            typeElem = (TypeElement) element.getEnclosingElement();
+            if (!element.getModifiers().contains(Modifier.PUBLIC)) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "The primary constructor of a class must be public.", element);
+                return;
+            }
+            elems = element.getParameters();
+            getterFunc = (param, name) -> getGetter((TypeElement) element.getEnclosingElement(), param.asType(), name, env);
+            maxMatchingCtors = 1;
+        } else if (rawElement.getKind() == ElementKind.RECORD && rawElement instanceof TypeElement element) {
+            typeElem = element;
+            elems = element.getRecordComponents();
+            getterFunc = (param, name) -> GeneratedCodec.methodGetter(typeElem.getQualifiedName().toString(), name);
+            maxMatchingCtors = 0;
+        } else {
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "@PrimaryConstructor can only be used on constructors or records.", rawElement);
             return;
         }
-        if (!(element.getEnclosingElement() instanceof TypeElement typeElem)) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "Element annotated with @PrimaryConstructor is not a TypeElement.", element);
-            return;
-        }
-        if (!element.getModifiers().contains(Modifier.PUBLIC)) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "The primary constructor of a class must be public.", element);
-            return;
-        }
+
         if (typeElem.getEnclosedElements().stream()
                 .filter(e -> e.getKind() == ElementKind.CONSTRUCTOR)
                 .filter(e -> e.getAnnotation(PrimaryConstructor.class) != null)
-                .count() >= 2) {
+                .count() > maxMatchingCtors) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "A class can only have one primary constructor.", typeElem);
             return;
         }
-        if (element.getParameters().size() > 16) {
+        
+        if (elems.size() > 16) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "The primary constructor may not have more than 16 parameters. This is a limitation of DataFixerUpper.", typeElem);
             return;
         }
-        List<GeneratedCodec.CodecElement> params = new ArrayList<>();
-        for (VariableElement param : element.getParameters()) {
-            String name = param.getSimpleName().toString();
-            String codecFieldName;
-            {
-                StringBuilder sb = new StringBuilder();
-                for (char chr : name.toCharArray()) {
-                    if (Character.isUpperCase(chr)) {
-                        sb.append('_');
-                    }
-                    sb.append(Character.toLowerCase(chr));
+        
+        for (Element param : elems) {
+            generate(param, getterFunc, params, env);
+        }
+        GeneratedCodec codec = new GeneratedCodec(typeElem.getQualifiedName().toString(), params);
+        env.getMod(rawElement).addCodec(codec);
+    }
+    
+    private static void generate(Element param, BiFunction<Element, String, String> getterFunc, List<GeneratedCodec.CodecElement> params, ModEnv env) {
+        String name = param.getSimpleName().toString();
+        String codecFieldName;
+        {
+            StringBuilder sb = new StringBuilder();
+            for (char chr : name.toCharArray()) {
+                if (Character.isUpperCase(chr)) {
+                    sb.append('_');
                 }
-                codecFieldName = sb.toString();
+                sb.append(Character.toLowerCase(chr));
             }
-            
-            GetterSupplier getter = () -> {
-                String g = getGetter((TypeElement) element.getEnclosingElement(), param.asType(), name, env);
-                if (g == null) throw new FailureException();
-                return g;
-            };
-            
-            CodecType codecType = null;
+            codecFieldName = sb.toString();
+        }
+
+        GetterSupplier getter = () -> {
+            String g = getterFunc.apply(param, name);
+            if (g == null) throw new FailureException();
+            return g;
+        };
+
+        CodecType codecType = null;
+        for (CodecType c : CODECS) {
+            if (c.matchesDirect(param, codecFieldName, env)) {
+                if (codecType != null) {
+                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't use multiple codec parameter annotations on the same element.", param);
+                    return;
+                }
+                codecType = c;
+            }
+        }
+        if (codecType == null) {
             for (CodecType c : CODECS) {
-                if (c.matchesDirect(param, codecFieldName, env)) {
-                    if (codecType != null) {
-                        env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't use multiple codec parameter annotations on the same element.", param);
-                        return;
-                    }
+                if (c.matches(param, codecFieldName, env)) {
                     codecType = c;
+                    break;
                 }
             }
             if (codecType == null) {
-                for (CodecType c : CODECS) {
-                    if (c.matches(param, codecFieldName, env)) {
-                        codecType = c;
-                        break;
-                    }
-                }
-                if (codecType == null) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't infer codec type for parameter. Add an explicit annotation.", param);
-                    return;
-                }
-            } else {
-                if (!codecType.matches(param, codecFieldName, env)) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Parameter is not valid for applied annotation.", param);
-                    return;
-                }
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't infer codec type for parameter. Add an explicit annotation.", param);
+                return;
             }
-            params.add(codecType.generate(param, codecFieldName, getter, env));
+        } else {
+            if (!codecType.matches(param, codecFieldName, env)) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Parameter is not valid for applied annotation.", param);
+                return;
+            }
         }
-        GeneratedCodec codec = new GeneratedCodec(typeElem.getQualifiedName().toString(), params);
-        env.getMod(element).addCodec(codec);
+        params.add(codecType.generate(param, codecFieldName, getter, env));
     }
 
     @Nullable

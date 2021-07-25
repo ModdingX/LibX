@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
 import io.github.noeppi_noeppi.libx.command.EnumArgument2;
-import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;

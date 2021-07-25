@@ -13,7 +13,7 @@ import java.util.List;
 public class DatagenProcessor {
     
     public static void processDatagen(Element element, ModEnv env) {
-        if (element.getEnclosingElement().getKind() != ElementKind.CLASS || !(element instanceof TypeElement)) {
+        if (element.getKind() != ElementKind.CLASS || !(element instanceof TypeElement)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't use @Datagen on element that is not a class.", element);
             return;
         }

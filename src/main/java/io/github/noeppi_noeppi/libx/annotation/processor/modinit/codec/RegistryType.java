@@ -16,12 +16,12 @@ import java.util.List;
 public class RegistryType implements CodecType {
     
     @Override
-    public boolean matchesDirect(VariableElement param, String name, ModEnv env) {
+    public boolean matchesDirect(Element param, String name, ModEnv env) {
         return param.getAnnotation(Lookup.class) != null;
     }
 
     @Override
-    public boolean matches(VariableElement param, String name, ModEnv env) {
+    public boolean matches(Element param, String name, ModEnv env) {
         Element element = env.types().asElement(param.asType());
         if (element instanceof TypeElement) {
             return ((TypeElement) element).getQualifiedName().contentEquals(ModInit.REGISTRY_TYPE);
@@ -31,7 +31,7 @@ public class RegistryType implements CodecType {
     }
 
     @Override
-    public GeneratedCodec.CodecElement generate(VariableElement param, String name, GetterSupplier getter, ModEnv env) throws FailureException {
+    public GeneratedCodec.CodecElement generate(Element param, String name, GetterSupplier getter, ModEnv env) throws FailureException {
         String typeFqn = param.asType().toString();
         String typeFqnBoxed = env.boxed(param.asType()).toString();
         String namespace;

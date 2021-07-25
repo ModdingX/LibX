@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * {@code DIRECT_CODEC} in the class of the parameter type.
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.RECORD_COMPONENT})
 @Documented
 public @interface Param {
 

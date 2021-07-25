@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 
 import java.lang.annotation.*;
 
+// TODO update doc. Can now also be used on records.
 /**
  * This is used to create very simple Codecs for classes. It will always create
  * {@link RecordCodecBuilder} s that fill values. Default values are not directly
@@ -42,7 +43,7 @@ import java.lang.annotation.*;
  * To get your codec, use {@link Codecs#get(Class, Class)}.
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.CONSTRUCTOR)
+@Target({ElementType.TYPE, ElementType.CONSTRUCTOR})
 @Documented
 public @interface PrimaryConstructor {
     

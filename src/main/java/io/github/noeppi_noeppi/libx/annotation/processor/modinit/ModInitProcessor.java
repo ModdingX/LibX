@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
 import io.github.noeppi_noeppi.libx.annotation.ForMod;
+import io.github.noeppi_noeppi.libx.annotation.codec.Lookup;
 import io.github.noeppi_noeppi.libx.annotation.codec.Param;
 import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
 import io.github.noeppi_noeppi.libx.annotation.config.RegisterConfig;
@@ -46,8 +47,9 @@ public class ModInitProcessor extends Processor {
                 Model.class,
                 RegisterConfig.class,
                 RegisterMapper.class,
-                Param.class,
                 PrimaryConstructor.class,
+                Param.class,
+                Lookup.class,
                 Datagen.class
         };
     }
@@ -218,7 +220,14 @@ public class ModInitProcessor extends Processor {
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(Param.class)) {
             try {
-                CodecProcessor.processParam(element, local);
+                CodecProcessor.processAnyParam(element, "Param", local);
+            } catch (FailureException e) {
+                //
+            }
+        }
+        for (Element element : roundEnv.getElementsAnnotatedWith(Lookup.class)) {
+            try {
+                CodecProcessor.processAnyParam(element, "Lookup", local);
             } catch (FailureException e) {
                 //
             }

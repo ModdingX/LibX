@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * be used on parameters of type {@link Registry}.
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.RECORD_COMPONENT})
 @Documented
 public @interface Lookup {
 
