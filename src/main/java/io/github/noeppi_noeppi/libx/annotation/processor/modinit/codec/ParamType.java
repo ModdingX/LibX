@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 
 import io.github.noeppi_noeppi.libx.annotation.codec.Param;
-import io.github.noeppi_noeppi.libx.annotation.processor.modinit.GeneratedCodec;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 

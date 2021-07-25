@@ -1,6 +1,7 @@
-package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
+package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 
 import io.github.noeppi_noeppi.libx.annotation.impl.ProcessorInterface;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -61,13 +62,15 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         public final String registryNamespace;
         @Nullable
         public final String registryPath;
+        public final String registryTypeStr;
         public final String registryTypeFqn;
         public final String getter;
 
-        public CodecRegistry(String typeFqn, String typeFqnBoxed, @Nullable String registryNamespace, @Nullable String registryPath, String registryTypeFqn, String getter) {
+        public CodecRegistry(String typeFqn, String typeFqnBoxed, @Nullable String registryNamespace, @Nullable String registryPath, String registryTypeStr, String registryTypeFqn, String getter) {
             super(typeFqn, typeFqnBoxed);
             this.registryNamespace = registryNamespace;
             this.registryPath = registryPath;
+            this.registryTypeStr = registryTypeStr;
             this.registryTypeFqn = registryTypeFqn;
             this.getter = getter;
         }
@@ -75,14 +78,14 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         @Override
         public void writeCode(Writer writer) throws IOException {
             if (this.registryNamespace != null && this.registryPath != null) {
-                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeFqn + ">registryCodec(");
-                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeFqn + ">rootKey(");
+                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeStr + ">registryCodec(");
+                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeStr + ">rootKey(");
                 writer.write(ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + ModInit.quote(this.registryNamespace) + "\",\"" + ModInit.quote(this.registryPath) + "\")");
                 writer.write(")");
                 writer.write(")");
             } else {
-                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeFqn + ">registryCodec(");
-                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeFqn + ">getCodecDefaultRegistryKey(" + this.registryTypeFqn + ".class)");
+                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeStr + ">registryCodec(");
+                writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeStr + ">getCodecDefaultRegistryKey(" + this.registryTypeFqn + ".class)");
                 writer.write(")");
             }
             writer.write(".forGetter(" + this.getter + ")");

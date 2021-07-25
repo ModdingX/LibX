@@ -40,11 +40,11 @@ public class RegisterClassProcessor {
             return Stream.empty();
         } else {
             if (!element.getModifiers().contains(Modifier.STATIC)) {
-                env.messager().printMessage(Diagnostic.Kind.WARNING, "Skipping non-static member for automatic registration. Use @NoReg to suppress.", element);
+                env.messager().printMessage(Diagnostic.Kind.WARNING, "Skipping non-static or non-final member for automatic registration. Use @NoReg to suppress.", element);
                 return Stream.empty();
             }
             if (!element.getModifiers().contains(Modifier.FINAL)) {
-                env.messager().printMessage(Diagnostic.Kind.WARNING, "Skipping non-static member for automatic registration. Use @NoReg to suppress.", element);
+                env.messager().printMessage(Diagnostic.Kind.WARNING, "Skipping non-static or non-final member for automatic registration. Use @NoReg to suppress.", element);
                 return Stream.empty();
             }
             if (!element.getModifiers().contains(Modifier.PUBLIC) && !element.getModifiers().contains(Modifier.PRIVATE)) {

@@ -43,9 +43,9 @@ public class ProcessorInterface {
     public static <T> MapCodec<Registry<T>> registryCodec(ResourceKey<Registry<T>> registry) {
         return RegistryLookupCodec.create(registry);
     }
-    
+
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> ResourceKey<Registry<T>> getCodecDefaultRegistryKey(Class<T> clazz) {
+    public static <T> ResourceKey<Registry<T>> getCodecDefaultRegistryKey(Class<?> clazz) {
         if (clazz.equals(DimensionType.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.DIMENSION_TYPE_REGISTRY;
         if (clazz.equals(Biome.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.BIOME_REGISTRY;
         if (clazz.equals(ConfiguredSurfaceBuilder.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_SURFACE_BUILDER_REGISTRY;

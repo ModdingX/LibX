@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
 import io.github.noeppi_noeppi.libx.annotation.impl.ProcessorInterface;
+import io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec;
 import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
@@ -16,7 +17,6 @@ import java.io.Writer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// TODO Check ModInit as things have been refactored. Verify that code generates correctly.
 public class ModInit  {
 
     public static final String MOD_ANNOTATION_TYPE = "net.minecraftforge.fml.common.Mod";

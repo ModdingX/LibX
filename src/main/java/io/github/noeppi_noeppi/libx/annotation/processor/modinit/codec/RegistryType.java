@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 
 import io.github.noeppi_noeppi.libx.annotation.codec.Lookup;
-import io.github.noeppi_noeppi.libx.annotation.processor.modinit.GeneratedCodec;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 
@@ -46,16 +45,18 @@ public class RegistryType implements CodecType {
         }
         TypeMirror mirror = param.asType();
         TypeElement generic = null;
+        TypeMirror genericType = null;
         if (mirror instanceof DeclaredType) {
             List<? extends TypeMirror> generics = ((DeclaredType) mirror).getTypeArguments();
             if (generics != null && generics.size() == 1) {
-                Element elem = env.types().asElement(generics.get(0));
+                genericType = generics.get(0);
+                Element elem = env.types().asElement(genericType);
                 if (elem instanceof TypeElement) {
                     generic = (TypeElement) elem;
                 }
             }
         }
-        if (generic == null) {
+        if (genericType == null || generic == null) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Could not infer registry type for registry codec.", param);
             throw new FailureException();
         }
@@ -63,6 +64,6 @@ public class RegistryType implements CodecType {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't infer registry key for type '" + generic.getQualifiedName() + "'. Set it by annotation value.", param);
             throw new FailureException();
         }
-        return new GeneratedCodec.CodecRegistry(typeFqn, typeFqnBoxed, path == null ? null : namespace, path, generic.getQualifiedName().toString(), getter.get());
+        return new GeneratedCodec.CodecRegistry(typeFqn, typeFqnBoxed, path == null ? null : namespace, path, genericType.toString(), generic.getQualifiedName().toString(), getter.get());
     }
 }
