@@ -5,20 +5,15 @@ import io.github.noeppi_noeppi.libx.annotation.impl.ProcessorInterface;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class GeneratedCodec {
+public record GeneratedCodec(String fqn, List<CodecElement> params) {
 
     private static int objCounter = 0;
 
-    public final String fqn;
-    public final List<CodecElement> params;
-
     public GeneratedCodec(String fqn, List<CodecElement> params) {
         this.fqn = fqn;
-        this.params = Collections.unmodifiableList(new ArrayList<>(params));
+        this.params = List.copyOf(params);
     }
 
     public static abstract class CodecElement {
@@ -59,9 +54,9 @@ public class GeneratedCodec {
             writer.write(".forGetter(" + this.getter + ")");
         }
     }
-    
+
     public static class CodecRegistry extends CodecElement {
-        
+
         @Nullable
         public final String registryNamespace;
         @Nullable
@@ -76,9 +71,8 @@ public class GeneratedCodec {
             this.registryTypeFqn = registryTypeFqn;
             this.getter = getter;
         }
-        
+
         @Override
-        @SuppressWarnings("deprecation")
         public void writeCode(Writer writer) throws IOException {
             if (this.registryNamespace != null && this.registryPath != null) {
                 writer.write(ProcessorInterface.class.getCanonicalName() + ".<" + this.registryTypeFqn + ">registryCodec(");

@@ -2,17 +2,7 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
 import java.util.Objects;
 
-public class RegisteredConfig {
-    
-    public final String name;
-    public final boolean client;
-    public final String classFqn;
-    
-    public RegisteredConfig(String name, boolean client, String classFqn) {
-        this.name = name;
-        this.client = client;
-        this.classFqn = classFqn;
-    }
+public record RegisteredConfig(String name, boolean client, String classFqn) {
 
     @Override
     public boolean equals(Object o) {

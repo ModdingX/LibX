@@ -62,7 +62,7 @@ public class ConfigImpl {
     }
 
     public static Set<ConfigImpl> getAllConfigs() {
-        return Collections.unmodifiableSet(new HashSet<>(configs.values()));
+        return Set.copyOf(configs.values());
     }
     
     public final ResourceLocation id;

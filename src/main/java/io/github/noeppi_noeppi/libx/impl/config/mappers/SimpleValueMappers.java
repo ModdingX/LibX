@@ -20,8 +20,8 @@ public class SimpleValueMappers {
     
     private static <T> ValueMapper<T, JsonPrimitive> createPrimitive(Class<T> typeClass, Function<JsonPrimitive, T> fromJSON, Function<T, JsonPrimitive> toJSON, Function<FriendlyByteBuf, T> read, BiConsumer<FriendlyByteBuf, T> write) {
         
-        return new ValueMapper<T, JsonPrimitive>() {
-            
+        return new ValueMapper<>() {
+
             @Override
             public Class<T> type() {
                 return typeClass;

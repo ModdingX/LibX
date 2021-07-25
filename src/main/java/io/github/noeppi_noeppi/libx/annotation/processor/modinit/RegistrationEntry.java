@@ -2,15 +2,7 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
 import java.util.Objects;
 
-public class RegistrationEntry {
-
-    public final String registryName;
-    public final String fqn;
-
-    public RegistrationEntry(String registryName, String fqn) {
-        this.registryName = registryName;
-        this.fqn = fqn;
-    }
+public record RegistrationEntry(String registryName, String fqn) {
 
     @Override
     public boolean equals(Object o) {

@@ -21,12 +21,5 @@ public class BeRequestSerializer implements PacketSerializer<BeRequestSerializer
         return new BeRequestMessage(buffer.readBlockPos());
     }
 
-    public static class BeRequestMessage {
-
-        public BlockPos pos;
-
-        public BeRequestMessage(BlockPos pos) {
-            this.pos = pos;
-        }
-    }
+    public record BeRequestMessage(BlockPos pos) {}
 }

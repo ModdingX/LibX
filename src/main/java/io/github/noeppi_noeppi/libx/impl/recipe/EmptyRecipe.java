@@ -83,7 +83,7 @@ public class EmptyRecipe implements Recipe<Container> {
 
     @Override
     public boolean isSpecial() {
-        return Recipe.super.isSpecial();
+        return false;
     }
     
     @Nonnull

@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.libxcore;
 
 import io.github.noeppi_noeppi.libx.event.RandomTickEvent;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;

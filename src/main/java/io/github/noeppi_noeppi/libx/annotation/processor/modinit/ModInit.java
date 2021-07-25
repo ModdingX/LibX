@@ -26,16 +26,15 @@ public class ModInit  {
     public static final String CODEC_TYPE = "com.mojang.serialization.Codec";
     public static final String RECORD_CODEC_BUILDER_TYPE = "com.mojang.serialization.codecs.RecordCodecBuilder";
 
-    public static final List<String> DEFAULT_PARAM_CODEC_FIELDS = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-            "CODEC", "DIRECT_CODEC"
-    )));
+    public static final List<String> DEFAULT_PARAM_CODEC_FIELDS = List.of("CODEC", "DIRECT_CODEC");
 
+    // TODO Add everything from RegistryAccess to the list.
     // When something is added here, also add it to ProcessorInterface.getCodecDefaultRegistryKey
-    public static final Set<String> ALLOWED_REGISTRY_CODEC_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+    public static final Set<String> ALLOWED_REGISTRY_CODEC_TYPES = Set.of(
             "net.minecraft.world.biome.Biome",
             "net.minecraft.world.gen.DimensionSettings"
             // TODO Add everything from RegistryAccess to the list.
-    )));
+    );
     
     public final String modid;
     public final Element modClass;
@@ -89,32 +88,32 @@ public class ModInit  {
                 writer.write("private static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_TYPE + "<?>>buildCodecs(){");
                 writer.write(ProcessorInterface.LazyMapBuilder.class.getCanonicalName() + " builder=" + ProcessorInterface.class.getCanonicalName() + ".lazyMapBuilder();");
                 for (GeneratedCodec codec : this.codecs) {
-                    writer.write("builder.put(" + codec.fqn + ".class,");
-                    writer.write("() -> " + RECORD_CODEC_BUILDER_TYPE + ".<" + codec.fqn + ">create(instance->");
+                    writer.write("builder.put(" + codec.fqn() + ".class,");
+                    writer.write("() -> " + RECORD_CODEC_BUILDER_TYPE + ".<" + codec.fqn() + ">create(instance->");
                     writer.write("instance.group(");
-                    for (int i = 0; i < codec.params.size(); i++) {
-                        GeneratedCodec.CodecElement param = codec.params.get(i);
+                    for (int i = 0; i < codec.params().size(); i++) {
+                        GeneratedCodec.CodecElement param = codec.params().get(i);
                         writer.write("(");
                         param.writeCode(writer);
                         writer.write(")");
-                        if (i < codec.params.size() - 1) {
+                        if (i < codec.params().size() - 1) {
                             writer.write(",");
                         }
                     }
                     writer.write(").apply(instance,instance.stable(");
                     writer.write("(");
-                    for (int i = 0; i < codec.params.size(); i++) {
-                        GeneratedCodec.CodecElement param = codec.params.get(i);
+                    for (int i = 0; i < codec.params().size(); i++) {
+                        GeneratedCodec.CodecElement param = codec.params().get(i);
                         writer.write(param.typeFqnBoxed + " ctorArg" + i);
-                        if (i < codec.params.size() - 1) {
+                        if (i < codec.params().size() - 1) {
                             writer.write(",");
                         }
                     }
                     writer.write(")->{");
-                    writer.write("return new " + codec.fqn + "(");
-                    for (int i = 0; i < codec.params.size(); i++) {
+                    writer.write("return new " + codec.fqn() + "(");
+                    for (int i = 0; i < codec.params().size(); i++) {
                         writer.write("ctorArg" + i);
-                        if (i < codec.params.size() - 1) {
+                        if (i < codec.params().size() - 1) {
                             writer.write(",");
                         }
                     }
@@ -129,7 +128,7 @@ public class ModInit  {
             writer.write("public static void init(" + ModX.class.getCanonicalName() + " mod){");
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
             for (RegisteredConfig config : this.configs) {
-                writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name) + "\")," + config.classFqn + ".class," + config.client + ");");
+                writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
             }
             if (!allReg.isEmpty()) {
                 writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
@@ -144,7 +143,7 @@ public class ModInit  {
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
                 for (RegistrationEntry entry : allReg) {
-                    writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).register(\"" + quote(entry.registryName) + "\"," + entry.fqn + ");");
+                    writer.write("((" + ModXRegistration.class.getCanonicalName() + ")mod).register(\"" + quote(entry.registryName()) + "\"," + entry.fqn() + ");");
                 }
                 writer.write("}");
             }
@@ -152,13 +151,13 @@ public class ModInit  {
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void registerModels(net.minecraftforge.client.event.ModelRegistryEvent event){");
                 for (LoadableModel model : this.models) {
-                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
+                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
                 }
                 writer.write("}");
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void bakeModels(net.minecraftforge.client.event.ModelBakeEvent event){");
                 for (LoadableModel model : this.models) {
-                    writer.write(model.classFqn + "." + quote(model.fieldName) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
+                    writer.write(model.classFqn() + "." + quote(model.fieldName()) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
                 }
                 writer.write("}");
             }

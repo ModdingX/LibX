@@ -2,19 +2,7 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
 import java.util.Objects;
 
-public class LoadableModel {
-    
-    public final String classFqn;
-    public final String fieldName;
-    public final String modelNamespace;
-    public final String modelPath;
-
-    public LoadableModel(String classFqn, String fieldName, String modelNamespace, String modelPath) {
-        this.classFqn = classFqn;
-        this.fieldName = fieldName;
-        this.modelNamespace = modelNamespace;
-        this.modelPath = modelPath;
-    }
+public record LoadableModel(String classFqn, String fieldName, String modelNamespace, String modelPath) {
 
     @Override
     public boolean equals(Object o) {

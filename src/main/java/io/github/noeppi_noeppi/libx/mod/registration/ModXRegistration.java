@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
+import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +37,7 @@ import java.util.function.Predicate;
  * This system has several advantages over the one recommended by forge:
  * <ul>
  *     <li>An object can have dependencies that are automatically registered with it. This is done with
- *     the {@link Registerable} interface. For example {@link BlockTE} registers a block, an item for
+ *     the {@link Registerable} interface. For example {@link BlockBE} registers a block, an item for
  *     the block and a tile entity type. You could even go further with it and automatically register
  *     slabs, stairs, walls and doors for all of your decorative blocks.</li>
  *     <li>There's way less code you need to write.</li>

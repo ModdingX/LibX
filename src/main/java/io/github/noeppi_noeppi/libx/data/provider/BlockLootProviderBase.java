@@ -542,7 +542,6 @@ public abstract class BlockLootProviderBase implements DataProvider {
      * alter the behaviour.
      */
     protected boolean needsLootTable(BlockState state) {
-        //noinspection deprecation
         return !state.isAir() && state.getFluidState().createLegacyBlock().getBlock() != state.getBlock()
                 && !BuiltInLootTables.EMPTY.equals(state.getBlock().getLootTable());
     }

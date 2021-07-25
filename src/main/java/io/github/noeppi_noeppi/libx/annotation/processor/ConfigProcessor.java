@@ -17,17 +17,17 @@ public class ConfigProcessor extends Processor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        
-        Set<TypeMirror> wrapperTypesMutable = new HashSet<>();
-        wrapperTypesMutable.add(this.forClass(Boolean.class));
-        wrapperTypesMutable.add(this.forClass(Byte.class));
-        wrapperTypesMutable.add(this.forClass(Character.class));
-        wrapperTypesMutable.add(this.forClass(Short.class));
-        wrapperTypesMutable.add(this.forClass(Integer.class));
-        wrapperTypesMutable.add(this.forClass(Long.class));
-        wrapperTypesMutable.add(this.forClass(Float.class));
-        wrapperTypesMutable.add(this.forClass(Double.class));
-        this.wrapperTypes = Collections.unmodifiableSet(wrapperTypesMutable);
+
+        this.wrapperTypes = Set.of(
+                this.forClass(Boolean.class),
+                this.forClass(Byte.class),
+                this.forClass(Character.class),
+                this.forClass(Short.class),
+                this.forClass(Integer.class),
+                this.forClass(Long.class),
+                this.forClass(Float.class),
+                this.forClass(Double.class)
+        );
     }
 
     @Override

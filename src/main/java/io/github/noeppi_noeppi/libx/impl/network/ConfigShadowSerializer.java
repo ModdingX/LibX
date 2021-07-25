@@ -44,14 +44,5 @@ public class ConfigShadowSerializer implements PacketSerializer<ConfigShadowSeri
         }
     }
 
-    public static class ConfigShadowMessage {
-
-        public ConfigImpl config;
-        public ConfigState state;
-
-        public ConfigShadowMessage(ConfigImpl config, ConfigState state) {
-            this.config = config;
-            this.state = state;
-        }
-    }
+    public record ConfigShadowMessage(ConfigImpl config, ConfigState state) {}
 }

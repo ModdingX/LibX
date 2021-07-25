@@ -9,16 +9,14 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class CodecProcessor {
 
-    public static final List<CodecType> CODECS = Collections.unmodifiableList(Arrays.asList(
+    public static final List<CodecType> CODECS = List.of(
             new RegistryType(),
             new ParamType()
-    ));
+    );
     
     public static void processParam(Element element, ModEnv env) {
         if (element.getEnclosingElement().getKind() != ElementKind.CONSTRUCTOR || element.getEnclosingElement().getAnnotation(PrimaryConstructor.class) == null) {

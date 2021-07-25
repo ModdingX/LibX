@@ -29,16 +29,5 @@ public class BeUpdateSerializer implements PacketSerializer<BeUpdateSerializer.B
         return new BeUpdateMessage(pos, id, nbt);
     }
 
-    public static class BeUpdateMessage {
-
-        public BlockPos pos;
-        public ResourceLocation id;
-        public CompoundTag nbt;
-
-        public BeUpdateMessage(BlockPos pos, ResourceLocation id, CompoundTag nbt) {
-            this.pos = pos;
-            this.id = id;
-            this.nbt = nbt;
-        }
-    }
+    public record BeUpdateMessage(BlockPos pos, ResourceLocation id, CompoundTag nbt) {}
 }

@@ -14,9 +14,9 @@ public class BeUpdateHandler {
             Level level = Minecraft.getInstance().level;
             if (level == null)
                 return;
-            BlockEntity be = level.getBlockEntity(msg.pos);
-            if (be != null && msg.id.equals(be.getType().getRegistryName())) {
-                be.handleUpdateTag(msg.nbt);
+            BlockEntity be = level.getBlockEntity(msg.pos());
+            if (be != null && msg.id().equals(be.getType().getRegistryName())) {
+                be.handleUpdateTag(msg.nbt());
             }
         });
         ctx.get().setPacketHandled(true);

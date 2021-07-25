@@ -43,7 +43,7 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
 
     @Override
     public JsonElement toJSON(Optional<T> value, ValueMapper<T, JsonElement> mapper) {
-        if (!value.isPresent()) {
+        if (value.isEmpty()) {
             return JsonNull.INSTANCE;
         } else {
             return mapper.toJSON(value.get());
@@ -61,7 +61,7 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
 
     @Override
     public void write(Optional<T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
-        if (!value.isPresent()) {
+        if (value.isEmpty()) {
             buffer.writeBoolean(false);
         } else {
             buffer.writeBoolean(true);

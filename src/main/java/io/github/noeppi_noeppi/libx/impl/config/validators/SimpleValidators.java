@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class SimpleValidators {
     
-    public static final ConfigValidator<Short, ShortRange> SHORT = new ConfigValidator<Short, ShortRange>() {
+    public static final ConfigValidator<Short, ShortRange> SHORT = new ConfigValidator<>() {
         @Override
         public Class<Short> type() {
             return Short.class;
@@ -41,7 +41,7 @@ public class SimpleValidators {
         }
     };
 
-    public static final ConfigValidator<Integer, IntRange> INTEGER = new ConfigValidator<Integer, IntRange>() {
+    public static final ConfigValidator<Integer, IntRange> INTEGER = new ConfigValidator<>() {
         @Override
         public Class<Integer> type() {
             return Integer.class;
@@ -72,7 +72,7 @@ public class SimpleValidators {
         }
     };
 
-    public static final ConfigValidator<Long, LongRange> LONG = new ConfigValidator<Long, LongRange>() {
+    public static final ConfigValidator<Long, LongRange> LONG = new ConfigValidator<>() {
         @Override
         public Class<Long> type() {
             return Long.class;
@@ -103,7 +103,7 @@ public class SimpleValidators {
         }
     };
 
-    public static final ConfigValidator<Float, FloatRange> FLOAT = new ConfigValidator<Float, FloatRange>() {
+    public static final ConfigValidator<Float, FloatRange> FLOAT = new ConfigValidator<>() {
         @Override
         public Class<Float> type() {
             return Float.class;
@@ -134,7 +134,7 @@ public class SimpleValidators {
         }
     };
 
-    public static final ConfigValidator<Double, DoubleRange> DOUBLE = new ConfigValidator<Double, DoubleRange>() {
+    public static final ConfigValidator<Double, DoubleRange> DOUBLE = new ConfigValidator<>() {
         @Override
         public Class<Double> type() {
             return Double.class;

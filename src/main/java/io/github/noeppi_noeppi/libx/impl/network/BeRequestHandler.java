@@ -16,8 +16,8 @@ public class BeRequestHandler {
                 return;
             ServerLevel level = sender.getLevel();
             //noinspection deprecation
-            if (level.hasChunkAt(msg.pos)) {
-                NetworkImpl.getImpl().updateBE(PacketDistributor.PLAYER.with(() -> sender), level, msg.pos);
+            if (level.hasChunkAt(msg.pos())) {
+                NetworkImpl.getImpl().updateBE(PacketDistributor.PLAYER.with(() -> sender), level, msg.pos());
             }
         });
         ctx.get().setPacketHandled(true);

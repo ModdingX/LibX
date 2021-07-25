@@ -10,32 +10,7 @@ import java.util.function.Predicate;
 /**
  * An {@link Ingredient} with an amount.
  */
-public class IngredientStack implements Predicate<ItemStack> {
-    
-    private final Ingredient ingredient;
-    private final int count;
-
-    /**
-     * Creates a new IngredientStack
-     */
-    public IngredientStack(Ingredient ingredient, int count) {
-        this.ingredient = ingredient;
-        this.count = Math.max(count, 0);
-    }
-
-    /**
-     * Gets the {@link Ingredient} for this ingredient stack.
-     */
-    public Ingredient getIngredient() {
-        return this.ingredient;
-    }
-
-    /**
-     * Gets the count for this ingredient stack.
-     */
-    public int getCount() {
-        return this.count;
-    }
+public record IngredientStack(Ingredient ingredient, int count) implements Predicate<ItemStack> {
 
     /**
      * Returns whether the ingredient matches the stack and the count of the stack is greater or equal
@@ -49,7 +24,7 @@ public class IngredientStack implements Predicate<ItemStack> {
     /**
      * Returns whether the count is 0 or Ingredient#hasNoMatchingItems return true.
      */
-    public boolean isEmpty() {
+    public boolean empty() {
         return this.count == 0 || this.ingredient.isEmpty();
     }
 
@@ -70,7 +45,7 @@ public class IngredientStack implements Predicate<ItemStack> {
         buffer.writeVarInt(this.count);
         this.ingredient.toNetwork(buffer);
     }
-    
+
     /**
      * Deserializes and IngredientStack from json.
      */
@@ -79,7 +54,7 @@ public class IngredientStack implements Predicate<ItemStack> {
         int count = json.has("Count") && json.get("Count").isJsonPrimitive() ? json.get("Count").getAsInt() : 0;
         return new IngredientStack(ingredient, count);
     }
-    
+
     /**
      * Reads an IngredientStack from a {@link FriendlyByteBuf}
      */
