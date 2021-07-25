@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx;
 
-import io.github.noeppi_noeppi.libx.base.BlockEntityBase;
+import io.github.noeppi_noeppi.libx.base.tile.BlockEntityBase;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

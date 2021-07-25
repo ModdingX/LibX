@@ -16,7 +16,7 @@ io/github/noeppi_noeppi/libx/impl/config/ConfiguredValidator io/github/noeppi_no
 io/github/noeppi_noeppi/libx/impl/config/SimpleValidators io/github/noeppi_noeppi/libx/impl/config/validators/SimpleValidators
 io/github/noeppi_noeppi/libx/inventory/ItemStackHandlerWrapper io/github/noeppi_noeppi/libx/inventory/ItemCapabilities
 io/github/noeppi_noeppi/libx/inventory/container/CommonContainer io/github/noeppi_noeppi/libx/inventory/container/ContainerMenuBase
-io/github/noeppi_noeppi/libx/inventory/container/ContainerBase io/github/noeppi_noeppi/libx/inventory/container/TileContainerMenu
+io/github/noeppi_noeppi/libx/inventory/container/ContainerBase io/github/noeppi_noeppi/libx/inventory/container/BlockEntityMenu
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity io/github/noeppi_noeppi/libx/inventory/container/EntityContainerMenu
 io/github/noeppi_noeppi/libx/mod/registration/Colored io/github/noeppi_noeppi/libx/mod/registration/EnumObjects
 io/github/noeppi_noeppi/libx/mod/registration/Colored <init> (Ljava/util/function/Function;)V colored
@@ -25,7 +25,7 @@ io/github/noeppi_noeppi/libx/mod/registration/BlockGUI io/github/noeppi_noeppi/l
 io/github/noeppi_noeppi/libx/mod/registration/BlockTE io/github/noeppi_noeppi/libx/base/tile/BlockBE
 io/github/noeppi_noeppi/libx/mod/registration/ItemBase io/github/noeppi_noeppi/libx/base/ItemBase
 io/github/noeppi_noeppi/libx/mod/registration/ItemInventory io/github/noeppi_noeppi/libx/base/ItemInventory
-io/github/noeppi_noeppi/libx/mod/registration/TileEntityBase io/github/noeppi_noeppi/libx/base/BlockEntityBase
+io/github/noeppi_noeppi/libx/mod/registration/TileEntityBase io/github/noeppi_noeppi/libx/base/tile/BlockEntityBase
 io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent path configPath
 io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent getPath ()Ljava/nio/file/Path; getConfigPath
 io/github/noeppi_noeppi/libx/command/UppercaseEnumArgument io/github/noeppi_noeppi/libx/command/EnumArgument2
@@ -50,8 +50,20 @@ io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerTy
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lcom/mojang/datafixers/util/Function5;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/render/RenderHelper color (I)V rgb
-
-
+io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTile (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity; getBlockEntity
+io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTileType ()Lnet/minecraft/world/level/block/entity/BlockEntityType; getBlockEntityType
+io/github/noeppi_noeppi/libx/impl/TileEntityUpdateQueue io/github/noeppi_noeppi/libx/impl/BlockEntityUpdateQueue
+io/github/noeppi_noeppi/libx/impl/network/NetworkImpl updateTE (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V updateBE
+io/github/noeppi_noeppi/libx/impl/network/NetworkImpl requestTE (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V requestBE
+io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase TEISR_PARENT SPECIAL_BLOCK_PARENT
+io/github/noeppi_noeppi/libx/impl/network/TeRequestSerializer io/github/noeppi_noeppi/libx/impl/network/BeRequestSerializer
+io/github/noeppi_noeppi/libx/impl/network/TeRequestHandler io/github/noeppi_noeppi/libx/impl/network/BeRequestHandler
+io/github/noeppi_noeppi/libx/impl/network/TeUpdateSerializer io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer
+io/github/noeppi_noeppi/libx/impl/network/TeUpdateHandler io/github/noeppi_noeppi/libx/impl/network/BeUpdateHandler
+io/github/noeppi_noeppi/libx/impl/network/TeRequestSerializer$TeRequestMessage io/github/noeppi_noeppi/libx/impl/network/BeRequestSerializer$BeRequestMessage
+io/github/noeppi_noeppi/libx/impl/network/TeUpdateSerializer$TeUpdateMessage io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage
+io/github/noeppi_noeppi/libx/render/ItemStackRenderer setWorldPosState (Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/level/block/state/BlockState;)V setLevelAndState
+io/github/noeppi_noeppi/libx/render/RenderHelperWorld io/github/noeppi_noeppi/libx/render/RenderHelperLevel
 
 
 
