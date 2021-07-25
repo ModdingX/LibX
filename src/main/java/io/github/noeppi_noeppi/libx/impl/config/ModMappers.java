@@ -10,10 +10,12 @@ import io.github.noeppi_noeppi.libx.impl.config.mappers.generic.MapValueMapper;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.generic.OptionValueMapper;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.special.EnumValueMappers;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.special.PairValueMapper;
+import io.github.noeppi_noeppi.libx.impl.config.mappers.special.RecordValueMapper;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.special.TripleValueMapper;
 import io.github.noeppi_noeppi.libx.impl.config.validators.SimpleValidators;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.JsonTypesafeMapper;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.WrappedGenericMapper;
+import io.github.noeppi_noeppi.libx.util.ClassUtil;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.OnlyIns;
 import org.apache.commons.lang3.tuple.Pair;
@@ -29,7 +31,7 @@ import java.util.function.Function;
 // enums
 // pair
 // triple
-
+// record
 public class ModMappers {
 
     private static final Map<String, ModMappers> modMappers = new HashMap<>();
@@ -116,7 +118,7 @@ public class ModMappers {
     }
 
     private ValueMapper<?, ?> getMapper(Type type) {
-        Class<?> cls = getTypeClass(type);
+        Class<?> cls = ClassUtil.boxed(getTypeClass(type));
         if (cls.isEnum()) {
             //noinspection unchecked
             return EnumValueMappers.getMapper((Class<? extends Enum<?>>) cls);
@@ -124,6 +126,9 @@ public class ModMappers {
             return new PairValueMapper<>(this.getWrappedMapperUnsafe(type, 0), this.getWrappedMapperUnsafe(type, 1));
         } else if (cls == Triple.class) {
             return new TripleValueMapper<>(this.getWrappedMapperUnsafe(type, 0), this.getWrappedMapperUnsafe(type, 1), this.getWrappedMapperUnsafe(type, 2));
+        } else if (cls.isRecord()) {
+            //noinspection unchecked
+            return new RecordValueMapper<>((Class<? extends Record>) cls, this::getMapper);
         }
         CommonValueMapper<?, ?> mapper = null;
         if (this.mappers.containsKey(cls)) {

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
 
-    private final ValueMapper<C, ?> wrapped;
+    protected final ValueMapper<C, ?> wrapped;
 
     public JsonTypesafeMapper(ValueMapper<C, ?> mapper) {
         this.wrapped = mapper;
