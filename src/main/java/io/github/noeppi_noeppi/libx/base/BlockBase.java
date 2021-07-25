@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.base;
 
-import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
@@ -35,6 +34,6 @@ public class BlockBase extends Block implements Registerable {
 
     @Override
     public Set<Object> getAdditionalRegisters(ResourceLocation id) {
-        return ImmutableSet.of(this.item);
+        return Set.of(this.item);
     }
 }

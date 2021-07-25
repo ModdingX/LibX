@@ -71,7 +71,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                     e.getCause().printStackTrace();
                 throw new RuntimeException("Could not create BlockEntity of type " + beClass + ".", e);
             }
-        }, ImmutableSet.of(this), null);
+        }, Set.of(this), null);
     }
 
     @Override

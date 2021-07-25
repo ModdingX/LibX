@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -514,7 +513,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
                 throw new IllegalStateException("Can not add empty task to advancement.");
             }
             for (CriterionTriggerInstance instance : criteria) {
-                this.criteria.add(ImmutableList.of(new Criterion(instance)));
+                this.criteria.add(List.of(new Criterion(instance)));
             }
             this.criteria.add(Arrays.stream(criteria).map(Criterion::new).collect(Collectors.toList()));
             return this;

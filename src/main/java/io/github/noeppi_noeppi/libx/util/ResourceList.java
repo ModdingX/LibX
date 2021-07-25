@@ -45,8 +45,8 @@ public class ResourceList {
      */
     public static final ResourceList BLACKLIST = new ResourceList(false, b -> {});
 
-    private static final WildcardString ANY = new WildcardString(ImmutableList.of("*"));
-    private static final WildcardString NAMESPACE_MC = new WildcardString(ImmutableList.of("minecraft"));
+    private static final WildcardString ANY = new WildcardString(List.of("*"));
+    private static final WildcardString NAMESPACE_MC = new WildcardString(List.of("minecraft"));
     
     private final boolean whitelist;
     private final List<Rule> rules;
@@ -191,7 +191,7 @@ public class ResourceList {
         WildcardString namespace;
         WildcardString path;
         if (str.trim().equals("*")) {
-            namespace = new WildcardString(ImmutableList.of("*"));
+            namespace = new WildcardString(List.of("*"));
             path = new WildcardString(parseString(str.substring(str.indexOf(':') + 1)));
         } else if (str.contains(":")) {
             if (str.indexOf(':') != str.lastIndexOf(':')) {
@@ -333,7 +333,7 @@ public class ResourceList {
                     .filter(str -> !str.isEmpty())
                     .collect(ImmutableList.toImmutableList());
             if (partList.isEmpty()) {
-                this.parts = ImmutableList.of("*");
+                this.parts = List.of("*");
             } else {
                 this.parts = partList;
             }
@@ -373,7 +373,7 @@ public class ResourceList {
          * When this rule matches it will return the value of {@code allow} as result.
          */
         public void simple(boolean allow, ResourceLocation rl) {
-            this.rulesBuilderList.add(new SimpleRule(allow, new WildcardString(ImmutableList.of(rl.getNamespace())), new WildcardString(ImmutableList.of(rl.getPath()))));
+            this.rulesBuilderList.add(new SimpleRule(allow, new WildcardString(List.of(rl.getNamespace())), new WildcardString(List.of(rl.getPath()))));
         }
 
         /**

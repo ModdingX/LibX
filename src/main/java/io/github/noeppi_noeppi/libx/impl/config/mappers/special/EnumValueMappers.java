@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import net.minecraft.network.FriendlyByteBuf;
@@ -70,8 +69,7 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
 
     @Override
     public List<String> comment() {
-        return ImmutableList.of(
-                "Allowed values: " + Arrays.stream(this.clazz.getEnumConstants())
+        return List.of("Allowed values: " + Arrays.stream(this.clazz.getEnumConstants())
                         .map(e -> e.name().toLowerCase(Locale.ROOT))
                         .collect(Collectors.joining(", "))
         );

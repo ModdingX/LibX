@@ -1,7 +1,5 @@
 package io.github.noeppi_noeppi.libx.base;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.network.chat.Component;
@@ -261,13 +259,13 @@ public class FluidBase implements Registerable, ItemLike {
     @Override
     public Set<Object> getAdditionalRegisters(ResourceLocation id) {
         this.init(id);
-        return ImmutableSet.of(this.source, this.block);
+        return Set.of(this.source, this.block);
     }
 
     @Override
     public Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
         this.init(id);
-        return ImmutableMap.of(
+        return Map.of(
                 "flowing", this.flowing,
                 "bucket", this.bucket
         );

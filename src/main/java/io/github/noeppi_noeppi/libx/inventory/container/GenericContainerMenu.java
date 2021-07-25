@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.inventory.container;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.impl.inventory.container.GenericContainerSlotValidationWrapper;
 import net.minecraft.network.chat.Component;
@@ -40,7 +39,7 @@ import java.util.function.BiPredicate;
 public class GenericContainerMenu extends ContainerMenuBase {
 
     private static final ResourceLocation EMPTY_VALIDATOR = new ResourceLocation(LibX.getInstance().modid, "nothing");
-    private static final Map<ResourceLocation, BiPredicate<Integer, ItemStack>> validators = new HashMap<>(ImmutableMap.of(
+    private static final Map<ResourceLocation, BiPredicate<Integer, ItemStack>> validators = new HashMap<>(Map.of(
             EMPTY_VALIDATOR, (slot, stack) -> true
     ));
 

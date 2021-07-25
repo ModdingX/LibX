@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
@@ -16,7 +15,7 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
 
     }
 
-    private final List<String> COMMENT = ImmutableList.of(
+    private final List<String> COMMENT = List.of(
             "This is a resource list. In the `whitelist` field you can specify whether all entries will be accepted by",
             "default or rejected.",
             "`elements` is an array of rules. Each resource location that is matched against this list, will traverse these",

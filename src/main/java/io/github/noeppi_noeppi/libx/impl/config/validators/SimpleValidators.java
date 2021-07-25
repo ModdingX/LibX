@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.impl.config.validators;
 
-import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.config.ConfigValidator;
 import io.github.noeppi_noeppi.libx.config.validator.*;
 import net.minecraft.util.Mth;
@@ -30,13 +29,13 @@ public class SimpleValidators {
         @Override
         public List<String> comment(ShortRange validator) {
             if (validator.min() == Short.MIN_VALUE && validator.max() == Short.MAX_VALUE) {
-                return ImmutableList.of();
+                return List.of();
             } else if (validator.max() == Short.MAX_VALUE) {
-                return ImmutableList.of("Minimum: " + validator.min());
+                return List.of("Minimum: " + validator.min());
             } else if (validator.min() == Short.MIN_VALUE) {
-                return ImmutableList.of("Maximum: " + validator.max());
+                return List.of("Maximum: " + validator.max());
             } else {
-                return ImmutableList.of("Range: " + validator.min() + " - " + validator.max());
+                return List.of("Range: " + validator.min() + " - " + validator.max());
             }
         }
     };
@@ -61,13 +60,13 @@ public class SimpleValidators {
         @Override
         public List<String> comment(IntRange validator) {
             if (validator.min() == Integer.MIN_VALUE && validator.max() == Integer.MAX_VALUE) {
-                return ImmutableList.of();
+                return List.of();
             } else if (validator.max() == Integer.MAX_VALUE) {
-                return ImmutableList.of("Minimum: " + validator.min());
+                return List.of("Minimum: " + validator.min());
             } else if (validator.min() == Integer.MIN_VALUE) {
-                return ImmutableList.of("Maximum: " + validator.max());
+                return List.of("Maximum: " + validator.max());
             } else {
-                return ImmutableList.of("Range: " + validator.min() + " - " + validator.max());
+                return List.of("Range: " + validator.min() + " - " + validator.max());
             }
         }
     };
@@ -92,13 +91,13 @@ public class SimpleValidators {
         @Override
         public List<String> comment(LongRange validator) {
             if (validator.min() == Long.MIN_VALUE && validator.max() == Long.MAX_VALUE) {
-                return ImmutableList.of();
+                return List.of();
             } else if (validator.max() == Long.MAX_VALUE) {
-                return ImmutableList.of("Minimum: " + validator.min());
+                return List.of("Minimum: " + validator.min());
             } else if (validator.min() == Long.MIN_VALUE) {
-                return ImmutableList.of("Maximum: " + validator.max());
+                return List.of("Maximum: " + validator.max());
             } else {
-                return ImmutableList.of("Range: " + validator.min() + " - " + validator.max());
+                return List.of("Range: " + validator.min() + " - " + validator.max());
             }
         }
     };
@@ -123,13 +122,13 @@ public class SimpleValidators {
         @Override
         public List<String> comment(FloatRange validator) {
             if (validator.min() == Float.NEGATIVE_INFINITY && validator.max() == Float.POSITIVE_INFINITY) {
-                return ImmutableList.of();
+                return List.of();
             } else if (validator.max() == Float.POSITIVE_INFINITY) {
-                return ImmutableList.of("Minimum: " + validator.min());
+                return List.of("Minimum: " + validator.min());
             } else if (validator.min() == Float.NEGATIVE_INFINITY) {
-                return ImmutableList.of("Maximum: " + validator.max());
+                return List.of("Maximum: " + validator.max());
             } else {
-                return ImmutableList.of("Range: " + validator.min() + " - " + validator.max());
+                return List.of("Range: " + validator.min() + " - " + validator.max());
             }
         }
     };
@@ -154,13 +153,13 @@ public class SimpleValidators {
         @Override
         public List<String> comment(DoubleRange validator) {
             if (validator.min() == Double.NEGATIVE_INFINITY && validator.max() == Double.POSITIVE_INFINITY) {
-                return ImmutableList.of();
+                return List.of();
             } else if (validator.max() == Double.POSITIVE_INFINITY) {
-                return ImmutableList.of("Minimum: " + validator.min());
+                return List.of("Minimum: " + validator.min());
             } else if (validator.min() == Double.NEGATIVE_INFINITY) {
-                return ImmutableList.of("Maximum: " + validator.max());
+                return List.of("Maximum: " + validator.max());
             } else {
-                return ImmutableList.of("Range: " + validator.min() + " - " + validator.max());
+                return List.of("Range: " + validator.min() + " - " + validator.max());
             }
         }
     };

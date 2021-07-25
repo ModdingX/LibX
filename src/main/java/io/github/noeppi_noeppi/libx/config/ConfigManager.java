@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
+// TODO fix javadoc for new system
 /**
  * Provides a config system for configuration files that is meant to be more easy and powerful than
  * the system by forge based on {@link com.electronwill.nightconfig NightConfig}. This system creates
@@ -54,7 +55,7 @@ import java.util.*;
  *     public static class SubGroup {
  *
  *         \@Config(value = "xD", elementType = Integer.class)
- *         public static List<Integer> coolValues = ImmutableList.of(1, 5, 23);
+ *         public static List<Integer> coolValues = List.of(1, 5, 23);
  *     }
  * }
  * }

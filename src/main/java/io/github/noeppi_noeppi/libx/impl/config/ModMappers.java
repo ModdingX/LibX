@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.*;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.SimpleValueMappers;
@@ -23,10 +22,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 // special allowed types
@@ -48,7 +44,7 @@ public class ModMappers {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = ImmutableSet.of(
+    private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = Set.of(
             SimpleValueMappers.BOOLEAN,
             SimpleValueMappers.BYTE,
             SimpleValueMappers.SHORT,
@@ -69,7 +65,7 @@ public class ModMappers {
     ).stream().collect(ImmutableMap.toImmutableMap(CommonValueMapper::type, Function.identity()));
 
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = ImmutableSet.of(
+    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = Set.of(
             SimpleValidators.SHORT,
             SimpleValidators.INTEGER,
             SimpleValidators.LONG,
