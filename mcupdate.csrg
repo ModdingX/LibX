@@ -50,11 +50,11 @@ io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerTy
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lcom/mojang/datafixers/util/Function5;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/render/RenderHelper color (I)V rgb
-io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTile (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity; getBlockEntity
-io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTileType ()Lnet/minecraft/world/level/block/entity/BlockEntityType; getBlockEntityType
+io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTile (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/tileentity/TileEntity; getBlockEntity
+io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTileType ()Lnet/minecraft/tileentity/TileEntityType; getBlockEntityType
 io/github/noeppi_noeppi/libx/impl/TileEntityUpdateQueue io/github/noeppi_noeppi/libx/impl/BlockEntityUpdateQueue
-io/github/noeppi_noeppi/libx/impl/network/NetworkImpl updateTE (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V updateBE
-io/github/noeppi_noeppi/libx/impl/network/NetworkImpl requestTE (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V requestBE
+io/github/noeppi_noeppi/libx/impl/network/NetworkImpl updateTE (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V updateBE
+io/github/noeppi_noeppi/libx/impl/network/NetworkImpl requestTE (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V requestBE
 io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase TEISR_PARENT SPECIAL_BLOCK_PARENT
 io/github/noeppi_noeppi/libx/impl/network/TeRequestSerializer io/github/noeppi_noeppi/libx/impl/network/BeRequestSerializer
 io/github/noeppi_noeppi/libx/impl/network/TeRequestHandler io/github/noeppi_noeppi/libx/impl/network/BeRequestHandler
@@ -62,10 +62,5 @@ io/github/noeppi_noeppi/libx/impl/network/TeUpdateSerializer io/github/noeppi_no
 io/github/noeppi_noeppi/libx/impl/network/TeUpdateHandler io/github/noeppi_noeppi/libx/impl/network/BeUpdateHandler
 io/github/noeppi_noeppi/libx/impl/network/TeRequestSerializer$TeRequestMessage io/github/noeppi_noeppi/libx/impl/network/BeRequestSerializer$BeRequestMessage
 io/github/noeppi_noeppi/libx/impl/network/TeUpdateSerializer$TeUpdateMessage io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage
-io/github/noeppi_noeppi/libx/render/ItemStackRenderer setWorldPosState (Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/level/block/state/BlockState;)V setLevelAndState
+io/github/noeppi_noeppi/libx/render/ItemStackRenderer setWorldPosState (Lnet/minecraft/tileentity/TileEntity;Lnet/minecraft/block/BlockState;)V setLevelAndState
 io/github/noeppi_noeppi/libx/render/RenderHelperWorld io/github/noeppi_noeppi/libx/render/RenderHelperLevel
-
-
-
-
-
