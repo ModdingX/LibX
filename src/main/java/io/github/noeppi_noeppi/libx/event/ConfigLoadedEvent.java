@@ -73,7 +73,7 @@ public class ConfigLoadedEvent extends Event {
      * world specific config.
      * 
      * The value is {@code null} when the current config is loaded from a non-file location
-     * (for example on shadowing). IT can als obe the same as {@link #getConfigPath() configPath}
+     * (for example on shadowing). It can also be the same as {@link #getConfigPath() configPath}
      * when the config is loaded from the default path.
      */
     @Nullable

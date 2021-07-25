@@ -1,8 +1,8 @@
-package io.github.noeppi_noeppi.libx.base;
+package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;
-import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
+import io.github.noeppi_noeppi.libx.impl.BlockEntityUpdateQueue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -48,24 +48,24 @@ public class BlockEntityBase extends BlockEntity {
     }
 
     /**
-     * This will update the tile entity when on the client using {@link #getUpdateTag()}
+     * This will update the block entity when on the client using {@link #getUpdateTag()}
      * and {@link #handleUpdateTag(CompoundTag)}.
      */
     @Override
     public void onLoad() {
         super.onLoad();
         if (this.level != null && this.level.isClientSide) {
-            LibX.getNetwork().requestTE(this.level, this.worldPosition);
+            LibX.getNetwork().requestBE(this.level, this.worldPosition);
         }
     }
 
     /**
-     * This will update the tile entity to all clients that are tracking it when called on the server
+     * This will update the block entity to all clients that are tracking it when called on the server
      * using {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)} at the end of this tick.
      */
     public void markDispatchable() {
         if (this.level != null && !this.level.isClientSide) {
-            TileEntityUpdateQueue.scheduleUpdate(this.level, this.worldPosition);
+            BlockEntityUpdateQueue.scheduleUpdate(this.level, this.worldPosition);
         }
     }
 }

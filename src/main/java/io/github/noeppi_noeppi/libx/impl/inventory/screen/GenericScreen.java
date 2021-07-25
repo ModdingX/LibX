@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 
-// Screen for the GenericContainer. Do not use manually.
+// Screen for the GenericContainerMenu. Do not use manually.
 public class GenericScreen extends AbstractContainerScreen<GenericContainerMenu> {
     
     private final GenericContainerMenu menu;

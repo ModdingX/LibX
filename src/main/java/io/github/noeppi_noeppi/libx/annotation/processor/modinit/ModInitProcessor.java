@@ -166,7 +166,7 @@ public class ModInitProcessor extends Processor {
                     }
                     return modInits.get(effectiveFinalDefaultModid);
                 } else {
-                    ModInitProcessor.this.messager.printMessage(Diagnostic.Kind.ERROR, "Could not infer modid for element. Use an @ForMod anotation.", root);
+                    ModInitProcessor.this.messager.printMessage(Diagnostic.Kind.ERROR, "Could not infer modid for element. Use an @ForMod annotation.", root);
                     return new ModInit("", ModInitProcessor.this.types.asElement(ModInitProcessor.this.forClass(ModX.class)), ModInitProcessor.this.messager);
                 }
             }

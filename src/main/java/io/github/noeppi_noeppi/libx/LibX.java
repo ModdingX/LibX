@@ -6,7 +6,7 @@ import io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient;
-import io.github.noeppi_noeppi.libx.impl.TileEntityUpdateQueue;
+import io.github.noeppi_noeppi.libx.impl.BlockEntityUpdateQueue;
 import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.inventory.screen.GenericScreen;
@@ -50,7 +50,7 @@ public class LibX extends ModX {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, this::registerRecipes);
 
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
-        MinecraftForge.EVENT_BUS.addListener(TileEntityUpdateQueue::tick);
+        MinecraftForge.EVENT_BUS.addListener(BlockEntityUpdateQueue::tick);
         MinecraftForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
         MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 

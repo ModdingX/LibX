@@ -27,12 +27,11 @@ public class CodecProcessor {
     }
 
     public static void processPrimaryConstructor(Element rawElement, ModEnv env) {
-        if (rawElement.getKind() != ElementKind.CONSTRUCTOR || !(rawElement instanceof ExecutableElement)) {
+        if (rawElement.getKind() != ElementKind.CONSTRUCTOR || !(rawElement instanceof ExecutableElement element)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@PrimaryConstructor can only be used on constructors.", rawElement);
             return;
         }
-        ExecutableElement element = (ExecutableElement) rawElement;
-        if (!(element.getEnclosingElement() instanceof TypeElement)) {
+        if (!(element.getEnclosingElement() instanceof TypeElement type)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Element annotated with @PrimaryConstructor is not a TypeElement.", element);
             return;
         }
@@ -40,7 +39,6 @@ public class CodecProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "The primary constructor of a class must be public.", element);
             return;
         }
-        TypeElement type = (TypeElement) element.getEnclosingElement();
         if (type.getEnclosedElements().stream()
                 .filter(e -> e.getKind() == ElementKind.CONSTRUCTOR)
                 .filter(e -> e.getAnnotation(PrimaryConstructor.class) != null)

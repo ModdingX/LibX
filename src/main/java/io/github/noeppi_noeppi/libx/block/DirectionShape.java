@@ -31,14 +31,11 @@ public class DirectionShape extends RotationShape {
      */
     @Override
     public VoxelShape getShape(Direction direction) {
-        switch (direction) {
-            case UP:
-                return this.up;
-            case DOWN:
-                return this.down;
-            default:
-                return super.getShape(direction);
-        }
+        return switch (direction) {
+            case UP -> this.up;
+            case DOWN -> this.down;
+            default -> super.getShape(direction);
+        };
     }
 
     private static VoxelShape rotatedV(VoxelShape src) {

@@ -34,17 +34,12 @@ public class RotationShape {
      * direction the base shape is returned.
      */
     public VoxelShape getShape(Direction direction) {
-        switch (direction) {
-            case SOUTH:
-                return this.south;
-            case WEST:
-                return this.west;
-            case EAST:
-                return this.east;
-            case NORTH:
-            default:
-                return this.north;
-        }
+        return switch (direction) {
+            case SOUTH -> this.south;
+            case WEST -> this.west;
+            case EAST -> this.east;
+            default -> this.north;
+        };
     }
 
     private static VoxelShape rotated(VoxelShape src) {

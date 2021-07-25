@@ -1,11 +1,8 @@
-package io.github.noeppi_noeppi.libx.base;
+package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
-import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
-import io.github.noeppi_noeppi.libx.inventory.container.TileContainerMenu;
+import io.github.noeppi_noeppi.libx.inventory.container.BlockEntityMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -22,24 +19,23 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
  * This class registers a menu to it's {@link BlockEntityType block entity type} and handles the gui
  * opening when the block is right clicked. You still need to manually register the screen on the client.
  */
-public class BlockGUI<T extends BlockEntity, C extends TileContainerMenu<T>> extends BlockBE<T> {
+public class BlockMenu<T extends BlockEntity, C extends BlockEntityMenu<T>> extends BlockBE<T> {
 
     public final MenuType<C> menu;
 
-    public BlockGUI(ModX mod, Class<T> teClass, MenuType<C> menu, Properties properties) {
-        super(mod, teClass, properties);
+    public BlockMenu(ModX mod, Class<T> beClass, MenuType<C> menu, Properties properties) {
+        super(mod, beClass, properties);
         this.menu = menu;
     }
 
-    public BlockGUI(ModX mod, Class<T> teClass, MenuType<C> menu, Properties properties, Item.Properties itemProperties) {
-        super(mod, teClass, properties, itemProperties);
+    public BlockMenu(ModX mod, Class<T> beClass, MenuType<C> menu, Properties properties, Item.Properties itemProperties) {
+        super(mod, beClass, properties, itemProperties);
         this.menu = menu;
     }
 
@@ -54,7 +50,7 @@ public class BlockGUI<T extends BlockEntity, C extends TileContainerMenu<T>> ext
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         if (!level.isClientSide) {
             //noinspection ConstantConditions
-            TileContainerMenu.openMenu((ServerPlayer) player, this.menu, new TranslatableComponent("screen." + BlockGUI.this.mod.modid + "." + BlockGUI.this.getRegistryName().getPath()), pos);
+            BlockEntityMenu.openMenu((ServerPlayer) player, this.menu, new TranslatableComponent("screen." + BlockMenu.this.mod.modid + "." + BlockMenu.this.getRegistryName().getPath()), pos);
         }
         return InteractionResult.SUCCESS;
     }

@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class TileEntityUpdateQueue {
+public class BlockEntityUpdateQueue {
 
     private static final Map<Level, Set<BlockPos>> updateQueue = new HashMap<>();
 
@@ -27,7 +27,7 @@ public class TileEntityUpdateQueue {
         if (event.phase == TickEvent.Phase.END) {
             for (Map.Entry<Level, Set<BlockPos>> entry : updateQueue.entrySet()) {
                 for (BlockPos pos : entry.getValue()) {
-                    LibX.getNetwork().updateTE(entry.getKey(), pos);
+                    LibX.getNetwork().updateBE(entry.getKey(), pos);
                 }
                 entry.getValue().clear();
             }

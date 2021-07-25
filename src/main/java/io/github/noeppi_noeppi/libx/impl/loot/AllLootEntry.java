@@ -36,46 +36,43 @@ public class AllLootEntry extends CompositeEntryBase {
     @Nonnull
     @Override
     protected ComposableEntryContainer compose(ComposableEntryContainer[] entries) {
-        switch (entries.length) {
-            case 0:
-                return ALWAYS_TRUE;
-            case 1:
-                return entries[0];
-            default:
-                return (ctx, consumer) -> {
-                    List<LootPoolEntry> list = new ArrayList<>();
-                    boolean success = false;
-                    for (ComposableEntryContainer entry : entries) {
-                        if (entry.expand(ctx, list::add)) {
-                            success = true;
-                        }
+        return switch (entries.length) {
+            case 0 -> ALWAYS_TRUE;
+            case 1 -> entries[0];
+            default -> (ctx, consumer) -> {
+                List<LootPoolEntry> list = new ArrayList<>();
+                boolean success = false;
+                for (ComposableEntryContainer entry : entries) {
+                    if (entry.expand(ctx, list::add)) {
+                        success = true;
                     }
-                    if (list.size() == 1) {
-                        consumer.accept(list.get(0));
-                    } else if (!list.isEmpty()) {
-                        // Just hand one entry to the parent consumer that will if picked call all entries from
-                        // the children.
-                        consumer.accept(new LootPoolEntry() {
-                            
-                            @Override
-                            public int getWeight(float luck) {
-                                int total = 0;
-                                for (LootPoolEntry gen : list) {
-                                    total += gen.getWeight(luck);
-                                }
-                                return total;
-                            }
+                }
+                if (list.size() == 1) {
+                    consumer.accept(list.get(0));
+                } else if (!list.isEmpty()) {
+                    // Just hand one entry to the parent consumer that will if picked call all entries from
+                    // the children.
+                    consumer.accept(new LootPoolEntry() {
 
-                            @Override
-                            public void createItemStack(@Nonnull Consumer<ItemStack> stackConsumer, @Nonnull LootContext lootContext) {
-                                for (LootPoolEntry gen : list) {
-                                    gen.createItemStack(stackConsumer, lootContext);
-                                }
+                        @Override
+                        public int getWeight(float luck) {
+                            int total = 0;
+                            for (LootPoolEntry gen : list) {
+                                total += gen.getWeight(luck);
                             }
-                        });
-                    }
-                    return success;
-                };
-        }
+                            return total;
+                        }
+
+                        @Override
+                        public void createItemStack(@Nonnull Consumer<ItemStack> stackConsumer, @Nonnull LootContext lootContext) {
+                            for (LootPoolEntry gen : list) {
+                                gen.createItemStack(stackConsumer, lootContext);
+                            }
+                        }
+                    });
+                }
+                return success;
+            };
+        };
     }
 }

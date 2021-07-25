@@ -21,8 +21,8 @@ public class ModInit  {
 
     // TODO check all the classes in 1.17
     public static final String MOD_ANNOTATION_TYPE = "net.minecraftforge.fml.common.Mod";
-    public static final String MODEL_TYPE = "net.minecraft.client.renderer.model.IBakedModel";
-    public static final String REGISTRY_TYPE = "net.minecraft.util.registry.Registry";
+    public static final String MODEL_TYPE = "net.minecraft.client.resources.model.IBakedModel";
+    public static final String REGISTRY_TYPE = "net.minecraft.core.Registry";
     public static final String CODEC_TYPE = "com.mojang.serialization.Codec";
     public static final String RECORD_CODEC_BUILDER_TYPE = "com.mojang.serialization.codecs.RecordCodecBuilder";
 
@@ -87,7 +87,6 @@ public class ModInit  {
             if (!this.codecs.isEmpty()) {
                 writer.write("public static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_TYPE + "<?>>codecs=buildCodecs();");
                 writer.write("private static final " + Map.class.getCanonicalName() + "<Class<?>," + CODEC_TYPE + "<?>>buildCodecs(){");
-                //noinspection deprecation
                 writer.write(ProcessorInterface.LazyMapBuilder.class.getCanonicalName() + " builder=" + ProcessorInterface.class.getCanonicalName() + ".lazyMapBuilder();");
                 for (GeneratedCodec codec : this.codecs) {
                     writer.write("builder.put(" + codec.fqn + ".class,");
@@ -130,7 +129,6 @@ public class ModInit  {
             writer.write("public static void init(" + ModX.class.getCanonicalName() + " mod){");
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
             for (RegisteredConfig config : this.configs) {
-                //noinspection deprecation
                 writer.write(ConfigManager.class.getCanonicalName() + ".registerConfig(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name) + "\")," + config.classFqn + ".class," + config.client + ");");
             }
             if (!allReg.isEmpty()) {
@@ -138,9 +136,7 @@ public class ModInit  {
             }
             if (!this.models.isEmpty()) {
                 writer.write("net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT,()->()->{");
-                //noinspection deprecation
                 writer.write( ProcessorInterface.class.getCanonicalName() + ".addModListener(net.minecraftforge.client.event.ModelRegistryEvent.class," + this.modClass.getSimpleName() + "$::registerModels);");
-                //noinspection deprecation
                 writer.write( ProcessorInterface.class.getCanonicalName() + ".addModListener(net.minecraftforge.client.event.ModelBakeEvent.class," + this.modClass.getSimpleName() + "$::bakeModels);");
                 writer.write("});");
             }
@@ -156,14 +152,12 @@ public class ModInit  {
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void registerModels(net.minecraftforge.client.event.ModelRegistryEvent event){");
                 for (LoadableModel model : this.models) {
-                    //noinspection deprecation
                     writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
                 }
                 writer.write("}");
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void bakeModels(net.minecraftforge.client.event.ModelBakeEvent event){");
                 for (LoadableModel model : this.models) {
-                    //noinspection deprecation
                     writer.write(model.classFqn + "." + quote(model.fieldName) + "=event.getModelRegistry().get(" + ProcessorInterface.class.getCanonicalName() + ".newRL(\"" + quote(model.modelNamespace) + "\",\"" + quote(model.modelPath) + "\"));");
                 }
                 writer.write("}");
