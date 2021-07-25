@@ -10,6 +10,8 @@ import java.util.function.Supplier;
  * Base class for {@link Item items} for mods using {@link ModXRegistration}. This will automatically set the
  * creative tab if it's defined in the mod.
  */
+// TODO figure out a way to make the render properties stuff more convenient
+//  without breaking classloading on server.
 public class ItemBase extends Item {
 
     protected final ModX mod;

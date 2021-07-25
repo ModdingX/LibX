@@ -31,6 +31,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+// TODO
+//  general things left:
+//   - Finalise adaption to official mappings
+//   - Clean up the javadoc
+//   - Wait for MinecraftForge#7919 and securejarhandler#4
+//   - test dynamic datapacks once securejarhandler#4 is merged
 @Mod("libx")
 public class LibX extends ModX {
 

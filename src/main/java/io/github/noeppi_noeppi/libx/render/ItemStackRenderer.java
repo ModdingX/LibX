@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+// TODO update docs to new system forge uses now.
 /**
  * This class is meant to apply a TileEntityRenderer to items. Using it is really straightforward:
  * <p>
