@@ -16,7 +16,7 @@ function initializeCoreMod() {
         var target = new InsnList();
         target.add(new VarInsnNode(Opcodes.ALOAD, 0));
         target.add(ASMAPI.buildMethodCall(
-            'io/github/noeppi_noeppi/libx/impl/libxcore/CoreDatapacks',
+            'io/github/noeppi_noeppi/libx/impl/libxcore/CoreDataPacks',
             'fireReload', '(Lnet/minecraft/server/players/PlayerList;)V',
             ASMAPI.MethodType.STATIC
         ));

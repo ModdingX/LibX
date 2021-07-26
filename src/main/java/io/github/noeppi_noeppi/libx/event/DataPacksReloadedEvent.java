@@ -13,12 +13,12 @@ import net.minecraftforge.eventbus.api.Event;
  * reload via the {@code reload} or the {@code datapack} command.</b>
  * This event is not Cancelable and has no Result.
  */
-public class DatapacksReloadedEvent extends Event {
+public class DataPacksReloadedEvent extends Event {
     
     private final MinecraftServer server;
     private final ServerResources datapacks;
 
-    public DatapacksReloadedEvent(MinecraftServer server, ServerResources datapacks) {
+    public DataPacksReloadedEvent(MinecraftServer server, ServerResources datapacks) {
         this.server = server;
         this.datapacks = datapacks;
     }
@@ -31,9 +31,9 @@ public class DatapacksReloadedEvent extends Event {
     }
 
     /**
-     * Gets the new datapack registries.
+     * Gets the new server resources.
      */
-    public ServerResources getDatapacks() {
+    public ServerResources getResources() {
         return this.datapacks;
     }
 }

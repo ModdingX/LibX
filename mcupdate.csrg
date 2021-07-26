@@ -29,6 +29,8 @@ io/github/noeppi_noeppi/libx/event/ClickBlockEmptyHandEvent world level
 io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent getPath ()Ljava/nio/file/Path; getConfigPath
 io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent
 io/github/noeppi_noeppi/libx/event/ConfigLoadedEvent path configPath
+io/github/noeppi_noeppi/libx/event/DatapacksReloadedEvent getDatapacks ()Lnet/minecraft/resources/DataPackRegistries; getResources
+io/github/noeppi_noeppi/libx/event/DatapacksReloadedEvent io/github/noeppi_noeppi/libx/event/DataPacksReloadedEvent
 io/github/noeppi_noeppi/libx/event/RandomTickEvent getWorld ()Lnet/minecraft/world/World; getLevel
 io/github/noeppi_noeppi/libx/event/RandomTickEvent io/github/noeppi_noeppi/libx/event/RandomTickEvent
 io/github/noeppi_noeppi/libx/event/RandomTickEvent world level

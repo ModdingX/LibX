@@ -3,6 +3,8 @@ package io.github.noeppi_noeppi.libx.render;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import io.github.noeppi_noeppi.libx.impl.render.BlockOverlayQuadCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -36,7 +38,6 @@ public class RenderHelperBlock {
      *
      * @param breakProgress How much the block already broke. 0 means no break. This should not be lower than 0 and not be greater than 10.
      */
-    // TODO test
     public static void renderBlockBreak(BlockState state, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, int breakProgress) {
         renderBlockBreak(state, poseStack, buffer, light, overlay, breakProgress, state.getSeed(BlockPos.ZERO));
     }
@@ -86,42 +87,52 @@ public class RenderHelperBlock {
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, TextureAtlasSprite sprite, long positionRandom, Predicate<Direction> dirs) {
         if (state.getRenderShape() == RenderShape.MODEL) {
             BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(state);
-
             VertexConsumer vertex = Minecraft.getInstance().renderBuffers().crumblingBufferSource().getBuffer(RENDER_TYPE_BREAK);
-
             for (Direction direction : Direction.values()) {
                 random.setSeed(positionRandom);
                 List<BakedQuad> list = model.getQuads(state, direction, random, EmptyModelData.INSTANCE);
                 if (!list.isEmpty()) {
-                    renderBlockBreakQuad(poseStack.last(), vertex, list, light, overlay, sprite, dirs);
+                    renderBlockOverlayQuad(DefaultVertexFormat.BLOCK, poseStack.last(), vertex, list, light, overlay, sprite, dirs);
                 }
             }
 
             random.setSeed(positionRandom);
             List<BakedQuad> list = model.getQuads(state, null, random, EmptyModelData.INSTANCE);
             if (!list.isEmpty()) {
-                renderBlockBreakQuad(poseStack.last(), vertex, list, light, overlay, sprite, dirs);
+                renderBlockOverlayQuad(DefaultVertexFormat.BLOCK, poseStack.last(), vertex, list, light, overlay, sprite, dirs);
             }
         }
     }
 
-    private static void renderBlockBreakQuad(PoseStack.Pose pose, VertexConsumer vertex, List<BakedQuad> list, int light, int overlay, TextureAtlasSprite sprite, Predicate<Direction> dirs) {
+    private static void renderBlockOverlayQuad(@SuppressWarnings("SameParameterValue") VertexFormat format, PoseStack.Pose pose, VertexConsumer vertex, List<BakedQuad> list, int light, int overlay, TextureAtlasSprite sprite, Predicate<Direction> dirs) {
         for (BakedQuad quad : list) {
             if (dirs.test(quad.getDirection())) {
-                BakedQuad modifiedQuad = new BakedQuad(modifyBlockBreakQuadData(quad.getVertices(), quad.getSprite(), sprite), quad.getTintIndex(), quad.getDirection(), sprite, quad.isShade());
-                vertex.putBulkData(pose, modifiedQuad, 1, 1, 1, light, overlay);
+                vertex.putBulkData(pose, modifyBlockQuad(format, quad, sprite), 1, 1, 1, light, overlay);
             }
         }
     }
 
-    private static int[] modifyBlockBreakQuadData(int[] data, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite) {
-        // Only works for DefaultVertexFormats.BLOCK, might need to be fixed in the future
-        int[] newData = new int[data.length];
-        System.arraycopy(data, 0, newData, 0, data.length);
-        for (int off = 0; off + 7 < newData.length; off += DefaultVertexFormat.BLOCK.getIntegerSize()) {
-            newData[off + 4] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 4]) - oldSprite.getU0()) * newSprite.getWidth() / oldSprite.getWidth()) + newSprite.getU0());
-            newData[off + 5] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 5]) - oldSprite.getV0()) * newSprite.getHeight() / oldSprite.getHeight()) + newSprite.getV0());
+    private static BakedQuad modifyBlockQuad(VertexFormat format, BakedQuad quad, TextureAtlasSprite newSprite) {
+        BakedQuad result = BlockOverlayQuadCache.get(quad, newSprite);
+        if (result == null) {
+            int[] data = quad.getVertices();
+            int[] newData = new int[data.length];
+            System.arraycopy(data, 0, newData, 0, data.length);
+            int uvIdx = format.getElements().indexOf(DefaultVertexFormat.ELEMENT_UV);
+            if (uvIdx != -1) {
+                // Byte offset / 4 = integer offset
+                // Will break if UV is not on full ints but that is not the case in regular minecraft
+                TextureAtlasSprite oldSprite = quad.getSprite();
+                int uvOff = format.getOffset(uvIdx) / 4;
+                int intSize = format.getIntegerSize();
+                for (int off = 0; off + uvOff + 1 < newData.length; off += intSize) {
+                    newData[off + uvOff] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff]) - oldSprite.getU0()) * newSprite.getWidth() / oldSprite.getWidth()) + newSprite.getU0());
+                    newData[off + uvOff + 1] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff + 1]) - oldSprite.getV0()) * newSprite.getHeight() / oldSprite.getHeight()) + newSprite.getV0());
+                }
+            }
+            result = new BakedQuad(newData, quad.getTintIndex(), quad.getDirection(), newSprite, quad.isShade());
+            BlockOverlayQuadCache.put(quad, result);
         }
-        return newData;
+        return result;
     }
 }
