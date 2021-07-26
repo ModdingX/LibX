@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -29,15 +30,15 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * An ingredient that checks for potion effects to be present on a potion. This does not check for a
- * potion but for the effects. So potions with the {@code CustomPotionEffects} nbt tag will also be detected.
- * And you can match a for example a potion of the turtle master and a potion of slowness as both have the
- * slowness effect.
+ * An ingredient that checks for {@link MobEffectInstance potion effects} to be present on a potion. This does
+ * not check for a {@link Potion potion} but for the effects. So potions with the {@code CustomPotionEffects} nbt
+ * tag will also be detected. And you can match a for example a potion of the turtle master and a potion of
+ * slowness as both have the slowness effect.
  */
 public class EffectIngredient extends Ingredient {
 
     /**
-     * The item required for the potion.
+     * The item required for the potion. Can be null t match any item.
      */
     @Nullable
     public final Item potionItem;

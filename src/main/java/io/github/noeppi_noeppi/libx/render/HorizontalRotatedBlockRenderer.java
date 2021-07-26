@@ -14,21 +14,21 @@ import javax.annotation.Nonnull;
  * on the horizontal facing. This may only be used with blocks that have the property
  * {@link BlockStateProperties#HORIZONTAL_FACING}
  */
-public abstract class HorizontalRotatedBesr<T extends BlockEntity> implements BlockEntityRenderer<T> {
+public abstract class HorizontalRotatedBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
     @Override
-    public final void render(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        matrixStack.pushPose();
+    public final void render(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
+        poseStack.pushPose();
         float f = blockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180;
-        matrixStack.translate(0.5D, 0.5D, 0.5D);
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(-f));
-        matrixStack.translate(-0.5D, -0.5D, -0.5D);
-        this.doRender(blockEntity, partialTicks, matrixStack, buffer, combinedLight, combinedOverlay);
-        matrixStack.popPose();
+        poseStack.translate(0.5D, 0.5D, 0.5D);
+        poseStack.mulPose(Vector3f.YP.rotationDegrees(-f));
+        poseStack.translate(-0.5D, -0.5D, -0.5D);
+        this.doRender(blockEntity, partialTicks, poseStack, buffer, light, overlay);
+        poseStack.popPose();
     }
 
     /**
      * The custom render code goes in here.
      */
-    protected abstract void doRender(@Nonnull T tile, float partialTicks, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int light, int overlay);
+    protected abstract void doRender(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay);
 }

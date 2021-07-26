@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.network.datasync;
+package io.github.noeppi_noeppi.libx.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;

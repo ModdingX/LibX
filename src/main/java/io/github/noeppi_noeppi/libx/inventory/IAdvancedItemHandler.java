@@ -32,8 +32,8 @@ public interface IAdvancedItemHandler extends IItemHandler {
     }
 
     /**
-     * Gets whether the inventory has space for all the items given. <b>This does not check whether
-     * the inventory can take the stacks via {@link IItemHandler#insertItem(int, ItemStack, boolean)}.
+     * Gets whether the item handler has space for all the items given. <b>This does not check whether
+     * the item handler can take the stacks via {@link IItemHandler#insertItem(int, ItemStack, boolean)}.
      * However it checks for {@link IItemHandler#isItemValid(int, ItemStack)}.</b>
      */
     default boolean hasSpaceFor(List<ItemStack> stacks) {

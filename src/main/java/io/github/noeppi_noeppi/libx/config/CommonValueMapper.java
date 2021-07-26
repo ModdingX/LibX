@@ -25,7 +25,7 @@ public interface CommonValueMapper<T, E extends JsonElement> {
     Class<E> element();
 
     /**
-     * Returns a list of comment lines that will be added to the values specified in @Config.
+     * Returns a list of comment lines that will be added to the values specified in {@link Config @Config}.
      */
     default List<String> comment() {
         return Collections.emptyList();

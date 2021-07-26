@@ -10,6 +10,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * An immutable map with lazy populated values.
+ */
 public class LazyImmutableMap<K, V> implements Map<K, V> {
 
     private final ImmutableMap<K, LazyValue<V>> map;

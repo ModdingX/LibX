@@ -21,8 +21,8 @@ public class VanillaWrapper implements Container {
     /**
      * Wraps the given {@link IItemHandlerModifiable} to a vanilla {@link Container}.
      *
-     * @param changed A runnable which is always called when {@link Container#setChanged()} () markDirty()}
-     *              is called on the vanilla inventory.
+     * @param changed A runnable which is always called when {@link Container#setChanged()}
+     *                is called on the vanilla container.
      */
     public VanillaWrapper(IItemHandlerModifiable handler, @Nullable Runnable changed) {
         this.handler = handler;

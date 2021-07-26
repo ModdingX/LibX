@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 /**
  * Translates {@link Tag Named Binary Tag} into {@link MutableComponent text components}.
  */
-public class NbtToComponent {
+public class NbtToText {
 
     private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("libx.misc.copy_nbt"));
 
     /**
-     * As the fancy colored {@link NbtComponent nbt text components} are only available for
+     * As the fancy colored {@link NbtComponent nbt components} are only available for
      * {@link NbtComponent.BlockNbtComponent blocks}, {@link NbtComponent.EntityNbtComponent entities}
      * and {@link NbtComponent.StorageNbtComponent world storage} by default, this translates a piece of NBT
-     * to a colored {@link MutableComponent text component}.
+     * to a colored {@link Component text component}.
      */
     public static MutableComponent toText(Tag nbt) {
         Style copyTag = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, nbt.toString())).withHoverEvent(COPY_NBT);

@@ -11,20 +11,24 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * A base class for containers that handles basic container logic such as shift-clicks,
+ * A base class for menus that handles basic menu logic such as shift-clicks,
  * and laying out slots.
- * <p>
- * There are some things you need to pay attention to if you want to use this: <br>
- * Always register player inventory slots with layoutPlayerInventorySlots <br>
- * Register input slots, THEN output slots and THEN player inventory. <br>
- * </p>
- * <p>
- * Call the super constructor with <br>
- * firstOutputSlot    =  the number of input slot you have / the first output slot number <br>
- * firstInventorySlot =  the number of input slots and output slots you have / the first player inventory slot number. <br>
- * </p>
+ * 
+ * There are some things you need to pay attention to if you want to use this:
+ * 
+ * <ul>
+ *     <li>Always register player inventory slots with {@link #layoutPlayerInventorySlots(int, int)}</li>
+ *     <li>Register input slots, THEN output slots and THEN player inventory.</li>
+ * </ul>
+ * 
+ * Call the super constructor with
+ * 
+ * <ul>
+ *     <li>firstOutputSlot = the number of input slot you have / the first output slot number</li>
+ *     <li>firstInventorySlot = the number of input slots and output slots you have / the first player inventory slot number</li>
+ * </ul>
  */
-public abstract class DefaultContainerMenu extends ContainerMenuBase {
+public abstract class DefaultMenu extends MenuBase {
 
     protected final Player player;
     protected final Level level;
@@ -33,8 +37,8 @@ public abstract class DefaultContainerMenu extends ContainerMenuBase {
     public final int firstOutputSlot;
     public final int firstInventorySlot;
 
-    protected DefaultContainerMenu(@Nullable MenuType<?> type, int windowId, Level level, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
-        super(type, windowId, playerContainer);
+    protected DefaultMenu(@Nullable MenuType<?> type, int windowId, Level level, Inventory inventory, Player player, int firstOutputSlot, int firstInventorySlot) {
+        super(type, windowId, inventory);
         this.player = player;
         this.level = level;
         this.firstOutputSlot = firstOutputSlot;

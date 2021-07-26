@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.util;
 
 /**
- * Utilities for classes.
+ * Utilities for instances of the {@link Class} class.
  */
 public class ClassUtil {
 

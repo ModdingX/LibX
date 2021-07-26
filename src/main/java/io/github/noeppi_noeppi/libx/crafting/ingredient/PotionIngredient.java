@@ -24,16 +24,16 @@ import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
 /**
- * An ingredient that checks for a potion on an item. Unlike {@link EffectIngredient} there must
- * be exactly the potion given here and only registered potions can be used. {@code CustomPotionEffects}
+ * An ingredient that checks for a {@link Potion potion} on an item. Unlike {@link EffectIngredient} there
+ * must be exactly the potion given here and only registered potions can be used. {@code CustomPotionEffects}
  * is ignored.
- * <p>
+ * 
  * Please check whether EffectIngredient matches your needs better as it does in most cases.
  */
 public class PotionIngredient extends Ingredient {
 
     /**
-     * The item required for the potion.
+     * The item required for the potion. Can be null t match any item.
      */
     @Nullable
     public final Item potionItem;
@@ -54,7 +54,7 @@ public class PotionIngredient extends Ingredient {
     public ItemStack[] getItems() {
         ItemStack stack = new ItemStack(this.potionItem == null ? Items.POTION : this.potionItem);
         PotionUtils.setPotion(stack, this.potion);
-        return new ItemStack[]{stack};
+        return new ItemStack[] { stack };
     }
 
     @Override

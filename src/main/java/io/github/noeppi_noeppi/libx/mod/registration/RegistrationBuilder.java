@@ -31,6 +31,9 @@ import java.util.List;
  *     which is a subclass of ForgeRegistryEntry which means it can be registered directly to a forge
  *     registry.</i></li>
  * </ul>
+ * 
+ * @see RegistryTransformer
+ * @see RegistryCondition
  */
 public class RegistrationBuilder {
     

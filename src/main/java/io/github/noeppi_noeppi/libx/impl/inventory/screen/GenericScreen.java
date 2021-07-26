@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.impl.inventory.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.noeppi_noeppi.libx.inventory.container.GenericContainerMenu;
+import io.github.noeppi_noeppi.libx.inventory.container.GenericMenu;
 import io.github.noeppi_noeppi.libx.render.RenderHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -11,11 +11,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 
 // Screen for the GenericContainerMenu. Do not use manually.
-public class GenericScreen extends AbstractContainerScreen<GenericContainerMenu> {
+public class GenericScreen extends AbstractContainerScreen<GenericMenu> {
     
-    private final GenericContainerMenu menu;
+    private final GenericMenu menu;
 
-    public GenericScreen(GenericContainerMenu menu, Inventory playerContainer, Component title) {
+    public GenericScreen(GenericMenu menu, Inventory playerContainer, Component title) {
         super(menu, playerContainer, title);
         this.menu = menu;
         this.imageWidth = menu.width;

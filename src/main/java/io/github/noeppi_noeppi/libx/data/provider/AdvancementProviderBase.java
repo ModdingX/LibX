@@ -32,10 +32,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * base provider for custom {@link Advancement advancements}. If you want to have multiple advancement
- * tabs, use multiple providers. Every provider has one root advancement all advancements with no
- * explicit parent will be added to. You should configure your advancements with the {@code root}
- * and {@code advancement} methods in {@link #setup() setup}.
+ * Base provider for custom {@link Advancement advancements}. If you want to have multiple advancement
+ * tabs, use multiple providers. Every provider has one root advancement. All advancements with no
+ * explicit parent will be added to it. You should configure your advancements with the {@link #root()}
+ * and {@link #advancement(String)} methods in {@link #setup() setup}.
  */
 public abstract class AdvancementProviderBase implements DataProvider {
 
@@ -72,7 +72,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
 
     /**
      * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
-     * this provider. It's id will be the modid.
+     * this provider. The root id will be the modid.
      * 
      * @see #root(String, String)
      */
@@ -84,7 +84,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
      * this provider.
      * 
-     * @param id The id for the root advancement.
+     * @param id The root id. The actual advancement id will be {@code modid:id/root}
      * 
      * @see #root(String, String)
      */
@@ -97,9 +97,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * this provider.
      * 
      * @param namespace The namespace of the root advancement.
-     * @param id The root advancement id. The real advancement id will be namespace:id/root
-     *           All other advancements will then be put in {@code namespace:id/advancement_id} by default
-     *           where {@code id} is the id given here.
+     * @param id The root id. The actual advancement id will be {@code namespace:id/root}
      */
     public AdvancementFactory root(String namespace, String id) {
         if (id.equals("recipes")) {
@@ -176,16 +174,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets a criterion that requires all of the given items to be in the inventory at
-     * the same time.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires all of the given items to be in
+     * the inventory at the same time.
      */
     public CriterionTriggerInstance items(ItemLike... items) {
         return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
     
     /**
-     * Gets a criterion that requires all of the given items to be in the inventory at
-     * the same time.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires all of the given items to be in
+     * the inventory at the same time.
      */
     @SafeVarargs
     public final CriterionTriggerInstance items(Tag<Item>... items) {
@@ -193,8 +191,8 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
         
     /**
-     * Gets a criterion that requires all of the given items to be in the inventory at
-     * the same time.
+     * Gets a {@link CriterionTriggerInstance criterion} that requires all of the given items to be in
+     * the inventory at the same time.
      */
     public CriterionTriggerInstance items(ItemPredicate... items) {
         return InventoryChangeTrigger.TriggerInstance.hasItems(items);
@@ -323,9 +321,9 @@ public abstract class AdvancementProviderBase implements DataProvider {
 
     /**
      * An advancement factory can be used to customise an advancement in a builder style pattern.
-     * Calling one of the {@code parent} methods for the root advancement will cause an error.
-     * If this provider has no root advancement, you must always call one of the {@code parent}
-     * methods.
+     * Calling one of the {@link #parent(String) parent} methods for the root advancement will cause
+     * an error. If this provider has no root advancement, you must always call one of the
+     * {@link #parent(String) parent} methods.
      */
     public class AdvancementFactory {
 

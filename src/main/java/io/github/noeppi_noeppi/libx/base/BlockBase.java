@@ -7,8 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.IItemRenderProperties;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Base class for {@link Block blocks} for mods using {@link ModXRegistration}. This will automatically set the
@@ -29,11 +32,24 @@ public class BlockBase extends Block implements Registerable {
         if (mod.tab != null) {
             itemProperties.tab(mod.tab);
         }
-        this.item = new BlockItem(this, itemProperties);
+        this.item = new BlockItem(this, itemProperties) {
+            @Override
+            public void initializeClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+                BlockBase.this.initializeItemClient(consumer);
+            }
+        };
     }
 
     @Override
     public Set<Object> getAdditionalRegisters(ResourceLocation id) {
         return Set.of(this.item);
+    }
+
+    /**
+     * Called from the item for this block from {@link Item#initializeClient(Consumer)}.
+     * Can be used to set client properties for the block item.
+     */
+    public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+        
     }
 }

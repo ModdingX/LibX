@@ -22,13 +22,13 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A {@link DefaultContainerMenu} for entities.
+ * A {@link DefaultMenu} for entities.
  */
-public abstract class EntityContainerMenu<T extends Entity> extends DefaultContainerMenu {
+public abstract class EntityMenu<T extends Entity> extends DefaultMenu {
 
     public final T entity;
     
-    public EntityContainerMenu(@Nullable MenuType<?> type, int windowId, Level level, int entityId, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
+    public EntityMenu(@Nullable MenuType<?> type, int windowId, Level level, int entityId, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
         super(type, windowId, level, playerContainer, player, firstOutputSlot, firstInventorySlot);
         //noinspection unchecked
         this.entity = (T) level.getEntity(entityId);
@@ -44,9 +44,9 @@ public abstract class EntityContainerMenu<T extends Entity> extends DefaultConta
     }
 
     /**
-     * Creates a container type for a ContainerEntity.
+     * Creates a container type for an {@link EntityMenu}.
      *
-     * @param constructor A method reference to the container's constructor.
+     * @param constructor A method reference to the menus constructor.
      */
     public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function5<Integer, Level, Integer, Inventory, Player, T> constructor) {
         return IForgeContainerType.create((windowId1, inv, data) -> {
@@ -57,9 +57,9 @@ public abstract class EntityContainerMenu<T extends Entity> extends DefaultConta
     }
 
     /**
-     * Creates a container type for a ContainerEntity.
+     * Creates a menu type for an {@link EntityMenu}.
      *
-     * @param constructor A method reference to the container's constructor.
+     * @param constructor A method reference to the menus constructor.
      */
     public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function6<MenuType<T>, Integer, Level, Integer, Inventory, Player, T> constructor) {
         AtomicReference<MenuType<T>> typeRef = new AtomicReference<>(null);
@@ -73,7 +73,7 @@ public abstract class EntityContainerMenu<T extends Entity> extends DefaultConta
     }
 
     /**
-     * Opens an EntityContainer for a player.
+     * Opens an {@link EntityMenu} for a player.
      */
     public static void openMenu(ServerPlayer player, MenuType<? extends BlockEntityMenu<?>> menu, Component title, Entity entity) {
         MenuProvider containerProvider = new MenuProvider() {

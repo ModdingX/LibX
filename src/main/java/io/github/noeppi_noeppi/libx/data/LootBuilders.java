@@ -1,6 +1,7 @@
-package io.github.noeppi_noeppi.libx.data.provider;
+package io.github.noeppi_noeppi.libx.data;
 
 import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.EntryGroup;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.SequentialEntry;
@@ -9,9 +10,40 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contains builders vor various loot table entry containers.
+ */
 public class LootBuilders {
 
-    public static class AllLootBuilder extends LootPoolEntryContainer.Builder<AllLootBuilder> {
+    /**
+     * Gets a loot builder for a loot entry that selects all items fro mall its children at once.
+     */
+    public static LootPoolEntryContainer.Builder<?> all(LootPoolEntryContainer.Builder<?>... entries) {
+        return new AllLootBuilder(entries);
+    }
+    
+    /**
+     * Gets a loot builder for group loot.
+     */
+    public static LootPoolEntryContainer.Builder<?> group(LootPoolEntryContainer.Builder<?>... entries) {
+        return new GroupLootBuilder(entries);
+    }
+    
+    /**
+     * Gets a loot builder for alternative loot.
+     */
+    public static LootPoolEntryContainer.Builder<?> alternative(LootPoolEntryContainer.Builder<?>... entries) {
+        return AlternativesEntry.alternatives(entries);
+    }
+    
+    /**
+     * Gets a loot builder for sequence loot.
+     */
+    public static LootPoolEntryContainer.Builder<?> sequence(LootPoolEntryContainer.Builder<?>... entries) {
+        return new SequenceLootBuilder(entries);
+    }
+    
+    private static class AllLootBuilder extends LootPoolEntryContainer.Builder<AllLootBuilder> {
 
         private final List<LootPoolEntryContainer> lootEntries = new ArrayList<>();
 
@@ -39,7 +71,7 @@ public class LootBuilders {
         }
     }
 
-    public static class GroupLootBuilder extends LootPoolEntryContainer.Builder<GroupLootBuilder> {
+    private static class GroupLootBuilder extends LootPoolEntryContainer.Builder<GroupLootBuilder> {
 
         private final List<LootPoolEntryContainer> lootEntries = new ArrayList<>();
 
@@ -67,7 +99,7 @@ public class LootBuilders {
         }
     }
 
-    public static class SequenceLootBuilder extends LootPoolEntryContainer.Builder<SequenceLootBuilder> {
+    private static class SequenceLootBuilder extends LootPoolEntryContainer.Builder<SequenceLootBuilder> {
 
         private final List<LootPoolEntryContainer> lootEntries = new ArrayList<>();
 

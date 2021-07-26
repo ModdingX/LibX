@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.config.validator;
 import java.lang.annotation.*;
 
 /**
- * Config validator that checks whether a long is in a range of allowed values.
+ * Config validator annotation that checks whether a long is in a range of allowed values.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

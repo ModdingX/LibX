@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.inventory;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * An {@link ItemStackHandler} that can be configured with common things required for inventories.
+ * An {@link ItemStackHandler} that can be configured with common things required for many inventories.
  * To get a BaseItemStackHandler, use {@link #builder(int)}.
  */
 public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedItemHandler {
@@ -71,7 +72,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     }
 
     /**
-     * Gets a vanilla inventory that wraps around this inventory. Marking the vanilla inventory dirty
+     * Gets a vanilla container that wraps around this item handler. Marking the vanilla container dirty
      * will notify an content change for every slot of this item handler.
      */
     public Container toVanilla() {
@@ -80,7 +81,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     }
 
     /**
-     * Gets an inventory that wraps around this item handler but has no checks on which items are
+     * Gets an item handler that wraps around this item handler but has no checks on which items are
      * valid for a slot.
      */
     public IAdvancedItemHandlerModifiable getUnrestricted() {
@@ -108,14 +109,14 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
      * Creates a new {@link LazyOptional} for this inventory.
      * 
      * @param extract A predicate on whether an item can be extracted through this {@link LazyOptional}. This gets passed the slot to extract from.
-     * @param insert A predicate on whether an item can be inserted through this {@link LazyOptional}. This gets passed the slot to insert to and the stack that should be inserted..
+     * @param insert A predicate on whether an item can be inserted through this {@link LazyOptional}. This gets passed the slot to insert to and the stack that should be inserted.
      */
     public LazyOptional<IAdvancedItemHandlerModifiable> createCapability(@Nullable Predicate<Integer> extract, @Nullable BiPredicate<Integer, ItemStack> insert) {
         return ItemCapabilities.create(this, extract, insert);
     }
 
     /**
-     * Creates a new {@link Builder} for an inventory with the given size.
+     * Creates a new {@link Builder} for an item handler with the given size.
      */
     public static Builder builder(int size) {
         return new Builder(size);
@@ -163,7 +164,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     }
 
     /**
-     * Builder for {@link BaseItemStackHandler}
+     * Builder for a {@link BaseItemStackHandler}
      */
     public static class Builder {
 
@@ -180,14 +181,14 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         }
 
         /**
-         * Adds an action that is run whenever the contents of the inventory change.
+         * Adds an action that runs whenever the contents of the inventory change.
          */
         public Builder contentsChanged(Runnable action) {
             return this.contentsChanged(slot -> action.run());
         }
         
         /**
-         * Adds an action that is run whenever the contents of the inventory change. The action
+         * Adds an action that runs whenever the contents of the inventory change. The action
          * will get passed the slot that was changed.
          */
         public Builder contentsChanged(Consumer<Integer> action) {

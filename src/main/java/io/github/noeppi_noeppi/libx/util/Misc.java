@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.util;
 
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -11,7 +12,7 @@ public class Misc {
      * This resource location should be used as a placeholder / invalid  value
      * This is {@code minecraft:missigno}
      * The reason for {@code minecraft:missigno} is that minecraft uses this resource location
-     * on it's own. See for example MissingTextureSprite.
+     * on it's own. See for example {@link MissingTextureAtlasSprite}.
      */
     public static final ResourceLocation MISSIGNO = new ResourceLocation("minecraft", "missingno");
 }

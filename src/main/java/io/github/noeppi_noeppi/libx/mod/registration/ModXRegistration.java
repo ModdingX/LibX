@@ -4,6 +4,9 @@ import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.EventBus;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -23,34 +26,36 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * You should extends this instead of {@link ModX} if you want to use the alternative registration system
- * in LibX.
- * <p>
+ * You should extends this instead of {@link ModX} if you want to use the LibX registration system.
+ * 
  * This works like this:
+ * 
  * You define your objects for registration in classes like {@code ModItems}. Create some static methods
  * there that register all the items. To register something you need to call
  * {@link ModXRegistration#register(String, Object)}. The in the constructor of you mod class you call
  * {@link ModXRegistration#addRegistrationHandler(Runnable)} for every registration method with a method
  * reference to it. (Example: {@code addRegistrationHandler(ModItems::init)}. The handlers will get called
  * in the order you added them.
- * <p>
+ * 
  * This system has several advantages over the one recommended by forge:
+ * 
  * <ul>
  *     <li>An object can have dependencies that are automatically registered with it. This is done with
- *     the {@link Registerable} interface. For example {@link BlockBE} registers a block, an item for
- *     the block and a tile entity type. You could even go further with it and automatically register
- *     slabs, stairs, walls and doors for all of your decorative blocks.</li>
+ *     the {@link Registerable} interface. For example {@link BlockBE} registers a {@link Block block},
+ *     an {@link Item item} for the block and a {@link BlockEntityType block entity type}. You could even
+ *     go further with it and automatically register slabs, stairs, walls and doors for all of your
+ *     decorative blocks.</li>
  *     <li>There's way less code you need to write.</li>
  *     <li>You don't need the {@code .get()} when you want to access a registration object</li>
  * </ul>
- * <p>
+ * 
  * So you might want to know what exactly can be registered with this system. You can register everything
  * that has a forge registry such as items, block, biomes, enchantments... And if other mods add things
  * to register via forge registries you can register those as well. Another thing you can register are
  * thing that implement {@link Registerable}. See there for more info.
  * 
  * With registry transformers you can register literally everything. See {@link #initRegistration(RegistrationBuilder)}
- * for this.
+ * for more information about registry conditions and transformers.
  */
 public abstract class ModXRegistration extends ModX {
 
@@ -84,6 +89,7 @@ public abstract class ModXRegistration extends ModX {
         this.registryTransformers = result.getRight();
         
         // Call the generated code here as well
+        //noinspection deprecation
         this.callGeneratedCode();
     }
 

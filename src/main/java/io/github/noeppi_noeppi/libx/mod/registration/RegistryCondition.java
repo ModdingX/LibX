@@ -13,7 +13,7 @@ public interface RegistryCondition {
 
     /**
      * Gets whether an object should be registered into the LibX registration system. All
-     * conditions must return true for an object being registered.
+     * conditions must return true for an object to be registered.
      */
     boolean shouldRegister(ResourceLocation id, Object object);
 }

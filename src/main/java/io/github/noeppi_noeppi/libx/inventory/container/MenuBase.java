@@ -14,17 +14,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * A base class for {@link AbstractContainerMenu containers}. Provides some utilities that are useful for any type
- * of container. When using this it's important to register the player inventory slots through
- * {@link ContainerMenuBase#layoutPlayerInventorySlots(int, int)} and after all other slots.
+ * A base class for {@link AbstractContainerMenu menus}. Provides some utilities that are useful for any type
+ * of menu. When using this it's important to register the player inventory slots through
+ * {@link #layoutPlayerInventorySlots(int, int)} and after all the other slots.
  */
-public abstract class ContainerMenuBase extends AbstractContainerMenu {
+public abstract class MenuBase extends AbstractContainerMenu {
     
-    public final IItemHandler playerInventory;
+    public final IItemHandler playerinventory;
     
-    protected ContainerMenuBase(@Nullable MenuType<?> type, int id, Inventory playerContainer) {
+    protected MenuBase(@Nullable MenuType<?> type, int id, Inventory inventory) {
         super(type, id);
-        this.playerInventory = new InvWrapper(playerContainer);
+        this.playerinventory = new InvWrapper(inventory);
     }
 
     /**
@@ -34,9 +34,9 @@ public abstract class ContainerMenuBase extends AbstractContainerMenu {
      * @param topRow  The y coordinate of the top left slot
      */
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
-        this.addSlotBox(this.playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
+        this.addSlotBox(this.playerinventory, 9, leftCol, topRow, 9, 18, 3, 18);
         topRow += 58;
-        this.addSlotRange(this.playerInventory, 0, leftCol, topRow, 9, 18);
+        this.addSlotRange(this.playerinventory, 0, leftCol, topRow, 9, 18);
     }
 
     /**

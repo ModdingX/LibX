@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A {@link DefaultContainerMenu} for blocks with block entities.
+ * A {@link DefaultMenu} for blocks with block entities.
  */
-public class BlockEntityMenu<T extends BlockEntity> extends DefaultContainerMenu {
+public class BlockEntityMenu<T extends BlockEntity> extends DefaultMenu {
 
     protected final BlockPos pos;
     protected final T tile;
@@ -53,9 +53,9 @@ public class BlockEntityMenu<T extends BlockEntity> extends DefaultContainerMenu
 
 
     /**
-     * Creates a container type for a ContainerTile.
+     * Creates a menu type for a {@link BlockEntityMenu}.
      *
-     * @param constructor A method reference to the container's constructor.
+     * @param constructor A method reference to the menus constructor.
      */
     public static <T extends BlockEntityMenu<?>> MenuType<T> createMenuType(Function5<Integer, Level, BlockPos, Inventory, Player, T> constructor) {
         return IForgeContainerType.create((windowId1, inv, data) -> {
@@ -66,9 +66,9 @@ public class BlockEntityMenu<T extends BlockEntity> extends DefaultContainerMenu
     }
 
     /**
-     * Creates a container type for a ContainerTile.
+     * Creates a menu type for a {@link BlockEntityMenu}.
      *
-     * @param constructor A method reference to the container's constructor.
+     * @param constructor A method reference to the menus constructor.
      */
     public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function6<MenuType<T>, Integer, Level, BlockPos, Inventory, Player, T> constructor) {
         AtomicReference<MenuType<T>> typeRef = new AtomicReference<>(null);
@@ -82,7 +82,7 @@ public class BlockEntityMenu<T extends BlockEntity> extends DefaultContainerMenu
     }
 
     /**
-     * Opens a TileContainer for a player.
+     * Opens a {@link BlockEntityMenu} for a player.
      */
     public static void openMenu(ServerPlayer player, MenuType<? extends BlockEntityMenu<?>> menu, Component title, BlockPos pos) {
         MenuProvider containerProvider = new MenuProvider() {

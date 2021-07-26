@@ -45,7 +45,7 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
 
     @Override
     public JsonObject toJSON(ResourceList value) {
-        return value.toJSON();
+        return value.toJson();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
 
     @Override
     public void write(ResourceList value, FriendlyByteBuf buffer) {
-        value.write(buffer);
+        value.toNetwork(buffer);
     }
 
     @Override

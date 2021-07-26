@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A base class for item model provider. When overriding this you should call the
+ * A base class for item model provider. An extending class should call the
  * {@link #handheld(Item) handheld} and {@link #manualModel(Item) manualModel} methods
  * in {@link #setup() setup}.
  */

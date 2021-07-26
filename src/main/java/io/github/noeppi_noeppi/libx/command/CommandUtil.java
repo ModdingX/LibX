@@ -7,13 +7,15 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Method;
 
+/**
+ * Utilities for commands.
+ */
 public class CommandUtil {
 
     /**
-     * As the normal register method in {@link ArgumentTypes} does not work with
-     * generic arguments because of javas bad type inference here you can
-     * register your generic argument types. Just make sure you don't
-     * register something that breaks type safety.
+     * As the normal register method in {@link ArgumentTypes} does not work well with
+     * generic arguments, here you can register your generic argument types. Just make
+     * sure you don't register something that breaks type safety.
      */
     public static void registerGenericCommandArgument(String name, Class<?> clazz, ArgumentSerializer<?> ias) {
         try {

@@ -1,7 +1,9 @@
 package io.github.noeppi_noeppi.libx.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
+import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -12,6 +14,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,20 +23,24 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.util.Constants;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Consumer;
 
-// TODO update docs to new system forge uses now.
 /**
- * This class is meant to apply a TileEntityRenderer to items. Using it is really straightforward:
- * <p>
- * Add this to your item properties: {@code .setISTER(() -> ItemStackRenderer::get)}
- * <p>
- * Then in {@code registerClient} call {@link ItemStackRenderer#addRenderTile(BlockEntityType, boolean)}
- * <p>
+ * This class is meant to apply a {@link BlockEntityRenderer} to items. Using it is really straightforward:
+ * 
+ * <ul>
+ *     <li>Add custom {@link IItemRenderProperties render properties} to your item through
+ *     {@link Item#initializeClient(Consumer)} or {@link BlockBase#initializeItemClient(Consumer)}</li>
+ *     <li>In {@link Registerable#registerClient(ResourceLocation, Consumer)} call
+ *     {@link ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)}</li>
+ * </ul>
+ * 
  * The required models will generate automatically if you're using {@link ItemModelProviderBase}.
  */
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
@@ -52,9 +60,9 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
      *
      * @param teType             The Tile Entity Type.
      * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the tile
-     *                           entities {@code read} method will get called before rendering.
+     *                           entities {@code load} method will get called before rendering.
      */
-    public static <T extends BlockEntity> void addRenderTile(BlockEntityType<T> teType, boolean readBlockEntityTag) {
+    public static <T extends BlockEntity> void addRenderBlock(BlockEntityType<T> teType, boolean readBlockEntityTag) {
         types.add(teType);
         for (Block block : teType.validBlocks) {
             tiles.put(block, Pair.of(new LazyValue<>(() -> teType.create(BlockPos.ZERO, block.defaultBlockState())), readBlockEntityTag));

@@ -22,7 +22,7 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     }
 
     /**
-     * Returns whether the count is 0 or Ingredient#hasNoMatchingItems return true.
+     * Returns whether the count is 0 or {@link Ingredient#isEmpty()} return true.
      */
     public boolean empty() {
         return this.count == 0 || this.ingredient.isEmpty();
@@ -31,7 +31,7 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     /**
      * Serialises the IngredientStack to json.
      */
-    public JsonObject serialize() {
+    public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.add("Ingredient", this.ingredient.toJson());
         json.addProperty("Count", this.count);
@@ -39,9 +39,9 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     }
 
     /**
-     * Writes this IngredientStack to a {@link FriendlyByteBuf}
+     * Writes this IngredientStack to a {@link FriendlyByteBuf}.
      */
-    public void write(FriendlyByteBuf buffer) {
+    public void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeVarInt(this.count);
         this.ingredient.toNetwork(buffer);
     }
@@ -49,16 +49,16 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     /**
      * Deserializes and IngredientStack from json.
      */
-    public static IngredientStack deserialize(JsonObject json) {
+    public static IngredientStack fromJson(JsonObject json) {
         Ingredient ingredient = json.has("Ingredient") ? Ingredient.fromJson(json.get("Ingredient")) : Ingredient.EMPTY;
         int count = json.has("Count") && json.get("Count").isJsonPrimitive() ? json.get("Count").getAsInt() : 0;
         return new IngredientStack(ingredient, count);
     }
 
     /**
-     * Reads an IngredientStack from a {@link FriendlyByteBuf}
+     * Reads an IngredientStack from a {@link FriendlyByteBuf}.
      */
-    public static IngredientStack read(FriendlyByteBuf buffer) {
+    public static IngredientStack fromNetwork(FriendlyByteBuf buffer) {
         int count = buffer.readVarInt();
         Ingredient ingredient = Ingredient.fromNetwork(buffer);
         return new IngredientStack(ingredient, count);

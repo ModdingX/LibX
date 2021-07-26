@@ -30,7 +30,7 @@ public interface ConfigValidator<T, A extends Annotation> {
     Optional<T> validate(T value, A validator);
     
     /**
-     * Returns a list of comment lines that will be added to the values specified in @Config.
+     * Returns a list of comment lines that will be added to the values specified in {@link Config @Config}.
      */
     default List<String> comment(A validator) {
         return Collections.emptyList();

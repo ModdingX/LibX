@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.annotation;
+package io.github.noeppi_noeppi.libx.annotation.codec;
 
 import com.mojang.serialization.Codec;
 import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
@@ -7,11 +7,15 @@ import io.github.noeppi_noeppi.libx.mod.ModX;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+/**
+ * Class to retrieve generated {@link Codec codecs.}. They should normally be assigned to a
+ * {@code public static final} field in the class that the codec is for.
+ */
 public class Codecs {
 
     /**
      * Gets a codec created by the use of the {@link PrimaryConstructor} annotation.
-     * Should be assigned to a public static final field named {@code CODEC} in the same file.
+     * Should be assigned to a {@code public static final} named {@code CODEC} in the same file.
      *
      * @param mod   Your mods' class
      * @param clazz The class of which the codec was created

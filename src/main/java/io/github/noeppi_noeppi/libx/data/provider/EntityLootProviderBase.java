@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.github.noeppi_noeppi.libx.data.LootBuilders;
 import io.github.noeppi_noeppi.libx.impl.data.LootData;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * A base class for entity loot providers. When overriding this you should call the
+ * A base class for entity loot providers. An extending class should call the
  * {@link #customLootTable(EntityType, LootTable.Builder) customLootTable} methods in
  * {@link #setup() setup} to adjust the loot tables.
  */
@@ -247,68 +247,45 @@ public abstract class EntityLootProviderBase implements DataProvider {
     }
 
     /**
-     * A builder for loot groups where every member is selected.
-     */
-    public LootBuilders.AllLootBuilder all() {
-        return new LootBuilders.AllLootBuilder();
-    }
-    
-    /**
-     * Minecraft does not seem to have a loot builder for groups. So here you have one.
-     * This will select only one element per roll.
-     */
-    public LootBuilders.GroupLootBuilder group() {
-        return new LootBuilders.GroupLootBuilder();
-    }
-    
-    /**
-     * Minecraft does not seem to have a loot builder for sequences. So here you have one.
-     * This will select only one element per roll.
-     */
-    public LootBuilders.SequenceLootBuilder sequence() {
-        return new LootBuilders.SequenceLootBuilder();
-    }
-
-    /**
      * Combines the given loot builders into one. (All loot builders will be applied).
      */
     public LootPoolEntryContainer.Builder<?> combine(LootPoolEntryContainer.Builder<?>... loot) {
-        return LootData.combineBy(LootBuilders.AllLootBuilder::new, loot);
+        return LootData.combineBy(LootBuilders::all, loot);
     }
 
     /**
      * Combines the given loot factories into one. (All loot factories will be applied).
      */
     public LootFactory combine(LootFactory... loot) {
-        return e -> LootData.combineBy(LootBuilders.AllLootBuilder::new, l -> l.build(e), loot);
+        return e -> LootData.combineBy(LootBuilders::all, l -> l.build(e), loot);
     }
 
     /**
      * Combines the given loot builders into one. (One loot builder will be applied).
      */
     public LootPoolEntryContainer.Builder<?> random(LootPoolEntryContainer.Builder<?>... loot) {
-        return LootData.combineBy(LootBuilders.GroupLootBuilder::new, loot);
+        return LootData.combineBy(LootBuilders::group, loot);
     }
 
     /**
      * Combines the given loot factories into one. (One loot factory will be applied).
      */
     public LootFactory random(LootFactory... loot) {
-        return e -> LootData.combineBy(LootBuilders.GroupLootBuilder::new, l -> l.build(e), loot);
+        return e -> LootData.combineBy(LootBuilders::group, l -> l.build(e), loot);
     }
 
     /**
      * Combines the given loot builders into one. Only the first matching builder is applied.
      */
     public LootPoolEntryContainer.Builder<?> first(LootPoolEntryContainer.Builder<?>... loot) {
-        return LootData.combineBy(AlternativesEntry::alternatives, loot);
+        return LootData.combineBy(LootBuilders::alternative, loot);
     }
 
     /**
      * Combines the given loot factories into one. Only the first matching factory is applied.
      */
     public LootFactory first(LootFactory... loot) {
-        return e -> LootData.combineBy(AlternativesEntry::alternatives, l -> l.build(e), loot);
+        return e -> LootData.combineBy(LootBuilders::alternative, l -> l.build(e), loot);
     }
 
     /**
@@ -316,7 +293,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
      * From all the loot entries until the first one not matching, one is selected.
      */
     public LootPoolEntryContainer.Builder<?> whileMatch(LootPoolEntryContainer.Builder<?>... loot) {
-        return LootData.combineBy(LootBuilders.SequenceLootBuilder::new, loot);
+        return LootData.combineBy(LootBuilders::sequence, loot);
     }
 
     /**
@@ -324,7 +301,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
      * From all the loot factories until the first one not matching, one is selected.
      */
     public LootFactory whileMatch(LootFactory... loot) {
-        return e -> LootData.combineBy(LootBuilders.SequenceLootBuilder::new, l -> l.build(e), loot);
+        return e -> LootData.combineBy(LootBuilders::sequence, l -> l.build(e), loot);
     }
 
     /**

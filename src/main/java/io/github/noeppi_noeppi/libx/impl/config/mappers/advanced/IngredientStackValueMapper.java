@@ -25,21 +25,21 @@ public class IngredientStackValueMapper implements ValueMapper<IngredientStack, 
 
     @Override
     public IngredientStack fromJSON(JsonObject json) {
-        return IngredientStack.deserialize(json);
+        return IngredientStack.fromJson(json);
     }
 
     @Override
     public JsonObject toJSON(IngredientStack value) {
-        return value.serialize();
+        return value.toJson();
     }
 
     @Override
     public IngredientStack read(FriendlyByteBuf buffer) {
-        return IngredientStack.read(buffer);
+        return IngredientStack.fromNetwork(buffer);
     }
 
     @Override
     public void write(IngredientStack value, FriendlyByteBuf buffer) {
-        value.write(buffer);
+        value.toNetwork(buffer);
     }
 }

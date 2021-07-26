@@ -70,6 +70,9 @@ public class MergedIngredient extends Ingredient {
         }
     }
 
+    /**
+     * Gets the ingredients that were merged in this one ingredient.
+     */
     public List<Ingredient> getIngredients() {
         return this.ingredients;
     }

@@ -32,12 +32,12 @@ import java.util.Set;
  * Base class for blocks with {@link BlockEntity block entities} for mods using {@link ModXRegistration}.
  * This will automatically set the creative tab if it's defined in the mod and register a block item and
  * a block entity type.
- * <p>
- * The constructor requires a {@link BlockEntity} class. The block entity class  <b>must</b> define a public
+ * 
+ * The constructor requires a {@link BlockEntity} class. The block entity class must define a public
  * constructor with three arguments of types {@link BlockEntityType}, {@link BlockPos} and {@link BlockState}
  * for this to create a block entity type. This class will do the magic to wire the block entity to the block
  * and invoke the constructor.
- * <p>
+ * 
  * The block entity class can implement {@link TickableBlock} and {@link GameEventBlock}. This class will then
  * generate a matching {@link BlockEntityTicker} and a {@link GameEventListener} if required.
  */

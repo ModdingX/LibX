@@ -33,7 +33,7 @@ public class RecipeHelper {
     }
 
     /**
-     * Checks whether all the ingredients of a recipe are present in a list of {@link ItemStack ItemStacks}.
+     * Checks whether all the ingredients of a recipe are present in a list of {@link ItemStack}s.
      * This does not check that all ingredients are on different slots.
      *
      * @param exactMatch When this is true this will return false if the stack list contains

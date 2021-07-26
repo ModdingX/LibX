@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * A list of rules that will be applied one after another. The first rule that matches
+ * A {@link Predicate} for {@link ResourceLocation resource locations} implemented as
+ * a list of rules that will be applied one after another. The first rule that matches
  * a resource location determines the result.
  * The resource list can either be a white list or a black list. If it is a whitelist,
  * by default a matching rule will make the {@link #test(ResourceLocation) test} function
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  * priority and only the first matching rule will be applied.
  * Resource lists are immutable.
  */
-public class ResourceList {
+public class ResourceList implements Predicate<ResourceLocation> {
 
     /**
      * A resource list that accepts every item.
@@ -95,7 +96,7 @@ public class ResourceList {
         int ruleSize = buffer.readVarInt();
         ImmutableList.Builder<Rule> rules = ImmutableList.builder();
         for (int i = 0; i < ruleSize; i++) {
-            rules.add(this.readRule(buffer));
+            rules.add(this.ruleFromNetwork(buffer));
         }
         this.rules = rules.build();
     }
@@ -103,12 +104,12 @@ public class ResourceList {
     /**
      * Serialises this resource list to JSON.
      */
-    public JsonObject toJSON() {
+    public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("whitelist", this.whitelist);
         JsonArray array = new JsonArray();
         for (Rule rule : this.rules) {
-            array.add(rule.toJSON());
+            array.add(rule.toJson());
         }
         json.add("elements", array);
         return json;
@@ -117,15 +118,16 @@ public class ResourceList {
     /**
      * Writes this resource list to a {@link FriendlyByteBuf}.
      */
-    public void write(FriendlyByteBuf buffer) {
+    public void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeBoolean(this.whitelist);
         buffer.writeVarInt(this.rules.size());
-        this.rules.forEach(rule -> rule.write(buffer));
+        this.rules.forEach(rule -> rule.toNetwork(buffer));
     }
 
     /**
      * Tests whether the given {@link ResourceLocation} is on this resource list.
      */
+    @Override
     public boolean test(ResourceLocation rl) {
         for (Rule rule : this.rules) {
             Boolean value = rule.test(rl);
@@ -153,7 +155,7 @@ public class ResourceList {
         }
     }
     
-    private Rule readRule(FriendlyByteBuf buffer) {
+    private Rule ruleFromNetwork(FriendlyByteBuf buffer) {
         byte id = buffer.readByte();
         if (id == 0) {
             boolean allow = buffer.readBoolean();
@@ -231,8 +233,8 @@ public class ResourceList {
     private interface Rule {
 
         Boolean test(ResourceLocation rl);
-        JsonElement toJSON();
-        void write(FriendlyByteBuf buffer);
+        JsonElement toJson();
+        void toNetwork(FriendlyByteBuf buffer);
     }
 
     private class SimpleRule implements Rule {
@@ -259,7 +261,7 @@ public class ResourceList {
         }
 
         @Override
-        public JsonElement toJSON() {
+        public JsonElement toJson() {
             StringBuilder sb = new StringBuilder();
             if (this.allow != ResourceList.this.whitelist) {
                 sb.append(this.allow ? "+" : "-");
@@ -275,7 +277,7 @@ public class ResourceList {
         }
 
         @Override
-        public void write(FriendlyByteBuf buffer) {
+        public void toNetwork(FriendlyByteBuf buffer) {
             buffer.writeByte(0);
             buffer.writeBoolean(this.allow);
             buffer.writeVarInt(this.namespace.parts.size());
@@ -303,7 +305,7 @@ public class ResourceList {
         }
 
         @Override
-        public JsonElement toJSON() {
+        public JsonElement toJson() {
             JsonObject json = new JsonObject();
             if (this.allow != ResourceList.this.whitelist) {
                 json.addProperty("allow", this.allow);
@@ -313,7 +315,7 @@ public class ResourceList {
         }
 
         @Override
-        public void write(FriendlyByteBuf buffer) {
+        public void toNetwork(FriendlyByteBuf buffer) {
             buffer.writeByte(1);
             buffer.writeBoolean(this.allow);
             buffer.writeUtf(this.regex, 32767);

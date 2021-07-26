@@ -20,12 +20,11 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
- * A base class for block state and model providers. When overriding this, you should call the
+ * A base class for block state and model providers. An extending class should call the
  * {@link #manualState(Block) manualState} and {@link #manualModel(Block) manualModel} methods in
- * {@link #setup() setup}. Unlike the other provider this has an extra method because custom models
- * would not generate if not done there. Another thing you can do is override
- * {@link #defaultState(ResourceLocation, Block, ModelFile) defaultState} and
- * {@link #defaultModel(ResourceLocation, Block) defaultModel} to adjust the state and model depending
+ * {@link #setup() setup}.
+ * Another thing you can do is override {@link #defaultState(ResourceLocation, Block, ModelFile) defaultState}
+ * and {@link #defaultModel(ResourceLocation, Block) defaultModel} to adjust the state and model depending
  * on the block.
  */
 public abstract class BlockStateProviderBase extends BlockStateProvider {

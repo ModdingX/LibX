@@ -36,6 +36,7 @@ public class RenderHelperBlock {
      *
      * @param breakProgress How much the block already broke. 0 means no break. This should not be lower than 0 and not be greater than 10.
      */
+    // TODO test
     public static void renderBlockBreak(BlockState state, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, int breakProgress) {
         renderBlockBreak(state, poseStack, buffer, light, overlay, breakProgress, state.getSeed(BlockPos.ZERO));
     }

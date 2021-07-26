@@ -29,21 +29,23 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 /**
- * A common {@link AbstractContainerMenu} with a variable amount of slots. You should not use this with more than 154 slots.
- * To show a container to a {@link Player player}, call
- * {@link #open(ServerPlayer, IItemHandlerModifiable, Component, ResourceLocation) open}
- * on the logical server.
- * As there's no way to synchronise the item validator method from the item handler modifiable, you should
- * register the validator during setup. The slot validation method in your item handler will be ignored by this.
+ * A common {@link AbstractContainerMenu menu} with a variable amount of slots. You should not use this with
+ * more than 154 slots.
+ * 
+ * To show a menu to a {@link Player player}, call
+ * {@link #open(ServerPlayer, IItemHandlerModifiable, Component, ResourceLocation) open} on the logical server.
+ * 
+ * As there's no way to synchronise the item validator method from the {@link IItemHandlerModifiable modifiable item handler},
+ * you should register the validator during setup. The slot validation method in your item handler will be ignored by this.
  */
-public class GenericContainerMenu extends ContainerMenuBase {
+public class GenericMenu extends MenuBase {
 
     private static final ResourceLocation EMPTY_VALIDATOR = new ResourceLocation(LibX.getInstance().modid, "nothing");
     private static final Map<ResourceLocation, BiPredicate<Integer, ItemStack>> validators = new HashMap<>(Map.of(
             EMPTY_VALIDATOR, (slot, stack) -> true
     ));
 
-    public static final MenuType<GenericContainerMenu> TYPE = IForgeContainerType.create((id, playerInv, buffer) -> {
+    public static final MenuType<GenericMenu> TYPE = IForgeContainerType.create((id, playerInv, buffer) -> {
         int size = buffer.readVarInt();
         ResourceLocation validatorId = buffer.readResourceLocation();
         BiPredicate<Integer, ItemStack> validator;
@@ -58,7 +60,7 @@ public class GenericContainerMenu extends ContainerMenuBase {
             slotLimits[i] = buffer.readVarInt();
         }
         IItemHandlerModifiable handler = new GenericContainerSlotValidationWrapper(new ItemStackHandler(size), validator, slotLimits);
-        return new GenericContainerMenu(id, handler, playerInv);
+        return new GenericMenu(id, handler, playerInv);
     });
 
     public final int width;
@@ -67,7 +69,7 @@ public class GenericContainerMenu extends ContainerMenuBase {
     public final int invY;
     public final List<Pair<Integer, Integer>> slotList;
 
-    private GenericContainerMenu(int id, IItemHandlerModifiable handler, Inventory playerContainer) {
+    private GenericMenu(int id, IItemHandlerModifiable handler, Inventory playerContainer) {
         super(TYPE, id, playerContainer);
         Triple<Pair<Integer, Integer>, Pair<Integer, Integer>, List<Pair<Integer, Integer>>> layout = layoutSlots(handler.getSlots());
         this.width = layout.getLeft().getLeft();
@@ -126,16 +128,15 @@ public class GenericContainerMenu extends ContainerMenuBase {
     }
 
     /**
-     * Opens a container for a {@link Player player}.
+     * Opens a menu for a {@link Player player}.
      *
-     * @param player      The player that should see the container.
-     * @param inventory   The inventory of the container. The
-     *                    slot amount of this determines how big the container is. This should not have more than 154 slots.
-     * @param name        The name of the container.
-     * @param validatorId The id of the slot validator registered
-     *                    with {@link #registerSlotValidator(ResourceLocation, BiPredicate) registerSlotValidator}.
+     * @param player      The player that should see the menu.
+     * @param inventory   The inventory of the menu. The slot amount of this determines how big the container is.
+     *                    This should not have more than 154 slots.
+     * @param name        The name of the menu.
+     * @param validatorId The id of the slot validator registered with {@link #registerSlotValidator(ResourceLocation, BiPredicate) registerSlotValidator}.
      *                    {@code null} disables slot validation. This will override the item handlers slot validation, so null
-     *                    means no slot validation even if the item handler has the feature.
+     *                    means no slot validation even if the item handler has that feature.
      */
     public static void open(ServerPlayer player, IItemHandlerModifiable inventory, Component name, @Nullable ResourceLocation validatorId) {
         MenuProvider provider = new MenuProvider() {
@@ -155,7 +156,7 @@ public class GenericContainerMenu extends ContainerMenuBase {
                     LibX.logger.warn("Generic container created with invalid validator. Validator ID: " + validatorId);
                     validator = validators.get(EMPTY_VALIDATOR);
                 }
-                return new GenericContainerMenu(containerId, new GenericContainerSlotValidationWrapper(inventory, validator, null), inv);
+                return new GenericMenu(containerId, new GenericContainerSlotValidationWrapper(inventory, validator, null), inv);
             }
         };
         NetworkHooks.openGui(player, provider, buffer -> {

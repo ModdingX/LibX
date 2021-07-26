@@ -24,6 +24,8 @@ import java.util.Set;
 /**
  * This class registers a menu to it's {@link BlockEntityType block entity type} and handles the gui
  * opening when the block is right clicked. You still need to manually register the screen on the client.
+ * 
+ * @see BlockEntityMenu
  */
 public class BlockMenu<T extends BlockEntity, C extends BlockEntityMenu<T>> extends BlockBE<T> {
 

@@ -1,5 +1,6 @@
-package io.github.noeppi_noeppi.libx.inventory;
+package io.github.noeppi_noeppi.libx.capability;
 
+import io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;

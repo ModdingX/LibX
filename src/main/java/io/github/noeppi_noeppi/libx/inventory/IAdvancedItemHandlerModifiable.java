@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 public interface IAdvancedItemHandlerModifiable extends IItemHandlerModifiable, IAdvancedItemHandler {
 
     /**
-     * Clears all slots from the inventory.
+     * Clears all slots from the item handler.
      */
     default void clear() {
         for (int slot = 0; slot < this.getSlots(); slot++) {
@@ -22,7 +22,7 @@ public interface IAdvancedItemHandlerModifiable extends IItemHandlerModifiable, 
     }
     
     /**
-     * Clears all stacks from the inventory that match a predicate.
+     * Clears all stacks from the item handler that match a predicate.
      * 
      * @return The amount of items cleared.
      */

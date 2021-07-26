@@ -13,7 +13,7 @@ import io.github.noeppi_noeppi.libx.impl.inventory.screen.GenericScreen;
 import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.impl.recipe.EmptyRecipe;
-import io.github.noeppi_noeppi.libx.inventory.container.GenericContainerMenu;
+import io.github.noeppi_noeppi.libx.inventory.container.GenericMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -34,9 +34,12 @@ import org.apache.logging.log4j.Logger;
 // TODO
 //  general things left:
 //   - Finalise adaption to official mappings
-//   - Clean up the javadoc
 //   - Wait for MinecraftForge#7919 and securejarhandler#4
 //   - test dynamic datapacks once securejarhandler#4 is merged
+
+/**
+ * LibX instance class.
+ */
 @Mod("libx")
 public class LibX extends ModX {
 
@@ -78,14 +81,20 @@ public class LibX extends ModX {
     protected void clientSetup(FMLClientSetupEvent event) {
         //noinspection CodeBlock2Expr
         event.enqueueWork(() -> {
-            MenuScreens.register(GenericContainerMenu.TYPE, GenericScreen::new);
+            MenuScreens.register(GenericMenu.TYPE, GenericScreen::new);
         });
     }
 
+    /**
+     * Gets the LibX instance.
+     */
     public static LibX getInstance() {
         return instance;
     }
 
+    /**
+     * Gets the network implementation of LibX.
+     */
     public static CommonNetwork getNetwork() {
         return networkWrapper;
     }
@@ -96,8 +105,8 @@ public class LibX extends ModX {
     }
     
     private void registerContainers(RegistryEvent.Register<MenuType<?>> event) {
-        GenericContainerMenu.TYPE.setRegistryName(new ResourceLocation(this.modid, "generic"));
-        event.getRegistry().register(GenericContainerMenu.TYPE);
+        GenericMenu.TYPE.setRegistryName(new ResourceLocation(this.modid, "generic"));
+        event.getRegistry().register(GenericMenu.TYPE);
     }
 
     private void registerRecipes(RegistryEvent.Register<RecipeSerializer<?>> event) {

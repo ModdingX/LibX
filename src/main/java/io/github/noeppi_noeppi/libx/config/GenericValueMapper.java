@@ -16,12 +16,12 @@ import net.minecraft.network.FriendlyByteBuf;
  * 
  * When extending this, you should make the type argument {@code T} dependent on {@code C}.
  * For example for lists, you should do
- * {@code ListValueMapper&lt;T&gt; implements GenericValueMapper&lt;List&lt;T&gt;, JsonArray, T&gt;}. Then you
- * can register a {@code ListValueMapper&lt;?&gt;}.
+ * {@code ListValueMapper&lt;T&gt; implements GenericValueMapper&lt;List&lt;T&gt;, JsonArray, T&gt;}.
+ * Then you can register a {@code ListValueMapper&lt;?&gt;}.
  * 
  * @param <T> The type that this mapper can serialise.
  * @param <E> The JSON element type this mapper uses.
- * @param <C> The element type.
+ * @param <C> The element type. Should be a type variable in most cases.
  */
 public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonValueMapper<T, E> {
 

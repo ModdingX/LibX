@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.config.validator.DoubleRange;
 import io.github.noeppi_noeppi.libx.crafting.IngredientStack;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
@@ -14,6 +15,7 @@ import io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -30,7 +32,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-// TODO fix javadoc for new system
 /**
  * Provides a config system for configuration files that is meant to be more easy and powerful than
  * the system by forge based on {@link com.electronwill.nightconfig NightConfig}. This system creates
@@ -40,54 +41,53 @@ import java.util.*;
  * class structure:
  * 
  * <pre>
- * {@code 
- * public class SampleConfig {
+ * <code>
+ * public class ExampleConfig {
  *
- *     \@Config("A value")
- *     public static int value = 23;
+ *     {@link Config @Config}("A value")
+ *     public static {@link Integer int} value = 23;
  *
- *     \@Config({"Multiline Comments", "are also possible"})
- *     public static double another_value;
+ *     {@link Config @Config}({"Multiline Comments", "are also possible"})
+ *     {@link DoubleRange @DoubleRange}({@link DoubleRange#min() min} = 0)
+ *     public static {@link Double double} another_value;
  *
- *     \@Config("A text component")
- *     public static IFormattableTextComponent tc = new StringTextComponent("YAY");
+ *     {@link Config @Config}("A component")
+ *     public static {@link Component Component} component = new {@link TextComponent TextComponent}("LibX is fancy");
  *
  *     public static class SubGroup {
  *
- *         \@Config(value = "xD", elementType = Integer.class)
- *         public static List<Integer> coolValues = List.of(1, 5, 23);
+ *         {@link Config @Config}
+ *         public static {@link List List}<{@link Integer Integer}> valueList = {@link List List}.{@link List#of() of}(1, 5, 23);
  *     }
  * }
- * }
+ * </code>
  * </pre>
  * 
  * This would create the following config file:
  * 
  * <pre>
- * {@code 
+ * <code>
  * {
  *   // Multiline Comments
  *   // are also possible
+ *   // Minimum: 0
  *   "another_value": 0.0,
  *
- *   // A text component
+ *   // A component
  *   "tc": {
- *     "text": "YAY"
+ *     "text": "LibX is fancy"
  *   },
  *
  *   // A value
  *   "value": 23,
  *
  *   "SubGroup": {
- *     // xD
  *     "coolValues": [
- *       1,
- *       5,
- *       23
+ *       1, 5, 23
  *     ]
  *   }
  * }
- * }
+ * </code>
  * </pre>
  * 
  * The values of the fields are the default values for the config.
@@ -118,10 +118,18 @@ import java.util.*;
  *     <li>{@link Component}</li>
  *     <li>{@link ResourceList}</li>
  *     <li>{@link UUID UUID}</li>
- *     <li>Any enum</li>
+ *     <li>Any {@link Enum enum}</li>
+ *     <li>Any {@link Record record}</li>
  *     <li>Any {@link Pair Pair&lt;?, ?&gt;}</li>
  *     <li>Any {@link Triple Triple&lt;?, ?, ?&gt;}</li>
  * </ul>
+ * 
+ * If a class uses generics, the {@code ?} can be any type that is supported by the config system. So
+ * you can also use a <code>{@link List List}&lt;{@link Pair Pair}&lt;{@link List List}&lt;{@link Integer Integer}&gt;, {@link String String}&gt;&gt;</code>.
+ * 
+ * Each config field can also have <b>one</b> validator annotation applied to validate a value. You can
+ * find builtin validator annotations in {@link io.github.noeppi_noeppi.libx.config.validator}. To register
+ * you own validator, use {@link #registerConfigValidator(String, ConfigValidator)}.
  * 
  * Configs come in two different types: Common configs and client configs. Common configs are loaded on
  * both the dedicated server and the client and are synced from server to client. Client configs are
@@ -163,6 +171,7 @@ public class ConfigManager {
     /**
      * Registers a config. This will register a config with the id {@code modid:config}
      * which means the config will be located in {@code config/modid.json5}.
+     * 
      * @param modid The modid of the mod. 
      * @param configClass The base class for the config.
      * @param clientConfig Whether this is a client config.

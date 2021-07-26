@@ -17,6 +17,8 @@ import java.util.List;
 /**
  * A base class for a mod that uses LibX. Is required for many other features
  * of LibX.
+ * 
+ * @see ModXRegistration
  */
 public abstract class ModX {
 
@@ -30,12 +32,16 @@ public abstract class ModX {
      */
     public final Logger logger;
 
+    /**
+     * A creative tab for the mod.
+     */
+    @Nullable
     public final CreativeModeTab tab;
 
     private final List<Runnable> setupTasks = new ArrayList<>();
 
     /**
-     * Overriding classes should provide a public no-arg constructor that calls this with
+     * Subclasses should provide a public no-arg constructor that calls this with
      * the values needed.
      */
     protected ModX(String modid, @Nullable CreativeModeTab tab) {
@@ -49,6 +55,7 @@ public abstract class ModX {
         // as the list of handlers will be null. So for instances of ModXRegistration we don't call it here
         // but in the constructor of ModXRegistration
         if (!(this instanceof ModXRegistration))
+            //noinspection ControlFlowStatementWithoutBraces
             this.callGeneratedCode();
     }
 
@@ -67,7 +74,7 @@ public abstract class ModX {
     protected abstract void clientSetup(FMLClientSetupEvent event);
 
     /**
-     * This is used internally to add tasks to this mod. <b>THIS SHOULD NOT BE CALLED BY PEOPLE USING
+     * This is used internally to add tasks to this mod. <b>THIS SHOULD NOT BE CALLED BY MODS USING
      * THIS LIBRARY.</b> Override {@link ModX#setup(FMLCommonSetupEvent)} instead. This method might
      * fail in the future if called from outside this library.
      *
@@ -85,6 +92,13 @@ public abstract class ModX {
         this.setupTasks.add(runnable);
     }
     
+    /**
+     * This is used internally to call the generated code by ModInit. <b>THIS SHOULD NOT BE CALLED BY
+     * MODS USING THIS LIBRARY.</b> This method might fail in the future if called from outside this library.
+     *
+     * @deprecated This is deprecated as it should only be used internally.
+     */
+    @Deprecated
     protected final void callGeneratedCode() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         if (stackTrace.length > 2) {

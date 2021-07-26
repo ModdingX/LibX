@@ -2,12 +2,12 @@ package io.github.noeppi_noeppi.libx.util;
 
 import net.minecraft.network.chat.*;
 
-import java.util.function.BiConsumer;
+import java.util.Optional;
 
 /**
  * Utilities for {@link Component text components}.
  */
-public class TextComponentUtil {
+public class ComponentUtil {
 
     /**
      * Gets a {@link Component text component} as a string formatted with ANSI escape codes to
@@ -15,11 +15,12 @@ public class TextComponentUtil {
      */
     public static String getConsoleString(Component tc) {
         StringBuilder sb = new StringBuilder();
-        traverseComponent(tc, Style.EMPTY, (string, style) -> {
+        tc.visit((style, string) -> {
             reset(sb);
             formattingCodes(sb, style);
             sb.append(string);
-        });
+            return Optional.empty();
+        }, Style.EMPTY);
         reset(sb);
         return sb.toString();
     }
@@ -68,31 +69,5 @@ public class TextComponentUtil {
     
     private static void reset(StringBuilder sb) {
         sb.append("\u001B[0m");
-    }
-    
-    // We partially recreate getComponentWithStyle here as it's client only
-    private static void traverseComponent(FormattedText tc, Style parent, BiConsumer<String, Style> consumer) {
-        Style style = tc instanceof Component comp ? comp.getStyle().applyTo(parent) : parent;
-        consumeComponent(tc, style, consumer);
-        if (tc instanceof Component comp) {
-            for (Component sibling : comp.getSiblings()) {
-                traverseComponent(sibling, style, consumer);
-            }
-        }
-    }
-    
-    private static void consumeComponent(FormattedText tc, Style style, BiConsumer<String, Style> consumer) {
-        if (tc instanceof TranslatableComponent translation) {
-            translation.decompose();
-            for (FormattedText child : translation.decomposedParts) {
-                traverseComponent(child, style, consumer);
-            }
-        } else if (tc instanceof KeybindComponent keybind) {
-            traverseComponent(keybind.getNestedComponent(), style, consumer);
-        } else if (tc instanceof Component comp) {
-            consumer.accept(comp.getContents(), style);
-        } else {
-            consumer.accept(tc.getString(), style);
-        }
     }
 }

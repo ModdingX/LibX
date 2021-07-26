@@ -4,9 +4,9 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
-import io.github.noeppi_noeppi.libx.util.IdToComponent;
-import io.github.noeppi_noeppi.libx.util.JsonToComponent;
-import io.github.noeppi_noeppi.libx.util.NbtToComponent;
+import io.github.noeppi_noeppi.libx.util.ResourceToText;
+import io.github.noeppi_noeppi.libx.util.JsonToText;
+import io.github.noeppi_noeppi.libx.util.NbtToText;
 import io.github.noeppi_noeppi.libx.util.NbtToJson;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.NbtPathArgument;
@@ -49,7 +49,7 @@ public class HandCommand implements Command<CommandSourceStack> {
         NbtPathArgument.NbtPath path = CommandUtil.getArgumentOrDefault(ctx, "nbt_path", NbtPathArgument.NbtPath.class, null);
 
         //noinspection ConstantConditions
-        MutableComponent tc = IdToComponent.toText(item.getRegistryName());
+        MutableComponent tc = ResourceToText.toText(item.getRegistryName());
 
         if (count != 1) {
             tc = tc.append(new TextComponent(" ")).append(new TextComponent(Integer.toString(count)));
@@ -64,8 +64,8 @@ public class HandCommand implements Command<CommandSourceStack> {
             for (Tag element : printNBT) {
                 tc = tc.append(new TextComponent(" "))
                         .append(format == NbtOutputType.NBT ?
-                                NbtToComponent.toText(nbt) :
-                                JsonToComponent.toText(NbtToJson.getJson(element, true)));
+                                NbtToText.toText(nbt) :
+                                JsonToText.toText(NbtToJson.getJson(element, true)));
             }
         }
 

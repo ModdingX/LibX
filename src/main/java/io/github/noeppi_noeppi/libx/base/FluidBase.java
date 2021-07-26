@@ -17,6 +17,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -193,7 +194,7 @@ public class FluidBase implements Registerable, ItemLike {
         this.flowingFactory = flowingFactory;
         this.attributes = attributes;
         this.block = new LiquidBlock(this::getSource, blockProperties);
-        this.bucket = new BucketItem(this::getSource, new Item.Properties().stacksTo(1).tab(mod.tab)) {
+        this.bucket = new BucketItem(this::getSource, itemProperties.stacksTo(1)) {
 
             @Override
             public ItemStack getContainerItem(ItemStack stack) {
@@ -220,40 +221,67 @@ public class FluidBase implements Registerable, ItemLike {
         };
     }
 
+    /**
+     * Gets the fluid. This should be used in recipes or {@link IFluidHandler fluid handlers}.
+     * 
+     * @see #getSource()
+     */
     @Nonnull
     public Fluid getFluid() {
         return this.getSource();
     }
 
+    /**
+     * Gets the source fluid. In most cases you should use {@link #getFluid()}.
+     * 
+     * @see #getFluid()
+     */
     @Nonnull
     public ForgeFlowingFluid.Source getSource() {
         return Objects.requireNonNull(this.source, "FluidBase has not yet been registered.");
     }
 
+    /**
+     * Gets the flowing fluid.
+     * 
+     * @see #getSource()
+     */
     @Nonnull
     public ForgeFlowingFluid.Flowing getFlowing() {
         return Objects.requireNonNull(this.flowing, "FluidBase has not yet been registered.");
     }
 
+    /**
+     * Gets the fluid block for this fluid.
+     */
     @Nonnull
     public LiquidBlock getBlock() {
         return Objects.requireNonNull(this.block, "FluidBase has not yet been registered.");
     }
 
+    /**
+     * Gets the bucket item for this fluid.
+     */
     @Nonnull
     public BucketItem getBucket() {
         return Objects.requireNonNull(this.bucket, "FluidBase has not yet been registered.");
     }
 
+    /**
+     * Gets the properties for this fluid.
+     */
     @Nonnull
     public ForgeFlowingFluid.Properties getProperties() {
         return Objects.requireNonNull(this.properties, "FluidBase has not yet been registered.");
     }
 
+    /**
+     * Same as {@link #getBucket()}
+     */
     @Nonnull
     @Override
     public Item asItem() {
-        return this.bucket;
+        return this.getBucket();
     }
 
     @Override

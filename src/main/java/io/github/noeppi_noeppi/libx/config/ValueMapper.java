@@ -35,7 +35,7 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
 
     /**
      * Reads a value from a {@link FriendlyByteBuf}. The default implementation expects a
-     * JSON string and gives this string to {@link ValueMapper#fromJSON(JsonElement) fromJSON}.
+     * JSON string and gives this string to {@link #fromJSON(JsonElement) fromJSON}.
      */
     default T read(FriendlyByteBuf buffer) {
         return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readUtf(0x40000), this.element()));
@@ -43,7 +43,7 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
 
     /**
      * Writes a value to a {@link FriendlyByteBuf}. The default implementation calls
-     * {@link ValueMapper#toJSON(Object) toJSON} and writes the resulting JSON as a string.
+     * {@link #toJSON(Object) toJSON} and writes the resulting JSON as a string.
      */
     default void write(T value, FriendlyByteBuf buffer) {
         buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJSON(value)), 0x40000);

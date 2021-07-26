@@ -8,9 +8,9 @@ import net.minecraft.network.chat.*;
 import java.util.Map;
 
 /**
- * Translates JSON into {@link MutableComponent text components}.
+ * Translates JSON into {@link Component text components}.
  */
-public class JsonToComponent {
+public class JsonToText {
 
     private static final HoverEvent COPY_JSON = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("libx.misc.copy_json"));
 

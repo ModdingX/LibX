@@ -7,7 +7,6 @@ import com.mojang.math.Matrix4f;
 import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 
@@ -125,7 +124,7 @@ public class RenderHelper {
     /**
      * Renders a text with a gray semi-transparent background.
      */
-    public static void renderText(String text, PoseStack poseStack, MultiBufferSource buffer) {
+    public static void renderText(String text, PoseStack poseStack) {
         float widthHalf = Minecraft.getInstance().font.width(text) / 2f;
         float heightHalf = Minecraft.getInstance().font.lineHeight / 2f;
 
