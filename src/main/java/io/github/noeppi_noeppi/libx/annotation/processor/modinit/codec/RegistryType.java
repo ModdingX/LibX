@@ -7,7 +7,6 @@ import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;

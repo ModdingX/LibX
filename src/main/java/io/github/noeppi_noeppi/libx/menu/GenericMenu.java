@@ -1,8 +1,8 @@
-package io.github.noeppi_noeppi.libx.inventory.container;
+package io.github.noeppi_noeppi.libx.menu;
 
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.LibX;
-import io.github.noeppi_noeppi.libx.impl.inventory.container.GenericContainerSlotValidationWrapper;
+import io.github.noeppi_noeppi.libx.impl.menu.GenericContainerSlotValidationWrapper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

@@ -4,7 +4,6 @@ import io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureExceptio
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 
 import javax.lang.model.element.Element;
-import javax.lang.model.element.VariableElement;
 
 public interface CodecType {
     

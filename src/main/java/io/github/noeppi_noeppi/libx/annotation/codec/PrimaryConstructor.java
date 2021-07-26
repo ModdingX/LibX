@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.annotation.codec;
 
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 
 import java.lang.annotation.*;
 

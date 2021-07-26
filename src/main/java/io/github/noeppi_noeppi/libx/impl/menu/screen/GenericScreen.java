@@ -1,7 +1,7 @@
-package io.github.noeppi_noeppi.libx.impl.inventory.screen;
+package io.github.noeppi_noeppi.libx.impl.menu.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.noeppi_noeppi.libx.inventory.container.GenericMenu;
+import io.github.noeppi_noeppi.libx.menu.GenericMenu;
 import io.github.noeppi_noeppi.libx.render.RenderHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

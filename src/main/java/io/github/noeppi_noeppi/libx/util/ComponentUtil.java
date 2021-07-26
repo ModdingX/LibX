@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 
 import java.util.Optional;
 

@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
-import io.github.noeppi_noeppi.libx.inventory.container.BlockEntityMenu;
+import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;

@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.codec;
 
 import com.mojang.serialization.Codec;
-import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 
 import java.lang.reflect.Field;

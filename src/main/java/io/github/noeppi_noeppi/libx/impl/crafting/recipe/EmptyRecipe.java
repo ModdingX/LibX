@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.impl.recipe;
+package io.github.noeppi_noeppi.libx.impl.crafting.recipe;
 
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.LibX;

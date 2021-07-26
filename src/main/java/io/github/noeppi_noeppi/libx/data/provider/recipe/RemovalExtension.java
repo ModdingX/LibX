@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import com.google.gson.JsonObject;
-import io.github.noeppi_noeppi.libx.impl.recipe.EmptyRecipe;
+import io.github.noeppi_noeppi.libx.impl.crafting.recipe.EmptyRecipe;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;

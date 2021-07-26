@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.impl.inventory.container;
+package io.github.noeppi_noeppi.libx.impl.menu;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;

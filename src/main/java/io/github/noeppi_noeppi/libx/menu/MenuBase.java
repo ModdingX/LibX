@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.inventory.container;
+package io.github.noeppi_noeppi.libx.menu;
 
 import com.mojang.datafixers.util.Function4;
 import net.minecraft.world.entity.player.Inventory;

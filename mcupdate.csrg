@@ -52,16 +52,17 @@ io/github/noeppi_noeppi/libx/impl/network/TeUpdateHandler io/github/noeppi_noepp
 io/github/noeppi_noeppi/libx/impl/network/TeUpdateSerializer io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer
 io/github/noeppi_noeppi/libx/impl/network/TeUpdateSerializer$TeUpdateMessage io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage
 io/github/noeppi_noeppi/libx/inventory/ItemStackHandlerWrapper io/github/noeppi_noeppi/libx/capability/ItemCapabilities
-io/github/noeppi_noeppi/libx/inventory/container/CommonContainer io/github/noeppi_noeppi/libx/inventory/container/MenuBase
+io/github/noeppi_noeppi/libx/inventory/container/CommonContainer io/github/noeppi_noeppi/libx/menu/MenuBase
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function5;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase getTile ()Lnet/minecraft/tileentity/TileEntity; getBlockEntity
-io/github/noeppi_noeppi/libx/inventory/container/ContainerBase io/github/noeppi_noeppi/libx/inventory/container/BlockEntityMenu
+io/github/noeppi_noeppi/libx/inventory/container/ContainerBase io/github/noeppi_noeppi/libx/menu/BlockEntityMenu
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase tile blockEntity
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lcom/mojang/datafixers/util/Function5;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
-io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity io/github/noeppi_noeppi/libx/inventory/container/EntityMenu
-io/github/noeppi_noeppi/libx/inventory/container/GenericContainer io/github/noeppi_noeppi/libx/inventory/container/GenericMenu
+io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity io/github/noeppi_noeppi/libx/menu/EntityMenu
+io/github/noeppi_noeppi/libx/inventory/container/GenericContainer io/github/noeppi_noeppi/libx/menu/GenericMenu
+io/github/noeppi_noeppi/libx/inventory/slot/SlotOutputOnly io/github/noeppi_noeppi/libx/menu/slot/OutputSlot
 io/github/noeppi_noeppi/libx/mod/registration/BlockBase io/github/noeppi_noeppi/libx/base/BlockBase
 io/github/noeppi_noeppi/libx/mod/registration/BlockGUI container menu
 io/github/noeppi_noeppi/libx/mod/registration/BlockGUI io/github/noeppi_noeppi/libx/base/tile/BlockMenu

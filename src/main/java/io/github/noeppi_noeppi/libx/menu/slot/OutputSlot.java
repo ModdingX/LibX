@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.inventory.slot;
+package io.github.noeppi_noeppi.libx.menu.slot;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -9,9 +9,9 @@ import javax.annotation.Nonnull;
 /**
  * A {@link SlotItemHandler slot} that no items can be inserted in.
  */
-public class SlotOutputOnly extends SlotItemHandler {
+public class OutputSlot extends SlotItemHandler {
 
-    public SlotOutputOnly(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+    public OutputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
     }
 

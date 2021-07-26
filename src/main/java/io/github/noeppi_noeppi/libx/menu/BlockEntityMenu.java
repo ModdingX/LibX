@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.inventory.container;
+package io.github.noeppi_noeppi.libx.menu;
 
 import io.github.noeppi_noeppi.libx.fi.Function5;
 import io.github.noeppi_noeppi.libx.fi.Function6;

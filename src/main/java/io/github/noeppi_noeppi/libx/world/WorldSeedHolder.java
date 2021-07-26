@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.world;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.world.level.Level;
 
 /**
  * Provides a way to get the seed for the current world in a {@link Codec codec}.
