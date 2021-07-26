@@ -48,7 +48,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     private static final LazyValue<ItemStackRenderer> INSTANCE = new LazyValue<>(() -> new ItemStackRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
     private static final List<BlockEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
-    private static final Map<Block, Pair<LazyValue<BlockEntity>, Boolean>> tiles = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Block, Pair<LazyValue<BlockEntity>, Boolean>> blocks = Collections.synchronizedMap(new HashMap<>());
     private static final Map<BlockEntityType<?>, CompoundTag> defaultTags = new HashMap<>();
 
     public ItemStackRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
@@ -58,14 +58,14 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     /**
      * Registers a {@link BlockEntityType} to be rendered with the ItemStackRenderer.
      *
-     * @param teType             The Tile Entity Type.
-     * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the tile
+     * @param beType             The Block Entity Type.
+     * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the block
      *                           entities {@code load} method will get called before rendering.
      */
-    public static <T extends BlockEntity> void addRenderBlock(BlockEntityType<T> teType, boolean readBlockEntityTag) {
-        types.add(teType);
-        for (Block block : teType.validBlocks) {
-            tiles.put(block, Pair.of(new LazyValue<>(() -> teType.create(BlockPos.ZERO, block.defaultBlockState())), readBlockEntityTag));
+    public static <T extends BlockEntity> void addRenderBlock(BlockEntityType<T> beType, boolean readBlockEntityTag) {
+        types.add(beType);
+        for (Block block : beType.validBlocks) {
+            blocks.put(block, Pair.of(new LazyValue<>(() -> beType.create(BlockPos.ZERO, block.defaultBlockState())), readBlockEntityTag));
         }
     }
 
@@ -73,33 +73,33 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(ItemStack stack, @Nonnull ItemTransforms.TransformType type, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
         Block block = Block.byItem(stack.getItem());
         if (block != Blocks.AIR) {
-            if (tiles.containsKey(block)) {
-                Pair<LazyValue<BlockEntity>, Boolean> pair = tiles.get(block);
+            if (blocks.containsKey(block)) {
+                Pair<LazyValue<BlockEntity>, Boolean> pair = blocks.get(block);
                 BlockState state = block.defaultBlockState();
-                BlockEntity tile = pair.getLeft().get();
-                BlockEntityType<?> teType = tile.getType();
+                BlockEntity blockEntity = pair.getLeft().get();
+                BlockEntityType<?> teType = blockEntity.getType();
 
-                BlockEntityRenderer<BlockEntity> renderer = this.blockEntityRenderDispatcher.getRenderer(tile);
+                BlockEntityRenderer<BlockEntity> renderer = this.blockEntityRenderDispatcher.getRenderer(blockEntity);
                 if (renderer != null) {
                     if (pair.getRight()) {
                         if (!defaultTags.containsKey(teType)) {
-                            setLevelAndState(tile, state);
-                            defaultTags.put(teType, tile.save(new CompoundTag()));
+                            setLevelAndState(blockEntity, state);
+                            defaultTags.put(teType, blockEntity.save(new CompoundTag()));
                         }
 
                         CompoundTag nbt = stack.getTag();
-                        setLevelAndState(tile, state);
-                        tile.load(defaultTags.get(teType));
+                        setLevelAndState(blockEntity, state);
+                        blockEntity.load(defaultTags.get(teType));
                         if (nbt != null && nbt.contains("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
                             CompoundTag blockTag = nbt.getCompound("BlockEntityTag");
-                            tile.load(blockTag);
+                            blockEntity.load(blockTag);
                         }
                     }
 
                     if (Minecraft.getInstance().level != null) {
-                        tile.setLevel(Minecraft.getInstance().level);
+                        blockEntity.setLevel(Minecraft.getInstance().level);
                     }
-                    tile.blockState = state;
+                    blockEntity.blockState = state;
 
                     poseStack.pushPose();
 
@@ -107,7 +107,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
                         //noinspection deprecation
                         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay);
                     }
-                    renderer.render(tile, Minecraft.getInstance().getFrameTime(), poseStack, buffer, light, overlay);
+                    renderer.render(blockEntity, Minecraft.getInstance().getFrameTime(), poseStack, buffer, light, overlay);
 
                     poseStack.popPose();
                 }
@@ -115,11 +115,11 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
         }
     }
 
-    private static void setLevelAndState(BlockEntity tile, BlockState state) {
+    private static void setLevelAndState(BlockEntity blockEntity, BlockState state) {
         if (Minecraft.getInstance().level != null) {
-            tile.setLevel(Minecraft.getInstance().level);
+            blockEntity.setLevel(Minecraft.getInstance().level);
         }
-        tile.blockState = state;
+        blockEntity.blockState = state;
     }
 
     /**

@@ -93,11 +93,11 @@ public class RenderHelper {
         int red = color >> 16 & 255;
         int green = color >> 8 & 255;
         int blue = color & 255;
-        Matrix4f mat = poseStack.last().pose();
-        buffer.vertex(mat, x, y + height, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU0(), sprite.getV1()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(mat, x + width, y + height, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU1(), sprite.getV1()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(mat, x + width, y, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU1(), sprite.getV0()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(mat, x, y, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU0(), sprite.getV0()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        Matrix4f pose = poseStack.last().pose();
+        buffer.vertex(pose, x, y + height, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU0(), sprite.getV1()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.vertex(pose, x + width, y + height, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU1(), sprite.getV1()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.vertex(pose, x + width, y, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU1(), sprite.getV0()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.vertex(pose, x, y, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU0(), sprite.getV0()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
     }
 
     /**

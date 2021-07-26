@@ -20,7 +20,7 @@ public class CommonNetwork {
     }
 
     /**
-     * Sends the nbt tag retrieved from {@link BlockEntity#getUpdateTag()} from the tile entity at the given
+     * Sends the nbt tag retrieved from {@link BlockEntity#getUpdateTag()} from the block entity at the given
      * position to all clients tracking the chunk. On the client the tag is passed
      * to {@link BlockEntity#handleUpdateTag(CompoundTag)}. Does nothing when called on the client.
      */
@@ -29,7 +29,7 @@ public class CommonNetwork {
     }
 
     /**
-     * Requests the tile entity at the given position from the server. This is automatically done when
+     * Requests the block entity at the given position from the server. This is automatically done when
      * a {@link BlockEntityBase} is loaded. The server will
      * send an update packet as described in {@link #updateBE(Level, BlockPos)} to the client.
      * Does nothing when called on the server.

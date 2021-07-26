@@ -55,7 +55,9 @@ io/github/noeppi_noeppi/libx/inventory/ItemStackHandlerWrapper io/github/noeppi_
 io/github/noeppi_noeppi/libx/inventory/container/CommonContainer io/github/noeppi_noeppi/libx/inventory/container/MenuBase
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function5;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
+io/github/noeppi_noeppi/libx/inventory/container/ContainerBase getTile ()Lnet/minecraft/tileentity/TileEntity; getBlockEntity
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBase io/github/noeppi_noeppi/libx/inventory/container/BlockEntityMenu
+io/github/noeppi_noeppi/libx/inventory/container/ContainerBase tile blockEntity
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lcom/mojang/datafixers/util/Function5;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createContainerType (Lio/github/noeppi_noeppi/libx/fi/Function6;)Lnet/minecraft/inventory/container/ContainerType; createMenuType
 io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity io/github/noeppi_noeppi/libx/inventory/container/EntityMenu

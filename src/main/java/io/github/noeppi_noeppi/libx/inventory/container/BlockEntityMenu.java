@@ -28,27 +28,27 @@ import java.util.concurrent.atomic.AtomicReference;
 public class BlockEntityMenu<T extends BlockEntity> extends DefaultMenu {
 
     protected final BlockPos pos;
-    protected final T tile;
+    protected final T blockEntity;
     
     public BlockEntityMenu(@Nullable MenuType<?> type, int windowId, Level level, BlockPos pos, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
         super(type, windowId, level, playerContainer, player, firstOutputSlot, firstInventorySlot);
         this.pos = pos;
         //noinspection unchecked
-        this.tile = (T) level.getBlockEntity(pos);
+        this.blockEntity = (T) level.getBlockEntity(pos);
     }
 
     @Override
     public boolean stillValid(@Nonnull Player player) {
         //noinspection ConstantConditions
-        return stillValid(ContainerLevelAccess.create(this.tile.getLevel(), this.tile.getBlockPos()), this.player, this.tile.getBlockState().getBlock());
+        return stillValid(ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos()), this.player, this.blockEntity.getBlockState().getBlock());
     }
 
     public BlockPos getPos() {
         return this.pos;
     }
 
-    public T getTile() {
-        return this.tile;
+    public T getBlockEntity() {
+        return this.blockEntity;
     }
 
 

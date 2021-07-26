@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import javax.annotation.Nonnull;
 
 /**
- * A TileEntityRenderer that before calling the actual render code rotates the MatrixStack depending
+ * A {@link BlockEntityRenderer} that before calling the actual render code rotates the {@link PoseStack} depending
  * on the horizontal facing. This may only be used with blocks that have the property
  * {@link BlockStateProperties#HORIZONTAL_FACING}
  */
