@@ -1,3 +1,4 @@
+io/github/noeppi_noeppi/libx/annotation/Codecs io/github/noeppi_noeppi/libx/annotation/codec/Codecs
 io/github/noeppi_noeppi/libx/annotation/Lookup io/github/noeppi_noeppi/libx/annotation/codec/Lookup
 io/github/noeppi_noeppi/libx/annotation/NoReg io/github/noeppi_noeppi/libx/annotation/registration/NoReg
 io/github/noeppi_noeppi/libx/annotation/Param io/github/noeppi_noeppi/libx/annotation/codec/Param
@@ -73,6 +74,7 @@ io/github/noeppi_noeppi/libx/mod/registration/Colored io/github/noeppi_noeppi/li
 io/github/noeppi_noeppi/libx/mod/registration/ItemBase io/github/noeppi_noeppi/libx/base/ItemBase
 io/github/noeppi_noeppi/libx/mod/registration/ItemInventory io/github/noeppi_noeppi/libx/base/ItemInventory
 io/github/noeppi_noeppi/libx/mod/registration/TileEntityBase io/github/noeppi_noeppi/libx/base/tile/BlockEntityBase
+io/github/noeppi_noeppi/libx/network/datasync/EntityDataSerializer io/github/noeppi_noeppi/libx/network/EntityDataSerializer
 io/github/noeppi_noeppi/libx/render/ItemStackRenderer io/github/noeppi_noeppi/libx/render/ItemStackRenderer
 io/github/noeppi_noeppi/libx/render/ItemStackRenderer setWorldPosState (Lnet/minecraft/tileentity/TileEntity;Lnet/minecraft/block/BlockState;)V setLevelAndState
 io/github/noeppi_noeppi/libx/render/RenderHelper color (I)V rgb
@@ -81,7 +83,7 @@ io/github/noeppi_noeppi/libx/render/RenderHelperWorld io/github/noeppi_noeppi/li
 io/github/noeppi_noeppi/libx/util/IdToTextComponent io/github/noeppi_noeppi/libx/util/ResourceToText
 io/github/noeppi_noeppi/libx/util/JsonToTextComponent io/github/noeppi_noeppi/libx/util/JsonToText
 io/github/noeppi_noeppi/libx/util/NbtToTextComponent io/github/noeppi_noeppi/libx/util/NbtToText
-io/github/noeppi_noeppi/libx/network/datasync/EntityDataSerializer io/github/noeppi_noeppi/libx/network/EntityDataSerializer
+io/github/noeppi_noeppi/libx/util/ResourceList io/github/noeppi_noeppi/libx/util/ResourceList
 io/github/noeppi_noeppi/libx/util/ResourceList toJSON ()Lcom/google/gson/JsonObject; toJson
 io/github/noeppi_noeppi/libx/util/ResourceList write(Lnet/minecraft/network/FriendlyByteBuf;)V toNetwork
 io/github/noeppi_noeppi/libx/util/TextComponentUtil io/github/noeppi_noeppi/libx/util/ComponentUtil
