@@ -1,7 +1,9 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.*;
@@ -41,11 +43,11 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
     }
 
     @Override
-    public Enum<?> fromJSON(JsonPrimitive json) {
-        String str = json.getAsString();
+    public Enum<?> fromJson(JsonPrimitive json) {
+        String str = json.getAsString().toLowerCase(Locale.ROOT).strip();
         Enum<?>[] enums = this.clazz.getEnumConstants();
         for (Enum<?> e : enums) {
-            if (e.name().equalsIgnoreCase(str)) {
+            if (e.name().toLowerCase(Locale.ROOT).equals(str)) {
                 return e;
             }
         }
@@ -53,18 +55,43 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
     }
 
     @Override
-    public JsonPrimitive toJSON(Enum<?> value) {
+    public JsonPrimitive toJson(Enum<?> value) {
         return new JsonPrimitive(value.name().toLowerCase(Locale.ROOT));
     }
 
     @Override
-    public Enum<?> read(FriendlyByteBuf buffer) {
+    public Enum<?> fromNetwork(FriendlyByteBuf buffer) {
         return this.clazz.getEnumConstants()[buffer.readVarInt()];
     }
 
     @Override
-    public void write(Enum<?> value, FriendlyByteBuf buffer) {
+    public void toNetwork(Enum<?> value, FriendlyByteBuf buffer) {
         buffer.writeVarInt(value.ordinal());
+    }
+
+    @Override
+    public Optional<Enum<?>> correct(JsonElement json, ConfigCorrection<Enum<?>> correction) {
+        if (json.isJsonPrimitive() && json.isJsonNull()) {
+            String str = json.isJsonNull() ? "null" : json.getAsString().toLowerCase(Locale.ROOT).strip();
+            Enum<?>[] enums = this.clazz.getEnumConstants();
+            for (Enum<?> e : enums) {
+                if (e.name().toLowerCase(Locale.ROOT).equals(str) || str.startsWith(e.name()) || str.endsWith(e.name())) {
+                    return Optional.of(e);
+                }
+            }
+            try {
+                int ordinal = Integer.parseInt(str);
+                if (ordinal >= 0 && ordinal < enums.length) {
+                    return Optional.of(enums[ordinal]);
+                } else {
+                    return Optional.empty();
+                }
+            } catch (NumberFormatException e) {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override

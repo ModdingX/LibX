@@ -9,6 +9,8 @@ io/github/noeppi_noeppi/libx/annotation/RegisterConfig io/github/noeppi_noeppi/l
 io/github/noeppi_noeppi/libx/block/DirectionShape io/github/noeppi_noeppi/libx/block/RotationShape
 io/github/noeppi_noeppi/libx/block/tesr/HorizontalRotatedTesr io/github/noeppi_noeppi/libx/render/block/RotatedBlockRenderer
 io/github/noeppi_noeppi/libx/command/UppercaseEnumArgument io/github/noeppi_noeppi/libx/command/EnumArgument2
+io/github/noeppi_noeppi/libx/config/GenericValueMapper io/github/noeppi_noeppi/libx/config/GenericValueMapper
+io/github/noeppi_noeppi/libx/config/ValueMapper io/github/noeppi_noeppi/libx/config/ValueMapper
 io/github/noeppi_noeppi/libx/crafting/IngredientStack io/github/noeppi_noeppi/libx/crafting/IngredientStack
 io/github/noeppi_noeppi/libx/data/CraftingHelper2 io/github/noeppi_noeppi/libx/crafting/CraftingHelper2
 io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase
@@ -67,6 +69,14 @@ io/github/noeppi_noeppi/libx/mod/registration/BlockTE teClass beClass
 io/github/noeppi_noeppi/libx/mod/registration/BlockTE teConstructor beConstructor
 io/github/noeppi_noeppi/libx/mod/registration/BlockTE teType beType
 io/github/noeppi_noeppi/libx/util/ResourceList write(Lnet/minecraft/network/FriendlyByteBuf;)V toNetwork
+io/github/noeppi_noeppi/libx/config/GenericValueMapper fromJSON (Lcom/google/gson/JsonElement;Lio/github/noeppi_noeppi/libx/config/ValueMapper;)Ljava/lang/Object; fromJson
+io/github/noeppi_noeppi/libx/config/GenericValueMapper read (Lnet/minecraft/network/PacketBuffer;Lio/github/noeppi_noeppi/libx/config/ValueMapper;)Ljava/lang/Object; fromNetwork
+io/github/noeppi_noeppi/libx/config/GenericValueMapper toJSON (Ljava/lang/Object;Lio/github/noeppi_noeppi/libx/config/ValueMapper;)Lcom/google/gson/JsonElement; toJson
+io/github/noeppi_noeppi/libx/config/GenericValueMapper write (Ljava/lang/Object;Lnet/minecraft/network/PacketBuffer;Lio/github/noeppi_noeppi/libx/config/ValueMapper;)V toNetwork
+io/github/noeppi_noeppi/libx/config/ValueMapper fromJSON (Lcom/google/gson/JsonElement;)Ljava/lang/Object; fromJson
+io/github/noeppi_noeppi/libx/config/ValueMapper read (Lnet/minecraft/network/PacketBuffer;)Ljava/lang/Object; fromNetwork
+io/github/noeppi_noeppi/libx/config/ValueMapper toJSON (Ljava/lang/Object;)Lcom/google/gson/JsonElement; toJson
+io/github/noeppi_noeppi/libx/config/ValueMapper write (Ljava/lang/Object;Lnet/minecraft/network/PacketBuffer;)V toNetwork
 io/github/noeppi_noeppi/libx/crafting/IngredientStack deserialize (Lcom/google/gson/JsonObject;)Lio/github/noeppi_noeppi/libx/crafting/IngredientStack; fromJson
 io/github/noeppi_noeppi/libx/crafting/IngredientStack getCount ()I count
 io/github/noeppi_noeppi/libx/crafting/IngredientStack getIngredient ()Lnet/minecraft/item/crafting/Ingredient; ingredient

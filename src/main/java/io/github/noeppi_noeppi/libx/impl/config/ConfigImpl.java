@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
+import io.github.noeppi_noeppi.libx.impl.config.correct.CorrectionInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -133,7 +134,7 @@ public class ConfigImpl {
                 if (key == null) {
                     throw new IllegalStateException("Config between client and server mismatch. Server sent unknown or non-config field. Ignoring");
                 }
-                Object value = key.mapper.read(buffer);
+                Object value = key.mapper.fromNetwork(buffer);
                 values.put(key, value);
                 keysLeft.remove(key);
             }
@@ -196,11 +197,14 @@ public class ConfigImpl {
                         throw new IllegalStateException("Json element has invalid type for key '" + String.join(".", key.path) + "': Expected: " + key.mapper.element().getSimpleName() + " Got: " + elem.getClass().getSimpleName());
                     }
                     //noinspection unchecked
-                    Object value = ((ValueMapper<?, JsonElement>) key.mapper).fromJSON(elem);
+                    Object value = ((ValueMapper<?, JsonElement>) key.mapper).fromJson(elem);
+                    if (value == null) throw new IllegalStateException("Config mapper reported null value.");
                     values.put(key, key.validate(value, "Invalid value in config file", needsCorrection));
                 } catch (Exception e) {
                     LibX.logger.warn("Failed to read config value " + String.join(".", key.path) + ". Using default. Error: " + e.getMessage());
-                    values.put(key, parentConfig.getValue(key));
+                    CorrectionInstance<?, ?> correction = CorrectionInstance.create(parentConfig.getValue(key));
+                    //noinspection unchecked
+                    values.put(key, correction.correct(elem, (ValueMapper<Object, ?>) key.mapper, Optional::of));
                     needsCorrection.set(true);
                 }
             } else {

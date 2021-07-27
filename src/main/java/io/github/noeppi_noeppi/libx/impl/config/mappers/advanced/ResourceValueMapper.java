@@ -24,22 +24,22 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
     }
 
     @Override
-    public ResourceLocation fromJSON(JsonPrimitive json) {
+    public ResourceLocation fromJson(JsonPrimitive json) {
         return new ResourceLocation(json.getAsString());
     }
 
     @Override
-    public JsonPrimitive toJSON(ResourceLocation value) {
+    public JsonPrimitive toJson(ResourceLocation value) {
         return new JsonPrimitive(value.toString());
     }
 
     @Override
-    public ResourceLocation read(FriendlyByteBuf buffer) {
+    public ResourceLocation fromNetwork(FriendlyByteBuf buffer) {
         return buffer.readResourceLocation();
     }
 
     @Override
-    public void write(ResourceLocation value, FriendlyByteBuf buffer) {
+    public void toNetwork(ResourceLocation value, FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(value);
     }
 }

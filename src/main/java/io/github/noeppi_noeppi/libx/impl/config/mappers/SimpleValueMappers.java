@@ -33,22 +33,22 @@ public class SimpleValueMappers {
             }
 
             @Override
-            public T fromJSON(JsonPrimitive json) {
+            public T fromJson(JsonPrimitive json) {
                 return fromJSON.apply(json);
             }
 
             @Override
-            public JsonPrimitive toJSON(T value) {
+            public JsonPrimitive toJson(T value) {
                 return toJSON.apply(value);
             }
 
             @Override
-            public T read(FriendlyByteBuf buffer) {
+            public T fromNetwork(FriendlyByteBuf buffer) {
                 return read.apply(buffer);
             }
 
             @Override
-            public void write(T value, FriendlyByteBuf buffer) {
+            public void toNetwork(T value, FriendlyByteBuf buffer) {
                 write.accept(buffer, value);
             }
         };

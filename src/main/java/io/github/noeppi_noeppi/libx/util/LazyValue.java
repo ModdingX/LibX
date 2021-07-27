@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.util;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -18,7 +19,7 @@ public class LazyValue<T> {
      * Creates a new lazy value. the supplier will be called once when
      * the value is first retrieved.
      */
-    public LazyValue(Supplier<? extends T> supplier) {
+    public LazyValue(@Nonnull Supplier<? extends T> supplier) {
         this.supplier = supplier;
         this.value = null;
     }

@@ -1,8 +1,11 @@
 package io.github.noeppi_noeppi.libx.config;
 
 import com.google.gson.JsonElement;
+import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import net.minecraft.network.FriendlyByteBuf;
+
+import java.util.Optional;
 
 /**
  * A value mapper for a generic type. This will get the value mapper for the generic
@@ -32,26 +35,33 @@ public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonV
     int getGenericElementPosition();
 
     /**
-     * @see ValueMapper#fromJSON(JsonElement)
+     * @see ValueMapper#fromJson(JsonElement)
      */
-    T fromJSON(E json, ValueMapper<C, JsonElement> mapper);
+    T fromJson(E json, ValueMapper<C, JsonElement> mapper);
     
     /**
-     * @see ValueMapper#toJSON(Object)
+     * @see ValueMapper#toJson(Object)
      */
-    E toJSON(T value, ValueMapper<C, JsonElement> mapper);
+    E toJson(T value, ValueMapper<C, JsonElement> mapper);
 
     /**
-     * @see ValueMapper#read(FriendlyByteBuf)
+     * @see ValueMapper#fromNetwork(FriendlyByteBuf)
      */
-    default T read(FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
-        return this.fromJSON(ConfigImpl.INTERNAL.fromJson(buffer.readUtf(0x40000), this.element()), mapper);
+    default T fromNetwork(FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
+        return this.fromJson(ConfigImpl.INTERNAL.fromJson(buffer.readUtf(0x40000), this.element()), mapper);
     }
     
     /**
-     * @see ValueMapper#write(Object, FriendlyByteBuf)
+     * @see ValueMapper#toNetwork(Object, FriendlyByteBuf)
      */
-    default void write(T value, FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
-        buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJSON(value, mapper)), 0x40000);
+    default void toNetwork(T value, FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
+        buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJson(value, mapper)), 0x40000);
+    }
+    
+    /**
+     * @see ValueMapper#correct(JsonElement, ConfigCorrection)
+     */
+    default Optional<T> correct(JsonElement json, ValueMapper<C, JsonElement> mapper, ConfigCorrection<T> correction) {
+        return Optional.empty();
     }
 }

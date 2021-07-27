@@ -4,9 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, JsonElement, T> {
 
@@ -33,39 +35,46 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
     }
 
     @Override
-    public Optional<T> fromJSON(JsonElement json, ValueMapper<T, JsonElement> mapper) {
+    public Optional<T> fromJson(JsonElement json, ValueMapper<T, JsonElement> mapper) {
         if (json.isJsonNull()) {
             return Optional.empty();
         } else {
-            return Optional.of(mapper.fromJSON(json));
+            return Optional.of(mapper.fromJson(json));
         }
     }
 
     @Override
-    public JsonElement toJSON(Optional<T> value, ValueMapper<T, JsonElement> mapper) {
+    public JsonElement toJson(Optional<T> value, ValueMapper<T, JsonElement> mapper) {
         if (value.isEmpty()) {
             return JsonNull.INSTANCE;
         } else {
-            return mapper.toJSON(value.get());
+            return mapper.toJson(value.get());
         }
     }
 
     @Override
-    public Optional<T> read(FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
+    public Optional<T> fromNetwork(FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
         if (!buffer.readBoolean()) {
             return Optional.empty();
         } else {
-            return Optional.of(mapper.read(buffer));
+            return Optional.of(mapper.fromNetwork(buffer));
         }
     }
 
     @Override
-    public void write(Optional<T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
+    public void toNetwork(Optional<T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
         if (value.isEmpty()) {
             buffer.writeBoolean(false);
         } else {
             buffer.writeBoolean(true);
-            mapper.write(value.get(), buffer);
+            mapper.toNetwork(value.get(), buffer);
         }
+    }
+
+    @Override
+    public Optional<Optional<T>> correct(JsonElement json, ValueMapper<T, JsonElement> mapper, ConfigCorrection<Optional<T>> correction) {
+        // We only ever need to correct values that are present.
+        // null is filtered by fromJSON
+        return correction.tryCorrect(json, mapper, Function.identity()).map(Optional::of);
     }
 }

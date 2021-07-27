@@ -2,9 +2,11 @@ package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
+import java.util.Optional;
 
 public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
 
@@ -25,28 +27,33 @@ public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
     }
 
     @Override
-    public C fromJSON(JsonElement json) {
+    public C fromJson(JsonElement json) {
         if (this.wrapped.element().isAssignableFrom(json.getClass())) {
             //noinspection unchecked
-            return ((ValueMapper<C, JsonElement>) this.wrapped).fromJSON(json);
+            return ((ValueMapper<C, JsonElement>) this.wrapped).fromJson(json);
         } else {
             throw new IllegalStateException("Json type mismatch: Expected " + this.wrapped.element() + ", got " + json.getClass());
         }
     }
 
     @Override
-    public JsonElement toJSON(C value) {
-        return this.wrapped.toJSON(value);
+    public JsonElement toJson(C value) {
+        return this.wrapped.toJson(value);
     }
 
     @Override
-    public C read(FriendlyByteBuf buffer) {
-        return this.wrapped.read(buffer);
+    public C fromNetwork(FriendlyByteBuf buffer) {
+        return this.wrapped.fromNetwork(buffer);
     }
 
     @Override
-    public void write(C value, FriendlyByteBuf buffer) {
-        this.wrapped.write(value, buffer);
+    public void toNetwork(C value, FriendlyByteBuf buffer) {
+        this.wrapped.toNetwork(value, buffer);
+    }
+
+    @Override
+    public Optional<C> correct(JsonElement json, ConfigCorrection<C> correction) {
+        return this.wrapped.correct(json, correction);
     }
 
     @Override

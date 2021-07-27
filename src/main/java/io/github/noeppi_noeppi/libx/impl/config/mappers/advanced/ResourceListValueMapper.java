@@ -39,22 +39,22 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
     }
 
     @Override
-    public ResourceList fromJSON(JsonObject json) {
+    public ResourceList fromJson(JsonObject json) {
         return new ResourceList(json);
     }
 
     @Override
-    public JsonObject toJSON(ResourceList value) {
+    public JsonObject toJson(ResourceList value) {
         return value.toJson();
     }
 
     @Override
-    public ResourceList read(FriendlyByteBuf buffer) {
+    public ResourceList fromNetwork(FriendlyByteBuf buffer) {
         return new ResourceList(buffer);
     }
 
     @Override
-    public void write(ResourceList value, FriendlyByteBuf buffer) {
+    public void toNetwork(ResourceList value, FriendlyByteBuf buffer) {
         value.toNetwork(buffer);
     }
 

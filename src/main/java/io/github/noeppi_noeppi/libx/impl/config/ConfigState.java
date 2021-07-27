@@ -61,7 +61,7 @@ public class ConfigState {
             buffer.writeUtf(key.field.getDeclaringClass().getName(), 0x7fff);
             buffer.writeUtf(key.field.getName(), 0x7fff);
             //noinspection unchecked
-            ((ValueMapper<Object, ?>) key.mapper).write(value, buffer);
+            ((ValueMapper<Object, ?>) key.mapper).toNetwork(value, buffer);
         }
     }
 
@@ -96,7 +96,7 @@ public class ConfigState {
             builder.append("\"").append(quote(key.path.get(key.path.size() - 1))).append("\": ");
             Object value = this.values.get(key);
             //noinspection unchecked
-            JsonElement json = ((ValueMapper<Object, ?>) key.mapper).toJSON(value);
+            JsonElement json = ((ValueMapper<Object, ?>) key.mapper).toJson(value);
             builder.append(this.specialString(json));
         }
         

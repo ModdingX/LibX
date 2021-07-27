@@ -23,12 +23,12 @@ public class ComponentValueMapper implements ValueMapper<Component, JsonElement>
     }
 
     @Override
-    public Component fromJSON(JsonElement json) {
+    public Component fromJson(JsonElement json) {
         return Component.Serializer.fromJson(json);
     }
 
     @Override
-    public JsonElement toJSON(Component value) {
+    public JsonElement toJson(Component value) {
         return Component.Serializer.toJsonTree(value);
     }
 }

@@ -3,9 +3,11 @@ package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
+import java.util.Optional;
 
 public class WrappedGenericMapper<T, E extends JsonElement, C> implements ValueMapper<T, E> {
 
@@ -28,23 +30,28 @@ public class WrappedGenericMapper<T, E extends JsonElement, C> implements ValueM
     }
 
     @Override
-    public T fromJSON(E json) {
-        return this.parent.fromJSON(json, this.mapper);
+    public T fromJson(E json) {
+        return this.parent.fromJson(json, this.mapper);
     }
 
     @Override
-    public E toJSON(T value) {
-        return this.parent.toJSON(value, this.mapper);
+    public E toJson(T value) {
+        return this.parent.toJson(value, this.mapper);
     }
 
     @Override
-    public T read(FriendlyByteBuf buffer) {
-        return this.parent.read(buffer, this.mapper);
+    public T fromNetwork(FriendlyByteBuf buffer) {
+        return this.parent.fromNetwork(buffer, this.mapper);
     }
 
     @Override
-    public void write(T value, FriendlyByteBuf buffer) {
-        this.parent.write(value, buffer, this.mapper);
+    public void toNetwork(T value, FriendlyByteBuf buffer) {
+        this.parent.toNetwork(value, buffer, this.mapper);
+    }
+
+    @Override
+    public Optional<T> correct(JsonElement json, ConfigCorrection<T> correction) {
+        return this.parent.correct(json, this.mapper, correction);
     }
 
     @Override

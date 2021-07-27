@@ -25,24 +25,24 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     }
 
     @Override
-    public java.util.UUID fromJSON(JsonPrimitive json) {
+    public java.util.UUID fromJson(JsonPrimitive json) {
         return UUID.fromString(json.getAsString());
     }
 
     @Override
-    public JsonPrimitive toJSON(java.util.UUID value) {
+    public JsonPrimitive toJson(java.util.UUID value) {
         return new JsonPrimitive(value.toString());
     }
 
     @Override
-    public UUID read(FriendlyByteBuf buffer) {
+    public UUID fromNetwork(FriendlyByteBuf buffer) {
         long mostSignificantBits = buffer.readLong();
         long leastSignificantBits = buffer.readLong();
         return new UUID(mostSignificantBits, leastSignificantBits);
     }
 
     @Override
-    public void write(UUID value, FriendlyByteBuf buffer) {
+    public void toNetwork(UUID value, FriendlyByteBuf buffer) {
         buffer.writeLong(value.getMostSignificantBits());
         buffer.writeLong(value.getLeastSignificantBits());
     }

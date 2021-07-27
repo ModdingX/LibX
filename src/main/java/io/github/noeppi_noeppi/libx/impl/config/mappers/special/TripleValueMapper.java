@@ -3,8 +3,11 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import net.minecraft.network.FriendlyByteBuf;
 import org.apache.commons.lang3.tuple.Triple;
+
+import java.util.Optional;
 
 public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, JsonArray> {
 
@@ -30,32 +33,49 @@ public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, 
     }
 
     @Override
-    public Triple<A, B, C> fromJSON(JsonArray json) {
+    public Triple<A, B, C> fromJson(JsonArray json) {
         if (json.size() != 3) {
             throw new IllegalStateException("Invalid list length for a triple: " + json.size());
         } else {
-            return Triple.of(this.mapper1.fromJSON(json.get(0)), this.mapper2.fromJSON(json.get(1)), this.mapper3.fromJSON(json.get(2)));
+            return Triple.of(this.mapper1.fromJson(json.get(0)), this.mapper2.fromJson(json.get(1)), this.mapper3.fromJson(json.get(2)));
         }
     }
 
     @Override
-    public JsonArray toJSON(Triple<A, B, C> value) {
+    public JsonArray toJson(Triple<A, B, C> value) {
         JsonArray array = new JsonArray();
-        array.add(this.mapper1.toJSON(value.getLeft()));
-        array.add(this.mapper2.toJSON(value.getMiddle()));
-        array.add(this.mapper3.toJSON(value.getRight()));
+        array.add(this.mapper1.toJson(value.getLeft()));
+        array.add(this.mapper2.toJson(value.getMiddle()));
+        array.add(this.mapper3.toJson(value.getRight()));
         return array;
     }
 
     @Override
-    public Triple<A, B, C> read(FriendlyByteBuf buffer) {
-        return Triple.of(this.mapper1.read(buffer), this.mapper2.read(buffer), this.mapper3.read(buffer));
+    public Triple<A, B, C> fromNetwork(FriendlyByteBuf buffer) {
+        return Triple.of(this.mapper1.fromNetwork(buffer), this.mapper2.fromNetwork(buffer), this.mapper3.fromNetwork(buffer));
     }
 
     @Override
-    public void write(Triple<A, B, C> value, FriendlyByteBuf buffer) {
-        this.mapper1.write(value.getLeft(), buffer);
-        this.mapper2.write(value.getMiddle(), buffer);
-        this.mapper3.write(value.getRight(), buffer);
+    public void toNetwork(Triple<A, B, C> value, FriendlyByteBuf buffer) {
+        this.mapper1.toNetwork(value.getLeft(), buffer);
+        this.mapper2.toNetwork(value.getMiddle(), buffer);
+        this.mapper3.toNetwork(value.getRight(), buffer);
+    }
+
+    @Override
+    public Optional<Triple<A, B, C>> correct(JsonElement json, ConfigCorrection<Triple<A, B, C>> correction) {
+        if (json.isJsonArray() && json.getAsJsonArray().size() == 3) {
+            // We have a valid triple, it failed on the children. Correct all.
+            Optional<A> first = correction.correct(json.getAsJsonArray().get(0), this.mapper1, Triple::getLeft);
+            Optional<B> second = correction.correct(json.getAsJsonArray().get(1), this.mapper2, Triple::getMiddle);
+            Optional<C> third = correction.correct(json.getAsJsonArray().get(2), this.mapper3, Triple::getRight);
+            if (first.isPresent() && second.isPresent() && third.isPresent()) {
+                return Optional.of(Triple.of(first.get(), second.get(), third.get()));
+            } else {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 }
