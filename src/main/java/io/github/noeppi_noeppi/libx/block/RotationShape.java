@@ -44,7 +44,14 @@ public class RotationShape {
 
     private static VoxelShape rotated(VoxelShape src) {
         List<VoxelShape> boxes = new ArrayList<>();
-        src.forAllBoxes((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(Shapes.box(1 - fromZ, fromY, fromX, 1 - toZ, toY, toX)));
+        src.forAllBoxes((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(Shapes.box(
+                Math.min(1 - fromZ, 1 - toZ),
+                Math.min(fromY, toY),
+                Math.min(fromX, toX),
+                Math.max(1 - fromZ, 1 - toZ),
+                Math.max(fromY, toY),
+                Math.max(fromX, toX)
+        )));
         return Shapes.or(Shapes.empty(), boxes.toArray(new VoxelShape[]{})).optimize();
     }
 }

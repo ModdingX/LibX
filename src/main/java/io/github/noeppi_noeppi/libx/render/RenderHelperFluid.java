@@ -36,12 +36,19 @@ public class RenderHelperFluid {
         poseStack.translate(0, 0, 100);
         RenderSystem.setShaderTexture(0, sprite.atlas().location());
         // Some mods set alpha, other leave it 0 so we use the alpha whenever it is not 0.
-        if (((color >>> 24) & 0xFF) > 0) {
+        int alpha = (color >>> 24) & 0xFF;
+        if (alpha > 0) {
             RenderHelper.argb(color);
+            if (alpha < 255) {
+                RenderSystem.enableBlend();
+            }
         } else {
             RenderHelper.rgb(color);
         }
         RenderHelper.repeatBlit(poseStack, x, y, width, height, sprite);
+        if (alpha > 0 && alpha < 255) {
+            RenderSystem.disableBlend();
+        }
         RenderHelper.resetColor();
         poseStack.popPose();
     }

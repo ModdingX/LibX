@@ -27,7 +27,7 @@ public class LazyValue<T> {
      * Wraps a {@link LazyLoadedValue} to a lazy value.
      */
     @SuppressWarnings("deprecation")
-    public static <T> LazyValue<T> wrap(net.minecraft.util.LazyLoadedValue<T> value) {
+    public static <T> LazyValue<T> wrap(LazyLoadedValue<T> value) {
         return new LazyValue<>(value::get);
     }
 

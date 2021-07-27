@@ -40,7 +40,14 @@ public class DirectionShape extends RotationShape {
 
     private static VoxelShape rotatedV(VoxelShape src) {
         List<VoxelShape> boxes = new ArrayList<>();
-        src.forAllBoxes((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(Shapes.box(fromX, fromZ, 1 - fromY, toX, toZ, 1 - toY)));
+        src.forAllBoxes((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(Shapes.box(
+                Math.min(fromX, toX),
+                Math.min(fromZ, toZ),
+                Math.min(1 - fromY, 1- toY),
+                Math.max(fromX, toX),
+                Math.max(fromZ, toZ),
+                Math.max(1 - fromY, 1- toY)
+        )));
         return Shapes.or(Shapes.empty(), boxes.toArray(new VoxelShape[]{})).optimize();
     }
 }
