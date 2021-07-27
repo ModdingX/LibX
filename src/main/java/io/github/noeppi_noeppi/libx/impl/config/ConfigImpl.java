@@ -189,7 +189,7 @@ public class ConfigImpl {
         AtomicBoolean needsCorrection = new AtomicBoolean(false);
         Set<ConfigKey> keysToCorrect = parent == null ? null : new HashSet<>();
         for (ConfigKey key : this.keys.values()) {
-            JsonElement elem = getInObjectKeyPath(config, key, needsCorrection);
+            JsonElement elem = config == null ? null : getInObjectKeyPath(config, key, needsCorrection);
             if (elem != null) {
                 if (keysToCorrect != null) keysToCorrect.add(key);
                 try {
@@ -201,10 +201,11 @@ public class ConfigImpl {
                     if (value == null) throw new IllegalStateException("Config mapper reported null value.");
                     values.put(key, key.validate(value, "Invalid value in config file", needsCorrection));
                 } catch (Exception e) {
-                    LibX.logger.warn("Failed to read config value " + String.join(".", key.path) + ". Using default. Error: " + e.getMessage());
+                    LibX.logger.warn("Failed to read config value " + String.join(".", key.path) + ". Correcting. Error: " + e.getMessage());
                     CorrectionInstance<?, ?> correction = CorrectionInstance.create(parentConfig.getValue(key));
                     //noinspection unchecked
-                    values.put(key, correction.correct(elem, (ValueMapper<Object, ?>) key.mapper, Optional::of));
+                    Object value = correction.correct(elem, (ValueMapper<Object, ?>) key.mapper, o -> o).orElse(parentConfig.getValue(key));
+                    values.put(key, key.validate(value, "Invalid value in corrected config file", needsCorrection));
                     needsCorrection.set(true);
                 }
             } else {

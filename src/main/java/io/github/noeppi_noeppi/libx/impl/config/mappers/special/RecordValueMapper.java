@@ -116,10 +116,11 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
             // We have a json object. Just correct every key from it.
             Object[] args = new Object[parts.length];
             for (int i = 0; i < parts.length; i++) {
+                int idx = i;
                 String name = parts[i].getName();
-                Optional<Object> obj = correction.tryCorrect(json.getAsJsonObject().has(name) ? json.getAsJsonObject().get(name) : null, this.mappers.get(i), record -> {
+                Optional<Object> obj = correction.tryCorrect(json.getAsJsonObject().has(name) ? json.getAsJsonObject().get(name) : null, this.mappers.get(idx), record -> {
                     try {
-                        return Optional.of(parts[0].getAccessor().invoke(record));
+                        return Optional.of(parts[idx].getAccessor().invoke(record));
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         return Optional.empty();
                     }
