@@ -43,10 +43,10 @@ public class DirectionShape extends RotationShape {
         src.forAllBoxes((fromX, fromY, fromZ, toX, toY, toZ) -> boxes.add(Shapes.box(
                 Math.min(fromX, toX),
                 Math.min(fromZ, toZ),
-                Math.min(1 - fromY, 1- toY),
+                Math.min(1 - fromY, 1 - toY),
                 Math.max(fromX, toX),
                 Math.max(fromZ, toZ),
-                Math.max(1 - fromY, 1- toY)
+                Math.max(1 - fromY, 1 - toY)
         )));
         return Shapes.or(Shapes.empty(), boxes.toArray(new VoxelShape[]{})).optimize();
     }
