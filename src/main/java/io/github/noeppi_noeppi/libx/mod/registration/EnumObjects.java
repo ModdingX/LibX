@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 /**
- * A {@link Registerable} that multiple objects, one for each value of an enum. This is
+ * A {@link Registerable} that registers multiple objects, one for each value of an enum. This is
  * done via {@link Registerable#getNamedAdditionalRegisters(ResourceLocation)} so the enum names will be
  * applied automatically.
  *
