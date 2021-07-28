@@ -22,3 +22,7 @@ dependencies {
 ```
 
 **Javadoc can be found here: https://git.io/libx**
+
+### The future branch
+
+The `future` branch is used to implement breaking changes that will be merged in the next major minecraft release.
