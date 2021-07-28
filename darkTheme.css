@@ -1,0 +1,83 @@
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #a4b2be;
+        background-color:#2b2b2b;
+    }
+    
+    .block {
+        color: #a4b2be;
+    }
+
+    .top-nav {
+        background-color:#4f4b41;
+        color:#FFFFFF;
+    }
+
+    .sub-nav {
+        background-color:#3c3f41;
+    }
+
+    .title {
+        color:#babbec;
+    }
+
+    .table-sub-heading-color {
+        background-color:#313335;
+    }
+
+    .even-row-color, .even-row-color .table-header {
+        color: #a4b2be;
+        background-color:#3b3b3d;
+    }
+
+    .odd-row-color, .odd-row-color .table-header {
+        color: #a4b2be;
+        background-color:#353536;
+    }
+
+    a {
+        color: #F8981D!important;
+    }
+
+    a:hover, a:focus {
+        color: #94d689!important;
+    }
+
+    .table-header {
+        background:#45494a;
+    }
+
+    .summary-table {
+        border-left:1px solid #45494a;
+        border-right:1px solid #45494a;
+        border-bottom:1px solid #45494a;
+    }
+
+    .summary section[class$="-summary"], .details section[class$="-details"], .class-uses .detail, .serialized-class-details {
+        border: 1px solid #313335;
+        background-color: #45494a;
+    }
+
+    body.class-declaration-page .summary h3, body.class-declaration-page .details h3, body.class-declaration-page .summary .inherited-list h2 {
+        background-color: #3c3f41;
+        border: 1px solid #5a5d5f;
+    }
+
+    .inherited-list, section[class$="-details"] .detail {
+        background-color: #3b3b3d;
+        border: 1px solid #5a5d5f;
+    }
+
+    .ui-autocomplete-category {
+        background:#45494a;
+    }
+
+    .ui-menu-item {
+        background:#5d5e5f;
+        color: #d0d3d8
+    }
+
+    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+        background: #3b3b3d;
+    }
+}
