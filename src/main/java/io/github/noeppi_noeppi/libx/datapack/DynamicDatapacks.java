@@ -14,9 +14,6 @@ import java.util.Set;
  * the name of your dynamic datapack. Inside this folder you can have an `assets` and / or `data` directory.
  * A {@code pack.mcmeta} file is not required and if you provide one it'll be ignored.
  */
-// TODO currently broken in dev env because of SecureJarHandler
-//  see https://github.com/MinecraftForge/securejarhandler/pull/4
-//  test again when that gets fixed
 public class DynamicDatapacks {
     
     private static final Set<ResourceLocation> enabledPacks = new HashSet<>();
@@ -25,7 +22,9 @@ public class DynamicDatapacks {
      * Enables a dynamic datapack.
      */
     public static void enablePack(String modId, String packName) {
-        enabledPacks.add(new ResourceLocation(modId, packName));
+        // TODO test after this got fixed
+        throw new IllegalStateException("Dynamic datapacks are currenty broken. See https://github.com/MinecraftForge/securejarhandler/pull/4");
+        // enabledPacks.add(new ResourceLocation(modId, packName));
     }
 
     /**
