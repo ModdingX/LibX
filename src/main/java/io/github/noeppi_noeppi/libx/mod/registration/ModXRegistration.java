@@ -15,8 +15,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -62,10 +60,8 @@ public abstract class ModXRegistration extends ModX {
     private final List<Runnable> registrationHandlers = new ArrayList<>();
     private boolean registered = false;
     private final Object registrationLock = new Object();
-    private final List<Pair<String, Object>> registerables = new ArrayList<>();
-    private final List<RegistryCondition> registryConditions;
-    private final List<RegistryTransformer> registryReplacers;
-    private final List<RegistryTransformer> registryTransformers;
+    private final List<RegEntry> registerables = new ArrayList<>();
+    private final RegistrationBuilder.RegistrationSettings settings;
 
     protected ModXRegistration(String modid, CreativeModeTab tab) {
         super(modid, tab);
@@ -83,10 +79,7 @@ public abstract class ModXRegistration extends ModX {
         // Initialise the registration system.
         RegistrationBuilder builder = new RegistrationBuilder();
         this.initRegistration(builder);
-        Triple<List<RegistryCondition>, List<RegistryTransformer>, List<RegistryTransformer>> result = builder.build();
-        this.registryConditions = result.getLeft();
-        this.registryReplacers = result.getMiddle();
-        this.registryTransformers = result.getRight();
+        this.settings = builder.build();
         
         // Call the generated code here as well
         //noinspection deprecation
@@ -109,17 +102,17 @@ public abstract class ModXRegistration extends ModX {
             throw new IllegalArgumentException("ModXRegistration#register called with invalid id argument.");
         }
         ResourceLocation rl = new ResourceLocation(this.modid, id);
-        if (this.registryConditions.stream().allMatch(c -> c.shouldRegister(rl, obj))) {
-            Object replaced = this.registryReplacers.stream()
+        if (this.settings.conditions().stream().allMatch(c -> c.shouldRegister(rl, obj))) {
+            Object replaced = this.settings.replacers().stream()
                     .map(r -> r.getAdditional(rl, obj))
                     .filter(Objects::nonNull)
                     .findFirst().orElse(obj);
-            this.registerables.add(Pair.of(id, replaced));
+            this.registerables.add(new RegEntry(id, replaced));
             if (replaced instanceof Registerable reg) {
                 reg.getAdditionalRegisters(rl).forEach(o -> this.register(id, o));
                 reg.getNamedAdditionalRegisters(rl).forEach((str, o) -> this.register(id + "_" + str, o));
             }
-            this.registryTransformers.forEach(t -> {
+            this.settings.transformers().forEach(t -> {
                 Object additional = t.getAdditional(rl, replaced);
                 if (additional != null) this.register(id, additional);
             });
@@ -148,22 +141,36 @@ public abstract class ModXRegistration extends ModX {
     
     private void commonRegistration(FMLCommonSetupEvent event) {
         this.runRegistration();
-        this.registerables.stream().filter(pair -> pair.getRight() instanceof Registerable)
-                .forEach(pair -> ((Registerable) pair.getRight()).registerCommon(new ResourceLocation(this.modid, pair.getLeft()), event::enqueueWork));
+        this.registerables.forEach(entry -> entry.run(reg -> reg.registerCommon(entry.id(this.modid), event::enqueueWork)));
     }
     
     private void clientRegistration(FMLClientSetupEvent event) {
         this.runRegistration();
-        this.registerables.stream().filter(pair -> pair.getRight() instanceof Registerable)
-                .forEach(pair -> ((Registerable) pair.getRight()).registerClient(new ResourceLocation(this.modid, pair.getLeft()), event::enqueueWork));
+        this.registerables.forEach(entry -> entry.run(reg -> reg.registerClient(entry.id(this.modid), event::enqueueWork)));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void onRegistry(final RegistryEvent.Register<? extends IForgeRegistryEntry<?>> event) {
         this.runRegistration();
-        this.registerables.stream().filter(pair -> event.getRegistry().getRegistrySuperType().isAssignableFrom(pair.getRight().getClass())).forEach(pair -> {
-            ((IForgeRegistryEntry<?>) pair.getRight()).setRegistryName(new ResourceLocation(this.modid, pair.getLeft()));
-            ((IForgeRegistry) event.getRegistry()).register((IForgeRegistryEntry<?>) pair.getRight());
-        });
+        this.registerables.stream()
+                .filter(entry -> entry.value() instanceof IForgeRegistryEntry<?>)
+                .filter(entry -> event.getRegistry().getRegistrySuperType().equals(((IForgeRegistryEntry<?>) entry.value()).getRegistryType()))
+                .forEach(entry -> {
+                    ((IForgeRegistryEntry<?>) entry.value()).setRegistryName(entry.id(this.modid));
+                    ((IForgeRegistry) event.getRegistry()).register((IForgeRegistryEntry<?>) entry.value()); 
+                });
+    }
+    
+    private record RegEntry(String id, Object value) {
+        
+        public ResourceLocation id(String modid) {
+            return new ResourceLocation(modid, this.id);
+        }
+        
+        public void run(Consumer<Registerable> action) {
+            if (this.value instanceof Registerable) {
+                action.accept((Registerable) this.value);
+            }
+        }
     }
 }

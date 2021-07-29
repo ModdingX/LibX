@@ -60,7 +60,7 @@ public class RegistrationBuilder {
         this.customTransformers.add(transformer);
     }
     
-    public Triple<List<RegistryCondition>, List<RegistryTransformer>, List<RegistryTransformer>> build() {
+    public RegistrationSettings build() {
         if (this.version < 0) {
             throw new IllegalStateException("LibX registration version not set.");
         }
@@ -78,6 +78,12 @@ public class RegistrationBuilder {
         }
         conditions.addAll(this.customConditions);
         transformers.addAll(this.customTransformers);
-        return Triple.of(conditions.build(), replacers.build(), transformers.build());
+        return new RegistrationSettings(conditions.build(), replacers.build(), transformers.build());
     }
+    
+    public record RegistrationSettings(
+            List<RegistryCondition> conditions,
+            List<RegistryTransformer> replacers,
+            List<RegistryTransformer> transformers
+    ) {}
 }
