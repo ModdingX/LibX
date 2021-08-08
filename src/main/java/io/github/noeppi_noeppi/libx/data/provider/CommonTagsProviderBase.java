@@ -41,6 +41,8 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     private final FluidTagProviderBase fluidTags;
 
     private boolean isSetup = false;
+    // Copies must happen at last so we store them
+    private final List<Runnable> itemCopies = new ArrayList<>();
     private final List<Pair<Tag.Named<Fluid>, Tag.Named<Block>>> fluidCopies = new ArrayList<>();
 
     /**
@@ -119,7 +121,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
      * Copies all entries from a block tag to an item tag.
      */
     public void copyBlock(Tag.Named<Block> from, Tag.Named<Item> to) {
-        this.itemTags.copy(from, to);
+        this.itemCopies.add(() -> this.itemTags.copy(from, to));
     }
 
     /**
@@ -202,6 +204,9 @@ public abstract class CommonTagsProviderBase implements DataProvider {
                 CommonTagsProviderBase.this.doSetup();
             } else if (this.tagCache != null) {
                 this.builders.putAll(this.tagCache);
+            }
+            for (Runnable copy : CommonTagsProviderBase.this.itemCopies) {
+                copy.run();
             }
         }
 
