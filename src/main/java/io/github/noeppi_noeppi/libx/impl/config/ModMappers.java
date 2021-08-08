@@ -27,6 +27,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 // special allowed types
 // enums
@@ -47,7 +48,7 @@ public class ModMappers {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = Set.of(
+    private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = Stream.of(
             SimpleValueMappers.BOOLEAN,
             SimpleValueMappers.BYTE,
             SimpleValueMappers.SHORT,
@@ -65,16 +66,16 @@ public class ModMappers {
             ResourceListValueMapper.INSTANCE,
             IngredientStackValueMapper.INSTANCE,
             UidValueMapper.INSTANCE
-    ).stream().collect(ImmutableMap.toImmutableMap(CommonValueMapper::type, Function.identity()));
+    ).collect(ImmutableMap.toImmutableMap(CommonValueMapper::type, Function.identity()));
 
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = Set.of(
+    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = Stream.of(
             SimpleValidators.SHORT,
             SimpleValidators.INTEGER,
             SimpleValidators.LONG,
             SimpleValidators.FLOAT,
             SimpleValidators.DOUBLE
-    ).stream().collect(ImmutableMap.toImmutableMap(ConfigValidator::annotation, Function.identity()));
+    ).collect(ImmutableMap.toImmutableMap(ConfigValidator::annotation, Function.identity()));
 
 
     private final String modid;
@@ -187,7 +188,7 @@ public class ModMappers {
         // Annotations will be proxies at runtime so we can't check classes for equality.
         if (Config.class.isAssignableFrom(validatorClass) || Group.class.isAssignableFrom(validatorClass)
                 || OnlyIn.class.isAssignableFrom(validatorClass) || OnlyIns.class.isAssignableFrom(validatorClass)) {
-            // Just in case someone register those...
+            // Just in case someone registers those...
             return null;
         } else {
             Optional<? extends ConfigValidator<?, ?>> validator = globalValidators.entrySet().stream()

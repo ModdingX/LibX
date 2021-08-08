@@ -104,6 +104,7 @@ public class ModInit  {
             JavaFileObject file = filer.createSourceFile(((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + "." + this.modClass.getSimpleName() + "$", this.modClass);
             Writer writer = file.openWriter();
             writer.write("package " + ((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + ";");
+            writer.write("@" + SuppressWarnings.class.getCanonicalName() + "(\"all\")");
             writer.write("public class " + this.modClass.getSimpleName() + "${");
             writer.write("private static " + ModX.class.getCanonicalName() + " mod=null;");
             if (!this.codecs.isEmpty()) {

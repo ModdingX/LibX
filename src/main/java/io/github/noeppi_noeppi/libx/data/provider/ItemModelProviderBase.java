@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.data.AlwaysExistentModelFile;
+import io.github.noeppi_noeppi.libx.impl.RendererOnDataGenException;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.data.DataGenerator;
@@ -9,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -89,10 +91,21 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     }
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
-        if (RenderProperties.get(item).getItemStackRenderer() == ItemStackRenderer.get()) {
+        if (isItemStackRenderer(RenderProperties.get(item))) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(SPECIAL_BLOCK_PARENT));
         } else {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
         }
+    }
+    
+    private static boolean isItemStackRenderer(IItemRenderProperties properties) {
+        try {
+            properties.getItemStackRenderer();
+        } catch (RendererOnDataGenException e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 }
