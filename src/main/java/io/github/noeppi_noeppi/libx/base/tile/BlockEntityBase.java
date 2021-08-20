@@ -63,7 +63,7 @@ public class BlockEntityBase extends BlockEntity {
      * This will update the block entity to all clients that are tracking it when called on the server
      * using {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)} at the end of this tick.
      */
-    public void markDispatchable() {
+    public void setDispatchable() {
         if (this.level != null && !this.level.isClientSide) {
             BlockEntityUpdateQueue.scheduleUpdate(this.level, this.worldPosition);
         }

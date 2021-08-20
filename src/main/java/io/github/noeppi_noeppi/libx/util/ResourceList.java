@@ -33,6 +33,24 @@ import java.util.stream.Collectors;
  * The order of the rules is important. Rules that are added first will have a higher
  * priority and only the first matching rule will be applied.
  * Resource lists are immutable.
+ * 
+ * <a name="use_resource_lists_in_configs"></a>
+ * 
+ * <h3>ResourceLists in LibX configs</h3>
+ * 
+ * This explains, how a resource list is used inj a config. In the {@code whitelist} field you can specify
+ * whether all entries will be accepted by default or rejected.
+ * 
+ * {@code elements} is an array of rules. Each resource location that is matched against this list, will
+ * traverse these rules from top to bottom. The first rule that matches a resource location determines its result.
+ * 
+ * Rules are resource locations, where asterisks (*) can be added to match any number of characters.
+ * However, an asterisk can not match a colon. The nly exception to this is the single asterisk which matches
+ * everything. When a rule is matched, it will yield the result specified in `whitelist` as a result. To alter
+ * this, add a plus (+) or a minus (-) in front of the rule. This will make it a whitelist or blacklist rule
+ * respectively. You can also add regex rules. These are json objects with two keys: `allow` - a boolean that
+ * specifies whether this is a whitelist or blacklist rule and `regex` - which is a regex that must match the
+ * resource location.
  */
 public class ResourceList implements Predicate<ResourceLocation> {
 
