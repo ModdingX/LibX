@@ -145,16 +145,16 @@ loadScripts(document, 'script');</script>
  net.minecraft.core.Direction&nbsp;side)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#markDispatchable()">markDispatchable</a></span>()</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#onLoad()">onLoad</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
-<div class="block">This will update the block entity to all clients that are tracking it when called on the server
- using <code>BlockEntity.getUpdateTag()</code> and <code>IForgeBlockEntity.handleUpdateTag(CompoundTag)</code> at the end of this tick.</div>
-</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#onLoad()">onLoad</a></span>()</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">This will update the block entity when on the client using <code>BlockEntity.getUpdateTag()</code>
  and <code>IForgeBlockEntity.handleUpdateTag(CompoundTag)</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#setDispatchable()">setDispatchable</a></span>()</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="block">This will update the block entity to all clients that are tracking it when called on the server
+ using <code>BlockEntity.getUpdateTag()</code> and <code>IForgeBlockEntity.handleUpdateTag(CompoundTag)</code> at the end of this tick.</div>
 </div>
 </div>
 </div>
@@ -238,9 +238,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="markDispatchable()">
-<h3>markDispatchable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">markDispatchable</span>()</div>
+<section class="detail" id="setDispatchable()">
+<h3>setDispatchable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setDispatchable</span>()</div>
 <div class="block">This will update the block entity to all clients that are tracking it when called on the server
  using <code>BlockEntity.getUpdateTag()</code> and <code>IForgeBlockEntity.handleUpdateTag(CompoundTag)</code> at the end of this tick.</div>
 </section>
