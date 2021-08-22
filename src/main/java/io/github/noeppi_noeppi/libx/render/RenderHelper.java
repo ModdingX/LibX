@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderHelper {
 
     /**
-     * ResourceLocation of a texture with the size 512x512 that is purely white. If can be colored with
+     * ResourceLocation of a texture with the size 512x512 that is purely white. It can be colored with
      * {@link RenderSystem#setShaderColor(float, float, float, float)}.
      */
     public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation(LibX.getInstance().modid, "textures/white.png");
