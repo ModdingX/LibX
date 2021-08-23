@@ -71,7 +71,7 @@ public class RenderHelper {
                 pixelsRenderedY += pixelsNowY;
             }
             pixelsRenderedX += pixelsNowX;
-            
+
         }
     }
 
@@ -106,7 +106,7 @@ public class RenderHelper {
     public static void rgb(int color) {
         RenderSystem.setShaderColor(((color >>> 16) & 0xFF) / 255f, ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f, 1);
     }
-    
+
     /**
      * Sets the color to the given ARGB color in format 0xAARRGGBB
      */
@@ -144,16 +144,24 @@ public class RenderHelper {
     }
 
     /**
+     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation)}} but with pre-set texture.
+     */
+    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
+        renderGuiBackground(poseStack, x, y, width, height, TEXTURE_CHEST_GUI);
+    }
+
+    /**
      * Renders a gui background of any size. This is created from the chest GUI texture and should
      * work with texture packs. The width and height must be at least 9.
      *
-     * @param x      The x position for the top left corner.
-     * @param y      The y position for the top left corner.
-     * @param width  The width of the GUI background
-     * @param height The height of the GUI background
+     * @param x       The x position for the top left corner.
+     * @param y       The y position for the top left corner.
+     * @param width   The width of the GUI background
+     * @param height  The height of the GUI background
+     * @param texture The texture to use for the GUI background
      */
-    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
-        RenderSystem.setShaderTexture(0, TEXTURE_CHEST_GUI);
+    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture) {
+        RenderSystem.setShaderTexture(0, texture);
         // Background
         repeatBlit(poseStack, x + 2, y + 2,
                 162, 14, width - 4, height - 4,
