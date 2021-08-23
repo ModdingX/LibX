@@ -140,10 +140,20 @@ loadScripts(document, 'script');</script>
  int&nbsp;width,
  int&nbsp;height)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
-<div class="block">Renders a gui background of any size.</div>
+<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation)"><code>renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation)</code></a>} but with pre-set texture.</div>
 </div>
 <div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#renderIconColored(com.mojang.blaze3d.vertex.PoseStack,com.mojang.blaze3d.vertex.VertexConsumer,float,float,net.minecraft.client.renderer.texture.TextureAtlasSprite,float,float,float,int,int,int)">renderIconColored</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation)">renderGuiBackground</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+ int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;width,
+ int&nbsp;height,
+ net.minecraft.resources.ResourceLocation&nbsp;texture)</code></div>
+<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="block">Renders a gui background of any size.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#renderIconColored(com.mojang.blaze3d.vertex.PoseStack,com.mojang.blaze3d.vertex.VertexConsumer,float,float,net.minecraft.client.renderer.texture.TextureAtlasSprite,float,float,float,int,int,int)">renderIconColored</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  com.mojang.blaze3d.vertex.VertexConsumer&nbsp;buffer,
  float&nbsp;x,
  float&nbsp;y,
@@ -154,17 +164,17 @@ loadScripts(document, 'script');</script>
  int&nbsp;color,
  int&nbsp;light,
  int&nbsp;overlay)</code></div>
-<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
 <div class="block">Renders a texture colored with a given color.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#renderText(java.lang.String,com.mojang.blaze3d.vertex.PoseStack)">renderText</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
+<div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#renderText(java.lang.String,com.mojang.blaze3d.vertex.PoseStack)">renderText</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
  com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack)</code></div>
-<div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
 <div class="block">Renders a text with a gray semi-transparent background.</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,int,int,float,float,float,float)">repeatBlit</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;ms,
+<div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,int,int,float,float,float,float)">repeatBlit</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;ms,
  int&nbsp;x,
  int&nbsp;y,
  int&nbsp;texWidth,
@@ -175,11 +185,11 @@ loadScripts(document, 'script');</script>
  float&nbsp;maxU,
  float&nbsp;minV,
  float&nbsp;maxV)</code></div>
-<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
 <div class="block">Same as <a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)"><code>repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)</code></a> but with the u and v values set directly and not with a TextureAtlasSprite.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)">repeatBlit</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;ms,
+<div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)">repeatBlit</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;ms,
  int&nbsp;x,
  int&nbsp;y,
  int&nbsp;texWidth,
@@ -187,27 +197,27 @@ loadScripts(document, 'script');</script>
  int&nbsp;displayWidth,
  int&nbsp;displayHeight,
  net.minecraft.client.renderer.texture.TextureAtlasSprite&nbsp;sprite)</code></div>
-<div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
 <div class="block">Repeatedly blits a texture</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)">repeatBlit</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)">repeatBlit</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  int&nbsp;x,
  int&nbsp;y,
  int&nbsp;displayWidth,
  int&nbsp;displayHeight,
  net.minecraft.client.renderer.texture.TextureAtlasSprite&nbsp;sprite)</code></div>
-<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
 <div class="block">Same as <a href="#repeatBlit(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)"><code>repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#resetColor()">resetColor</a></span>()</code></div>
-<div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#resetColor()">resetColor</a></span>()</code></div>
+<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
 <div class="block">Resets the color to white.</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#rgb(int)">rgb</a></span>&#8203;(int&nbsp;color)</code></div>
-<div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
+<div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#rgb(int)">rgb</a></span>&#8203;(int&nbsp;color)</code></div>
+<div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
 <div class="block">Sets the color to the given RGB color in format 0xRRGGBB</div>
 </div>
 </div>
@@ -377,6 +387,18 @@ loadScripts(document, 'script');</script>
  int&nbsp;y,
  int&nbsp;width,
  int&nbsp;height)</span></div>
+<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation)"><code>renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation)</code></a>} but with pre-set texture.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation)">
+<h3>renderGuiBackground</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">renderGuiBackground</span>&#8203;<span class="parameters">(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+ int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;width,
+ int&nbsp;height,
+ net.minecraft.resources.ResourceLocation&nbsp;texture)</span></div>
 <div class="block">Renders a gui background of any size. This is created from the chest GUI texture and should
  work with texture packs. The width and height must be at least 9.</div>
 <dl class="notes">
@@ -385,6 +407,7 @@ loadScripts(document, 'script');</script>
 <dd><code>y</code> - The y position for the top left corner.</dd>
 <dd><code>width</code> - The width of the GUI background</dd>
 <dd><code>height</code> - The height of the GUI background</dd>
+<dd><code>texture</code> - The texture to use for the GUI background</dd>
 </dl>
 </section>
 </li>
