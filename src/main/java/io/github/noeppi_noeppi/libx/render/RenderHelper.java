@@ -144,48 +144,62 @@ public class RenderHelper {
     }
 
     /**
-     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation)}} but with pre-set texture.
+     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)} but with pre-set texture.
      */
     public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
         renderGuiBackground(poseStack, x, y, width, height, TEXTURE_CHEST_GUI);
     }
 
     /**
+     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)}
+     * but with pre-set texture values from {@code minecraft:textures/gui/container/generic_54.png}.
+     */
+    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture) {
+        renderGuiBackground(poseStack, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);
+    }
+
+    /**
      * Renders a gui background of any size. This is created from the chest GUI texture and should
      * work with texture packs. The width and height must be at least 9.
      *
-     * @param x       The x position for the top left corner.
-     * @param y       The y position for the top left corner.
-     * @param width   The width of the GUI background
-     * @param height  The height of the GUI background
-     * @param texture The texture to use for the GUI background
+     * @param x        The x position for the top left corner.
+     * @param y        The y position for the top left corner.
+     * @param width    The width of the GUI background
+     * @param height   The height of the GUI background
+     * @param texture  The texture to use for the GUI background
+     * @param textureX Texture size x
+     * @param textureY Texture size y
+     * @param minU     The start x position for the background texture
+     * @param maxU     The end x position for the background texture
+     * @param minV     The start y position for the background texture
+     * @param maxV     The end y position for the background texture
      */
-    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture) {
+    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
         RenderSystem.setShaderTexture(0, texture);
         // Background
         repeatBlit(poseStack, x + 2, y + 2,
-                162, 14, width - 4, height - 4,
-                7 / 256f, 169 / 256f, 125 / 256f, 139 / 256f);
+                maxU - minU, maxV - minV, width - 4, height - 4,
+                minU / 256f, maxU / 256f, minV / 256f, maxV / 256f);
         // Corners
         GuiComponent.blit(poseStack, x, y, 0, 0, 0, 4, 4, 256, 256);
-        GuiComponent.blit(poseStack, x + width - 5, y, 0, 172, 0, 4, 4, 256, 256);
-        GuiComponent.blit(poseStack, x, y + height - 5, 0, 0, 218, 4, 4, 256, 256);
-        GuiComponent.blit(poseStack, x + width - 5, y + height - 5, 0, 172, 218, 4, 4, 256, 256);
+        GuiComponent.blit(poseStack, x + width - 5, y, 0, textureX - 4, 0, 4, 4, 256, 256);
+        GuiComponent.blit(poseStack, x, y + height - 5, 0, 0, textureY - 4, 4, 4, 256, 256);
+        GuiComponent.blit(poseStack, x + width - 5, y + height - 5, 0, textureX - 4, textureY - 4, 4, 4, 256, 256);
         // Top edge
         repeatBlit(poseStack, x + 4, y,
                 169, 3, width - 8, 3,
-                4 / 256f, 173 / 256f, 0 / 256f, 3 / 256f);
+                4 / 256f, (textureX - 3) / 256f, 0 / 256f, 3 / 256f);
         // Bottom edge
         repeatBlit(poseStack, x + 4, y + height - 4,
                 169, 3, width - 8, 3,
-                4 / 256f, 173 / 256f, 219 / 256f, 222 / 256f);
+                4 / 256f, (textureX - 3) / 256f, (textureY - 3) / 256f, textureY / 256f);
         // Left edge
         repeatBlit(poseStack, x, y + 4,
                 3, 214, 3, height - 8,
-                0 / 256f, 3 / 256f, 4 / 256f, 218 / 256f);
+                0 / 256f, 3 / 256f, 4 / 256f, (textureY - 4) / 256f);
         // Right edge
         repeatBlit(poseStack, x + width - 4, y + 4,
                 3, 214, 3, height - 8,
-                173 / 256f, 176 / 256f, 4 / 256f, 218 / 256f);
+                (textureX - 3) / 256f, textureX / 256f, 4 / 256f, (textureY - 4) / 256f);
     }
 }

@@ -12,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public class ConfigEvents {
-    
+
     @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void serverPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -20,7 +20,7 @@ public class ConfigEvents {
             ConfigManager.forceResync(serverPlayer);
         }
     }
-    
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void clientPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -30,7 +30,7 @@ public class ConfigEvents {
             }
         }
     }
-    
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void clientPlayerLeave(ClientPlayerNetworkEvent.LoggedOutEvent event) {
