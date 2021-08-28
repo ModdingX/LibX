@@ -1829,10 +1829,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets a loot modifier that does nothing.</div>
 </dd>
-<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/util/ScreenHelper.html#inBounds(int,int,int,int,double,double)">inBounds(int, int, int, int, double, double)</a></span> - Static method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ScreenHelper.html" title="class in io.github.noeppi_noeppi.libx.util">ScreenHelper</a></dt>
-<dd>
-<div class="block">Checks if a position is within a certain area.</div>
-</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/crafting/IngredientStack.html#ingredient()">ingredient()</a></span> - Method in record class io.github.noeppi_noeppi.libx.crafting.<a href="io/github/noeppi_noeppi/libx/crafting/IngredientStack.html" title="class in io.github.noeppi_noeppi.libx.crafting">IngredientStack</a></dt>
 <dd>
 <div class="block">Returns the value of the <code>ingredient</code> record component.</div>
@@ -2018,6 +2014,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/util/LazyImmutableMap.html#isEmpty()">isEmpty()</a></span> - Method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/LazyImmutableMap.html" title="class in io.github.noeppi_noeppi.libx.util">LazyImmutableMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/util/Math2.html#isInBounds(double,double,double,double,double,double)">isInBounds(double, double, double, double, double, double)</a></span> - Static method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/Math2.html" title="class in io.github.noeppi_noeppi.libx.util">Math2</a></dt>
+<dd>
+<div class="block">Checks if a position is within a certain area defined by x, y, width and height.</div>
+</dd>
+<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/util/Math2.html#isInRect(double,double,double,double,double,double)">isInRect(double, double, double, double, double, double)</a></span> - Static method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/Math2.html" title="class in io.github.noeppi_noeppi.libx.util">Math2</a></dt>
+<dd>
+<div class="block">Checks if a position is within a certain area defined by minX, minY, width and height.</div>
+</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler.html#isItemValid(int,net.minecraft.world.item.ItemStack)">isItemValid(int, ItemStack)</a></span> - Method in class io.github.noeppi_noeppi.libx.inventory.<a href="io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler.html" title="class in io.github.noeppi_noeppi.libx.inventory">BaseItemStackHandler</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/crafting/recipe/RecipeHelper.html#isItemValidInput(net.minecraft.world.item.crafting.RecipeManager,net.minecraft.world.item.crafting.RecipeType,net.minecraft.world.item.ItemStack)">isItemValidInput(RecipeManager, RecipeType&lt;?&gt;, ItemStack)</a></span> - Static method in class io.github.noeppi_noeppi.libx.crafting.recipe.<a href="io/github/noeppi_noeppi/libx/crafting/recipe/RecipeHelper.html" title="class in io.github.noeppi_noeppi.libx.crafting.recipe">RecipeHelper</a></dt>
@@ -2264,6 +2268,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets a loot condition builder for a match tool condition.</div>
 </dd>
+<dt><a href="io/github/noeppi_noeppi/libx/util/Math2.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="type-name-link">Math2</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/util/package-summary.html">io.github.noeppi_noeppi.libx.util</a></dt>
+<dd>
+<div class="block">Some utilities for working with screens.</div>
+</dd>
+<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/util/Math2.html#%3Cinit%3E()">Math2()</a></span> - Constructor for class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/Math2.html" title="class in io.github.noeppi_noeppi.libx.util">Math2</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/config/validator/DoubleRange.html#max()">max()</a></span> - Element in annotation interface io.github.noeppi_noeppi.libx.config.validator.<a href="io/github/noeppi_noeppi/libx/config/validator/DoubleRange.html" title="annotation in io.github.noeppi_noeppi.libx.config.validator">DoubleRange</a></dt>
 <dd>
 <div class="block">The upper bound (inclusive)</div>
@@ -2906,12 +2916,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int)">renderGuiBackground(PoseStack, int, int, int, int)</a></span> - Static method in class io.github.noeppi_noeppi.libx.render.<a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html" title="class in io.github.noeppi_noeppi.libx.render">RenderHelper</a></dt>
 <dd>
-<div class="block">Same as <a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>RenderHelper.renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)</code></a> but with pre-set texture.</div>
+<div class="block">Same as <a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground</code></a> but with pre-set texture.</div>
 </dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation)">renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation)</a></span> - Static method in class io.github.noeppi_noeppi.libx.render.<a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html" title="class in io.github.noeppi_noeppi.libx.render">RenderHelper</a></dt>
 <dd>
-<div class="block">Same as <a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>RenderHelper.renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)</code></a>
- but with pre-set texture values from <code>minecraft:textures/gui/container/generic_54.png</code>.</div>
+<div class="block">Same as <a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground</code></a>
+ with the default GUI texture.</div>
 </dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)">renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)</a></span> - Static method in class io.github.noeppi_noeppi.libx.render.<a href="io/github/noeppi_noeppi/libx/render/RenderHelper.html" title="class in io.github.noeppi_noeppi.libx.render">RenderHelper</a></dt>
 <dd>
@@ -3088,12 +3098,6 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
-<dt><a href="io/github/noeppi_noeppi/libx/util/ScreenHelper.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="type-name-link">ScreenHelper</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/util/package-summary.html">io.github.noeppi_noeppi.libx.util</a></dt>
-<dd>
-<div class="block">Some utilities for working with screens.</div>
-</dd>
-<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/util/ScreenHelper.html#%3Cinit%3E()">ScreenHelper()</a></span> - Constructor for class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ScreenHelper.html" title="class in io.github.noeppi_noeppi.libx.util">ScreenHelper</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/data/LootBuilders.html#sequence(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder...)">sequence(LootPoolEntryContainer.Builder&lt;?&gt;...)</a></span> - Static method in class io.github.noeppi_noeppi.libx.data.<a href="io/github/noeppi_noeppi/libx/data/LootBuilders.html" title="class in io.github.noeppi_noeppi.libx.data">LootBuilders</a></dt>
 <dd>
 <div class="block">Gets a loot builder for sequence loot.</div>

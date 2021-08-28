@@ -140,7 +140,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;width,
  int&nbsp;height)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
-<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)</code></a> but with pre-set texture.</div>
+<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground</code></a> but with pre-set texture.</div>
 </div>
 <div class="col-first even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation)">renderGuiBackground</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
@@ -150,8 +150,8 @@ loadScripts(document, 'script');</script>
  int&nbsp;height,
  net.minecraft.resources.ResourceLocation&nbsp;texture)</code></div>
 <div class="col-last even-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table">
-<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)</code></a>
- but with pre-set texture values from <code>minecraft:textures/gui/container/generic_54.png</code>.</div>
+<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground</code></a>
+ with the default GUI texture.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table-tab1 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)">renderGuiBackground</a></span>&#8203;(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
@@ -404,7 +404,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;y,
  int&nbsp;width,
  int&nbsp;height)</span></div>
-<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)</code></a> but with pre-set texture.</div>
+<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground</code></a> but with pre-set texture.</div>
 </section>
 </li>
 <li>
@@ -416,8 +416,8 @@ loadScripts(document, 'script');</script>
  int&nbsp;width,
  int&nbsp;height,
  net.minecraft.resources.ResourceLocation&nbsp;texture)</span></div>
-<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)</code></a>
- but with pre-set texture values from <code>minecraft:textures/gui/container/generic_54.png</code>.</div>
+<div class="block">Same as <a href="#renderGuiBackground(com.mojang.blaze3d.vertex.PoseStack,int,int,int,int,net.minecraft.resources.ResourceLocation,int,int,int,int,int,int)"><code>renderGuiBackground</code></a>
+ with the default GUI texture.</div>
 </section>
 </li>
 <li>
@@ -446,10 +446,10 @@ loadScripts(document, 'script');</script>
 <dd><code>texture</code> - The texture to use for the GUI background</dd>
 <dd><code>textureX</code> - Texture size x</dd>
 <dd><code>textureY</code> - Texture size y</dd>
-<dd><code>minU</code> - The start x position for the background texture</dd>
-<dd><code>maxU</code> - The end x position for the background texture</dd>
-<dd><code>minV</code> - The start y position for the background texture</dd>
-<dd><code>maxV</code> - The end y position for the background texture</dd>
+<dd><code>minU</code> - The minimum u position for the filling part of the texture</dd>
+<dd><code>maxU</code> - The maximum u position for the filling part of the texture</dd>
+<dd><code>minV</code> - The minimum v position for the filling part of the texture</dd>
+<dd><code>maxV</code> - The maximum v position for the filling part of the texture</dd>
 </dl>
 </section>
 </li>
