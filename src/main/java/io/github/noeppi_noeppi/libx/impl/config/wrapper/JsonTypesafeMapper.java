@@ -3,7 +3,10 @@ package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,5 +62,11 @@ public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
     @Override
     public List<String> comment() {
         return this.wrapped.comment();
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<C> createEditor() {
+        return this.wrapped.createEditor();
     }
 }
