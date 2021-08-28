@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.config.gui;
 
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.UnsupportedEditor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -10,7 +11,7 @@ import java.util.function.Function;
 
 public interface ConfigEditor<T> {
     
-    AbstractWidget createWidget(int x, int y, int width, int height, Consumer<T> inputChanged);
+    AbstractWidget createWidget(Screen screen, int x, int y, int width, int height, Consumer<T> inputChanged);
     
     default boolean search(String query) {
         return false;
@@ -20,8 +21,8 @@ public interface ConfigEditor<T> {
         return new ConfigEditor<>() {
             
             @Override
-            public AbstractWidget createWidget(int x, int y, int width, int height, Consumer<U> inputChanged) {
-                return ConfigEditor.this.createWidget(x, y, width, height, value -> {
+            public AbstractWidget createWidget(Screen screen, int x, int y, int width, int height, Consumer<U> inputChanged) {
+                return ConfigEditor.this.createWidget(screen, x, y, width, height, value -> {
                     try {
                         inputChanged.accept(mapper.apply(value));
                     } catch (Exception e) {
@@ -37,9 +38,8 @@ public interface ConfigEditor<T> {
         };
     }
     
-    // Show a msg that a value can't be edited from the GUI and you need to edit the JSON directly
     static <T> ConfigEditor<T> unsupported() {
-        throw new RuntimeException("Not implemented");
+        return UnsupportedEditor.instance();
     }
     
     static <T> ConfigEditor<Optional<T>> option(ConfigEditor<T> editor) {

@@ -8,5 +8,7 @@
   "libx.command.entitydata.modified_player": "Modified data of %s entities. (Warning: You modified player nbt)",
   "libx.command.entitydata.player_modify_no_permission": "Only Operators with permission level 4 can modify player NBT.",
   "libx.command.reload": "Reloading all LibX common configs.",
-  "libx.tooltip.fluidbase.bucket": "%s Bucket"
+  "libx.tooltip.fluidbase.bucket": "%s Bucket",
+  "libx.config.editor.unsupported.title": "Unsupported",
+  "libx.config.editor.unsupported.description": "This value can't be edited through the GUI"
 }
