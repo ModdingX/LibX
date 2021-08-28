@@ -72,7 +72,7 @@ public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonV
      * @see ValueMapper#createEditor()
      */
     @OnlyIn(Dist.CLIENT)
-    default ConfigEditor<T> createEditor(ValueMapper<C, JsonElement> mapper) {
+    default ConfigEditor<T> createEditor(ValueMapper<C, JsonElement> mapper, ValidatorInfo<?> validator) {
         return ConfigEditor.unsupported();
     }
 }

@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.config;
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.ConfigValidator;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.impl.config.validators.ConfiguredValidator;
 import io.github.noeppi_noeppi.libx.util.ClassUtil;
@@ -65,6 +66,14 @@ public class ConfigKey {
             return result;
         } else {
             return value;
+        }
+    }
+    
+    public ValidatorInfo<?> validatorAccess() {
+        if (this.validator == null) {
+            return ValidatorInfo.empty();
+        } else {
+            return this.validator.access();
         }
     }
 

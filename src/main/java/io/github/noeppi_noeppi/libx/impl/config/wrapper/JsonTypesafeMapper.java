@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
@@ -66,7 +67,7 @@ public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public ConfigEditor<C> createEditor() {
-        return this.wrapped.createEditor();
+    public ConfigEditor<C> createEditor(ValidatorInfo<?> validator) {
+        return this.wrapped.createEditor(validator);
     }
 }

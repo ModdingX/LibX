@@ -27,7 +27,7 @@ public class ConfigDisplay {
         this.values = new HashMap<>();
         for (ConfigKey key : config.keys.values()) {
             //noinspection unchecked
-            this.values.put(key, new DisplayValue<>(key, (ConfigEditor<Object>) key.mapper.createEditor(), currentState.getValue(key), defaultState.getValue(key)));
+            this.values.put(key, new DisplayValue<>(key, (ConfigEditor<Object>) key.mapper.createEditor(key.validatorAccess()), currentState.getValue(key), defaultState.getValue(key)));
         }
         this.cachedState = new CachedValue<>(this::stateInternal);
     }

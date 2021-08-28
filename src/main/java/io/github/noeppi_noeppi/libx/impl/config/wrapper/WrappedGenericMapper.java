@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
@@ -64,7 +65,7 @@ public class WrappedGenericMapper<T, E extends JsonElement, C> implements ValueM
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public ConfigEditor<T> createEditor() {
-        return this.parent.createEditor(this.mapper);
+    public ConfigEditor<T> createEditor(ValidatorInfo<?> validator) {
+        return this.parent.createEditor(this.mapper, validator);
     }
 }
