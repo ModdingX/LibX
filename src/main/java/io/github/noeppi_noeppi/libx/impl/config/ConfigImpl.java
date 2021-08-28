@@ -10,6 +10,7 @@ import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
 import io.github.noeppi_noeppi.libx.impl.config.correct.CorrectionInstance;
+import io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -332,6 +333,28 @@ public class ConfigImpl {
                     }
                 }
             }
+        }
+    }
+    
+    public ConfigDisplay createDisplay() {
+        if (this.defaultState == null) {
+            throw new IllegalStateException("Can't create config display: Default state not yet set.");
+        }
+        if (this.savedState == null) {
+            throw new IllegalStateException("Can't create config display: No saved state.");
+        }
+        return new ConfigDisplay(this, this.savedState, this.defaultState);
+    }
+    
+    public void applyInGameChanges(ConfigState newState) {
+        this.saveState(newState);
+        if (!this.shadowed) {
+            newState.apply();
+        }
+        try {
+            newState.writeToFile(null, null);
+        } catch (IOException e) {
+            LibX.logger.warn("Failed to save config file from InGame values: " + e.getMessage(), e);
         }
     }
     
