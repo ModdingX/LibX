@@ -12,14 +12,29 @@ public interface ConfigEditor<T> {
     
     AbstractWidget createWidget(int x, int y, int width, int height, Consumer<T> inputChanged);
     
+    default boolean search(String query) {
+        return false;
+    }
+    
     default <U> ConfigEditor<U> map(Function<T, U> mapper) {
-        return (x, y, width, height, inputChanged) -> this.createWidget(x, y, width, height, value -> {
-            try {
-                inputChanged.accept(mapper.apply(value));
-            } catch (Exception e) {
-                e.printStackTrace();
+        return new ConfigEditor<>() {
+            
+            @Override
+            public AbstractWidget createWidget(int x, int y, int width, int height, Consumer<U> inputChanged) {
+                return ConfigEditor.this.createWidget(x, y, width, height, value -> {
+                    try {
+                        inputChanged.accept(mapper.apply(value));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
             }
-        });
+
+            @Override
+            public boolean search(String query) {
+                return ConfigEditor.this.search(query);
+            }
+        };
     }
     
     // Show a msg that a value can't be edited from the GUI and you need to edit the JSON directly
