@@ -144,15 +144,15 @@ public class RenderHelper {
     }
 
     /**
-     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)} but with pre-set texture.
+     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground} but with pre-set texture.
      */
     public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
         renderGuiBackground(poseStack, x, y, width, height, TEXTURE_CHEST_GUI);
     }
 
     /**
-     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int)}
-     * but with pre-set texture values from {@code minecraft:textures/gui/container/generic_54.png}.
+     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground}
+     * with the default GUI texture.
      */
     public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture) {
         renderGuiBackground(poseStack, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);
@@ -169,10 +169,10 @@ public class RenderHelper {
      * @param texture  The texture to use for the GUI background
      * @param textureX Texture size x
      * @param textureY Texture size y
-     * @param minU     The start x position for the background texture
-     * @param maxU     The end x position for the background texture
-     * @param minV     The start y position for the background texture
-     * @param maxV     The end y position for the background texture
+     * @param minU     The minimum u position for the filling part of the texture
+     * @param maxU     The maximum u position for the filling part of the texture
+     * @param minV     The minimum v position for the filling part of the texture
+     * @param maxV     The maximum v position for the filling part of the texture
      */
     public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
         RenderSystem.setShaderTexture(0, texture);
