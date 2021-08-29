@@ -9,7 +9,7 @@ public class Math2 {
      * Checks if a position is within a certain area defined by x, y, width and height.
      */
     public static boolean isInBounds(double x1, double y1, double w, double h, double x, double y) {
-        return isInRect(x1, y1, w, h, x, y);
+        return isInRect(x1, y1, x1 + w, y1 + h, x, y);
     }
     
     /**
