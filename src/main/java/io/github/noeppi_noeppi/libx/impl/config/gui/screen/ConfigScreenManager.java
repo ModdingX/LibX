@@ -39,6 +39,10 @@ public class ConfigScreenManager {
         }
     }
     
+    public void pushUnchecked(Screen screen) {
+        this.history.push(screen);
+    }
+    
     public void close() {
         if (!this.history.empty()) {
             this.history.pop();

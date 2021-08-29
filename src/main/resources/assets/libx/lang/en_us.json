@@ -11,5 +11,8 @@
   "libx.tooltip.fluidbase.bucket": "%s Bucket",
   "libx.config.editor.unsupported.title": "Unsupported",
   "libx.config.editor.unsupported.description": "This value can't be edited through the GUI",
-  "libx.config.gui.selection.title": "Select config to edit"
+  "libx.config.gui.selection.title": "Select config to edit",
+  "libx.config.gui.search.title": "Search",
+  "libx.config.gui.back": "Back",
+  "libx.config.gui.config.title": "Config: %s"
 }

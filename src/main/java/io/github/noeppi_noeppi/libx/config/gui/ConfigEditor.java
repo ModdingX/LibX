@@ -4,6 +4,7 @@ import io.github.noeppi_noeppi.libx.impl.config.gui.editor.UnsupportedEditor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -11,29 +12,21 @@ import java.util.function.Function;
 
 public interface ConfigEditor<T> {
     
-    AbstractWidget createWidget(Screen screen, int x, int y, int width, int height, Consumer<T> inputChanged);
-    
-    default boolean search(String query) {
-        return false;
-    }
+    AbstractWidget createWidget(Screen screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height, Consumer<T> inputChanged);
     
     default <U> ConfigEditor<U> map(Function<T, U> mapper) {
+        //noinspection Convert2Lambda
         return new ConfigEditor<>() {
             
             @Override
-            public AbstractWidget createWidget(Screen screen, int x, int y, int width, int height, Consumer<U> inputChanged) {
-                return ConfigEditor.this.createWidget(screen, x, y, width, height, value -> {
+            public AbstractWidget createWidget(Screen screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height, Consumer<U> inputChanged) {
+                return ConfigEditor.this.createWidget(screen, oldWidget, x, y, width, height, value -> {
                     try {
                         inputChanged.accept(mapper.apply(value));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
-            }
-
-            @Override
-            public boolean search(String query) {
-                return ConfigEditor.this.search(query);
             }
         };
     }

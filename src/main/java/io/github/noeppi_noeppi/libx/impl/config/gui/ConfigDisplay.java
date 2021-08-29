@@ -13,6 +13,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class ConfigDisplay {
         return new ConfigState(this.config, map.build());
     }
     
-    public AbstractWidget createWidget(ConfigKey key, Screen screen, int x, int y, int width, int height) {
+    public AbstractWidget createWidget(ConfigKey key, Screen screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height) {
         DisplayValue<?> value = this.values.get(key);
         if (value == null) {
             // Dummy
@@ -62,7 +63,7 @@ public class ConfigDisplay {
             };
         } else {
             //noinspection unchecked
-            return value.editor.createWidget(screen, x, y, width, height, ((DisplayValue<Object>) value)::setValue);
+            return value.editor.createWidget(screen, oldWidget, x, y, width, height, ((DisplayValue<Object>) value)::setValue);
         }
     }
     

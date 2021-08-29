@@ -34,14 +34,14 @@ public class ModConfigGuiAdapter {
     public Screen createScreen(Minecraft minecraft, Screen modListScreen) {
         List<ConfigImpl> configs = ConfigImpl.getAllConfigs().stream()
                 .filter(config -> this.modid.equals(config.id.getNamespace()))
-                .sorted(Comparator.comparing(config -> config.id.getPath()))
+                .sorted(Comparator.comparing(config -> "config".equals(config.id.getPath()) ? "" : config.id.getPath()))
                 .toList();
         if (configs.isEmpty()) {
             return modListScreen;
         } else if (configs.size() == 1) {
             return this.factory(minecraft, modListScreen).apply(configs.get(0));
         } else {
-            return new ConfigSelectScreen(this.factory(minecraft, modListScreen), configs);
+            return new ConfigSelectScreen(this.factory(minecraft, modListScreen), configs, modListScreen);
         }
     }
     
@@ -49,7 +49,11 @@ public class ModConfigGuiAdapter {
         return config -> {
             ConfigDisplay display = config.createDisplay();
             ConfigScreenManager manager = new ConfigScreenManager(minecraft, root, display);
-            throw new RuntimeException("Not implemented");
+            // Must also push to the manager
+            RootConfigScreen screen = new RootConfigScreen(manager, config);
+            // Push screen unchecked, should be opened right after the call
+            manager.pushUnchecked(screen);
+            return screen;
         };
     }
 }
