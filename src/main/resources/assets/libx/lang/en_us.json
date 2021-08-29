@@ -10,5 +10,6 @@
   "libx.command.reload": "Reloading all LibX common configs.",
   "libx.tooltip.fluidbase.bucket": "%s Bucket",
   "libx.config.editor.unsupported.title": "Unsupported",
-  "libx.config.editor.unsupported.description": "This value can't be edited through the GUI"
+  "libx.config.editor.unsupported.description": "This value can't be edited through the GUI",
+  "libx.config.gui.selection.title": "Select config to edit"
 }

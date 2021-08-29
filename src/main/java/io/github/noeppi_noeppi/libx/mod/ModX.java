@@ -1,7 +1,9 @@
 package io.github.noeppi_noeppi.libx.mod;
 
+import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -48,9 +50,15 @@ public abstract class ModX {
         this.modid = modid;
         this.logger = LogManager.getLogger(modid);
         this.tab = tab;
+        
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::runSetupTasks);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        
+        // Initialise config system for this mod container
+        // Required so the extension point can be added when required
+        ModMappers.get(modid).initAdapter(ModLoadingContext.get());
+        
         // As the generated code registers registration handlers this will produce a null pointer exception
         // as the list of handlers will be null. So for instances of ModXRegistration we don't call it here
         // but in the constructor of ModXRegistration
