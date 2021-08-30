@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
 import io.github.noeppi_noeppi.libx.command.EnumArgument2;
+import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
@@ -49,6 +50,8 @@ public class LibX extends ModX {
 
     public LibX() {
         super("libx", null);
+
+        ConfigManager.registerConfig(this.modid, TestConfig.class, false);
         
         logger.warn("\u001B[1m\u001B[31mRunning LibX experimental build. (" + ModList.get().getModFileById(this.modid).moduleName() + "/" + ModList.get().getModFileById(this.modid).versionString() + ")\u001B[0m");
         logger.warn("\u001B[1m\u001B[31mAnything in LibX may still change.\u001B[0m");

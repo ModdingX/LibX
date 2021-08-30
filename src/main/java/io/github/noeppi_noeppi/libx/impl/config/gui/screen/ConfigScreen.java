@@ -46,12 +46,15 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
         int titleWidth = Math.max(0, this.width - 15 - editorWidth - 25);
         ImmutableMap.Builder<T, BuiltEntry> entryBuilder = ImmutableMap.builder();
         String query = this.searchTerm();
+        boolean first = true;
         for (BuiltCategory category : this.keys.keySet().stream().sorted(Comparator.comparing(BuiltCategory::id)).toList()) {
             if (this.keys.get(category).stream().anyMatch(t -> this.searchPredicate.test(t, this, query))) {
                 if (!category.id().isEmpty()) {
-                    consumer.accept(new TextWidget(this, 4, y + 10, this.width - 6, 20, category.title(), category.description()));
-                    y += 33;
+                    if (!first) y+= 10;
+                    consumer.accept(new TextWidget(this, 4, y, this.width - 6, 20, category.title(), category.description()));
+                    y += 23;
                 }
+                first = false;
                 for (T t : this.keys.get(category)) {
                     if (this.searchPredicate.test(t, this, query)) {
                         BuiltEntry oldEntry = this.elements.getOrDefault(t, null);
