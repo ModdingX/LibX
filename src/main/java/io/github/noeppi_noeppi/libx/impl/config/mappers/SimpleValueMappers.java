@@ -5,11 +5,15 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import io.github.noeppi_noeppi.libx.config.gui.InputProperties;
+import io.github.noeppi_noeppi.libx.config.validator.*;
 import io.github.noeppi_noeppi.libx.impl.config.gui.editor.CheckEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.function.Function;
 
 public class SimpleValueMappers {
@@ -127,7 +131,15 @@ public class SimpleValueMappers {
         @Override
         @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Short> createEditor(ValidatorInfo<?> validator) {
-            return ConfigEditor.input(number(false, (short) 0, Short::parseShort), validator);
+            ShortRange range = validator.value(ShortRange.class);
+            if (range != null && range.min() != Short.MIN_VALUE && range.max() != Short.MAX_VALUE) {
+                return ConfigEditor.slider(
+                        value -> (value - range.min()) / ((double) (range.max() - range.min())),
+                        value -> (short) Math.round(Mth.lerp(value, range.min(), range.max()))
+                );
+            } else {
+                return ConfigEditor.input(number(false, (short) 0, Short::parseShort), validator);
+            }
         }
     };
 
@@ -166,7 +178,15 @@ public class SimpleValueMappers {
         @Override
         @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Integer> createEditor(ValidatorInfo<?> validator) {
-            return ConfigEditor.input(number(false, 0, Integer::parseInt), validator);
+            IntRange range = validator.value(IntRange.class);
+            if (range != null && range.min() != Integer.MIN_VALUE && range.max() != Integer.MAX_VALUE) {
+                return ConfigEditor.slider(
+                        value -> (value - range.min()) / ((double) (range.max() - range.min())),
+                        value -> (int) Math.round(Mth.lerp(value, range.min(), range.max()))
+                );
+            } else {
+                return ConfigEditor.input(number(false, 0, Integer::parseInt), validator);
+            }
         }
     };
 
@@ -205,7 +225,15 @@ public class SimpleValueMappers {
         @Override
         @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Long> createEditor(ValidatorInfo<?> validator) {
-            return ConfigEditor.input(number(false, (long) 0, Long::parseLong), validator);
+            LongRange range = validator.value(LongRange.class);
+            if (range != null && range.min() != Long.MIN_VALUE && range.max() != Long.MAX_VALUE) {
+                return ConfigEditor.slider(
+                        value -> (value - range.min()) / ((double) (range.max() - range.min())),
+                        value -> Math.round(Mth.lerp(value, range.min(), range.max()))
+                );
+            } else {
+                return ConfigEditor.input(number(false, (long) 0, Long::parseLong), validator);
+            }
         }
     };
 
@@ -244,7 +272,15 @@ public class SimpleValueMappers {
         @Override
         @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Float> createEditor(ValidatorInfo<?> validator) {
-            return ConfigEditor.input(number(true, 0f, Float::parseFloat), validator);
+            FloatRange range = validator.value(FloatRange.class);
+            if (range != null && Float.isFinite(range.min()) && Float.isFinite(range.max())) {
+                return ConfigEditor.slider(
+                        value -> (value - range.min()) / ((double) (range.max() - range.min())),
+                        value -> BigDecimal.valueOf(Mth.lerp(value, range.min(), range.max())).setScale(3, RoundingMode.HALF_UP).floatValue()
+                );
+            } else {
+                return ConfigEditor.input(number(true, 0f, Float::parseFloat), validator);
+            }
         }
     };
 
@@ -283,7 +319,15 @@ public class SimpleValueMappers {
         @Override
         @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Double> createEditor(ValidatorInfo<?> validator) {
-            return ConfigEditor.input(number(true, 0d, Double::parseDouble), validator);
+            DoubleRange range = validator.value(DoubleRange.class);
+            if (range != null && Double.isFinite(range.min()) && Double.isFinite(range.max())) {
+                return ConfigEditor.slider(
+                        value -> (value - range.min()) / (range.max() - range.min()),
+                        value -> BigDecimal.valueOf(Mth.lerp(value, range.min(), range.max())).setScale(3, RoundingMode.HALF_UP).doubleValue()
+                );
+            } else {
+                return ConfigEditor.input(number(true, 0d, Double::parseDouble), validator);
+            }
         }
     };
 

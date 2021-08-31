@@ -141,6 +141,19 @@ public abstract class ConfigBaseScreen extends Screen {
                 }
                 return false;
             }
+
+            @Override
+            public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+                if (!super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
+                    if (this.getFocused() != null && this.isDragging() && button == 0) {
+                        return this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY);
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return true;
+                }
+            }
         };
         this.addRenderableWidget(this.panel);
     }
@@ -193,11 +206,6 @@ public abstract class ConfigBaseScreen extends Screen {
         @Override
         public void updateNarration(@Nonnull NarrationElementOutput output) {
             //
-        }
-
-        @Override
-        public boolean isActive() {
-            return NarratableEntry.super.isActive();
         }
     }
 

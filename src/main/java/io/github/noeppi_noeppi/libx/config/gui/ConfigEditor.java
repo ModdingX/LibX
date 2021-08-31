@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.config.gui;
 import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.impl.config.gui.editor.InputEditor;
 import io.github.noeppi_noeppi.libx.impl.config.gui.editor.OptionEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.SliderEditor;
 import io.github.noeppi_noeppi.libx.impl.config.gui.editor.UnsupportedEditor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -47,8 +48,9 @@ public interface ConfigEditor<T> {
         return new InputEditor<>(input, validator);
     }
     
-    static ConfigEditor<Double> slider() {
-        throw new RuntimeException("Not implemented");
+    // doubles between 0 and 1
+    static <T> ConfigEditor<T> slider(Function<T, Double> extractor, Function<Double, T> factory) {
+        return new SliderEditor<>(extractor, factory);
     }
     
     static <T> ConfigEditor<T> screen(Component title, List<ConfigEditorEntry> entries, Function<T, List<?>> valueFill) {
