@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.impl.config.gui.editor;
 
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.config.gui.EditorOps;
 import io.github.noeppi_noeppi.libx.config.gui.WidgetProperties;
 import io.github.noeppi_noeppi.libx.impl.config.gui.EditorHelper;
 import io.github.noeppi_noeppi.libx.screen.Panel;
@@ -59,12 +60,14 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
                 @Override
                 public void onPress() {
                     super.onPress();
+                    EditorOps.wrap(OptionWidget.this.widget).enabled(this.selected());
                     OptionWidget.this.update(null);
                 }
             };
 
             WidgetProperties<T> modified = new WidgetProperties<>(22, 0, properties.width(), properties.height(), this::update);
             this.widget = EditorHelper.create(screen, editor, this.value, old, modified);
+            EditorOps.wrap(OptionWidget.this.widget).enabled(selected);
 
             this.addRenderableWidget(this.box);
             this.addRenderableWidget(this.widget);

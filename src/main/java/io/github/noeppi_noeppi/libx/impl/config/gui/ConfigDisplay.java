@@ -7,7 +7,6 @@ import io.github.noeppi_noeppi.libx.config.gui.WidgetProperties;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigKey;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigState;
-import io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreenManager;
 import io.github.noeppi_noeppi.libx.util.CachedValue;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -97,7 +96,8 @@ public class ConfigDisplay {
                 LibX.logger.warn("Failed to store config value from user input: Editor produced invalid type. Expected: " + this.key.mapper.type() + ", Got: " + value.getClass() + ", ignoring.");
             } else {
                 if (this.value != value) {
-                    this.value = value;
+                    //noinspection unchecked
+                    this.value = (T) this.key.validate(value, "Invalid value in editor config", null);
                     ConfigDisplay.this.cachedState.invalidate();
                 }
             }

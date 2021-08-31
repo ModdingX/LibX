@@ -20,6 +20,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.ScrollPanel;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
@@ -47,9 +48,8 @@ public abstract class ConfigBaseScreen extends Screen {
     // While rendering the scrollable view, tooltips must be delayed
     // Because scissors is enabled, and they need to be rendered with
     // absolute coordinates as they should not be cut by the screen border.
-    private final List<Runnable> capturedTooltips = new LinkedList<>();
+    private final List<Pair<PoseStack.Pose, Runnable>> capturedTooltips = new LinkedList<>();
     private boolean isCapturingTooltips = false;
-    private int captureTooltipOffset = 0;
 
     protected ConfigBaseScreen(Component title, @Nullable ConfigScreenManager manager, boolean hasSearchBar) {
         super(title);
@@ -108,20 +108,24 @@ public abstract class ConfigBaseScreen extends Screen {
                 ConfigBaseScreen.this.isCapturingTooltips = true;
                 super.render(poseStack, mouseX, mouseY, partialTicks);
                 ConfigBaseScreen.this.isCapturingTooltips = false;
-                ConfigBaseScreen.this.capturedTooltips.forEach(Runnable::run);
+                ConfigBaseScreen.this.capturedTooltips.forEach(pair -> {
+                    poseStack.pushPose();
+                    poseStack.setIdentity();
+                    poseStack.mulPoseMatrix(pair.getLeft().pose());
+                    pair.getRight().run();
+                    poseStack.popPose();
+                });
                 ConfigBaseScreen.this.capturedTooltips.clear();
             }
 
             @Override
             protected void drawPanel(PoseStack poseStack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
-                ConfigBaseScreen.this.captureTooltipOffset = relativeY;
                 poseStack.pushPose();
                 poseStack.translate(0, relativeY, 0);
                 for (AbstractWidget widget : widgets) {
                     widget.render(poseStack, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaFrameTime());
                 }
                 poseStack.popPose();
-                ConfigBaseScreen.this.captureTooltipOffset = 0;
             }
 
             @Override
@@ -197,12 +201,15 @@ public abstract class ConfigBaseScreen extends Screen {
         }
     }
 
+    private void captureTooltip(PoseStack.Pose pose, Runnable action) {
+        this.capturedTooltips.add(Pair.of(pose, action));
+    }
+    
     @Override
     protected void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull ItemStack stack, int x, int y) {
         if (this.isCapturingTooltips) {
             // Not inside lambda as the value may change
-            int newY = y + this.captureTooltipOffset;
-            this.capturedTooltips.add(() -> this.renderTooltip(poseStack, stack, x, newY));
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, stack, x, y));
         } else {
             super.renderTooltip(poseStack, stack, x, y);
         }
@@ -211,8 +218,7 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> tooltip, @Nonnull Optional<TooltipComponent> special, int x, int y) {
         if (this.isCapturingTooltips) {
-            int newY = y + this.captureTooltipOffset;
-            this.capturedTooltips.add(() -> this.renderTooltip(poseStack, tooltip, special, x, newY));
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, tooltip, special, x, y));
         } else {
             super.renderTooltip(poseStack, tooltip, special, x, y);
         }
@@ -221,8 +227,7 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull Component tooltip, int x, int y) {
         if (this.isCapturingTooltips) {
-            int newY = y + this.captureTooltipOffset;
-            this.capturedTooltips.add(() -> this.renderTooltip(poseStack, tooltip, x, newY));
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, tooltip, x, y));
         } else {
             super.renderTooltip(poseStack, tooltip, x, y);
         }
@@ -231,8 +236,7 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> tooltip, int x, int y) {
         if (this.isCapturingTooltips) {
-            int newY = y + this.captureTooltipOffset;
-            this.capturedTooltips.add(() -> this.renderComponentTooltip(poseStack, tooltip, x, newY));
+            this.captureTooltip(poseStack.last(), () -> this.renderComponentTooltip(poseStack, tooltip, x, y));
         } else {
             super.renderComponentTooltip(poseStack, tooltip, x, y);
         }
@@ -241,8 +245,7 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     public void renderComponentToolTip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> tooltip, int x, int y, @Nonnull Font font) {
         if (this.isCapturingTooltips) {
-            int newY = y + this.captureTooltipOffset;
-            this.capturedTooltips.add(() -> this.renderComponentToolTip(poseStack, tooltip, x, newY, font));
+            this.captureTooltip(poseStack.last(), () -> this.renderComponentToolTip(poseStack, tooltip, x, y, font));
         } else {
             super.renderComponentToolTip(poseStack, tooltip, x, y, font);
         }
@@ -251,8 +254,7 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> tooltip, int x, int y) {
         if (this.isCapturingTooltips) {
-            int newY = y + this.captureTooltipOffset;
-            this.capturedTooltips.add(() -> this.renderTooltip(poseStack, tooltip, x, newY));
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, tooltip, x, y));
         } else {
             super.renderTooltip(poseStack, tooltip, x, y);
         }
@@ -261,8 +263,7 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     public void renderToolTip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> tooltip, int x, int y, @Nonnull Font font) {
         if (this.isCapturingTooltips) {
-            int newY = y + this.captureTooltipOffset;
-            this.capturedTooltips.add(() -> this.renderToolTip(poseStack, tooltip, x, newY, font));
+            this.captureTooltip(poseStack.last(), () -> this.renderToolTip(poseStack, tooltip, x, y, font));
         } else {
             super.renderToolTip(poseStack, tooltip, x, y, font);
         }

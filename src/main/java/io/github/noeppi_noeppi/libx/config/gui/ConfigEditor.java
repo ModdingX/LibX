@@ -27,19 +27,23 @@ public interface ConfigEditor<T> {
         return new OptionEditor<>(editor);
     }
     
-    static <T> ConfigEditor<T> toggle(List<T> elems, Function<T, String> name, Consumer<T> inputChanged) {
+    static <T> ConfigEditor<T> toggle(List<T> elems, Function<T, String> name) {
         throw new RuntimeException("Not implemented");
     }
     
-    static ConfigEditor<String> input(Consumer<String> inputChanged) {
+    static ConfigEditor<String> input() {
+        return input(InputProperties.PLAIN);
+    }
+    
+    static <T> ConfigEditor<T> input(InputProperties<T> input) {
         throw new RuntimeException("Not implemented");
     }
     
-    static ConfigEditor<Double> slider(Consumer<Double> inputChanged) {
+    static ConfigEditor<Double> slider() {
         throw new RuntimeException("Not implemented");
     }
     
-    static <T> ConfigEditor<T> screen(Component title, List<ConfigEditorEntry> entries, Function<T, List<?>> valueFill, Consumer<List<?>> inputChanged) {
+    static <T> ConfigEditor<T> screen(Component title, List<ConfigEditorEntry> entries, Function<T, List<?>> valueFill) {
         throw new RuntimeException("Not implemented");
     }
     

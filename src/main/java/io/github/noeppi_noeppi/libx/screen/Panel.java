@@ -30,7 +30,6 @@ public abstract class Panel extends AbstractWidget {
     public Panel(Screen screen, int x, int y, int width, int height) {
         super(x, y, width, height, new TextComponent(""));
         this.screen = screen;
-        
     }
 
     /**

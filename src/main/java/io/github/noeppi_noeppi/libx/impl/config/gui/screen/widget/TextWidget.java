@@ -32,6 +32,11 @@ public class TextWidget extends AbstractWidget {
     }
 
     @Override
+    protected boolean clicked(double mouseX, double mouseY) {
+        return false;
+    }
+
+    @Override
     public void updateNarration(@Nonnull NarrationElementOutput output) {
         //
     }
