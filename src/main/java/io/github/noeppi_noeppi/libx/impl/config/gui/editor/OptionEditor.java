@@ -38,7 +38,7 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
             //noinspection unchecked
             return new OptionWidget<>(screen, this.editor, (OptionWidget<T>) old, properties);
         } else {
-            return new OptionWidget<>(screen, this.editor, this.defaultValue(), properties);
+            return this.createWidget(screen, this.defaultValue(), properties);
         }
     }
 

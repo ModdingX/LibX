@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.config.gui;
 
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.network.chat.Component;
 
@@ -19,6 +20,13 @@ public interface EditorOps {
     static EditorOps wrap(Widget widget) {
         if (widget instanceof EditorOps ops) {
             return ops;
+        } else if (widget instanceof EditBox base) {
+            return new EditorOps() {
+                @Override
+                public void enabled(boolean enabled) {
+                    base.setEditable(enabled);
+                }
+            };
         } else if (widget instanceof AbstractWidget base) {
             return new EditorOps() {
                 @Override

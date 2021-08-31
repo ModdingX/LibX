@@ -27,6 +27,7 @@ public interface InputProperties<T> {
     
     T defaultValue();
     
+    // May throw an exception but must success when isValid returns true.
     T valueOf(String str);
 
     default String toString(T t) {

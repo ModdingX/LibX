@@ -55,6 +55,12 @@ public class ConfiguredValidator<T, A extends Annotation> {
             public A value() {
                 return ConfiguredValidator.this.annotation;
             }
+
+            @Override
+            public boolean isValid(Object value) {
+                //noinspection unchecked
+                return ConfiguredValidator.this.validator.type().isAssignableFrom(value.getClass()) && ConfiguredValidator.this.validator.validate((T) value, ConfiguredValidator.this.annotation).isEmpty();
+            }
         };
     }
 }

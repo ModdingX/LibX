@@ -36,8 +36,14 @@ public interface ValidatorInfo<T> {
         }
     }
 
+    /**
+     * Gets whether this object matches the validators type and is not corrected by
+     * the validator.
+     */
+    boolean isValid(Object value);
+
     static <T> ValidatorInfo<T> empty() {
-        return new ValidatorInfo<T>() {
+        return new ValidatorInfo<>() {
 
             @Nullable
             @Override
@@ -49,6 +55,11 @@ public interface ValidatorInfo<T> {
             @Override
             public T value() {
                 return null;
+            }
+
+            @Override
+            public boolean isValid(Object value) {
+                return true;
             }
         };
     }
