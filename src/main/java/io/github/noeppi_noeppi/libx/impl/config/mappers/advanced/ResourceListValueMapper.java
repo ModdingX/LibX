@@ -1,9 +1,13 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonObject;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -50,5 +54,11 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
     @Override
     public List<String> comment() {
         return this.COMMENT;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<ResourceList> createEditor(ValidatorInfo<?> validator) {
+        return ConfigEditor.unsupported(ResourceList.WHITELIST);
     }
 }

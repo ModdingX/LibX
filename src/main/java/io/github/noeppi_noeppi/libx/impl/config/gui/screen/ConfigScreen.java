@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -44,7 +45,11 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
         int y = 5;
         int editorWidth = Math.min(200, (int) Math.round(this.width * (2 / 5d)));
         int titleWidth = Math.max(0, this.width - 15 - editorWidth - 25);
-        ImmutableMap.Builder<T, BuiltEntry> entryBuilder = ImmutableMap.builder();
+        
+        // Create element map based on old elements, so elements currently not showing
+        // due to search will keep their state
+        Map<T, BuiltEntry> entryBuilder = new HashMap<>(this.elements);
+        
         String query = this.searchTerm();
         boolean first = true;
         for (BuiltCategory category : this.keys.keySet().stream().sorted(Comparator.comparing(BuiltCategory::id)).toList()) {
@@ -67,7 +72,7 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
                 }
             }
         }
-        this.elements = entryBuilder.build();
+        this.elements = ImmutableMap.copyOf(entryBuilder);
     }
     
     @Override

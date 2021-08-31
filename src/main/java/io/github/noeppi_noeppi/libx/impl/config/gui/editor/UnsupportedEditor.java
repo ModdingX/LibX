@@ -3,33 +3,44 @@ package io.github.noeppi_noeppi.libx.impl.config.gui.editor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import io.github.noeppi_noeppi.libx.config.gui.EditorOps;
+import io.github.noeppi_noeppi.libx.config.gui.WidgetProperties;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
-public class UnsupportedEditor implements ConfigEditor<Void> {
-
-    private static final UnsupportedEditor INSTANCE = new UnsupportedEditor();
+public class UnsupportedEditor<T> implements ConfigEditor<T> {
     
-    public static <T> ConfigEditor<T> instance() {
-        //noinspection unchecked
-        return (ConfigEditor<T>) INSTANCE;
+    private final T defaultValue;
+
+    public UnsupportedEditor(T defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public T defaultValue() {
+        return this.defaultValue;
+    }
+
+    @Override
+    public AbstractWidget createWidget(Screen screen, T initialValue, WidgetProperties<T> properties) {
+        // initialValue is null for the unsupported editor
+        return this.create(screen, properties);
+    }
+
+    @Override
+    public AbstractWidget updateWidget(Screen screen, AbstractWidget old, WidgetProperties<T> properties) {
+        return this.create(screen, properties);
     }
     
-    @Override
-    public AbstractWidget createWidget(Screen screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height, Consumer<Void> inputChanged) {
-        Button button = new UnsupportedButton(x, y, width, height, new TranslatableComponent("libx.config.editor.unsupported.title").withStyle(ChatFormatting.RED), b -> {}) {
-            
+    private AbstractWidget create(Screen screen, WidgetProperties<T> properties) {
+        Button button = new UnsupportedButton(properties.x(), properties.y(), properties.width(), properties.height(), new TranslatableComponent("libx.config.editor.unsupported.title").withStyle(ChatFormatting.RED), b -> {}) {
             @Override
             public void renderToolTip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
                 screen.renderTooltip(poseStack, List.of(new TranslatableComponent("libx.config.editor.unsupported.description")), Optional.empty(), mouseX, mouseY);

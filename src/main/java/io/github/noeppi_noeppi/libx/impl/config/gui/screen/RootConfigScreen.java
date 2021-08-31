@@ -50,12 +50,12 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
         return builder.build();
     }
     
-    private static BuiltEntry createEntry(ConfigKey key, ConfigScreen<ConfigKey> screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height) {
+    private static BuiltEntry createEntry(ConfigKey key, ConfigScreen<ConfigKey> screen, @Nullable AbstractWidget old, int x, int y, int width, int height) {
         //noinspection UnstableApiUsage
         return new BuiltEntry(
                 new TextComponent(key.path.get(key.path.size() - 1)),
                 key.comment.stream().map(TextComponent::new).collect(ImmutableList.toImmutableList()),
-                screen.display.createWidget(key, screen, oldWidget, x, y, width, height)
+                screen.display.createWidget(key, screen, old, x, y, width, height)
         );
     }
     

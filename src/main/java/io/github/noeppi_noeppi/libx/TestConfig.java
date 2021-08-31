@@ -2,12 +2,15 @@ package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.config.Config;
 
+import java.util.Optional;
+
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class TestConfig {
     
     @Config("1") public static int test1 = 0;
     @Config("2") public static int test2 = 0;
-    @Config("3") public static int test3 = 0;
-    @Config("4") public static int test4 = 0;
+    @Config("3") public static Optional<Integer> test3 = Optional.of(0);
+    @Config("4") public static Optional<Integer> test4 = Optional.empty();
     @Config("5") public static int test5 = 0;
     @Config("6") public static int test6 = 0;
     @Config("7") public static int test7 = 0;

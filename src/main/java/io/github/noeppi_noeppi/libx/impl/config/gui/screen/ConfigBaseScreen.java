@@ -143,6 +143,11 @@ public abstract class ConfigBaseScreen extends Screen {
 
     protected abstract void buildGui(Consumer<AbstractWidget> consumer);
 
+    @Nullable
+    public ConfigScreenManager getCurrentManager() {
+        return this.manager;
+    }
+
     @Override
     public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         this.renderDirtBackground(0);

@@ -3,9 +3,11 @@ package io.github.noeppi_noeppi.libx.impl.config.gui;
 import com.google.common.collect.ImmutableMap;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.config.gui.WidgetProperties;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigKey;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigState;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreenManager;
 import io.github.noeppi_noeppi.libx.util.CachedValue;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -51,7 +53,7 @@ public class ConfigDisplay {
         return new ConfigState(this.config, map.build());
     }
     
-    public AbstractWidget createWidget(ConfigKey key, Screen screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height) {
+    public AbstractWidget createWidget(ConfigKey key, Screen screen, @Nullable AbstractWidget old, int x, int y, int width, int height) {
         DisplayValue<?> value = this.values.get(key);
         if (value == null) {
             // Dummy
@@ -63,7 +65,7 @@ public class ConfigDisplay {
             };
         } else {
             //noinspection unchecked
-            return value.editor.createWidget(screen, oldWidget, x, y, width, height, ((DisplayValue<Object>) value)::setValue);
+            return EditorHelper.create(screen, ((ConfigEditor<Object>) value.editor), value.getValue(), old, new WidgetProperties<>(x, y, width, height, ((DisplayValue<Object>) value)::setValue));
         }
     }
     

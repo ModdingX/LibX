@@ -1,9 +1,13 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonElement;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class IngredientValueMapper implements ValueMapper<Ingredient, JsonElement> {
 
@@ -41,5 +45,11 @@ public class IngredientValueMapper implements ValueMapper<Ingredient, JsonElemen
     @Override
     public void toNetwork(Ingredient value, FriendlyByteBuf buffer) {
         value.toNetwork(buffer);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<Ingredient> createEditor(ValidatorInfo<?> validator) {
+        return ConfigEditor.unsupported(Ingredient.EMPTY);
     }
 }

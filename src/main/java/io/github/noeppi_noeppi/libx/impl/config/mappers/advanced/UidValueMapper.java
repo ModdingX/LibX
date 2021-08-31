@@ -1,8 +1,12 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonPrimitive;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
@@ -45,5 +49,11 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     public void toNetwork(UUID value, FriendlyByteBuf buffer) {
         buffer.writeLong(value.getMostSignificantBits());
         buffer.writeLong(value.getLeastSignificantBits());
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<UUID> createEditor(ValidatorInfo<?> validator) {
+        return ConfigEditor.unsupported(new UUID(0, 0));
     }
 }
