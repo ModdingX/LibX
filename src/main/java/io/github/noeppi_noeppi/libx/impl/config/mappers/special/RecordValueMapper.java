@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.RecordEditor;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
@@ -164,15 +165,6 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<T> createEditor(ValidatorInfo<?> validator) {
-        RecordComponent[] parts = this.clazz.getRecordComponents();
-        Object[] values = new Object[parts.length];
-        for (int i = 0; i < parts.length; i++) {
-            values[i] = this.mappers.get(i).createEditor(ValidatorInfo.empty()).defaultValue();
-        }
-        try {
-            return ConfigEditor.unsupported(this.ctor.newInstance(values));
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("Failed to create record for config editor.", e);
-        }
+        return new RecordEditor<>(this.clazz, this.mappers, this.ctor);
     }
 }

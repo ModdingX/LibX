@@ -19,6 +19,11 @@ public class TestConfig {
     @DoubleRange(min = -1, max = 3)
     @Config("7") public static double test7 = 2;
     @Config("8") public static double test8 = -44e12;
-    @IntRange(max = 0)
-    @Config("9") public static int test9 = 0;
+    @Config("9") public static TestRecord test9 = new TestRecord("Hello", 44, Optional.empty());
+    
+    public static record TestRecord(
+            String something,
+            int something_else,
+            Optional<String> option
+    ) {}
 }

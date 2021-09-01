@@ -14,5 +14,6 @@
   "libx.config.gui.selection.title": "Select config to edit",
   "libx.config.gui.search.title": "Search",
   "libx.config.gui.back": "Back",
-  "libx.config.gui.config.title": "Config: %s"
+  "libx.config.gui.config.title": "Config: %s",
+  "libx.config.gui.edit": "Edit"
 }

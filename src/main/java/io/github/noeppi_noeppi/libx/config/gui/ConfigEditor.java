@@ -53,13 +53,9 @@ public interface ConfigEditor<T> {
         return new SliderEditor<>(extractor, factory);
     }
     
-    static <T> ConfigEditor<T> screen(Component title, List<ConfigEditorEntry> entries, Function<T, List<?>> valueFill) {
-        throw new RuntimeException("Not implemented");
-    }
-    
     // Needed so we can still render own title, back button and such things and capture key events
     // The screen from the factory will be rendered into our own screen. Let's hope this works
-    static <T> ConfigEditor<T> custom(Component title, ConfigScreenContent<T> content) {
+    static <T> ConfigEditor<T> custom(ConfigScreenContent<T> content) {
         throw new RuntimeException("Not implemented");
     }
 }
