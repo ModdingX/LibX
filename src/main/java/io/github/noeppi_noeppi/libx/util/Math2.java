@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.libx.util;
 
 /**
- * Some utilities for working with screens.
+ * Some math utilities.
  */
 public class Math2 {
 
@@ -13,7 +13,7 @@ public class Math2 {
     }
     
     /**
-     * Checks if a position is within a certain area defined by minX, minY, width and height.
+     * Checks if a position is within a certain area defined by minX, minY, maxX and maxY.
      */
     public static boolean isInRect(double x1, double y1, double x2, double y2, double x, double y) {
         double minX = Math.min(x1, x2);

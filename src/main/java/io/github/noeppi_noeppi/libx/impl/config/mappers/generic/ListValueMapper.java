@@ -8,6 +8,7 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ListContent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -102,6 +103,6 @@ public class ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<List<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
-        return ConfigEditor.unsupported(List.of());
+        return ConfigEditor.custom(List.of(), list -> new ListContent<>(list, mapper.createEditor(ValidatorInfo.empty())));
     }
 }

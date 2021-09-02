@@ -1,7 +1,9 @@
-package io.github.noeppi_noeppi.libx.impl.config.gui.screen;
+package io.github.noeppi_noeppi.libx.impl.config.gui;
 
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
-import io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreenManager;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigSelectScreen;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.RootConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.fml.ModContainer;

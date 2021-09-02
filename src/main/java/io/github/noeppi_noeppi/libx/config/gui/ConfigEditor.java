@@ -1,13 +1,9 @@
 package io.github.noeppi_noeppi.libx.config.gui;
 
 import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
-import io.github.noeppi_noeppi.libx.impl.config.gui.editor.InputEditor;
-import io.github.noeppi_noeppi.libx.impl.config.gui.editor.OptionEditor;
-import io.github.noeppi_noeppi.libx.impl.config.gui.editor.SliderEditor;
-import io.github.noeppi_noeppi.libx.impl.config.gui.editor.UnsupportedEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.*;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +51,7 @@ public interface ConfigEditor<T> {
     
     // Needed so we can still render own title, back button and such things and capture key events
     // The screen from the factory will be rendered into our own screen. Let's hope this works
-    static <T> ConfigEditor<T> custom(ConfigScreenContent<T> content) {
-        throw new RuntimeException("Not implemented");
+    static <T> ConfigEditor<T> custom(T defaultValue, Function<T, ConfigScreenContent<T>> contentFactory) {
+        return new CustomEditor<>(defaultValue, contentFactory);
     }
 }

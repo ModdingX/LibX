@@ -51,6 +51,7 @@ public class InputEditor<T> implements ConfigEditor<T> {
 
         private final InputProperties<T> input;
         private final ValidatorInfo<?> validator;
+        private String last = null;
 
         private InputWidget(InputProperties<T> input, ValidatorInfo<?> validator, WidgetProperties<T> properties, String initialValue) {
             super(Minecraft.getInstance().font, properties.x(), properties.y(), properties.width(), properties.height(), new TextComponent(""));
@@ -66,9 +67,11 @@ public class InputEditor<T> implements ConfigEditor<T> {
                 return true;
             });
             this.setResponder(str -> {
-                if (this.input.isValid(str)) {
-                    // No need to check validator here, will be validated when saving
-                    properties.inputChanged().accept(this.input.valueOf(str));
+                if (this.last == null || !this.last.equals(str)) {
+                    if (this.input.isValid(str)) {
+                        // No need to check validator here, will be validated when saving
+                        properties.inputChanged().accept(this.input.valueOf(str));
+                    }
                 }
             });
         }

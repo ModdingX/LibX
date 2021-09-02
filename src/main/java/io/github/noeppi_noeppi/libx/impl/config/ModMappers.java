@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.*;
-import io.github.noeppi_noeppi.libx.impl.config.gui.screen.ModConfigGuiAdapter;
+import io.github.noeppi_noeppi.libx.impl.config.gui.ModConfigGuiAdapter;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.SimpleValueMappers;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.*;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.generic.ListValueMapper;

@@ -4,6 +4,7 @@ import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.validator.DoubleRange;
 import io.github.noeppi_noeppi.libx.config.validator.IntRange;
 
+import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -18,7 +19,7 @@ public class TestConfig {
     @Config("6") public static int test6 = 42;
     @DoubleRange(min = -1, max = 3)
     @Config("7") public static double test7 = 2;
-    @Config("8") public static double test8 = -44e12;
+    @Config("8") public static List<Integer> test8 = List.of(1, 2, 3, 4, 5);
     @Config("9") public static TestRecord test9 = new TestRecord("Hello", 44, Optional.empty());
     
     public static record TestRecord(

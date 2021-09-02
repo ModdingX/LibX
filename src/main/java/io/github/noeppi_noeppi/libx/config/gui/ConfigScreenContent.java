@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 // Must keep state between builds
 public interface ConfigScreenContent<T> {
     
+    Component title();
     boolean searchable();
     
     void init(Consumer<T> inputChanged);
@@ -16,7 +17,9 @@ public interface ConfigScreenContent<T> {
     
     interface ScreenManager {
         
-        <T> void open(Component title, ConfigScreenContent<T> content, Consumer<T> inputChanged);
+        void rebuild();
+        
+        <T> void open(ConfigScreenContent<T> content, Consumer<T> inputChanged);
         void close();
     }
 }

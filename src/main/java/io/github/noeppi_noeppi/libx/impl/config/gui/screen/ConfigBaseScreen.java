@@ -130,16 +130,19 @@ public abstract class ConfigBaseScreen extends Screen {
 
             @Override
             protected boolean clickPanel(double mouseX, double mouseY, int button) {
+                // Extra var required as we need to cal all listeners
+                // so widgets can for example handle their loss of focus.
+                boolean success = false;
                 for (GuiEventListener widget : widgets) {
                     if (widget.mouseClicked(mouseX, mouseY, button)) {
                         this.setFocused(widget);
                         if (button == 0) {
                             this.setDragging(true);
                         }
-                        return true;
+                        success = true;
                     }
                 }
-                return false;
+                return success;
             }
 
             @Override
