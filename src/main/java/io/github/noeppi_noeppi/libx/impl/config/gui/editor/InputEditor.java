@@ -104,10 +104,10 @@ public class InputEditor<T> implements ConfigEditor<T> {
                 poseStack.translate(0, 0, 10);
                 RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
                 RenderHelper.rgb(0xFF2222);
-                GuiComponent.blit(poseStack, this.x - 1, this.y - 1, 0, 0, this.width + 1, 1, 256, 256);
-                GuiComponent.blit(poseStack, this.x - 1, this.y + this.height, 0, 0, this.width + 1, 1, 256, 256);
-                GuiComponent.blit(poseStack, this.x - 1, this.y - 1, 0, 0, 1, this.height + 1, 256, 256);
-                GuiComponent.blit(poseStack, this.x + this.width, this.y - 1, 0, 0, 1, this.height + 1, 256, 256);
+                GuiComponent.blit(poseStack, this.x - 1, this.y - 1, 0, 0, this.width + 2, 1, 256, 256);
+                GuiComponent.blit(poseStack, this.x - 1, this.y + this.height, 0, 0, this.width + 2, 1, 256, 256);
+                GuiComponent.blit(poseStack, this.x - 1, this.y - 1, 0, 0, 1, this.height + 2, 256, 256);
+                GuiComponent.blit(poseStack, this.x + this.width, this.y - 1, 0, 0, 1, this.height + 2, 256, 256);
                 RenderHelper.resetColor();
                 poseStack.popPose();
             }
