@@ -2,8 +2,11 @@ package io.github.noeppi_noeppi.libx.config.gui;
 
 import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.impl.config.gui.editor.*;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.SelectContent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +27,16 @@ public interface ConfigEditor<T> {
         return new OptionEditor<>(editor);
     }
     
-    static <T> ConfigEditor<T> toggle(List<T> elems, Function<T, String> name) {
-        throw new RuntimeException("Not implemented");
+    static <T> ConfigEditor<T> toggle(List<T> elems) {
+        return toggle(elems, e -> new TextComponent(e.toString()));
+    }
+
+    static <T> ConfigEditor<T> toggle(List<T> elems, Function<T, Component> name) {
+        if (elems.size() <= 5) {
+            return new SimpleSelectEditor<>(elems, name);
+        } else {
+            return custom(elems.get(0), current -> new SelectContent<>(elems, name, current));
+        }
     }
     
     static ConfigEditor<String> input() {

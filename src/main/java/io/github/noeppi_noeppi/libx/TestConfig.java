@@ -3,6 +3,8 @@ package io.github.noeppi_noeppi.libx;
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.validator.DoubleRange;
 import io.github.noeppi_noeppi.libx.config.validator.IntRange;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.InteractionResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +12,8 @@ import java.util.Optional;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class TestConfig {
     
-    @Config("1") public static boolean test1 = true;
-    @Config("2") public static boolean test2 = false;
+    @Config("1") public static ChatFormatting test1 = ChatFormatting.RESET;
+    @Config("2") public static InteractionResult test2 = InteractionResult.PASS;
     @Config("3") public static Optional<String> test3 = Optional.of("abc");
     @Config("4") public static Optional<String> test4 = Optional.empty();
     @Config("5") public static int test5 = 0;

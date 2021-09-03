@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
@@ -7,6 +8,7 @@ import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -111,6 +113,6 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Enum<?>> createEditor(ValidatorInfo<?> validator) {
-        return ConfigEditor.unsupported(this.clazz.getEnumConstants()[0]);
+        return ConfigEditor.toggle(ImmutableList.copyOf(this.clazz.getEnumConstants()), e -> new TextComponent(e.name().toLowerCase(Locale.ROOT)));
     }
 }

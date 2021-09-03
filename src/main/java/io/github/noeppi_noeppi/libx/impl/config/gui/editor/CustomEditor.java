@@ -10,10 +10,8 @@ import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class CustomEditor<T> implements ConfigEditor<T> {
 
@@ -65,14 +63,14 @@ public class CustomEditor<T> implements ConfigEditor<T> {
         private final ConfigScreenContent<T> content;
         
         public CustomButton(ConfigScreenManager manager, ConfigScreenContent<T> content, WidgetProperties<T> properties) {
-            super(properties.x(), properties.y(), properties.width(), properties.height(), new TranslatableComponent("libx.config.gui.edit"), b -> {});
+            super(properties.x(), properties.y(), properties.width(), properties.height(), content.message(), b -> {});
             this.manager = manager;
             this.content = content;
         }
 
         @Override
         public void onPress() {
-            this.manager.open(new CustomConfigScreen<>(this.manager, this.content));
+            this.manager.open(new CustomConfigScreen<>(this.manager, this.content, () -> this.setMessage(this.content.message())));
         }
     }
 }
