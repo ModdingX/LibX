@@ -57,6 +57,7 @@ public class InputEditor<T> implements ConfigEditor<T> {
             super(Minecraft.getInstance().font, properties.x(), properties.y(), properties.width(), properties.height(), new TextComponent(""));
             this.input = input;
             this.validator = validator;
+            this.setMaxLength(32767);
             this.setValue(initialValue);
             this.setFilter(str -> {
                 for (char chr : str.toCharArray()) {
@@ -68,6 +69,7 @@ public class InputEditor<T> implements ConfigEditor<T> {
             });
             this.setResponder(str -> {
                 if (this.last == null || !this.last.equals(str)) {
+                    this.last = str;
                     if (this.input.isValid(str)) {
                         // No need to check validator here, will be validated when saving
                         properties.inputChanged().accept(this.input.valueOf(str));

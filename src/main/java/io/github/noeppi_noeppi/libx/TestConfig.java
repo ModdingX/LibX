@@ -2,12 +2,14 @@ package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.validator.DoubleRange;
-import io.github.noeppi_noeppi.libx.config.validator.IntRange;
+import io.github.noeppi_noeppi.libx.util.Misc;
 import net.minecraft.ChatFormatting;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class TestConfig {
@@ -16,9 +18,8 @@ public class TestConfig {
     @Config("2") public static InteractionResult test2 = InteractionResult.PASS;
     @Config("3") public static Optional<String> test3 = Optional.of("abc");
     @Config("4") public static Optional<String> test4 = Optional.empty();
-    @Config("5") public static int test5 = 0;
-    @IntRange(min = 20, max = 50)
-    @Config("6") public static int test6 = 42;
+    @Config("5") public static ResourceLocation test5 = Misc.MISSIGNO;
+    @Config("6") public static UUID test6 = UUID.randomUUID();
     @DoubleRange(min = -1, max = 3)
     @Config("7") public static double test7 = 2;
     @Config("8") public static Map<String, Integer> test8 = Map.of(

@@ -92,6 +92,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
 
         AtomicReference<String> current = new AtomicReference<>(this.list.get(idx).getKey());
         EditBox keyInput = new EditBox(Minecraft.getInstance().font, 3, y, width, 20, new TextComponent(""));
+        keyInput.setMaxLength(32767);
         keyInput.setValue(current.get());
         keyInput.setResponder(str -> {
             if (!current.get().equals(str)) {
