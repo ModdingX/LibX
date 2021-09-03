@@ -61,19 +61,19 @@ public class TripleEditor<A, B, C> implements ConfigEditor<Triple<A, B, C>> {
             this.middle = middle;
             this.right = right;
 
-            int width = properties.width() / 3;
+            int width = (properties.width() - 2) / 3;
             
             WidgetProperties<A> leftProperties = new WidgetProperties<>(0, 0, width, properties.height(), a -> {
                 this.left = a;
                 properties.inputChanged().accept(Triple.of(this.left, this.middle, this.right));
             });
             
-            WidgetProperties<B> middleProperties = new WidgetProperties<>(width, 0, width, properties.height(), b -> {
+            WidgetProperties<B> middleProperties = new WidgetProperties<>(width + 1, 0, width, properties.height(), b -> {
                 this.middle = b;
                 properties.inputChanged().accept(Triple.of(this.left, this.middle, this.right));
             });
             
-            WidgetProperties<C> rightProperties = new WidgetProperties<>(2 * width, 0, width, properties.height(), c -> {
+            WidgetProperties<C> rightProperties = new WidgetProperties<>((2 * width) + 2, 0, width, properties.height(), c -> {
                 this.right = c;
                 properties.inputChanged().accept(Triple.of(this.left, this.middle, this.right));
             });

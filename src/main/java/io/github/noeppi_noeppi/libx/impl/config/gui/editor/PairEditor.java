@@ -56,14 +56,14 @@ public class PairEditor<A, B> implements ConfigEditor<Pair<A, B>> {
             this.left = left;
             this.right = right;
 
-            int width = properties.width() / 2;
+            int width = (properties.width() - 1) / 2;
             
             WidgetProperties<A> leftProperties = new WidgetProperties<>(0, 0, width, properties.height(), a -> {
                 this.left = a;
                 properties.inputChanged().accept(Pair.of(this.left, this.right));
             });
             
-            WidgetProperties<B> rightProperties = new WidgetProperties<>(width, 0, width, properties.height(), b -> {
+            WidgetProperties<B> rightProperties = new WidgetProperties<>(width + 1, 0, width, properties.height(), b -> {
                 this.right = b;
                 properties.inputChanged().accept(Pair.of(this.left, this.right));
             });

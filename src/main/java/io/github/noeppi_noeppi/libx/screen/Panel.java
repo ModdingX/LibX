@@ -69,6 +69,7 @@ public abstract class Panel extends AbstractWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        boolean success = false;
         for (GuiEventListener child : this.children) {
             if (child.mouseClicked(mouseX - this.x, mouseY - this.y, button)) {
                 this.screen.setFocused(this);
@@ -76,10 +77,10 @@ public abstract class Panel extends AbstractWidget {
                 if (button == 0) {
                     this.screen.setDragging(true);
                 }
-                return true;
+                success = true;
             }
         }
-        return false;
+        return success;
     }
 
     @Override
