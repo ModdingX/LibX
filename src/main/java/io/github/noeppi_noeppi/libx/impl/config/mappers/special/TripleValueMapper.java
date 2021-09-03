@@ -6,6 +6,8 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.PairEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.TripleEditor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -86,10 +88,11 @@ public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, 
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Triple<A, B, C>> createEditor(ValidatorInfo<?> validator) {
-        return ConfigEditor.unsupported(Triple.of(
-                this.mapper1.createEditor(null).defaultValue(),
-                this.mapper2.createEditor(null).defaultValue(),
-                this.mapper3.createEditor(null).defaultValue()
-        ));
+        return new TripleEditor<>(
+                this.mapper1.createEditor(ValidatorInfo.empty()),
+                this.mapper2.createEditor(ValidatorInfo.empty()),
+                this.mapper3.createEditor(ValidatorInfo.empty())
+        );
+
     }
 }

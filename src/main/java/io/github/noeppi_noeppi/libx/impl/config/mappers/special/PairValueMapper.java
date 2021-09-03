@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.PairEditor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -93,9 +94,9 @@ public class PairValueMapper<A, B> implements ValueMapper<Pair<A, B>, JsonArray>
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Pair<A, B>> createEditor(ValidatorInfo<?> validator) {
-        return ConfigEditor.unsupported(Pair.of(
-                this.mapper1.createEditor(null).defaultValue(),
-                this.mapper2.createEditor(null).defaultValue()
-        ));
+        return new PairEditor<>(
+                this.mapper1.createEditor(ValidatorInfo.empty()),
+                this.mapper2.createEditor(ValidatorInfo.empty())
+        );
     }
 }

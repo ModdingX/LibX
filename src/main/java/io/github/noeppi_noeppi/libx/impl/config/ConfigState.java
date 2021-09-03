@@ -129,7 +129,7 @@ public class ConfigState {
         if (json.isJsonArray() && json.getAsJsonArray().size() == 0) {
             return "[]";
         }
-        if (json.isJsonArray() && json.getAsJsonArray().size() < 5) {
+        if (json.isJsonArray() && json.getAsJsonArray().size() <= 5) {
             //noinspection UnstableApiUsage
             List<JsonElement> list = Streams.stream(json.getAsJsonArray()).collect(Collectors.toList());
             if (list.stream().allMatch(this::isSimple)) {
