@@ -18,5 +18,8 @@
   "libx.config.gui.edit": "Edit",
   "libx.config.gui.list.title": "List",
   "libx.config.gui.list.new": "New Element",
-  "libx.config.gui.select.title": "Select"
+  "libx.config.gui.select.title": "Select",
+  "libx.config.gui.map.title": "Map",
+  "libx.config.gui.map.new": "New Entry"
+  
 }

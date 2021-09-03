@@ -34,7 +34,7 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
 
     @Override
     public Component title() {
-        return new TranslatableComponent("libx.config.gui.title.list");
+        return new TranslatableComponent("libx.config.gui.list.title");
     }
 
     @Override
@@ -47,6 +47,12 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         this.inputChanged = inputChanged;
     }
 
+    private void update() {
+        if (this.inputChanged != null) {
+            this.inputChanged.accept(ImmutableList.copyOf(this.list));
+        }
+    }
+    
     @Override
     public void buildGui(Screen screen, ScreenManager manager, String search, Consumer<AbstractWidget> consumer) {
         int y = 0;
@@ -63,7 +69,7 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
             public void onPress() {
                 ListContent.this.list.add(ListContent.this.editor.defaultValue());
                 ListContent.this.widgets.add(null);
-                if (ListContent.this.inputChanged != null) ListContent.this.inputChanged.accept(ImmutableList.copyOf(ListContent.this.list));
+                ListContent.this.update();
                 manager.rebuild();
             }
         };
@@ -76,7 +82,7 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
 
         WidgetProperties<T> properties = new WidgetProperties<>(padding, y, 200, 20, t -> {
             this.list.set(idx, t);
-            if (this.inputChanged != null) this.inputChanged.accept(ImmutableList.copyOf(this.list));
+            this.update();
         });
         AbstractWidget widget = EditorHelper.create(screen, this.editor, this.list.get(idx), this.widgets.get(idx), properties);
         this.widgets.set(idx, widget);
@@ -85,21 +91,21 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         this.addControlButton(consumer, padding + 203, y, new TextComponent("⬆"), idx > 0, () -> {
             move(this.list, idx, idx - 1);
             move(this.widgets, idx, idx - 1);
-            if (this.inputChanged != null) this.inputChanged.accept(ImmutableList.copyOf(this.list));
+            this.update();
             manager.rebuild();
         });
         
         this.addControlButton(consumer, padding + 226, y, new TextComponent("⬇"), idx < this.list.size() - 1, () -> {
             move(this.list, idx, idx + 1);
             move(this.widgets, idx, idx + 1);
-            if (this.inputChanged != null) this.inputChanged.accept(ImmutableList.copyOf(this.list));
+            this.update();
             manager.rebuild();
         });
         
         this.addControlButton(consumer, padding + 249, y, new TextComponent("✖").withStyle(ChatFormatting.RED), true, () -> {
             this.list.remove(idx);
             this.widgets.remove(idx);
-            if (this.inputChanged != null) this.inputChanged.accept(ImmutableList.copyOf(this.list));
+            this.update();
             manager.rebuild();
         });
     }

@@ -96,7 +96,7 @@ public abstract class ConfigBaseScreen extends Screen {
         int totalHeight = 10 + widgets.stream().map(w -> w.y + w.getHeight()).max(Comparator.naturalOrder()).orElse(0);
         int paddingTop = 18 + this.mc.font.lineHeight + (this.hasSearchBar ? 26 : 0);
 
-        this.panel = new BasePanel(this.mc, this.width - 5, this.height - paddingTop, paddingTop, 1) {
+        this.panel = new BasePanel(this.mc, this.width - 2, this.height - paddingTop, paddingTop, 1) {
 
             @Override
             protected int getContentHeight() {
