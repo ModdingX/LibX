@@ -64,7 +64,6 @@ public class ResourceList implements Predicate<ResourceLocation> {
      */
     public static final ResourceList BLACKLIST = new ResourceList(false, b -> {});
 
-    private static final WildcardString ANY = new WildcardString(List.of("*"));
     private static final WildcardString NAMESPACE_MC = new WildcardString(List.of("minecraft"));
     
     private final boolean whitelist;
@@ -78,7 +77,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
      */
     public ResourceList(boolean whitelist, Consumer<RuleBuilder> rules) {
         this.whitelist = whitelist;
-        RuleBuilder builder = new RuleBuilder(whitelist);
+        RuleBuilder builder = new RuleBuilder();
         rules.accept(builder);
         this.rules = builder.rulesBuilderList.build();
     }
@@ -98,7 +97,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         ImmutableList.Builder<Rule> rules = ImmutableList.builder();
         for (JsonElement elem : elements) {
             try {
-                rules.add(this.parseRule(this.whitelist, elem));
+                rules.add(this.parseRule(elem));
             } catch (IllegalStateException e) {
                 LibX.logger.warn("Skipping invalid rule in resource list: " + e.getMessage());
             }
@@ -141,6 +140,14 @@ public class ResourceList implements Predicate<ResourceLocation> {
         buffer.writeVarInt(this.rules.size());
         this.rules.forEach(rule -> rule.toNetwork(buffer));
     }
+    
+    public boolean isWhitelist() {
+        return this.whitelist;
+    }
+    
+    public List<RuleEntry> getRules() {
+        return this.rules.stream().map(Rule::getEntry).toList();
+    }
 
     /**
      * Tests whether the given {@link ResourceLocation} is on this resource list.
@@ -156,13 +163,13 @@ public class ResourceList implements Predicate<ResourceLocation> {
         return !this.whitelist;
     }
 
-    private Rule parseRule(boolean whitelist, JsonElement json) {
+    private Rule parseRule(JsonElement json) {
         if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
             String str = json.getAsJsonPrimitive().getAsString();
-            return this.parseSimpleRule(whitelist, str);
+            return this.parseSimpleRule(str);
         } else if (json.isJsonObject()) {
             JsonObject obj = json.getAsJsonObject();
-            boolean allow = obj.has("allow") ? obj.get("allow").getAsBoolean() : whitelist;
+            Boolean allow = obj.has("allow") ? obj.get("allow").getAsBoolean() : null;
             if (!obj.has("regex")) {
                 throw new IllegalStateException("Failed to build rule for resource list: JSON object has no member 'regex': " + json);
             }
@@ -176,7 +183,11 @@ public class ResourceList implements Predicate<ResourceLocation> {
     private Rule ruleFromNetwork(FriendlyByteBuf buffer) {
         byte id = buffer.readByte();
         if (id == 0) {
-            boolean allow = buffer.readBoolean();
+            Boolean allow = switch (buffer.readByte()) {
+                case 0 -> false;
+                case 1 -> true;
+                default -> null;
+            };
             int namespaceSize = buffer.readVarInt();
             List<String> namespace = new ArrayList<>();
             for (int i = 0; i < namespaceSize; i++) {
@@ -189,7 +200,11 @@ public class ResourceList implements Predicate<ResourceLocation> {
             }
             return new SimpleRule(allow, new WildcardString(namespace), new WildcardString(path));
         } else if (id == 1) {
-            boolean allow = buffer.readBoolean();
+            Boolean allow = switch (buffer.readByte()) {
+                case 0 -> false;
+                case 1 -> true;
+                default -> null;
+            };
             String regex = buffer.readUtf(32767);
             return new RegexRule(allow, regex);
         } else {
@@ -197,8 +212,8 @@ public class ResourceList implements Predicate<ResourceLocation> {
         }
     }
     
-    private Rule parseSimpleRule(boolean whitelist, String str) {
-        boolean allow;
+    private Rule parseSimpleRule(String str) {
+        Boolean allow;
         if (str.startsWith("+")) {
             allow = true;
             str = str.substring(1);
@@ -206,7 +221,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
             allow = false;
             str = str.substring(1);
         } else {
-            allow = whitelist;
+            allow = null;
         }
         WildcardString namespace;
         WildcardString path;
@@ -253,15 +268,17 @@ public class ResourceList implements Predicate<ResourceLocation> {
         Boolean test(ResourceLocation rl);
         JsonElement toJson();
         void toNetwork(FriendlyByteBuf buffer);
+        RuleEntry getEntry();
     }
 
     private class SimpleRule implements Rule {
 
-        private final boolean allow;
+        @Nullable
+        private final Boolean allow;
         private final WildcardString namespace;
         private final WildcardString path;
 
-        public SimpleRule(boolean allow, WildcardString namespace, WildcardString path) {
+        public SimpleRule(@Nullable Boolean allow, WildcardString namespace, WildcardString path) {
             this.allow = allow;
             this.namespace = namespace;
             this.path = path;
@@ -272,7 +289,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         public Boolean test(ResourceLocation rl) {
             if (this.namespace.matcher.get().test(rl.getNamespace())
                     && this.path.matcher.get().test(rl.getPath())) {
-                return this.allow;
+                return this.allow == null ? ResourceList.this.whitelist : this.allow;
             } else {
                 return null;
             }
@@ -281,7 +298,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         @Override
         public JsonElement toJson() {
             StringBuilder sb = new StringBuilder();
-            if (this.allow != ResourceList.this.whitelist) {
+            if (this.allow != null) {
                 sb.append(this.allow ? "+" : "-");
             }
             if (this.namespace.fullWildcard && this.path.fullWildcard) {
@@ -297,35 +314,56 @@ public class ResourceList implements Predicate<ResourceLocation> {
         @Override
         public void toNetwork(FriendlyByteBuf buffer) {
             buffer.writeByte(0);
-            buffer.writeBoolean(this.allow);
+            if (this.allow == null) {
+                buffer.writeByte(-1);
+            } else {
+                buffer.writeByte(this.allow ? 1 : 0);
+            }
             buffer.writeVarInt(this.namespace.parts.size());
             this.namespace.parts.forEach(str -> buffer.writeUtf(str, 32767));
             buffer.writeVarInt(this.path.parts.size());
             this.path.parts.forEach(str -> buffer.writeUtf(str, 32767));
         }
+
+        @Override
+        public RuleEntry getEntry() {
+            StringBuilder sb = new StringBuilder();
+            if (this.namespace.fullWildcard && this.path.fullWildcard) {
+                sb.append("*");
+            } else {
+                this.namespace.parts.forEach(sb::append);
+                sb.append(":");
+                this.path.parts.forEach(sb::append);
+            }
+            return new RuleEntry(sb.toString(), false, this.allow);
+        }
     }
     
     private class RegexRule implements Rule {
 
-        private final boolean allow;
+        private final Boolean allow;
         private final String regex;
         public final LazyValue<Predicate<String>> matcher;
 
-        public RegexRule(boolean allow, String regex) {
+        public RegexRule(@Nullable Boolean allow, String regex) {
             this.allow = allow;
             this.regex = regex;
-            this.matcher = new LazyValue<>(() -> Pattern.compile(regex).asPredicate());
+            this.matcher = new LazyValue<>(() -> Pattern.compile(regex).asMatchPredicate());
         }
 
         @Override
         public Boolean test(ResourceLocation rl) {
-            return this.matcher.get().test(rl.toString()) ? this.allow : null;
+            if (this.matcher.get().test(rl.toString())) {
+                return this.allow == null ? ResourceList.this.whitelist : this.allow;
+            } else {
+                return null;
+            }
         }
 
         @Override
         public JsonElement toJson() {
             JsonObject json = new JsonObject();
-            if (this.allow != ResourceList.this.whitelist) {
+            if (this.allow != null) {
                 json.addProperty("allow", this.allow);
             }
             json.addProperty("regex", this.regex);
@@ -335,8 +373,17 @@ public class ResourceList implements Predicate<ResourceLocation> {
         @Override
         public void toNetwork(FriendlyByteBuf buffer) {
             buffer.writeByte(1);
-            buffer.writeBoolean(this.allow);
+            if (this.allow == null) {
+                buffer.writeByte(-1);
+            } else {
+                buffer.writeByte(this.allow ? 1 : 0);
+            }
             buffer.writeUtf(this.regex, 32767);
+        }
+
+        @Override
+        public RuleEntry getEntry() {
+            return new RuleEntry(this.regex, true, this.allow);
         }
     }
 
@@ -360,7 +407,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
             this.matcher = new LazyValue<>(
                     () -> Pattern.compile("^" + this.parts.stream()
                             .map(str -> str.equals("*") ? ".*" : Pattern.quote(str))
-                            .collect(Collectors.joining()) + "$").asPredicate()
+                            .collect(Collectors.joining()) + "$").asMatchPredicate()
             );
             this.fullWildcard = this.parts.stream().allMatch(str -> str.equals("*"));
         }
@@ -371,11 +418,9 @@ public class ResourceList implements Predicate<ResourceLocation> {
      */
     public class RuleBuilder {
         
-        private final boolean whitelist;
         private final ImmutableList.Builder<Rule> rulesBuilderList;
         
-        private RuleBuilder(boolean whitelist) {
-            this.whitelist = whitelist;
+        private RuleBuilder() {
             this.rulesBuilderList = ImmutableList.builder();
         }
 
@@ -385,7 +430,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
          * as result.
          */
         public void simple(ResourceLocation rl) {
-            this.simple(this.whitelist, rl);
+            this.rulesBuilderList.add(new SimpleRule(null, new WildcardString(List.of(rl.getNamespace())), new WildcardString(List.of(rl.getPath()))));
         }
         
         /**
@@ -406,7 +451,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
          * it return false on a match.
          */
         public void parse(String rule) {
-            this.rulesBuilderList.add(ResourceList.this.parseSimpleRule(this.whitelist, rule));
+            this.rulesBuilderList.add(ResourceList.this.parseSimpleRule(rule));
         }
 
         /**
@@ -415,7 +460,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
          * as result.
          */
         public void regex(@RegEx String regex) {
-            this.regex(this.whitelist, regex);
+            this.rulesBuilderList.add(new RegexRule(null, regex));
         }
         
         /**
@@ -426,4 +471,6 @@ public class ResourceList implements Predicate<ResourceLocation> {
             this.rulesBuilderList.add(new RegexRule(allow, regex));
         }
     }
+    
+    public record RuleEntry(String value, boolean regex, @Nullable Boolean allow) {}
 }
