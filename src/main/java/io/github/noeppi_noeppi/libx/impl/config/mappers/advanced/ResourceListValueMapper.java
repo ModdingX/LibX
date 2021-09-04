@@ -4,22 +4,35 @@ import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ResourceListContent;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonObject> {
 
     public static final ResourceListValueMapper INSTANCE = new ResourceListValueMapper();
+    
+    public static final URL INFO_URL;
+
+    static {
+        try {
+            INFO_URL = new URL("https://noeppi-noeppi.github.io/LibX/io/github/noeppi_noeppi/libx/util/ResourceList.html#use_resource_lists_in_configs");
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private ResourceListValueMapper() {
 
     }
 
-    private final List<String> COMMENT = List.of("This is a resource list. See https://noeppi-noeppi.github.io/LibX/io/github/noeppi_noeppi/libx/util/ResourceList.html#use_resource_lists_in_configs");
+    private final List<String> COMMENT = List.of("This is a resource list. See " + INFO_URL);
 
     @Override
     public Class<ResourceList> type() {
@@ -59,6 +72,6 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<ResourceList> createEditor(ValidatorInfo<?> validator) {
-        return ConfigEditor.unsupported(ResourceList.WHITELIST);
+        return ConfigEditor.custom(ResourceList.WHITELIST, ResourceListContent::new);
     }
 }

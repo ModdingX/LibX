@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx;
 
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.validator.DoubleRange;
-import net.minecraft.ChatFormatting;
+import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.world.InteractionResult;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class TestConfig {
     
-    @Config("1") public static ChatFormatting test1 = ChatFormatting.RESET;
+    @Config("1") public static ResourceList test1 = ResourceList.WHITELIST;
     @Config("2") public static InteractionResult test2 = InteractionResult.PASS;
     @Config("3") public static Optional<String> test3 = Optional.of("abc");
     @Config("4") public static Pair<String, Boolean> test4 = Pair.of("Hello", false);

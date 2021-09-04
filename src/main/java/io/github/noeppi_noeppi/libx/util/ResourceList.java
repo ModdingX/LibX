@@ -140,11 +140,17 @@ public class ResourceList implements Predicate<ResourceLocation> {
         buffer.writeVarInt(this.rules.size());
         this.rules.forEach(rule -> rule.toNetwork(buffer));
     }
-    
+
+    /**
+     * Gets whether this ResourceList is a whitelist or a blacklist.
+     */
     public boolean isWhitelist() {
         return this.whitelist;
     }
-    
+
+    /**
+     * Gets a list of {@link RuleEntry rule entries} for this ResourceList.
+     */
     public List<RuleEntry> getRules() {
         return this.rules.stream().map(Rule::getEntry).toList();
     }
@@ -471,6 +477,11 @@ public class ResourceList implements Predicate<ResourceLocation> {
             this.rulesBuilderList.add(new RegexRule(allow, regex));
         }
     }
-    
+
+    /**
+     * And entry that represents a rule in this {@link ResourceList}.
+     * This is only meant to give access to the values in a resource list, it can't
+     * be used to build new rules.
+     */
     public record RuleEntry(String value, boolean regex, @Nullable Boolean allow) {}
 }

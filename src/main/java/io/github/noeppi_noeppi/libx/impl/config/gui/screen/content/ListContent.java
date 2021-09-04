@@ -88,21 +88,21 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         this.widgets.set(idx, widget);
         consumer.accept(widget);
 
-        this.addControlButton(consumer, padding + 203, y, new TextComponent("⬆"), idx > 0, () -> {
+        addControlButton(consumer, padding + 203, y, new TextComponent("⬆"), idx > 0, () -> {
             move(this.list, idx, idx - 1);
             move(this.widgets, idx, idx - 1);
             this.update();
             manager.rebuild();
         });
         
-        this.addControlButton(consumer, padding + 226, y, new TextComponent("⬇"), idx < this.list.size() - 1, () -> {
+        addControlButton(consumer, padding + 226, y, new TextComponent("⬇"), idx < this.list.size() - 1, () -> {
             move(this.list, idx, idx + 1);
             move(this.widgets, idx, idx + 1);
             this.update();
             manager.rebuild();
         });
         
-        this.addControlButton(consumer, padding + 249, y, new TextComponent("✖").withStyle(ChatFormatting.RED), true, () -> {
+        addControlButton(consumer, padding + 249, y, new TextComponent("✖").withStyle(ChatFormatting.RED), true, () -> {
             this.list.remove(idx);
             this.widgets.remove(idx);
             this.update();
@@ -110,7 +110,7 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         });
     }
     
-    private void addControlButton(Consumer<AbstractWidget> consumer, int x, int y, Component text, boolean enable, Runnable action) {
+    public static void addControlButton(Consumer<AbstractWidget> consumer, int x, int y, Component text, boolean enable, Runnable action) {
         Button button = new Button(x, y, 20, 20, text, b -> {}) {
 
             @Override
@@ -122,7 +122,7 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         consumer.accept(button);
     }
     
-    private static <T> void move(List<T> list, int from0, int to0) {
+    public static <T> void move(List<T> list, int from0, int to0) {
         int from = Mth.clamp(from0, 0, list.size() - 1);
         int to = Mth.clamp(to0, 0, list.size() - 1);
         T elem = list.remove(from);

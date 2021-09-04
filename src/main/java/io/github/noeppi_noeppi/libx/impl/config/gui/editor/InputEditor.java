@@ -47,7 +47,7 @@ public class InputEditor<T> implements ConfigEditor<T> {
         }
     }
 
-    private static class InputWidget<T> extends EditBox {
+    public static class InputWidget<T> extends EditBox {
 
         private final InputProperties<T> input;
         private final ValidatorInfo<?> validator;
@@ -86,6 +86,12 @@ public class InputEditor<T> implements ConfigEditor<T> {
             this(input, validator, properties, old.getValue());
         }
 
+        // Used internally by other config editors
+        // may not check `last`
+        public Optional<T> getValidInput() {
+            return this.getValidInput(this.getValue());
+        }
+        
         private Optional<T> getValidInput(String str) {
             if (this.input.isValid(str)) {
                 T t = this.input.valueOf(str);
