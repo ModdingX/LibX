@@ -6,6 +6,7 @@ import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -143,13 +144,40 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            return BaseItemStackHandler.super.insertItem(slot, stack, simulate);
+            if (stack.isEmpty()) return ItemStack.EMPTY;
+            BaseItemStackHandler.this.validateSlotIndex(slot);
+            ItemStack current = BaseItemStackHandler.this.stacks.get(slot);
+            int amount = BaseItemStackHandler.this.getStackLimit(slot, stack);
+            if (!current.isEmpty()) {
+                if (!ItemHandlerHelper.canItemStacksStack(stack, current)) return stack;
+                amount -= current.getCount();
+            }
+            if (amount <= 0) return stack;
+
+            if (!simulate) {
+                if (current.isEmpty()) {
+                    BaseItemStackHandler.this.stacks.set(slot, ItemHandlerHelper.copyStackWithSize(stack, Math.min(stack.getCount(), amount)));
+                } else {
+                    current.grow(Math.min(stack.getCount(), amount));
+                }
+                BaseItemStackHandler.this.onContentsChanged(slot);
+            }
+            return ItemHandlerHelper.copyStackWithSize(stack, Math.max(0, stack.getCount() - amount));
         }
 
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return BaseItemStackHandler.super.extractItem(slot, amount, simulate);
+            if (amount <= 0) return ItemStack.EMPTY;
+            BaseItemStackHandler.this.validateSlotIndex(slot);
+            ItemStack current = BaseItemStackHandler.this.stacks.get(slot);
+            if (current.isEmpty()) return ItemStack.EMPTY;
+            int count = Math.min(current.getCount(), Math.min(amount, current.getMaxStackSize()));
+            if (!simulate) {
+                BaseItemStackHandler.this.stacks.set(slot, ItemHandlerHelper.copyStackWithSize(current, Math.max(0, current.getCount() - count)));
+                BaseItemStackHandler.this.onContentsChanged(slot);
+            }
+            return ItemHandlerHelper.copyStackWithSize(current, count);
         }
 
         @Override
