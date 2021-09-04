@@ -20,12 +20,12 @@ import java.util.List;
  */
 public abstract class Panel extends AbstractWidget {
 
-    private final Screen screen;
+    protected final Screen screen;
     private final List<GuiEventListener> children = new ArrayList<>();
     private final List<Widget> renderables = new ArrayList<>();
 
     @Nullable
-    private GuiEventListener focused = null;
+    protected GuiEventListener focused = null;
 
     public Panel(Screen screen, int x, int y, int width, int height) {
         super(x, y, width, height, new TextComponent(""));
@@ -98,7 +98,7 @@ public abstract class Panel extends AbstractWidget {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return this.focused != null && this.screen.isDragging() && button == 0 && this.focused.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return this.focused != null && this.screen.isDragging() && button == 0 && this.focused.mouseDragged(mouseX - this.x, mouseY - this.y, button, dragX, dragY);
     }
 
     @Override

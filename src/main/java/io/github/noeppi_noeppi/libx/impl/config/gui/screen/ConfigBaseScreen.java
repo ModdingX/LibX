@@ -129,6 +129,16 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
+            public boolean mouseClicked(double mouseX, double mouseY, int button) {
+                // Without this, the panel would process clicks from areas currently not on the screen
+                if (mouseX >= this.left && mouseX <= this.left + this.width && mouseY >= this.top && mouseY <= this.top + this.height) {
+                    return super.mouseClicked(mouseX, mouseY, button);
+                } else {
+                    return false;
+                }
+            }
+
+            @Override
             protected boolean clickPanel(double mouseX, double mouseY, int button) {
                 // Extra var required as we need to cal all listeners
                 // so widgets can for example handle their loss of focus.
@@ -149,7 +159,20 @@ public abstract class ConfigBaseScreen extends Screen {
             public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
                 if (!super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
                     if (this.getFocused() != null && this.isDragging() && button == 0) {
-                        return this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY);
+                        return this.getFocused().mouseDragged(mouseX, mouseY - this.top + ((int) this.scrollDistance) - this.border, button, dragX, dragY);
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public boolean mouseReleased(double mouseX, double mouseY, int button) {
+                if (!super.mouseReleased(mouseX, mouseY, button)) {
+                    if (this.getFocused() != null) {
+                        return this.getFocused().mouseReleased(mouseX, mouseY - this.top + ((int) this.scrollDistance) - this.border, button);
                     } else {
                         return false;
                     }

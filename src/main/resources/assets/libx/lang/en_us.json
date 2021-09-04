@@ -33,5 +33,8 @@
   "libx.config.gui.resource_list.entry_mode_allow": "Allow",
   "libx.config.gui.resource_list.entry_mode_deny": "Deny",
   "libx.config.gui.resource_list.entry_mode_default": "Inherit",
-  "libx.config.gui.resource_list.new": "New Entry"
+  "libx.config.gui.resource_list.new": "New Entry",
+  "libx.gui.color_picker.red": "Red: %s",
+  "libx.gui.color_picker.green": "Green: %s",
+  "libx.gui.color_picker.blue": "Blue: %s"
 }
