@@ -39,7 +39,10 @@ public class ColorPicker extends Panel {
      */
     public static final int HEIGHT = 100;
 
+    // Amount of vertices (vertically) for the hue bar
     private static final int HUE_VERTICES = 40;
+    
+    // Amount of vertices (horizontally & vertically) for the saturation & brightness square
     private static final int HSB_VERTICES = 20;
     
     private int red;

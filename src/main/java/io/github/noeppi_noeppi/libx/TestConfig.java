@@ -3,7 +3,8 @@ package io.github.noeppi_noeppi.libx;
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.validator.DoubleRange;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class TestConfig {
     
     @Config("1") public static ResourceList test1 = ResourceList.WHITELIST;
-    @Config("2") public static InteractionResult test2 = InteractionResult.PASS;
+    @Config("2") public static Component test2 = new TranslatableComponent("libx.tooltip.fluidbase.bucket", "Test");
     @Config("3") public static Optional<String> test3 = Optional.of("abc");
     @Config("4") public static Pair<String, Boolean> test4 = Pair.of("Hello", false);
     @Config("5") public static Triple<String, Integer, List<Integer>> test5 = Triple.of("Wow", 42, List.of(1, 2, 3, 4, 5));

@@ -36,5 +36,20 @@
   "libx.config.gui.resource_list.new": "New Entry",
   "libx.gui.color_picker.red": "Red: %s",
   "libx.gui.color_picker.green": "Green: %s",
-  "libx.gui.color_picker.blue": "Blue: %s"
+  "libx.gui.color_picker.blue": "Blue: %s",
+  "libx.config.gui.component.title": "Text Component",
+  "libx.config.gui.component.no_edit": "This type of component can't be edited.",
+  "libx.config.gui.component.style_setting.null": "Inherit",
+  "libx.config.gui.component.style_setting.true": "True",
+  "libx.config.gui.component.style_setting.false": "False",
+  "libx.config.gui.component.bold": "Bold: %s",
+  "libx.config.gui.component.italic": "Italic: %s",
+  "libx.config.gui.component.underlined": "Underlined: %s",
+  "libx.config.gui.component.strikethrough": "Strikethrough: %s",
+  "libx.config.gui.component.obfuscated": "Obfuscated: %s",
+  "libx.config.gui.component.siblings": "Siblings",
+  "libx.config.gui.component.arguments": "Arguments",
+  "libx.config.gui.component.type_text": "Text",
+  "libx.config.gui.component.type_translate": "Translation",
+  "libx.config.gui.component.type_key": "Keybinding"
 }
