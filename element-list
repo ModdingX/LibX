@@ -12,6 +12,7 @@ io.github.noeppi_noeppi.libx.capability
 io.github.noeppi_noeppi.libx.command
 io.github.noeppi_noeppi.libx.config
 io.github.noeppi_noeppi.libx.config.correct
+io.github.noeppi_noeppi.libx.config.gui
 io.github.noeppi_noeppi.libx.config.validator
 io.github.noeppi_noeppi.libx.crafting
 io.github.noeppi_noeppi.libx.crafting.ingredient
@@ -31,5 +32,6 @@ io.github.noeppi_noeppi.libx.mod.registration
 io.github.noeppi_noeppi.libx.network
 io.github.noeppi_noeppi.libx.render
 io.github.noeppi_noeppi.libx.render.block
+io.github.noeppi_noeppi.libx.screen
 io.github.noeppi_noeppi.libx.util
 io.github.noeppi_noeppi.libx.world

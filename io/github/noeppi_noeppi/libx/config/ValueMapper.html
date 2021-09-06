@@ -111,25 +111,31 @@ extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_no
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">
 <div class="block">Corrects a config value.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="ValueMapper.html" title="type parameter in ValueMapper">T</a></code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#fromJson(E)">fromJson</a></span>&#8203;(<a href="ValueMapper.html" title="type parameter in ValueMapper">E</a>&nbsp;json)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">ConfigEditor</a>&lt;<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#createEditor(io.github.noeppi_noeppi.libx.config.ValidatorInfo)">createEditor</a></span>&#8203;(<a href="ValidatorInfo.html" title="interface in io.github.noeppi_noeppi.libx.config">ValidatorInfo</a>&lt;?&gt;&nbsp;validator)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">
+<div class="block">Creates a <a href="gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui"><code>ConfigEditor</code></a> for this value mapper to display this config in the
+ config menu.</div>
+</div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="ValueMapper.html" title="type parameter in ValueMapper">T</a></code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#fromJson(E)">fromJson</a></span>&#8203;(<a href="ValueMapper.html" title="type parameter in ValueMapper">E</a>&nbsp;json)</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">
 <div class="block">Reads an object from JSON.</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default <a href="ValueMapper.html" title="type parameter in ValueMapper">T</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#fromNetwork(net.minecraft.network.FriendlyByteBuf)">fromNetwork</a></span>&#8203;(net.minecraft.network.FriendlyByteBuf&nbsp;buffer)</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default <a href="ValueMapper.html" title="type parameter in ValueMapper">T</a></code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#fromNetwork(net.minecraft.network.FriendlyByteBuf)">fromNetwork</a></span>&#8203;(net.minecraft.network.FriendlyByteBuf&nbsp;buffer)</code></div>
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">
 <div class="block">Reads a value from a <code>FriendlyByteBuf</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="ValueMapper.html" title="type parameter in ValueMapper">E</a></code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#toJson(T)">toJson</a></span>&#8203;(<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="ValueMapper.html" title="type parameter in ValueMapper">E</a></code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#toJson(T)">toJson</a></span>&#8203;(<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">
 <div class="block">Serialises a value to JSON.</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#toNetwork(T,net.minecraft.network.FriendlyByteBuf)">toNetwork</a></span>&#8203;(<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&nbsp;value,
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#toNetwork(T,net.minecraft.network.FriendlyByteBuf)">toNetwork</a></span>&#8203;(<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&nbsp;value,
  net.minecraft.network.FriendlyByteBuf&nbsp;buffer)</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">
 <div class="block">Writes a value to a <code>FriendlyByteBuf</code>.</div>
 </div>
 </div>
@@ -209,6 +215,21 @@ extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_no
 <dt>Returns:</dt>
 <dd>An <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> containing the corrected value or an empty <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>
  the correction failed.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createEditor(io.github.noeppi_noeppi.libx.config.ValidatorInfo)">
+<h3>createEditor</h3>
+<div class="member-signature"><span class="return-type"><a href="gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">ConfigEditor</a>&lt;<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;</span>&nbsp;<span class="element-name">createEditor</span>&#8203;<span class="parameters">(<a href="ValidatorInfo.html" title="interface in io.github.noeppi_noeppi.libx.config">ValidatorInfo</a>&lt;?&gt;&nbsp;validator)</span></div>
+<div class="block">Creates a <a href="gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui"><code>ConfigEditor</code></a> for this value mapper to display this config in the
+ config menu. To display that this value can't be edited through the GUI, use
+ <a href="gui/ConfigEditor.html#unsupported(T)"><code>ConfigEditor.unsupported(Object)</code></a> with a default value that is used if for example
+ elements of this type are created in a list.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>validator</code> - Access to the current validator used. Can be used to create different
+                  editors based on validators.</dd>
 </dl>
 </section>
 </li>

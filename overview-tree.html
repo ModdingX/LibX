@@ -70,6 +70,7 @@ loadScripts(document, 'script');</script>
 <li><a href="io/github/noeppi_noeppi/libx/command/package-tree.html">io.github.noeppi_noeppi.libx.command</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/config/package-tree.html">io.github.noeppi_noeppi.libx.config</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/config/correct/package-tree.html">io.github.noeppi_noeppi.libx.config.correct</a>, </li>
+<li><a href="io/github/noeppi_noeppi/libx/config/gui/package-tree.html">io.github.noeppi_noeppi.libx.config.gui</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/config/validator/package-tree.html">io.github.noeppi_noeppi.libx.config.validator</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/crafting/package-tree.html">io.github.noeppi_noeppi.libx.crafting</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/crafting/ingredient/package-tree.html">io.github.noeppi_noeppi.libx.crafting.ingredient</a>, </li>
@@ -89,6 +90,7 @@ loadScripts(document, 'script');</script>
 <li><a href="io/github/noeppi_noeppi/libx/network/package-tree.html">io.github.noeppi_noeppi.libx.network</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/render/package-tree.html">io.github.noeppi_noeppi.libx.render</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/render/block/package-tree.html">io.github.noeppi_noeppi.libx.render.block</a>, </li>
+<li><a href="io/github/noeppi_noeppi/libx/screen/package-tree.html">io.github.noeppi_noeppi.libx.screen</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/util/package-tree.html">io.github.noeppi_noeppi.libx.util</a>, </li>
 <li><a href="io/github/noeppi_noeppi/libx/world/package-tree.html">io.github.noeppi_noeppi.libx.world</a></li>
 </ul>
@@ -131,6 +133,7 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/CachedFunction.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="type-name-link">CachedFunction</span></a>&lt;T,&#8203;R&gt; (implements java.util.function.<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,&#8203;R&gt;)</li>
+<li class="circle">io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/CachedValue.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="type-name-link">CachedValue</span></a>&lt;T&gt;</li>
 <li class="circle">net.minecraftforge.common.capabilities.CapabilityProvider&lt;B&gt; (implements net.minecraftforge.common.capabilities.ICapabilityProvider)
 <ul>
 <li class="circle">net.minecraft.world.level.block.entity.BlockEntity (implements net.minecraftforge.common.extensions.IForgeBlockEntity)
@@ -206,6 +209,19 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">net.minecraft.client.gui.GuiComponent
+<ul>
+<li class="circle">net.minecraft.client.gui.components.AbstractWidget (implements net.minecraft.client.gui.components.events.GuiEventListener, net.minecraft.client.gui.narration.NarratableEntry, net.minecraft.client.gui.components.Widget)
+<ul>
+<li class="circle">io.github.noeppi_noeppi.libx.screen.<a href="io/github/noeppi_noeppi/libx/screen/Panel.html" title="class in io.github.noeppi_noeppi.libx.screen"><span class="type-name-link">Panel</span></a>
+<ul>
+<li class="circle">io.github.noeppi_noeppi.libx.screen.<a href="io/github/noeppi_noeppi/libx/screen/ColorPicker.html" title="class in io.github.noeppi_noeppi.libx.screen"><span class="type-name-link">ColorPicker</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="circle">net.minecraft.world.item.crafting.Ingredient (implements java.util.function.<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;)
 <ul>
 <li class="circle">io.github.noeppi_noeppi.libx.crafting.ingredient.<a href="io/github/noeppi_noeppi/libx/crafting/ingredient/EffectIngredient.html" title="class in io.github.noeppi_noeppi.libx.crafting.ingredient"><span class="type-name-link">EffectIngredient</span></a></li>
@@ -264,6 +280,8 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">io.github.noeppi_noeppi.libx.crafting.<a href="io/github/noeppi_noeppi/libx/crafting/IngredientStack.html" title="class in io.github.noeppi_noeppi.libx.crafting"><span class="type-name-link">IngredientStack</span></a> (implements java.util.function.<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;)</li>
 <li class="circle">io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/RegistrationBuilder.RegistrationSettings.html" title="class in io.github.noeppi_noeppi.libx.mod.registration"><span class="type-name-link">RegistrationBuilder.RegistrationSettings</span></a></li>
+<li class="circle">io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.RuleEntry.html" title="class in io.github.noeppi_noeppi.libx.util"><span class="type-name-link">ResourceList.RuleEntry</span></a></li>
+<li class="circle">io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/WidgetProperties.html" title="class in io.github.noeppi_noeppi.libx.config.gui"><span class="type-name-link">WidgetProperties</span></a>&lt;T&gt;</li>
 </ul>
 </li>
 <li class="circle">io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/RegistrationBuilder.html" title="class in io.github.noeppi_noeppi.libx.mod.registration"><span class="type-name-link">RegistrationBuilder</span></a></li>
@@ -330,6 +348,9 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">io.github.noeppi_noeppi.libx.config.correct.<a href="io/github/noeppi_noeppi/libx/config/correct/ConfigCorrection.html" title="interface in io.github.noeppi_noeppi.libx.config.correct"><span class="type-name-link">ConfigCorrection</span></a>&lt;T&gt;</li>
+<li class="circle">io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui"><span class="type-name-link">ConfigEditor</span></a>&lt;T&gt;</li>
+<li class="circle">io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent.html" title="interface in io.github.noeppi_noeppi.libx.config.gui"><span class="type-name-link">ConfigScreenContent</span></a>&lt;T&gt;</li>
+<li class="circle">io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent.ScreenManager.html" title="interface in io.github.noeppi_noeppi.libx.config.gui"><span class="type-name-link">ConfigScreenContent.ScreenManager</span></a></li>
 <li class="circle">io.github.noeppi_noeppi.libx.config.<a href="io/github/noeppi_noeppi/libx/config/ConfigValidator.html" title="interface in io.github.noeppi_noeppi.libx.config"><span class="type-name-link">ConfigValidator</span></a>&lt;T,&#8203;A&gt;</li>
 <li class="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Consumer3.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="type-name-link">Consumer3</span></a>&lt;A,&#8203;B,&#8203;C&gt;</li>
 <li class="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Consumer4.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="type-name-link">Consumer4</span></a>&lt;A,&#8203;B,&#8203;C,&#8203;D&gt;</li>
@@ -337,6 +358,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Consumer6.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="type-name-link">Consumer6</span></a>&lt;A,&#8203;B,&#8203;C,&#8203;D,&#8203;E,&#8203;F&gt;</li>
 <li class="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Consumer7.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="type-name-link">Consumer7</span></a>&lt;A,&#8203;B,&#8203;C,&#8203;D,&#8203;E,&#8203;F,&#8203;G&gt;</li>
 <li class="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Consumer8.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="type-name-link">Consumer8</span></a>&lt;A,&#8203;B,&#8203;C,&#8203;D,&#8203;E,&#8203;F,&#8203;G,&#8203;H&gt;</li>
+<li class="circle">io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/EditorOps.html" title="interface in io.github.noeppi_noeppi.libx.config.gui"><span class="type-name-link">EditorOps</span></a></li>
 <li class="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase.GenericLootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="type-name-link">EntityLootProviderBase.GenericLootModifier</span></a>
 <ul>
 <li class="circle">io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase.LootModifier.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><span class="type-name-link">EntityLootProviderBase.LootModifier</span></a></li>
@@ -373,6 +395,7 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/InputProperties.html" title="interface in io.github.noeppi_noeppi.libx.config.gui"><span class="type-name-link">InputProperties</span></a>&lt;T&gt;</li>
 <li class="circle">io.github.noeppi_noeppi.libx.network.<a href="io/github/noeppi_noeppi/libx/network/PacketSerializer.html" title="interface in io.github.noeppi_noeppi.libx.network"><span class="type-name-link">PacketSerializer</span></a>&lt;T&gt;</li>
 <li class="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Predicate3.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="type-name-link">Predicate3</span></a>&lt;A,&#8203;B,&#8203;C&gt;</li>
 <li class="circle">io.github.noeppi_noeppi.libx.fi.<a href="io/github/noeppi_noeppi/libx/fi/Predicate4.html" title="interface in io.github.noeppi_noeppi.libx.fi"><span class="type-name-link">Predicate4</span></a>&lt;A,&#8203;B,&#8203;C,&#8203;D&gt;</li>
@@ -393,6 +416,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/RegistryCondition.html" title="interface in io.github.noeppi_noeppi.libx.mod.registration"><span class="type-name-link">RegistryCondition</span></a></li>
 <li class="circle">io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/RegistryTransformer.html" title="interface in io.github.noeppi_noeppi.libx.mod.registration"><span class="type-name-link">RegistryTransformer</span></a></li>
 <li class="circle">io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/TickableBlock.html" title="interface in io.github.noeppi_noeppi.libx.base.tile"><span class="type-name-link">TickableBlock</span></a></li>
+<li class="circle">io.github.noeppi_noeppi.libx.config.<a href="io/github/noeppi_noeppi/libx/config/ValidatorInfo.html" title="interface in io.github.noeppi_noeppi.libx.config"><span class="type-name-link">ValidatorInfo</span></a>&lt;T&gt;</li>
 </ul>
 </section>
 <section class="hierarchy">

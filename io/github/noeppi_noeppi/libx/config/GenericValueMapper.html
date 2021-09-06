@@ -122,28 +122,32 @@ extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_no
  <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper,
  <a href="correct/ConfigCorrection.html" title="interface in io.github.noeppi_noeppi.libx.config.correct">ConfigCorrection</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a>&gt;&nbsp;correction)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a></code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#fromJson(E,io.github.noeppi_noeppi.libx.config.ValueMapper)">fromJson</a></span>&#8203;(<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">E</a>&nbsp;json,
- <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">ConfigEditor</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#createEditor(io.github.noeppi_noeppi.libx.config.ValueMapper,io.github.noeppi_noeppi.libx.config.ValidatorInfo)">createEditor</a></span>&#8203;(<a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper,
+ <a href="ValidatorInfo.html" title="interface in io.github.noeppi_noeppi.libx.config">ValidatorInfo</a>&lt;?&gt;&nbsp;validator)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default <a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#fromNetwork(net.minecraft.network.FriendlyByteBuf,io.github.noeppi_noeppi.libx.config.ValueMapper)">fromNetwork</a></span>&#8203;(net.minecraft.network.FriendlyByteBuf&nbsp;buffer,
- <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper)</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#getGenericElementPosition()">getGenericElementPosition</a></span>()</code></div>
-<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">
-<div class="block">The position which generic type argument should be used to retrieve a value mapper.</div>
-</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">E</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#toJson(T,io.github.noeppi_noeppi.libx.config.ValueMapper)">toJson</a></span>&#8203;(<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a>&nbsp;value,
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a></code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#fromJson(E,io.github.noeppi_noeppi.libx.config.ValueMapper)">fromJson</a></span>&#8203;(<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">E</a>&nbsp;json,
  <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default void</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#toNetwork(T,net.minecraft.network.FriendlyByteBuf,io.github.noeppi_noeppi.libx.config.ValueMapper)">toNetwork</a></span>&#8203;(<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a>&nbsp;value,
- net.minecraft.network.FriendlyByteBuf&nbsp;buffer,
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default <a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a></code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#fromNetwork(net.minecraft.network.FriendlyByteBuf,io.github.noeppi_noeppi.libx.config.ValueMapper)">fromNetwork</a></span>&#8203;(net.minecraft.network.FriendlyByteBuf&nbsp;buffer,
  <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#getGenericElementPosition()">getGenericElementPosition</a></span>()</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">
+<div class="block">The position which generic type argument should be used to retrieve a value mapper.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">E</a></code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#toJson(T,io.github.noeppi_noeppi.libx.config.ValueMapper)">toJson</a></span>&#8203;(<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a>&nbsp;value,
+ <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper)</code></div>
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#toNetwork(T,net.minecraft.network.FriendlyByteBuf,io.github.noeppi_noeppi.libx.config.ValueMapper)">toNetwork</a></span>&#8203;(<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a>&nbsp;value,
+ net.minecraft.network.FriendlyByteBuf&nbsp;buffer,
+ <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper)</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -223,6 +227,17 @@ extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_no
 <dl class="notes">
 <dt>See Also:</dt>
 <dd><a href="ValueMapper.html#correct(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection)"><code>ValueMapper.correct(JsonElement, ConfigCorrection)</code></a></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createEditor(io.github.noeppi_noeppi.libx.config.ValueMapper,io.github.noeppi_noeppi.libx.config.ValidatorInfo)">
+<h3>createEditor</h3>
+<div class="member-signature"><span class="return-type"><a href="gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">ConfigEditor</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">T</a>&gt;</span>&nbsp;<span class="element-name">createEditor</span>&#8203;<span class="parameters">(<a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">ValueMapper</a>&lt;<a href="GenericValueMapper.html" title="type parameter in GenericValueMapper">C</a>,&#8203;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;&nbsp;mapper,
+ <a href="ValidatorInfo.html" title="interface in io.github.noeppi_noeppi.libx.config">ValidatorInfo</a>&lt;?&gt;&nbsp;validator)</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd><a href="ValueMapper.html#createEditor(io.github.noeppi_noeppi.libx.config.ValidatorInfo)"><code>ValueMapper.createEditor(ValidatorInfo)</code></a></dd>
 </dl>
 </section>
 </li>

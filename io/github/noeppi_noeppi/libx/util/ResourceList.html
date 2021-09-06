@@ -136,6 +136,11 @@ implements <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base
 <div class="col-last even-row-color">
 <div class="block">A builder for rules.</div>
 </div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><span class="member-name-link"><a href="ResourceList.RuleEntry.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList.RuleEntry</a></span></code></div>
+<div class="col-last odd-row-color">
+<div class="block">And entry that represents a rule in this <a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util"><code>ResourceList</code></a>.</div>
+</div>
 </div>
 </section>
 </li>
@@ -196,6 +201,16 @@ implements <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceList.RuleEntry.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList.RuleEntry</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getRules()">getRules</a></span>()</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="block">Gets a list of <a href="ResourceList.RuleEntry.html" title="class in io.github.noeppi_noeppi.libx.util"><code>rule entries</code></a> for this ResourceList.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#isWhitelist()">isWhitelist</a></span>()</code></div>
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="block">Gets whether this ResourceList is a whitelist or a blacklist.</div>
+</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#test(net.minecraft.resources.ResourceLocation)">test</a></span>&#8203;(net.minecraft.resources.ResourceLocation&nbsp;rl)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
@@ -300,6 +315,20 @@ implements <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base
 <h3>toNetwork</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">toNetwork</span>&#8203;<span class="parameters">(net.minecraft.network.FriendlyByteBuf&nbsp;buffer)</span></div>
 <div class="block">Writes this resource list to a <code>FriendlyByteBuf</code>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="isWhitelist()">
+<h3>isWhitelist</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isWhitelist</span>()</div>
+<div class="block">Gets whether this ResourceList is a whitelist or a blacklist.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getRules()">
+<h3>getRules</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceList.RuleEntry.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList.RuleEntry</a>&gt;</span>&nbsp;<span class="element-name">getRules</span>()</div>
+<div class="block">Gets a list of <a href="ResourceList.RuleEntry.html" title="class in io.github.noeppi_noeppi.libx.util"><code>rule entries</code></a> for this ResourceList.</div>
 </section>
 </li>
 <li>
