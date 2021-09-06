@@ -69,6 +69,15 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
         return Optional.empty();
     }
 
+    /**
+     * Creates a {@link ConfigEditor} for this value mapper to display this config in the
+     * config menu. To display that this value can't be edited through the GUI, use
+     * {@link ConfigEditor#unsupported(Object)} with a default value that is used if for example
+     * elements of this type are created in a list.
+     * 
+     * @param validator Access to the current validator used. Can be used to create different
+     *                  editors based on validators.
+     */
     @OnlyIn(Dist.CLIENT)
     ConfigEditor<T> createEditor(ValidatorInfo<?> validator);
 }
