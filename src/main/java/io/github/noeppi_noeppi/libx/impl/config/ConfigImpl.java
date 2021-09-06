@@ -10,6 +10,7 @@ import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
 import io.github.noeppi_noeppi.libx.impl.config.correct.CorrectionInstance;
+import io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -111,7 +112,7 @@ public class ConfigImpl {
                 }
                 values.put(key, value);
             }
-            return new ConfigState(this, values.build(), ImmutableSet.copyOf(this.groups));
+            return new ConfigState(this, values.build());
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to read config state from current values.");
         }
@@ -141,7 +142,7 @@ public class ConfigImpl {
             if (!keysLeft.isEmpty()) {
                 LibX.logger.warn("Config " + this.id + ": There are additional fields on the client, not sent by the server. Using client values.");
             }
-            return new ConfigState(this, values.build(), ImmutableSet.copyOf(this.groups));
+            return new ConfigState(this, values.build());
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to read config state.", e);
         }
@@ -174,7 +175,7 @@ public class ConfigImpl {
         if (!Files.isRegularFile(filePath) || !Files.isReadable(filePath)) {
             if (parent == null) {
                 if (path != null) {
-                    throw new IllegalStateException("Config '" + this.id + "' at '" + path.toAbsolutePath().normalize().toString() + "' does not exist or is not readable.");
+                    throw new IllegalStateException("Config '" + this.id + "' at '" + path.toAbsolutePath().normalize() + "' does not exist or is not readable.");
                 } else {
                     throw new IllegalStateException("Config '" + this.id + "' does not exist or is not readable.");
                 }
@@ -220,10 +221,10 @@ public class ConfigImpl {
             }
         }
         reader.close();
-        ConfigState state = new ConfigState(this, values.build(), ImmutableSet.copyOf(this.groups));
+        ConfigState state = new ConfigState(this, values.build());
         if (needsCorrection.get()) {
             if (path != null) {
-                LibX.logger.info("Correcting config '" + this.id + "' at " + path.toAbsolutePath().normalize().toString());
+                LibX.logger.info("Correcting config '" + this.id + "' at " + path.toAbsolutePath().normalize());
             } else {
                 LibX.logger.info("Correcting config '" + this.id + "'");
             }
@@ -332,6 +333,28 @@ public class ConfigImpl {
                     }
                 }
             }
+        }
+    }
+    
+    public ConfigDisplay createDisplay() {
+        if (this.defaultState == null) {
+            throw new IllegalStateException("Can't create config display: Default state not yet set.");
+        }
+        if (this.savedState == null) {
+            throw new IllegalStateException("Can't create config display: No saved state.");
+        }
+        return new ConfigDisplay(this, this.savedState, this.defaultState);
+    }
+    
+    public void applyInGameChanges(ConfigState newState) {
+        this.saveState(newState);
+        if (!this.shadowed) {
+            newState.apply();
+        }
+        try {
+            newState.writeToFile(null, null);
+        } catch (IOException e) {
+            LibX.logger.warn("Failed to save config file from InGame values: " + e.getMessage(), e);
         }
     }
     

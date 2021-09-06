@@ -3,10 +3,15 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.RecordEditor;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -155,5 +160,11 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<T> createEditor(ValidatorInfo<?> validator) {
+        return new RecordEditor<>(this.clazz, this.mappers, this.ctor);
     }
 }

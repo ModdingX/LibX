@@ -185,7 +185,7 @@ public class EffectIngredient extends Ingredient {
             List<MobEffectInstance> effects = new ArrayList<>();
             int effectsSize = buffer.readInt();
             for (int i = 0; i < effectsSize; i++) {
-                MobEffect potion = ForgeRegistries.POTIONS.getValue(buffer.readResourceLocation());
+                MobEffect potion = ForgeRegistries.MOB_EFFECTS.getValue(buffer.readResourceLocation());
                 if (potion == null) {
                     potion = MobEffects.MOVEMENT_SPEED;
                 }
@@ -217,7 +217,7 @@ public class EffectIngredient extends Ingredient {
             List<MobEffectInstance> effects = new ArrayList<>();
             for (JsonElement effectJson : json.get("effects").getAsJsonArray()) {
                 JsonObject effect = effectJson.getAsJsonObject();
-                MobEffect potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effect.get("potion").getAsString()));
+                MobEffect potion = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effect.get("potion").getAsString()));
                 if (potion == null) {
                     potion = MobEffects.MOVEMENT_SPEED;
                 }

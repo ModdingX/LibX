@@ -198,6 +198,7 @@ public class ConfigManager {
         configIds.put(location, configClass);
         configs.put(configClass, path);
         new ConfigImpl(location, configClass, path, clientConfig);
+        ModMappers.get(location.getNamespace()).configRegistered();
         firstLoadConfig(configClass);
     }
 

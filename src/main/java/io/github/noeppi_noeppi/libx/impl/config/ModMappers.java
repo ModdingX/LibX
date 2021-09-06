@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.*;
+import io.github.noeppi_noeppi.libx.impl.config.gui.ModConfigGuiAdapter;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.SimpleValueMappers;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.*;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.generic.ListValueMapper;
@@ -17,8 +18,11 @@ import io.github.noeppi_noeppi.libx.impl.config.validators.SimpleValidators;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.JsonTypesafeMapper;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.WrappedGenericMapper;
 import io.github.noeppi_noeppi.libx.util.ClassUtil;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.OnlyIns;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -81,7 +85,8 @@ public class ModMappers {
     private final String modid;
     private final Map<Class<?>, CommonValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
     private final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> validators = Collections.synchronizedMap(new HashMap<>());
-
+    private ModConfigGuiAdapter adapter = null;
+    
     private ModMappers(String modid) {
         this.modid = modid;
     }
@@ -206,6 +211,18 @@ public class ModMappers {
                 //noinspection unchecked
                 return (ConfigValidator<?, A>) validator.orElse(null);
             }
+        }
+    }
+    
+    public void initAdapter(ModLoadingContext context) {
+        if (this.adapter == null && FMLEnvironment.dist == Dist.CLIENT) {
+            this.adapter = new ModConfigGuiAdapter(this.modid, context.getActiveContainer());
+        }
+    }
+    
+    public void configRegistered() {
+        if (this.adapter != null) {
+            this.adapter.checkRegister();
         }
     }
 }

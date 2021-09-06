@@ -1,10 +1,16 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,6 +22,8 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
     public static EnumValueMappers getMapper(Class<? extends Enum<?>> enumClass) {
         if (!enumClass.isEnum()) {
             throw new IllegalArgumentException("Can't get enum serializer for non-enum class: " + enumClass);
+        } else if (enumClass.getEnumConstants().length == 0) {
+            throw new IllegalArgumentException("Can't get enum serializer for empty enum: " + enumClass);
         } else if (mappers.containsKey(enumClass)) {
             return mappers.get(enumClass);
         } else {
@@ -100,5 +108,11 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
                         .map(e -> e.name().toLowerCase(Locale.ROOT))
                         .collect(Collectors.joining(", "))
         );
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<Enum<?>> createEditor(ValidatorInfo<?> validator) {
+        return ConfigEditor.toggle(ImmutableList.copyOf(this.clazz.getEnumConstants()), e -> new TextComponent(e.name().toLowerCase(Locale.ROOT)));
     }
 }

@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.inventory;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Range;
 import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 /**
  * An {@link ItemStackHandler} that can be configured with common things required for many inventories.
@@ -256,6 +258,16 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         }
         
         /**
+         * Marks the given slots as outputs. That means it's not possible to insert items
+         * into these slots. Marking a slot as insertion only and output at the same time
+         * will cause an exception.
+         */
+        public Builder output(Range<Integer> slots) {
+            IntStream.range(0, this.size).filter(slots::contains).forEach(this.outputSlots::add);
+            return this;
+        }
+        
+        /**
          * Marks the given slots as insertion only. That means it's not possible to extract
          * items from these slots. Marking a slot as insertion only and output at the same
          * time will cause an exception.
@@ -274,6 +286,16 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
          */
         public Builder insertionOnly(Set<Integer> slots) {
             this.insertionOnlySlots.addAll(slots);
+            return this;
+        }
+
+        /**
+         * Marks the given slots as insertion only. That means it's not possible to extract
+         * items from these slots. Marking a slot as insertion only and output at the same
+         * time will cause an exception.
+         */
+        public Builder insertionOnly(Range<Integer> slots) {
+            IntStream.range(0, this.size).filter(slots::contains).forEach(this.insertionOnlySlots::add);
             return this;
         }
 
@@ -306,6 +328,14 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         }
         
         /**
+         * Sets a maximum stack size for some slots.
+         */
+        public Builder slotLimit(int slotLimit, Range<Integer> slots) {
+            IntStream.range(0, this.size).filter(slots::contains).forEach(slot -> this.slotLimits.put(slot, slotLimit));
+            return this;
+        }
+        
+        /**
          * Sets a slot validator for some slots.
          */
         public Builder validator(Predicate<ItemStack> validator, int... slots) {
@@ -322,6 +352,15 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             for (int slot : slots) {
                 this.slotValidators.put(slot, validator);
             }
+            return this;
+        }
+        
+        /**
+         * Sets a slot validator for some slots.
+         */
+        public Builder validator(Predicate<ItemStack> validator, Range<Integer> slots) {
+            IntStream.range(0, this.size).filter(slots::contains).forEach(slot -> this.slotValidators.put(slot, validator));
+
             return this;
         }
 

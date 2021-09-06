@@ -12,6 +12,8 @@ import java.util.function.Predicate;
  */
 public record IngredientStack(Ingredient ingredient, int count) implements Predicate<ItemStack> {
 
+    public static final IngredientStack EMPTY = new IngredientStack(Ingredient.EMPTY, 1);
+    
     /**
      * Returns whether the ingredient matches the stack and the count of the stack is greater or equal
      * to the count of the IngredientStack.

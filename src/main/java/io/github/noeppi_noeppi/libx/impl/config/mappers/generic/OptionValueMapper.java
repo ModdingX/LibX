@@ -3,8 +3,10 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.generic;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Optional;
@@ -76,5 +78,10 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
         // We only ever need to correct values that are present.
         // null is filtered by fromJSON
         return correction.tryCorrect(json, mapper, Function.identity()).map(Optional::of);
+    }
+
+    @Override
+    public ConfigEditor<Optional<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
+        return ConfigEditor.option(mapper.createEditor(ValidatorInfo.empty()));
     }
 }

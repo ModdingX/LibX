@@ -2,9 +2,15 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.PairEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.TripleEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.Optional;
@@ -77,5 +83,16 @@ public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, 
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<Triple<A, B, C>> createEditor(ValidatorInfo<?> validator) {
+        return new TripleEditor<>(
+                this.mapper1.createEditor(ValidatorInfo.empty()),
+                this.mapper2.createEditor(ValidatorInfo.empty()),
+                this.mapper3.createEditor(ValidatorInfo.empty())
+        );
+
     }
 }
