@@ -144,54 +144,59 @@ implements <a href="RecipeExtension.html" title="interface in io.github.noeppi_n
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#buildCraftingRecipes(java.util.function.Consumer)">buildCraftingRecipes</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;net.minecraft.data.recipes.FinishedRecipe&gt;&nbsp;consumer)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#buildCraftingRecipes(java.util.function.Consumer)">buildCraftingRecipes</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;net.minecraft.data.recipes.FinishedRecipe&gt;&nbsp;base)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;net.minecraft.data.recipes.FinishedRecipe&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#consumer()">consumer</a></span>()</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>protected <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;net.minecraftforge.common.crafting.conditions.ICondition&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#conditions()">conditions</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="block">Gets a list of conditions for all recipes added by this provider.</div>
+</div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;net.minecraft.data.recipes.FinishedRecipe&gt;</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#consumer()">consumer</a></span>()</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">Gets the <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link"><code>Consumer</code></a> for <code>finished recipes</code> to add recipes to.</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#criterion(net.minecraft.advancements.critereon.ItemPredicate...)">criterion</a></span>&#8203;(net.minecraft.advancements.critereon.ItemPredicate...&nbsp;items)</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#criterion(net.minecraft.advancements.critereon.ItemPredicate...)">criterion</a></span>&#8203;(net.minecraft.advancements.critereon.ItemPredicate...&nbsp;items)</code></div>
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">Builds an <code>advancement criterion</code> that requires all of the given
  <code>items</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#criterion(net.minecraft.tags.Tag)">criterion</a></span>&#8203;(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;&nbsp;item)</code></div>
-<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#criterion(net.minecraft.tags.Tag)">criterion</a></span>&#8203;(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;&nbsp;item)</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">Builds an <code>advancement criterion</code> for the given <code>tag</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#criterion(net.minecraft.world.level.ItemLike)">criterion</a></span>&#8203;(net.minecraft.world.level.ItemLike&nbsp;item)</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#criterion(net.minecraft.world.level.ItemLike)">criterion</a></span>&#8203;(net.minecraft.world.level.ItemLike&nbsp;item)</code></div>
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">Builds an <code>advancement criterion</code> for the given <code>item</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getName()">getName</a></span>()</code></div>
-<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.resources.ResourceLocation</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#loc(net.minecraft.world.level.ItemLike)">loc</a></span>&#8203;(net.minecraft.world.level.ItemLike&nbsp;item)</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getName()">getName</a></span>()</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.resources.ResourceLocation</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#loc(net.minecraft.world.level.ItemLike)">loc</a></span>&#8203;(net.minecraft.world.level.ItemLike&nbsp;item)</code></div>
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">Gets a <code>ResourceLocation</code> with the namespace being the modid of the mod given in constructor
  and the path being the registry path of the given item.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.resources.ResourceLocation</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#loc(net.minecraft.world.level.ItemLike,java.lang.String)">loc</a></span>&#8203;(net.minecraft.world.level.ItemLike&nbsp;item,
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>net.minecraft.resources.ResourceLocation</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#loc(net.minecraft.world.level.ItemLike,java.lang.String)">loc</a></span>&#8203;(net.minecraft.world.level.ItemLike&nbsp;item,
  <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;suffix)</code></div>
-<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">Gets a <code>ResourceLocation</code> with the namespace being the modid of the mod given in constructor
  and the path being the registry path of the given item followed by an underscore and the
  given suffix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe">RecipeProviderBase</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#provider()">provider</a></span>()</code></div>
-<div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe">RecipeProviderBase</a></code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#provider()">provider</a></span>()</code></div>
+<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
 <div class="block">Gets the <a href="RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe"><code>RecipeProviderBase</code></a> for this extension.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>protected abstract void</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#setup()">setup</a></span>()</code></div>
-<div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>protected abstract void</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#setup()">setup</a></span>()</code></div>
+<div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -264,10 +269,17 @@ implements <a href="RecipeExtension.html" title="interface in io.github.noeppi_n
 </section>
 </li>
 <li>
+<section class="detail" id="conditions()">
+<h3>conditions</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;net.minecraftforge.common.crafting.conditions.ICondition&gt;</span>&nbsp;<span class="element-name">conditions</span>()</div>
+<div class="block">Gets a list of conditions for all recipes added by this provider.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="buildCraftingRecipes(java.util.function.Consumer)">
 <h3>buildCraftingRecipes</h3>
 <div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">buildCraftingRecipes</span>&#8203;<span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.1/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
- <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;net.minecraft.data.recipes.FinishedRecipe&gt;&nbsp;consumer)</span></div>
+ <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;net.minecraft.data.recipes.FinishedRecipe&gt;&nbsp;base)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code>buildCraftingRecipes</code>&nbsp;in class&nbsp;<code>net.minecraft.data.recipes.RecipeProvider</code></dd>
