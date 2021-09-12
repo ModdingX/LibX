@@ -5,9 +5,7 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import io.github.noeppi_noeppi.libx.config.gui.InputProperties;
-import io.github.noeppi_noeppi.libx.util.Misc;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

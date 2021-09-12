@@ -4,7 +4,6 @@ import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.data.AlwaysExistentModelFile;
 import io.github.noeppi_noeppi.libx.impl.RendererOnDataGenException;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;

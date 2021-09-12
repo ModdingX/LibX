@@ -6,7 +6,6 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
-import io.github.noeppi_noeppi.libx.impl.config.gui.editor.PairEditor;
 import io.github.noeppi_noeppi.libx.impl.config.gui.editor.TripleEditor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

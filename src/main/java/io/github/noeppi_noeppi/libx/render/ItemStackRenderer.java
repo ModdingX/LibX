@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.commons.lang3.tuple.Pair;
 

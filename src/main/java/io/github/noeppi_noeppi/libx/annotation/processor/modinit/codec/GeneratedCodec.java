@@ -56,6 +56,28 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         }
     }
 
+    public static class CodecDynamic extends CodecElement {
+
+        public final String name;
+        public final String factoryFqn;
+        public final String getter;
+
+        public CodecDynamic(String name, String typeFqn, String typeFqnBoxed, String factoryFqn, String getter) {
+            super(typeFqn, typeFqnBoxed);
+            this.name = name;
+            this.factoryFqn = factoryFqn;
+            this.getter = getter;
+        }
+
+        @Override
+        public void writeCode(Writer writer) throws IOException {
+            writer.write("((" + ModInit.MAP_CODEC_TYPE + "<" + this.typeFqnBoxed + ">)");
+            writer.write(this.factoryFqn);
+            writer.write("(\"" + ModInit.quote(this.name) + "\"))");
+            writer.write(".forGetter(" + this.getter + ")");
+        }
+    }
+    
     public static class CodecRegistry extends CodecElement {
 
         @Nullable

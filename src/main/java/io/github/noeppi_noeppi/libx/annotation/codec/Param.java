@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.codec;
 
 import com.mojang.serialization.Codec;
-import io.github.noeppi_noeppi.libx.world.WorldSeedHolder;
 
 import java.lang.annotation.*;
 
@@ -21,10 +20,6 @@ import java.lang.annotation.*;
  * annotation. By this you can create default values easily by creating a class
  * with a field named {@code CODEC} that holds a codec for a value and adds a
  * default to it.
- * 
- * For example using {@code @Param(WorldSeedHolder.class)} on a parameter of type
- * {@link Long long} will get you a field codec for a long that defaults to the
- * current world seed using {@link WorldSeedHolder}.
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.RECORD_COMPONENT})

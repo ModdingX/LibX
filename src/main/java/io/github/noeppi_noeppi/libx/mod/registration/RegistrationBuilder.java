@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.mod.registration;
 
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.impl.registration.BuiltinTransformers;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
 import java.util.List;

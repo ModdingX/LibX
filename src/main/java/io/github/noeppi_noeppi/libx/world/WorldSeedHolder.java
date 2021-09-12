@@ -1,13 +1,12 @@
 package io.github.noeppi_noeppi.libx.world;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
 /**
- * Provides a way to get the seed for the current world in a {@link Codec codec}.
+ * Provides a way to get the seed for the current world.
  */
 public class WorldSeedHolder {
-    
-    public static final Codec<Long> CODEC = Codec.LONG.orElseGet(WorldSeedHolder::getSeed);
     
     private static long seed = 0;
 
@@ -22,7 +21,12 @@ public class WorldSeedHolder {
      * You should never call this. This is therefore marked deprecated.
      */
     @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     public static void setSeed(long worldSeed) {
         seed = worldSeed;
+    }
+    
+    public static MapCodec<Long> fieldOf(String name) {
+        return Codec.LONG.fieldOf(name).orElseGet(WorldSeedHolder::getSeed);
     }
 }

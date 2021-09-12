@@ -7,7 +7,10 @@ import io.github.noeppi_noeppi.libx.impl.config.gui.EditorHelper;
 import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.component.ComponentType;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
