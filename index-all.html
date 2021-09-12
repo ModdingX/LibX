@@ -531,8 +531,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Closes the current screen.</div>
 </dd>
-<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html#CODEC">CODEC</a></span> - Static variable in class io.github.noeppi_noeppi.libx.world.<a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">WorldSeedHolder</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/annotation/codec/Codecs.html" title="class in io.github.noeppi_noeppi.libx.annotation.codec"><span class="type-name-link">Codecs</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/annotation/codec/package-summary.html">io.github.noeppi_noeppi.libx.annotation.codec</a></dt>
 <dd>
 <div class="block">Class to retrieve generated <code>codecs.</code>.</div>
@@ -1098,6 +1096,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a dummy <code>advancement</code> with a given id to be used as a parent if your
  advancement should have another advancement from another mod as parent.</div>
 </dd>
+<dt><a href="io/github/noeppi_noeppi/libx/annotation/codec/Dynamic.html" title="annotation in io.github.noeppi_noeppi.libx.annotation.codec"><span class="type-name-link">Dynamic</span></a> - Annotation Interface in <a href="io/github/noeppi_noeppi/libx/annotation/codec/package-summary.html">io.github.noeppi_noeppi.libx.annotation.codec</a></dt>
+<dd>
+<div class="block">The dynamic codec field type will create a <code>MapCodec</code> from a static method
+ 
+ The method is defined through the fields defined in the annotation.</div>
+</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/datapack/DynamicDatapacks.html" title="class in io.github.noeppi_noeppi.libx.datapack"><span class="type-name-link">DynamicDatapacks</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/datapack/package-summary.html">io.github.noeppi_noeppi.libx.datapack</a></dt>
 <dd>
 <div class="block">This allows you to have multiple datapacks in your mod file.</div>
@@ -1292,10 +1296,16 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:F">F</h2>
 <dl class="index">
+<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/annotation/codec/Dynamic.html#factory()">factory()</a></span> - Element in annotation interface io.github.noeppi_noeppi.libx.annotation.codec.<a href="io/github/noeppi_noeppi/libx/annotation/codec/Dynamic.html" title="annotation in io.github.noeppi_noeppi.libx.annotation.codec">Dynamic</a></dt>
+<dd>
+<div class="block">Method name of the factory method.</div>
+</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/annotation/codec/Param.html#field()">field()</a></span> - Element in annotation interface io.github.noeppi_noeppi.libx.annotation.codec.<a href="io/github/noeppi_noeppi/libx/annotation/codec/Param.html" title="annotation in io.github.noeppi_noeppi.libx.annotation.codec">Param</a></dt>
 <dd>
 <div class="block">Field name of the codec field.</div>
 </dd>
+<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html#fieldOf(java.lang.String)">fieldOf(String)</a></span> - Static method in class io.github.noeppi_noeppi.libx.world.<a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">WorldSeedHolder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/data/provider/CommonTagsProviderBase.html#fileHelper">fileHelper</a></span> - Variable in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/CommonTagsProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">CommonTagsProviderBase</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#first(io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...)">first(BlockLootProviderBase.LootFactory...)</a></span> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase</a></dt>
@@ -3801,6 +3811,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Interface to retrieve information about a validator used on a config element</div>
 </dd>
+<dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/annotation/codec/Dynamic.html#value()">value()</a></span> - Element in annotation interface io.github.noeppi_noeppi.libx.annotation.codec.<a href="io/github/noeppi_noeppi/libx/annotation/codec/Dynamic.html" title="annotation in io.github.noeppi_noeppi.libx.annotation.codec">Dynamic</a></dt>
+<dd>
+<div class="block">Class where to find the codec factory.</div>
+</dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/annotation/codec/Lookup.html#value()">value()</a></span> - Element in annotation interface io.github.noeppi_noeppi.libx.annotation.codec.<a href="io/github/noeppi_noeppi/libx/annotation/codec/Lookup.html" title="annotation in io.github.noeppi_noeppi.libx.annotation.codec">Lookup</a></dt>
 <dd>
 <div class="block">The path of the registry id.</div>
@@ -3934,7 +3948,7 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world"><span class="type-name-link">WorldSeedHolder</span></a> - Class in <a href="io/github/noeppi_noeppi/libx/world/package-summary.html">io.github.noeppi_noeppi.libx.world</a></dt>
 <dd>
-<div class="block">Provides a way to get the seed for the current world in a <code>codec</code>.</div>
+<div class="block">Provides a way to get the seed for the current world.</div>
 </dd>
 <dt><span class="member-name-link"><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html#%3Cinit%3E()">WorldSeedHolder()</a></span> - Constructor for class io.github.noeppi_noeppi.libx.world.<a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">WorldSeedHolder</a></dt>
 <dd>&nbsp;</dd>
