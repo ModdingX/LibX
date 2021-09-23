@@ -40,7 +40,7 @@ import org.apache.logging.log4j.Logger;
  * LibX instance class.
  */
 @Mod("libx")
-public class LibX extends ModX {
+public final class LibX extends ModX {
 
     public static final Logger logger = LogManager.getLogger();
     

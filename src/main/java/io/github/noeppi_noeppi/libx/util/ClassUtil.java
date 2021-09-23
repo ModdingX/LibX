@@ -1,10 +1,14 @@
 package io.github.noeppi_noeppi.libx.util;
 
+import javax.annotation.Nullable;
+
 /**
  * Utilities for instances of the {@link Class} class.
  */
 public class ClassUtil {
 
+    private static final StackWalker STACK = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+    
     /**
      * Returns the given class unless it's a primitive class in which
      * case the boxed class for that primitive is returned.
@@ -58,6 +62,22 @@ public class ClassUtil {
             return void.class;
         } else {
             return clazz;
+        }
+    }
+
+    /**
+     * Same as {@link Class#forName(String)} but instead of throwing a {@link ClassNotFoundException},
+     * returns {@code null}.
+     */
+    @Nullable
+    public static Class<?> forName(String cls) {
+        // As the simple forName is caller sensitive, we need to get the caller ourselves
+        // and forward it to a call to the non-caller-sensitive method.
+        Class<?> caller = STACK.getCallerClass();
+        try {
+            return Class.forName(cls, true, caller.getClassLoader());
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            return null;
         }
     }
 }

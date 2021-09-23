@@ -73,7 +73,6 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
             this.addRenderableWidget(this.widget);
         }
         
-        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
         public OptionWidget(Screen screen, ConfigEditor<T> editor, Optional<T> initialValue, WidgetProperties<Optional<T>> properties) {
             this(screen, editor, properties, initialValue.orElse(editor.defaultValue()), initialValue.isPresent(), null);
         }

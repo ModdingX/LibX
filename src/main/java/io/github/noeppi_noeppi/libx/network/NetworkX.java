@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.network;
 
+import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
@@ -21,8 +22,10 @@ import java.util.function.Supplier;
  */
 public abstract class NetworkX {
 
-    private final String protocolVersion;
+    private static final Object LOCK = new Object();
+    
     public final SimpleChannel instance;
+    private final String protocolVersion;
     private int discriminator = 0;
 
     public NetworkX(ModX mod) {
@@ -33,8 +36,7 @@ public abstract class NetworkX {
                 this.protocolVersion::equals,
                 this.protocolVersion::equals
         );
-        //noinspection deprecation
-        mod.addSetupTask(this::registerPackets);
+        ModInternal.get(mod).addSetupTask(this::registerPackets);
     }
 
     /**
@@ -44,14 +46,16 @@ public abstract class NetworkX {
      * @param direction The network direction the packet should go.
      */
     protected <T> void register(PacketSerializer<T> serializer, Supplier<BiConsumer<T, Supplier<NetworkEvent.Context>>> handler, NetworkDirection direction) {
-        Objects.requireNonNull(direction);
-        BiConsumer<T, Supplier<NetworkEvent.Context>> realHandler;
-        if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_CLIENT) {
-            realHandler = DistExecutor.unsafeRunForDist(() -> handler, () -> () -> (msg, ctx) -> {});
-        } else {
-            realHandler = handler.get();
+        synchronized (LOCK) {
+            Objects.requireNonNull(direction);
+            BiConsumer<T, Supplier<NetworkEvent.Context>> realHandler;
+            if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_CLIENT) {
+                realHandler = DistExecutor.unsafeRunForDist(() -> handler, () -> () -> (msg, ctx) -> {});
+            } else {
+                realHandler = handler.get();
+            }
+            this.instance.registerMessage(this.discriminator++, serializer.messageClass(), serializer::encode, serializer::decode, realHandler, Optional.of(direction));
         }
-        this.instance.registerMessage(this.discriminator++, serializer.messageClass(), serializer::encode, serializer::decode, realHandler, Optional.of(direction));
     }
 
     /**
