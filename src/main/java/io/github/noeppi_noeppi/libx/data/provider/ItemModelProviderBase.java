@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.material.Fluid;
@@ -40,7 +41,6 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     private final Set<Item> handheld = new HashSet<>();
     private final Set<Item> blacklist = new HashSet<>();
-    private final Map<Item, Fluid> bucket = new HashMap<>();
 
     public ItemModelProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
         super(generator, mod.modid, fileHelper);
@@ -67,13 +67,6 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         this.blacklist.add(item);
     }
 
-    /**
-     * This item will get a dynamic model with the fluid.
-     */
-    protected void bucket(Item item, Fluid fluid) {
-        this.bucket.put(item, fluid);
-    }
-
     @Override
     protected void registerModels() {
         this.setup();
@@ -85,8 +78,6 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
                     this.defaultBlock(id, blockItem);
                 } else if (this.handheld.contains(item)) {
                     this.withExistingParent(id.getPath(), HANDHELD).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
-                } else if (this.bucket.containsKey(item)) {
-                    this.defaultBucket(id, item);
                 } else {
                     this.defaultItem(id, item);
                 }
@@ -99,6 +90,8 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     protected void defaultItem(ResourceLocation id, Item item) {
         if (item instanceof SpawnEggItem) {
             this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
+        } else if (item instanceof BucketItem bucketItem) {
+            this.defaultBucket(id, bucketItem);
         } else {
             this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         }
@@ -112,11 +105,11 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         }
     }
 
-    protected void defaultBucket(ResourceLocation id, Item item) {
+    private void defaultBucket(ResourceLocation id, BucketItem item) {
         this.withExistingParent(id.getPath(), DRIPPING_BUCKET)
                 .texture("base", this.modLoc("item/" + id.getPath()))
                 .customLoader(DynamicBucketModelBuilder::begin)
-                .fluid(this.bucket.get(item));
+                .fluid(item.getFluid());
     }
 
     private static boolean isItemStackRenderer(IItemRenderProperties properties) {
