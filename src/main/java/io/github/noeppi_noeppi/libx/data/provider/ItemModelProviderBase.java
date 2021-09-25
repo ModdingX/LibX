@@ -9,14 +9,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,6 +32,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
+    public static final ResourceLocation DRIPPING_BUCKET = new ResourceLocation("forge", "bucket_drip");
     public static final ResourceLocation SPECIAL_BLOCK_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/special_block");
     public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
 
@@ -35,6 +40,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     private final Set<Item> handheld = new HashSet<>();
     private final Set<Item> blacklist = new HashSet<>();
+    private final Map<Item, Fluid> bucket = new HashMap<>();
 
     public ItemModelProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
         super(generator, mod.modid, fileHelper);
@@ -61,6 +67,13 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         this.blacklist.add(item);
     }
 
+    /**
+     * This item will get a dynamic model with the fluid.
+     */
+    protected void bucket(Item item, Fluid fluid) {
+        this.bucket.put(item, fluid);
+    }
+
     @Override
     protected void registerModels() {
         this.setup();
@@ -72,6 +85,8 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
                     this.defaultBlock(id, blockItem);
                 } else if (this.handheld.contains(item)) {
                     this.withExistingParent(id.getPath(), HANDHELD).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
+                } else if (this.bucket.containsKey(item)) {
+                    this.defaultBucket(id, item);
                 } else {
                     this.defaultItem(id, item);
                 }
@@ -83,7 +98,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     protected void defaultItem(ResourceLocation id, Item item) {
         if (item instanceof SpawnEggItem) {
-             this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
+            this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
         } else {
             this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         }
@@ -96,7 +111,14 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
         }
     }
-    
+
+    protected void defaultBucket(ResourceLocation id, Item item) {
+        this.withExistingParent(id.getPath(), DRIPPING_BUCKET)
+                .texture("base", this.modLoc("item/" + id.getPath()))
+                .customLoader(DynamicBucketModelBuilder::begin)
+                .fluid(this.bucket.get(item));
+    }
+
     private static boolean isItemStackRenderer(IItemRenderProperties properties) {
         try {
             properties.getItemStackRenderer();
