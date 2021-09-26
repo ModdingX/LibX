@@ -170,7 +170,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         if (this.rootId == null) {
             throw new IllegalStateException("On advancement providers without a root advancement only fully qualified resource locations are allowed, no plain ids.");
         }
-        return new ResourceLocation(this.mod.modid, this.rootId + "/" + id);
+        return this.mod.resource(this.rootId + "/" + id);
     }
 
     /**

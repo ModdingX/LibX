@@ -103,7 +103,7 @@ public abstract class ModXRegistration extends ModX {
         if (!ResourceLocation.isValidPath(id)) {
             throw new IllegalArgumentException("ModXRegistration#register called with invalid id argument.");
         }
-        ResourceLocation rl = new ResourceLocation(this.modid, id);
+        ResourceLocation rl = this.resource(id);
         synchronized (this.registrationLock) {
             if (this.settings.conditions().stream().allMatch(c -> c.shouldRegister(rl, obj))) {
                 Object replaced = this.settings.replacers().stream()
@@ -145,12 +145,12 @@ public abstract class ModXRegistration extends ModX {
     
     private void commonRegistration(FMLCommonSetupEvent event) {
         this.runRegistration();
-        this.registrationEntries.forEach(entry -> entry.run(reg -> reg.registerCommon(entry.id(this.modid), event::enqueueWork)));
+        this.registrationEntries.forEach(entry -> entry.run(reg -> reg.registerCommon(this.resource(entry.id()), event::enqueueWork)));
     }
     
     private void clientRegistration(FMLClientSetupEvent event) {
         this.runRegistration();
-        this.registrationEntries.forEach(entry -> entry.run(reg -> reg.registerClient(entry.id(this.modid), event::enqueueWork)));
+        this.registrationEntries.forEach(entry -> entry.run(reg -> reg.registerClient(this.resource(entry.id()), event::enqueueWork)));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -160,16 +160,12 @@ public abstract class ModXRegistration extends ModX {
                 .filter(entry -> entry.value() instanceof IForgeRegistryEntry<?>)
                 .filter(entry -> event.getRegistry().getRegistrySuperType().equals(((IForgeRegistryEntry<?>) entry.value()).getRegistryType()))
                 .forEach(entry -> {
-                    ((IForgeRegistryEntry<?>) entry.value()).setRegistryName(entry.id(this.modid));
+                    ((IForgeRegistryEntry<?>) entry.value()).setRegistryName(this.resource(entry.id()));
                     ((IForgeRegistry) event.getRegistry()).register((IForgeRegistryEntry<?>) entry.value()); 
                 });
     }
     
     private record RegEntry(String id, Object value) {
-        
-        public ResourceLocation id(String modid) {
-            return new ResourceLocation(modid, this.id);
-        }
         
         public void run(Consumer<Registerable> action) {
             if (this.value instanceof Registerable) {

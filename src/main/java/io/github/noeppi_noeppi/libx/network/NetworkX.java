@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.network;
 
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
@@ -31,7 +30,7 @@ public abstract class NetworkX {
     public NetworkX(ModX mod) {
         this.protocolVersion = this.getProtocolVersion();
         this.instance = NetworkRegistry.newSimpleChannel(
-                new ResourceLocation(mod.modid, "netchannel"),
+                mod.resource("netchannel"),
                 () -> this.protocolVersion,
                 this.protocolVersion::equals,
                 this.protocolVersion::equals

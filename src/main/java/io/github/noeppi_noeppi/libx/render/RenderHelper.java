@@ -19,7 +19,7 @@ public class RenderHelper {
      * ResourceLocation of a texture with the size 512x512 that is purely white. It can be colored with
      * {@link RenderSystem#setShaderColor(float, float, float, float)}.
      */
-    public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation(LibX.getInstance().modid, "textures/white.png");
+    public static final ResourceLocation TEXTURE_WHITE = LibX.getInstance().resource("textures/white.png");
     private static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
 
     /**

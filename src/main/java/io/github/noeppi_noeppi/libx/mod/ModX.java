@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.mod;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -71,4 +72,12 @@ public abstract class ModX {
      * Automatically registered to the event bus.
      */
     protected abstract void clientSetup(FMLClientSetupEvent event);
+
+    /**
+     * Creates a new {@link ResourceLocation} where the namespace is this mods id and the
+     * path is the given string.
+     */
+    public final ResourceLocation resource(String path) {
+        return new ResourceLocation(this.modid, path);
+    }
 }

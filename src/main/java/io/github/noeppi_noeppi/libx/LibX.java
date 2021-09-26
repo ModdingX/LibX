@@ -19,7 +19,6 @@ import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -70,10 +69,10 @@ public final class LibX extends ModX {
         MinecraftForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
         MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 
-        CraftingHelper.register(new ResourceLocation(this.modid, "effect"), EffectIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(this.modid, "potion"), PotionIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(this.modid, "nbt"), NbtIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(this.modid, "merged"), MergedIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(this.resource("effect"), EffectIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(this.resource("potion"), PotionIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(this.resource("nbt"), NbtIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(this.resource("merged"), MergedIngredient.Serializer.INSTANCE);
     }
 
     @Override
@@ -112,7 +111,7 @@ public final class LibX extends ModX {
     }
     
     private void registerContainers(RegistryEvent.Register<MenuType<?>> event) {
-        GenericMenu.TYPE.setRegistryName(new ResourceLocation(this.modid, "generic"));
+        GenericMenu.TYPE.setRegistryName(this.resource("generic"));
         event.getRegistry().register(GenericMenu.TYPE);
     }
 
