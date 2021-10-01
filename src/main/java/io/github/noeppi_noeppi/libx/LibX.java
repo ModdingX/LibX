@@ -49,12 +49,6 @@ public final class LibX extends ModX {
     public LibX() {
         super("libx", null);
         
-        logger.warn("\u001B[1m\u001B[31mRunning LibX experimental build. (" + ModList.get().getModFileById(this.modid).moduleName() + "/" + ModList.get().getModFileById(this.modid).versionString() + ")\u001B[0m");
-        logger.warn("\u001B[1m\u001B[31mAnything in LibX may still change.\u001B[0m");
-        if (FMLEnvironment.production) {
-            logger.error("\u001B[1m\u001B[31mProduction environment detected. Using LibX experimental builds in production is strongly discouraged.\u001B[0m");
-        }
-        
         instance = this;
         NetworkImpl network = new NetworkImpl(this);
         networkWrapper = new CommonNetwork(network);
