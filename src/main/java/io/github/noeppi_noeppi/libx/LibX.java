@@ -105,7 +105,7 @@ public final class LibX extends ModX {
         return networkWrapper;
     }
 
-    // We can not do this in setup as it would not be available for `runData`
+    // We can't do this in setup as it would not be available for `runData`
     private void registerMisc(RegistryEvent.NewRegistry event) {
         Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, AllLootEntry.TYPE);
     }

@@ -263,15 +263,15 @@ public class ConfigManager {
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             ResourceLocation id = configIds.inverse().get(configClass);
             ConfigImpl config = ConfigImpl.getConfig(id);
-            if (!config.clientConfig) {
+            if (!config.clientConfig && NetworkImpl.getImpl().canSend()) {
                 PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                NetworkImpl.getImpl().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                NetworkImpl.getImpl().channel.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
             }
         } else {
             LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
         }
     }
-    
+
     /**
      * Forces a resync of all configs to one player.
      */
@@ -279,9 +279,9 @@ public class ConfigManager {
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             for (ResourceLocation id : ConfigManager.configs()) {
                 ConfigImpl config = ConfigImpl.getConfig(id);
-                if (!config.clientConfig) {
+                if (!config.clientConfig && NetworkImpl.getImpl().canSend()) {
                     PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                    NetworkImpl.getImpl().instance.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                    NetworkImpl.getImpl().channel.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
                 }
             }
         } else {

@@ -34,17 +34,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ConfigImpl {
 
     public static final Gson GSON = net.minecraft.Util.make(() -> {
-        GsonBuilder gsonbuilder = new GsonBuilder();
-        gsonbuilder.disableHtmlEscaping();
-        gsonbuilder.setLenient();
-        gsonbuilder.setPrettyPrinting();
-        return gsonbuilder.create();
+        GsonBuilder builder = new GsonBuilder();
+        builder.disableHtmlEscaping();
+        builder.setLenient();
+        builder.setPrettyPrinting();
+        return builder.create();
     });
 
     public static final Gson INTERNAL = net.minecraft.Util.make(() -> {
-        GsonBuilder gsonbuilder = new GsonBuilder();
-        gsonbuilder.disableHtmlEscaping();
-        return gsonbuilder.create();
+        GsonBuilder builder = new GsonBuilder();
+        builder.disableHtmlEscaping();
+        return builder.create();
     });
 
     private static final Map<ResourceLocation, ConfigImpl> configs = Collections.synchronizedMap(new HashMap<>());
