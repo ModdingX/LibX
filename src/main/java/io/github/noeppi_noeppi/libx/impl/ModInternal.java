@@ -20,8 +20,7 @@ public class ModInternal {
     public static void init(ModX mod, FMLJavaModLoadingContext ctx) {
         synchronized (LOCK) {
             if (!Modifier.isFinal(mod.getClass().getModifiers())) {
-                mod.logger.error("The mod class " + mod.getClass() + " is not final. This will crash when LibX moves to a stable version."
-                        + " Report to author of the " + mod.modid + " mod.");
+                throw new IllegalStateException("Mod class must be final. Report to the author of the " + mod.modid + " mod.");
             }
             if (MAP.containsKey(mod.getClass())) {
                 throw new IllegalStateException("ModInternal initialised twice for mod " + mod.getClass());
