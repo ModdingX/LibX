@@ -28,11 +28,11 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
         }
     }
 
+    private static final List<String> COMMENT = List.of("This is a resource list. See " + INFO_URL);
+
     private ResourceListValueMapper() {
 
     }
-
-    private final List<String> COMMENT = List.of("This is a resource list. See " + INFO_URL);
 
     @Override
     public Class<ResourceList> type() {
@@ -66,7 +66,7 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
 
     @Override
     public List<String> comment() {
-        return this.COMMENT;
+        return COMMENT;
     }
 
     @Override
