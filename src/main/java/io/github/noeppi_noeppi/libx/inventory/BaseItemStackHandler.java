@@ -71,7 +71,9 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
 
     @Override
     public void onContentsChanged(int slot) {
-        this.contentsChanged.accept(slot);
+        if (this.contentsChanged != null) {
+            this.contentsChanged.accept(slot);
+        }
     }
 
     /**
