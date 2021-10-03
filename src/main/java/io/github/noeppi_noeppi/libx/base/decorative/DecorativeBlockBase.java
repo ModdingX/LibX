@@ -4,12 +4,9 @@ import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.IItemRenderProperties;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class DecorativeBlockBase extends BlockBase {
 
@@ -28,45 +25,19 @@ public class DecorativeBlockBase extends BlockBase {
         super(mod, properties, itemProperties);
         this.type = type;
 
-        this.slab = new SlabBlockBase(mod, properties, itemProperties) {
-            @Override
-            public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
-                DecorativeBlockBase.this.initializeItemClient(consumer);
-            }
-        };
+        this.slab = new SlabBlockBase(mod, properties, itemProperties);
 
-        this.stairs = new StairBlockBase(mod, this::defaultBlockState, properties, itemProperties) {
-            @Override
-            public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
-                DecorativeBlockBase.this.initializeItemClient(consumer);
-            }
-        };
+        this.stairs = new StairBlockBase(mod, this::defaultBlockState, properties, itemProperties);
 
         if (type == Type.WALL) {
-            this.wall = new WallBlockBase(mod, properties, itemProperties) {
-                @Override
-                public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
-                    DecorativeBlockBase.this.initializeItemClient(consumer);
-                }
-            };
+            this.wall = new WallBlockBase(mod, properties, itemProperties);
         } else {
             this.wall = null;
         }
 
         if (type == Type.FENCE) {
-            this.fence = new FenceBlockBase(mod, properties, itemProperties) {
-                @Override
-                public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
-                    DecorativeBlockBase.this.initializeItemClient(consumer);
-                }
-            };
-
-            this.fenceGate = new FenceGateBlockBase(mod, properties, itemProperties) {
-                @Override
-                public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
-                    DecorativeBlockBase.this.initializeItemClient(consumer);
-                }
-            };
+            this.fence = new FenceBlockBase(mod, properties, itemProperties);
+            this.fenceGate = new FenceGateBlockBase(mod, properties, itemProperties);
         } else {
             this.fence = null;
             this.fenceGate = null;
