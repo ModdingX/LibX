@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.base.decorative;
 
 import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
@@ -9,6 +10,13 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Base class for {@link net.minecraft.world.level.block.Block blocks} for mods using {@link ModXRegistration}. This
+ * will automatically set the creative tab if it's defined in the mod and a register a
+ * {@link net.minecraft.world.item.BlockItem block item}. Additionally, it will register a slab and stairs
+ * {@link net.minecraft.world.level.block.Block block}, and based on the {@link Type block type} it will also generate
+ * a wall, or fence and fence gate. Everything again with the {@link net.minecraft.world.item.BlockItem block item}.
+ */
 public class DecorativeBlockBase extends BlockBase {
 
     private final Type type;

@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
-import io.github.noeppi_noeppi.libx.base.decorative.ChildBlock;
+import io.github.noeppi_noeppi.libx.block.ChildBlock;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;

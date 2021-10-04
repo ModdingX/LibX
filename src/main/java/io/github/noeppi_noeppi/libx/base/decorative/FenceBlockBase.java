@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.base.decorative;
 
+import io.github.noeppi_noeppi.libx.block.ChildBlock;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.resources.ResourceLocation;
