@@ -10,6 +10,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.block.FenceBlock;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -33,6 +34,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     public static final ResourceLocation DRIPPING_BUCKET = new ResourceLocation("forge", "bucket_drip");
     public static final ResourceLocation SPECIAL_BLOCK_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/special_block");
     public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
+    public static final ResourceLocation FENCE_PARENT = new ResourceLocation("minecraft", "block/fence_inventory");
 
     protected final ModX mod;
 
@@ -97,6 +99,10 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
         if (isItemStackRenderer(RenderProperties.get(item))) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(SPECIAL_BLOCK_PARENT));
+        } else if (item.getBlock() instanceof FenceBlock) {
+            ResourceLocation texture = new ResourceLocation(id.getNamespace(), "block/" + (id.getPath().endsWith("_fence") ? id.getPath().substring(0, id.getPath().length() - 6) : id.getPath()));
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(FENCE_PARENT))
+                    .texture("texture", texture);
         } else {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
         }

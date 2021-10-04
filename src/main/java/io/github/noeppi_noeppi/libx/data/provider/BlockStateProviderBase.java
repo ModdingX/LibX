@@ -1,13 +1,11 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
+import io.github.noeppi_noeppi.libx.base.decorative.ChildBlock;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -95,7 +93,21 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * {@link BlockStateProperties#FACING} and creates block states matching those.
      */
     protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
-        if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
+        if (block instanceof ChildBlock child && child.getParent() != null) {
+            id = child.getParent().getRegistryName();
+        }
+
+        if (block instanceof SlabBlock) {
+            this.slabBlock((SlabBlock) block, id, id);
+        } else if (block instanceof StairBlock) {
+            this.stairsBlock((StairBlock) block, id);
+        } else if (block instanceof WallBlock) {
+            this.wallBlock((WallBlock) block, id);
+        } else if (block instanceof FenceBlock) {
+            this.fenceBlock((FenceBlock) block, id);
+        } else if (block instanceof FenceGateBlock) {
+            this.fenceGateBlock((FenceGateBlock) block, id);
+        } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
                 builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
@@ -117,6 +129,10 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * of type {@link LiquidBlock} and {@link LeavesBlock}.
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
+        if (block instanceof SlabBlock || block instanceof StairBlock || block instanceof WallBlock || block instanceof FenceBlock || block instanceof FenceGateBlock) {
+            return null;
+        }
+
         if (block.getStateDefinition().getPossibleStates().stream().allMatch(state -> state.getRenderShape() != RenderShape.MODEL)) {
             if (block instanceof LiquidBlock fluidBlock) {
                 return this.models().getBuilder(id.getPath()).texture("particle", fluidBlock.getFluid().getAttributes().getStillTexture());

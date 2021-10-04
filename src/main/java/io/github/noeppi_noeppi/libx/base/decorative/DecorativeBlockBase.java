@@ -5,6 +5,7 @@ import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,20 +25,18 @@ public class DecorativeBlockBase extends BlockBase {
     public DecorativeBlockBase(ModX mod, Properties properties, Item.Properties itemProperties, Type type) {
         super(mod, properties, itemProperties);
         this.type = type;
-
-        this.slab = new SlabBlockBase(mod, properties, itemProperties);
-
-        this.stairs = new StairBlockBase(mod, this::defaultBlockState, properties, itemProperties);
+        this.slab = new SlabBlockBase(mod, properties, itemProperties, this);
+        this.stairs = new StairBlockBase(mod, this::defaultBlockState, properties, itemProperties, this);
 
         if (type == Type.WALL) {
-            this.wall = new WallBlockBase(mod, properties, itemProperties);
+            this.wall = new WallBlockBase(mod, properties, itemProperties, this);
         } else {
             this.wall = null;
         }
 
         if (type == Type.FENCE) {
-            this.fence = new FenceBlockBase(mod, properties, itemProperties);
-            this.fenceGate = new FenceGateBlockBase(mod, properties, itemProperties);
+            this.fence = new FenceBlockBase(mod, properties, itemProperties, this);
+            this.fenceGate = new FenceGateBlockBase(mod, properties, itemProperties, this);
         } else {
             this.fence = null;
             this.fenceGate = null;
@@ -54,6 +53,29 @@ public class DecorativeBlockBase extends BlockBase {
 
     public boolean hasWall() {
         return this.type == Type.WALL;
+    }
+
+    public SlabBlockBase getSlab() {
+        return this.slab;
+    }
+
+    public StairBlockBase getStairs() {
+        return this.stairs;
+    }
+
+    @Nullable
+    public WallBlockBase getWall() {
+        return this.wall;
+    }
+
+    @Nullable
+    public FenceBlockBase getFence() {
+        return this.fence;
+    }
+
+    @Nullable
+    public FenceGateBlockBase getFenceGate() {
+        return this.fenceGate;
     }
 
     @Override
