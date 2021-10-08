@@ -5,6 +5,8 @@ import io.github.noeppi_noeppi.libx.base.decoration.SignAccess;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -63,6 +65,7 @@ public class DecoratedSign implements Registerable, SignAccess {
     @OnlyIn(Dist.CLIENT)
     public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
         this.init(id);
+        BlockEntityRenderers.register(this.beType, SignRenderer::new);
         defer.accept(() -> Sheets.addWoodType(this.wood));
     }
 

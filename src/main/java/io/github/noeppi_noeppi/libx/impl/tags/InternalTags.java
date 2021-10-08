@@ -33,12 +33,12 @@ public class InternalTags {
         public static Tag.Named<Item> WALLS = wrap(ItemTags.WALLS, Blocks.WALLS);
         public static Tag.Named<Item> TRAPDOORS = wrap(ItemTags.TRAPDOORS, Blocks.TRAPDOORS);
         public static Tag.Named<Item> FENCES = wrap(ItemTags.FENCES, Blocks.FENCES);
-        public static Tag.Named<Item> SIGNS = wrap(ItemTags.SIGNS, Blocks.SIGNS);
+        public static Tag.Named<Item> SIGNS = wrap(ItemTags.SIGNS, Blocks.STANDING_SIGNS);
         
         private static Tag.Named<Item> wrap(Tag.Named<Item> tag, Tag.Named<Block> blockTag) {
             Tag.Named<Item> newTag = ItemTags.bind(LibX.getInstance().resource("impl_" + tag.getName().getPath()).toString());
             TAGS.put(tag, newTag);
-            COPIES.put(blockTag, tag);
+            COPIES.put(blockTag, newTag);
             return newTag;
         }
 

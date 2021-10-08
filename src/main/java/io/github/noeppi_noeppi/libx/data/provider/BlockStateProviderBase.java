@@ -109,29 +109,29 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      */
     protected void defaultState(ResourceLocation id, Block block, Supplier<ModelFile> model) {
         if (block instanceof DecoratedSlabBlock decorated) {
-            this.slabBlock(decorated, decorated.parent.getRegistryName(), decorated.parent.getRegistryName());
+            this.slabBlock(decorated, textureId(decorated.parent.getRegistryName()), textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedStairBlock decorated) {
-            this.stairsBlock(decorated, decorated.parent.getRegistryName());
+            this.stairsBlock(decorated, textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedWallBlock decorated) {
-            this.wallBlock(decorated, decorated.parent.getRegistryName());
+            this.wallBlock(decorated, textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedFenceBlock decorated) {
-            this.fenceBlock(decorated, decorated.parent.getRegistryName());
+            this.fenceBlock(decorated, textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedFenceGateBlock decorated) {
-            this.fenceGateBlock(decorated, decorated.parent.getRegistryName());
+            this.fenceGateBlock(decorated, textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedWoodButton decorated) {
-            this.buttonBlock(decorated, decorated.parent.getRegistryName());
+            this.buttonBlock(decorated, textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedStoneButton decorated) {
-            this.buttonBlock(decorated, decorated.parent.getRegistryName());
+            this.buttonBlock(decorated, textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedPressurePlate decorated) {
-            this.pressurePlateBlock(decorated, decorated.parent.getRegistryName());
+            this.pressurePlateBlock(decorated, textureId(decorated.parent.getRegistryName()));
         } else if (block instanceof DecoratedDoorBlock decorated) {
-            this.doorBlock(decorated, new ResourceLocation(id.getNamespace(), id.getPath() + "_bottom"), new ResourceLocation(id.getNamespace(), id.getPath() + "_top"));
+            this.doorBlock(decorated, textureId(id, "bottom"), textureId(id, "top"));
         } else if (block instanceof DecoratedTrapdoorBlock decorated) {
-            this.trapdoorBlock(decorated, id, true);
+            this.trapdoorBlock(decorated, textureId(id), true);
         } else if (block instanceof DecoratedSign.Standing decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", decorated.parent.getRegistryName())));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(decorated.parent.getRegistryName()))));
         } else if (block instanceof DecoratedSign.Wall decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", decorated.parent.getRegistryName())));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(decorated.parent.getRegistryName()))));
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
@@ -210,6 +210,16 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         
         VariantBlockStateBuilder builder = this.getVariantBuilder(block);
         builder.partialState().with(BlockStateProperties.POWERED, false).addModels(new ConfiguredModel(model));
-        builder.partialState().with(BlockStateProperties.POWERED, false).addModels(new ConfiguredModel(pressedModel));
+        builder.partialState().with(BlockStateProperties.POWERED, true).addModels(new ConfiguredModel(pressedModel));
+    }
+    
+    private static ResourceLocation textureId(ResourceLocation blockId) {
+        Objects.requireNonNull(blockId);
+        return new ResourceLocation(blockId.getNamespace(), "block/" + blockId.getPath());
+    }
+    
+    private static ResourceLocation textureId(ResourceLocation blockId, String suffix) {
+        Objects.requireNonNull(blockId);
+        return new ResourceLocation(blockId.getNamespace(), "block/" + blockId.getPath() + "_" + suffix);
     }
 }

@@ -3,10 +3,7 @@ package io.github.noeppi_noeppi.libx.data.provider;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.data.AlwaysExistentModelFile;
 import io.github.noeppi_noeppi.libx.impl.RendererOnDataGenException;
-import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedFenceBlock;
-import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedSign;
-import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedStoneButton;
-import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedWoodButton;
+import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.*;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -116,7 +113,9 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
             ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
-        } else if (item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall) {
+        } else if (item.getBlock() instanceof DecoratedTrapdoorBlock) {
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath() + "_bottom")));
+        } else if (item.getBlock() instanceof DecoratedDoorBlock || item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall) {
             this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         } else {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
