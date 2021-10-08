@@ -3,14 +3,14 @@ package io.github.noeppi_noeppi.libx.data.provider;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.data.AlwaysExistentModelFile;
 import io.github.noeppi_noeppi.libx.impl.RendererOnDataGenException;
+import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedFenceBlock;
+import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedSign;
+import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedStoneButton;
+import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedWoodButton;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.item.*;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -35,6 +36,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     public static final ResourceLocation SPECIAL_BLOCK_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/special_block");
     public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
     public static final ResourceLocation FENCE_PARENT = new ResourceLocation("minecraft", "block/fence_inventory");
+    public static final ResourceLocation BUTTON_PARENT = new ResourceLocation("minecraft", "block/button_inventory");
 
     protected final ModX mod;
 
@@ -90,7 +92,10 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         if (item instanceof SpawnEggItem) {
             this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
         } else if (item instanceof BucketItem bucketItem) {
-            this.defaultBucket(id, bucketItem);
+            this.withExistingParent(id.getPath(), DRIPPING_BUCKET)
+                    .texture("base", this.modLoc("item/" + id.getPath()))
+                    .customLoader(DynamicBucketModelBuilder::begin)
+                    .fluid(bucketItem.getFluid());
         } else {
             this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         }
@@ -99,20 +104,23 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
         if (isItemStackRenderer(RenderProperties.get(item))) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(SPECIAL_BLOCK_PARENT));
-        } else if (item.getBlock() instanceof FenceBlock) {
-            ResourceLocation texture = new ResourceLocation(id.getNamespace(), "block/" + (id.getPath().endsWith("_fence") ? id.getPath().substring(0, id.getPath().length() - 6) : id.getPath()));
-            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(FENCE_PARENT))
-                    .texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedFenceBlock decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(FENCE_PARENT)).texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedWoodButton decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedStoneButton decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall) {
+            this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         } else {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
         }
-    }
-
-    private void defaultBucket(ResourceLocation id, BucketItem item) {
-        this.withExistingParent(id.getPath(), DRIPPING_BUCKET)
-                .texture("base", this.modLoc("item/" + id.getPath()))
-                .customLoader(DynamicBucketModelBuilder::begin)
-                .fluid(item.getFluid());
     }
 
     private static boolean isItemStackRenderer(IItemRenderProperties properties) {
