@@ -34,7 +34,11 @@ public class DecoratedBlock extends BlockBase {
                 .putAll(this.registerMap)
                 .build();
     }
-    
+
+    public DecorationContext getContext() {
+        return this.context;
+    }
+
     public boolean has(DecorationType<?> type) {
         return this.context.has(type) && this.elements.containsKey(type);
     }

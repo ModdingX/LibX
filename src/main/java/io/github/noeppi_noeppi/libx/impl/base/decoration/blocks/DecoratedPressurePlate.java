@@ -13,10 +13,12 @@ import java.util.Random;
 public class DecoratedPressurePlate extends PressurePlateBlock {
 
     public final DecoratedBlock parent;
+    public final PressurePlateBlock.Sensitivity sensitivity;
 
     public DecoratedPressurePlate(PressurePlateBlock.Sensitivity sensitivity, DecoratedBlock parent) {
         super(sensitivity, Properties.copy(parent));
         this.parent = parent;
+        this.sensitivity = sensitivity;
     }
 
     @Override

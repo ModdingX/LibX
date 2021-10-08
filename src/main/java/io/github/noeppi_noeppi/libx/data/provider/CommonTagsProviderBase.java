@@ -1,5 +1,7 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
+import io.github.noeppi_noeppi.libx.impl.data.DecorationTags;
+import io.github.noeppi_noeppi.libx.impl.tags.InternalTags;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -64,9 +66,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
     private void doSetup() {
         this.setup();
+        for (Map.Entry<Tag.Named<Item>, Tag.Named<Item>> entry : InternalTags.Items.getTags().entrySet()) {
+            this.item(entry.getValue());
+        }
+        for (Map.Entry<Tag.Named<Block>, Tag.Named<Block>> entry : InternalTags.Blocks.getTags().entrySet()) {
+            this.block(entry.getValue());
+        }
+        for (Map.Entry<Tag.Named<Block>, Tag.Named<Item>> entry : InternalTags.Items.getCopies().entrySet()) {
+            this.copyBlock(entry.getKey(), entry.getValue());
+        }
         ForgeRegistries.BLOCKS.getValues().stream()
                 .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
-                .forEach(CommonTagsProviderBase.this::defaultBlockTags);
+                .forEach(block -> {
+                    DecorationTags.addTags(block, CommonTagsProviderBase.this);
+                    CommonTagsProviderBase.this.defaultBlockTags(block);
+                });
         ForgeRegistries.ITEMS.getValues().stream()
                 .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
                 .forEach(CommonTagsProviderBase.this::defaultItemTags);

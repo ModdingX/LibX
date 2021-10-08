@@ -8,7 +8,6 @@ import net.minecraftforge.common.Tags;
 public class DecorationRecipes {
     
     public static void defaultRecipes(Block block, RecipeExtension ext) {
-        ObjectCraftingBuilder.buildShaped(ext, new Object[]{  });
         if (block instanceof DecoratedSlabBlock decorated) {
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, 6, "###", '#', decorated.parent });
         } else if (block instanceof DecoratedStairBlock decorated) {
