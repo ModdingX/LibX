@@ -4,7 +4,6 @@ import io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
