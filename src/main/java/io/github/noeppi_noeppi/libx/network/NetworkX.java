@@ -59,9 +59,7 @@ public abstract class NetworkX {
     }
 
     /**
-     * Gets the protocol version for this network. This must be the same on client and server.
-     * It's recommended to use whole numbers here and increase them when you change something in
-     * a packet format or add a new packet.
+     * Gets the {@link Protocol protocol} for this network.
      */
     protected abstract Protocol getProtocol();
 

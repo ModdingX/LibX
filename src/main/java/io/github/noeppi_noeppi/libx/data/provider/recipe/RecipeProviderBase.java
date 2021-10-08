@@ -17,6 +17,10 @@ import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.TrueCondition;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -67,7 +71,39 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
                 builder.build(this.consumer, recipe.getId());
             };
         }
+        this.setupExtensions();
         this.setup();
+    }
+    
+    private void setupExtensions() {
+        List<Method> extensionMethods = new ArrayList<>();
+        // Collect all extensions, this class implements up to RecipeProviderBase
+        Class<?> currentClass = this.getClass();
+        while(currentClass != null && currentClass != RecipeProviderBase.class && currentClass != Object.class) {
+            for (Class<?> iface : currentClass.getInterfaces()) {
+                if (RecipeExtension.class.isAssignableFrom(iface)) {
+                    try {
+                        Method method = iface.getMethod("setup", ModX.class, iface);
+                        if (!Modifier.isStatic(method.getModifiers())) {
+                            throw new IllegalStateException("Recipe extension setup method must be static: " + iface.getName() + "#setup");
+                        }
+                        extensionMethods.add(method);
+                    } catch (NoSuchMethodException error) {
+                        //
+                    }
+                }
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        for (Method method : extensionMethods) {
+            try {
+                method.invoke(null, this.mod, this);
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException("Can't access recipe extension setup method: " + method.getDeclaringClass().getName() + "#setup", e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException("Failed to run recipe extension setup: " + method.getDeclaringClass().getName(), e);
+            }
+        }
     }
 
     /**
