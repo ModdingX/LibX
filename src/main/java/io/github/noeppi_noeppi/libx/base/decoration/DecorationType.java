@@ -7,8 +7,15 @@ import net.minecraft.world.level.block.*;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * Something that is registered together with a {@link DecoratedBlock}.
+ * @param <T>
+ */
 public interface DecorationType<T> {
 
+    /**
+     * The {@link DecoratedBlock} itself.
+     */
     DecorationType<DecoratedBlock> BASE = DecorationTypes.BASE;
     
     DecorationType<? extends SlabBlock> SLAB = DecorationTypes.SLAB;
@@ -24,10 +31,19 @@ public interface DecorationType<T> {
     DecorationType<? extends TrapDoorBlock> TRAPDOOR = DecorationTypes.TRAPDOOR;
     DecorationType<? extends SignAccess> SIGN = DecorationTypes.SIGN;
 
+    /**
+     * Gets the name for this decoration type. Must be unique within a {@link DecorationContext}.
+     */
     String name();
 
+    /**
+     * Gets the element to register.
+     */
     T registration(ModX mod, DecorationContext context, DecoratedBlock block);
-    
+
+    /**
+     * Gets additional elements to register.
+     */
     default Set<Object> additionalRegistration(ModX mod, DecorationContext context, DecoratedBlock block, T element) {
         return Collections.emptySet();
     }

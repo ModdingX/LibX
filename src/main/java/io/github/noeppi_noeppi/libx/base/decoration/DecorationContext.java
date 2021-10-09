@@ -9,18 +9,37 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * A context that defines, what {@link DecorationType elements} should be registered with a
+ * {@link DecoratedBlock}.
+ */
 public class DecorationContext {
 
+    /**
+     * Generic context. Registers {@link DecorationType#SLAB slabs} and {@link DecorationType#STAIR stairs}.
+     */
     public static final DecorationContext GENERIC = new DecorationContext("stone",
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIR
     );
-    
+
+    /**
+     * Decoration context for wooden planks. Registers {@link DecorationType#SLAB slabs},
+     * {@link DecorationType#STAIR stairs}, {@link DecorationType#FENCE fences},
+     * {@link DecorationType#FENCE_GATE fence gates}, {@link DecorationType#WOOD_BUTTON buttons},
+     * {@link DecorationType#WOOD_PRESSURE_PLATE pressure plates}, {@link DecorationType#DOOR doors},
+     * {@link DecorationType#TRAPDOOR trapdoors} and {@link DecorationType#SIGN signs}.
+     */
     public static final DecorationContext PLANKS = new DecorationContext("planks",
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIR, DecorationType.FENCE,
             DecorationType.FENCE_GATE, DecorationType.WOOD_BUTTON, DecorationType.WOOD_PRESSURE_PLATE,
             DecorationType.DOOR, DecorationType.TRAPDOOR, DecorationType.SIGN
     );
 
+    /**
+     * Decoration context for stone blocks. Registers {@link DecorationType#SLAB slabs},
+     * {@link DecorationType#STAIR stairs}, {@link DecorationType#WALL walls},
+     * {@link DecorationType#STONE_BUTTON buttons} and {@link DecorationType#STONE_PRESSURE_PLATE pressure plates}.
+     */
     public static final DecorationContext STONE = new DecorationContext("stone",
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIR, DecorationType.WALL,
             DecorationType.STONE_BUTTON, DecorationType.STONE_PRESSURE_PLATE
@@ -30,6 +49,12 @@ public class DecorationContext {
     private final Map<String, DecorationType<?>> types;
     private final Set<DecorationType<?>> typeSet;
 
+    /**
+     * Creates a new decoration context.
+     * 
+     * @param name The name of the context.
+     * @param types The types to register. This must include {@link DecorationType#BASE}.
+     */
     public DecorationContext(String name, DecorationType<?>... types) {
         this.name = name;
         Map<String, DecorationType<?>> typeMap = new HashMap<>();
@@ -50,12 +75,18 @@ public class DecorationContext {
         this.typeSet = ImmutableSet.copyOf(this.types.values());
     }
 
+    /**
+     * Gets whether this context has a given {@link DecorationType}
+     */
     public boolean has(DecorationType<?> type) {
         if (type == DecorationType.BASE) return true;
         String name = type.name();
         return this.types.containsKey(name) && this.types.get(name) == type;
     }
     
+    /**
+     * Gets all supported {@link DecorationType}s.
+     */
     public Set<DecorationType<?>> types() {
         return this.typeSet;
     }

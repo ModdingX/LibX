@@ -169,7 +169,10 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             return this.cubeAll(block);
         }
     }
-    
+
+    /**
+     * Creates a block state and models for a button.
+     */
     public void buttonBlock(Block block, ResourceLocation texture) {
         ResourceLocation blockId = Objects.requireNonNull(block.getRegistryName());
 
@@ -202,6 +205,9 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         }
     }
     
+    /**
+     * Creates a block state and models for a pressure plate.
+     */
     public void pressurePlateBlock(Block block, ResourceLocation texture) {
         ResourceLocation blockId = Objects.requireNonNull(block.getRegistryName());
 

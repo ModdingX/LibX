@@ -90,6 +90,13 @@ public class DecoratedSign implements Registerable, SignAccess {
         }
     }
 
+    @Nonnull
+    @Override
+    public Item asItem() {
+        if (this.item == null) throw new IllegalStateException("Can't get sign item before registration");
+        return this.item;
+    }
+
     @Override
     public StandingSignBlock getStandingBlock() {
         if (this.standing == null) throw new IllegalStateException("Can't get standing sign before registration");
