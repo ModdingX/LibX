@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <section class="description">
 <dl class="notes">
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="crafting/CompressionExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe.crafting">CompressionExtension</a></code>, <code><a href="crafting/CraftingExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe.crafting">CraftingExtension</a></code>, <code><a href="RemovalExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe">RemovalExtension</a></code>, <code><a href="SmeltingExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe">SmeltingExtension</a></code>, <code><a href="crafting/ToolExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe.crafting">ToolExtension</a></code></dd>
+<dd><code><a href="crafting/CompressionExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe.crafting">CompressionExtension</a></code>, <code><a href="crafting/CraftingExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe.crafting">CraftingExtension</a></code>, <code><a href="DefaultExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe">DefaultExtension</a></code>, <code><a href="RemovalExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe">RemovalExtension</a></code>, <code><a href="SmeltingExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe">SmeltingExtension</a></code>, <code><a href="crafting/ToolExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe.crafting">ToolExtension</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -87,6 +87,13 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">RecipeExtension</span></div>
+<div class="block">A recipe extension is an interface that provides logic for a <a href="RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe"><code>RecipeProviderBase</code></a>. Custom recipe
+ extension should extend this interface and then add default methods to be used in <a href="RecipeProviderBase.html#setup()"><code>RecipeProviderBase.setup()</code></a>.
+ As <a href="RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe"><code>RecipeProviderBase</code></a> implements this interface as well, the abstract methods are then filled with logic.
+ 
+ Additionally, a recipe extension class can define a <code>public</code> <code>static</code> method named <code>setup</code> that
+ takes a <a href="../../../mod/ModX.html" title="class in io.github.noeppi_noeppi.libx.mod"><code>ModX</code></a> and an extension with the same type as the class that defines the method. When
+ a <a href="RecipeProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider.recipe"><code>RecipeProviderBase</code></a> implements that extension, it'll call that setup method during setup.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

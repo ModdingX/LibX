@@ -6,6 +6,7 @@ io.github.noeppi_noeppi.libx.annotation.data
 io.github.noeppi_noeppi.libx.annotation.model
 io.github.noeppi_noeppi.libx.annotation.registration
 io.github.noeppi_noeppi.libx.base
+io.github.noeppi_noeppi.libx.base.decoration
 io.github.noeppi_noeppi.libx.base.tile
 io.github.noeppi_noeppi.libx.block
 io.github.noeppi_noeppi.libx.capability
