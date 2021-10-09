@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
+import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -14,6 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * A recipe extension is an interface that provides logic for a {@link RecipeProviderBase}. Custom recipe
+ * extension should extend this interface and then add default methods to be used in {@link RecipeProviderBase#setup()}.
+ * As {@link RecipeProviderBase} implements this interface as well, the abstract methods are then filled with logic.
+ * 
+ * Additionally, a recipe extension class can define a {@code public} {@code static} method named {@code setup} that
+ * takes a {@link ModX} and an extension with the same type as the class that defines the method. When
+ * a {@link RecipeProviderBase} implements that extension, it'll call that setup method during setup.
+ */
 public interface RecipeExtension {
 
     /**

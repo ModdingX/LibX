@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient;
 import io.github.noeppi_noeppi.libx.impl.BlockEntityUpdateQueue;
+import io.github.noeppi_noeppi.libx.impl.InternalDataGen;
 import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.crafting.recipe.EmptyRecipe;
@@ -26,12 +27,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,6 +52,8 @@ public final class LibX extends ModX {
         NetworkImpl network = new NetworkImpl(this);
         networkWrapper = new CommonNetwork(network);
 
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
+        
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(MenuType.class, this::registerContainers);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, this::registerRecipes);

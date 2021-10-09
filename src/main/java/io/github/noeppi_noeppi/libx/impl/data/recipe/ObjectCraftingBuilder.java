@@ -77,7 +77,7 @@ public class ObjectCraftingBuilder {
     }
 
     @Nonnull
-    public static Ingredient getIngredient(ObjectReader reader) {
+    private static Ingredient getIngredient(ObjectReader reader) {
         return ObjectCraftingBuilder.first(
                 () -> reader.optConsume(ItemLike.class).map(Ingredient::of),
                 () -> reader.optConsume(Tag.class).map(Ingredient::of),

@@ -1,5 +1,8 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
+import io.github.noeppi_noeppi.libx.impl.data.DecorationTags;
+import io.github.noeppi_noeppi.libx.impl.tags.InternalTagProvider;
+import io.github.noeppi_noeppi.libx.impl.tags.InternalTags;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -44,6 +47,8 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     // Copies must happen at last so we store them
     private final List<Runnable> itemCopies = new ArrayList<>();
     private final List<Pair<Tag.Named<Fluid>, Tag.Named<Block>>> fluidCopies = new ArrayList<>();
+    
+    private boolean hasLibXInternalTags = false;
 
     /**
      * Creates a new CommonTagsProviderBase
@@ -63,16 +68,20 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     public abstract void setup();
 
     private void doSetup() {
+        if (this.getClass() == InternalTagProvider.class) this.initInternalTags();
         this.setup();
         ForgeRegistries.BLOCKS.getValues().stream()
-                .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
-                .forEach(CommonTagsProviderBase.this::defaultBlockTags);
+                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .forEach(block -> {
+                    DecorationTags.addTags(block, this, this::initInternalTags);
+                    this.defaultBlockTags(block);
+                });
         ForgeRegistries.ITEMS.getValues().stream()
-                .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
-                .forEach(CommonTagsProviderBase.this::defaultItemTags);
+                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .forEach(this::defaultItemTags);
         ForgeRegistries.FLUIDS.getValues().stream()
-                .filter(i -> CommonTagsProviderBase.this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
-                .forEach(CommonTagsProviderBase.this::defaultFluidTags);
+                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+                .forEach(this::defaultFluidTags);
     }
 
     /**
@@ -140,6 +149,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     @Override
     public void run(@Nonnull HashCache cache) {
         // We don't do anything here, everything is done by the three child providers
+    }
+    
+    private void initInternalTags() {
+        if (!this.hasLibXInternalTags) {
+            this.hasLibXInternalTags = true;
+            for (Map.Entry<Tag.Named<Item>, Tag.Named<Item>> entry : InternalTags.Items.getTags().entrySet()) {
+                this.item(entry.getValue());
+            }
+            for (Map.Entry<Tag.Named<Block>, Tag.Named<Block>> entry : InternalTags.Blocks.getTags().entrySet()) {
+                this.block(entry.getValue());
+            }
+            for (Map.Entry<Tag.Named<Block>, Tag.Named<Item>> entry : InternalTags.Items.getCopies().entrySet()) {
+                this.copyBlock(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     private class BlockTagProviderBase extends BlockTagsProvider {
