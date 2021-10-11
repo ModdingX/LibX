@@ -64,28 +64,46 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
 
     protected abstract void setup();
 
+    /**
+     * Default behaviour for sound events. Override to change.
+     */
     protected void defaultSound(ResourceLocation id, SoundEvent sound) {
         this.sound(sound)
                 .subtitle("subtitle." + id.getNamespace() + "." + id.getPath().replace("/", "."))
                 .with(id);
     }
-    
+
+    /**
+     * Creates some empty sound settings
+     */
     protected SoundSettingsBuilder settings() {
         return new SoundSettingsBuilder();
     }
-    
+
+    /**
+     * Creates a new sound definition for the given sound event.
+     */
     protected SoundDefinitionBuilder sound(SoundEvent sound) {
         return this.sound(Objects.requireNonNull(sound.getRegistryName()), this.settings());
     }
-    
+
+    /**
+     * Creates a new sound definition for the given sound event.
+     */
     protected SoundDefinitionBuilder sound(ResourceLocation sound) {
         return this.sound(sound, this.settings());
     }
-    
+
+    /**
+     * Creates a new sound definition for the given sound event and default sound settings.
+     */
     protected SoundDefinitionBuilder sound(SoundEvent sound, SoundSettingsBuilder settings) {
         return this.sound(Objects.requireNonNull(sound.getRegistryName()), settings);
     }
-    
+
+    /**
+     * Creates a new sound definition for the given sound event and default sound settings.
+     */
     protected SoundDefinitionBuilder sound(ResourceLocation sound, SoundSettingsBuilder settings) {
         this.ignore(sound);
         if (this.sounds.containsKey(sound)) throw new IllegalArgumentException("Sound processed twice: " + sound);
@@ -128,41 +146,80 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         private SoundSettingsBuilder() {
 
         }
-        
+
+        /**
+         * Sets the volume for the sound settings.
+         * 
+         * @see SoundDefinition.Sound#volume(float)
+         */
         public SoundSettingsBuilder volume(float volume) {
             this.volume = volume;
             return this;
         }
 
-
+        /**
+         * Sets the pitch for the sound settings.
+         *
+         * @see SoundDefinition.Sound#pitch(float)
+         */
         public SoundSettingsBuilder pitch(float pitch) {
             this.pitch = pitch;
             return this;
         }
 
+        /**
+         * Sets the weight for the sound settings.
+         *
+         * @see SoundDefinition.Sound#weight(int)
+         */
         public SoundSettingsBuilder weight(int weight) {
             this.weight = weight;
             return this;
         }
 
+        /**
+         * Marks the sound settings as stream sound.
+         *
+         * @see SoundDefinition.Sound#stream()
+         */
         public SoundSettingsBuilder stream() {
             return this.stream(true);
         }
-
+        
+        /**
+         * Sets the stream state of the sound settings.
+         *
+         * @see SoundDefinition.Sound#stream(boolean)
+         */
         public SoundSettingsBuilder stream(boolean stream) {
             this.stream = stream;
             return this;
         }
 
+        /**
+         * Sets the attenuation distance for the sound settings.
+         *
+         * @see SoundDefinition.Sound#attenuationDistance(int)
+         */
         public SoundSettingsBuilder attenuationDistance(int attenuationDistance) {
             this.attenuationDistance = attenuationDistance;
             return this;
         }
 
+        /**
+         * Marks the sound settings as preloaded.
+         *
+         * @see SoundDefinition.Sound#preload()
+         */
         public SoundSettingsBuilder preload() {
             return this.preload(true);
         }
 
+        /**
+         * Sets the preload state of the sound settings.
+         *
+         * @see SoundDefinition.Sound#preload(boolean)
+         */
         public SoundSettingsBuilder preload(boolean preload) {
             this.preload = preload;
             return this;
@@ -177,7 +234,10 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
             sound.preload(this.preload);
         }
     }
-    
+
+    /**
+     * A builder for a sound definition.
+     */
     protected class SoundDefinitionBuilder {
 
         private final SoundSettingsBuilder settings;
@@ -188,32 +248,60 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
             this.definition = SoundDefinition.definition();
         }
 
+        /**
+         * Sets the sound definition as a replacement sound.
+         * 
+         * @see SoundDefinition#replace(boolean)
+         */
         public SoundDefinitionBuilder replace() {
             return this.replace(true);
         }
-        
+
+        /**
+         * Sets the replace state of the sound definition.
+         *
+         * @see SoundDefinition#replace(boolean)
+         */
         public SoundDefinitionBuilder replace(boolean replace) {
             this.definition.replace(replace);
             return this;
         }
-        
+
+        /**
+         * Sets the language key for the sounds subtitle.
+         * 
+         * @see SoundDefinition#subtitle(String)
+         */
         public SoundDefinitionBuilder subtitle(@Nullable String subtitle) {
             this.definition.subtitle(subtitle);
             return this;
         }
 
+        /**
+         * Adds a sound from this mods namespace to this sound definition.
+         */
         public SoundDefinitionBuilder with(String path) {
             return this.with(SoundDefinitionProviderBase.this.mod.resource(path), sound -> {});
         }
 
+        /**
+         * Adds a sound to this sound definition.
+         */
         public SoundDefinitionBuilder with(ResourceLocation soundId) {
             return this.with(soundId, sound -> {});
         }
-        
+
+        /**
+         * Adds a sound from this mods namespace to this sound definition. Also allows to then further
+         * customise the sound.
+         */
         public SoundDefinitionBuilder with(String path, Consumer<SoundDefinition.Sound> configure) {
             return this.with(SoundDefinitionProviderBase.this.mod.resource(path), configure);
         }
-        
+
+        /**
+         * Adds a sound to this sound definition. Also allows to then further customise the sound.
+         */
         public SoundDefinitionBuilder with(ResourceLocation soundId, Consumer<SoundDefinition.Sound> configure) {
             SoundDefinition.Sound sound = SoundDefinition.Sound.sound(soundId, SoundDefinition.SoundType.SOUND);
             this.settings.applyTo(sound);
@@ -221,30 +309,52 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
             this.definition.with(sound);
             return this;
         }
-        
+
+        /**
+         * Adds {@code amount} sounds to the definition. They are constructed by appending the numbers from
+         * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
+         */
         public SoundDefinitionBuilder withRange(String path, int amount) {
             return this.withRange(SoundDefinitionProviderBase.this.mod.resource(path), amount, sound -> {});
         }
 
+        /**
+         * Adds {@code amount} sounds to the definition. They are constructed by appending the numbers from
+         * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
+         */
         public SoundDefinitionBuilder withRange(ResourceLocation soundId, int amount) {
             return this.withRange(soundId, amount, sound -> {});
         }
-        
+
+        /**
+         * Adds {@code amount} sounds to the definition. They are constructed by appending the numbers from
+         * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
+         */
         public SoundDefinitionBuilder withRange(String path, int amount, Consumer<SoundDefinition.Sound> configure) {
             return this.withRange(SoundDefinitionProviderBase.this.mod.resource(path), amount, configure);
         }
-        
+
+        /**
+         * Adds {@code amount} sounds to the definition. They are constructed by appending the numbers from
+         * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
+         */
         public SoundDefinitionBuilder withRange(ResourceLocation soundId, int amount, Consumer<SoundDefinition.Sound> configure) {
             for (int i = 0; i < amount; i++) {
                 this.with(new ResourceLocation(soundId.getNamespace(), soundId.getPath() + i), configure);
             }
             return this;
         }
-        
+
+        /**
+         * Adds another sound event as a sound for this definition.
+         */
         public SoundDefinitionBuilder effect(SoundEvent event) {
             return this.effect(event, sound -> {});
         }
         
+        /**
+         * Adds another sound event as a sound for this definition. Also allows to then further customise the sound.
+         */
         public SoundDefinitionBuilder effect(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
             SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(event.getRegistryName()), SoundDefinition.SoundType.SOUND);
             this.settings.applyTo(sound);
