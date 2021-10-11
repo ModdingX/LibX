@@ -12,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,6 +23,7 @@ public abstract class SoundDefinitionsProviderBase extends SoundDefinitionsProvi
     protected final ModX mod;
 
     private final Set<SoundEvent> blacklist = new HashSet<>();
+    private final Set<Sounds> sounds = new HashSet<>();
 
     public SoundDefinitionsProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper helper) {
         super(generator, mod.modid, helper);
@@ -37,13 +39,14 @@ public abstract class SoundDefinitionsProviderBase extends SoundDefinitionsProvi
     /**
      * This sound event will not be processed by the default generator
      */
-    protected void manualSound(SoundEvent soundEvent) {
+    protected void ignore(SoundEvent soundEvent) {
         this.blacklist.add(soundEvent);
     }
 
     @Override
     public void registerSounds() {
         this.setup();
+        this.sounds.forEach(Sounds::buildDefinition);
 
         for (ResourceLocation id : ForgeRegistries.SOUND_EVENTS.getKeys()) {
             SoundEvent soundEvent = ForgeRegistries.SOUND_EVENTS.getValue(id);
@@ -65,90 +68,125 @@ public abstract class SoundDefinitionsProviderBase extends SoundDefinitionsProvi
     /**
      * The name for the sound with the amount of different sound files.
      */
-    protected Sounds sound(String name, int amount) {
-        Sounds sounds = new Sounds();
-        for (int i = 0; i < amount; i++) {
-            sounds.add(sound(this.mod.resource(name + i)));
-        }
-        return sounds;
+    protected SoundDefinition sound(String name, int amount) {
+        return this.sound(this.mod.resource(name), amount);
     }
 
     /**
      * The resource location for the sound with the amount of different sound files.
      */
-    protected Sounds sound(ResourceLocation name, int amount) {
-        return this.sound(name, SoundDefinition.SoundType.SOUND, amount);
+    protected SoundDefinition sound(ResourceLocation location, int amount) {
+        return this.sound(location, SoundDefinition.SoundType.SOUND, amount);
     }
 
-    protected Sounds sound(ResourceLocation name, SoundDefinition.SoundType type, int amount) {
+    protected SoundDefinition sound(ResourceLocation location, SoundDefinition.SoundType type, int amount) {
+        SoundEvent soundEvent = ForgeRegistries.SOUND_EVENTS.getValue(location);
+
+        if (soundEvent != null) {
+            this.ignore(soundEvent);
+        }
+
         Sounds sounds = new Sounds();
         for (int i = 0; i < amount; i++) {
-            sounds.add(sound(new ResourceLocation(name.getNamespace(), name.getPath() + i), type));
+            sounds.add(sound(this.transformLocation(location, i), type));
         }
-        return sounds;
+
+        this.sounds.add(sounds);
+        return sounds.definition;
+    }
+
+    /**
+     * Used to transform the given location into a new location.
+     * Override this in case you have another naming pattern for your sound files.
+     */
+    protected ResourceLocation transformLocation(ResourceLocation location, int index) {
+        return new ResourceLocation(location.getNamespace(), location.getPath() + index);
     }
 
     /**
      * A helper class to allow setting e.g. the volume or pitch for all the sounds in the list.
      */
-    protected static class Sounds extends ArrayList<SoundDefinition.Sound> {
+    protected static class Sounds {
 
-        public Sounds volume(double volume) {
-            return this.volume((float) volume);
-        }
+        private final List<SoundDefinition.Sound> sounds = new ArrayList<>();
+        private final SoundDefinition definition = SoundDefinition.definition();
 
-        public Sounds volume(float volume) {
-            this.iterator().forEachRemaining(sound -> sound.volume(volume));
-            return this;
-        }
-
-        public Sounds pitch(double pitch) {
-            return this.pitch((float) pitch);
-        }
-
-        public Sounds pitch(float pitch) {
-            this.iterator().forEachRemaining(sound -> sound.pitch(pitch));
-            return this;
-        }
-
-        public Sounds weight(int weight) {
-            this.iterator().forEachRemaining(sound -> sound.weight(weight));
-            return this;
+        /**
+         * See {@link SoundDefinition.Sound#volume(double)} but for all sound files.
+         */
+        public void volume(double volume) {
+            this.volume((float) volume);
         }
 
         /**
-         * Same as {@link net.minecraftforge.common.data.SoundDefinition.Sound#stream()} but for all sound files.
+         * See {@link SoundDefinition.Sound#volume(float)} but for all sound files.
          */
-        public Sounds streamSounds() {
-            return this.stream(true);
-        }
-
-        public Sounds stream(boolean stream) {
-            this.iterator().forEachRemaining(sound -> sound.stream(stream));
-            return this;
-        }
-
-        public Sounds attenuationDistance(int attenuationDistance) {
-            this.iterator().forEachRemaining(sound -> sound.attenuationDistance(attenuationDistance));
-            return this;
-        }
-
-        public Sounds preload() {
-            return this.preload(true);
-        }
-
-        public Sounds preload(boolean preload) {
-            this.iterator().forEachRemaining(sound -> sound.preload(preload));
-            return this;
+        public void volume(float volume) {
+            this.sounds.forEach(sound -> sound.volume(volume));
         }
 
         /**
-         * Puts all sounds in one sound definition.
+         * See {@link SoundDefinition.Sound#pitch(double)} but for all sound files.
          */
-        public SoundDefinition asDefinition() {
-            SoundDefinition definition = SoundDefinition.definition();
-            this.iterator().forEachRemaining(definition::with);
-            return definition;
+        public void pitch(double pitch) {
+            this.pitch((float) pitch);
+        }
+
+        /**
+         * See {@link SoundDefinition.Sound#pitch(float)} but for all sound files.
+         */
+        public void pitch(float pitch) {
+            this.sounds.forEach(sound -> sound.pitch(pitch));
+        }
+
+        /**
+         * See {@link SoundDefinition.Sound#weight(int)} but for all sound files.
+         */
+        public void weight(int weight) {
+            this.sounds.forEach(sound -> sound.weight(weight));
+        }
+
+        /**
+         * See {@link SoundDefinition.Sound#stream()} but for all sound files.
+         */
+        public void stream() {
+            this.stream(true);
+        }
+
+        /**
+         * See {@link SoundDefinition.Sound#stream(boolean)} but for all sound files.
+         */
+        public void stream(boolean stream) {
+            this.sounds.forEach(sound -> sound.stream(stream));
+        }
+
+        /**
+         * See {@link SoundDefinition.Sound#attenuationDistance(int)} but for all sound files.
+         */
+        public void attenuationDistance(int attenuationDistance) {
+            this.sounds.forEach(sound -> sound.attenuationDistance(attenuationDistance));
+        }
+
+        /**
+         * See {@link SoundDefinition.Sound#preload()} but for all sound files.
+         */
+        public void preload() {
+            this.preload(true);
+        }
+
+        /**
+         * See {@link SoundDefinition.Sound#preload(boolean)} but for all sound files.
+         */
+        public void preload(boolean preload) {
+            this.sounds.forEach(sound -> sound.preload(preload));
+        }
+
+        private void add(SoundDefinition.Sound sound) {
+            this.sounds.add(sound);
+        }
+
+        private void buildDefinition() {
+            this.sounds.forEach(this.definition::with);
         }
     }
 }
