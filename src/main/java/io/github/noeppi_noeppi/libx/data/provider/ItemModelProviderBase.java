@@ -120,7 +120,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         } else if (item.getBlock() instanceof DecoratedWallBlock decorated) {
             ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
-            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(WALL_PARENT)).texture("texture", texture);
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(WALL_PARENT)).texture("wall", texture);
         } else if (item.getBlock() instanceof DecoratedTrapdoorBlock) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath() + "_bottom")));
         } else if (item.getBlock() instanceof DecoratedDoorBlock || item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall) {
