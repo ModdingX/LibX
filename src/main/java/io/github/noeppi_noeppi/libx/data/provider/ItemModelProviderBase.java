@@ -37,6 +37,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
     public static final ResourceLocation FENCE_PARENT = new ResourceLocation("minecraft", "block/fence_inventory");
     public static final ResourceLocation BUTTON_PARENT = new ResourceLocation("minecraft", "block/button_inventory");
+    public static final ResourceLocation WALL_PARENT = new ResourceLocation("minecraft", "block/wall_inventory");
 
     protected final ModX mod;
 
@@ -116,6 +117,10 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
             ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedWallBlock decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(WALL_PARENT)).texture("texture", texture);
         } else if (item.getBlock() instanceof DecoratedTrapdoorBlock) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath() + "_bottom")));
         } else if (item.getBlock() instanceof DecoratedDoorBlock || item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall) {
