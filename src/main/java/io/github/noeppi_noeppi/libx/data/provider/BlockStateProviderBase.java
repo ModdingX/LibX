@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.*;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
@@ -99,6 +100,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     protected abstract void setup();
     
     @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.18")
     @SuppressWarnings("DeprecatedIsStillUsed")
     protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
         this.simpleBlock(block, model);
