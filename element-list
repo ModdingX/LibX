@@ -3,6 +3,7 @@ io.github.noeppi_noeppi.libx.annotation
 io.github.noeppi_noeppi.libx.annotation.codec
 io.github.noeppi_noeppi.libx.annotation.config
 io.github.noeppi_noeppi.libx.annotation.data
+io.github.noeppi_noeppi.libx.annotation.meta
 io.github.noeppi_noeppi.libx.annotation.model
 io.github.noeppi_noeppi.libx.annotation.registration
 io.github.noeppi_noeppi.libx.base
