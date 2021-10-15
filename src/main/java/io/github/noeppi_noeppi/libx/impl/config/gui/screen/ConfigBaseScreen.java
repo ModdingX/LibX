@@ -238,68 +238,124 @@ public abstract class ConfigBaseScreen extends Screen {
     private void captureTooltip(PoseStack.Pose pose, Runnable action) {
         this.capturedTooltips.add(Pair.of(pose, action));
     }
-    
+
     @Override
-    protected void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull ItemStack stack, int x, int y) {
+    protected void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull ItemStack stack, int mouseX, int mouseY) {
         if (this.isCapturingTooltips) {
             // Not inside lambda as the value may change
-            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, stack, x, y));
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, stack, mouseX, mouseY));
         } else {
-            super.renderTooltip(poseStack, stack, x, y);
+            super.renderTooltip(poseStack, stack, mouseX, mouseY);
         }
     }
 
     @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> tooltip, @Nonnull Optional<TooltipComponent> special, int x, int y) {
+    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int x, int y, @Nonnull ItemStack stack) {
         if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, tooltip, special, x, y));
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, components, special, x, y, stack));
         } else {
-            super.renderTooltip(poseStack, tooltip, special, x, y);
+            super.renderTooltip(poseStack, components, special, x, y, stack);
         }
     }
 
     @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull Component tooltip, int x, int y) {
+    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int x, int y, @Nullable Font font) {
         if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, tooltip, x, y));
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, components, special, x, y, font));
         } else {
-            super.renderTooltip(poseStack, tooltip, x, y);
+            super.renderTooltip(poseStack, components, special, x, y, font);
         }
     }
 
     @Override
-    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> tooltip, int x, int y) {
+    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int x, int y, @Nullable Font font, @Nonnull ItemStack stack) {
         if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), () -> this.renderComponentTooltip(poseStack, tooltip, x, y));
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, components, special, x, y, font, stack));
         } else {
-            super.renderComponentTooltip(poseStack, tooltip, x, y);
+            super.renderTooltip(poseStack, components, special, x, y, font, stack);
         }
     }
 
     @Override
-    public void renderComponentToolTip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> tooltip, int x, int y, @Nonnull Font font) {
+    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int mouseX, int mouseY) {
         if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), () -> this.renderComponentToolTip(poseStack, tooltip, x, y, font));
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, components, special, mouseX, mouseY));
         } else {
-            super.renderComponentToolTip(poseStack, tooltip, x, y, font);
+            super.renderTooltip(poseStack, components, special, mouseX, mouseY);
         }
     }
 
     @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> tooltip, int x, int y) {
+    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull Component component, int mouseX, int mouseY) {
         if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, tooltip, x, y));
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, component, mouseX, mouseY));
         } else {
-            super.renderTooltip(poseStack, tooltip, x, y);
+            super.renderTooltip(poseStack, component, mouseX, mouseY);
         }
     }
 
     @Override
-    public void renderToolTip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> tooltip, int x, int y, @Nonnull Font font) {
+    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, int mouseX, int mouseY) {
         if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), () -> this.renderToolTip(poseStack, tooltip, x, y, font));
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderComponentTooltip(poseStack, components, mouseX, mouseY));
         } else {
-            super.renderToolTip(poseStack, tooltip, x, y, font);
+            super.renderComponentTooltip(poseStack, components, mouseX, mouseY);
+        }
+    }
+
+    @Override
+    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> components, int mouseX, int mouseY, @Nonnull ItemStack stack) {
+        if (this.isCapturingTooltips) {
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderComponentTooltip(poseStack, components, mouseX, mouseY, stack));
+        } else {
+            super.renderComponentTooltip(poseStack, components, mouseX, mouseY, stack);
+        }
+    }
+
+    @Override
+    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> components, int mouseX, int mouseY, @Nullable Font font) {
+        if (this.isCapturingTooltips) {
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderComponentTooltip(poseStack, components, mouseX, mouseY, font));
+        } else {
+            super.renderComponentTooltip(poseStack, components, mouseX, mouseY, font);
+        }
+    }
+
+    @Override
+    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> components, int mouseX, int mouseY, @Nullable Font font, @Nonnull ItemStack stack) {
+        if (this.isCapturingTooltips) {
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderComponentTooltip(poseStack, components, mouseX, mouseY, font, stack));
+        } else {
+            super.renderComponentTooltip(poseStack, components, mouseX, mouseY, font, stack);
+        }
+    }
+
+    @Override
+    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> components, int mouseX, int mouseY) {
+        if (this.isCapturingTooltips) {
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, components, mouseX, mouseY));
+        } else {
+            super.renderTooltip(poseStack, components, mouseX, mouseY);
+        }
+    }
+
+    @Override
+    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> components, int x, int y, @Nonnull Font font) {
+        if (this.isCapturingTooltips) {
+            // Not inside lambda as the value may change
+            this.captureTooltip(poseStack.last(), () -> this.renderTooltip(poseStack, components, x, y, font));
+        } else {
+            super.renderTooltip(poseStack, components, x, y, font);
         }
     }
 }

@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.util;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +14,7 @@ import javax.annotation.Nullable;
 /**
  * Utilities to deal with NBT.
  */
+@Experimental
 public class NBTX {
 
     /**
