@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +66,13 @@ public abstract class ModXRegistration extends ModX {
 
     private boolean registered = false;
     private final List<RegEntry> registrationEntries = new ArrayList<>();
-
-    protected ModXRegistration(String modid, CreativeModeTab tab) {
-        super(modid, tab);
+    
+    protected ModXRegistration() {
+        this(null);
+    }
+    
+    protected ModXRegistration(@Nullable CreativeModeTab tab) {
+        super(tab);
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonRegistration);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientRegistration);
@@ -86,6 +92,12 @@ public abstract class ModXRegistration extends ModX {
         
         // Call the generated code here as well
         ModInternal.get(this).callGeneratedCode();
+    }
+
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.18")
+    protected ModXRegistration(String modid, @Nullable CreativeModeTab tab) {
+        this(tab);
     }
 
     /**

@@ -1,11 +1,13 @@
 package io.github.noeppi_noeppi.libx.mod;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -37,30 +39,49 @@ public abstract class ModX {
      */
     @Nullable
     public final CreativeModeTab tab;
+
+    /**
+     * Subclasses should provide a public no-arg constructor that calls this with
+     * the values needed.
+     */
+    protected ModX() {
+        this(null);
+    }
     
     /**
      * Subclasses should provide a public no-arg constructor that calls this with
      * the values needed.
      */
-    protected ModX(String modid, @Nullable CreativeModeTab tab) {
-        this.modid = modid;
-        this.logger = LogManager.getLogger(modid);
+    protected ModX(@Nullable CreativeModeTab tab) {
+        Class<? extends ModX> cls = this.getClass();
+        Mod mod = cls.getAnnotation(Mod.class);
+        if (mod == null) throw new IllegalStateException("Mod class has no @Mod annotation.");
+        this.modid = mod.value();
+
+        this.logger = LogManager.getLogger(this.modid);
         this.tab = tab;
 
         ModInternal.init(this, FMLJavaModLoadingContext.get());
-        
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-        
+
         // Initialise config system for this mod container
         // Required so the extension point can be added when required
-        ModMappers.get(modid).initAdapter(ModLoadingContext.get());
-        
+        ModMappers.get(this.modid).initAdapter(ModLoadingContext.get());
+
         // As the generated code registers registration handlers this will produce a null pointer exception
         // as the list of handlers will be null. So for instances of ModXRegistration we don't call it here
         // but in the constructor of ModXRegistration
-        if (!(this instanceof ModXRegistration))
+        if (!(this instanceof ModXRegistration)) {
             ModInternal.get(this).callGeneratedCode();
+        }
+    }
+    
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.18")
+    protected ModX(String modid, @Nullable CreativeModeTab tab) {
+        this(tab);
     }
     
     /**

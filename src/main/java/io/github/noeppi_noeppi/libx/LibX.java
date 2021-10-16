@@ -46,8 +46,6 @@ public final class LibX extends ModX {
     private static CommonNetwork networkWrapper;
 
     public LibX() {
-        super("libx", null);
-        
         instance = this;
         NetworkImpl network = new NetworkImpl(this);
         networkWrapper = new CommonNetwork(network);
