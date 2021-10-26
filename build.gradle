@@ -10,7 +10,7 @@ apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.coremods'
 
 repositories {
     maven { url = 'https://maven.melanx.de' }
-    maven { url = 'file:///home/tux/dev/util/MinecraftUtilities/maven/' }
+    maven { url = 'https://noeppi-noeppi.github.io/MinecraftUtilities/maven' }
 }
 
 dependencies {
