@@ -1,4 +1,16 @@
-function initializeCoreMod() {
+import {
+  ASMAPI,
+  CoreMods,
+  InsnList,
+  InsnNode,
+  JumpInsnNode,
+  LabelNode,
+  MethodNode,
+  Opcodes,
+  VarInsnNode
+} from "coremods";
+
+function initializeCoreMod(): CoreMods {
   return {
     'interact': {
       'target': {
@@ -7,17 +19,9 @@ function initializeCoreMod() {
         'methodName': 'm_7179_',
         'methodDesc': '(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;'
       },
-      'transformer': function(method) {
-        var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
-        var Opcodes = Java.type('org.objectweb.asm.Opcodes');
-        var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
-        var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
-        var LabelNode = Java.type('org.objectweb.asm.tree.LabelNode');
-        var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
-        var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
-        
-        var label = new LabelNode();
-        var target = new InsnList();
+      'transformer': function(method: MethodNode) {
+        const label = new LabelNode();
+        const target = new InsnList();
         target.add(new VarInsnNode(Opcodes.ALOAD, 1));
         target.add(new VarInsnNode(Opcodes.ALOAD, 2));
         target.add(new VarInsnNode(Opcodes.ALOAD, 3));
@@ -34,9 +38,9 @@ function initializeCoreMod() {
         target.add(label);
         target.add(new InsnNode(Opcodes.POP));
         
-        for (var i = method.instructions.size() - 1; i >= 0; i--) {
-          var inst = method.instructions.get(i);
-          if (inst.getOpcode() == Opcodes.ARETURN) {
+        for (let i = method.instructions.size() - 1; i >= 0; i--) {
+          const inst = method.instructions.get(i);
+          if (inst != null && inst.getOpcode() == Opcodes.ARETURN) {
             method.instructions.insertBefore(inst, target)
             return method;
           }

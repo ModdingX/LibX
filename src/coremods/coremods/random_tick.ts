@@ -1,4 +1,16 @@
-function initializeCoreMod() {
+import {
+  ASMAPI,
+  CoreMods,
+  InsnList,
+  InsnNode,
+  JumpInsnNode,
+  LabelNode,
+  MethodNode,
+  Opcodes,
+  VarInsnNode
+} from "coremods";
+
+function initializeCoreMod(): CoreMods {
   return {
     'random_tick_block': {
       'target': {
@@ -7,17 +19,9 @@ function initializeCoreMod() {
         'methodName': 'm_60735_',
         'methodDesc': '(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)V'
       },
-      'transformer': function(method) {
-        var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
-        var Opcodes = Java.type('org.objectweb.asm.Opcodes');
-        var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
-        var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
-        var LabelNode = Java.type('org.objectweb.asm.tree.LabelNode');
-        var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
-        var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
-        
-        var label = new LabelNode();
-        var target = new InsnList();
+      'transformer': function(method: MethodNode) {
+        const label = new LabelNode();
+        const target = new InsnList();
         target.add(new VarInsnNode(Opcodes.ALOAD, 0));
         target.add(new VarInsnNode(Opcodes.ALOAD, 1));
         target.add(new VarInsnNode(Opcodes.ALOAD, 2));
@@ -43,17 +47,9 @@ function initializeCoreMod() {
         'methodName': 'm_76174_',
         'methodDesc': '(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Ljava/util/Random;)V'
       },
-      'transformer': function(method) {
-        var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
-        var Opcodes = Java.type('org.objectweb.asm.Opcodes');
-        var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
-        var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
-        var LabelNode = Java.type('org.objectweb.asm.tree.LabelNode');
-        var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
-        var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
-        
-        var label = new LabelNode();
-        var target = new InsnList();
+      'transformer': function(method: MethodNode) {
+        const label = new LabelNode();
+        const target = new InsnList();
         target.add(new VarInsnNode(Opcodes.ALOAD, 0));
         target.add(new VarInsnNode(Opcodes.ALOAD, 1));
         target.add(new VarInsnNode(Opcodes.ALOAD, 2));

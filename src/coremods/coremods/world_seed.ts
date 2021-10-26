@@ -1,4 +1,6 @@
-function initializeCoreMod() {
+import {AbstractInsnNode, ASMAPI, CoreMods, InsnList, MethodNode, Opcodes, VarInsnNode} from "../coremods";
+
+function initializeCoreMod(): CoreMods {
   return {
     'world_seed': {
       'target': {
@@ -7,13 +9,8 @@ function initializeCoreMod() {
         'methodName': '<init>',
         'methodDesc': '(JZZLnet/minecraft/core/MappedRegistry;Ljava/util/Optional;)V'
       },
-      'transformer': function(method) {
-        var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
-        var Opcodes = Java.type('org.objectweb.asm.Opcodes');
-        var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
-        var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
-
-        var target = new InsnList();
+      'transformer': function(method: MethodNode) {
+        const target = new InsnList();
         target.add(new VarInsnNode(Opcodes.LLOAD, 1));
         target.add(ASMAPI.buildMethodCall(
             'io/github/noeppi_noeppi/libx/impl/libxcore/CoreWorldSeed',
@@ -21,18 +18,18 @@ function initializeCoreMod() {
             ASMAPI.MethodType.STATIC
         ));
         
-        var ret = [];
-        for (var i = 0; i < method.instructions.size(); i++) {
-          var inst = method.instructions.get(i);
-          if (inst.getOpcode() == Opcodes.RETURN) {
+        const ret: Array<AbstractInsnNode> = [];
+        for (let i = 0; i < method.instructions.size(); i++) {
+          const inst = method.instructions.get(i);
+          if (inst != null && inst.getOpcode() == Opcodes.RETURN) {
             ret.push(inst);
           }
         }
         
         if (ret.length > 0) {
-          for (var i = 0; i < ret.length; i++) {
+          for (let i = 0; i < ret.length; i++) {
             // Need to insert before as inserting after return means we would never get called
-            method.instructions.insertBefore(ret[i], target);
+            method.instructions.insertBefore(ret[i] as AbstractInsnNode, target);
           }
           return method;
         } else {
