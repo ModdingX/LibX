@@ -23,6 +23,7 @@ io.github.noeppi_noeppi.libx.data
 io.github.noeppi_noeppi.libx.data.provider
 io.github.noeppi_noeppi.libx.data.provider.recipe
 io.github.noeppi_noeppi.libx.data.provider.recipe.crafting
+io.github.noeppi_noeppi.libx.data.provider.texture
 io.github.noeppi_noeppi.libx.datapack
 io.github.noeppi_noeppi.libx.event
 io.github.noeppi_noeppi.libx.fi
