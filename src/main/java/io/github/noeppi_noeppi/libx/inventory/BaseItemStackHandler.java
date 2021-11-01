@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
  * An {@link ItemStackHandler} that can be configured with common things required for many inventories.
  * To get a BaseItemStackHandler, use {@link #builder(int)}.
  */
-public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedItemHandler {
+public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedItemHandlerModifiable {
 
     private final int defaultSlotLimit;
     private final Set<Integer> insertionOnlySlots;
