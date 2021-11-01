@@ -66,7 +66,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
 
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return this.slotValidators.containsKey(slot) && this.slotValidators.get(slot).test(stack);
+        return !this.slotValidators.containsKey(slot) || this.slotValidators.get(slot).test(stack);
     }
 
     @Override
