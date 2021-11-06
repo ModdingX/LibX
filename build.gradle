@@ -1,3 +1,5 @@
+import net.minecraftforge.gradle.common.util.MavenArtifactDownloader
+
 buildscript {
     apply from: 'https://raw.githubusercontent.com/noeppi-noeppi/ModUtils/v2/buildscript.gradle', to: buildscript
 }
@@ -37,6 +39,14 @@ javadoc {
             + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
             + '<a href="https://github.com/noeppi-noeppi/LibX" target="_blank">GitHub</a></h2>')
     options.memberLevel = JavadocMemberLevel.PROTECTED
+}
+
+task javadocMeta(type: Javadoc) {
+    source file('src/main/java')
+    destinationDir file('build/docs/meta')
+    classpath = compileJava.classpath
+    options.doclet('io.github.noeppi_noeppi.tools.java_doclet_meta.Main')
+    options.docletpath(MavenArtifactDownloader.download(project, 'io.github.noeppi_noeppi.tools:JavaDocletMeta:0.0.1:fatjar', false))
 }
 
 // Performs checks for releases

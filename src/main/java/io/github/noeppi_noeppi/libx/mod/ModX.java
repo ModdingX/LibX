@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 public abstract class ModX {
 
     /**
-     * Contains the Mod id  of this mod.
+     * Contains the Mod id of this mod.
      */
     public final String modid;
 

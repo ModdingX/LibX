@@ -21,13 +21,20 @@ jobs:
           java-version: '16'
           
       - name: 'Install and Build 🔧'
-        run: './gradlew javadoc'
+        run: './gradlew javadoc javadocMeta'
+        
+      - name: 'Copying Files 🔨'
+        run: |
+          rm -r build/javadoc_merged_target
+          mkdir -p build/javadoc_merged_target/meta
+          cp -r build/docs/javadoc build/javadoc_merged_target
+          cp -r build/docs/meta build/javadoc_merged_target/meta
 
       - name: 'Deploy 🚀'
         uses: 'JamesIves/github-pages-deploy-action@4.1.4'
         with:
           branch: gh-pages
-          folder: 'build/docs/javadoc'
+          folder: 'build/javadoc_merged_target'
           clean: true
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           git-config-name: 'Github Actions'
