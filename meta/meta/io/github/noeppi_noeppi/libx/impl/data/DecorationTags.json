@@ -1,0 +1,91 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/data/DecorationTags",
+  "simpleName": "DecorationTags",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.data.DecorationTags",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "addTags",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.block.Block,io.github.noeppi_noeppi.libx.data.provider.CommonTagsProviderBase,java.lang.Runnable)void",
+      "parameters": [
+        {
+          "name": "block",
+          "type": {
+            "name": "net.minecraft.world.level.block.Block",
+            "desc": "Lnet/minecraft/world/level/block/Block;",
+            "binaryName": "net/minecraft/world/level/block/Block"
+          }
+        },
+        {
+          "name": "provider",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.data.provider.CommonTagsProviderBase",
+            "desc": "Lio/github/noeppi_noeppi/libx/data/provider/CommonTagsProviderBase;",
+            "binaryName": "io/github/noeppi_noeppi/libx/data/provider/CommonTagsProviderBase"
+          }
+        },
+        {
+          "name": "initInternal",
+          "type": {
+            "name": "java.lang.Runnable",
+            "desc": "Ljava/lang/Runnable;",
+            "binaryName": "java/lang/Runnable"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "isWood",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock)boolean",
+      "parameters": [
+        {
+          "name": "block",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock",
+            "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock;",
+            "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    }
+  ]
+}

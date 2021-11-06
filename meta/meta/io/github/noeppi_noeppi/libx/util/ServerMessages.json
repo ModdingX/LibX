@@ -1,0 +1,158 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/util/ServerMessages",
+  "simpleName": "ServerMessages",
+  "sourceNam": "io.github.noeppi_noeppi.libx.util.ServerMessages",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "broadcast",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.Level,net.minecraft.network.chat.Component)void",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "message",
+          "type": {
+            "name": "net.minecraft.network.chat.Component",
+            "desc": "Lnet/minecraft/network/chat/Component;",
+            "binaryName": "net/minecraft/network/chat/Component"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sends a <ref cls=\"net/minecraft/network/chat/Component\">text component</ref> to every <ref cls=\"net/minecraft/world/entity/player/Player\">player</ref> on the server.",
+        "text": "Sends a <ref cls=\"net/minecraft/network/chat/Component\">text component</ref> to every <ref cls=\"net/minecraft/world/entity/player/Player\">player</ref> on the server.",
+        "properties": []
+      }
+    },
+    {
+      "name": "broadcastExcept",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.Level,net.minecraft.world.entity.player.Player,net.minecraft.network.chat.Component)void",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "exclude",
+          "type": {
+            "name": "net.minecraft.world.entity.player.Player",
+            "desc": "Lnet/minecraft/world/entity/player/Player;",
+            "binaryName": "net/minecraft/world/entity/player/Player"
+          }
+        },
+        {
+          "name": "message",
+          "type": {
+            "name": "net.minecraft.network.chat.Component",
+            "desc": "Lnet/minecraft/network/chat/Component;",
+            "binaryName": "net/minecraft/network/chat/Component"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sends a <ref cls=\"net/minecraft/network/chat/Component\">text component</ref> to every <ref cls=\"net/minecraft/world/entity/player/Player\">player</ref> on the server except one.",
+        "text": "Sends a <ref cls=\"net/minecraft/network/chat/Component\">text component</ref> to every <ref cls=\"net/minecraft/world/entity/player/Player\">player</ref> on the server except one.",
+        "properties": []
+      }
+    },
+    {
+      "name": "broadcastTo",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.Level,java.util.function.Predicate<? super net.minecraft.server.level.ServerPlayer>,net.minecraft.network.chat.Component)void",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "condition",
+          "type": {
+            "name": "java.util.function.Predicate<? super net.minecraft.server.level.ServerPlayer>",
+            "desc": "Ljava/util/function/Predicate;",
+            "binaryName": "java/util/function/Predicate"
+          }
+        },
+        {
+          "name": "message",
+          "type": {
+            "name": "net.minecraft.network.chat.Component",
+            "desc": "Lnet/minecraft/network/chat/Component;",
+            "binaryName": "net/minecraft/network/chat/Component"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sends a <ref cls=\"net/minecraft/network/chat/Component\">text component</ref> to all <ref cls=\"net/minecraft/world/entity/player/Player\">player</ref> matching a predicate.",
+        "text": "Sends a <ref cls=\"net/minecraft/network/chat/Component\">text component</ref> to all <ref cls=\"net/minecraft/world/entity/player/Player\">player</ref> matching a predicate.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Utilities to send messages to a set of <ref cls=\"net/minecraft/world/entity/player/Player\">players</ref> on the <ref cls=\"net/minecraft/server/MinecraftServer\">server</ref>.",
+    "text": "Utilities to send messages to a set of <ref cls=\"net/minecraft/world/entity/player/Player\">players</ref> on the <ref cls=\"net/minecraft/server/MinecraftServer\">server</ref>.",
+    "properties": []
+  }
+}

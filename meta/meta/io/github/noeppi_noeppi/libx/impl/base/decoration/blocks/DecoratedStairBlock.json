@@ -1,0 +1,187 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/base/decoration/blocks/DecoratedStairBlock",
+  "simpleName": "DecoratedStairBlock",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedStairBlock",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraft/world/level/block/StairBlock",
+    "signature": "net.minecraft.world.level.block.StairBlock",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "parent",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock)void",
+      "parameters": [
+        {
+          "name": "parent",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock",
+            "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock;",
+            "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "animateTick",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,java.util.Random)void",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        },
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        },
+        {
+          "name": "rand",
+          "type": {
+            "name": "java.util.Random",
+            "desc": "Ljava/util/Random;",
+            "binaryName": "java/util/Random"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "getExplosionResistance",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()float",
+      "parameters": [],
+      "return": {
+        "name": "float",
+        "desc": "F"
+      },
+      "throws": []
+    },
+    {
+      "name": "getLightBlock",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.BlockGetter,net.minecraft.core.BlockPos)int",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        },
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.BlockGetter",
+            "desc": "Lnet/minecraft/world/level/BlockGetter;",
+            "binaryName": "net/minecraft/world/level/BlockGetter"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        }
+      ],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "getLightEmission",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.BlockGetter,net.minecraft.core.BlockPos)int",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        },
+        {
+          "name": "world",
+          "type": {
+            "name": "net.minecraft.world.level.BlockGetter",
+            "desc": "Lnet/minecraft/world/level/BlockGetter;",
+            "binaryName": "net/minecraft/world/level/BlockGetter"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        }
+      ],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    }
+  ]
+}

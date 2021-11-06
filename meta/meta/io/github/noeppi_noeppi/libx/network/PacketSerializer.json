@@ -1,0 +1,89 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/network/PacketSerializer",
+  "simpleName": "PacketSerializer",
+  "sourceNam": "io.github.noeppi_noeppi.libx.network.PacketSerializer",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "messageClass",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.Class<T>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<T>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "encode",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(T,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "msg",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "decode",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)T",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "An interface implementing the logic on how to serialise and deserialize a message and how to handle it.",
+    "text": "An interface implementing the logic on how to serialise and deserialize a message and how to handle it.",
+    "properties": []
+  }
+}

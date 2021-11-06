@@ -1,0 +1,275 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/mappers/special/RecordValueMapper",
+  "simpleName": "RecordValueMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.mappers.special.RecordValueMapper",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/ValueMapper",
+      "signature": "io.github.noeppi_noeppi.libx.config.ValueMapper<T,com.google.gson.JsonObject>",
+      "parameters": [
+        null,
+        {
+          "name": "com/google/gson/JsonObject",
+          "signature": "com.google.gson.JsonObject",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "clazz",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.Class<T>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      }
+    },
+    {
+      "name": "mappers",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    },
+    {
+      "name": "ctor",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.reflect.Constructor<T>",
+        "desc": "Ljava/lang/reflect/Constructor;",
+        "binaryName": "java/lang/reflect/Constructor"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Class<T>,java.util.function.Function<java.lang.reflect.Type,io.github.noeppi_noeppi.libx.config.ValueMapper<?,?>>)void",
+      "parameters": [
+        {
+          "name": "clazz",
+          "type": {
+            "name": "java.lang.Class<T>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "mapperFunc",
+          "type": {
+            "name": "java.util.function.Function<java.lang.reflect.Type,io.github.noeppi_noeppi.libx.config.ValueMapper<?,?>>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "type",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<T>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<T>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "element",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<com.google.gson.JsonObject>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<com.google.gson.JsonObject>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonObject)T",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonObject",
+            "desc": "Lcom/google/gson/JsonObject;",
+            "binaryName": "com/google/gson/JsonObject"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(T)com.google.gson.JsonObject",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.google.gson.JsonObject",
+        "desc": "Lcom/google/gson/JsonObject;",
+        "binaryName": "com/google/gson/JsonObject"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)T",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    },
+    {
+      "name": "toNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(T,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "correct",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection<T>)java.util.Optional<T>",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonElement",
+            "desc": "Lcom/google/gson/JsonElement;",
+            "binaryName": "com/google/gson/JsonElement"
+          }
+        },
+        {
+          "name": "correction",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/correct/ConfigCorrection;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/correct/ConfigCorrection"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Optional<T>",
+        "desc": "Ljava/util/Optional;",
+        "binaryName": "java/util/Optional"
+      },
+      "throws": []
+    },
+    {
+      "name": "createEditor",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>)io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>",
+      "parameters": [
+        {
+          "name": "validator",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValidatorInfo;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValidatorInfo"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      },
+      "throws": []
+    }
+  ]
+}

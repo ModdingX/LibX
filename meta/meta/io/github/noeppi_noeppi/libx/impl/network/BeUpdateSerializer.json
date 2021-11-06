@@ -1,0 +1,109 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer",
+  "simpleName": "BeUpdateSerializer",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/network/PacketSerializer",
+      "signature": "io.github.noeppi_noeppi.libx.network.PacketSerializer<io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage>",
+      "parameters": [
+        {
+          "name": "io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage",
+          "signature": "io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "messageClass",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "encode",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "msg",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "decode",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.network.BeUpdateSerializer.BeUpdateMessage",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/network/BeUpdateSerializer$BeUpdateMessage"
+      },
+      "throws": []
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/processor/modinit/config/RegisteredMapper",
+  "simpleName": "RegisteredMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.processor.modinit.config.RegisteredMapper",
+  "modifiers": [
+    "public",
+    "final"
+  ],
+  "superClass": {
+    "name": "java/lang/Record",
+    "signature": "java.lang.Record",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "classFqn",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      }
+    },
+    {
+      "name": "genericType",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.String,boolean)void",
+      "parameters": [
+        {
+          "name": "classFqn",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        },
+        {
+          "name": "genericType",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "equals",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "o",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "hashCode",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "toString",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "classFqn",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "genericType",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    }
+  ]
+}

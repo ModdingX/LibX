@@ -1,0 +1,37 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/processor/modinit/codec/GetterSupplier",
+  "simpleName": "GetterSupplier",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GetterSupplier",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "get",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": [
+        {
+          "name": "io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureException",
+          "desc": "Lio/github/noeppi_noeppi/libx/annotation/processor/modinit/FailureException;",
+          "binaryName": "io/github/noeppi_noeppi/libx/annotation/processor/modinit/FailureException"
+        }
+      ]
+    }
+  ]
+}

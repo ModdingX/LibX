@@ -1,0 +1,304 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/mappers/special/EnumValueMappers",
+  "simpleName": "EnumValueMappers",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.mappers.special.EnumValueMappers",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/ValueMapper",
+      "signature": "io.github.noeppi_noeppi.libx.config.ValueMapper<java.lang.Enum<?>,com.google.gson.JsonPrimitive>",
+      "parameters": [
+        {
+          "name": "java/lang/Enum",
+          "signature": "java.lang.Enum<?>",
+          "parameters": [
+            null
+          ]
+        },
+        {
+          "name": "com/google/gson/JsonPrimitive",
+          "signature": "com.google.gson.JsonPrimitive",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "mappers",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<java.lang.Class<? extends java.lang.Enum<?>>,io.github.noeppi_noeppi.libx.impl.config.mappers.special.EnumValueMappers>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    },
+    {
+      "name": "clazz",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.Class<? extends java.lang.Enum<?>>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Class<? extends java.lang.Enum<?>>)void",
+      "parameters": [
+        {
+          "name": "clazz",
+          "type": {
+            "name": "java.lang.Class<? extends java.lang.Enum<?>>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getMapper",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.lang.Class<? extends java.lang.Enum<?>>)io.github.noeppi_noeppi.libx.impl.config.mappers.special.EnumValueMappers",
+      "parameters": [
+        {
+          "name": "enumClass",
+          "type": {
+            "name": "java.lang.Class<? extends java.lang.Enum<?>>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.mappers.special.EnumValueMappers",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/mappers/special/EnumValueMappers;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/mappers/special/EnumValueMappers"
+      },
+      "throws": []
+    },
+    {
+      "name": "type",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<java.lang.Enum<?>>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<java.lang.Enum<?>>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "element",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<com.google.gson.JsonPrimitive>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<com.google.gson.JsonPrimitive>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonPrimitive)java.lang.Enum<?>",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonPrimitive",
+            "desc": "Lcom/google/gson/JsonPrimitive;",
+            "binaryName": "com/google/gson/JsonPrimitive"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.lang.Enum<?>",
+        "desc": "Ljava/lang/Enum;",
+        "binaryName": "java/lang/Enum"
+      },
+      "throws": []
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Enum<?>)com.google.gson.JsonPrimitive",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "java.lang.Enum<?>",
+            "desc": "Ljava/lang/Enum;",
+            "binaryName": "java/lang/Enum"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.google.gson.JsonPrimitive",
+        "desc": "Lcom/google/gson/JsonPrimitive;",
+        "binaryName": "com/google/gson/JsonPrimitive"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)java.lang.Enum<?>",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.lang.Enum<?>",
+        "desc": "Ljava/lang/Enum;",
+        "binaryName": "java/lang/Enum"
+      },
+      "throws": []
+    },
+    {
+      "name": "toNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Enum<?>,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "java.lang.Enum<?>",
+            "desc": "Ljava/lang/Enum;",
+            "binaryName": "java/lang/Enum"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "correct",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection<java.lang.Enum<?>>)java.util.Optional<java.lang.Enum<?>>",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonElement",
+            "desc": "Lcom/google/gson/JsonElement;",
+            "binaryName": "com/google/gson/JsonElement"
+          }
+        },
+        {
+          "name": "correction",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection<java.lang.Enum<?>>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/correct/ConfigCorrection;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/correct/ConfigCorrection"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Optional<java.lang.Enum<?>>",
+        "desc": "Ljava/util/Optional;",
+        "binaryName": "java/util/Optional"
+      },
+      "throws": []
+    },
+    {
+      "name": "comment",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.util.List<java.lang.String>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.List<java.lang.String>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      },
+      "throws": []
+    },
+    {
+      "name": "createEditor",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>)io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<java.lang.Enum<?>>",
+      "parameters": [
+        {
+          "name": "validator",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValidatorInfo;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValidatorInfo"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<java.lang.Enum<?>>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      },
+      "throws": []
+    }
+  ]
+}

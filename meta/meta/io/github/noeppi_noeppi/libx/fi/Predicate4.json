@@ -1,0 +1,127 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/fi/Predicate4",
+  "simpleName": "Predicate4",
+  "sourceNam": "io.github.noeppi_noeppi.libx.fi.Predicate4",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "test",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(A,B,C,D)boolean",
+      "parameters": [
+        {
+          "name": "a",
+          "type": {
+            "name": "A",
+            "typeVar": "A"
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "name": "B",
+            "typeVar": "B"
+          }
+        },
+        {
+          "name": "c",
+          "type": {
+            "name": "C",
+            "typeVar": "C"
+          }
+        },
+        {
+          "name": "d",
+          "type": {
+            "name": "D",
+            "typeVar": "D"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "and",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>)io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+      "parameters": [
+        {
+          "name": "other",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate4;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate4"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate4;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate4"
+      },
+      "throws": []
+    },
+    {
+      "name": "or",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>)io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+      "parameters": [
+        {
+          "name": "other",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate4;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate4"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate4;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate4"
+      },
+      "throws": []
+    },
+    {
+      "name": "negate",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate4<A,B,C,D>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate4;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate4"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A predicate that takes 4 parameters.",
+    "text": "A predicate that takes 4 parameters.",
+    "properties": []
+  }
+}

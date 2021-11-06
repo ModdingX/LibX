@@ -1,0 +1,95 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/util/LongAmountToIntUtil",
+  "simpleName": "LongAmountToIntUtil",
+  "sourceNam": "io.github.noeppi_noeppi.libx.util.LongAmountToIntUtil",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getValue",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(long,long)int",
+      "parameters": [
+        {
+          "name": "stored",
+          "type": {
+            "name": "long",
+            "desc": "J"
+          }
+        },
+        {
+          "name": "max",
+          "type": {
+            "name": "long",
+            "desc": "J"
+          }
+        }
+      ],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets a value stored as a long as an int value.",
+        "text": "Gets a value stored as a long as an int value. For more info see class description.",
+        "properties": []
+      }
+    },
+    {
+      "name": "getMaxValue",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(long)int",
+      "parameters": [
+        {
+          "name": "max",
+          "type": {
+            "name": "long",
+            "desc": "J"
+          }
+        }
+      ],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets a maximum value stored as a long as an int value.",
+        "text": "Gets a maximum value stored as a long as an int value. For more info see class description.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Utility methods to convert amounts (must be &gt; 0) that are stored as <code>long</code><br> to <code>int</code>.",
+    "text": "Utility methods to convert amounts (must be &gt; 0) that are stored as <code>long</code><br> to <code>int</code>. This is meant to be used whenever an API only allows int values<br> (like <ref cls=\"net/minecraftforge/energy/IEnergyStorage\">IEnergyStorage</ref>) but you store the value as a long. This will output<br> half of <ref cls=\"java/lang/Integer\" field=\"MAX_VALUE\">Integer#MAX_VALUE</ref> if there's more energy stored and more free than<br> the maximum int value so things using these APIs will detect that they can extract<br> stuff and also insert it. (Only at half of the possible maximum speed though)<br> <br> To use this with <ref cls=\"net/minecraftforge/energy/IEnergyStorage\">IEnergyStorage</ref>, you can use <ref cls=\"io/github/noeppi_noeppi/libx/capability/LongEnergyStorage\">LongEnergyStorage</ref>.",
+    "properties": []
+  }
+}

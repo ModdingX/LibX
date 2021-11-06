@@ -1,0 +1,313 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType",
+  "simpleName": "DecorationType",
+  "sourceNam": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "BASE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      },
+      "doc": {
+        "summary": "The <ref cls=\"io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock\">DecoratedBlock</ref> itself.",
+        "text": "The <ref cls=\"io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock\">DecoratedBlock</ref> itself.",
+        "properties": []
+      }
+    },
+    {
+      "name": "SLAB",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.SlabBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "STAIR",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.StairBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "WALL",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.WallBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "FENCE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.FenceBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "FENCE_GATE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.FenceGateBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "WOOD_BUTTON",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.WoodButtonBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "STONE_BUTTON",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.StoneButtonBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "WOOD_PRESSURE_PLATE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.PressurePlateBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "STONE_PRESSURE_PLATE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.PressurePlateBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "DOOR",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.DoorBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "TRAPDOOR",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends net.minecraft.world.level.block.TrapDoorBlock>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    },
+    {
+      "name": "SIGN",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationType<? extends io.github.noeppi_noeppi.libx.base.decoration.SignAccess>",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationType;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationType"
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "name",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the name for this decoration type.",
+        "text": "Gets the name for this decoration type. Must be unique within a <ref cls=\"io/github/noeppi_noeppi/libx/base/decoration/DecorationContext\">DecorationContext</ref>.",
+        "properties": []
+      }
+    },
+    {
+      "name": "registration",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.mod.ModX,io.github.noeppi_noeppi.libx.base.decoration.DecorationContext,io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock)T",
+      "parameters": [
+        {
+          "name": "mod",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.mod.ModX",
+            "desc": "Lio/github/noeppi_noeppi/libx/mod/ModX;",
+            "binaryName": "io/github/noeppi_noeppi/libx/mod/ModX"
+          }
+        },
+        {
+          "name": "context",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationContext",
+            "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationContext;",
+            "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationContext"
+          }
+        },
+        {
+          "name": "block",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock",
+            "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock;",
+            "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the element to register.",
+        "text": "Gets the element to register.",
+        "properties": []
+      }
+    },
+    {
+      "name": "additionalRegistration",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.mod.ModX,io.github.noeppi_noeppi.libx.base.decoration.DecorationContext,io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock,T)java.util.Set<java.lang.Object>",
+      "parameters": [
+        {
+          "name": "mod",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.mod.ModX",
+            "desc": "Lio/github/noeppi_noeppi/libx/mod/ModX;",
+            "binaryName": "io/github/noeppi_noeppi/libx/mod/ModX"
+          }
+        },
+        {
+          "name": "context",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.base.decoration.DecorationContext",
+            "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecorationContext;",
+            "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecorationContext"
+          }
+        },
+        {
+          "name": "block",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock",
+            "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock;",
+            "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock"
+          }
+        },
+        {
+          "name": "element",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Set<java.lang.Object>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets additional elements to register.",
+        "text": "Gets additional elements to register.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Something that is registered together with a <ref cls=\"io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock\">DecoratedBlock</ref>.",
+    "text": "Something that is registered together with a <ref cls=\"io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock\">DecoratedBlock</ref>.",
+    "properties": []
+  }
+}

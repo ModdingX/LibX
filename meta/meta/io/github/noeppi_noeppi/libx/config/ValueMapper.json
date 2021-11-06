@@ -1,0 +1,232 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/config/ValueMapper",
+  "simpleName": "ValueMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.config.ValueMapper",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/CommonValueMapper",
+      "signature": "io.github.noeppi_noeppi.libx.config.CommonValueMapper<T,E>",
+      "parameters": [
+        null,
+        null
+      ]
+    }
+  ],
+  "methods": [
+    {
+      "name": "fromJson",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(E)T",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "E",
+            "typeVar": "E"
+          },
+          "doc": "The json data"
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Reads an object from JSON.",
+        "text": "Reads an object from JSON. If the json is invalid you may either throw<br> an <ref cls=\"java/lang/IllegalStateException\">IllegalStateException</ref> or a <ref cls=\"com/google/gson/JsonParseException\">JsonParseException</ref> to end<br> config parsing with an error, or just correct errors yourself and return<br> default values.",
+        "properties": [
+          {
+            "text": "The value read.",
+            "type": "return"
+          }
+        ]
+      }
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(T)E",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          },
+          "doc": "The value to serialise"
+        }
+      ],
+      "return": {
+        "name": "E",
+        "typeVar": "E"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Serialises a value to JSON.",
+        "text": "Serialises a value to JSON.",
+        "properties": [
+          {
+            "text": "The resulting json data.",
+            "type": "return"
+          }
+        ]
+      }
+    },
+    {
+      "name": "fromNetwork",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)T",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Reads a value from a <ref cls=\"net/minecraft/network/FriendlyByteBuf\">FriendlyByteBuf</ref>.",
+        "text": "Reads a value from a <ref cls=\"net/minecraft/network/FriendlyByteBuf\">FriendlyByteBuf</ref>. The default implementation expects a<br> JSON string and gives this string to <ref cls=\"io/github/noeppi_noeppi/libx/config/ValueMapper\" method=\"fromJson\" type=\"(E)T\">fromJSON</ref>.",
+        "properties": []
+      }
+    },
+    {
+      "name": "toNetwork",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(T,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Writes a value to a <ref cls=\"net/minecraft/network/FriendlyByteBuf\">FriendlyByteBuf</ref>.",
+        "text": "Writes a value to a <ref cls=\"net/minecraft/network/FriendlyByteBuf\">FriendlyByteBuf</ref>. The default implementation calls<br> <ref cls=\"io/github/noeppi_noeppi/libx/config/ValueMapper\" method=\"toJson\" type=\"(T)E\">toJSON</ref> and writes the resulting JSON as a string.",
+        "properties": []
+      }
+    },
+    {
+      "name": "correct",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection<T>)java.util.Optional<T>",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonElement",
+            "desc": "Lcom/google/gson/JsonElement;",
+            "binaryName": "com/google/gson/JsonElement"
+          }
+        },
+        {
+          "name": "correction",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/correct/ConfigCorrection;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/correct/ConfigCorrection"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Optional<T>",
+        "desc": "Ljava/util/Optional;",
+        "binaryName": "java/util/Optional"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Corrects a config value.",
+        "text": "Corrects a config value. This is only called if <ref cls=\"io/github/noeppi_noeppi/libx/config/ValueMapper\" method=\"fromJson\" type=\"(E)T\">#fromJson(JsonElement)</ref> fails.<br> Here the raw json for the config value is passed. Also a <ref cls=\"io/github/noeppi_noeppi/libx/config/correct/ConfigCorrection\">ConfigCorrection</ref> is<br> passed that allows to correct json of types contained in this value. For example a<br> list value mapper can use the <ref cls=\"io/github/noeppi_noeppi/libx/config/correct/ConfigCorrection\">ConfigCorrection</ref> to try to get as many values<br> as possible out of a json array.",
+        "properties": [
+          {
+            "text": "An <ref cls=\"java/util/Optional\">Optional</ref> containing the corrected value or an empty <ref cls=\"java/util/Optional\">Optional</ref><br> the correction failed.",
+            "type": "return"
+          }
+        ]
+      }
+    },
+    {
+      "name": "createEditor",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>)io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>",
+      "parameters": [
+        {
+          "name": "validator",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValidatorInfo;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValidatorInfo"
+          },
+          "doc": "Access to the current validator used. Can be used to create different<br>                  editors based on validators."
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a <ref cls=\"io/github/noeppi_noeppi/libx/config/gui/ConfigEditor\">ConfigEditor</ref> for this value mapper to display this config in the<br> config menu.",
+        "text": "Creates a <ref cls=\"io/github/noeppi_noeppi/libx/config/gui/ConfigEditor\">ConfigEditor</ref> for this value mapper to display this config in the<br> config menu. To display that this value can't be edited through the GUI, use<br> <ref cls=\"io/github/noeppi_noeppi/libx/config/gui/ConfigEditor\" method=\"unsupported\" type=\"<T>(T)io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>\">ConfigEditor#unsupported(Object)</ref> with a default value that is used if for example<br> elements of this type are created in a list.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "A way to serialise values of a specific type for a config file.",
+    "text": "A way to serialise values of a specific type for a config file. See <ref cls=\"io/github/noeppi_noeppi/libx/config/ConfigManager\">ConfigManager</ref> for<br> more info.",
+    "properties": []
+  }
+}

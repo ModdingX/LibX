@@ -1,0 +1,42 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/registration/BuiltinTransformers",
+  "simpleName": "BuiltinTransformers",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.registration.BuiltinTransformers",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "DATA_SERIALIZER",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.mod.registration.RegistryTransformer",
+        "desc": "Lio/github/noeppi_noeppi/libx/mod/registration/RegistryTransformer;",
+        "binaryName": "io/github/noeppi_noeppi/libx/mod/registration/RegistryTransformer"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

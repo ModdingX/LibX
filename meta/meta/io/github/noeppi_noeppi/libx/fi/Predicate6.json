@@ -1,0 +1,141 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/fi/Predicate6",
+  "simpleName": "Predicate6",
+  "sourceNam": "io.github.noeppi_noeppi.libx.fi.Predicate6",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "test",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(A,B,C,D,E,F)boolean",
+      "parameters": [
+        {
+          "name": "a",
+          "type": {
+            "name": "A",
+            "typeVar": "A"
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "name": "B",
+            "typeVar": "B"
+          }
+        },
+        {
+          "name": "c",
+          "type": {
+            "name": "C",
+            "typeVar": "C"
+          }
+        },
+        {
+          "name": "d",
+          "type": {
+            "name": "D",
+            "typeVar": "D"
+          }
+        },
+        {
+          "name": "e",
+          "type": {
+            "name": "E",
+            "typeVar": "E"
+          }
+        },
+        {
+          "name": "f",
+          "type": {
+            "name": "F",
+            "typeVar": "F"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "and",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>)io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+      "parameters": [
+        {
+          "name": "other",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate6;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate6"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate6;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate6"
+      },
+      "throws": []
+    },
+    {
+      "name": "or",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>)io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+      "parameters": [
+        {
+          "name": "other",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate6;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate6"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate6;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate6"
+      },
+      "throws": []
+    },
+    {
+      "name": "negate",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate6<A,B,C,D,E,F>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate6;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate6"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A predicate that takes 6 parameters.",
+    "text": "A predicate that takes 6 parameters.",
+    "properties": []
+  }
+}

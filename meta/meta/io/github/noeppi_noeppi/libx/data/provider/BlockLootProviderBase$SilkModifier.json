@@ -1,0 +1,57 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase$SilkModifier",
+  "simpleName": "SilkModifier",
+  "sourceNam": "io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.SilkModifier",
+  "modifiers": [
+    "public",
+    "static"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "modifier",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.GenericLootModifier",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase$GenericLootModifier;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase$GenericLootModifier"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.GenericLootModifier)void",
+      "parameters": [
+        {
+          "name": "modifier",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.GenericLootModifier",
+            "desc": "Lio/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase$GenericLootModifier;",
+            "binaryName": "io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase$GenericLootModifier"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A class used in the drops method to reduce ambiguity and make the code more readable.",
+    "text": "A class used in the drops method to reduce ambiguity and make the code more readable. Just call<br> the <ref cls=\"io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase\" method=\"silk\" type=\"(io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.GenericLootModifier)io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.SilkModifier\">#silk(GenericLootModifier)</ref> method wih a generic loot modifier to get a silk modifier.<br> A silk modifier does not extend <ref cls=\"io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase$GenericLootModifier\">GenericLootModifier</ref> for this reason.",
+    "properties": []
+  }
+}

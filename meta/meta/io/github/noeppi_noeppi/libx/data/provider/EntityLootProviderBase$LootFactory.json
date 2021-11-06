@@ -1,0 +1,182 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory",
+  "simpleName": "LootFactory",
+  "sourceNam": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory",
+  "modifiers": [
+    "public",
+    "static",
+    "abstract"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "from",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>)io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory",
+      "parameters": [
+        {
+          "name": "builder",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+            "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+            "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets a loot factory that will always return the given loot entry.",
+        "text": "Gets a loot factory that will always return the given loot entry.",
+        "properties": []
+      }
+    },
+    {
+      "name": "from",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[])io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory[]",
+      "parameters": [
+        {
+          "name": "builders",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+            "arrayOf": {
+              "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+              "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+              "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory[]",
+        "arrayOf": {
+          "name": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory",
+          "desc": "Lio/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory;",
+          "binaryName": "io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory"
+        }
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets an array of loot factories that will always return the given loot entries.",
+        "text": "Gets an array of loot factories that will always return the given loot entries.",
+        "properties": []
+      }
+    },
+    {
+      "name": "resolve",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.entity.EntityType<?>,io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory[])net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+      "parameters": [
+        {
+          "name": "e",
+          "type": {
+            "name": "net.minecraft.world.entity.EntityType<?>",
+            "desc": "Lnet/minecraft/world/entity/EntityType;",
+            "binaryName": "net/minecraft/world/entity/EntityType"
+          }
+        },
+        {
+          "name": "factories",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory[]",
+            "arrayOf": {
+              "name": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory",
+              "desc": "Lio/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory;",
+              "binaryName": "io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+        "arrayOf": {
+          "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+          "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+          "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+        }
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Calls <ref cls=\"io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory\" method=\"build\" type=\"(net.minecraft.world.entity.EntityType<?>)net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>\">#build(EntityType)</ref> on all factories with the given entity and returns a new array.",
+        "text": "Calls <ref cls=\"io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory\" method=\"build\" type=\"(net.minecraft.world.entity.EntityType<?>)net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>\">#build(EntityType)</ref> on all factories with the given entity and returns a new array.",
+        "properties": []
+      }
+    },
+    {
+      "name": "build",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(net.minecraft.world.entity.EntityType<?>)net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "entity",
+          "type": {
+            "name": "net.minecraft.world.entity.EntityType<?>",
+            "desc": "Lnet/minecraft/world/entity/EntityType;",
+            "binaryName": "net/minecraft/world/entity/EntityType"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "throws": []
+    },
+    {
+      "name": "with",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder[])io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory",
+      "parameters": [
+        {
+          "name": "conditions",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder[]",
+            "arrayOf": {
+              "name": "net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder",
+              "desc": "Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition$Builder;",
+              "binaryName": "net/minecraft/world/level/storage/loot/predicates/LootItemCondition$Builder"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.LootFactory",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$LootFactory"
+      },
+      "vararg": true,
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "Interface to get a loot entry from an entity.",
+    "text": "Interface to get a loot entry from an entity.",
+    "properties": []
+  }
+}

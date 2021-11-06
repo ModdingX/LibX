@@ -1,0 +1,315 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder",
+  "simpleName": "SoundSettingsBuilder",
+  "sourceNam": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+  "modifiers": [
+    "protected",
+    "static"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "volume",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "float",
+        "desc": "F"
+      }
+    },
+    {
+      "name": "pitch",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "float",
+        "desc": "F"
+      }
+    },
+    {
+      "name": "weight",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    },
+    {
+      "name": "stream",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      }
+    },
+    {
+      "name": "attenuationDistance",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    },
+    {
+      "name": "preload",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "volume",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(float)io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [
+        {
+          "name": "volume",
+          "type": {
+            "name": "float",
+            "desc": "F"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets the volume for the sound settings.",
+        "text": "Sets the volume for the sound settings.",
+        "properties": []
+      }
+    },
+    {
+      "name": "pitch",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(float)io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [
+        {
+          "name": "pitch",
+          "type": {
+            "name": "float",
+            "desc": "F"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets the pitch for the sound settings.",
+        "text": "Sets the pitch for the sound settings.",
+        "properties": []
+      }
+    },
+    {
+      "name": "weight",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(int)io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [
+        {
+          "name": "weight",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets the weight for the sound settings.",
+        "text": "Sets the weight for the sound settings.",
+        "properties": []
+      }
+    },
+    {
+      "name": "stream",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Marks the sound settings as stream sound.",
+        "text": "Marks the sound settings as stream sound.",
+        "properties": []
+      }
+    },
+    {
+      "name": "stream",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(boolean)io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [
+        {
+          "name": "stream",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets the stream state of the sound settings.",
+        "text": "Sets the stream state of the sound settings.",
+        "properties": []
+      }
+    },
+    {
+      "name": "attenuationDistance",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(int)io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [
+        {
+          "name": "attenuationDistance",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets the attenuation distance for the sound settings.",
+        "text": "Sets the attenuation distance for the sound settings.",
+        "properties": []
+      }
+    },
+    {
+      "name": "preload",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Marks the sound settings as preloaded.",
+        "text": "Marks the sound settings as preloaded.",
+        "properties": []
+      }
+    },
+    {
+      "name": "preload",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(boolean)io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+      "parameters": [
+        {
+          "name": "preload",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.SoundDefinitionProviderBase.SoundSettingsBuilder",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/SoundDefinitionProviderBase$SoundSettingsBuilder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets the preload state of the sound settings.",
+        "text": "Sets the preload state of the sound settings.",
+        "properties": []
+      }
+    },
+    {
+      "name": "applyTo",
+      "modifiers": [
+        "private"
+      ],
+      "type": "(net.minecraftforge.common.data.SoundDefinition.Sound)void",
+      "parameters": [
+        {
+          "name": "sound",
+          "type": {
+            "name": "net.minecraftforge.common.data.SoundDefinition.Sound",
+            "desc": "Lnet/minecraftforge/common/data/SoundDefinition$Sound;",
+            "binaryName": "net/minecraftforge/common/data/SoundDefinition$Sound"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

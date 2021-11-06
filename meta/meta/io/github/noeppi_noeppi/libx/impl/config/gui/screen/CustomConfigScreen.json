@@ -1,0 +1,160 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/CustomConfigScreen",
+  "simpleName": "CustomConfigScreen",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.CustomConfigScreen",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigBaseScreen",
+    "signature": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigBaseScreen",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "content",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent<T>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent"
+      }
+    },
+    {
+      "name": "contentManager",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent.ScreenManager",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager"
+      }
+    },
+    {
+      "name": "onClose",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.Runnable",
+        "desc": "Ljava/lang/Runnable;",
+        "binaryName": "java/lang/Runnable"
+      }
+    },
+    {
+      "name": "searchTerm",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreenManager,io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent<T>,java.lang.Runnable)void",
+      "parameters": [
+        {
+          "name": "manager",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreenManager",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreenManager;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreenManager"
+          }
+        },
+        {
+          "name": "content",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent"
+          }
+        },
+        {
+          "name": "onClose",
+          "type": {
+            "name": "java.lang.Runnable",
+            "desc": "Ljava/lang/Runnable;",
+            "binaryName": "java/lang/Runnable"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "buildGui",
+      "modifiers": [
+        "protected"
+      ],
+      "type": "(java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>)void",
+      "parameters": [
+        {
+          "name": "consumer",
+          "type": {
+            "name": "java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "searchChange",
+      "modifiers": [
+        "protected"
+      ],
+      "type": "(java.lang.String)void",
+      "parameters": [
+        {
+          "name": "term",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "removed",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

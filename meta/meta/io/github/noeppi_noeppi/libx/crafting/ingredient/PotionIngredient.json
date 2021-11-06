@@ -1,0 +1,194 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/crafting/ingredient/PotionIngredient",
+  "simpleName": "PotionIngredient",
+  "sourceNam": "io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraft/world/item/crafting/Ingredient",
+    "signature": "net.minecraft.world.item.crafting.Ingredient",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "potionItem",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.world.item.Item",
+        "desc": "Lnet/minecraft/world/item/Item;",
+        "binaryName": "net/minecraft/world/item/Item"
+      },
+      "doc": {
+        "summary": "The item required for the potion.",
+        "text": "The item required for the potion. Can be null t match any item.",
+        "properties": []
+      }
+    },
+    {
+      "name": "potion",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.world.item.alchemy.Potion",
+        "desc": "Lnet/minecraft/world/item/alchemy/Potion;",
+        "binaryName": "net/minecraft/world/item/alchemy/Potion"
+      },
+      "doc": {
+        "summary": "The potion type used for this ingredient.",
+        "text": "The potion type used for this ingredient.",
+        "properties": []
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.Item,net.minecraft.world.item.alchemy.Potion)void",
+      "parameters": [
+        {
+          "name": "potionItem",
+          "type": {
+            "name": "net.minecraft.world.item.Item",
+            "desc": "Lnet/minecraft/world/item/Item;",
+            "binaryName": "net/minecraft/world/item/Item"
+          }
+        },
+        {
+          "name": "potion",
+          "type": {
+            "name": "net.minecraft.world.item.alchemy.Potion",
+            "desc": "Lnet/minecraft/world/item/alchemy/Potion;",
+            "binaryName": "net/minecraft/world/item/alchemy/Potion"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getItems",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.world.item.ItemStack[]",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.world.item.ItemStack[]",
+        "arrayOf": {
+          "name": "net.minecraft.world.item.ItemStack",
+          "desc": "Lnet/minecraft/world/item/ItemStack;",
+          "binaryName": "net/minecraft/world/item/ItemStack"
+        }
+      },
+      "throws": []
+    },
+    {
+      "name": "test",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.ItemStack)boolean",
+      "parameters": [
+        {
+          "name": "stack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "getStackingIds",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()it.unimi.dsi.fastutil.ints.IntList",
+      "parameters": [],
+      "return": {
+        "name": "it.unimi.dsi.fastutil.ints.IntList",
+        "desc": "Lit/unimi/dsi/fastutil/ints/IntList;",
+        "binaryName": "it/unimi/dsi/fastutil/ints/IntList"
+      },
+      "throws": []
+    },
+    {
+      "name": "isSimple",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "getSerializer",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraftforge.common.crafting.IIngredientSerializer<? extends net.minecraft.world.item.crafting.Ingredient>",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraftforge.common.crafting.IIngredientSerializer<? extends net.minecraft.world.item.crafting.Ingredient>",
+        "desc": "Lnet/minecraftforge/common/crafting/IIngredientSerializer;",
+        "binaryName": "net/minecraftforge/common/crafting/IIngredientSerializer"
+      },
+      "throws": []
+    },
+    {
+      "name": "isEmpty",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()com.google.gson.JsonElement",
+      "parameters": [],
+      "return": {
+        "name": "com.google.gson.JsonElement",
+        "desc": "Lcom/google/gson/JsonElement;",
+        "binaryName": "com/google/gson/JsonElement"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "An ingredient that checks for a <ref cls=\"net/minecraft/world/item/alchemy/Potion\">potion</ref> on an item.",
+    "text": "An ingredient that checks for a <ref cls=\"net/minecraft/world/item/alchemy/Potion\">potion</ref> on an item. Unlike <ref cls=\"io/github/noeppi_noeppi/libx/crafting/ingredient/EffectIngredient\">EffectIngredient</ref> there<br> must be exactly the potion given here and only registered potions can be used. <code>CustomPotionEffects</code><br> is ignored.<br> <br> Please check whether EffectIngredient matches your needs better as it does in most cases.",
+    "properties": []
+  }
+}

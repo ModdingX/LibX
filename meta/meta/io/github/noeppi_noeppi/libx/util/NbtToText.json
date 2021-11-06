@@ -1,0 +1,149 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/util/NbtToText",
+  "simpleName": "NbtToText",
+  "sourceNam": "io.github.noeppi_noeppi.libx.util.NbtToText",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "COPY_NBT",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.network.chat.HoverEvent",
+        "desc": "Lnet/minecraft/network/chat/HoverEvent;",
+        "binaryName": "net/minecraft/network/chat/HoverEvent"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "toText",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.nbt.Tag)net.minecraft.network.chat.MutableComponent",
+      "parameters": [
+        {
+          "name": "nbt",
+          "type": {
+            "name": "net.minecraft.nbt.Tag",
+            "desc": "Lnet/minecraft/nbt/Tag;",
+            "binaryName": "net/minecraft/nbt/Tag"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.network.chat.MutableComponent",
+        "desc": "Lnet/minecraft/network/chat/MutableComponent;",
+        "binaryName": "net/minecraft/network/chat/MutableComponent"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "As the fancy colored <ref cls=\"net/minecraft/network/chat/NbtComponent\">nbt components</ref> are only available for<br> <ref cls=\"net/minecraft/network/chat/NbtComponent$BlockNbtComponent\">blocks</ref>, <ref cls=\"net/minecraft/network/chat/NbtComponent$EntityNbtComponent\">entities</ref><br> and <ref cls=\"net/minecraft/network/chat/NbtComponent$StorageNbtComponent\">world storage</ref> by default, this translates a piece of NBT<br> to a colored <ref cls=\"net/minecraft/network/chat/Component\">text component</ref>.",
+        "text": "As the fancy colored <ref cls=\"net/minecraft/network/chat/NbtComponent\">nbt components</ref> are only available for<br> <ref cls=\"net/minecraft/network/chat/NbtComponent$BlockNbtComponent\">blocks</ref>, <ref cls=\"net/minecraft/network/chat/NbtComponent$EntityNbtComponent\">entities</ref><br> and <ref cls=\"net/minecraft/network/chat/NbtComponent$StorageNbtComponent\">world storage</ref> by default, this translates a piece of NBT<br> to a colored <ref cls=\"net/minecraft/network/chat/Component\">text component</ref>.",
+        "properties": []
+      }
+    },
+    {
+      "name": "toTextInternal",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(net.minecraft.nbt.Tag)net.minecraft.network.chat.MutableComponent",
+      "parameters": [
+        {
+          "name": "nbt",
+          "type": {
+            "name": "net.minecraft.nbt.Tag",
+            "desc": "Lnet/minecraft/nbt/Tag;",
+            "binaryName": "net/minecraft/nbt/Tag"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.network.chat.MutableComponent",
+        "desc": "Lnet/minecraft/network/chat/MutableComponent;",
+        "binaryName": "net/minecraft/network/chat/MutableComponent"
+      },
+      "throws": []
+    },
+    {
+      "name": "quotesRequired",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(java.lang.String)boolean",
+      "parameters": [
+        {
+          "name": "text",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "escape",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(java.lang.String)java.lang.String",
+      "parameters": [
+        {
+          "name": "text",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "Translates <ref cls=\"net/minecraft/nbt/Tag\">Named Binary Tag</ref> into <ref cls=\"net/minecraft/network/chat/MutableComponent\">text components</ref>.",
+    "text": "Translates <ref cls=\"net/minecraft/nbt/Tag\">Named Binary Tag</ref> into <ref cls=\"net/minecraft/network/chat/MutableComponent\">text components</ref>.",
+    "properties": []
+  }
+}

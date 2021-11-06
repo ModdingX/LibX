@@ -1,0 +1,212 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/mappers/advanced/IngredientStackValueMapper",
+  "simpleName": "IngredientStackValueMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.IngredientStackValueMapper",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/ValueMapper",
+      "signature": "io.github.noeppi_noeppi.libx.config.ValueMapper<io.github.noeppi_noeppi.libx.crafting.IngredientStack,com.google.gson.JsonObject>",
+      "parameters": [
+        {
+          "name": "io/github/noeppi_noeppi/libx/crafting/IngredientStack",
+          "signature": "io.github.noeppi_noeppi.libx.crafting.IngredientStack",
+          "parameters": []
+        },
+        {
+          "name": "com/google/gson/JsonObject",
+          "signature": "com.google.gson.JsonObject",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "INSTANCE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.IngredientStackValueMapper",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/mappers/advanced/IngredientStackValueMapper;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/mappers/advanced/IngredientStackValueMapper"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "type",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<io.github.noeppi_noeppi.libx.crafting.IngredientStack>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<io.github.noeppi_noeppi.libx.crafting.IngredientStack>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "element",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<com.google.gson.JsonObject>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<com.google.gson.JsonObject>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonObject)io.github.noeppi_noeppi.libx.crafting.IngredientStack",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonObject",
+            "desc": "Lcom/google/gson/JsonObject;",
+            "binaryName": "com/google/gson/JsonObject"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.crafting.IngredientStack",
+        "desc": "Lio/github/noeppi_noeppi/libx/crafting/IngredientStack;",
+        "binaryName": "io/github/noeppi_noeppi/libx/crafting/IngredientStack"
+      },
+      "throws": []
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.crafting.IngredientStack)com.google.gson.JsonObject",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.crafting.IngredientStack",
+            "desc": "Lio/github/noeppi_noeppi/libx/crafting/IngredientStack;",
+            "binaryName": "io/github/noeppi_noeppi/libx/crafting/IngredientStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.google.gson.JsonObject",
+        "desc": "Lcom/google/gson/JsonObject;",
+        "binaryName": "com/google/gson/JsonObject"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)io.github.noeppi_noeppi.libx.crafting.IngredientStack",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.crafting.IngredientStack",
+        "desc": "Lio/github/noeppi_noeppi/libx/crafting/IngredientStack;",
+        "binaryName": "io/github/noeppi_noeppi/libx/crafting/IngredientStack"
+      },
+      "throws": []
+    },
+    {
+      "name": "toNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.crafting.IngredientStack,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.crafting.IngredientStack",
+            "desc": "Lio/github/noeppi_noeppi/libx/crafting/IngredientStack;",
+            "binaryName": "io/github/noeppi_noeppi/libx/crafting/IngredientStack"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "createEditor",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>)io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<io.github.noeppi_noeppi.libx.crafting.IngredientStack>",
+      "parameters": [
+        {
+          "name": "validator",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValidatorInfo;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValidatorInfo"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<io.github.noeppi_noeppi.libx.crafting.IngredientStack>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      },
+      "throws": []
+    }
+  ]
+}

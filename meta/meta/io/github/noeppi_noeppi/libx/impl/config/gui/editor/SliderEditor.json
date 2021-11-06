@@ -1,0 +1,171 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/editor/SliderEditor",
+  "simpleName": "SliderEditor",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.editor.SliderEditor",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor",
+      "signature": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>",
+      "parameters": [
+        null
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "extractor",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.function.Function<T,java.lang.Double>",
+        "desc": "Ljava/util/function/Function;",
+        "binaryName": "java/util/function/Function"
+      }
+    },
+    {
+      "name": "factory",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.function.Function<java.lang.Double,T>",
+        "desc": "Ljava/util/function/Function;",
+        "binaryName": "java/util/function/Function"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.util.function.Function<T,java.lang.Double>,java.util.function.Function<java.lang.Double,T>)void",
+      "parameters": [
+        {
+          "name": "extractor",
+          "type": {
+            "name": "java.util.function.Function<T,java.lang.Double>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        },
+        {
+          "name": "factory",
+          "type": {
+            "name": "java.util.function.Function<java.lang.Double,T>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "defaultValue",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()T",
+      "parameters": [],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    },
+    {
+      "name": "createWidget",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen,T,io.github.noeppi_noeppi.libx.config.gui.WidgetProperties<T>)net.minecraft.client.gui.components.AbstractWidget",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "initialValue",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "properties",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.WidgetProperties<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/WidgetProperties;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/WidgetProperties"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.client.gui.components.AbstractWidget",
+        "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+        "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+      },
+      "throws": []
+    },
+    {
+      "name": "updateWidget",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen,net.minecraft.client.gui.components.AbstractWidget,io.github.noeppi_noeppi.libx.config.gui.WidgetProperties<T>)net.minecraft.client.gui.components.AbstractWidget",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "old",
+          "type": {
+            "name": "net.minecraft.client.gui.components.AbstractWidget",
+            "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+            "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+          }
+        },
+        {
+          "name": "properties",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.WidgetProperties<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/WidgetProperties;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/WidgetProperties"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.client.gui.components.AbstractWidget",
+        "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+        "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+      },
+      "throws": []
+    }
+  ]
+}

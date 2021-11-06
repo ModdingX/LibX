@@ -1,0 +1,56 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreen$SearchPredicate",
+  "simpleName": "SearchPredicate",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreen.SearchPredicate",
+  "modifiers": [
+    "public",
+    "static",
+    "abstract"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "test",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(T,io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreen<T>,java.lang.String)boolean",
+      "parameters": [
+        {
+          "name": "elem",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "screen",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreen<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreen;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreen"
+          }
+        },
+        {
+          "name": "query",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    }
+  ]
+}

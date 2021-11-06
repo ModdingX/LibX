@@ -1,0 +1,85 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreen$ElementFactory",
+  "simpleName": "ElementFactory",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreen.ElementFactory",
+  "modifiers": [
+    "public",
+    "static",
+    "abstract"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "create",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(T,io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreen<T>,net.minecraft.client.gui.components.AbstractWidget,int,int,int,int)io.github.noeppi_noeppi.libx.impl.config.gui.screen.BuiltEntry",
+      "parameters": [
+        {
+          "name": "elem",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "screen",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreen<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreen;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreen"
+          }
+        },
+        {
+          "name": "oldWidget",
+          "type": {
+            "name": "net.minecraft.client.gui.components.AbstractWidget",
+            "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+            "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+          }
+        },
+        {
+          "name": "x",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "width",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "height",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.BuiltEntry",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/gui/screen/BuiltEntry;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/BuiltEntry"
+      },
+      "throws": []
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/fi/Function5",
+  "simpleName": "Function5",
+  "sourceNam": "io.github.noeppi_noeppi.libx.fi.Function5",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "apply",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(A,B,C,D,E)R",
+      "parameters": [
+        {
+          "name": "a",
+          "type": {
+            "name": "A",
+            "typeVar": "A"
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "name": "B",
+            "typeVar": "B"
+          }
+        },
+        {
+          "name": "c",
+          "type": {
+            "name": "C",
+            "typeVar": "C"
+          }
+        },
+        {
+          "name": "d",
+          "type": {
+            "name": "D",
+            "typeVar": "D"
+          }
+        },
+        {
+          "name": "e",
+          "type": {
+            "name": "E",
+            "typeVar": "E"
+          }
+        }
+      ],
+      "return": {
+        "name": "R",
+        "typeVar": "R"
+      },
+      "throws": []
+    },
+    {
+      "name": "andThen",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "<V>(java.util.function.Function<? super R,? extends V>)io.github.noeppi_noeppi.libx.fi.Function5<A,B,C,D,E,V>",
+      "parameters": [
+        {
+          "name": "after",
+          "type": {
+            "name": "java.util.function.Function<? super R,? extends V>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Function5<A,B,C,D,E,V>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Function5;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Function5"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A function that takes 5 parameters and returns a value.",
+    "text": "A function that takes 5 parameters and returns a value.",
+    "properties": []
+  }
+}

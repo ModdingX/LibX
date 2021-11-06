@@ -1,0 +1,223 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/RecordConfigScreen$Entry",
+  "simpleName": "Entry",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.RecordConfigScreen.Entry",
+  "modifiers": [
+    "public",
+    "static",
+    "final"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Record",
+    "signature": "java.lang.Record",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "component",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.reflect.RecordComponent",
+        "desc": "Ljava/lang/reflect/RecordComponent;",
+        "binaryName": "java/lang/reflect/RecordComponent"
+      }
+    },
+    {
+      "name": "mapper",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/wrapper/TypesafeMapper;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/wrapper/TypesafeMapper"
+      }
+    },
+    {
+      "name": "value",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.function.Supplier<java.lang.Object>",
+        "desc": "Ljava/util/function/Supplier;",
+        "binaryName": "java/util/function/Supplier"
+      }
+    },
+    {
+      "name": "inputChanged",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.function.Consumer<java.lang.Object>",
+        "desc": "Ljava/util/function/Consumer;",
+        "binaryName": "java/util/function/Consumer"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.reflect.RecordComponent,io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper,java.util.function.Supplier<java.lang.Object>,java.util.function.Consumer<java.lang.Object>)void",
+      "parameters": [
+        {
+          "name": "component",
+          "type": {
+            "name": "java.lang.reflect.RecordComponent",
+            "desc": "Ljava/lang/reflect/RecordComponent;",
+            "binaryName": "java/lang/reflect/RecordComponent"
+          }
+        },
+        {
+          "name": "mapper",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/wrapper/TypesafeMapper;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/wrapper/TypesafeMapper"
+          }
+        },
+        {
+          "name": "value",
+          "type": {
+            "name": "java.util.function.Supplier<java.lang.Object>",
+            "desc": "Ljava/util/function/Supplier;",
+            "binaryName": "java/util/function/Supplier"
+          }
+        },
+        {
+          "name": "inputChanged",
+          "type": {
+            "name": "java.util.function.Consumer<java.lang.Object>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "toString",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "hashCode",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "equals",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "o",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "component",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.reflect.RecordComponent",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.reflect.RecordComponent",
+        "desc": "Ljava/lang/reflect/RecordComponent;",
+        "binaryName": "java/lang/reflect/RecordComponent"
+      },
+      "throws": []
+    },
+    {
+      "name": "mapper",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/wrapper/TypesafeMapper;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/wrapper/TypesafeMapper"
+      },
+      "throws": []
+    },
+    {
+      "name": "value",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.util.function.Supplier<java.lang.Object>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.function.Supplier<java.lang.Object>",
+        "desc": "Ljava/util/function/Supplier;",
+        "binaryName": "java/util/function/Supplier"
+      },
+      "throws": []
+    },
+    {
+      "name": "inputChanged",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.util.function.Consumer<java.lang.Object>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.function.Consumer<java.lang.Object>",
+        "desc": "Ljava/util/function/Consumer;",
+        "binaryName": "java/util/function/Consumer"
+      },
+      "throws": []
+    }
+  ]
+}

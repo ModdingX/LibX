@@ -1,0 +1,223 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/network/NetworkX$Protocol",
+  "simpleName": "Protocol",
+  "sourceNam": "io.github.noeppi_noeppi.libx.network.NetworkX.Protocol",
+  "modifiers": [
+    "public",
+    "static",
+    "final"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Record",
+    "signature": "java.lang.Record",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "version",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      }
+    },
+    {
+      "name": "client",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+        "desc": "Lio/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide;",
+        "binaryName": "io/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide"
+      }
+    },
+    {
+      "name": "server",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+        "desc": "Lio/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide;",
+        "binaryName": "io/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.String,io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide,io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide)void",
+      "parameters": [
+        {
+          "name": "version",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        },
+        {
+          "name": "client",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+            "desc": "Lio/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide;",
+            "binaryName": "io/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide"
+          }
+        },
+        {
+          "name": "server",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+            "desc": "Lio/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide;",
+            "binaryName": "io/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "of",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.lang.String)io.github.noeppi_noeppi.libx.network.NetworkX.Protocol",
+      "parameters": [
+        {
+          "name": "version",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.network.NetworkX.Protocol",
+        "desc": "Lio/github/noeppi_noeppi/libx/network/NetworkX$Protocol;",
+        "binaryName": "io/github/noeppi_noeppi/libx/network/NetworkX$Protocol"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new protocol with the given version, that is required on both sides.",
+        "text": "Creates a new protocol with the given version, that is required on both sides.",
+        "properties": []
+      }
+    },
+    {
+      "name": "toString",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "hashCode",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "equals",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "o",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "version",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "client",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+        "desc": "Lio/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide;",
+        "binaryName": "io/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide"
+      },
+      "throws": []
+    },
+    {
+      "name": "server",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.network.NetworkX.ProtocolSide",
+        "desc": "Lio/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide;",
+        "binaryName": "io/github/noeppi_noeppi/libx/network/NetworkX$ProtocolSide"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A protocol defines when a connection is accepted or rejected.",
+    "text": "A protocol defines when a connection is accepted or rejected.",
+    "properties": []
+  }
+}

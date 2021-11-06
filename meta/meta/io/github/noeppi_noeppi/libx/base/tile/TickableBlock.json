@@ -1,0 +1,40 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/base/tile/TickableBlock",
+  "simpleName": "TickableBlock",
+  "sourceNam": "io.github.noeppi_noeppi.libx.base.tile.TickableBlock",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "tick",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Ticks the <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">BlockEntity</ref>.",
+        "text": "Ticks the <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">BlockEntity</ref>.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "A <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">BlockEntity</ref> used with <ref cls=\"io/github/noeppi_noeppi/libx/base/tile/BlockBE\">BlockBE</ref> can implement this.",
+    "text": "A <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">BlockEntity</ref> used with <ref cls=\"io/github/noeppi_noeppi/libx/base/tile/BlockBE\">BlockBE</ref> can implement this. Then a <ref cls=\"net/minecraft/world/level/block/entity/BlockEntityTicker\">BlockEntityTicker</ref> to<br> tick the block entity will be created.",
+    "properties": []
+  }
+}

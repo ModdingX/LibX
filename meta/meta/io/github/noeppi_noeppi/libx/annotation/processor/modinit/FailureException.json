@@ -1,0 +1,27 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/processor/modinit/FailureException",
+  "simpleName": "FailureException",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureException",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/RuntimeException",
+    "signature": "java.lang.RuntimeException",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

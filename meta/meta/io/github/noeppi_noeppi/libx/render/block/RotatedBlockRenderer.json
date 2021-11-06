@@ -1,0 +1,74 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/render/block/RotatedBlockRenderer",
+  "simpleName": "RotatedBlockRenderer",
+  "sourceNam": "io.github.noeppi_noeppi.libx.render.block.RotatedBlockRenderer",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "io/github/noeppi_noeppi/libx/render/block/DecoratedBlockRenderer",
+    "signature": "io.github.noeppi_noeppi.libx.render.block.DecoratedBlockRenderer<T>",
+    "parameters": [
+      null
+    ]
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "decorate",
+      "modifiers": [
+        "protected",
+        "final"
+      ],
+      "type": "(T,float,com.mojang.blaze3d.vertex.PoseStack)void",
+      "parameters": [
+        {
+          "name": "blockEntity",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "partialTicks",
+          "type": {
+            "name": "float",
+            "desc": "F"
+          }
+        },
+        {
+          "name": "poseStack",
+          "type": {
+            "name": "com.mojang.blaze3d.vertex.PoseStack",
+            "desc": "Lcom/mojang/blaze3d/vertex/PoseStack;",
+            "binaryName": "com/mojang/blaze3d/vertex/PoseStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A <ref cls=\"net/minecraft/client/renderer/blockentity/BlockEntityRenderer\">BlockEntityRenderer</ref> that before calling the actual render code rotates the <ref cls=\"com/mojang/blaze3d/vertex/PoseStack\">PoseStack</ref> depending<br> on the horizontal facing.",
+    "text": "A <ref cls=\"net/minecraft/client/renderer/blockentity/BlockEntityRenderer\">BlockEntityRenderer</ref> that before calling the actual render code rotates the <ref cls=\"com/mojang/blaze3d/vertex/PoseStack\">PoseStack</ref> depending<br> on the horizontal facing. This may only be used with blocks that have the property <ref cls=\"net/minecraft/world/level/block/state/properties/BlockStateProperties\" field=\"HORIZONTAL_FACING\">BlockStateProperties#HORIZONTAL_FACING</ref>.<br> The <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">block entity</ref> should be rendered as if it was facing north.",
+    "properties": []
+  }
+}

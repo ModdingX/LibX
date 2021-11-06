@@ -1,0 +1,97 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/wrapper/TypesafeMapper",
+  "simpleName": "TypesafeMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.wrapper.TypesafeMapper",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "io/github/noeppi_noeppi/libx/impl/config/wrapper/JsonTypesafeMapper",
+    "signature": "io.github.noeppi_noeppi.libx.impl.config.wrapper.JsonTypesafeMapper<java.lang.Object>",
+    "parameters": [
+      {
+        "name": "java/lang/Object",
+        "signature": "java.lang.Object",
+        "parameters": []
+      }
+    ]
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.config.ValueMapper<?,?>)void",
+      "parameters": [
+        {
+          "name": "mapper",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValueMapper<?,?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValueMapper;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValueMapper"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object)com.google.gson.JsonElement",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.google.gson.JsonElement",
+        "desc": "Lcom/google/gson/JsonElement;",
+        "binaryName": "com/google/gson/JsonElement"
+      },
+      "throws": []
+    },
+    {
+      "name": "toNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

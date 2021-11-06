@@ -1,0 +1,60 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/processor/modinit/config/RegisterMapperProcessor",
+  "simpleName": "RegisterMapperProcessor",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.processor.modinit.config.RegisterMapperProcessor",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "processRegisterMapper",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(javax.lang.model.element.Element,io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv)void",
+      "parameters": [
+        {
+          "name": "element",
+          "type": {
+            "name": "javax.lang.model.element.Element",
+            "desc": "Ljavax/lang/model/element/Element;",
+            "binaryName": "javax/lang/model/element/Element"
+          }
+        },
+        {
+          "name": "env",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv",
+            "desc": "Lio/github/noeppi_noeppi/libx/annotation/processor/modinit/ModEnv;",
+            "binaryName": "io/github/noeppi_noeppi/libx/annotation/processor/modinit/ModEnv"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

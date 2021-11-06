@@ -1,0 +1,312 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/content/ResourceListContent",
+  "simpleName": "ResourceListContent",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ResourceListContent",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent",
+      "signature": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent<io.github.noeppi_noeppi.libx.util.ResourceList>",
+      "parameters": [
+        {
+          "name": "io/github/noeppi_noeppi/libx/util/ResourceList",
+          "signature": "io.github.noeppi_noeppi.libx.util.ResourceList",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "whitelist",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      }
+    },
+    {
+      "name": "list",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.util.ResourceList.RuleEntry>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    },
+    {
+      "name": "inputChanged",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "java.util.function.Consumer<io.github.noeppi_noeppi.libx.util.ResourceList>",
+        "desc": "Ljava/util/function/Consumer;",
+        "binaryName": "java/util/function/Consumer"
+      }
+    },
+    {
+      "name": "typeEditor",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<java.lang.Boolean>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      }
+    },
+    {
+      "name": "entryTypeEditor",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<java.lang.Boolean>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      }
+    },
+    {
+      "name": "modeEditor",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ResourceListContent.Mode>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      }
+    },
+    {
+      "name": "typeWidget",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "net.minecraft.client.gui.components.AbstractWidget",
+        "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+        "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+      }
+    },
+    {
+      "name": "entryWidgets",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ResourceListContent.EntryWidgets>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.util.ResourceList)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.util.ResourceList",
+            "desc": "Lio/github/noeppi_noeppi/libx/util/ResourceList;",
+            "binaryName": "io/github/noeppi_noeppi/libx/util/ResourceList"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "title",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.network.chat.Component",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.network.chat.Component",
+        "desc": "Lnet/minecraft/network/chat/Component;",
+        "binaryName": "net/minecraft/network/chat/Component"
+      },
+      "throws": []
+    },
+    {
+      "name": "searchable",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "init",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.util.function.Consumer<io.github.noeppi_noeppi.libx.util.ResourceList>)void",
+      "parameters": [
+        {
+          "name": "inputChanged",
+          "type": {
+            "name": "java.util.function.Consumer<io.github.noeppi_noeppi.libx.util.ResourceList>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "update",
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "buildGui",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen,io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent.ScreenManager,java.lang.String,java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>)void",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "manager",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent.ScreenManager",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager"
+          }
+        },
+        {
+          "name": "search",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        },
+        {
+          "name": "consumer",
+          "type": {
+            "name": "java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "addEntryWidgets",
+      "modifiers": [
+        "private"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen,io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent.ScreenManager,java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>,int,int,int)void",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "manager",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent.ScreenManager",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager"
+          }
+        },
+        {
+          "name": "consumer",
+          "type": {
+            "name": "java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          }
+        },
+        {
+          "name": "idx",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "padding",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

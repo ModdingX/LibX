@@ -1,0 +1,200 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/ConfigDisplay",
+  "simpleName": "ConfigDisplay",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "config",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigImpl;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl"
+      }
+    },
+    {
+      "name": "values",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<io.github.noeppi_noeppi.libx.impl.config.ConfigKey,io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay.DisplayValue<?>>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    },
+    {
+      "name": "cachedState",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.util.CachedValue<io.github.noeppi_noeppi.libx.impl.config.ConfigState>",
+        "desc": "Lio/github/noeppi_noeppi/libx/util/CachedValue;",
+        "binaryName": "io/github/noeppi_noeppi/libx/util/CachedValue"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigImpl,io.github.noeppi_noeppi.libx.impl.config.ConfigState,io.github.noeppi_noeppi.libx.impl.config.ConfigState)void",
+      "parameters": [
+        {
+          "name": "config",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigImpl;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl"
+          }
+        },
+        {
+          "name": "currentState",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        },
+        {
+          "name": "defaultState",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "state",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": []
+    },
+    {
+      "name": "stateInternal",
+      "modifiers": [
+        "private"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": []
+    },
+    {
+      "name": "createWidget",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigKey,net.minecraft.client.gui.screens.Screen,net.minecraft.client.gui.components.AbstractWidget,int,int,int,int)net.minecraft.client.gui.components.AbstractWidget",
+      "parameters": [
+        {
+          "name": "key",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigKey",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigKey;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigKey"
+          }
+        },
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "old",
+          "type": {
+            "name": "net.minecraft.client.gui.components.AbstractWidget",
+            "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+            "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+          }
+        },
+        {
+          "name": "x",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "width",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "height",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.client.gui.components.AbstractWidget",
+        "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+        "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+      },
+      "throws": []
+    },
+    {
+      "name": "save",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

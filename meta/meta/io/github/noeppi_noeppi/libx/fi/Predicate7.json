@@ -1,0 +1,148 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/fi/Predicate7",
+  "simpleName": "Predicate7",
+  "sourceNam": "io.github.noeppi_noeppi.libx.fi.Predicate7",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "test",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(A,B,C,D,E,F,G)boolean",
+      "parameters": [
+        {
+          "name": "a",
+          "type": {
+            "name": "A",
+            "typeVar": "A"
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "name": "B",
+            "typeVar": "B"
+          }
+        },
+        {
+          "name": "c",
+          "type": {
+            "name": "C",
+            "typeVar": "C"
+          }
+        },
+        {
+          "name": "d",
+          "type": {
+            "name": "D",
+            "typeVar": "D"
+          }
+        },
+        {
+          "name": "e",
+          "type": {
+            "name": "E",
+            "typeVar": "E"
+          }
+        },
+        {
+          "name": "f",
+          "type": {
+            "name": "F",
+            "typeVar": "F"
+          }
+        },
+        {
+          "name": "g",
+          "type": {
+            "name": "G",
+            "typeVar": "G"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "and",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>)io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+      "parameters": [
+        {
+          "name": "other",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate7;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate7"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate7;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate7"
+      },
+      "throws": []
+    },
+    {
+      "name": "or",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>)io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+      "parameters": [
+        {
+          "name": "other",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate7;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate7"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate7;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate7"
+      },
+      "throws": []
+    },
+    {
+      "name": "negate",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Predicate7<A,B,C,D,E,F,G>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Predicate7;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Predicate7"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A predicate that takes 7 parameters.",
+    "text": "A predicate that takes 7 parameters.",
+    "properties": []
+  }
+}

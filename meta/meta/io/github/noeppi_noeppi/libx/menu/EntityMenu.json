@@ -1,0 +1,256 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/menu/EntityMenu",
+  "simpleName": "EntityMenu",
+  "sourceNam": "io.github.noeppi_noeppi.libx.menu.EntityMenu",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "io/github/noeppi_noeppi/libx/menu/DefaultMenu",
+    "signature": "io.github.noeppi_noeppi.libx.menu.DefaultMenu",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "entity",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "T",
+        "typeVar": "T"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.inventory.MenuType<?>,int,net.minecraft.world.level.Level,int,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,int,int)void",
+      "parameters": [
+        {
+          "name": "type",
+          "type": {
+            "name": "net.minecraft.world.inventory.MenuType<?>",
+            "desc": "Lnet/minecraft/world/inventory/MenuType;",
+            "binaryName": "net/minecraft/world/inventory/MenuType"
+          }
+        },
+        {
+          "name": "windowId",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "entityId",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "playerContainer",
+          "type": {
+            "name": "net.minecraft.world.entity.player.Inventory",
+            "desc": "Lnet/minecraft/world/entity/player/Inventory;",
+            "binaryName": "net/minecraft/world/entity/player/Inventory"
+          }
+        },
+        {
+          "name": "player",
+          "type": {
+            "name": "net.minecraft.world.entity.player.Player",
+            "desc": "Lnet/minecraft/world/entity/player/Player;",
+            "binaryName": "net/minecraft/world/entity/player/Player"
+          }
+        },
+        {
+          "name": "firstOutputSlot",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "firstInventorySlot",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "stillValid",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.entity.player.Player)boolean",
+      "parameters": [
+        {
+          "name": "player",
+          "type": {
+            "name": "net.minecraft.world.entity.player.Player",
+            "desc": "Lnet/minecraft/world/entity/player/Player;",
+            "binaryName": "net/minecraft/world/entity/player/Player"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "getEntity",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()T",
+      "parameters": [],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    },
+    {
+      "name": "createMenuType",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "<T>(com.mojang.datafixers.util.Function5<java.lang.Integer,net.minecraft.world.level.Level,java.lang.Integer,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,T>)net.minecraft.world.inventory.MenuType<T>",
+      "parameters": [
+        {
+          "name": "constructor",
+          "type": {
+            "name": "com.mojang.datafixers.util.Function5<java.lang.Integer,net.minecraft.world.level.Level,java.lang.Integer,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,T>",
+            "desc": "Lcom/mojang/datafixers/util/Function5;",
+            "binaryName": "com/mojang/datafixers/util/Function5"
+          },
+          "doc": "A method reference to the menus constructor."
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.inventory.MenuType<T>",
+        "desc": "Lnet/minecraft/world/inventory/MenuType;",
+        "binaryName": "net/minecraft/world/inventory/MenuType"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a container type for an <ref cls=\"io/github/noeppi_noeppi/libx/menu/EntityMenu\">EntityMenu</ref>.",
+        "text": "Creates a container type for an <ref cls=\"io/github/noeppi_noeppi/libx/menu/EntityMenu\">EntityMenu</ref>.",
+        "properties": []
+      }
+    },
+    {
+      "name": "createMenuType",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "<T>(io.github.noeppi_noeppi.libx.fi.Function6<net.minecraft.world.inventory.MenuType<T>,java.lang.Integer,net.minecraft.world.level.Level,java.lang.Integer,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,T>)net.minecraft.world.inventory.MenuType<T>",
+      "parameters": [
+        {
+          "name": "constructor",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Function6<net.minecraft.world.inventory.MenuType<T>,java.lang.Integer,net.minecraft.world.level.Level,java.lang.Integer,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Function6;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Function6"
+          },
+          "doc": "A method reference to the menus constructor."
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.inventory.MenuType<T>",
+        "desc": "Lnet/minecraft/world/inventory/MenuType;",
+        "binaryName": "net/minecraft/world/inventory/MenuType"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a menu type for an <ref cls=\"io/github/noeppi_noeppi/libx/menu/EntityMenu\">EntityMenu</ref>.",
+        "text": "Creates a menu type for an <ref cls=\"io/github/noeppi_noeppi/libx/menu/EntityMenu\">EntityMenu</ref>.",
+        "properties": []
+      }
+    },
+    {
+      "name": "openMenu",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.server.level.ServerPlayer,net.minecraft.world.inventory.MenuType<? extends io.github.noeppi_noeppi.libx.menu.BlockEntityMenu<?>>,net.minecraft.network.chat.Component,net.minecraft.world.entity.Entity)void",
+      "parameters": [
+        {
+          "name": "player",
+          "type": {
+            "name": "net.minecraft.server.level.ServerPlayer",
+            "desc": "Lnet/minecraft/server/level/ServerPlayer;",
+            "binaryName": "net/minecraft/server/level/ServerPlayer"
+          }
+        },
+        {
+          "name": "menu",
+          "type": {
+            "name": "net.minecraft.world.inventory.MenuType<? extends io.github.noeppi_noeppi.libx.menu.BlockEntityMenu<?>>",
+            "desc": "Lnet/minecraft/world/inventory/MenuType;",
+            "binaryName": "net/minecraft/world/inventory/MenuType"
+          }
+        },
+        {
+          "name": "title",
+          "type": {
+            "name": "net.minecraft.network.chat.Component",
+            "desc": "Lnet/minecraft/network/chat/Component;",
+            "binaryName": "net/minecraft/network/chat/Component"
+          }
+        },
+        {
+          "name": "entity",
+          "type": {
+            "name": "net.minecraft.world.entity.Entity",
+            "desc": "Lnet/minecraft/world/entity/Entity;",
+            "binaryName": "net/minecraft/world/entity/Entity"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Opens an <ref cls=\"io/github/noeppi_noeppi/libx/menu/EntityMenu\">EntityMenu</ref> for a player.",
+        "text": "Opens an <ref cls=\"io/github/noeppi_noeppi/libx/menu/EntityMenu\">EntityMenu</ref> for a player.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "A <ref cls=\"io/github/noeppi_noeppi/libx/menu/DefaultMenu\">DefaultMenu</ref> for entities.",
+    "text": "A <ref cls=\"io/github/noeppi_noeppi/libx/menu/DefaultMenu\">DefaultMenu</ref> for entities.",
+    "properties": []
+  }
+}

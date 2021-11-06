@@ -1,0 +1,477 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler",
+  "simpleName": "BaseItemStackHandler",
+  "sourceNam": "io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraftforge/items/ItemStackHandler",
+    "signature": "net.minecraftforge.items.ItemStackHandler",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/inventory/IAdvancedItemHandlerModifiable",
+      "signature": "io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable",
+      "parameters": []
+    }
+  ],
+  "fields": [
+    {
+      "name": "defaultSlotLimit",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    },
+    {
+      "name": "insertionOnlySlots",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Set<java.lang.Integer>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      }
+    },
+    {
+      "name": "outputSlots",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Set<java.lang.Integer>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      }
+    },
+    {
+      "name": "slotLimits",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<java.lang.Integer,java.lang.Integer>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    },
+    {
+      "name": "slotValidators",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<java.lang.Integer,java.util.function.Predicate<net.minecraft.world.item.ItemStack>>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    },
+    {
+      "name": "contentsChanged",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.function.Consumer<java.lang.Integer>",
+        "desc": "Ljava/util/function/Consumer;",
+        "binaryName": "java/util/function/Consumer"
+      }
+    },
+    {
+      "name": "vanilla",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "net.minecraft.world.Container",
+        "desc": "Lnet/minecraft/world/Container;",
+        "binaryName": "net/minecraft/world/Container"
+      }
+    },
+    {
+      "name": "unrestricted",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler.Unrestricted",
+        "desc": "Lio/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler$Unrestricted;",
+        "binaryName": "io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler$Unrestricted"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "(int,int,java.util.Set<java.lang.Integer>,java.util.Set<java.lang.Integer>,java.util.Map<java.lang.Integer,java.lang.Integer>,java.util.Map<java.lang.Integer,java.util.function.Predicate<net.minecraft.world.item.ItemStack>>,java.util.function.Consumer<java.lang.Integer>)void",
+      "parameters": [
+        {
+          "name": "size",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "defaultSlotLimit",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "insertionOnlySlots",
+          "type": {
+            "name": "java.util.Set<java.lang.Integer>",
+            "desc": "Ljava/util/Set;",
+            "binaryName": "java/util/Set"
+          }
+        },
+        {
+          "name": "outputSlots",
+          "type": {
+            "name": "java.util.Set<java.lang.Integer>",
+            "desc": "Ljava/util/Set;",
+            "binaryName": "java/util/Set"
+          }
+        },
+        {
+          "name": "slotLimits",
+          "type": {
+            "name": "java.util.Map<java.lang.Integer,java.lang.Integer>",
+            "desc": "Ljava/util/Map;",
+            "binaryName": "java/util/Map"
+          }
+        },
+        {
+          "name": "slotValidators",
+          "type": {
+            "name": "java.util.Map<java.lang.Integer,java.util.function.Predicate<net.minecraft.world.item.ItemStack>>",
+            "desc": "Ljava/util/Map;",
+            "binaryName": "java/util/Map"
+          }
+        },
+        {
+          "name": "contentsChanged",
+          "type": {
+            "name": "java.util.function.Consumer<java.lang.Integer>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "insertItem",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(int,net.minecraft.world.item.ItemStack,boolean)net.minecraft.world.item.ItemStack",
+      "parameters": [
+        {
+          "name": "slot",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "stack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        },
+        {
+          "name": "simulate",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.item.ItemStack",
+        "desc": "Lnet/minecraft/world/item/ItemStack;",
+        "binaryName": "net/minecraft/world/item/ItemStack"
+      },
+      "throws": []
+    },
+    {
+      "name": "extractItem",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(int,int,boolean)net.minecraft.world.item.ItemStack",
+      "parameters": [
+        {
+          "name": "slot",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "amount",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "simulate",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.item.ItemStack",
+        "desc": "Lnet/minecraft/world/item/ItemStack;",
+        "binaryName": "net/minecraft/world/item/ItemStack"
+      },
+      "throws": []
+    },
+    {
+      "name": "getSlotLimit",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(int)int",
+      "parameters": [
+        {
+          "name": "slot",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "isItemValid",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(int,net.minecraft.world.item.ItemStack)boolean",
+      "parameters": [
+        {
+          "name": "slot",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "stack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "onContentsChanged",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(int)void",
+      "parameters": [
+        {
+          "name": "slot",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "toVanilla",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.world.Container",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.world.Container",
+        "desc": "Lnet/minecraft/world/Container;",
+        "binaryName": "net/minecraft/world/Container"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets a vanilla container that wraps around this item handler.",
+        "text": "Gets a vanilla container that wraps around this item handler. Marking the vanilla container dirty<br> will notify an content change for every slot of this item handler.",
+        "properties": []
+      }
+    },
+    {
+      "name": "getUnrestricted",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable",
+        "desc": "Lio/github/noeppi_noeppi/libx/inventory/IAdvancedItemHandlerModifiable;",
+        "binaryName": "io/github/noeppi_noeppi/libx/inventory/IAdvancedItemHandlerModifiable"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets an item handler that wraps around this item handler but has no checks on which items are<br> valid for a slot.",
+        "text": "Gets an item handler that wraps around this item handler but has no checks on which items are<br> valid for a slot.",
+        "properties": []
+      }
+    },
+    {
+      "name": "createCapability",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraftforge.common.util.LazyOptional<io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable>",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraftforge.common.util.LazyOptional<io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable>",
+        "desc": "Lnet/minecraftforge/common/util/LazyOptional;",
+        "binaryName": "net/minecraftforge/common/util/LazyOptional"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref> for this inventory.",
+        "text": "Creates a new <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref> for this inventory.",
+        "properties": []
+      }
+    },
+    {
+      "name": "createUnrestrictedCapability",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraftforge.common.util.LazyOptional<io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable>",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraftforge.common.util.LazyOptional<io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable>",
+        "desc": "Lnet/minecraftforge/common/util/LazyOptional;",
+        "binaryName": "net/minecraftforge/common/util/LazyOptional"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref> for this inventory but without slot validation.",
+        "text": "Creates a new <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref> for this inventory but without slot validation.",
+        "properties": []
+      }
+    },
+    {
+      "name": "createCapability",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.util.function.Predicate<java.lang.Integer>,java.util.function.BiPredicate<java.lang.Integer,net.minecraft.world.item.ItemStack>)net.minecraftforge.common.util.LazyOptional<io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable>",
+      "parameters": [
+        {
+          "name": "extract",
+          "type": {
+            "name": "java.util.function.Predicate<java.lang.Integer>",
+            "desc": "Ljava/util/function/Predicate;",
+            "binaryName": "java/util/function/Predicate"
+          },
+          "doc": "A predicate on whether an item can be extracted through this <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref>. This gets passed the slot to extract from."
+        },
+        {
+          "name": "insert",
+          "type": {
+            "name": "java.util.function.BiPredicate<java.lang.Integer,net.minecraft.world.item.ItemStack>",
+            "desc": "Ljava/util/function/BiPredicate;",
+            "binaryName": "java/util/function/BiPredicate"
+          },
+          "doc": "A predicate on whether an item can be inserted through this <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref>. This gets passed the slot to insert to and the stack that should be inserted."
+        }
+      ],
+      "return": {
+        "name": "net.minecraftforge.common.util.LazyOptional<io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable>",
+        "desc": "Lnet/minecraftforge/common/util/LazyOptional;",
+        "binaryName": "net/minecraftforge/common/util/LazyOptional"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref> for this inventory.",
+        "text": "Creates a new <ref cls=\"net/minecraftforge/common/util/LazyOptional\">LazyOptional</ref> for this inventory.",
+        "properties": []
+      }
+    },
+    {
+      "name": "builder",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(int)io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler.Builder",
+      "parameters": [
+        {
+          "name": "size",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler.Builder",
+        "desc": "Lio/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler$Builder;",
+        "binaryName": "io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler$Builder"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new <ref cls=\"io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler$Builder\">Builder</ref> for an item handler with the given size.",
+        "text": "Creates a new <ref cls=\"io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler$Builder\">Builder</ref> for an item handler with the given size.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "An <ref cls=\"net/minecraftforge/items/ItemStackHandler\">ItemStackHandler</ref> that can be configured with common things required for many inventories.",
+    "text": "An <ref cls=\"net/minecraftforge/items/ItemStackHandler\">ItemStackHandler</ref> that can be configured with common things required for many inventories.<br> To get a BaseItemStackHandler, use <ref cls=\"io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler\" method=\"builder\" type=\"(int)io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler.Builder\">#builder(int)</ref>.",
+    "properties": []
+  }
+}

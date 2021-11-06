@@ -1,0 +1,43 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/registration/RegName",
+  "simpleName": "RegName",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.registration.RegName",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "java/lang/annotation/Annotation",
+      "signature": "java.lang.annotation.Annotation",
+      "parameters": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "value",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "Set a custom name for automatic registration.",
+    "text": "Set a custom name for automatic registration.",
+    "properties": []
+  }
+}

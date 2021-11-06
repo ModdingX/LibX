@@ -1,0 +1,26 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/data/Datagen",
+  "simpleName": "Datagen",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.data.Datagen",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "java/lang/annotation/Annotation",
+      "signature": "java.lang.annotation.Annotation",
+      "parameters": []
+    }
+  ],
+  "doc": {
+    "summary": "Registers a class as a data provider to be used in datagen.",
+    "text": "Registers a class as a data provider to be used in datagen. A class annotated with this must<br> extend <ref cls=\"net/minecraft/data/DataProvider\">DataProvider</ref> and define exactly one constructor that must be <code>public</code>.<br> The arguments of the constructor must all be from the list below. Each argument type is optional.<br> Also the order of the arguments does not matter.<br> <br> Allowed argument types for the constructor:<br> <br> <li><br>     <ul><ref cls=\"io/github/noeppi_noeppi/libx/mod/ModX\">ModX</ref></ul><br>     <ul><ref cls=\"net/minecraft/data/DataProvider\">DataProvider</ref></ul><br>     <ul><ref cls=\"net/minecraftforge/common/data/ExistingFileHelper\">ExistingFileHelper</ref></ul><br> </li>",
+    "properties": []
+  }
+}

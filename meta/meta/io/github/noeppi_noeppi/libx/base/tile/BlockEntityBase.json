@@ -1,0 +1,194 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/base/tile/BlockEntityBase",
+  "simpleName": "BlockEntityBase",
+  "sourceNam": "io.github.noeppi_noeppi.libx.base.tile.BlockEntityBase",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraft/world/level/block/entity/BlockEntity",
+    "signature": "net.minecraft.world.level.block.entity.BlockEntity",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "caps",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Set<net.minecraftforge.common.capabilities.Capability<?>>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.level.block.entity.BlockEntityType<?>,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)void",
+      "parameters": [
+        {
+          "name": "type",
+          "type": {
+            "name": "net.minecraft.world.level.block.entity.BlockEntityType<?>",
+            "desc": "Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+            "binaryName": "net/minecraft/world/level/block/entity/BlockEntityType"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.level.block.entity.BlockEntityType<?>,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState,net.minecraftforge.common.capabilities.Capability<?>[])void",
+      "parameters": [
+        {
+          "name": "type",
+          "type": {
+            "name": "net.minecraft.world.level.block.entity.BlockEntityType<?>",
+            "desc": "Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+            "binaryName": "net/minecraft/world/level/block/entity/BlockEntityType"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        },
+        {
+          "name": "caps",
+          "type": {
+            "name": "net.minecraftforge.common.capabilities.Capability<?>[]",
+            "arrayOf": {
+              "name": "net.minecraftforge.common.capabilities.Capability<?>",
+              "desc": "Lnet/minecraftforge/common/capabilities/Capability;",
+              "binaryName": "net/minecraftforge/common/capabilities/Capability"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "vararg": true,
+      "throws": [],
+      "doc": {
+        "summary": "This constructor accepts some capabilities that this block entity will have.",
+        "text": "This constructor accepts some capabilities that this block entity will have. Just make sure that<br> the class also implements the required capability types or you might crash the game.",
+        "properties": []
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "getCapability",
+      "modifiers": [
+        "public"
+      ],
+      "type": "<T>(net.minecraftforge.common.capabilities.Capability<T>,net.minecraft.core.Direction)net.minecraftforge.common.util.LazyOptional<T>",
+      "parameters": [
+        {
+          "name": "cap",
+          "type": {
+            "name": "net.minecraftforge.common.capabilities.Capability<T>",
+            "desc": "Lnet/minecraftforge/common/capabilities/Capability;",
+            "binaryName": "net/minecraftforge/common/capabilities/Capability"
+          }
+        },
+        {
+          "name": "side",
+          "type": {
+            "name": "net.minecraft.core.Direction",
+            "desc": "Lnet/minecraft/core/Direction;",
+            "binaryName": "net/minecraft/core/Direction"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraftforge.common.util.LazyOptional<T>",
+        "desc": "Lnet/minecraftforge/common/util/LazyOptional;",
+        "binaryName": "net/minecraftforge/common/util/LazyOptional"
+      },
+      "throws": []
+    },
+    {
+      "name": "onLoad",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "This will update the block entity when on the client using <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\" method=\"getUpdateTag\" type=\"()net.minecraft.nbt.CompoundTag\">#getUpdateTag()</ref><br> and <ref cls=\"net/minecraftforge/common/extensions/IForgeBlockEntity\" method=\"handleUpdateTag\" type=\"(net.minecraft.nbt.CompoundTag)void\">#handleUpdateTag(CompoundTag)</ref>.",
+        "text": "This will update the block entity when on the client using <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\" method=\"getUpdateTag\" type=\"()net.minecraft.nbt.CompoundTag\">#getUpdateTag()</ref><br> and <ref cls=\"net/minecraftforge/common/extensions/IForgeBlockEntity\" method=\"handleUpdateTag\" type=\"(net.minecraft.nbt.CompoundTag)void\">#handleUpdateTag(CompoundTag)</ref>.",
+        "properties": []
+      }
+    },
+    {
+      "name": "setDispatchable",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "This will update the block entity to all clients that are tracking it when called on the server<br> using <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\" method=\"getUpdateTag\" type=\"()net.minecraft.nbt.CompoundTag\">#getUpdateTag()</ref> and <ref cls=\"net/minecraftforge/common/extensions/IForgeBlockEntity\" method=\"handleUpdateTag\" type=\"(net.minecraft.nbt.CompoundTag)void\">#handleUpdateTag(CompoundTag)</ref> at the end of this tick.",
+        "text": "This will update the block entity to all clients that are tracking it when called on the server<br> using <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\" method=\"getUpdateTag\" type=\"()net.minecraft.nbt.CompoundTag\">#getUpdateTag()</ref> and <ref cls=\"net/minecraftforge/common/extensions/IForgeBlockEntity\" method=\"handleUpdateTag\" type=\"(net.minecraft.nbt.CompoundTag)void\">#handleUpdateTag(CompoundTag)</ref> at the end of this tick.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "A base class for <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">block entities</ref>.",
+    "text": "A base class for <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">block entities</ref>. This provides some useful methods.",
+    "properties": []
+  }
+}

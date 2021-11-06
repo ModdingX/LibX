@@ -1,0 +1,95 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/ConfigEvents",
+  "simpleName": "ConfigEvents",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.ConfigEvents",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "serverPlayerJoin",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent)void",
+      "parameters": [
+        {
+          "name": "event",
+          "type": {
+            "name": "net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent",
+            "desc": "Lnet/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedInEvent;",
+            "binaryName": "net/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedInEvent"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "clientPlayerJoin",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent)void",
+      "parameters": [
+        {
+          "name": "event",
+          "type": {
+            "name": "net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent",
+            "desc": "Lnet/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedInEvent;",
+            "binaryName": "net/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedInEvent"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "clientPlayerLeave",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggedOutEvent)void",
+      "parameters": [
+        {
+          "name": "event",
+          "type": {
+            "name": "net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggedOutEvent",
+            "desc": "Lnet/minecraftforge/client/event/ClientPlayerNetworkEvent$LoggedOutEvent;",
+            "binaryName": "net/minecraftforge/client/event/ClientPlayerNetworkEvent$LoggedOutEvent"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

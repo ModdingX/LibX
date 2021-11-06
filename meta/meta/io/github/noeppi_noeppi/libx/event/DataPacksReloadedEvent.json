@@ -1,0 +1,115 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/event/DataPacksReloadedEvent",
+  "simpleName": "DataPacksReloadedEvent",
+  "sourceNam": "io.github.noeppi_noeppi.libx.event.DataPacksReloadedEvent",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraftforge/eventbus/api/Event",
+    "signature": "net.minecraftforge.eventbus.api.Event",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "server",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.server.MinecraftServer",
+        "desc": "Lnet/minecraft/server/MinecraftServer;",
+        "binaryName": "net/minecraft/server/MinecraftServer"
+      }
+    },
+    {
+      "name": "datapacks",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.server.ServerResources",
+        "desc": "Lnet/minecraft/server/ServerResources;",
+        "binaryName": "net/minecraft/server/ServerResources"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.server.MinecraftServer,net.minecraft.server.ServerResources)void",
+      "parameters": [
+        {
+          "name": "server",
+          "type": {
+            "name": "net.minecraft.server.MinecraftServer",
+            "desc": "Lnet/minecraft/server/MinecraftServer;",
+            "binaryName": "net/minecraft/server/MinecraftServer"
+          }
+        },
+        {
+          "name": "datapacks",
+          "type": {
+            "name": "net.minecraft.server.ServerResources",
+            "desc": "Lnet/minecraft/server/ServerResources;",
+            "binaryName": "net/minecraft/server/ServerResources"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getServer",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.server.MinecraftServer",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.server.MinecraftServer",
+        "desc": "Lnet/minecraft/server/MinecraftServer;",
+        "binaryName": "net/minecraft/server/MinecraftServer"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the <ref cls=\"net/minecraft/server/MinecraftServer\">MinecraftServer</ref> whose datapacks were reloaded.",
+        "text": "Gets the <ref cls=\"net/minecraft/server/MinecraftServer\">MinecraftServer</ref> whose datapacks were reloaded.",
+        "properties": []
+      }
+    },
+    {
+      "name": "getResources",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.server.ServerResources",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.server.ServerResources",
+        "desc": "Lnet/minecraft/server/ServerResources;",
+        "binaryName": "net/minecraft/server/ServerResources"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the new server resources.",
+        "text": "Gets the new server resources.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Fired on the server after datapacks have been reloaded.",
+    "text": "Fired on the server after datapacks have been reloaded.<br> This event is fired on the <ref cls=\"net/minecraftforge/common/MinecraftForge\" field=\"EVENT_BUS\">MinecraftForge#EVENT_BUS</ref><br> This event may be fired on the Server Thread, or an async reloader thread.<br> <b>This event is NOT fired on client or on server startup, only after a<br> reload via the <code>reload</code> or the <code>datapack</code> command.</b><br> This event is not Cancelable and has no Result.",
+    "properties": []
+  }
+}

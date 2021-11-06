@@ -1,0 +1,212 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/mappers/advanced/IngredientValueMapper",
+  "simpleName": "IngredientValueMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.IngredientValueMapper",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/ValueMapper",
+      "signature": "io.github.noeppi_noeppi.libx.config.ValueMapper<net.minecraft.world.item.crafting.Ingredient,com.google.gson.JsonElement>",
+      "parameters": [
+        {
+          "name": "net/minecraft/world/item/crafting/Ingredient",
+          "signature": "net.minecraft.world.item.crafting.Ingredient",
+          "parameters": []
+        },
+        {
+          "name": "com/google/gson/JsonElement",
+          "signature": "com.google.gson.JsonElement",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "INSTANCE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.IngredientValueMapper",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/mappers/advanced/IngredientValueMapper;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/mappers/advanced/IngredientValueMapper"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "type",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<net.minecraft.world.item.crafting.Ingredient>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<net.minecraft.world.item.crafting.Ingredient>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "element",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<com.google.gson.JsonElement>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<com.google.gson.JsonElement>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonElement)net.minecraft.world.item.crafting.Ingredient",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonElement",
+            "desc": "Lcom/google/gson/JsonElement;",
+            "binaryName": "com/google/gson/JsonElement"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.item.crafting.Ingredient",
+        "desc": "Lnet/minecraft/world/item/crafting/Ingredient;",
+        "binaryName": "net/minecraft/world/item/crafting/Ingredient"
+      },
+      "throws": []
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.crafting.Ingredient)com.google.gson.JsonElement",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "net.minecraft.world.item.crafting.Ingredient",
+            "desc": "Lnet/minecraft/world/item/crafting/Ingredient;",
+            "binaryName": "net/minecraft/world/item/crafting/Ingredient"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.google.gson.JsonElement",
+        "desc": "Lcom/google/gson/JsonElement;",
+        "binaryName": "com/google/gson/JsonElement"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)net.minecraft.world.item.crafting.Ingredient",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.item.crafting.Ingredient",
+        "desc": "Lnet/minecraft/world/item/crafting/Ingredient;",
+        "binaryName": "net/minecraft/world/item/crafting/Ingredient"
+      },
+      "throws": []
+    },
+    {
+      "name": "toNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.crafting.Ingredient,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "net.minecraft.world.item.crafting.Ingredient",
+            "desc": "Lnet/minecraft/world/item/crafting/Ingredient;",
+            "binaryName": "net/minecraft/world/item/crafting/Ingredient"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "createEditor",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>)io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<net.minecraft.world.item.crafting.Ingredient>",
+      "parameters": [
+        {
+          "name": "validator",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValidatorInfo;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValidatorInfo"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<net.minecraft.world.item.crafting.Ingredient>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      },
+      "throws": []
+    }
+  ]
+}

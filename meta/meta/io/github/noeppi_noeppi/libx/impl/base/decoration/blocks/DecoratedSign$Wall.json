@@ -1,0 +1,113 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/base/decoration/blocks/DecoratedSign$Wall",
+  "simpleName": "Wall",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedSign.Wall",
+  "modifiers": [
+    "public",
+    "static"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "net/minecraft/world/level/block/WallSignBlock",
+    "signature": "net.minecraft.world.level.block.WallSignBlock",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "parent",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock",
+        "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock;",
+        "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock"
+      }
+    },
+    {
+      "name": "beType",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedSign.Entity>>",
+        "desc": "Ljava/util/function/Supplier;",
+        "binaryName": "java/util/function/Supplier"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock,java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedSign.Entity>>,net.minecraft.world.level.block.state.properties.WoodType)void",
+      "parameters": [
+        {
+          "name": "parent",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock",
+            "desc": "Lio/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock;",
+            "binaryName": "io/github/noeppi_noeppi/libx/base/decoration/DecoratedBlock"
+          }
+        },
+        {
+          "name": "beType",
+          "type": {
+            "name": "java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.DecoratedSign.Entity>>",
+            "desc": "Ljava/util/function/Supplier;",
+            "binaryName": "java/util/function/Supplier"
+          }
+        },
+        {
+          "name": "wood",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.properties.WoodType",
+            "desc": "Lnet/minecraft/world/level/block/state/properties/WoodType;",
+            "binaryName": "net/minecraft/world/level/block/state/properties/WoodType"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "newBlockEntity",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)net.minecraft.world.level.block.entity.BlockEntity",
+      "parameters": [
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.block.entity.BlockEntity",
+        "desc": "Lnet/minecraft/world/level/block/entity/BlockEntity;",
+        "binaryName": "net/minecraft/world/level/block/entity/BlockEntity"
+      },
+      "throws": []
+    }
+  ]
+}

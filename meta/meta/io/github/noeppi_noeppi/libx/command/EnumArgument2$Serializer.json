@@ -1,0 +1,129 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/command/EnumArgument2$Serializer",
+  "simpleName": "Serializer",
+  "sourceNam": "io.github.noeppi_noeppi.libx.command.EnumArgument2.Serializer",
+  "modifiers": [
+    "public",
+    "static"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "net/minecraft/commands/synchronization/ArgumentSerializer",
+      "signature": "net.minecraft.commands.synchronization.ArgumentSerializer<io.github.noeppi_noeppi.libx.command.EnumArgument2<?>>",
+      "parameters": [
+        {
+          "name": "io/github/noeppi_noeppi/libx/command/EnumArgument2",
+          "signature": "io.github.noeppi_noeppi.libx.command.EnumArgument2<?>",
+          "parameters": [
+            null
+          ]
+        }
+      ]
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "serializeToNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.command.EnumArgument2,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "argument",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.command.EnumArgument2",
+            "desc": "Lio/github/noeppi_noeppi/libx/command/EnumArgument2;",
+            "binaryName": "io/github/noeppi_noeppi/libx/command/EnumArgument2"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "deserializeFromNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)io.github.noeppi_noeppi.libx.command.EnumArgument2",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.command.EnumArgument2",
+        "desc": "Lio/github/noeppi_noeppi/libx/command/EnumArgument2;",
+        "binaryName": "io/github/noeppi_noeppi/libx/command/EnumArgument2"
+      },
+      "throws": []
+    },
+    {
+      "name": "serializeToJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.command.EnumArgument2,com.google.gson.JsonObject)void",
+      "parameters": [
+        {
+          "name": "argument",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.command.EnumArgument2",
+            "desc": "Lio/github/noeppi_noeppi/libx/command/EnumArgument2;",
+            "binaryName": "io/github/noeppi_noeppi/libx/command/EnumArgument2"
+          }
+        },
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonObject",
+            "desc": "Lcom/google/gson/JsonObject;",
+            "binaryName": "com/google/gson/JsonObject"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

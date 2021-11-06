@@ -1,0 +1,166 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/data/LootBuilders",
+  "simpleName": "LootBuilders",
+  "sourceNam": "io.github.noeppi_noeppi.libx.data.LootBuilders",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "all",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[])net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "entries",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+            "arrayOf": {
+              "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+              "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+              "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "vararg": true,
+      "throws": [],
+      "doc": {
+        "summary": "Gets a loot builder for a loot entry that selects all items fro mall its children at once.",
+        "text": "Gets a loot builder for a loot entry that selects all items fro mall its children at once.",
+        "properties": []
+      }
+    },
+    {
+      "name": "group",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[])net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "entries",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+            "arrayOf": {
+              "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+              "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+              "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "vararg": true,
+      "throws": [],
+      "doc": {
+        "summary": "Gets a loot builder for group loot.",
+        "text": "Gets a loot builder for group loot.",
+        "properties": []
+      }
+    },
+    {
+      "name": "alternative",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[])net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "entries",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+            "arrayOf": {
+              "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+              "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+              "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "vararg": true,
+      "throws": [],
+      "doc": {
+        "summary": "Gets a loot builder for alternative loot.",
+        "text": "Gets a loot builder for alternative loot.",
+        "properties": []
+      }
+    },
+    {
+      "name": "sequence",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[])net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "entries",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+            "arrayOf": {
+              "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+              "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+              "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "vararg": true,
+      "throws": [],
+      "doc": {
+        "summary": "Gets a loot builder for sequence loot.",
+        "text": "Gets a loot builder for sequence loot.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Contains builders vor various loot table entry containers.",
+    "text": "Contains builders vor various loot table entry containers.",
+    "properties": []
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient$Serializer",
+  "simpleName": "Serializer",
+  "sourceNam": "io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient.Serializer",
+  "modifiers": [
+    "public",
+    "static"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "net/minecraftforge/common/crafting/IIngredientSerializer",
+      "signature": "net.minecraftforge.common.crafting.IIngredientSerializer<io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient>",
+      "parameters": [
+        {
+          "name": "io/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient",
+          "signature": "io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "INSTANCE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient.Serializer",
+        "desc": "Lio/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient$Serializer;",
+        "binaryName": "io/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient$Serializer"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "parse",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient",
+        "desc": "Lio/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient;",
+        "binaryName": "io/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient"
+      },
+      "throws": []
+    },
+    {
+      "name": "parse",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonObject)io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonObject",
+            "desc": "Lcom/google/gson/JsonObject;",
+            "binaryName": "com/google/gson/JsonObject"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient",
+        "desc": "Lio/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient;",
+        "binaryName": "io/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient"
+      },
+      "throws": []
+    },
+    {
+      "name": "write",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf,io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient)void",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        },
+        {
+          "name": "ingredient",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient",
+            "desc": "Lio/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient;",
+            "binaryName": "io/github/noeppi_noeppi/libx/crafting/ingredient/NbtIngredient"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

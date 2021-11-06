@@ -1,0 +1,75 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$GenericLootModifier",
+  "simpleName": "GenericLootModifier",
+  "sourceNam": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.GenericLootModifier",
+  "modifiers": [
+    "public",
+    "static",
+    "abstract"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "identity",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.GenericLootModifier",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.data.provider.EntityLootProviderBase.GenericLootModifier",
+        "desc": "Lio/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$GenericLootModifier;",
+        "binaryName": "io/github/noeppi_noeppi/libx/data/provider/EntityLootProviderBase$GenericLootModifier"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets a loot modifier that does nothing.",
+        "text": "Gets a loot modifier that does nothing.",
+        "properties": []
+      }
+    },
+    {
+      "name": "apply",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(net.minecraft.world.entity.EntityType<?>,net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer.Builder<?>)net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "entity",
+          "type": {
+            "name": "net.minecraft.world.entity.EntityType<?>",
+            "desc": "Lnet/minecraft/world/entity/EntityType;",
+            "binaryName": "net/minecraft/world/entity/EntityType"
+          }
+        },
+        {
+          "name": "entry",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer.Builder<?>",
+            "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer$Builder;",
+            "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer$Builder"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "Interface to modify a singleton loot entry to a new loot entry.",
+    "text": "Interface to modify a singleton loot entry to a new loot entry.",
+    "properties": []
+  }
+}

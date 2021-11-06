@@ -1,0 +1,57 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/mod/registration/RegistryCondition",
+  "simpleName": "RegistryCondition",
+  "sourceNam": "io.github.noeppi_noeppi.libx.mod.registration.RegistryCondition",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "shouldRegister",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation,java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "id",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        },
+        {
+          "name": "object",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets whether an object should be registered into the LibX registration system.",
+        "text": "Gets whether an object should be registered into the LibX registration system. All<br> conditions must return true for an object to be registered.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "A registry condition is used by the LibX registration system to prevent things<br> passed to <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/ModXRegistration\" method=\"register\" type=\"(java.lang.String,java.lang.Object)void\">ModXRegistration#register(String, Object)</ref> from being registered.",
+    "text": "A registry condition is used by the LibX registration system to prevent things<br> passed to <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/ModXRegistration\" method=\"register\" type=\"(java.lang.String,java.lang.Object)void\">ModXRegistration#register(String, Object)</ref> from being registered.<br> For more information see <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/ModXRegistration\" method=\"initRegistration\" type=\"(io.github.noeppi_noeppi.libx.mod.registration.RegistrationBuilder)void\">ModXRegistration#initRegistration(RegistrationBuilder)</ref>",
+    "properties": []
+  }
+}

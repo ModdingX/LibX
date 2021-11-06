@@ -1,0 +1,228 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/processor/modinit/codec/GeneratedCodec",
+  "simpleName": "GeneratedCodec",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec",
+  "modifiers": [
+    "public",
+    "final"
+  ],
+  "superClass": {
+    "name": "java/lang/Record",
+    "signature": "java.lang.Record",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "fqn",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      }
+    },
+    {
+      "name": "params",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec.CodecElement>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    },
+    {
+      "name": "objCounter",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.String,java.util.List<io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec.CodecElement>)void",
+      "parameters": [
+        {
+          "name": "fqn",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        },
+        {
+          "name": "params",
+          "type": {
+            "name": "java.util.List<io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec.CodecElement>",
+            "desc": "Ljava/util/List;",
+            "binaryName": "java/util/List"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "fieldGetter",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.lang.String,java.lang.String)java.lang.String",
+      "parameters": [
+        {
+          "name": "elementFqn",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        },
+        {
+          "name": "field",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "methodGetter",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.lang.String,java.lang.String)java.lang.String",
+      "parameters": [
+        {
+          "name": "elementFqn",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        },
+        {
+          "name": "method",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "toString",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "hashCode",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "equals",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "o",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "fqn",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "params",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.util.List<io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec.CodecElement>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec.CodecElement>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      },
+      "throws": []
+    }
+  ]
+}

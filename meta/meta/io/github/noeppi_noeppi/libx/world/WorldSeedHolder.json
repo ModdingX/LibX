@@ -1,0 +1,77 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/world/WorldSeedHolder",
+  "simpleName": "WorldSeedHolder",
+  "sourceNam": "io.github.noeppi_noeppi.libx.world.WorldSeedHolder",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getSeed",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "()long",
+      "parameters": [],
+      "return": {
+        "name": "long",
+        "desc": "J"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the world seed to be used in codecs.",
+        "text": "Gets the world seed to be used in codecs. Vanilla provides no way for this.",
+        "properties": []
+      }
+    },
+    {
+      "name": "fieldOf",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.lang.String)com.mojang.serialization.MapCodec<java.lang.Long>",
+      "parameters": [
+        {
+          "name": "name",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.mojang.serialization.MapCodec<java.lang.Long>",
+        "desc": "Lcom/mojang/serialization/MapCodec;",
+        "binaryName": "com/mojang/serialization/MapCodec"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "Provides a way to get the seed for the current world.",
+    "text": "Provides a way to get the seed for the current world.",
+    "properties": []
+  }
+}

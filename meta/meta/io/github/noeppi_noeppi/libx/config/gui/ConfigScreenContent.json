@@ -1,0 +1,165 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent",
+  "simpleName": "ConfigScreenContent",
+  "sourceNam": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "title",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()net.minecraft.network.chat.Component",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.network.chat.Component",
+        "desc": "Lnet/minecraft/network/chat/Component;",
+        "binaryName": "net/minecraft/network/chat/Component"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the title of the screen.",
+        "text": "Gets the title of the screen.",
+        "properties": []
+      }
+    },
+    {
+      "name": "message",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "()net.minecraft.network.chat.Component",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.network.chat.Component",
+        "desc": "Lnet/minecraft/network/chat/Component;",
+        "binaryName": "net/minecraft/network/chat/Component"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the message for the button that opens the screen.",
+        "text": "Gets the message for the button that opens the screen.",
+        "properties": []
+      }
+    },
+    {
+      "name": "searchable",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Whether this screen is searchable",
+        "text": "Whether this screen is searchable",
+        "properties": []
+      }
+    },
+    {
+      "name": "init",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(java.util.function.Consumer<T>)void",
+      "parameters": [
+        {
+          "name": "inputChanged",
+          "type": {
+            "name": "java.util.function.Consumer<T>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          },
+          "doc": "A consumer that should be called with the new value whenever the input changes."
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Initialises the screen.",
+        "text": "Initialises the screen.",
+        "properties": []
+      }
+    },
+    {
+      "name": "buildGui",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen,io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent.ScreenManager,java.lang.String,java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>)void",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          },
+          "doc": "The screen that is used. This can be used to get the available width. Height is unlimited<br>               because the screen is scrollable. Also, this <b>must</b> be used if the screen wants<br>               to draw tooltips, or they won't work correctly."
+        },
+        {
+          "name": "manager",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent.ScreenManager",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager"
+          },
+          "doc": "A <ref cls=\"io/github/noeppi_noeppi/libx/config/gui/ConfigScreenContent$ScreenManager\">ScreenManager</ref> that provides access to the internal screen history and can be<br>                used to rebuild the screen."
+        },
+        {
+          "name": "search",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          },
+          "doc": "The current search term or an empty <ref cls=\"java/lang/String\">String</ref> if there is none."
+        },
+        {
+          "name": "consumer",
+          "type": {
+            "name": "java.util.function.Consumer<net.minecraft.client.gui.components.AbstractWidget>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          },
+          "doc": "A consumer that will consume all widgets that should be displayed."
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Builds the screen content.",
+        "text": "Builds the screen content.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Interface that defines content for custom config editor screens.",
+    "text": "Interface that defines content for custom config editor screens.",
+    "properties": []
+  }
+}

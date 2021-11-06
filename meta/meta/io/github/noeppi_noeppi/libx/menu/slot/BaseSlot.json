@@ -1,0 +1,171 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/menu/slot/BaseSlot",
+  "simpleName": "BaseSlot",
+  "sourceNam": "io.github.noeppi_noeppi.libx.menu.slot.BaseSlot",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraftforge/items/SlotItemHandler",
+    "signature": "net.minecraftforge.items.SlotItemHandler",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "baseInventory",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraftforge.items.IItemHandler",
+        "desc": "Lnet/minecraftforge/items/IItemHandler;",
+        "binaryName": "net/minecraftforge/items/IItemHandler"
+      }
+    },
+    {
+      "name": "index",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler,int,int,int)void",
+      "parameters": [
+        {
+          "name": "inventory",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler",
+            "desc": "Lio/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler;",
+            "binaryName": "io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler"
+          }
+        },
+        {
+          "name": "index",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "x",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new BaseSlot with the given <ref cls=\"io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler\">BaseItemStackHandler</ref>",
+        "text": "Creates a new BaseSlot with the given <ref cls=\"io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler\">BaseItemStackHandler</ref>",
+        "properties": []
+      }
+    },
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraftforge.items.IItemHandler,net.minecraftforge.items.IItemHandler,int,int,int)void",
+      "parameters": [
+        {
+          "name": "inventory",
+          "type": {
+            "name": "net.minecraftforge.items.IItemHandler",
+            "desc": "Lnet/minecraftforge/items/IItemHandler;",
+            "binaryName": "net/minecraftforge/items/IItemHandler"
+          }
+        },
+        {
+          "name": "unrestricted",
+          "type": {
+            "name": "net.minecraftforge.items.IItemHandler",
+            "desc": "Lnet/minecraftforge/items/IItemHandler;",
+            "binaryName": "net/minecraftforge/items/IItemHandler"
+          }
+        },
+        {
+          "name": "index",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "x",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new BaseSlot with the given base and unrestricted inventory.",
+        "text": "Creates a new BaseSlot with the given base and unrestricted inventory.",
+        "properties": []
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "mayPlace",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.ItemStack)boolean",
+      "parameters": [
+        {
+          "name": "stack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A slot that is meant to be used together with <ref cls=\"io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler\">BaseItemStackHandler</ref>.",
+    "text": "A slot that is meant to be used together with <ref cls=\"io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler\">BaseItemStackHandler</ref>. the slot<br> will use the unrestricted item handler as inventory, but it will use the base inventory<br> for <ref cls=\"io/github/noeppi_noeppi/libx/menu/slot/BaseSlot\" method=\"mayPlace\" type=\"(net.minecraft.world.item.ItemStack)boolean\">#mayPlace(ItemStack)</ref> to allow validators to run.",
+    "properties": []
+  }
+}

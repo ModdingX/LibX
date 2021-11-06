@@ -1,0 +1,88 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/fi/Consumer4",
+  "simpleName": "Consumer4",
+  "sourceNam": "io.github.noeppi_noeppi.libx.fi.Consumer4",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "apply",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "(A,B,C,D)void",
+      "parameters": [
+        {
+          "name": "a",
+          "type": {
+            "name": "A",
+            "typeVar": "A"
+          }
+        },
+        {
+          "name": "b",
+          "type": {
+            "name": "B",
+            "typeVar": "B"
+          }
+        },
+        {
+          "name": "c",
+          "type": {
+            "name": "C",
+            "typeVar": "C"
+          }
+        },
+        {
+          "name": "d",
+          "type": {
+            "name": "D",
+            "typeVar": "D"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "andThen",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.fi.Consumer4<A,B,C,D>)io.github.noeppi_noeppi.libx.fi.Consumer4<A,B,C,D>",
+      "parameters": [
+        {
+          "name": "after",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.fi.Consumer4<A,B,C,D>",
+            "desc": "Lio/github/noeppi_noeppi/libx/fi/Consumer4;",
+            "binaryName": "io/github/noeppi_noeppi/libx/fi/Consumer4"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.fi.Consumer4<A,B,C,D>",
+        "desc": "Lio/github/noeppi_noeppi/libx/fi/Consumer4;",
+        "binaryName": "io/github/noeppi_noeppi/libx/fi/Consumer4"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A consumer that takes 4 parameters.",
+    "text": "A consumer that takes 4 parameters.",
+    "properties": []
+  }
+}

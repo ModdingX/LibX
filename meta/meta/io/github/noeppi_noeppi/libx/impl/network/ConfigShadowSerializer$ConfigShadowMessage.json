@@ -1,0 +1,155 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/network/ConfigShadowSerializer$ConfigShadowMessage",
+  "simpleName": "ConfigShadowMessage",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.network.ConfigShadowSerializer.ConfigShadowMessage",
+  "modifiers": [
+    "public",
+    "static",
+    "final"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Record",
+    "signature": "java.lang.Record",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "config",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigImpl;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl"
+      }
+    },
+    {
+      "name": "state",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigImpl,io.github.noeppi_noeppi.libx.impl.config.ConfigState)void",
+      "parameters": [
+        {
+          "name": "config",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigImpl;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "toString",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "hashCode",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "equals",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "o",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "config",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigImpl;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl"
+      },
+      "throws": []
+    },
+    {
+      "name": "state",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": []
+    }
+  ]
+}

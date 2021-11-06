@@ -1,0 +1,98 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/BlockEntityUpdateQueue",
+  "simpleName": "BlockEntityUpdateQueue",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.BlockEntityUpdateQueue",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "updateQueue",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<net.minecraft.world.level.Level,java.util.Set<net.minecraft.core.BlockPos>>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "scheduleUpdate",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.Level,net.minecraft.core.BlockPos)void",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "tick",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraftforge.event.TickEvent.ServerTickEvent)void",
+      "parameters": [
+        {
+          "name": "event",
+          "type": {
+            "name": "net.minecraftforge.event.TickEvent.ServerTickEvent",
+            "desc": "Lnet/minecraftforge/event/TickEvent$ServerTickEvent;",
+            "binaryName": "net/minecraftforge/event/TickEvent$ServerTickEvent"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

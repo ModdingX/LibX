@@ -1,0 +1,225 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/mappers/advanced/ResourceValueMapper",
+  "simpleName": "ResourceValueMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.ResourceValueMapper",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/ValueMapper",
+      "signature": "io.github.noeppi_noeppi.libx.config.ValueMapper<net.minecraft.resources.ResourceLocation,com.google.gson.JsonPrimitive>",
+      "parameters": [
+        {
+          "name": "net/minecraft/resources/ResourceLocation",
+          "signature": "net.minecraft.resources.ResourceLocation",
+          "parameters": []
+        },
+        {
+          "name": "com/google/gson/JsonPrimitive",
+          "signature": "com.google.gson.JsonPrimitive",
+          "parameters": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "INSTANCE",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.ResourceValueMapper",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/mappers/advanced/ResourceValueMapper;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/mappers/advanced/ResourceValueMapper"
+      }
+    },
+    {
+      "name": "INPUT",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.InputProperties<net.minecraft.resources.ResourceLocation>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/InputProperties;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/InputProperties"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "type",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<net.minecraft.resources.ResourceLocation>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<net.minecraft.resources.ResourceLocation>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "element",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.lang.Class<com.google.gson.JsonPrimitive>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<com.google.gson.JsonPrimitive>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.gson.JsonPrimitive)net.minecraft.resources.ResourceLocation",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonPrimitive",
+            "desc": "Lcom/google/gson/JsonPrimitive;",
+            "binaryName": "com/google/gson/JsonPrimitive"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.resources.ResourceLocation",
+        "desc": "Lnet/minecraft/resources/ResourceLocation;",
+        "binaryName": "net/minecraft/resources/ResourceLocation"
+      },
+      "throws": []
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation)com.google.gson.JsonPrimitive",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.google.gson.JsonPrimitive",
+        "desc": "Lcom/google/gson/JsonPrimitive;",
+        "binaryName": "com/google/gson/JsonPrimitive"
+      },
+      "throws": []
+    },
+    {
+      "name": "fromNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)net.minecraft.resources.ResourceLocation",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.resources.ResourceLocation",
+        "desc": "Lnet/minecraft/resources/ResourceLocation;",
+        "binaryName": "net/minecraft/resources/ResourceLocation"
+      },
+      "throws": []
+    },
+    {
+      "name": "toNetwork",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation,net.minecraft.network.FriendlyByteBuf)void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "createEditor",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>)io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<net.minecraft.resources.ResourceLocation>",
+      "parameters": [
+        {
+          "name": "validator",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValidatorInfo<?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValidatorInfo;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValidatorInfo"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<net.minecraft.resources.ResourceLocation>",
+        "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+        "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+      },
+      "throws": []
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/data/provider/recipe/RemovalExtension",
+  "simpleName": "RemovalExtension",
+  "sourceNam": "io.github.noeppi_noeppi.libx.data.provider.recipe.RemovalExtension",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeExtension",
+      "signature": "io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension",
+      "parameters": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "remove",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation)void",
+      "parameters": [
+        {
+          "name": "recipe",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

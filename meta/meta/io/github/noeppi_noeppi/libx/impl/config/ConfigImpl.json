@@ -1,0 +1,726 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl",
+  "simpleName": "ConfigImpl",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "GSON",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "com.google.gson.Gson",
+        "desc": "Lcom/google/gson/Gson;",
+        "binaryName": "com/google/gson/Gson"
+      }
+    },
+    {
+      "name": "INTERNAL",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "com.google.gson.Gson",
+        "desc": "Lcom/google/gson/Gson;",
+        "binaryName": "com/google/gson/Gson"
+      }
+    },
+    {
+      "name": "configs",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<net.minecraft.resources.ResourceLocation,io.github.noeppi_noeppi.libx.impl.config.ConfigImpl>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    },
+    {
+      "name": "id",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.resources.ResourceLocation",
+        "desc": "Lnet/minecraft/resources/ResourceLocation;",
+        "binaryName": "net/minecraft/resources/ResourceLocation"
+      }
+    },
+    {
+      "name": "baseClass",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.Class<?>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      }
+    },
+    {
+      "name": "path",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.nio.file.Path",
+        "desc": "Ljava/nio/file/Path;",
+        "binaryName": "java/nio/file/Path"
+      }
+    },
+    {
+      "name": "keys",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<java.lang.reflect.Field,io.github.noeppi_noeppi.libx.impl.config.ConfigKey>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    },
+    {
+      "name": "groups",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Set<io.github.noeppi_noeppi.libx.impl.config.ConfigGroup>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      }
+    },
+    {
+      "name": "clientConfig",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      }
+    },
+    {
+      "name": "shadowed",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      }
+    },
+    {
+      "name": "shadowedLocal",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      }
+    },
+    {
+      "name": "savedState",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      }
+    },
+    {
+      "name": "defaultState",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation,java.lang.Class<?>,java.nio.file.Path,boolean)void",
+      "parameters": [
+        {
+          "name": "id",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        },
+        {
+          "name": "baseClass",
+          "type": {
+            "name": "java.lang.Class<?>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "path",
+          "type": {
+            "name": "java.nio.file.Path",
+            "desc": "Ljava/nio/file/Path;",
+            "binaryName": "java/nio/file/Path"
+          }
+        },
+        {
+          "name": "clientConfig",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getConfig",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation)io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+      "parameters": [
+        {
+          "name": "id",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigImpl;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl"
+      },
+      "throws": []
+    },
+    {
+      "name": "getConfigNullable",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation)io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+      "parameters": [
+        {
+          "name": "id",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigImpl",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigImpl;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigImpl"
+      },
+      "throws": []
+    },
+    {
+      "name": "getAllConfigs",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "()java.util.Set<io.github.noeppi_noeppi.libx.impl.config.ConfigImpl>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.Set<io.github.noeppi_noeppi.libx.impl.config.ConfigImpl>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      },
+      "throws": []
+    },
+    {
+      "name": "stateFromValues",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": []
+    },
+    {
+      "name": "readState",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": []
+    },
+    {
+      "name": "readFromFileOrCreateByDefault",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": [
+        {
+          "name": "java.io.IOException",
+          "desc": "Ljava/io/IOException;",
+          "binaryName": "java/io/IOException"
+        }
+      ]
+    },
+    {
+      "name": "readFromFileOrCreateBy",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigState)io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": [
+        {
+          "name": "java.io.IOException",
+          "desc": "Ljava/io/IOException;",
+          "binaryName": "java/io/IOException"
+        }
+      ]
+    },
+    {
+      "name": "readFromFile",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.nio.file.Path,io.github.noeppi_noeppi.libx.impl.config.ConfigState)io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [
+        {
+          "name": "path",
+          "type": {
+            "name": "java.nio.file.Path",
+            "desc": "Ljava/nio/file/Path;",
+            "binaryName": "java/nio/file/Path"
+          }
+        },
+        {
+          "name": "parent",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": [
+        {
+          "name": "java.io.IOException",
+          "desc": "Ljava/io/IOException;",
+          "binaryName": "java/io/IOException"
+        }
+      ]
+    },
+    {
+      "name": "addAllFieldsToBuilder",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(java.lang.String,java.lang.Class<?>,java.lang.Class<?>,com.google.common.collect.ImmutableMap.Builder<java.lang.reflect.Field,io.github.noeppi_noeppi.libx.impl.config.ConfigKey>,com.google.common.collect.ImmutableSet.Builder<io.github.noeppi_noeppi.libx.impl.config.ConfigGroup>)void",
+      "parameters": [
+        {
+          "name": "modid",
+          "type": {
+            "name": "java.lang.String",
+            "desc": "Ljava/lang/String;",
+            "binaryName": "java/lang/String"
+          }
+        },
+        {
+          "name": "baseClass",
+          "type": {
+            "name": "java.lang.Class<?>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "currentClass",
+          "type": {
+            "name": "java.lang.Class<?>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "keys",
+          "type": {
+            "name": "com.google.common.collect.ImmutableMap.Builder<java.lang.reflect.Field,io.github.noeppi_noeppi.libx.impl.config.ConfigKey>",
+            "desc": "Lcom/google/common/collect/ImmutableMap$Builder;",
+            "binaryName": "com/google/common/collect/ImmutableMap$Builder"
+          }
+        },
+        {
+          "name": "groups",
+          "type": {
+            "name": "com.google.common.collect.ImmutableSet.Builder<io.github.noeppi_noeppi.libx.impl.config.ConfigGroup>",
+            "desc": "Lcom/google/common/collect/ImmutableSet$Builder;",
+            "binaryName": "com/google/common/collect/ImmutableSet$Builder"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [
+        {
+          "name": "java.lang.ReflectiveOperationException",
+          "desc": "Ljava/lang/ReflectiveOperationException;",
+          "binaryName": "java/lang/ReflectiveOperationException"
+        }
+      ]
+    },
+    {
+      "name": "getInObjectKeyPath",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(com.google.gson.JsonObject,io.github.noeppi_noeppi.libx.impl.config.ConfigKey,java.util.concurrent.atomic.AtomicBoolean)com.google.gson.JsonElement",
+      "parameters": [
+        {
+          "name": "root",
+          "type": {
+            "name": "com.google.gson.JsonObject",
+            "desc": "Lcom/google/gson/JsonObject;",
+            "binaryName": "com/google/gson/JsonObject"
+          }
+        },
+        {
+          "name": "key",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigKey",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigKey;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigKey"
+          }
+        },
+        {
+          "name": "needsCorrection",
+          "type": {
+            "name": "java.util.concurrent.atomic.AtomicBoolean",
+            "desc": "Ljava/util/concurrent/atomic/AtomicBoolean;",
+            "binaryName": "java/util/concurrent/atomic/AtomicBoolean"
+          }
+        }
+      ],
+      "return": {
+        "name": "com.google.gson.JsonElement",
+        "desc": "Lcom/google/gson/JsonElement;",
+        "binaryName": "com/google/gson/JsonElement"
+      },
+      "throws": []
+    },
+    {
+      "name": "shadowBy",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigState)void",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "shadowBy",
+      "modifiers": [
+        "private"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigState,boolean,java.nio.file.Path)void",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        },
+        {
+          "name": "local",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        },
+        {
+          "name": "loadPath",
+          "type": {
+            "name": "java.nio.file.Path",
+            "desc": "Ljava/nio/file/Path;",
+            "binaryName": "java/nio/file/Path"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "restore",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "reloadClientWorldState",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "createDisplay",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/gui/ConfigDisplay;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/gui/ConfigDisplay"
+      },
+      "throws": []
+    },
+    {
+      "name": "applyInGameChanges",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigState)void",
+      "parameters": [
+        {
+          "name": "newState",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "saveState",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigState)void",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "setDefaultState",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.impl.config.ConfigState)void",
+      "parameters": [
+        {
+          "name": "defaultState",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+            "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+            "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "cachedOrCurrent",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigState",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigState;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigState"
+      },
+      "throws": []
+    },
+    {
+      "name": "isShadowed",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "resolveConfigPath",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.nio.file.Path,net.minecraft.resources.ResourceLocation)java.nio.file.Path",
+      "parameters": [
+        {
+          "name": "configDir",
+          "type": {
+            "name": "java.nio.file.Path",
+            "desc": "Ljava/nio/file/Path;",
+            "binaryName": "java/nio/file/Path"
+          }
+        },
+        {
+          "name": "id",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.nio.file.Path",
+        "desc": "Ljava/nio/file/Path;",
+        "binaryName": "java/nio/file/Path"
+      },
+      "throws": []
+    }
+  ]
+}

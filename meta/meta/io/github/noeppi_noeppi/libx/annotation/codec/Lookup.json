@@ -1,0 +1,68 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/codec/Lookup",
+  "simpleName": "Lookup",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.codec.Lookup",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "java/lang/annotation/Annotation",
+      "signature": "java.lang.annotation.Annotation",
+      "parameters": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "value",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "The path of the registry id.",
+        "text": "The path of the registry id. If left empty, it'll be auto-detected.",
+        "properties": []
+      }
+    },
+    {
+      "name": "namespace",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "The namespace of the registry id.",
+        "text": "The namespace of the registry id. Defaults to <code>minecraft</code>.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "The registry lookup codec field type will try to get a  <ref cls=\"net/minecraft/core/Registry\">registry</ref> from<br> the <ref cls=\"net/minecraft/core/RegistryAccess\">RegistryAccess</ref>.",
+    "text": "The registry lookup codec field type will try to get a  <ref cls=\"net/minecraft/core/Registry\">registry</ref> from<br> the <ref cls=\"net/minecraft/core/RegistryAccess\">RegistryAccess</ref>. With this annotation you can customise which registry should<br> be retrieved by setting the resource key for the registry to use.",
+    "properties": []
+  }
+}

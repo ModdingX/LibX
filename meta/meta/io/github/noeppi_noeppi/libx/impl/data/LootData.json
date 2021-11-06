@@ -1,0 +1,130 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/data/LootData",
+  "simpleName": "LootData",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.data.LootData",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "stack",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.item.ItemStack)net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "stack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer$Builder"
+      },
+      "throws": []
+    },
+    {
+      "name": "combineBy",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "<T>(java.util.function.Function<net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[],net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>>,java.util.function.Function<T,net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>>,T[])net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "combineFunc",
+          "type": {
+            "name": "java.util.function.Function<net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[],net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        },
+        {
+          "name": "extract",
+          "type": {
+            "name": "java.util.function.Function<T,net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        },
+        {
+          "name": "loot",
+          "type": {
+            "name": "T[]",
+            "arrayOf": {
+              "name": "T",
+              "typeVar": "T"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "throws": []
+    },
+    {
+      "name": "combineBy",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.util.function.Function<net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[],net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>>,net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[])net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+      "parameters": [
+        {
+          "name": "combineFunc",
+          "type": {
+            "name": "java.util.function.Function<net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[],net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        },
+        {
+          "name": "loot",
+          "type": {
+            "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>[]",
+            "arrayOf": {
+              "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+              "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+              "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+            }
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>",
+        "desc": "Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder;",
+        "binaryName": "net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer$Builder"
+      },
+      "throws": []
+    }
+  ]
+}

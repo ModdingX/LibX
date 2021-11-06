@@ -1,0 +1,355 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/crafting/ingredient/EffectIngredient",
+  "simpleName": "EffectIngredient",
+  "sourceNam": "io.github.noeppi_noeppi.libx.crafting.ingredient.EffectIngredient",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraft/world/item/crafting/Ingredient",
+    "signature": "net.minecraft.world.item.crafting.Ingredient",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "potionItem",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.world.item.Item",
+        "desc": "Lnet/minecraft/world/item/Item;",
+        "binaryName": "net/minecraft/world/item/Item"
+      },
+      "doc": {
+        "summary": "The item required for the potion.",
+        "text": "The item required for the potion. Can be null t match any item.",
+        "properties": []
+      }
+    },
+    {
+      "name": "effects",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<net.minecraft.world.effect.MobEffectInstance>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      },
+      "doc": {
+        "summary": "A list of effects that an ItemStack needs.",
+        "text": "A list of effects that an ItemStack needs.",
+        "properties": []
+      }
+    },
+    {
+      "name": "extraEffects",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "doc": {
+        "summary": "Whether potions with more effects than the ones specified in this ingredient are matched.",
+        "text": "Whether potions with more effects than the ones specified in this ingredient are matched.",
+        "properties": []
+      }
+    },
+    {
+      "name": "higherAmplifier",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "doc": {
+        "summary": "Whether potions with a higher amplifier as specified in this ingredient are matched.",
+        "text": "Whether potions with a higher amplifier as specified in this ingredient are matched.",
+        "properties": []
+      }
+    },
+    {
+      "name": "higherDuration",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "doc": {
+        "summary": "Whether potions with a higher duration as specified in this ingredient are matched.",
+        "text": "Whether potions with a higher duration as specified in this ingredient are matched.",
+        "properties": []
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.ItemStack)void",
+      "parameters": [
+        {
+          "name": "potionStack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.ItemStack,boolean,boolean,boolean)void",
+      "parameters": [
+        {
+          "name": "potionStack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        },
+        {
+          "name": "extraEffects",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        },
+        {
+          "name": "higherAmplifier",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        },
+        {
+          "name": "higherDuration",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.Item,java.util.List<net.minecraft.world.effect.MobEffectInstance>)void",
+      "parameters": [
+        {
+          "name": "potionItem",
+          "type": {
+            "name": "net.minecraft.world.item.Item",
+            "desc": "Lnet/minecraft/world/item/Item;",
+            "binaryName": "net/minecraft/world/item/Item"
+          }
+        },
+        {
+          "name": "effects",
+          "type": {
+            "name": "java.util.List<net.minecraft.world.effect.MobEffectInstance>",
+            "desc": "Ljava/util/List;",
+            "binaryName": "java/util/List"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.Item,java.util.List<net.minecraft.world.effect.MobEffectInstance>,boolean,boolean,boolean)void",
+      "parameters": [
+        {
+          "name": "potionItem",
+          "type": {
+            "name": "net.minecraft.world.item.Item",
+            "desc": "Lnet/minecraft/world/item/Item;",
+            "binaryName": "net/minecraft/world/item/Item"
+          }
+        },
+        {
+          "name": "effects",
+          "type": {
+            "name": "java.util.List<net.minecraft.world.effect.MobEffectInstance>",
+            "desc": "Ljava/util/List;",
+            "binaryName": "java/util/List"
+          }
+        },
+        {
+          "name": "extraEffects",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        },
+        {
+          "name": "higherAmplifier",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        },
+        {
+          "name": "higherDuration",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getItems",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.world.item.ItemStack[]",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.world.item.ItemStack[]",
+        "arrayOf": {
+          "name": "net.minecraft.world.item.ItemStack",
+          "desc": "Lnet/minecraft/world/item/ItemStack;",
+          "binaryName": "net/minecraft/world/item/ItemStack"
+        }
+      },
+      "throws": []
+    },
+    {
+      "name": "test",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.ItemStack)boolean",
+      "parameters": [
+        {
+          "name": "stack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "getStackingIds",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()it.unimi.dsi.fastutil.ints.IntList",
+      "parameters": [],
+      "return": {
+        "name": "it.unimi.dsi.fastutil.ints.IntList",
+        "desc": "Lit/unimi/dsi/fastutil/ints/IntList;",
+        "binaryName": "it/unimi/dsi/fastutil/ints/IntList"
+      },
+      "throws": []
+    },
+    {
+      "name": "isSimple",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "getSerializer",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraftforge.common.crafting.IIngredientSerializer<? extends net.minecraft.world.item.crafting.Ingredient>",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraftforge.common.crafting.IIngredientSerializer<? extends net.minecraft.world.item.crafting.Ingredient>",
+        "desc": "Lnet/minecraftforge/common/crafting/IIngredientSerializer;",
+        "binaryName": "net/minecraftforge/common/crafting/IIngredientSerializer"
+      },
+      "throws": []
+    },
+    {
+      "name": "isEmpty",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "toJson",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()com.google.gson.JsonElement",
+      "parameters": [],
+      "return": {
+        "name": "com.google.gson.JsonElement",
+        "desc": "Lcom/google/gson/JsonElement;",
+        "binaryName": "com/google/gson/JsonElement"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "An ingredient that checks for <ref cls=\"net/minecraft/world/effect/MobEffectInstance\">potion effects</ref> to be present on a potion.",
+    "text": "An ingredient that checks for <ref cls=\"net/minecraft/world/effect/MobEffectInstance\">potion effects</ref> to be present on a potion. This does<br> not check for a <ref cls=\"net/minecraft/world/item/alchemy/Potion\">potion</ref> but for the effects. So potions with the <code>CustomPotionEffects</code> nbt<br> tag will also be detected. And you can match a for example a potion of the turtle master and a potion of<br> slowness as both have the slowness effect.",
+    "properties": []
+  }
+}

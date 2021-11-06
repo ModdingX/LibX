@@ -1,0 +1,60 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/data/recipe/DecorationRecipes",
+  "simpleName": "DecorationRecipes",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.data.recipe.DecorationRecipes",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "defaultRecipes",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.block.Block,io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension)void",
+      "parameters": [
+        {
+          "name": "block",
+          "type": {
+            "name": "net.minecraft.world.level.block.Block",
+            "desc": "Lnet/minecraft/world/level/block/Block;",
+            "binaryName": "net/minecraft/world/level/block/Block"
+          }
+        },
+        {
+          "name": "ext",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension",
+            "desc": "Lio/github/noeppi_noeppi/libx/data/provider/recipe/RecipeExtension;",
+            "binaryName": "io/github/noeppi_noeppi/libx/data/provider/recipe/RecipeExtension"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

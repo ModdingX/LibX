@@ -1,0 +1,172 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/ConfigGroup",
+  "simpleName": "ConfigGroup",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.ConfigGroup",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "type",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.Class<?>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      }
+    },
+    {
+      "name": "path",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<java.lang.String>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    },
+    {
+      "name": "comment",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<java.lang.String>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    },
+    {
+      "name": "BY_PATH",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Comparator<io.github.noeppi_noeppi.libx.impl.config.ConfigGroup>",
+        "desc": "Ljava/util/Comparator;",
+        "binaryName": "java/util/Comparator"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Class<?>,com.google.common.collect.ImmutableList<java.lang.String>,com.google.common.collect.ImmutableList<java.lang.String>)void",
+      "parameters": [
+        {
+          "name": "type",
+          "type": {
+            "name": "java.lang.Class<?>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "path",
+          "type": {
+            "name": "com.google.common.collect.ImmutableList<java.lang.String>",
+            "desc": "Lcom/google/common/collect/ImmutableList;",
+            "binaryName": "com/google/common/collect/ImmutableList"
+          }
+        },
+        {
+          "name": "comment",
+          "type": {
+            "name": "com.google.common.collect.ImmutableList<java.lang.String>",
+            "desc": "Lcom/google/common/collect/ImmutableList;",
+            "binaryName": "com/google/common/collect/ImmutableList"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "equals",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "o",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "hashCode",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "create",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(java.lang.Class<?>,java.lang.Class<?>)io.github.noeppi_noeppi.libx.impl.config.ConfigGroup",
+      "parameters": [
+        {
+          "name": "type",
+          "type": {
+            "name": "java.lang.Class<?>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "configBaseClass",
+          "type": {
+            "name": "java.lang.Class<?>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.ConfigGroup",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/ConfigGroup;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/ConfigGroup"
+      },
+      "throws": []
+    }
+  ]
+}

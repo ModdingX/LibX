@@ -1,0 +1,412 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/base/tile/BlockBE",
+  "simpleName": "BlockBE",
+  "sourceNam": "io.github.noeppi_noeppi.libx.base.tile.BlockBE",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "io/github/noeppi_noeppi/libx/base/BlockBase",
+    "signature": "io.github.noeppi_noeppi.libx.base.BlockBase",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "net/minecraft/world/level/block/EntityBlock",
+      "signature": "net.minecraft.world.level.block.EntityBlock",
+      "parameters": []
+    }
+  ],
+  "fields": [
+    {
+      "name": "beClass",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.Class<T>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      }
+    },
+    {
+      "name": "beConstructor",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.reflect.Constructor<T>",
+        "desc": "Ljava/lang/reflect/Constructor;",
+        "binaryName": "java/lang/reflect/Constructor"
+      }
+    },
+    {
+      "name": "beType",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.world.level.block.entity.BlockEntityType<T>",
+        "desc": "Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+        "binaryName": "net/minecraft/world/level/block/entity/BlockEntityType"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.mod.ModX,java.lang.Class<T>,net.minecraft.world.level.block.state.BlockBehaviour.Properties)void",
+      "parameters": [
+        {
+          "name": "mod",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.mod.ModX",
+            "desc": "Lio/github/noeppi_noeppi/libx/mod/ModX;",
+            "binaryName": "io/github/noeppi_noeppi/libx/mod/ModX"
+          }
+        },
+        {
+          "name": "beClass",
+          "type": {
+            "name": "java.lang.Class<T>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "properties",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockBehaviour.Properties",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockBehaviour$Properties"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.mod.ModX,java.lang.Class<T>,net.minecraft.world.level.block.state.BlockBehaviour.Properties,net.minecraft.world.item.Item.Properties)void",
+      "parameters": [
+        {
+          "name": "mod",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.mod.ModX",
+            "desc": "Lio/github/noeppi_noeppi/libx/mod/ModX;",
+            "binaryName": "io/github/noeppi_noeppi/libx/mod/ModX"
+          }
+        },
+        {
+          "name": "beClass",
+          "type": {
+            "name": "java.lang.Class<T>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        },
+        {
+          "name": "properties",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockBehaviour.Properties",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockBehaviour$Properties"
+          }
+        },
+        {
+          "name": "itemProperties",
+          "type": {
+            "name": "net.minecraft.world.item.Item.Properties",
+            "desc": "Lnet/minecraft/world/item/Item$Properties;",
+            "binaryName": "net/minecraft/world/item/Item$Properties"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getAdditionalRegisters",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation)java.util.Set<java.lang.Object>",
+      "parameters": [
+        {
+          "name": "id",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Set<java.lang.Object>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      },
+      "throws": []
+    },
+    {
+      "name": "newBlockEntity",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)net.minecraft.world.level.block.entity.BlockEntity",
+      "parameters": [
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.block.entity.BlockEntity",
+        "desc": "Lnet/minecraft/world/level/block/entity/BlockEntity;",
+        "binaryName": "net/minecraft/world/level/block/entity/BlockEntity"
+      },
+      "throws": []
+    },
+    {
+      "name": "getTicker",
+      "modifiers": [
+        "public"
+      ],
+      "type": "<X>(net.minecraft.world.level.Level,net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.block.entity.BlockEntityType<X>)net.minecraft.world.level.block.entity.BlockEntityTicker<X>",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        },
+        {
+          "name": "beType",
+          "type": {
+            "name": "net.minecraft.world.level.block.entity.BlockEntityType<X>",
+            "desc": "Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+            "binaryName": "net/minecraft/world/level/block/entity/BlockEntityType"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.block.entity.BlockEntityTicker<X>",
+        "desc": "Lnet/minecraft/world/level/block/entity/BlockEntityTicker;",
+        "binaryName": "net/minecraft/world/level/block/entity/BlockEntityTicker"
+      },
+      "throws": []
+    },
+    {
+      "name": "getListener",
+      "modifiers": [
+        "public"
+      ],
+      "type": "<X>(net.minecraft.world.level.Level,X)net.minecraft.world.level.gameevent.GameEventListener",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "blockEntity",
+          "type": {
+            "name": "X",
+            "typeVar": "X"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.level.gameevent.GameEventListener",
+        "desc": "Lnet/minecraft/world/level/gameevent/GameEventListener;",
+        "binaryName": "net/minecraft/world/level/gameevent/GameEventListener"
+      },
+      "throws": []
+    },
+    {
+      "name": "onRemove",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState,boolean)void",
+      "parameters": [
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        },
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        },
+        {
+          "name": "newState",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        },
+        {
+          "name": "isMoving",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "getBlockEntity",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.level.Level,net.minecraft.core.BlockPos)T",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    },
+    {
+      "name": "getBlockEntityType",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.world.level.block.entity.BlockEntityType<T>",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.world.level.block.entity.BlockEntityType<T>",
+        "desc": "Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+        "binaryName": "net/minecraft/world/level/block/entity/BlockEntityType"
+      },
+      "throws": []
+    },
+    {
+      "name": "shouldDropInventory",
+      "modifiers": [
+        "protected"
+      ],
+      "type": "(net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)boolean",
+      "parameters": [
+        {
+          "name": "level",
+          "type": {
+            "name": "net.minecraft.world.level.Level",
+            "desc": "Lnet/minecraft/world/level/Level;",
+            "binaryName": "net/minecraft/world/level/Level"
+          }
+        },
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Override this to prevent the inventory of the block entity to be dropped when the block is<br> broken.",
+        "text": "Override this to prevent the inventory of the block entity to be dropped when the block is<br> broken. To automatically drop the inventory the block entity must provide an item handler<br> capability that is an instance of <ref cls=\"net/minecraftforge/items/IItemHandlerModifiable\">IItemHandlerModifiable</ref>",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Base class for blocks with <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">block entities</ref> for mods using <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/ModXRegistration\">ModXRegistration</ref>.",
+    "text": "Base class for blocks with <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">block entities</ref> for mods using <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/ModXRegistration\">ModXRegistration</ref>.<br> This will automatically set the creative tab if it's defined in the mod and register a block item and<br> a block entity type.<br> <br> The constructor requires a <ref cls=\"net/minecraft/world/level/block/entity/BlockEntity\">BlockEntity</ref> class. The block entity class must define a public<br> constructor with three arguments of types <ref cls=\"net/minecraft/world/level/block/entity/BlockEntityType\">BlockEntityType</ref>, <ref cls=\"net/minecraft/core/BlockPos\">BlockPos</ref> and <ref cls=\"net/minecraft/world/level/block/state/BlockState\">BlockState</ref><br> for this to create a block entity type. This class will do the magic to wire the block entity to the block<br> and invoke the constructor.<br> <br> The block entity class can implement <ref cls=\"io/github/noeppi_noeppi/libx/base/tile/TickableBlock\">TickableBlock</ref> and <ref cls=\"io/github/noeppi_noeppi/libx/base/tile/GameEventBlock\">GameEventBlock</ref>. This class will then<br> generate a matching <ref cls=\"net/minecraft/world/level/block/entity/BlockEntityTicker\">BlockEntityTicker</ref> and a <ref cls=\"net/minecraft/world/level/gameevent/GameEventListener\">GameEventListener</ref> if required.",
+    "properties": []
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/mod/registration/EnumObjects",
+  "simpleName": "EnumObjects",
+  "sourceNam": "io.github.noeppi_noeppi.libx.mod.registration.EnumObjects",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/mod/registration/Registerable",
+      "signature": "io.github.noeppi_noeppi.libx.mod.registration.Registerable",
+      "parameters": []
+    }
+  ],
+  "fields": [
+    {
+      "name": "defaultValue",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "T",
+        "typeVar": "T"
+      }
+    },
+    {
+      "name": "keys",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "E[]",
+        "arrayOf": {
+          "name": "E",
+          "typeVar": "E"
+        }
+      }
+    },
+    {
+      "name": "map",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<E,T>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Class<E>,java.util.function.Function<E,T>)void",
+      "parameters": [
+        {
+          "name": "enumClass",
+          "type": {
+            "name": "java.lang.Class<E>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          },
+          "doc": "The class of the enum that is used."
+        },
+        {
+          "name": "factory",
+          "type": {
+            "name": "java.util.function.Function<E,T>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          },
+          "doc": "A factory function that creates the objects to be registered."
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new instance of EnumObjects.",
+        "text": "Creates a new instance of EnumObjects.",
+        "properties": []
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "get",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(E)T",
+      "parameters": [
+        {
+          "name": "key",
+          "type": {
+            "name": "E",
+            "typeVar": "E"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets a value for an enum value.",
+        "text": "Gets a value for an enum value.",
+        "properties": []
+      }
+    },
+    {
+      "name": "random",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.util.Random)T",
+      "parameters": [
+        {
+          "name": "random",
+          "type": {
+            "name": "java.util.Random",
+            "desc": "Ljava/util/Random;",
+            "binaryName": "java/util/Random"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets a random object from the objects in this EnumObjects.",
+        "text": "Gets a random object from the objects in this EnumObjects.",
+        "properties": []
+      }
+    },
+    {
+      "name": "getNamedAdditionalRegisters",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation)java.util.Map<java.lang.String,java.lang.Object>",
+      "parameters": [
+        {
+          "name": "id",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Map<java.lang.String,java.lang.Object>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      },
+      "throws": []
+    },
+    {
+      "name": "colored",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "<T>(java.util.function.Function<net.minecraft.world.item.DyeColor,T>)io.github.noeppi_noeppi.libx.mod.registration.EnumObjects<net.minecraft.world.item.DyeColor,T>",
+      "parameters": [
+        {
+          "name": "factory",
+          "type": {
+            "name": "java.util.function.Function<net.minecraft.world.item.DyeColor,T>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.mod.registration.EnumObjects<net.minecraft.world.item.DyeColor,T>",
+        "desc": "Lio/github/noeppi_noeppi/libx/mod/registration/EnumObjects;",
+        "binaryName": "io/github/noeppi_noeppi/libx/mod/registration/EnumObjects"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new EnumObjects for DyeColors.",
+        "text": "Creates a new EnumObjects for DyeColors.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "A <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/Registerable\">Registerable</ref> that registers multiple objects, one for each value of an enum.",
+    "text": "A <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/Registerable\">Registerable</ref> that registers multiple objects, one for each value of an enum. This is<br> done via <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/Registerable\" method=\"getNamedAdditionalRegisters\" type=\"(net.minecraft.resources.ResourceLocation)java.util.Map<java.lang.String,java.lang.Object>\">Registerable#getNamedAdditionalRegisters(ResourceLocation)</ref> so the enum names will be<br> applied automatically.",
+    "properties": []
+  }
+}

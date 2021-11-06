@@ -1,0 +1,126 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/block/DirectionShape",
+  "simpleName": "DirectionShape",
+  "sourceNam": "io.github.noeppi_noeppi.libx.block.DirectionShape",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "io/github/noeppi_noeppi/libx/block/RotationShape",
+    "signature": "io.github.noeppi_noeppi.libx.block.RotationShape",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "up",
+      "modifiers": [
+        "protected",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.world.phys.shapes.VoxelShape",
+        "desc": "Lnet/minecraft/world/phys/shapes/VoxelShape;",
+        "binaryName": "net/minecraft/world/phys/shapes/VoxelShape"
+      }
+    },
+    {
+      "name": "down",
+      "modifiers": [
+        "protected",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.world.phys.shapes.VoxelShape",
+        "desc": "Lnet/minecraft/world/phys/shapes/VoxelShape;",
+        "binaryName": "net/minecraft/world/phys/shapes/VoxelShape"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.phys.shapes.VoxelShape)void",
+      "parameters": [
+        {
+          "name": "baseShape",
+          "type": {
+            "name": "net.minecraft.world.phys.shapes.VoxelShape",
+            "desc": "Lnet/minecraft/world/phys/shapes/VoxelShape;",
+            "binaryName": "net/minecraft/world/phys/shapes/VoxelShape"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Creates a new RotationShape with the given base shape.",
+        "text": "Creates a new RotationShape with the given base shape. The base shape should be the shape<br> facing up.",
+        "properties": []
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "getShape",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.core.Direction)net.minecraft.world.phys.shapes.VoxelShape",
+      "parameters": [
+        {
+          "name": "direction",
+          "type": {
+            "name": "net.minecraft.core.Direction",
+            "desc": "Lnet/minecraft/core/Direction;",
+            "binaryName": "net/minecraft/core/Direction"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.phys.shapes.VoxelShape",
+        "desc": "Lnet/minecraft/world/phys/shapes/VoxelShape;",
+        "binaryName": "net/minecraft/world/phys/shapes/VoxelShape"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "",
+        "text": "",
+        "properties": []
+      }
+    },
+    {
+      "name": "rotatedV",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(net.minecraft.world.phys.shapes.VoxelShape)net.minecraft.world.phys.shapes.VoxelShape",
+      "parameters": [
+        {
+          "name": "src",
+          "type": {
+            "name": "net.minecraft.world.phys.shapes.VoxelShape",
+            "desc": "Lnet/minecraft/world/phys/shapes/VoxelShape;",
+            "binaryName": "net/minecraft/world/phys/shapes/VoxelShape"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.world.phys.shapes.VoxelShape",
+        "desc": "Lnet/minecraft/world/phys/shapes/VoxelShape;",
+        "binaryName": "net/minecraft/world/phys/shapes/VoxelShape"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "Holds 6 different <ref cls=\"net/minecraft/world/phys/shapes/VoxelShape\">VoxelShapes</ref>, one for each facing.",
+    "text": "Holds 6 different <ref cls=\"net/minecraft/world/phys/shapes/VoxelShape\">VoxelShapes</ref>, one for each facing. Those are all created by rotating<br> one original VoxelShape.",
+    "properties": []
+  }
+}

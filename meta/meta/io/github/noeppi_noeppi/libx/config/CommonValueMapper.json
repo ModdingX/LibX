@@ -1,0 +1,81 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/config/CommonValueMapper",
+  "simpleName": "CommonValueMapper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.config.CommonValueMapper",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "methods": [
+    {
+      "name": "type",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.Class<T>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<T>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the class of the type that this mapper can serialise.",
+        "text": "Gets the class of the type that this mapper can serialise.",
+        "properties": []
+      }
+    },
+    {
+      "name": "element",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.Class<E>",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.Class<E>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the class of the JSON element type this mapper uses.",
+        "text": "Gets the class of the JSON element type this mapper uses.",
+        "properties": []
+      }
+    },
+    {
+      "name": "comment",
+      "modifiers": [
+        "public",
+        "default"
+      ],
+      "type": "()java.util.List<java.lang.String>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.List<java.lang.String>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Returns a list of comment lines that will be added to the values specified in <ref cls=\"io/github/noeppi_noeppi/libx/config/Config\">@Config</ref>.",
+        "text": "Returns a list of comment lines that will be added to the values specified in <ref cls=\"io/github/noeppi_noeppi/libx/config/Config\">@Config</ref>.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Base interface for everything that can map values for config entries.",
+    "text": "Base interface for everything that can map values for config entries. See<br> <ref cls=\"io/github/noeppi_noeppi/libx/config/ConfigManager\">ConfigManager</ref> for more info.",
+    "properties": []
+  }
+}

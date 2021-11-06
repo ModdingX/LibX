@@ -1,0 +1,56 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/data/AlwaysExistentModelFile",
+  "simpleName": "AlwaysExistentModelFile",
+  "sourceNam": "io.github.noeppi_noeppi.libx.data.AlwaysExistentModelFile",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraftforge/client/model/generators/ModelFile",
+    "signature": "net.minecraftforge.client.model.generators.ModelFile",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.resources.ResourceLocation)void",
+      "parameters": [
+        {
+          "name": "rl",
+          "type": {
+            "name": "net.minecraft.resources.ResourceLocation",
+            "desc": "Lnet/minecraft/resources/ResourceLocation;",
+            "binaryName": "net/minecraft/resources/ResourceLocation"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "exists",
+      "modifiers": [
+        "protected"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A <ref cls=\"net/minecraftforge/client/model/generators/ModelFile\">ModelFile</ref> that always returns <code>true</code> in <ref cls=\"io/github/noeppi_noeppi/libx/data/AlwaysExistentModelFile\" method=\"exists\" type=\"()boolean\">#exists()</ref> for cases<br> where the model obviously exists but is not found.",
+    "text": "A <ref cls=\"net/minecraftforge/client/model/generators/ModelFile\">ModelFile</ref> that always returns <code>true</code> in <ref cls=\"io/github/noeppi_noeppi/libx/data/AlwaysExistentModelFile\" method=\"exists\" type=\"()boolean\">#exists()</ref> for cases<br> where the model obviously exists but is not found.",
+    "properties": []
+  }
+}

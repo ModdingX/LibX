@@ -1,0 +1,108 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/gui/EditorHelper",
+  "simpleName": "EditorHelper",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.gui.EditorHelper",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "create",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "<T>(net.minecraft.client.gui.screens.Screen,io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>,T,net.minecraft.client.gui.components.AbstractWidget,io.github.noeppi_noeppi.libx.config.gui.WidgetProperties<T>)net.minecraft.client.gui.components.AbstractWidget",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "editor",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.ConfigEditor<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/ConfigEditor;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/ConfigEditor"
+          }
+        },
+        {
+          "name": "initialValue",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        },
+        {
+          "name": "old",
+          "type": {
+            "name": "net.minecraft.client.gui.components.AbstractWidget",
+            "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+            "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+          }
+        },
+        {
+          "name": "properties",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.gui.WidgetProperties<T>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/gui/WidgetProperties;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/gui/WidgetProperties"
+          }
+        }
+      ],
+      "return": {
+        "name": "net.minecraft.client.gui.components.AbstractWidget",
+        "desc": "Lnet/minecraft/client/gui/components/AbstractWidget;",
+        "binaryName": "net/minecraft/client/gui/components/AbstractWidget"
+      },
+      "throws": []
+    },
+    {
+      "name": "getManager",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen)io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreenManager",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigScreenManager",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreenManager;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/gui/screen/ConfigScreenManager"
+      },
+      "throws": []
+    }
+  ]
+}

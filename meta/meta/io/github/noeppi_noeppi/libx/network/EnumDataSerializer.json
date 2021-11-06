@@ -1,0 +1,138 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/network/EnumDataSerializer",
+  "simpleName": "EnumDataSerializer",
+  "sourceNam": "io.github.noeppi_noeppi.libx.network.EnumDataSerializer",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "net/minecraft/network/syncher/EntityDataSerializer",
+      "signature": "net.minecraft.network.syncher.EntityDataSerializer<T>",
+      "parameters": [
+        null
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "enumClass",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.lang.Class<T>",
+        "desc": "Ljava/lang/Class;",
+        "binaryName": "java/lang/Class"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Class<T>)void",
+      "parameters": [
+        {
+          "name": "enumClass",
+          "type": {
+            "name": "java.lang.Class<T>",
+            "desc": "Ljava/lang/Class;",
+            "binaryName": "java/lang/Class"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "write",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf,T)void",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        },
+        {
+          "name": "value",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "read",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.FriendlyByteBuf)T",
+      "parameters": [
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.network.FriendlyByteBuf",
+            "desc": "Lnet/minecraft/network/FriendlyByteBuf;",
+            "binaryName": "net/minecraft/network/FriendlyByteBuf"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    },
+    {
+      "name": "copy",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(T)T",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        }
+      ],
+      "return": {
+        "name": "T",
+        "typeVar": "T"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "<ref cls=\"net/minecraft/network/syncher/EntityDataSerializer\">Data serializers</ref> for enums.",
+    "text": "<ref cls=\"net/minecraft/network/syncher/EntityDataSerializer\">Data serializers</ref> for enums. You need to register them manually tough.",
+    "properties": []
+  }
+}

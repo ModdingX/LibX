@@ -1,0 +1,68 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/annotation/model/Model",
+  "simpleName": "Model",
+  "sourceNam": "io.github.noeppi_noeppi.libx.annotation.model.Model",
+  "modifiers": [
+    "public",
+    "abstract"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "java/lang/annotation/Annotation",
+      "signature": "java.lang.annotation.Annotation",
+      "parameters": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "namespace",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "The namespace of the model.",
+        "text": "The namespace of the model. Defaults to the modid inferred for this element. See <ref cls=\"io/github/noeppi_noeppi/libx/annotation/ForMod\">ForMod</ref>.",
+        "properties": []
+      }
+    },
+    {
+      "name": "value",
+      "modifiers": [
+        "public",
+        "abstract"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "The path of the model.",
+        "text": "The path of the model.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "Can be attached to public static non-final fields with the type <ref cls=\"net/minecraft/client/resources/model/BakedModel\">BakedModel</ref>.",
+    "text": "Can be attached to public static non-final fields with the type <ref cls=\"net/minecraft/client/resources/model/BakedModel\">BakedModel</ref>. The model will<br> then be put into those fields.",
+    "properties": []
+  }
+}

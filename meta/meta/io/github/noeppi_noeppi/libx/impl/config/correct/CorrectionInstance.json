@@ -1,0 +1,185 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/config/correct/CorrectionInstance",
+  "simpleName": "CorrectionInstance",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.config.correct.CorrectionInstance",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "io/github/noeppi_noeppi/libx/config/correct/ConfigCorrection",
+      "signature": "io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection<T>",
+      "parameters": [
+        null
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "defaultValue",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.util.LazyValue<java.util.Optional<T>>",
+        "desc": "Lio/github/noeppi_noeppi/libx/util/LazyValue;",
+        "binaryName": "io/github/noeppi_noeppi/libx/util/LazyValue"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "private"
+      ],
+      "type": "(io.github.noeppi_noeppi.libx.util.LazyValue<java.util.Optional<T>>)void",
+      "parameters": [
+        {
+          "name": "defaultValue",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.util.LazyValue<java.util.Optional<T>>",
+            "desc": "Lio/github/noeppi_noeppi/libx/util/LazyValue;",
+            "binaryName": "io/github/noeppi_noeppi/libx/util/LazyValue"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "create",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "<T>(T)io.github.noeppi_noeppi.libx.impl.config.correct.CorrectionInstance<T,T>",
+      "parameters": [
+        {
+          "name": "defaultValue",
+          "type": {
+            "name": "T",
+            "typeVar": "T"
+          }
+        }
+      ],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.impl.config.correct.CorrectionInstance<T,T>",
+        "desc": "Lio/github/noeppi_noeppi/libx/impl/config/correct/CorrectionInstance;",
+        "binaryName": "io/github/noeppi_noeppi/libx/impl/config/correct/CorrectionInstance"
+      },
+      "throws": []
+    },
+    {
+      "name": "tryGetRaw",
+      "modifiers": [
+        "public"
+      ],
+      "type": "<U>(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.ValueMapper<U,?>)java.util.Optional<U>",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonElement",
+            "desc": "Lcom/google/gson/JsonElement;",
+            "binaryName": "com/google/gson/JsonElement"
+          }
+        },
+        {
+          "name": "mapper",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValueMapper<U,?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValueMapper;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValueMapper"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Optional<U>",
+        "desc": "Ljava/util/Optional;",
+        "binaryName": "java/util/Optional"
+      },
+      "throws": []
+    },
+    {
+      "name": "tryGet",
+      "modifiers": [
+        "public"
+      ],
+      "type": "<U>(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.ValueMapper<U,?>)java.util.Optional<U>",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonElement",
+            "desc": "Lcom/google/gson/JsonElement;",
+            "binaryName": "com/google/gson/JsonElement"
+          }
+        },
+        {
+          "name": "mapper",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValueMapper<U,?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValueMapper;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValueMapper"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Optional<U>",
+        "desc": "Ljava/util/Optional;",
+        "binaryName": "java/util/Optional"
+      },
+      "throws": []
+    },
+    {
+      "name": "tryCorrect",
+      "modifiers": [
+        "public"
+      ],
+      "type": "<U>(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.ValueMapper<U,?>,java.util.function.Function<T,java.util.Optional<U>>)java.util.Optional<U>",
+      "parameters": [
+        {
+          "name": "json",
+          "type": {
+            "name": "com.google.gson.JsonElement",
+            "desc": "Lcom/google/gson/JsonElement;",
+            "binaryName": "com/google/gson/JsonElement"
+          }
+        },
+        {
+          "name": "mapper",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.config.ValueMapper<U,?>",
+            "desc": "Lio/github/noeppi_noeppi/libx/config/ValueMapper;",
+            "binaryName": "io/github/noeppi_noeppi/libx/config/ValueMapper"
+          }
+        },
+        {
+          "name": "extractor",
+          "type": {
+            "name": "java.util.function.Function<T,java.util.Optional<U>>",
+            "desc": "Ljava/util/function/Function;",
+            "binaryName": "java/util/function/Function"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.Optional<U>",
+        "desc": "Ljava/util/Optional;",
+        "binaryName": "java/util/Optional"
+      },
+      "throws": []
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/world/WorldSeedHolderImpl",
+  "simpleName": "WorldSeedHolderImpl",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.world.WorldSeedHolderImpl",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "seed",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": {
+        "name": "long",
+        "desc": "J"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ]
+}

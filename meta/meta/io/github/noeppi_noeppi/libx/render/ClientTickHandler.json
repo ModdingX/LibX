@@ -1,0 +1,70 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/render/ClientTickHandler",
+  "simpleName": "ClientTickHandler",
+  "sourceNam": "io.github.noeppi_noeppi.libx.render.ClientTickHandler",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "ticksInGame",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "tick",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "(net.minecraftforge.event.TickEvent.ClientTickEvent)void",
+      "parameters": [
+        {
+          "name": "event",
+          "type": {
+            "name": "net.minecraftforge.event.TickEvent.ClientTickEvent",
+            "desc": "Lnet/minecraftforge/event/TickEvent$ClientTickEvent;",
+            "binaryName": "net/minecraftforge/event/TickEvent$ClientTickEvent"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "On the client this counts the ticks in game.",
+    "text": "On the client this counts the ticks in game. Useful for render code.",
+    "properties": []
+  }
+}

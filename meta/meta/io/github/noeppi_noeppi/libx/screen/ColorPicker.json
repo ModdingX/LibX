@@ -1,0 +1,732 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/screen/ColorPicker",
+  "simpleName": "ColorPicker",
+  "sourceNam": "io.github.noeppi_noeppi.libx.screen.ColorPicker",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "io/github/noeppi_noeppi/libx/screen/Panel",
+    "signature": "io.github.noeppi_noeppi.libx.screen.Panel",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "WIDTH",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      },
+      "constant": 200,
+      "doc": {
+        "summary": "The width of a colour picker widget",
+        "text": "The width of a colour picker widget",
+        "properties": []
+      }
+    },
+    {
+      "name": "HEIGHT",
+      "modifiers": [
+        "public",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      },
+      "constant": 100,
+      "doc": {
+        "summary": "The height of a colour picker widget",
+        "text": "The height of a colour picker widget",
+        "properties": []
+      }
+    },
+    {
+      "name": "HUE_VERTICES",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      },
+      "constant": 40
+    },
+    {
+      "name": "HSB_VERTICES",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      },
+      "constant": 20
+    },
+    {
+      "name": "red",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    },
+    {
+      "name": "green",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    },
+    {
+      "name": "blue",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "int",
+        "desc": "I"
+      }
+    },
+    {
+      "name": "hue",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "float",
+        "desc": "F"
+      }
+    },
+    {
+      "name": "saturation",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "float",
+        "desc": "F"
+      }
+    },
+    {
+      "name": "brightness",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "float",
+        "desc": "F"
+      }
+    },
+    {
+      "name": "colorValue",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.util.CachedValue<net.minecraft.network.chat.TextColor>",
+        "desc": "Lio/github/noeppi_noeppi/libx/util/CachedValue;",
+        "binaryName": "io/github/noeppi_noeppi/libx/util/CachedValue"
+      }
+    },
+    {
+      "name": "huePanel",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    },
+    {
+      "name": "hsbMatrix",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.util.CachedValue<java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>>",
+        "desc": "Lio/github/noeppi_noeppi/libx/util/CachedValue;",
+        "binaryName": "io/github/noeppi_noeppi/libx/util/CachedValue"
+      }
+    },
+    {
+      "name": "redSlider",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.screen.ColorPicker.ValueSlider",
+        "desc": "Lio/github/noeppi_noeppi/libx/screen/ColorPicker$ValueSlider;",
+        "binaryName": "io/github/noeppi_noeppi/libx/screen/ColorPicker$ValueSlider"
+      }
+    },
+    {
+      "name": "greenSlider",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.screen.ColorPicker.ValueSlider",
+        "desc": "Lio/github/noeppi_noeppi/libx/screen/ColorPicker$ValueSlider;",
+        "binaryName": "io/github/noeppi_noeppi/libx/screen/ColorPicker$ValueSlider"
+      }
+    },
+    {
+      "name": "blueSlider",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.screen.ColorPicker.ValueSlider",
+        "desc": "Lio/github/noeppi_noeppi/libx/screen/ColorPicker$ValueSlider;",
+        "binaryName": "io/github/noeppi_noeppi/libx/screen/ColorPicker$ValueSlider"
+      }
+    },
+    {
+      "name": "responder",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "java.util.function.Consumer<net.minecraft.network.chat.TextColor>",
+        "desc": "Ljava/util/function/Consumer;",
+        "binaryName": "java/util/function/Consumer"
+      }
+    },
+    {
+      "name": "lastDelivered",
+      "modifiers": [
+        "private"
+      ],
+      "type": {
+        "name": "net.minecraft.network.chat.TextColor",
+        "desc": "Lnet/minecraft/network/chat/TextColor;",
+        "binaryName": "net/minecraft/network/chat/TextColor"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen,int,int)void",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "x",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.client.gui.screens.Screen,int,int,io.github.noeppi_noeppi.libx.screen.ColorPicker)void",
+      "parameters": [
+        {
+          "name": "screen",
+          "type": {
+            "name": "net.minecraft.client.gui.screens.Screen",
+            "desc": "Lnet/minecraft/client/gui/screens/Screen;",
+            "binaryName": "net/minecraft/client/gui/screens/Screen"
+          }
+        },
+        {
+          "name": "x",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "old",
+          "type": {
+            "name": "io.github.noeppi_noeppi.libx.screen.ColorPicker",
+            "desc": "Lio/github/noeppi_noeppi/libx/screen/ColorPicker;",
+            "binaryName": "io/github/noeppi_noeppi/libx/screen/ColorPicker"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "getColor",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.network.chat.TextColor",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.network.chat.TextColor",
+        "desc": "Lnet/minecraft/network/chat/TextColor;",
+        "binaryName": "net/minecraft/network/chat/TextColor"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the current value of the colour picker.",
+        "text": "Gets the current value of the colour picker.",
+        "properties": []
+      }
+    },
+    {
+      "name": "setColor",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.network.chat.TextColor)void",
+      "parameters": [
+        {
+          "name": "color",
+          "type": {
+            "name": "net.minecraft.network.chat.TextColor",
+            "desc": "Lnet/minecraft/network/chat/TextColor;",
+            "binaryName": "net/minecraft/network/chat/TextColor"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets the current value of the colour picker.",
+        "text": "Sets the current value of the colour picker.",
+        "properties": []
+      }
+    },
+    {
+      "name": "setResponder",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.util.function.Consumer<net.minecraft.network.chat.TextColor>)void",
+      "parameters": [
+        {
+          "name": "responder",
+          "type": {
+            "name": "java.util.function.Consumer<net.minecraft.network.chat.TextColor>",
+            "desc": "Ljava/util/function/Consumer;",
+            "binaryName": "java/util/function/Consumer"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Sets a responder that is notified whenever the colour changes.",
+        "text": "Sets a responder that is notified whenever the colour changes.",
+        "properties": []
+      }
+    },
+    {
+      "name": "updateRGB",
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "updateHSB",
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "update",
+      "modifiers": [
+        "private"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "render",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.mojang.blaze3d.vertex.PoseStack,int,int,float)void",
+      "parameters": [
+        {
+          "name": "poseStack",
+          "type": {
+            "name": "com.mojang.blaze3d.vertex.PoseStack",
+            "desc": "Lcom/mojang/blaze3d/vertex/PoseStack;",
+            "binaryName": "com/mojang/blaze3d/vertex/PoseStack"
+          }
+        },
+        {
+          "name": "mouseX",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "mouseY",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "partialTicks",
+          "type": {
+            "name": "float",
+            "desc": "F"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "mouseClicked",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(double,double,int)boolean",
+      "parameters": [
+        {
+          "name": "mouseX",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        },
+        {
+          "name": "mouseY",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        },
+        {
+          "name": "button",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "mouseDragged",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(double,double,int,double,double)boolean",
+      "parameters": [
+        {
+          "name": "mouseX",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        },
+        {
+          "name": "mouseY",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        },
+        {
+          "name": "button",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "dragX",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        },
+        {
+          "name": "dragY",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "updateColorValue",
+      "modifiers": [
+        "private"
+      ],
+      "type": "(double,double)boolean",
+      "parameters": [
+        {
+          "name": "mouseX",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        },
+        {
+          "name": "mouseY",
+          "type": {
+            "name": "double",
+            "desc": "D"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "createHsbMatrix",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(float,int,int,int,int)java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>",
+      "parameters": [
+        {
+          "name": "hue",
+          "type": {
+            "name": "float",
+            "desc": "F"
+          }
+        },
+        {
+          "name": "x1",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y1",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "x2",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y2",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      },
+      "throws": []
+    },
+    {
+      "name": "createHuePanel",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(int,int,int,int)java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>",
+      "parameters": [
+        {
+          "name": "x1",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y1",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "x2",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y2",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      },
+      "throws": []
+    },
+    {
+      "name": "createColorMatrix",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(int,int,int,int,java.util.List<java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.ColorValue>>)java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>",
+      "parameters": [
+        {
+          "name": "x1",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y1",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "x2",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "y2",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "list",
+          "type": {
+            "name": "java.util.List<java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.ColorValue>>",
+            "desc": "Ljava/util/List;",
+            "binaryName": "java/util/List"
+          }
+        }
+      ],
+      "return": {
+        "name": "java.util.List<io.github.noeppi_noeppi.libx.screen.ColorPicker.VertexInfo>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "A widgets that lets a user select a <ref cls=\"net/minecraft/network/chat/TextColor\">colour</ref>.",
+    "text": "A widgets that lets a user select a <ref cls=\"net/minecraft/network/chat/TextColor\">colour</ref>.",
+    "properties": []
+  }
+}

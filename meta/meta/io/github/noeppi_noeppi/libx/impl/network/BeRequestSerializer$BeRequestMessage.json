@@ -1,0 +1,121 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/impl/network/BeRequestSerializer$BeRequestMessage",
+  "simpleName": "BeRequestMessage",
+  "sourceNam": "io.github.noeppi_noeppi.libx.impl.network.BeRequestSerializer.BeRequestMessage",
+  "modifiers": [
+    "public",
+    "static",
+    "final"
+  ],
+  "nesting": "member",
+  "superClass": {
+    "name": "java/lang/Record",
+    "signature": "java.lang.Record",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "pos",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "net.minecraft.core.BlockPos",
+        "desc": "Lnet/minecraft/core/BlockPos;",
+        "binaryName": "net/minecraft/core/BlockPos"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.core.BlockPos)void",
+      "parameters": [
+        {
+          "name": "pos",
+          "type": {
+            "name": "net.minecraft.core.BlockPos",
+            "desc": "Lnet/minecraft/core/BlockPos;",
+            "binaryName": "net/minecraft/core/BlockPos"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "toString",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()java.lang.String",
+      "parameters": [],
+      "return": {
+        "name": "java.lang.String",
+        "desc": "Ljava/lang/String;",
+        "binaryName": "java/lang/String"
+      },
+      "throws": []
+    },
+    {
+      "name": "hashCode",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "equals",
+      "modifiers": [
+        "public",
+        "final"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "o",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "pos",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()net.minecraft.core.BlockPos",
+      "parameters": [],
+      "return": {
+        "name": "net.minecraft.core.BlockPos",
+        "desc": "Lnet/minecraft/core/BlockPos;",
+        "binaryName": "net/minecraft/core/BlockPos"
+      },
+      "throws": []
+    }
+  ]
+}

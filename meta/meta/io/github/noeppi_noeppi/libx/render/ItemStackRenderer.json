@@ -1,0 +1,253 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/render/ItemStackRenderer",
+  "simpleName": "ItemStackRenderer",
+  "sourceNam": "io.github.noeppi_noeppi.libx.render.ItemStackRenderer",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "net/minecraft/client/renderer/BlockEntityWithoutLevelRenderer",
+    "signature": "net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer",
+    "parameters": []
+  },
+  "fields": [
+    {
+      "name": "INSTANCE",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.util.LazyValue<io.github.noeppi_noeppi.libx.render.ItemStackRenderer>",
+        "desc": "Lio/github/noeppi_noeppi/libx/util/LazyValue;",
+        "binaryName": "io/github/noeppi_noeppi/libx/util/LazyValue"
+      }
+    },
+    {
+      "name": "types",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.List<net.minecraft.world.level.block.entity.BlockEntityType<?>>",
+        "desc": "Ljava/util/List;",
+        "binaryName": "java/util/List"
+      }
+    },
+    {
+      "name": "blocks",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<net.minecraft.world.level.block.Block,org.apache.commons.lang3.tuple.Pair<io.github.noeppi_noeppi.libx.util.LazyValue<net.minecraft.world.level.block.entity.BlockEntity>,java.lang.Boolean>>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    },
+    {
+      "name": "defaultTags",
+      "modifiers": [
+        "private",
+        "static",
+        "final"
+      ],
+      "type": {
+        "name": "java.util.Map<net.minecraft.world.level.block.entity.BlockEntityType<?>,net.minecraft.nbt.CompoundTag>",
+        "desc": "Ljava/util/Map;",
+        "binaryName": "java/util/Map"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher,net.minecraft.client.model.geom.EntityModelSet)void",
+      "parameters": [
+        {
+          "name": "dispatcher",
+          "type": {
+            "name": "net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher",
+            "desc": "Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;",
+            "binaryName": "net/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher"
+          }
+        },
+        {
+          "name": "modelSet",
+          "type": {
+            "name": "net.minecraft.client.model.geom.EntityModelSet",
+            "desc": "Lnet/minecraft/client/model/geom/EntityModelSet;",
+            "binaryName": "net/minecraft/client/model/geom/EntityModelSet"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "addRenderBlock",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "<T>(net.minecraft.world.level.block.entity.BlockEntityType<T>,boolean)void",
+      "parameters": [
+        {
+          "name": "beType",
+          "type": {
+            "name": "net.minecraft.world.level.block.entity.BlockEntityType<T>",
+            "desc": "Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+            "binaryName": "net/minecraft/world/level/block/entity/BlockEntityType"
+          },
+          "doc": "The Block Entity Type."
+        },
+        {
+          "name": "readBlockEntityTag",
+          "type": {
+            "name": "boolean",
+            "desc": "Z"
+          },
+          "doc": "If this is set to true and an item has a <code>BlockEntityTag</code>, the block<br>                           entities <code>load</code> method will get called before rendering."
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Registers a <ref cls=\"net/minecraft/world/level/block/entity/BlockEntityType\">BlockEntityType</ref> to be rendered with the ItemStackRenderer.",
+        "text": "Registers a <ref cls=\"net/minecraft/world/level/block/entity/BlockEntityType\">BlockEntityType</ref> to be rendered with the ItemStackRenderer.",
+        "properties": []
+      }
+    },
+    {
+      "name": "renderByItem",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(net.minecraft.world.item.ItemStack,net.minecraft.client.renderer.block.model.ItemTransforms.TransformType,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int)void",
+      "parameters": [
+        {
+          "name": "stack",
+          "type": {
+            "name": "net.minecraft.world.item.ItemStack",
+            "desc": "Lnet/minecraft/world/item/ItemStack;",
+            "binaryName": "net/minecraft/world/item/ItemStack"
+          }
+        },
+        {
+          "name": "type",
+          "type": {
+            "name": "net.minecraft.client.renderer.block.model.ItemTransforms.TransformType",
+            "desc": "Lnet/minecraft/client/renderer/block/model/ItemTransforms$TransformType;",
+            "binaryName": "net/minecraft/client/renderer/block/model/ItemTransforms$TransformType"
+          }
+        },
+        {
+          "name": "poseStack",
+          "type": {
+            "name": "com.mojang.blaze3d.vertex.PoseStack",
+            "desc": "Lcom/mojang/blaze3d/vertex/PoseStack;",
+            "binaryName": "com/mojang/blaze3d/vertex/PoseStack"
+          }
+        },
+        {
+          "name": "buffer",
+          "type": {
+            "name": "net.minecraft.client.renderer.MultiBufferSource",
+            "desc": "Lnet/minecraft/client/renderer/MultiBufferSource;",
+            "binaryName": "net/minecraft/client/renderer/MultiBufferSource"
+          }
+        },
+        {
+          "name": "light",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        },
+        {
+          "name": "overlay",
+          "type": {
+            "name": "int",
+            "desc": "I"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "setLevelAndState",
+      "modifiers": [
+        "private",
+        "static"
+      ],
+      "type": "(net.minecraft.world.level.block.entity.BlockEntity,net.minecraft.world.level.block.state.BlockState)void",
+      "parameters": [
+        {
+          "name": "blockEntity",
+          "type": {
+            "name": "net.minecraft.world.level.block.entity.BlockEntity",
+            "desc": "Lnet/minecraft/world/level/block/entity/BlockEntity;",
+            "binaryName": "net/minecraft/world/level/block/entity/BlockEntity"
+          }
+        },
+        {
+          "name": "state",
+          "type": {
+            "name": "net.minecraft.world.level.block.state.BlockState",
+            "desc": "Lnet/minecraft/world/level/block/state/BlockState;",
+            "binaryName": "net/minecraft/world/level/block/state/BlockState"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "get",
+      "modifiers": [
+        "public",
+        "static"
+      ],
+      "type": "()io.github.noeppi_noeppi.libx.render.ItemStackRenderer",
+      "parameters": [],
+      "return": {
+        "name": "io.github.noeppi_noeppi.libx.render.ItemStackRenderer",
+        "desc": "Lio/github/noeppi_noeppi/libx/render/ItemStackRenderer;",
+        "binaryName": "io/github/noeppi_noeppi/libx/render/ItemStackRenderer"
+      },
+      "throws": [],
+      "doc": {
+        "summary": "Gets the instance of the ItemStackRenderer.",
+        "text": "Gets the instance of the ItemStackRenderer.",
+        "properties": []
+      }
+    }
+  ],
+  "doc": {
+    "summary": "This class is meant to apply a <ref cls=\"net/minecraft/client/renderer/blockentity/BlockEntityRenderer\">BlockEntityRenderer</ref> to items.",
+    "text": "This class is meant to apply a <ref cls=\"net/minecraft/client/renderer/blockentity/BlockEntityRenderer\">BlockEntityRenderer</ref> to items. Using it is really straightforward:<br> <br> <ul><br>     <li>Add custom <ref cls=\"net/minecraftforge/client/IItemRenderProperties\">render properties</ref> to your item through<br>     <ref cls=\"net/minecraft/world/item/Item\" method=\"initializeClient\" type=\"(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties>)void\">Item#initializeClient(Consumer)</ref> or <ref cls=\"io/github/noeppi_noeppi/libx/base/BlockBase\" method=\"initializeItemClient\" type=\"(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties>)void\">BlockBase#initializeItemClient(Consumer)</ref></li><br>     <li>In <ref cls=\"io/github/noeppi_noeppi/libx/mod/registration/Registerable\" method=\"registerClient\" type=\"(net.minecraft.resources.ResourceLocation,java.util.function.Consumer<java.lang.Runnable>)void\">Registerable#registerClient(ResourceLocation, Consumer)</ref> call<br>     <ref cls=\"io/github/noeppi_noeppi/libx/render/ItemStackRenderer\" method=\"addRenderBlock\" type=\"<T>(net.minecraft.world.level.block.entity.BlockEntityType<T>,boolean)void\">ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)</ref></li><br> </ul><br> <br> The required models will generate automatically if you're using <ref cls=\"io/github/noeppi_noeppi/libx/data/provider/ItemModelProviderBase\">ItemModelProviderBase</ref>.",
+    "properties": []
+  }
+}

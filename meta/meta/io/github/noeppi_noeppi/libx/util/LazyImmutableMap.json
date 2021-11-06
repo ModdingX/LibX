@@ -1,0 +1,310 @@
+{
+  "name": "io/github/noeppi_noeppi/libx/util/LazyImmutableMap",
+  "simpleName": "LazyImmutableMap",
+  "sourceNam": "io.github.noeppi_noeppi.libx.util.LazyImmutableMap",
+  "modifiers": [
+    "public"
+  ],
+  "superClass": {
+    "name": "java/lang/Object",
+    "signature": "java.lang.Object",
+    "parameters": []
+  },
+  "interfaces": [
+    {
+      "name": "java/util/Map",
+      "signature": "java.util.Map<K,V>",
+      "parameters": [
+        null,
+        null
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "name": "map",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "com.google.common.collect.ImmutableMap<K,io.github.noeppi_noeppi.libx.util.LazyValue<V>>",
+        "desc": "Lcom/google/common/collect/ImmutableMap;",
+        "binaryName": "com/google/common/collect/ImmutableMap"
+      }
+    },
+    {
+      "name": "values",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.util.LazyValue<java.util.Collection<V>>",
+        "desc": "Lio/github/noeppi_noeppi/libx/util/LazyValue;",
+        "binaryName": "io/github/noeppi_noeppi/libx/util/LazyValue"
+      }
+    },
+    {
+      "name": "entries",
+      "modifiers": [
+        "private",
+        "final"
+      ],
+      "type": {
+        "name": "io.github.noeppi_noeppi.libx.util.LazyValue<java.util.Set<java.util.Map.Entry<K,V>>>",
+        "desc": "Lio/github/noeppi_noeppi/libx/util/LazyValue;",
+        "binaryName": "io/github/noeppi_noeppi/libx/util/LazyValue"
+      }
+    }
+  ],
+  "constructors": [
+    {
+      "modifiers": [
+        "public"
+      ],
+      "type": "(com.google.common.collect.ImmutableMap<K,io.github.noeppi_noeppi.libx.util.LazyValue<V>>)void",
+      "parameters": [
+        {
+          "name": "map",
+          "type": {
+            "name": "com.google.common.collect.ImmutableMap<K,io.github.noeppi_noeppi.libx.util.LazyValue<V>>",
+            "desc": "Lcom/google/common/collect/ImmutableMap;",
+            "binaryName": "com/google/common/collect/ImmutableMap"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    }
+  ],
+  "methods": [
+    {
+      "name": "size",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()int",
+      "parameters": [],
+      "return": {
+        "name": "int",
+        "desc": "I"
+      },
+      "throws": []
+    },
+    {
+      "name": "isEmpty",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()boolean",
+      "parameters": [],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "containsKey",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "key",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "containsValue",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object)boolean",
+      "parameters": [
+        {
+          "name": "value",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "boolean",
+        "desc": "Z"
+      },
+      "throws": []
+    },
+    {
+      "name": "get",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object)V",
+      "parameters": [
+        {
+          "name": "key",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "V",
+        "typeVar": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "put",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(K,V)V",
+      "parameters": [
+        {
+          "name": "key",
+          "type": {
+            "name": "K",
+            "typeVar": "K"
+          }
+        },
+        {
+          "name": "value",
+          "type": {
+            "name": "V",
+            "typeVar": "V"
+          }
+        }
+      ],
+      "return": {
+        "name": "V",
+        "typeVar": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "remove",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.lang.Object)V",
+      "parameters": [
+        {
+          "name": "key",
+          "type": {
+            "name": "java.lang.Object",
+            "desc": "Ljava/lang/Object;",
+            "binaryName": "java/lang/Object"
+          }
+        }
+      ],
+      "return": {
+        "name": "V",
+        "typeVar": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "putAll",
+      "modifiers": [
+        "public"
+      ],
+      "type": "(java.util.Map)void",
+      "parameters": [
+        {
+          "name": "m",
+          "type": {
+            "name": "java.util.Map",
+            "desc": "Ljava/util/Map;",
+            "binaryName": "java/util/Map"
+          }
+        }
+      ],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "clear",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()void",
+      "parameters": [],
+      "return": {
+        "name": "void",
+        "desc": "V"
+      },
+      "throws": []
+    },
+    {
+      "name": "keySet",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.util.Set<K>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.Set<K>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      },
+      "throws": []
+    },
+    {
+      "name": "values",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.util.Collection<V>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.Collection<V>",
+        "desc": "Ljava/util/Collection;",
+        "binaryName": "java/util/Collection"
+      },
+      "throws": []
+    },
+    {
+      "name": "entrySet",
+      "modifiers": [
+        "public"
+      ],
+      "type": "()java.util.Set<java.util.Map.Entry<K,V>>",
+      "parameters": [],
+      "return": {
+        "name": "java.util.Set<java.util.Map.Entry<K,V>>",
+        "desc": "Ljava/util/Set;",
+        "binaryName": "java/util/Set"
+      },
+      "throws": []
+    }
+  ],
+  "doc": {
+    "summary": "An immutable map with lazy populated values.",
+    "text": "An immutable map with lazy populated values.",
+    "properties": []
+  }
+}
