@@ -26,9 +26,9 @@ jobs:
       - name: 'Copying Files 🔨'
         run: |
           rm -rf build/javadoc_merged_target
-          mkdir -p build/javadoc_merged_target/meta
-          cp -r build/docs/javadoc build/javadoc_merged_target
-          cp -r build/docs/meta build/javadoc_merged_target/meta
+          mkdir -p build/javadoc_merged_target
+          cp -r build/docs/javadoc/* build/javadoc_merged_target
+          cp -r build/docs/meta build/javadoc_merged_target
 
       - name: 'Deploy 🚀'
         uses: 'JamesIves/github-pages-deploy-action@4.1.4'
