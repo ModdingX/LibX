@@ -46,7 +46,7 @@ task javadocMeta(type: Javadoc) {
     destinationDir file('build/docs/meta')
     classpath = compileJava.classpath
     options.doclet('io.github.noeppi_noeppi.tools.java_doclet_meta.Main')
-    options.docletpath(MavenArtifactDownloader.download(project, 'io.github.noeppi_noeppi.tools:JavaDocletMeta:0.0.3:fatjar', false))
+    options.docletpath(MavenArtifactDownloader.download(project, 'io.github.noeppi_noeppi.tools:JavaDocletMeta:0.0.4:fatjar', false))
 }
 
 // Performs checks for releases
