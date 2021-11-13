@@ -2,8 +2,11 @@ package io.github.noeppi_noeppi.libx.config;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 
@@ -64,4 +67,10 @@ public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonV
     default Optional<T> correct(JsonElement json, ValueMapper<C, JsonElement> mapper, ConfigCorrection<T> correction) {
         return Optional.empty();
     }
+    
+    /**
+     * @see ValueMapper#createEditor(ValidatorInfo)
+     */
+    @OnlyIn(Dist.CLIENT)
+    ConfigEditor<T> createEditor(ValueMapper<C, JsonElement> mapper, ValidatorInfo<?> validator);
 }

@@ -17,7 +17,8 @@ repositories {
 }
 
 dependencies {
-    compile fg.deobf("io.github.noeppi_noeppi.mods:LibX:${mc_version}-${libx-version}")
+    annotationProcessor fg.deobf("io.github.noeppi_noeppi.mods:LibX:${mc_version}-${libx-version}")
+    implementation fg.deobf("io.github.noeppi_noeppi.mods:LibX:${mc_version}-${libx-version}")
 }
 ```
 

@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.config.validators;
 
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.ConfigValidator;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
@@ -38,5 +39,28 @@ public class ConfiguredValidator<T, A extends Annotation> {
     
     public List<String> comment() {
         return this.validator.comment(this.annotation);
+    }
+    
+    public ValidatorInfo<A> access() {
+        return new ValidatorInfo<>() {
+            
+            @Nullable
+            @Override
+            public Class<A> type() {
+                return ConfiguredValidator.this.validator.annotation();
+            }
+
+            @Nullable
+            @Override
+            public A value() {
+                return ConfiguredValidator.this.annotation;
+            }
+
+            @Override
+            public boolean isValid(Object value) {
+                //noinspection unchecked
+                return ConfiguredValidator.this.validator.type().isAssignableFrom(value.getClass()) && ConfiguredValidator.this.validator.validate((T) value, ConfiguredValidator.this.annotation).isEmpty();
+            }
+        };
     }
 }

@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.data.provider.recipe.crafting;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import io.github.noeppi_noeppi.libx.impl.data.recipe.ObjectCraftingBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -32,7 +33,7 @@ public interface CraftingExtension extends RecipeExtension {
      * 
      * <ul>
      *     <li>An {@link ItemLike}</li>
-     *     <li>An {@link net.minecraft.tags.Tag Tag&lt;Item&gt;}</li>
+     *     <li>An {@link Tag Tag&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>
@@ -60,7 +61,7 @@ public interface CraftingExtension extends RecipeExtension {
      *
      * <ul>
      *     <li>An {@link ItemLike}</li>
-     *     <li>An {@link net.minecraft.tags.Tag Tag&lt;Item&gt;}</li>
+     *     <li>An {@link Tag Tag&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>

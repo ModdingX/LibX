@@ -2,20 +2,25 @@ package io.github.noeppi_noeppi.libx.data.provider;
 
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.data.AlwaysExistentModelFile;
+import io.github.noeppi_noeppi.libx.impl.RendererOnDataGenException;
+import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.*;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -27,8 +32,12 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
+    public static final ResourceLocation DRIPPING_BUCKET = new ResourceLocation("forge", "bucket_drip");
     public static final ResourceLocation SPECIAL_BLOCK_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/special_block");
     public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
+    public static final ResourceLocation FENCE_PARENT = new ResourceLocation("minecraft", "block/fence_inventory");
+    public static final ResourceLocation BUTTON_PARENT = new ResourceLocation("minecraft", "block/button_inventory");
+    public static final ResourceLocation WALL_PARENT = new ResourceLocation("minecraft", "block/wall_inventory");
 
     protected final ModX mod;
 
@@ -82,17 +91,53 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     protected void defaultItem(ResourceLocation id, Item item) {
         if (item instanceof SpawnEggItem) {
-             this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
+            this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
+        } else if (item instanceof BucketItem bucketItem) {
+            this.withExistingParent(id.getPath(), DRIPPING_BUCKET)
+                    .texture("base", this.modLoc("item/" + id.getPath()))
+                    .customLoader(DynamicBucketModelBuilder::begin)
+                    .fluid(bucketItem.getFluid());
         } else {
             this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         }
     }
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
-        if (RenderProperties.get(item).getItemStackRenderer() == ItemStackRenderer.get()) {
+        if (isItemStackRenderer(RenderProperties.get(item))) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(SPECIAL_BLOCK_PARENT));
+        } else if (item.getBlock() instanceof DecoratedFenceBlock decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(FENCE_PARENT)).texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedWoodButton decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedStoneButton decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
+        } else if (item.getBlock() instanceof DecoratedWallBlock decorated) {
+            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(WALL_PARENT)).texture("wall", texture);
+        } else if (item.getBlock() instanceof DecoratedTrapdoorBlock) {
+            this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath() + "_bottom")));
+        } else if (item.getBlock() instanceof DecoratedDoorBlock || item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall) {
+            this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         } else {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
         }
+    }
+
+    private static boolean isItemStackRenderer(IItemRenderProperties properties) {
+        try {
+            properties.getItemStackRenderer();
+        } catch (RendererOnDataGenException e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 }

@@ -1,32 +1,38 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonObject;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ResourceListContent;
 import io.github.noeppi_noeppi.libx.util.ResourceList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonObject> {
 
     public static final ResourceListValueMapper INSTANCE = new ResourceListValueMapper();
+    
+    public static final URL INFO_URL;
+
+    static {
+        try {
+            INFO_URL = new URL("https://noeppi-noeppi.github.io/LibX/io/github/noeppi_noeppi/libx/util/ResourceList.html#use_resource_lists_in_configs");
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final List<String> COMMENT = List.of("This is a resource list. See " + INFO_URL);
 
     private ResourceListValueMapper() {
 
     }
-
-    private final List<String> COMMENT = List.of(
-            "This is a resource list. In the `whitelist` field you can specify whether all entries will be accepted by",
-            "default or rejected.",
-            "`elements` is an array of rules. Each resource location that is matched against this list, will traverse these",
-            "rules from top to bottom. The first rule that matches a resource location determines its result.",
-            "Rules are resource locations, where asterisks (*) can be added to match any number of characters.",
-            "However an asterisk can not match a colon. The nly exception to this is the single asterisk which matches everything.",
-            "When a rule is matched, it will yield the result specified in `whitelist` as a result. To alter this",
-            "add a plus (+) or a minus (-) in front of the rule. This will make it a whitelist or blacklist rule respectively.",
-            "You can also add regex rules. These are objects with two keys: `allow` - a boolean that specifies whether this",
-            "is a whitelist or blacklist rule and `regex` - which is a regex that must match the resource location."
-    );
 
     @Override
     public Class<ResourceList> type() {
@@ -60,6 +66,12 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
 
     @Override
     public List<String> comment() {
-        return this.COMMENT;
+        return COMMENT;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<ResourceList> createEditor(ValidatorInfo<?> validator) {
+        return ConfigEditor.custom(ResourceList.WHITELIST, ResourceListContent::new);
     }
 }

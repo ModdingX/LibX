@@ -29,6 +29,7 @@ public class ModInit  {
     public static final String MODEL_TYPE = "net.minecraft.client.resources.model.BakedModel";
     public static final String REGISTRY_TYPE = "net.minecraft.core.Registry";
     public static final String CODEC_TYPE = "com.mojang.serialization.Codec";
+    public static final String MAP_CODEC_TYPE = "com.mojang.serialization.MapCodec";
     public static final String RECORD_CODEC_BUILDER_TYPE = "com.mojang.serialization.codecs.RecordCodecBuilder";
     public static final String DATA_PROVIDER_TYPE = "net.minecraft.data.DataProvider";
     public static final String DATA_GENERATOR_TYPE = "net.minecraft.data.DataGenerator";
@@ -104,6 +105,7 @@ public class ModInit  {
             JavaFileObject file = filer.createSourceFile(((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + "." + this.modClass.getSimpleName() + "$", this.modClass);
             Writer writer = file.openWriter();
             writer.write("package " + ((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + ";");
+            writer.write("@" + SuppressWarnings.class.getCanonicalName() + "({\"all\",\"unchecked\",\"rawtypes\"})");
             writer.write("public class " + this.modClass.getSimpleName() + "${");
             writer.write("private static " + ModX.class.getCanonicalName() + " mod=null;");
             if (!this.codecs.isEmpty()) {

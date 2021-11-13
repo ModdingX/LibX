@@ -28,18 +28,25 @@ pipeline {
             }
         }
 
-//        stage('Upload artifacts to CurseForge') {
-//            steps {
-//                echo 'Uploading to CurseForge'
-//                sh './gradlew curseforge'
-//            }
-//        }
+       stage('Upload artifacts to CurseForge') {
+           steps {
+               echo 'Uploading to CurseForge'
+               sh './gradlew curseforge'
+           }
+       }
+       
+       stage('Upload artifacts to Modrinth') {
+           steps {
+               echo 'Uploading to Modrinth'
+               sh './gradlew modrinth'
+           }
+       }
 
-        stage('Publish artifacts') {
-            steps {
-                echo 'Publishing'
-                sh './gradlew publish'
-            }
-        }
+       stage('Publish artifacts') {
+           steps {
+               echo 'Publishing'
+               sh './gradlew publish'
+           }
+       }
     }
 }

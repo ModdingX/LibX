@@ -4,9 +4,14 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.MapContent;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
 import java.util.Optional;
@@ -96,5 +101,11 @@ public class MapValueMapper<T> implements GenericValueMapper<Map<String, T>, Jso
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<Map<String, T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
+        return ConfigEditor.custom(Map.of(), map -> new MapContent<>(map, mapper.createEditor(ValidatorInfo.empty())));
     }
 }

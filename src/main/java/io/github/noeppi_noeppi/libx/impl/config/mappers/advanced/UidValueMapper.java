@@ -1,14 +1,47 @@
 package io.github.noeppi_noeppi.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonPrimitive;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.config.gui.InputProperties;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
 public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     
     public static final UidValueMapper INSTANCE = new UidValueMapper();
+    private static final InputProperties<UUID> INPUT = new InputProperties<>() {
+
+        @Override
+        public UUID defaultValue() {
+            return new UUID(0, 0);
+        }
+
+        @Override
+        public boolean canInputChar(char chr) {
+            return (chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'f') || (chr >= 'A' && chr <= 'F') || chr == '-';
+        }
+
+        @Override
+        public boolean isValid(String str) {
+            try {
+                //noinspection ResultOfMethodCallIgnored
+                UUID.fromString(str);
+                return true;
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+        }
+
+        @Override
+        public UUID valueOf(String str) {
+            return UUID.fromString(str);
+        }
+    };
 
     private UidValueMapper() {
 
@@ -45,5 +78,11 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     public void toNetwork(UUID value, FriendlyByteBuf buffer) {
         buffer.writeLong(value.getMostSignificantBits());
         buffer.writeLong(value.getLeastSignificantBits());
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<UUID> createEditor(ValidatorInfo<?> validator) {
+        return ConfigEditor.input(INPUT, validator);
     }
 }

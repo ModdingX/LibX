@@ -99,6 +99,7 @@ io/github/noeppi_noeppi/libx/inventory/container/ContainerBaseEntity createConta
 io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTile (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/tileentity/TileEntity; getBlockEntity
 io/github/noeppi_noeppi/libx/mod/registration/BlockTE getTileType ()Lnet/minecraft/tileentity/TileEntityType; getBlockEntityType
 io/github/noeppi_noeppi/libx/mod/registration/Colored <init> (Ljava/util/function/Function;)V colored
+io/github/noeppi_noeppi/libx/mod/registration/TileEntityBase markDispatchable ()V setDispatchable
 io/github/noeppi_noeppi/libx/render/ItemStackRenderer setWorldPosState (Lnet/minecraft/tileentity/TileEntity;Lnet/minecraft/block/BlockState;)V setLevelAndState
 io/github/noeppi_noeppi/libx/render/RenderHelper color (I)V rgb
 io/github/noeppi_noeppi/libx/util/ResourceList toJSON ()Lcom/google/gson/JsonObject; toJson

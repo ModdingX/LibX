@@ -2,9 +2,13 @@ package io.github.noeppi_noeppi.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,5 +61,11 @@ public class WrappedGenericMapper<T, E extends JsonElement, C> implements ValueM
     @Override
     public List<String> comment() {
         return this.parent.comment();
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<T> createEditor(ValidatorInfo<?> validator) {
+        return this.parent.createEditor(this.mapper, validator);
     }
 }

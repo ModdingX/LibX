@@ -4,9 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.config.GenericValueMapper;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ListContent;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.Optional;
@@ -93,5 +98,11 @@ public class ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray
             // We just try to pass the entire json to the child mapper.
             return correction.tryCorrect(json, mapper, ConfigCorrection.check(value -> value.size() == 1, value -> value.get(0))).map(ImmutableList::of);
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<List<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
+        return ConfigEditor.custom(List.of(), list -> new ListContent<>(list, mapper.createEditor(ValidatorInfo.empty())));
     }
 }

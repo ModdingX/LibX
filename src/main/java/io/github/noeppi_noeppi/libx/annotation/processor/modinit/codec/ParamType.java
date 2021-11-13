@@ -38,7 +38,7 @@ public class ParamType implements CodecType {
         if (param.asType().getKind() == TypeKind.DECLARED && param.asType() instanceof DeclaredType listType && env.sameErasure(param.asType(), env.forClass(List.class))) {
             List<? extends TypeMirror> generics = listType.getTypeArguments();
             if (generics.size() != 1) {
-                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for parameterized list type.");
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for parameterized list type.", param);
                 throw new FailureException();
             }
             codecFqn = getCodecFqn(generics.get(0), param, env);
@@ -106,7 +106,7 @@ public class ParamType implements CodecType {
                         String result = tryDetect(paramElement, boxed, codecClass, name, env, false);
                         if (result != null) return result;
                     }
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: No default codec field found. Tried [ " + String.join(", ", ModInit.DEFAULT_PARAM_CODEC_FIELDS) + " ] in class " + codecClass + ".");
+                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: No default codec field found. Tried [ " + String.join(", ", ModInit.DEFAULT_PARAM_CODEC_FIELDS) + " ] in class " + codecClass + ".", paramElement);
                     // Run tryDetect on the all fields again to get error messages as all of them failed.
                     for (String name : ModInit.DEFAULT_PARAM_CODEC_FIELDS) {
                         tryDetect(paramElement, boxed, codecClass, name, env, true);
@@ -165,7 +165,7 @@ public class ParamType implements CodecType {
         }
     }
 
-    private static boolean genericMatches(TypeMirror typeWithGeneric, TypeMirror compare, ModEnv env) {
+    public static boolean genericMatches(TypeMirror typeWithGeneric, TypeMirror compare, ModEnv env) {
         if (typeWithGeneric.getKind() == TypeKind.DECLARED && typeWithGeneric instanceof DeclaredType declared && declared.getTypeArguments().size() == 1) {
             TypeMirror generic = declared.getTypeArguments().get(0);
             return env.sameErasure(generic, compare);

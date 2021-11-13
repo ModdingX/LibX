@@ -3,9 +3,14 @@ package io.github.noeppi_noeppi.libx.impl.config.mappers.special;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
+import io.github.noeppi_noeppi.libx.impl.config.gui.editor.PairEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
@@ -84,5 +89,14 @@ public class PairValueMapper<A, B> implements ValueMapper<Pair<A, B>, JsonArray>
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ConfigEditor<Pair<A, B>> createEditor(ValidatorInfo<?> validator) {
+        return new PairEditor<>(
+                this.mapper1.createEditor(ValidatorInfo.empty()),
+                this.mapper2.createEditor(ValidatorInfo.empty())
+        );
     }
 }

@@ -17,6 +17,7 @@ public class CodecProcessor {
 
     public static final List<CodecType> CODECS = List.of(
             new RegistryType(),
+            new DynamicType(),
             new ParamType()
     );
     

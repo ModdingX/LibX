@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,6 +23,8 @@ public class RenderHelperItem {
      * Renders an {@link ItemStack item} into a gui. This allows to set the size of the item and whether the
      * amount should be included.
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.18")
     public static void renderItemGui(PoseStack poseStack, MultiBufferSource buffer, ItemStack stack, int x, int y, int size, boolean includeAmount) {
         if (!stack.isEmpty()) {
             BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, Minecraft.getInstance().player, 0);

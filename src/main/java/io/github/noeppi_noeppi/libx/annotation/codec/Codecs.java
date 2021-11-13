@@ -1,9 +1,9 @@
 package io.github.noeppi_noeppi.libx.annotation.codec;
 
 import com.mojang.serialization.Codec;
+import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
@@ -20,28 +20,14 @@ public class Codecs {
      * @param clazz The class of which the codec was created
      */
     public static <T> Codec<T> get(Class<? extends ModX> mod, Class<T> clazz) {
-        try {
-            Class<?> modInit;
-            try {
-                modInit = Class.forName(mod.getCanonicalName() + "$");
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException("Can't get codec for " + clazz + ": No generated code for mod " + mod + ".", e);
-            }
-            Field field;
-            try {
-                field = modInit.getDeclaredField("codecs");
-            } catch (NoSuchFieldException e) {
-                throw new IllegalStateException("Can't get codec for " + clazz + ": No generated codecs for mod " + mod + ".", e);
-            }
-            @SuppressWarnings("unchecked")
-            Map<Class<?>, Codec<?>> codecs = (Map<Class<?>, Codec<?>>) field.get(null);
-            if (!codecs.containsKey(clazz)) {
-                throw new IllegalStateException("Can't get codec for " + clazz + ": No codec found.");
-            }
+        Map<Class<?>, Codec<?>> map = ModInternal.get(mod).getCodecMap();
+        if (map == null) {
+            throw new IllegalStateException("Can't get codec for " + clazz + ": No generated codecs for mod " + mod + ".");
+        } else if (!map.containsKey(clazz)) {
+            throw new IllegalStateException("Can't get codec for " + clazz + ": No codec found.");
+        } else {
             //noinspection unchecked
-            return (Codec<T>) codecs.get(clazz);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Can't get codec for " + clazz, e);
+            return (Codec<T>) map.get(clazz);
         }
     }
 }

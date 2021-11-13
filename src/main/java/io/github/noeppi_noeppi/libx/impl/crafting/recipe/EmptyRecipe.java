@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.impl.crafting.recipe;
 import com.google.gson.JsonObject;
 import io.github.noeppi_noeppi.libx.LibX;
 import net.minecraft.core.NonNullList;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -116,5 +117,39 @@ public class EmptyRecipe implements Recipe<Container> {
         public void toNetwork(@Nonnull FriendlyByteBuf buffer, @Nonnull EmptyRecipe recipe) {
             //
         }
+    }
+    
+    public static FinishedRecipe empty(ResourceLocation id) {
+        return new FinishedRecipe() {
+
+            @Override
+            public void serializeRecipeData(@Nonnull JsonObject json) {
+                //
+            }
+
+            @Nonnull
+            @Override
+            public ResourceLocation getId() {
+                return id;
+            }
+
+            @Nonnull
+            @Override
+            public RecipeSerializer<?> getType() {
+                return Serializer.INSTANCE;
+            }
+
+            @Nullable
+            @Override
+            public JsonObject serializeAdvancement() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public ResourceLocation getAdvancementId() {
+                return null;
+            }
+        };
     }
 }

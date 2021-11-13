@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
+import io.github.noeppi_noeppi.libx.impl.RendererOnDataGenException;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -126,6 +128,10 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
      * Gets the instance of the ItemStackRenderer.
      */
     public static ItemStackRenderer get() {
-        return INSTANCE.get();
+        if (FMLLoader.getLaunchHandler().isData()) {
+            throw new RendererOnDataGenException();
+        } else {
+            return INSTANCE.get();
+        }
     }
 }

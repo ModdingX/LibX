@@ -2,11 +2,13 @@ package io.github.noeppi_noeppi.libx.impl.network;
 
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.network.NetworkX;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
 import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
@@ -29,8 +31,18 @@ public final class NetworkImpl extends NetworkX {
     }
 
     @Override
-    protected String getProtocolVersion() {
-        return "6";
+    protected Protocol getProtocol() {
+        // Not required on the client, so LibX can be used by client only mods
+        return new Protocol("8", ProtocolSide.VANILLA, ProtocolSide.REQUIRED);
+    }
+    
+    // Gets whether a packet can be currently sent.
+    // Will return false on clients connected to a non-LibX server
+    public boolean canSend() {
+        return DistExecutor.unsafeRunForDist(
+                () -> () -> Minecraft.getInstance().getConnection() != null && this.channel.isRemotePresent(Minecraft.getInstance().getConnection().getConnection()),
+                () -> () -> true
+        );
     }
 
     @Override
@@ -42,13 +54,13 @@ public final class NetworkImpl extends NetworkX {
     }
     
     public void updateBE(Level level, BlockPos pos) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide && this.canSend()) {
             this.updateBE(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), level, pos);
         }
     }
 
     void updateBE(PacketDistributor.PacketTarget target, Level level, BlockPos pos) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide && this.canSend()) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be == null)
                 return;
@@ -59,13 +71,13 @@ public final class NetworkImpl extends NetworkX {
             ResourceLocation id = be.getType().getRegistryName();
             if (id == null)
                 return;
-            this.instance.send(target, new BeUpdateSerializer.BeUpdateMessage(pos, id, nbt));
+            this.channel.send(target, new BeUpdateSerializer.BeUpdateMessage(pos, id, nbt));
         }
     }
 
     public void requestBE(Level level, BlockPos pos) {
-        if (level.isClientSide) {
-            this.instance.sendToServer(new BeRequestSerializer.BeRequestMessage(pos));
+        if (level.isClientSide && this.canSend()) {
+            this.channel.sendToServer(new BeRequestSerializer.BeRequestMessage(pos));
         }
     }
 }

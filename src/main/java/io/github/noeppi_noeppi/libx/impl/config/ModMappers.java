@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.config.*;
+import io.github.noeppi_noeppi.libx.impl.config.gui.ModConfigGuiAdapter;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.SimpleValueMappers;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.advanced.*;
 import io.github.noeppi_noeppi.libx.impl.config.mappers.generic.ListValueMapper;
@@ -17,16 +18,23 @@ import io.github.noeppi_noeppi.libx.impl.config.validators.SimpleValidators;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.JsonTypesafeMapper;
 import io.github.noeppi_noeppi.libx.impl.config.wrapper.WrappedGenericMapper;
 import io.github.noeppi_noeppi.libx.util.ClassUtil;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.OnlyIns;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 // special allowed types
 // enums
@@ -47,7 +55,7 @@ public class ModMappers {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = Set.of(
+    private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = Stream.of(
             SimpleValueMappers.BOOLEAN,
             SimpleValueMappers.BYTE,
             SimpleValueMappers.SHORT,
@@ -65,22 +73,23 @@ public class ModMappers {
             ResourceListValueMapper.INSTANCE,
             IngredientStackValueMapper.INSTANCE,
             UidValueMapper.INSTANCE
-    ).stream().collect(ImmutableMap.toImmutableMap(CommonValueMapper::type, Function.identity()));
+    ).collect(ImmutableMap.toImmutableMap(CommonValueMapper::type, Function.identity()));
 
     @SuppressWarnings("UnstableApiUsage")
-    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = Set.of(
+    private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = Stream.of(
             SimpleValidators.SHORT,
             SimpleValidators.INTEGER,
             SimpleValidators.LONG,
             SimpleValidators.FLOAT,
             SimpleValidators.DOUBLE
-    ).stream().collect(ImmutableMap.toImmutableMap(ConfigValidator::annotation, Function.identity()));
+    ).collect(ImmutableMap.toImmutableMap(ConfigValidator::annotation, Function.identity()));
 
 
     private final String modid;
     private final Map<Class<?>, CommonValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
     private final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> validators = Collections.synchronizedMap(new HashMap<>());
-
+    private ModConfigGuiAdapter adapter = null;
+    
     private ModMappers(String modid) {
         this.modid = modid;
     }
@@ -187,7 +196,7 @@ public class ModMappers {
         // Annotations will be proxies at runtime so we can't check classes for equality.
         if (Config.class.isAssignableFrom(validatorClass) || Group.class.isAssignableFrom(validatorClass)
                 || OnlyIn.class.isAssignableFrom(validatorClass) || OnlyIns.class.isAssignableFrom(validatorClass)) {
-            // Just in case someone register those...
+            // Just in case someone registers those...
             return null;
         } else {
             Optional<? extends ConfigValidator<?, ?>> validator = globalValidators.entrySet().stream()
@@ -205,6 +214,18 @@ public class ModMappers {
                 //noinspection unchecked
                 return (ConfigValidator<?, A>) validator.orElse(null);
             }
+        }
+    }
+    
+    public void initAdapter(ModLoadingContext context) {
+        if (this.adapter == null && FMLEnvironment.dist == Dist.CLIENT) {
+            this.adapter = new ModConfigGuiAdapter(this.modid, context.getActiveContainer());
+        }
+    }
+    
+    public void configRegistered() {
+        if (this.adapter != null) {
+            this.adapter.checkRegister();
         }
     }
 }

@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -25,12 +24,10 @@ public class ConfigState {
     
     private final ConfigImpl config;
     private final Map<ConfigKey, Object> values;
-    private final Set<ConfigGroup> groups;
 
-    public ConfigState(ConfigImpl config, ImmutableMap<ConfigKey, Object> values, ImmutableSet<ConfigGroup> groups) {
+    public ConfigState(ConfigImpl config, ImmutableMap<ConfigKey, Object> values) {
         this.config = config;
         this.values = values;
-        this.groups = groups;
     }
     
     public Object getValue(ConfigKey key) {
@@ -71,7 +68,7 @@ public class ConfigState {
             Files.createDirectories(path.getParent());
         }
         Writer writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        writer.write("{\n" + this.applyIndent(this.writeObject(keys == null ? this.values.keySet() : keys, this.groups, 0), "  ") + "\n}\n");
+        writer.write("{\n" + this.applyIndent(this.writeObject(keys == null ? this.values.keySet() : keys, this.config.groups, 0)) + "\n}\n");
         writer.close();
     }
     
@@ -119,7 +116,7 @@ public class ConfigState {
                 cg.comment.forEach(line -> builder.append("// ").append(line.replace('\n', ' ')).append("\n"));
             }
             builder.append("\"").append(quote(group)).append("\": {\n\n");
-            builder.append(this.applyIndent(this.writeObject(subGroups.get(group), subGroupInstances, pathStrip + 1), "  "));
+            builder.append(this.applyIndent(this.writeObject(subGroups.get(group), subGroupInstances, pathStrip + 1)));
             builder.append("\n}");
         }
         return builder.toString();
@@ -132,7 +129,7 @@ public class ConfigState {
         if (json.isJsonArray() && json.getAsJsonArray().size() == 0) {
             return "[]";
         }
-        if (json.isJsonArray() && json.getAsJsonArray().size() < 5) {
+        if (json.isJsonArray() && json.getAsJsonArray().size() <= 5) {
             //noinspection UnstableApiUsage
             List<JsonElement> list = Streams.stream(json.getAsJsonArray()).collect(Collectors.toList());
             if (list.stream().allMatch(this::isSimple)) {
@@ -143,14 +140,14 @@ public class ConfigState {
             String content = json.getAsJsonObject().entrySet().stream()
                     .map(e -> ConfigImpl.GSON.toJson(new JsonPrimitive(e.getKey())) + ": " + this.specialString(e.getValue()))
                     .collect(Collectors.joining(",\n")).trim();
-            return "{\n" + this.applyIndent(content, "  ") + "\n}";
+            return "{\n" + this.applyIndent(content) + "\n}";
         }
         if (json.isJsonArray()) {
             //noinspection UnstableApiUsage
             String content = Streams.stream(json.getAsJsonArray())
                     .map(this::specialString)
                     .collect(Collectors.joining(",\n")).trim();
-            return "[\n" + this.applyIndent(content, "  ") + "\n]";
+            return "[\n" + this.applyIndent(content) + "\n]";
         }
         if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber()) {
             Number number = json.getAsJsonPrimitive().getAsNumber();
@@ -180,8 +177,8 @@ public class ConfigState {
         }
     }
     
-    private String applyIndent(String str, @SuppressWarnings("SameParameterValue") String indentStr) {
-        return indentStr + str.replace("\n", "\n" + indentStr);
+    private String applyIndent(String str) {
+        return "  " + str.replace("\n", "\n" + "  ");
     }
 
     private static String quote(String str) {

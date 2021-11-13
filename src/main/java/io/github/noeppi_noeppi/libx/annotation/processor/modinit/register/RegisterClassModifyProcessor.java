@@ -19,20 +19,19 @@ public class RegisterClassModifyProcessor extends Processor {
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    public void run(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         for (Element element : roundEnv.getElementsAnnotatedWith(NoReg.class)) {
             if (element.getEnclosingElement().getAnnotation(RegisterClass.class) == null) {
-                this.messager.printMessage(Diagnostic.Kind.ERROR, "Can not exclude value from automatic registration outside class annotated with @RegisterClass", element);
+                this.messager().printMessage(Diagnostic.Kind.ERROR, "Can not exclude value from automatic registration outside class annotated with @RegisterClass", element);
             }
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(RegName.class)) {
             if (element.getEnclosingElement().getAnnotation(RegisterClass.class) == null) {
-                this.messager.printMessage(Diagnostic.Kind.ERROR, "Can not alter registry name outside class annotated with @RegisterClass", element);
+                this.messager().printMessage(Diagnostic.Kind.ERROR, "Can not alter registry name outside class annotated with @RegisterClass", element);
             }
             if (element.getAnnotation(NoReg.class) != null) {
-                this.messager.printMessage(Diagnostic.Kind.ERROR, "Can not alter registry name of ignored field.", element);
+                this.messager().printMessage(Diagnostic.Kind.ERROR, "Can not alter registry name of ignored field.", element);
             }
         }
-        return true;
     }
 }

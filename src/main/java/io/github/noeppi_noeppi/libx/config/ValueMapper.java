@@ -3,8 +3,11 @@ package io.github.noeppi_noeppi.libx.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
+import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigImpl;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 
@@ -65,4 +68,16 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
     default Optional<T> correct(JsonElement json, ConfigCorrection<T> correction) {
         return Optional.empty();
     }
+
+    /**
+     * Creates a {@link ConfigEditor} for this value mapper to display this config in the
+     * config menu. To display that this value can't be edited through the GUI, use
+     * {@link ConfigEditor#unsupported(Object)} with a default value that is used if for example
+     * elements of this type are created in a list.
+     * 
+     * @param validator Access to the current validator used. Can be used to create different
+     *                  editors based on validators.
+     */
+    @OnlyIn(Dist.CLIENT)
+    ConfigEditor<T> createEditor(ValidatorInfo<?> validator);
 }

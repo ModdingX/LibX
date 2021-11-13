@@ -129,7 +129,7 @@ public class PotionIngredient extends Ingredient {
                 potionItem = null;
             }
 
-            Potion potion = ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(buffer.readUtf()));
+            Potion potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(buffer.readUtf()));
             if (potion == null) {
                 potion = Potions.EMPTY;
             }
@@ -150,7 +150,7 @@ public class PotionIngredient extends Ingredient {
                 if (potionItem == null) potionItem = Items.AIR;
             }
             
-            Potion potion = ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(json.get("potion").getAsString()));
+            Potion potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(json.get("potion").getAsString()));
             if (potion == null) {
                 potion = Potions.EMPTY;
             }

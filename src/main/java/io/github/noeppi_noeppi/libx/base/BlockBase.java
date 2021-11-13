@@ -50,6 +50,6 @@ public class BlockBase extends Block implements Registerable {
      * Can be used to set client properties for the block item.
      */
     public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
-        
+
     }
 }
