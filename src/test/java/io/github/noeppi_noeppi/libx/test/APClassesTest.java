@@ -17,7 +17,7 @@ public class APClassesTest {
     public void testClasses() throws Throwable {
         for (Field field : Classes.class.getDeclaredFields()) {
             if (!Modifier.isPublic(field.getModifiers()) || !Modifier.isStatic(field.getModifiers()) || !Modifier.isFinal(field.getModifiers())) {
-                fail("Classes may only contain public static final fields: " + field.getName());
+                fail("The Classes class may only contain public static final fields: " + field.getName());
             } else if (field.getType() == String.class) {
                 testClass((String) field.get(null), "Class not found: " + field.getName());
             } else if (Collection.class.isAssignableFrom(field.getType())) {
