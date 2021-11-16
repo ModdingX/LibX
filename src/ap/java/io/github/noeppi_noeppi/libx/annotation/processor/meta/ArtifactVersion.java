@@ -1,7 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.meta;
 
-import org.jetbrains.annotations.NotNull;
-
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +21,7 @@ public record ArtifactVersion(List<List<String>> parts) implements Comparable<Ar
     }
 
     @Override
-    public int compareTo(@NotNull ArtifactVersion v) {
+    public int compareTo(@Nonnull ArtifactVersion v) {
         if (this.parts.isEmpty() && v.parts.isEmpty()) return 0;
         if (this.parts.isEmpty()) return -1;
         if (v.parts.isEmpty()) return 1;

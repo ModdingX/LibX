@@ -5,8 +5,8 @@ import io.github.noeppi_noeppi.libx.annotation.processor.Classes;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureException;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;

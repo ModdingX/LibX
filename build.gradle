@@ -13,13 +13,13 @@ configurations {
 }
 
 dependencies {
-    // Uses jetbrains annotations instead of jsr305 because they
-    // have CLASS retention
-    apCompileOnly 'org.jetbrains:annotations:23.0.0'
+    apCompileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 sourceSets {
-    ap
+    ap {
+        compileClasspath = configurations.apCompileOnlyResolvable
+    }
 }
 
 dependencies {
@@ -36,7 +36,16 @@ test {
     useJUnitPlatform()
 }
 
+jar {
+    from sourceSets.ap.output
+}
+
+sourceJarConfigure {
+    sourceSets.ap.java.srcDirs.forEach { additionalSourceDir it }
+}
+
 javadocConfigure {
+    from sourceSets.ap.java.sourceDirectories
     exclude '**.impl.*?'
     exclude '**.annotation.processor.*?'
 }

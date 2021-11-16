@@ -3,8 +3,8 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.FailureException;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;

@@ -2,8 +2,8 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 
 import io.github.noeppi_noeppi.libx.annotation.processor.Classes;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;

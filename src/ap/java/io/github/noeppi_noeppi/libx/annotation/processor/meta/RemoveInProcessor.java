@@ -32,7 +32,7 @@ public class RemoveInProcessor extends Processor {
                 continue;
             }
             if (!remove.minecraft().isEmpty()) {
-                ArtifactVersion minecraftVersion = LibXAPEnv.minecraftVersion(this);
+                ArtifactVersion minecraftVersion = ExternalProperties.minecraftVersion(this);
                 if (minecraftVersion != null) {
                     ArtifactVersion ver = ArtifactVersion.parse(remove.minecraft());
                     if (minecraftVersion.compareTo(ver) > 0) {
@@ -42,7 +42,7 @@ public class RemoveInProcessor extends Processor {
                 }
             }
             if (!remove.mod().isEmpty()) {
-                ArtifactVersion modVersion = LibXAPEnv.modVersion(this);
+                ArtifactVersion modVersion = ExternalProperties.modVersion(this);
                 if (modVersion != null) {
                     ArtifactVersion ver = ArtifactVersion.parse(remove.mod());
                     if (modVersion.compareTo(ver) > 0) {
