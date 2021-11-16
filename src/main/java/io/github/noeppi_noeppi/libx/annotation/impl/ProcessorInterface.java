@@ -1,9 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.impl;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
-import io.github.noeppi_noeppi.libx.util.LazyImmutableMap;
-import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -26,9 +23,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
-import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ProcessorInterface {
 
@@ -84,18 +79,5 @@ public class ProcessorInterface {
     
     public static <K, V> LazyMapBuilder<K, V> lazyMapBuilder() {
         return new LazyMapBuilder<>();
-    }
-    
-    public static class LazyMapBuilder<K, V> {
-        
-        private final ImmutableMap.Builder<K, LazyValue<V>> builder = ImmutableMap.builder();
-        
-        public void put(K k, Supplier<V> v) {
-            this.builder.put(k, new LazyValue<>(v));
-        }
-        
-        public Map<K, V> build() {
-            return new LazyImmutableMap<>(this.builder.build());
-        }
     }
 }

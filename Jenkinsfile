@@ -5,12 +5,22 @@ pipeline {
     tools {
         jdk 'java16'
     }
+    environment { 
+        MODGRADLE_CI = 'true'
+    }
     stages {
         stage('Clean') {
             steps {
                 echo 'Cleaning Project'
                 sh 'chmod +x gradlew'
                 sh './gradlew clean'
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                echo 'Testing'
+                sh './gradlew test'
             }
         }
 

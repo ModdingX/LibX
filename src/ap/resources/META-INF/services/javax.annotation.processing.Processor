@@ -1,0 +1,5 @@
+io.github.noeppi_noeppi.libx.annotation.processor.meta.ExperimentalProcessor
+io.github.noeppi_noeppi.libx.annotation.processor.meta.RemoveInProcessor
+io.github.noeppi_noeppi.libx.annotation.processor.misc.ConfigProcessor
+io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInitProcessor
+io.github.noeppi_noeppi.libx.annotation.processor.modinit.register.RegisterClassModifyProcessor

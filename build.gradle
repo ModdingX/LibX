@@ -1,28 +1,39 @@
-import net.minecraftforge.gradle.common.util.MavenArtifactDownloader
-
 buildscript {
-    apply from: 'https://raw.githubusercontent.com/noeppi-noeppi/ModUtils/v2/buildscript.gradle', to: buildscript
+    apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/buildscript.gradle', to: buildscript
 }
 
-apply from: 'https://raw.githubusercontent.com/noeppi-noeppi/ModUtils/v2/mod.gradle'
+apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/mod.gradle'
 
 apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.javadoc'
-apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.mergeartifact'
 apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.coremods'
 
-repositories {
-    maven { url = 'https://maven.melanx.de' }
-    maven { url = 'https://noeppi-noeppi.github.io/MinecraftUtilities/maven' }
+configurations {
+    apCompileOnly
+    apCompileOnlyResolvable.extendsFrom apCompileOnly
 }
 
 dependencies {
-    annotationProcessor "io.github.noeppi_noeppi.tools:LibXAP:${project.ap_version}"
-    implementation "io.github.noeppi_noeppi.tools:LibXAP:${project.ap_version}"
-    coremods 'io.github.noeppi_noeppi.misc:CoreModTypes:5.0.1-1'
+    // Uses jetbrains annotations instead of jsr305 because they
+    // have CLASS retention
+    apCompileOnly 'org.jetbrains:annotations:23.0.0'
 }
 
-mergeArtifacts {
-    include "io.github.noeppi_noeppi.tools:LibXAP:${project.ap_version}"
+sourceSets {
+    ap
+}
+
+dependencies {
+    annotationProcessor sourceSets.ap.output
+    implementation sourceSets.ap.output
+    
+    coremods 'io.github.noeppi_noeppi.misc:CoreModTypes:5.0.1-1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 javadocConfigure {
@@ -35,18 +46,10 @@ javadoc {
     options.destinationDirectory(file("build/docs/javadoc"))
     title("LibX ${base_version} JavaDoc")
     options.windowTitle("LibX ${base_version} JavaDoc")
-    options.header('<h3><a href="https://www.curseforge.com/minecraft/mc-mods/libx" target="_blank">CurseForge</a>' \
+    options.header('<h3><a href="https://noeppi-noeppi.github.io/WikiX" target="_blank">Wiki</a>' \
             + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
             + '<a href="https://github.com/noeppi-noeppi/LibX" target="_blank">GitHub</a></h2>')
     options.memberLevel = JavadocMemberLevel.PROTECTED
-}
-
-task javadocMeta(type: Javadoc) {
-    source file('src/main/java')
-    destinationDir file('build/docs/meta')
-    classpath = compileJava.classpath
-    options.doclet('io.github.noeppi_noeppi.tools.java_doclet_meta.Main')
-    options.docletpath(MavenArtifactDownloader.download(project, 'io.github.noeppi_noeppi.tools:JavaDocletMeta:0.0.4:fatjar', false))
 }
 
 // Performs checks for releases

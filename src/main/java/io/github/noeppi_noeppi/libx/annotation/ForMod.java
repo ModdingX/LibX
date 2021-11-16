@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.annotation;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraftforge.fml.common.Mod;
 
+// Not in the ap source set as it needs the ModX type bound.
 /**
  * Normally ModInit will infer the mod id and mod class from your {@link Mod @Mod}
  * annotation. However, if you have multiple mods in the same project you need to put
