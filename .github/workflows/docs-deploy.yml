@@ -24,11 +24,10 @@ jobs:
         run: './gradlew javadoc'
 
       - name: 'Deploy 🚀'
-        uses: 'JamesIves/github-pages-deploy-action@4.1.4'
+        uses: 'JamesIves/github-pages-deploy-action@4.1.7'
         with:
           branch: gh-pages
           folder: 'build/docs/javadoc'
           clean: true
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
           git-config-name: 'Github Actions'
           git-config-email: '<>'
