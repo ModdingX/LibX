@@ -5,9 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
@@ -30,7 +30,7 @@ public class NBTX {
      */
     @Nullable
     public static BlockPos getPos(CompoundTag nbt, String key) {
-        if (nbt.contains(key, Constants.NBT.TAG_INT_ARRAY)) {
+        if (nbt.contains(key, Tag.TAG_INT_ARRAY)) {
             int[] list = nbt.getIntArray(key);
             if (list.length == 3) {
                 return new BlockPos(list[0], list[1], list[2]);
@@ -61,7 +61,7 @@ public class NBTX {
      */
     @Nullable
     public static ResourceLocation getRL(CompoundTag nbt, String key) {
-        if (nbt.contains(key, Constants.NBT.TAG_STRING)) {
+        if (nbt.contains(key, Tag.TAG_STRING)) {
             return ResourceLocation.tryParse(nbt.getString(key));
         } else {
             return null;

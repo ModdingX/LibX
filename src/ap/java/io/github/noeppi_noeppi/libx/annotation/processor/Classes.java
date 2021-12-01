@@ -30,12 +30,17 @@ public class Classes {
     public static final Set<String> ALLOWED_REGISTRY_CODEC_TYPES = Set.of(
             "net.minecraft.world.level.dimension.DimensionType",
             "net.minecraft.world.level.biome.Biome",
-            "net.minecraft.world.level.levelgen.surfacebuilders.ConfiguredSurfaceBuilder",
             "net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver",
             "net.minecraft.world.level.levelgen.feature.ConfiguredFeature",
+            "net.minecraft.world.level.levelgen.placement.PlacedFeature",
             "net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature",
             "net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList",
             "net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool",
-            "net.minecraft.world.level.levelgen.NoiseGeneratorSettings"
+            "net.minecraft.world.level.levelgen.NoiseGeneratorSettings",
+            "net.minecraft.world.level.levelgen.synth.NormalNoise$NoiseParameters"
     );
+    
+    public static String sourceName(String cls) {
+        return cls.replace('$', '.');
+    }
 }

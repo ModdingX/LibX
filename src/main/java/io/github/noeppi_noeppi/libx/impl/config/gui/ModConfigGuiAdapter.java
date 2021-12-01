@@ -6,8 +6,8 @@ import io.github.noeppi_noeppi.libx.impl.config.gui.screen.ConfigSelectScreen;
 import io.github.noeppi_noeppi.libx.impl.config.gui.screen.RootConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fmlclient.ConfigGuiHandler;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;

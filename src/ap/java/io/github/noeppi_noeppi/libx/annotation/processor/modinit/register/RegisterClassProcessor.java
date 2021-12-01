@@ -26,7 +26,7 @@ public class RegisterClassProcessor {
         }
         RegisterClass registerClass = element.getAnnotation(RegisterClass.class);
         ModInit mod = env.getMod(element);
-        if (!env.subTypeErasure(mod.modClass.asType(), env.elements().getTypeElement(Classes.MODX_REGISTRATION).asType())) {
+        if (!env.subTypeErasure(mod.modClass.asType(), env.forClass(Classes.MODX_REGISTRATION))) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@RegisterClass used with a mod that is not a subtype of ModXRegistration", element);
             return;
         }

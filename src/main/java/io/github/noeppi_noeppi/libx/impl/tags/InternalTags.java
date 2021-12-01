@@ -55,26 +55,26 @@ public class InternalTags {
 
         private static final Map<Tag.Named<Block>, Tag.Named<Block>> TAGS = new HashMap<>();
 
-        public static Tag.Named<Block> WOODEN_BUTTONS = wrap(BlockTags.WOODEN_BUTTONS);
-        public static Tag.Named<Block> BUTTONS = wrap(BlockTags.BUTTONS);
-        public static Tag.Named<Block> WOODEN_DOORS = wrap(BlockTags.WOODEN_DOORS);
-        public static Tag.Named<Block> WOODEN_STAIRS = wrap(BlockTags.WOODEN_STAIRS);
-        public static Tag.Named<Block> WOODEN_SLABS = wrap(BlockTags.WOODEN_SLABS);
-        public static Tag.Named<Block> WOODEN_FENCES = wrap(BlockTags.WOODEN_FENCES);
-        public static Tag.Named<Block> PRESSURE_PLATES = wrap(BlockTags.PRESSURE_PLATES);
-        public static Tag.Named<Block> WOODEN_PRESSURE_PLATES = wrap(BlockTags.WOODEN_PRESSURE_PLATES);
-        public static Tag.Named<Block> STONE_PRESSURE_PLATES = wrap(BlockTags.STONE_PRESSURE_PLATES);
-        public static Tag.Named<Block> WOODEN_TRAPDOORS = wrap(BlockTags.WOODEN_TRAPDOORS);
-        public static Tag.Named<Block> DOORS = wrap(BlockTags.DOORS);
-        public static Tag.Named<Block> STAIRS = wrap(BlockTags.STAIRS);
-        public static Tag.Named<Block> SLABS = wrap(BlockTags.SLABS);
-        public static Tag.Named<Block> WALLS = wrap(BlockTags.WALLS);
-        public static Tag.Named<Block> TRAPDOORS = wrap(BlockTags.TRAPDOORS);
-        public static Tag.Named<Block> FENCES = wrap(BlockTags.FENCES);
-        public static Tag.Named<Block> STANDING_SIGNS = wrap(BlockTags.STANDING_SIGNS);
-        public static Tag.Named<Block> WALL_SIGNS = wrap(BlockTags.WALL_SIGNS);
-        public static Tag.Named<Block> SIGNS = wrap(BlockTags.SIGNS);
-        public static Tag.Named<Block> FENCE_GATES = wrap(BlockTags.FENCE_GATES);
+        public static final Tag.Named<Block> WOODEN_BUTTONS = wrap(BlockTags.WOODEN_BUTTONS);
+        public static final Tag.Named<Block> BUTTONS = wrap(BlockTags.BUTTONS);
+        public static final Tag.Named<Block> WOODEN_DOORS = wrap(BlockTags.WOODEN_DOORS);
+        public static final Tag.Named<Block> WOODEN_STAIRS = wrap(BlockTags.WOODEN_STAIRS);
+        public static final Tag.Named<Block> WOODEN_SLABS = wrap(BlockTags.WOODEN_SLABS);
+        public static final Tag.Named<Block> WOODEN_FENCES = wrap(BlockTags.WOODEN_FENCES);
+        public static final Tag.Named<Block> PRESSURE_PLATES = wrap(BlockTags.PRESSURE_PLATES);
+        public static final Tag.Named<Block> WOODEN_PRESSURE_PLATES = wrap(BlockTags.WOODEN_PRESSURE_PLATES);
+        public static final Tag.Named<Block> STONE_PRESSURE_PLATES = wrap(BlockTags.STONE_PRESSURE_PLATES);
+        public static final Tag.Named<Block> WOODEN_TRAPDOORS = wrap(BlockTags.WOODEN_TRAPDOORS);
+        public static final Tag.Named<Block> DOORS = wrap(BlockTags.DOORS);
+        public static final Tag.Named<Block> STAIRS = wrap(BlockTags.STAIRS);
+        public static final Tag.Named<Block> SLABS = wrap(BlockTags.SLABS);
+        public static final Tag.Named<Block> WALLS = wrap(BlockTags.WALLS);
+        public static final Tag.Named<Block> TRAPDOORS = wrap(BlockTags.TRAPDOORS);
+        public static final Tag.Named<Block> FENCES = wrap(BlockTags.FENCES);
+        public static final Tag.Named<Block> STANDING_SIGNS = wrap(BlockTags.STANDING_SIGNS);
+        public static final Tag.Named<Block> WALL_SIGNS = wrap(BlockTags.WALL_SIGNS);
+        public static final Tag.Named<Block> SIGNS = wrap(BlockTags.SIGNS);
+        public static final Tag.Named<Block> FENCE_GATES = wrap(BlockTags.FENCE_GATES);
 
         private static Tag.Named<Block> wrap(Tag.Named<Block> tag) {
             Tag.Named<Block> newTag = BlockTags.bind(LibX.getInstance().resource("impl_" + tag.getName().getPath()).toString());

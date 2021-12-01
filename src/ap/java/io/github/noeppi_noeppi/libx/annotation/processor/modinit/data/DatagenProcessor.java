@@ -21,7 +21,7 @@ public class DatagenProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Parent of element annotated with @Datagen is not a package", element);
             return;
         }
-        if (!env.subTypeErasure(element.asType(), env.elements().getTypeElement(Classes.DATA_PROVIDER).asType())) {
+        if (!env.subTypeErasure(element.asType(), env.forClass(Classes.DATA_PROVIDER))) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@Datagen can only be used on data providers.", element);
             return;
         }
@@ -48,11 +48,11 @@ public class DatagenProcessor {
     
     private static DatagenEntry.Arg getArg(VariableElement param, ModEnv env) {
         TypeMirror type = param.asType();
-        if (env.subTypeErasure(type, env.elements().getTypeElement(Classes.MODX).asType())) {
+        if (env.subTypeErasure(type, env.forClass(Classes.MODX))) {
             return DatagenEntry.Arg.MOD;
-        } else if (env.subTypeErasure(type, env.elements().getTypeElement(Classes.DATA_GENERATOR).asType())) {
+        } else if (env.subTypeErasure(type, env.forClass(Classes.DATA_GENERATOR))) {
             return DatagenEntry.Arg.GENERATOR;
-        } else if (env.subTypeErasure(type, env.elements().getTypeElement(Classes.DATA_FILE_HELPER).asType())) {
+        } else if (env.subTypeErasure(type, env.forClass(Classes.DATA_FILE_HELPER))) {
             return DatagenEntry.Arg.FILE_HELPER;
         } else {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Constructor in datagen class may only have specific parameters..", param);

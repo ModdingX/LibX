@@ -54,7 +54,6 @@ public class ModMappers {
         }
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = Stream.of(
             SimpleValueMappers.BOOLEAN,
             SimpleValueMappers.BYTE,
@@ -75,7 +74,6 @@ public class ModMappers {
             UidValueMapper.INSTANCE
     ).collect(ImmutableMap.toImmutableMap(CommonValueMapper::type, Function.identity()));
 
-    @SuppressWarnings("UnstableApiUsage")
     private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = Stream.of(
             SimpleValidators.SHORT,
             SimpleValidators.INTEGER,

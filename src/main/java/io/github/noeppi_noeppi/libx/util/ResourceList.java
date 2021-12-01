@@ -269,7 +269,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         return parts;
     }
     
-    private interface Rule {
+    private sealed interface Rule permits SimpleRule, RegexRule {
 
         Boolean test(ResourceLocation rl);
         JsonElement toJson();
@@ -277,7 +277,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         RuleEntry getEntry();
     }
 
-    private class SimpleRule implements Rule {
+    private final class SimpleRule implements Rule {
 
         @Nullable
         private final Boolean allow;
@@ -345,7 +345,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         }
     }
     
-    private class RegexRule implements Rule {
+    private final class RegexRule implements Rule {
 
         private final Boolean allow;
         private final String regex;
@@ -400,7 +400,6 @@ public class ResourceList implements Predicate<ResourceLocation> {
         public final boolean fullWildcard;
         
         public WildcardString(List<String> parts) {
-            //noinspection UnstableApiUsage
             ImmutableList<String> partList = parts.stream()
                     .map(String::trim)
                     .filter(str -> !str.isEmpty())

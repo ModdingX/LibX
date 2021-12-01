@@ -81,14 +81,14 @@ public class ModInit  {
             writer.write("package " + ((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + ";");
             writer.write("@" + SuppressWarnings.class.getCanonicalName() + "({\"all\",\"unchecked\",\"rawtypes\"})");
             writer.write("public class " + this.modClass.getSimpleName() + "${");
-            writer.write("private static " + Classes.MODX + " mod=null;");
+            writer.write("private static " + Classes.sourceName(Classes.MODX) + " mod=null;");
             if (!this.codecs.isEmpty()) {
-                writer.write("public static final " + Map.class.getCanonicalName() + "<Class<?>," + Classes.CODEC + "<?>>codecs=buildCodecs();");
-                writer.write("private static final " + Map.class.getCanonicalName() + "<Class<?>," + Classes.CODEC + "<?>>buildCodecs(){");
-                writer.write(Classes.LAZY_MAP_BUILDER + " builder=" + Classes.PROCESSOR_INTERFACE + ".lazyMapBuilder();");
+                writer.write("public static final " + Map.class.getCanonicalName() + "<Class<?>," + Classes.sourceName(Classes.CODEC) + "<?>>codecs=buildCodecs();");
+                writer.write("private static final " + Map.class.getCanonicalName() + "<Class<?>," + Classes.sourceName(Classes.CODEC) + "<?>>buildCodecs(){");
+                writer.write(Classes.sourceName(Classes.LAZY_MAP_BUILDER) + " builder=" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".lazyMapBuilder();");
                 for (GeneratedCodec codec : this.codecs) {
                     writer.write("builder.put(" + codec.fqn() + ".class,");
-                    writer.write("() -> " + Classes.RECORD_CODEC_BUILDER + ".<" + codec.fqn() + ">create(instance->");
+                    writer.write("() -> " + Classes.sourceName(Classes.RECORD_CODEC_BUILDER) + ".<" + codec.fqn() + ">create(instance->");
                     writer.write("instance.group(");
                     for (int i = 0; i < codec.params().size(); i++) {
                         GeneratedCodec.CodecElement param = codec.params().get(i);
@@ -124,31 +124,31 @@ public class ModInit  {
                 writer.write("return builder.build();");
                 writer.write("}");
             }
-            writer.write("public static void init(" + Classes.MODX + " mod){");
+            writer.write("public static void init(" + Classes.sourceName(Classes.MODX) + " mod){");
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
             for (RegisteredMapper mapper : this.configMappers) {
-                writer.write(Classes.CONFIG_MANAGER + ".registerValueMapper(\"" + quote(this.modid) + "\",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
+                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerValueMapper(\"" + quote(this.modid) + "\",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
             }
             for (RegisteredConfig config : this.configs) {
-                writer.write(Classes.CONFIG_MANAGER + ".registerConfig(" + Classes.PROCESSOR_INTERFACE + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
+                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerConfig(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
             }
             if (!allReg.isEmpty()) {
-                writer.write("((" + Classes.MODX_REGISTRATION + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
+                writer.write("((" + Classes.sourceName(Classes.MODX_REGISTRATION) + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
             }
             if (!this.models.isEmpty()) {
                 writer.write("net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT,()->()->{");
-                writer.write(Classes.PROCESSOR_INTERFACE + ".addModListener(net.minecraftforge.client.event.ModelRegistryEvent.class," + this.modClass.getSimpleName() + "$::registerModels);");
-                writer.write(Classes.PROCESSOR_INTERFACE + ".addModListener(net.minecraftforge.client.event.ModelBakeEvent.class," + this.modClass.getSimpleName() + "$::bakeModels);");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(net.minecraftforge.client.event.ModelRegistryEvent.class," + this.modClass.getSimpleName() + "$::registerModels);");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(net.minecraftforge.client.event.ModelBakeEvent.class," + this.modClass.getSimpleName() + "$::bakeModels);");
                 writer.write("});");
             }
             if (!this.datagen.isEmpty()) {
-                writer.write(Classes.PROCESSOR_INTERFACE + ".addModListener(net.minecraftforge.forge.event.lifecycle.GatherDataEvent.class," + this.modClass.getSimpleName() + "$::gatherData);");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(net.minecraftforge.forge.event.lifecycle.GatherDataEvent.class," + this.modClass.getSimpleName() + "$::gatherData);");
             }
             writer.write("}");
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
                 for (RegistrationEntry entry : allReg) {
-                    writer.write("((" + Classes.MODX_REGISTRATION + ")mod).register(\"" + quote(entry.registryName()) + "\"," + entry.fqn() + ");");
+                    writer.write("((" + Classes.sourceName(Classes.MODX_REGISTRATION) + ")mod).register(\"" + quote(entry.registryName()) + "\"," + entry.fqn() + ");");
                 }
                 writer.write("}");
             }
@@ -156,13 +156,13 @@ public class ModInit  {
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void registerModels(net.minecraftforge.client.event.ModelRegistryEvent event){");
                 for (LoadableModel model : this.models) {
-                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + Classes.PROCESSOR_INTERFACE + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
+                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
                 }
                 writer.write("}");
                 writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
                 writer.write("private static void bakeModels(net.minecraftforge.client.event.ModelBakeEvent event){");
                 for (LoadableModel model : this.models) {
-                    writer.write(model.classFqn() + "." + quote(model.fieldName()) + "=event.getModelRegistry().get(" + Classes.PROCESSOR_INTERFACE + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
+                    writer.write(model.classFqn() + "." + quote(model.fieldName()) + "=event.getModelRegistry().get(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
                 }
                 writer.write("}");
             }
@@ -171,10 +171,10 @@ public class ModInit  {
                 for (DatagenEntry entry : this.datagen) {
                     String ctorArgs = entry.ctorArgs().stream().map(t -> switch (t) {
                                 case MOD -> this.modClass.getSimpleName() + "$.mod";
-                                case GENERATOR -> Classes.PROCESSOR_INTERFACE + ".getDataGenerator(event)";
-                                case FILE_HELPER -> Classes.PROCESSOR_INTERFACE + ".getDataFileHelper(event)";
+                                case GENERATOR -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataGenerator(event)";
+                                case FILE_HELPER -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataFileHelper(event)";
                             }).collect(Collectors.joining(","));
-                    writer.write(Classes.PROCESSOR_INTERFACE + ".addDataProvider(event,new " + entry.classFqn() + "(" + ctorArgs + "));");
+                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addDataProvider(event,new " + entry.classFqn() + "(" + ctorArgs + "));");
                 }
                 writer.write("}");
             }

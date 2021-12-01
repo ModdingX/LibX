@@ -21,9 +21,7 @@ public class LazyImmutableMap<K, V> implements Map<K, V> {
 
     public LazyImmutableMap(ImmutableMap<K, LazyValue<V>> map) {
         this.map = map;
-        //noinspection UnstableApiUsage
         this.values = new LazyValue<>(() -> map.values().stream().map(LazyValue::get).collect(ImmutableList.toImmutableList()));
-        //noinspection UnstableApiUsage
         this.entries = new LazyValue<>(() -> map.entrySet().stream().map(e -> Pair.of(e.getKey(), e.getValue().get())).collect(ImmutableSet.toImmutableSet()));
     }
 
@@ -57,7 +55,8 @@ public class LazyImmutableMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(Object key) {
-        return this.map.get(key).get();
+        LazyValue<V> value = this.map.get(key);
+        return value == null ? null : value.get();
     }
 
     @Override

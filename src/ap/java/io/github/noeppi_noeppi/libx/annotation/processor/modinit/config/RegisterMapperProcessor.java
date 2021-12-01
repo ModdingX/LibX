@@ -21,8 +21,8 @@ public class RegisterMapperProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Parent of element annotated with @RegisterMapper is not a package", element);
             return;
         }
-        boolean simple = env.subTypeErasure(element.asType(), env.elements().getTypeElement(Classes.VALUE_MAPPER).asType());
-        boolean generic = env.subTypeErasure(element.asType(), env.elements().getTypeElement(Classes.GENERIC_VALUE_MAPPER).asType());
+        boolean simple = env.subTypeErasure(element.asType(), env.forClass(Classes.VALUE_MAPPER));
+        boolean generic = env.subTypeErasure(element.asType(), env.forClass(Classes.GENERIC_VALUE_MAPPER));
         if (simple && generic) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't register a value mapper that is both simple and generic.", element);
             return;

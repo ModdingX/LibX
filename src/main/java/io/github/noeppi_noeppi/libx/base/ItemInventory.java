@@ -3,11 +3,11 @@ package io.github.noeppi_noeppi.libx.base;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -49,7 +49,7 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
                 stack.setTag(nbt);
             }));
             CompoundTag nbt = stack.getTag();
-            if (nbt != null && nbt.contains("Inventory", Constants.NBT.TAG_COMPOUND)) {
+            if (nbt != null && nbt.contains("Inventory", Tag.TAG_COMPOUND)) {
                 handler.get().deserializeNBT(nbt.getCompound("Inventory"));
             }
             return handler.get();

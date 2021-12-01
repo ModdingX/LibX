@@ -130,7 +130,6 @@ public class ConfigState {
             return "[]";
         }
         if (json.isJsonArray() && json.getAsJsonArray().size() <= 5) {
-            //noinspection UnstableApiUsage
             List<JsonElement> list = Streams.stream(json.getAsJsonArray()).collect(Collectors.toList());
             if (list.stream().allMatch(this::isSimple)) {
                 return "[ " + list.stream().map(ConfigImpl.GSON::toJson).collect(Collectors.joining(", ")) + " ]";
@@ -143,7 +142,6 @@ public class ConfigState {
             return "{\n" + this.applyIndent(content) + "\n}";
         }
         if (json.isJsonArray()) {
-            //noinspection UnstableApiUsage
             String content = Streams.stream(json.getAsJsonArray())
                     .map(this::specialString)
                     .collect(Collectors.joining(",\n")).trim();

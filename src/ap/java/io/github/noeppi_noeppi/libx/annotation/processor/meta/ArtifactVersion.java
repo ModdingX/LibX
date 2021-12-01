@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public record ArtifactVersion(List<List<String>> parts) implements Comparable<ArtifactVersion> {
 
-    public static ArtifactVersion INVALID = new ArtifactVersion(List.of());
+    public static final ArtifactVersion INVALID = new ArtifactVersion(List.of());
 
     @Override
     public boolean equals(Object other) {

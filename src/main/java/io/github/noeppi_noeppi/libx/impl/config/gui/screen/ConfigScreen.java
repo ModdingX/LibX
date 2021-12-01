@@ -32,7 +32,6 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
         super(title, manager, true);
         this.display = manager.display;
         this.manager = manager;
-        //noinspection UnstableApiUsage
         this.keys = elements.entrySet().stream()
                 .map(e -> Pair.of(e.getKey(), (List < T >) ImmutableList.copyOf(e.getValue())))
                 .collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));

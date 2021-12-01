@@ -24,6 +24,7 @@ public class LootData {
             entry.apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(damage)));
         }
         if (stack.hasTag()) {
+            //noinspection deprecation
             entry.apply(SetNbtFunction.setTag(stack.getOrCreateTag()));
         }
         return entry;

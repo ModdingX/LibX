@@ -13,11 +13,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -45,7 +45,7 @@ public class GenericMenu extends MenuBase {
             EMPTY_VALIDATOR, (slot, stack) -> true
     ));
 
-    public static final MenuType<GenericMenu> TYPE = IForgeContainerType.create((id, playerInv, buffer) -> {
+    public static final MenuType<GenericMenu> TYPE = IForgeMenuType.create((id, playerInv, buffer) -> {
         int size = buffer.readVarInt();
         ResourceLocation validatorId = buffer.readResourceLocation();
         BiPredicate<Integer, ItemStack> validator;

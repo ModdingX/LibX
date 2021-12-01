@@ -10,6 +10,7 @@ import net.minecraftforge.forgespi.language.IModInfo;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,7 +38,7 @@ public class ModListCommand implements Command<CommandSourceStack> {
                         ": " + mod.getDescription().split("\n")[0].trim() : ""))
                 .map(TextComponent::new);
         //noinspection UnstableApiUsage
-        List<MutableComponent> lines = Streams.mapWithIndex(lineStream, (line, idx) -> line.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(idx % 2 == 0 ? 0xFFFF00 : 0xFF00F6))))
+        List<MutableComponent> lines = Streams.mapWithIndex(lineStream, (line, idx) -> Objects.requireNonNull(line).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(idx % 2 == 0 ? 0xFFFF00 : 0xFF00F6))))
                 .map(line -> line.withStyle(Style.EMPTY.withHoverEvent(COPY_MODLIST)))
                 .collect(Collectors.toList());
         String copyToClipboard = lines.stream()

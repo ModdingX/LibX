@@ -66,7 +66,6 @@ public class EnumObjects<E extends Enum<E>, T> implements Registerable {
 
     @Override
     public Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
-        //noinspection UnstableApiUsage
         return this.map.entrySet().stream()
                 .map(e -> Pair.of(e.getKey().name().toLowerCase(Locale.ROOT), e.getValue()))
                 .collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));

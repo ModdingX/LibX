@@ -76,31 +76,31 @@ public class ParamType implements CodecType {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for the void, null or none type.", paramElement);
             return null;
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.BOOLEAN) {
-            return Classes.CODEC + ".BOOL";
+            return Classes.sourceName(Classes.CODEC) + ".BOOL";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.BYTE) {
-            return Classes.CODEC + ".BYTE";
+            return Classes.sourceName(Classes.CODEC) + ".BYTE";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.CHAR) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for the char type.", paramElement);
             return null;
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.SHORT) {
-            return Classes.CODEC + ".SHORT";
+            return Classes.sourceName(Classes.CODEC) + ".SHORT";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.INT) {
-            return Classes.CODEC + ".INT";
+            return Classes.sourceName(Classes.CODEC) + ".INT";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.LONG) {
-            return Classes.CODEC + ".LONG";
+            return Classes.sourceName(Classes.CODEC) + ".LONG";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.FLOAT) {
-            return Classes.CODEC + ".FLOAT";
+            return Classes.sourceName(Classes.CODEC) + ".FLOAT";
         } else if (fieldName == null && codecClassUnboxed.getKind() == TypeKind.DOUBLE) {
-            return Classes.CODEC + ".DOUBLE";
+            return Classes.sourceName(Classes.CODEC) + ".DOUBLE";
         } else {
             if (fieldName == null && env.sameErasure(codecClass, env.forClass(String.class))) {
-                return Classes.CODEC + ".STRING";
+                return Classes.sourceName(Classes.CODEC) + ".STRING";
             } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(ByteBuffer.class))) {
-                return Classes.CODEC + ".BYTE_BUFFER";
+                return Classes.sourceName(Classes.CODEC) + ".BYTE_BUFFER";
             } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(IntStream.class))) {
-                return Classes.CODEC + ".INT_STREAM";
+                return Classes.sourceName(Classes.CODEC) + ".INT_STREAM";
             } else if (fieldName == null && env.sameErasure(codecClass, env.forClass(LongStream.class))) {
-                return Classes.CODEC + ".LONG_STREAM";
+                return Classes.sourceName(Classes.CODEC) + ".LONG_STREAM";
             } else {
                 if (fieldName == null) {
                     for (String name : ModInit.DEFAULT_PARAM_CODEC_FIELDS) {
@@ -144,7 +144,7 @@ public class ParamType implements CodecType {
             }
             return null;
         }
-        if (!env.sameErasure(fieldElem.asType(), env.elements().getTypeElement(Classes.CODEC).asType())) {
+        if (!env.sameErasure(fieldElem.asType(), env.forClass(Classes.CODEC))) {
             if (fail) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get codec for parameter: " + typeElem.asType() + "." + fieldName + " is defined but not a Codec.", paramElement);
             }

@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -82,7 +81,7 @@ public abstract class ModXRegistration extends ModX {
             method.setAccessible(true);
             method.invoke(FMLJavaModLoadingContext.get().getModEventBus(), EventPriority.NORMAL, (Predicate<Object>) obj -> true, RegistryEvent.Register.class, (Consumer<RegistryEvent.Register<?>>) this::onRegistry);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Could not add generic listener to listen to all registry events for mod " + modid + ".", e);
+            throw new RuntimeException("Could not add generic listener to listen to all registry events for mod " + this.modid + ".", e);
         }
         
         // Initialise the registration system.
@@ -92,12 +91,6 @@ public abstract class ModXRegistration extends ModX {
         
         // Call the generated code here as well
         ModInternal.get(this).callGeneratedCode();
-    }
-
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.18")
-    protected ModXRegistration(String modid, @Nullable CreativeModeTab tab) {
-        this(tab);
     }
 
     /**

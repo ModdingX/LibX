@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.mod;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
@@ -76,12 +75,6 @@ public abstract class ModX {
         if (!(this instanceof ModXRegistration)) {
             ModInternal.get(this).callGeneratedCode();
         }
-    }
-    
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.18")
-    protected ModX(String modid, @Nullable CreativeModeTab tab) {
-        this(tab);
     }
     
     /**

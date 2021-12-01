@@ -50,8 +50,8 @@ public class ModInitProcessor extends Processor implements ModEnv {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new HashSet<>(super.getSupportedAnnotationTypes());
-        set.add(Classes.MOD);
-        set.add(Classes.FOR_MOD);
+        set.add(Classes.sourceName(Classes.MOD));
+        set.add(Classes.sourceName(Classes.FOR_MOD));
         return set;
     }
 
@@ -62,7 +62,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
         this.defaultMod = null;
         
         {
-            TypeElement modAnnotation = this.elements().getTypeElement(Classes.MOD);
+            TypeElement modAnnotation = this.typeElement(Classes.MOD);
             Set<? extends Element> elems = roundEnv.getElementsAnnotatedWith(modAnnotation);
             if (elems.size() == 1) {
                 Element elem = elems.iterator().next();
@@ -143,7 +143,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
     private ModInit getMod(Element element, Element root) {
         List<? extends AnnotationMirror> annotations = element.getAnnotationMirrors();
         for (AnnotationMirror mirror : annotations) {
-            if (this.sameErasure(mirror.getAnnotationType().asElement().asType(), this.elements().getTypeElement(Classes.FOR_MOD).asType())) {
+            if (this.sameErasure(mirror.getAnnotationType().asElement().asType(), this.forClass(Classes.FOR_MOD))) {
                 Object typeValue = null;
                 for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : mirror.getElementValues().entrySet()) {
                     if ("value".equals(entry.getKey().getSimpleName().toString())) {
@@ -183,13 +183,13 @@ public class ModInitProcessor extends Processor implements ModEnv {
             return this.modInits.get(this.defaultModid);
         } else {
             ModInitProcessor.this.messager().printMessage(Diagnostic.Kind.ERROR, "Could not infer modid for element. Use an @ForMod annotation.", root);
-            return new ModInit("", ModInitProcessor.this.elements().getTypeElement(Classes.MODX), ModInitProcessor.this.messager());
+            return new ModInit("", this.typeElement(Classes.MODX), ModInitProcessor.this.messager());
         }
     }
     
     private String modidFromAnnotation(Element element) {
         for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
-            if (this.sameErasure(this.elements().getTypeElement(Classes.MOD).asType(), mirror.getAnnotationType())) {
+            if (this.sameErasure(this.forClass(Classes.MOD), mirror.getAnnotationType())) {
                 //noinspection OptionalGetWithoutIsPresent
                 return mirror.getElementValues().entrySet().stream()
                         .filter(e -> e.getKey().getSimpleName().contentEquals("value"))

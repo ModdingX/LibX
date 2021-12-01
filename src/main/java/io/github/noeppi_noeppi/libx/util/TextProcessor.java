@@ -50,7 +50,6 @@ public class TextProcessor {
      * @return A list of components. Each entry represents one line in the text.
      */
     public List<Component> process(String text) {
-        //noinspection UnstableApiUsage
         return Arrays.stream(text.split("\\$\\((?:n|newline)\\)"))
                 .map(String::trim)
                 .map(this::processLine)

@@ -46,13 +46,13 @@ public class ConfigProcessor extends Processor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new HashSet<>(super.getSupportedAnnotationTypes());
-        set.add(Classes.CONFIG);
+        set.add(Classes.sourceName(Classes.CONFIG));
         return set;
     }
 
     @Override
     public void run(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(this.elements().getTypeElement(Classes.CONFIG))) {
+        for (Element element : roundEnv.getElementsAnnotatedWith(this.typeElement(Classes.CONFIG))) {
             if (this.isSuppressed(element, "config")) continue;
 
             if (element.getKind() != ElementKind.FIELD || !element.getModifiers().contains(Modifier.STATIC) ||

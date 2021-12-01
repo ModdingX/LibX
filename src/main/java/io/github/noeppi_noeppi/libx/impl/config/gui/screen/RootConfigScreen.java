@@ -26,20 +26,17 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
                 map.computeIfAbsent("", k -> new ArrayList<>()).add(key);
             } else {
                 String categoryId = String.join(".", key.path.subList(0, key.path.size() - 1));
-                categories.computeIfAbsent(categoryId, k -> {
-                    //noinspection UnstableApiUsage
-                    return config.groups.stream()
-                            .filter(group -> categoryId.equals(String.join(".", group.path)))
-                            .findFirst().map(group -> new BuiltCategory(
-                                    String.join(".", group.path),
-                                    new TextComponent(String.join(".", group.path)),
-                                    group.comment.stream().map(TextComponent::new).collect(ImmutableList.toImmutableList())
-                            )).orElseGet(() -> new BuiltCategory(
-                                    String.join(".", key.path.subList(0, key.path.size() - 1)),
-                                    new TextComponent(String.join(".", key.path.subList(0, key.path.size() - 1))),
-                                    List.of()
-                            ));
-                });
+                categories.computeIfAbsent(categoryId, k -> config.groups.stream()
+                        .filter(group -> categoryId.equals(String.join(".", group.path)))
+                        .findFirst().map(group -> new BuiltCategory(
+                                String.join(".", group.path),
+                                new TextComponent(String.join(".", group.path)),
+                                group.comment.stream().map(TextComponent::new).collect(ImmutableList.toImmutableList())
+                        )).orElseGet(() -> new BuiltCategory(
+                                String.join(".", key.path.subList(0, key.path.size() - 1)),
+                                new TextComponent(String.join(".", key.path.subList(0, key.path.size() - 1))),
+                                List.of()
+                        )));
                 map.computeIfAbsent(categoryId, k -> new ArrayList<>()).add(key);
             }
         }
@@ -51,7 +48,6 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
     }
     
     private static BuiltEntry createEntry(ConfigKey key, ConfigScreen<ConfigKey> screen, @Nullable AbstractWidget old, int x, int y, int width, int height) {
-        //noinspection UnstableApiUsage
         return new BuiltEntry(
                 new TextComponent(key.path.get(key.path.size() - 1)),
                 key.comment.stream().map(TextComponent::new).collect(ImmutableList.toImmutableList()),

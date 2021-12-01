@@ -41,7 +41,6 @@ public class TextureGenerator {
             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
             ImageIO.write(image, "PNG", byteOut);
             byte[] data = byteOut.toByteArray();
-            //noinspection UnstableApiUsage
             String hash = DataProvider.SHA1.hashBytes(data).toString();
             if (!Objects.equals(cache.getHash(path), hash) || !Files.exists(path)) {
                 Files.createDirectories(path.getParent());

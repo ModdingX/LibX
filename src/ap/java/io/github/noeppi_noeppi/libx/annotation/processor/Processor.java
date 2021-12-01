@@ -103,11 +103,66 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
             } else if (clazz == double.class) {
                 return this.types.getPrimitiveType(TypeKind.DOUBLE);
             } else {
-                return null;
+                throw new IllegalArgumentException("Failed to resolve class to a type: " + clazz);
             }
         } else {
-            return this.elements.getTypeElement(clazz.getCanonicalName()).asType();
+            return this.typeElement(clazz).asType();
         }
+    }
+
+    @Override
+    public TypeMirror forClass(String binaryName) {
+        if (binaryName.startsWith("[")) {
+            return this.forDescriptor(binaryName);
+        } else {
+            return this.typeElement(binaryName).asType();
+        }
+    }
+    
+    private TypeMirror forDescriptor(String descriptor) {
+        if (descriptor.startsWith("[")) {
+            return this.types.getArrayType(this.forDescriptor(descriptor.substring(1)));
+        } else if (descriptor.equals("V")) {
+            return this.types.getNoType(TypeKind.VOID);
+        } else if (descriptor.equals("Z")) {
+            return this.types.getPrimitiveType(TypeKind.BOOLEAN);
+        } else if (descriptor.equals("B")) {
+            return this.types.getPrimitiveType(TypeKind.BYTE);
+        } else if (descriptor.equals("C")) {
+            return this.types.getPrimitiveType(TypeKind.CHAR);
+        } else if (descriptor.equals("S")) {
+            return this.types.getPrimitiveType(TypeKind.SHORT);
+        } else if (descriptor.equals("I")) {
+            return this.types.getPrimitiveType(TypeKind.INT);
+        } else if (descriptor.equals("J")) {
+            return this.types.getPrimitiveType(TypeKind.LONG);
+        } else if (descriptor.equals("F")) {
+            return this.types.getPrimitiveType(TypeKind.FLOAT);
+        } else if (descriptor.equals("D")) {
+            return this.types.getPrimitiveType(TypeKind.DOUBLE);
+        } else if (descriptor.startsWith("L") && descriptor.endsWith(";")) {
+            return this.forClass(descriptor.substring(1, descriptor.length() - 1));
+        } else {
+            throw new IllegalArgumentException("Invalid type descriptor: " + descriptor);
+        }
+    }
+
+    @Override
+    public TypeElement typeElement(Class<?> clazz) {
+        TypeElement elem = this.elements.getTypeElement(clazz.getCanonicalName());
+        if (elem == null) {
+            throw new IllegalArgumentException("Class " + clazz.getName() + " not found. (Source name: " + clazz.getCanonicalName() + ")");
+        }
+        return elem;
+    }
+
+    @Override
+    public TypeElement typeElement(String binaryName) {
+        TypeElement elem = this.elements.getTypeElement(Classes.sourceName(binaryName));
+        if (elem == null) {
+            throw new IllegalArgumentException("Type " + binaryName + " not found. (Source name: " + Classes.sourceName(binaryName) + ")");
+        }
+        return elem;
     }
 
     @Override

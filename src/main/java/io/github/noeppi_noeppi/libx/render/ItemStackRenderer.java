@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.IItemRenderProperties;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -92,7 +92,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
                         CompoundTag nbt = stack.getTag();
                         setLevelAndState(blockEntity, state);
                         blockEntity.load(defaultTags.get(teType));
-                        if (nbt != null && nbt.contains("BlockEntityTag", Constants.NBT.TAG_COMPOUND)) {
+                        if (nbt != null && nbt.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
                             CompoundTag blockTag = nbt.getCompound("BlockEntityTag");
                             blockEntity.load(blockTag);
                         }

@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.data.provider;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.*;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
@@ -99,13 +98,6 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
 
     protected abstract void setup();
     
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.18")
-    @SuppressWarnings("DeprecatedIsStillUsed")
-    protected void defaultState(ResourceLocation id, Block block, ModelFile model) {
-        this.simpleBlock(block, model);
-    }
-    
     /**
      * Creates a block state for the given block using the given model. The default implementation checks
      * whether the block has the properties {@link BlockStateProperties#HORIZONTAL_FACING} or
@@ -150,7 +142,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
                         .addModels(new ConfiguredModel(model.get(), direction == Direction.DOWN ? 180 : direction.getAxis().isHorizontal() ? 90 : 0, direction.getAxis().isVertical() ? 0 : (int) direction.getOpposite().toYRot(), false));
             }
         } else {
-            this.defaultState(id, block, model.get());
+            this.simpleBlock(block, model.get());
         }
     }
 

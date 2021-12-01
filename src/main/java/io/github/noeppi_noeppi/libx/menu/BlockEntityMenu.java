@@ -15,8 +15,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,7 +58,7 @@ public class BlockEntityMenu<T extends BlockEntity> extends DefaultMenu {
      * @param constructor A method reference to the menus constructor.
      */
     public static <T extends BlockEntityMenu<?>> MenuType<T> createMenuType(Function5<Integer, Level, BlockPos, Inventory, Player, T> constructor) {
-        return IForgeContainerType.create((windowId1, inv, data) -> {
+        return IForgeMenuType.create((windowId1, inv, data) -> {
             BlockPos pos = data.readBlockPos();
             Level level = inv.player.getCommandSenderWorld();
             return constructor.apply(windowId1, level, pos, inv, inv.player);
@@ -72,7 +72,7 @@ public class BlockEntityMenu<T extends BlockEntity> extends DefaultMenu {
      */
     public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function6<MenuType<T>, Integer, Level, BlockPos, Inventory, Player, T> constructor) {
         AtomicReference<MenuType<T>> typeRef = new AtomicReference<>(null);
-        MenuType<T> type = IForgeContainerType.create((windowId1, inv, data) -> {
+        MenuType<T> type = IForgeMenuType.create((windowId1, inv, data) -> {
             BlockPos pos1 = data.readBlockPos();
             Level world1 = inv.player.getCommandSenderWorld();
             return constructor.apply(typeRef.get(), windowId1, world1, pos1, inv, inv.player);

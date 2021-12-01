@@ -35,7 +35,7 @@ public class RemoveInProcessor extends Processor {
                 ArtifactVersion minecraftVersion = ExternalProperties.minecraftVersion(this);
                 if (minecraftVersion != null) {
                     ArtifactVersion ver = ArtifactVersion.parse(remove.minecraft());
-                    if (minecraftVersion.compareTo(ver) > 0) {
+                    if (minecraftVersion.compareTo(ver) >= 0) {
                         this.messager().printMessage(Diagnostic.Kind.ERROR, "Element should have been removed.", element);
                         continue;
                     }

@@ -30,6 +30,7 @@ public class DynamicDatapacks {
     /**
      * Gets all enabled dynamic datapacks.
      */
+    // TODO add datapack finder for this
     public static Set<ResourceLocation> getEnabledPacks() {
         return Collections.unmodifiableSet(enabledPacks);
     }

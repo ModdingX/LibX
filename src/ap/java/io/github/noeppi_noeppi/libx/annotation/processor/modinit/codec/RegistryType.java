@@ -22,8 +22,8 @@ public class RegistryType implements CodecType {
     @Override
     public boolean matches(Element param, String name, ModEnv env) {
         Element element = env.types().asElement(param.asType());
-        if (element instanceof TypeElement) {
-            return ((TypeElement) element).getQualifiedName().contentEquals(Classes.REGISTRY);
+        if (element instanceof TypeElement type) {
+            return env.elements().getBinaryName(type).contentEquals(Classes.REGISTRY);
         } else {
             return false;
         }
@@ -60,7 +60,7 @@ public class RegistryType implements CodecType {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Could not infer registry type for registry codec.", param);
             throw new FailureException();
         }
-        if (path == null && !Classes.ALLOWED_REGISTRY_CODEC_TYPES.contains(generic.getQualifiedName().toString())) {
+        if (path == null && !Classes.ALLOWED_REGISTRY_CODEC_TYPES.contains(env.elements().getBinaryName(generic).toString())) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't infer registry key for type '" + generic.getQualifiedName() + "'. Set it by annotation value.", param);
             throw new FailureException();
         }

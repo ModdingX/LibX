@@ -17,7 +17,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         this.params = List.copyOf(params);
     }
 
-    public static abstract class CodecElement {
+    public static sealed abstract class CodecElement permits CodecParam, CodecDynamic, CodecRegistry {
 
         public final String typeFqn;
         public final String typeFqnBoxed;
@@ -30,7 +30,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         public abstract void writeCode(Writer writer) throws IOException;
     }
 
-    public static class CodecParam extends CodecElement {
+    public static final class CodecParam extends CodecElement {
 
         public final String name;
         public final String codecFqn;
@@ -56,7 +56,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         }
     }
 
-    public static class CodecDynamic extends CodecElement {
+    public static final class CodecDynamic extends CodecElement {
 
         public final String name;
         public final String factoryFqn;
@@ -71,14 +71,14 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
 
         @Override
         public void writeCode(Writer writer) throws IOException {
-            writer.write("((" + Classes.MAP_CODEC + "<" + this.typeFqnBoxed + ">)");
+            writer.write("((" + Classes.sourceName(Classes.MAP_CODEC) + "<" + this.typeFqnBoxed + ">)");
             writer.write(this.factoryFqn);
             writer.write("(\"" + ModInit.quote(this.name) + "\"))");
             writer.write(".forGetter(" + this.getter + ")");
         }
     }
     
-    public static class CodecRegistry extends CodecElement {
+    public static final class CodecRegistry extends CodecElement {
 
         @Nullable
         public final String registryNamespace;
@@ -100,14 +100,14 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         @Override
         public void writeCode(Writer writer) throws IOException {
             if (this.registryNamespace != null && this.registryPath != null) {
-                writer.write(Classes.PROCESSOR_INTERFACE + ".<" + this.registryTypeStr + ">registryCodec(");
-                writer.write(Classes.PROCESSOR_INTERFACE + ".<" + this.registryTypeStr + ">rootKey(");
-                writer.write(Classes.PROCESSOR_INTERFACE + ".newRL(\"" + ModInit.quote(this.registryNamespace) + "\",\"" + ModInit.quote(this.registryPath) + "\")");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">registryCodec(");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">rootKey(");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + ModInit.quote(this.registryNamespace) + "\",\"" + ModInit.quote(this.registryPath) + "\")");
                 writer.write(")");
                 writer.write(")");
             } else {
-                writer.write(Classes.PROCESSOR_INTERFACE + ".<" + this.registryTypeStr + ">registryCodec(");
-                writer.write(Classes.PROCESSOR_INTERFACE + ".<" + this.registryTypeStr + ">getCodecDefaultRegistryKey(" + this.registryTypeFqn + ".class)");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">registryCodec(");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">getCodecDefaultRegistryKey(" + this.registryTypeFqn + ".class)");
                 writer.write(")");
             }
             writer.write(".forGetter(" + this.getter + ")");

@@ -14,8 +14,9 @@ import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import net.minecraft.world.level.levelgen.surfacebuilders.ConfiguredSurfaceBuilder;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.Event;
@@ -47,13 +48,14 @@ public class ProcessorInterface {
     public static <T> ResourceKey<Registry<T>> getCodecDefaultRegistryKey(Class<?> clazz) {
         if (clazz.equals(DimensionType.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.DIMENSION_TYPE_REGISTRY;
         if (clazz.equals(Biome.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.BIOME_REGISTRY;
-        if (clazz.equals(ConfiguredSurfaceBuilder.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_SURFACE_BUILDER_REGISTRY;
         if (clazz.equals(ConfiguredWorldCarver.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_CARVER_REGISTRY;
         if (clazz.equals(ConfiguredFeature.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_FEATURE_REGISTRY;
+        if (clazz.equals(PlacedFeature.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.PLACED_FEATURE_REGISTRY;
         if (clazz.equals(ConfiguredStructureFeature.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY;
         if (clazz.equals(StructureProcessorList.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.PROCESSOR_LIST_REGISTRY;
         if (clazz.equals(StructureTemplatePool.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.TEMPLATE_POOL_REGISTRY;
         if (clazz.equals(NoiseGeneratorSettings.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.NOISE_GENERATOR_SETTINGS_REGISTRY;
+        if (clazz.equals(NormalNoise.NoiseParameters.class)) return (ResourceKey<Registry<T>>) (ResourceKey) Registry.NOISE_REGISTRY;
         throw new IllegalStateException("Failed to get registry codec key for type: " + clazz);
     }
     
