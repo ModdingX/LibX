@@ -73,8 +73,7 @@ public class ModInit  {
         try {
             List<RegistrationEntry> allReg = this.registration.entrySet().stream()
                     .sorted(Comparator.comparingInt(e -> -e.getKey()))
-                    .flatMap(e -> e.getValue().stream())
-                    .collect(Collectors.toList());
+                    .flatMap(e -> e.getValue().stream()).toList();
             
             JavaFileObject file = filer.createSourceFile(((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + "." + this.modClass.getSimpleName() + "$", this.modClass);
             Writer writer = file.openWriter();
@@ -136,13 +135,13 @@ public class ModInit  {
                 writer.write("((" + Classes.sourceName(Classes.MODX_REGISTRATION) + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
             }
             if (!this.models.isEmpty()) {
-                writer.write("net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT,()->()->{");
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(net.minecraftforge.client.event.ModelRegistryEvent.class," + this.modClass.getSimpleName() + "$::registerModels);");
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(net.minecraftforge.client.event.ModelBakeEvent.class," + this.modClass.getSimpleName() + "$::bakeModels);");
+                writer.write(Classes.sourceName(Classes.DIST_EXECUTOR) + ".unsafeRunWhenOn(" + Classes.sourceName(Classes.DIST) + ".CLIENT,()->()->{");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(" + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + ".class," + this.modClass.getSimpleName() + "$::registerModels);");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + ".class," + this.modClass.getSimpleName() + "$::bakeModels);");
                 writer.write("});");
             }
             if (!this.datagen.isEmpty()) {
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(net.minecraftforge.forge.event.lifecycle.GatherDataEvent.class," + this.modClass.getSimpleName() + "$::gatherData);");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(" + Classes.sourceName(Classes.GATHER_DATA_EVENT) + ".class," + this.modClass.getSimpleName() + "$::gatherData);");
             }
             writer.write("}");
             if (!allReg.isEmpty()) {
@@ -153,21 +152,21 @@ public class ModInit  {
                 writer.write("}");
             }
             if (!this.models.isEmpty()) {
-                writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
-                writer.write("private static void registerModels(net.minecraftforge.client.event.ModelRegistryEvent event){");
+                writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
+                writer.write("private static void registerModels(" + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
-                    writer.write("net.minecraftforge.client.model.ModelLoader.addSpecialModel(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
+                    writer.write(Classes.sourceName(Classes.MODEL_BAKERY) + ".addSpecialModel(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
                 }
                 writer.write("}");
-                writer.write("@net.minecraftforge.api.distmarker.OnlyIn(net.minecraftforge.api.distmarker.Dist.CLIENT)");
-                writer.write("private static void bakeModels(net.minecraftforge.client.event.ModelBakeEvent event){");
+                writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
+                writer.write("private static void bakeModels(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
                     writer.write(model.classFqn() + "." + quote(model.fieldName()) + "=event.getModelRegistry().get(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
                 }
                 writer.write("}");
             }
             if (!this.datagen.isEmpty()) {
-                writer.write("private static void gatherData(net.minecraftforge.forge.event.lifecycle.GatherDataEvent event){");
+                writer.write("private static void gatherData(" + Classes.sourceName(Classes.GATHER_DATA_EVENT) + " event){");
                 for (DatagenEntry entry : this.datagen) {
                     String ctorArgs = entry.ctorArgs().stream().map(t -> switch (t) {
                                 case MOD -> this.modClass.getSimpleName() + "$.mod";
