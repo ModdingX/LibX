@@ -11,6 +11,7 @@ import io.github.noeppi_noeppi.libx.impl.InternalDataGen;
 import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.crafting.recipe.EmptyRecipe;
+import io.github.noeppi_noeppi.libx.impl.datapack.DynamicDatapackLocator;
 import io.github.noeppi_noeppi.libx.impl.loot.AllLootEntry;
 import io.github.noeppi_noeppi.libx.impl.menu.screen.GenericScreen;
 import io.github.noeppi_noeppi.libx.impl.network.NetworkImpl;
@@ -26,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -53,6 +55,7 @@ public final class LibX extends ModX {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicDatapackLocator::locatePacks);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(MenuType.class, this::registerContainers);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, this::registerRecipes);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(BlockOverlayQuadCache::resourcesReload));
