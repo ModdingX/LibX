@@ -3,7 +3,7 @@
 pipeline {
     agent any
     tools {
-        jdk 'java16'
+        jdk 'java17'
     }
     environment { 
         MODGRADLE_CI = 'true'

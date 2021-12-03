@@ -22,8 +22,8 @@ dependencies {
 }
 ```
 
-**Javadoc can be found here: https://git.io/libx**
+**Javadoc can be found at https://git.io/libx**
 
-### The future branch
+**The wiki can be found at https://git.io/wikix**
 
-The `future` branch is used to implement breaking changes that will be merged in the next major minecraft release.
+**Join the dev discord: https://discord.gg/NfwG6txUN6**
