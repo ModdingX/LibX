@@ -17,8 +17,8 @@ jobs:
       - name: 'Install Java 🍵'
         uses: 'actions/setup-java@v2'
         with:
-          distribution: 'adopt-hotspot'
-          java-version: '16'
+          distribution: 'temurin'
+          java-version: '17'
           
       - name: 'Install and Build 🔧'
         run: './gradlew javadoc'
