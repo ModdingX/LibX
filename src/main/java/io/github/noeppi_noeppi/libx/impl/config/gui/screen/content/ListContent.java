@@ -88,21 +88,21 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         this.widgets.set(idx, widget);
         consumer.accept(widget);
 
-        addControlButton(consumer, padding + 203, y, new TextComponent("⬆"), idx > 0, () -> {
+        addControlButton(consumer, padding + 203, y, new TextComponent("\u2b06"), idx > 0, () -> {
             move(this.list, idx, idx - 1);
             move(this.widgets, idx, idx - 1);
             this.update();
             manager.rebuild();
         });
-        
-        addControlButton(consumer, padding + 226, y, new TextComponent("⬇"), idx < this.list.size() - 1, () -> {
+
+        addControlButton(consumer, padding + 226, y, new TextComponent("\u2b07"), idx < this.list.size() - 1, () -> {
             move(this.list, idx, idx + 1);
             move(this.widgets, idx, idx + 1);
             this.update();
             manager.rebuild();
         });
-        
-        addControlButton(consumer, padding + 249, y, new TextComponent("✖").withStyle(ChatFormatting.RED), true, () -> {
+
+        addControlButton(consumer, padding + 249, y, new TextComponent("\u2716").withStyle(ChatFormatting.RED), true, () -> {
             this.list.remove(idx);
             this.widgets.remove(idx);
             this.update();

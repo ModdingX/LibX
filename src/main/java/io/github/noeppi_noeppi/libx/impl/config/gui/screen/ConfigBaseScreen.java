@@ -61,7 +61,7 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     protected void init() {
         if (this.manager != null) {
-            Button back = new Button(5, 5, 42, 20, new TextComponent("← ").append(new TranslatableComponent("libx.config.gui.back")), button -> this.manager.close());
+            Button back = new Button(5, 5, 42, 20, new TextComponent("\u2190 ").append(new TranslatableComponent("libx.config.gui.back")), button -> this.manager.close());
             this.addRenderableWidget(back);
         }
 
