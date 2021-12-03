@@ -1,1 +1,0 @@
-{"name":"io/github/noeppi_noeppi/libx/impl/tags/InternalTags","simpleName":"InternalTags","sourceName":"io.github.noeppi_noeppi.libx.impl.tags.InternalTags","modifiers":["public"],"superClass":{"name":"java/lang/Object","signature":"java.lang.Object","parameters":[]},"constructors":[{"modifiers":["public"],"typeId":"()void","parameters":[],"return":{"name":"void","desc":"V"}}]}
