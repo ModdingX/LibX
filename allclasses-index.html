@@ -101,7 +101,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="type parameter in BlockEntityMenu">T</a> extends net.minecraft.world.level.block.entity.BlockEntity&gt;</div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">A <a href="io/github/noeppi_noeppi/libx/menu/DefaultMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>DefaultMenu</code></a> for blocks with block entities.</div>
+<div class="block">A <a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockMenu</code></a> for blocks with block entities.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -134,10 +134,9 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="type parameter in BlockMenu">T</a> extends net.minecraft.world.level.block.entity.BlockEntity,<wbr><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="type parameter in BlockMenu">C</a> extends <a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="type parameter in BlockMenu">T</a>&gt;&gt;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">This class registers a menu to it's <code>block entity type</code> and handles the gui
- opening when the block is right clicked.</div>
+<div class="block">A <a href="io/github/noeppi_noeppi/libx/menu/DefaultMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>DefaultMenu</code></a> for menus related to a block in the world.</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockStateProviderBase</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -517,6 +516,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/menu/MenuBase.html" title="class in io.github.noeppi_noeppi.libx.menu">MenuBase</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A base class for <code>menus</code>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="class in io.github.noeppi_noeppi.libx.base">MenuBlock</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="type parameter in MenuBlock">C</a> extends <a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This class registers a menu with the Block
+ This also makes the Screen appear on right-click.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="class in io.github.noeppi_noeppi.libx.base.tile">MenuBlockBE</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="type parameter in MenuBlockBE">T</a> extends net.minecraft.world.level.block.entity.BlockEntity,<wbr><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="type parameter in MenuBlockBE">C</a> extends <a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="type parameter in MenuBlockBE">T</a>&gt;&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">This class registers a menu to it's <code>block entity type</code> and handles the gui
+ opening when the block is right clicked.</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/github/noeppi_noeppi/libx/crafting/ingredient/MergedIngredient.html" title="class in io.github.noeppi_noeppi.libx.crafting.ingredient">MergedIngredient</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

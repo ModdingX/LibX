@@ -339,9 +339,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="type parameter in BlockEntityMenu">T</a> extends net.minecraft.world.level.block.entity.BlockEntity&gt; - Class in <a href="io/github/noeppi_noeppi/libx/menu/package-summary.html">io.github.noeppi_noeppi.libx.menu</a></dt>
 <dd>
-<div class="block">A <a href="io/github/noeppi_noeppi/libx/menu/DefaultMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>DefaultMenu</code></a> for blocks with block entities.</div>
+<div class="block">A <a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockMenu</code></a> for blocks with block entities.</div>
 </dd>
-<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#%3Cinit%3E(net.minecraft.world.inventory.MenuType,int,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,int,int)" class="member-name-link">BlockEntityMenu(MenuType&lt;?&gt;, int, Level, BlockPos, Inventory, Player, int, int)</a> - Constructor for class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#%3Cinit%3E(net.minecraft.world.inventory.MenuType,int,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,int,int)" class="member-name-link">BlockEntityMenu(MenuType&lt;? extends BlockEntityMenu&lt;?&gt;&gt;, int, Level, BlockPos, Inventory, Player, int, int)</a> - Constructor for class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase</a> - Class in <a href="io/github/noeppi_noeppi/libx/data/provider/package-summary.html">io.github.noeppi_noeppi.libx.data.provider</a></dt>
 <dd>
@@ -376,14 +376,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.WrappedLootEntry.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase.WrappedLootEntry</a> - Class in <a href="io/github/noeppi_noeppi/libx/data/provider/package-summary.html">io.github.noeppi_noeppi.libx.data.provider</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="type parameter in BlockMenu">T</a> extends net.minecraft.world.level.block.entity.BlockEntity,<wbr><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="type parameter in BlockMenu">C</a> extends <a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="type parameter in BlockMenu">T</a>&gt;&gt; - Class in <a href="io/github/noeppi_noeppi/libx/base/tile/package-summary.html">io.github.noeppi_noeppi.libx.base.tile</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a> - Class in <a href="io/github/noeppi_noeppi/libx/menu/package-summary.html">io.github.noeppi_noeppi.libx.menu</a></dt>
 <dd>
-<div class="block">This class registers a menu to it's <code>block entity type</code> and handles the gui
- opening when the block is right clicked.</div>
+<div class="block">A <a href="io/github/noeppi_noeppi/libx/menu/DefaultMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>DefaultMenu</code></a> for menus related to a block in the world.</div>
 </dd>
-<dt><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html#%3Cinit%3E(io.github.noeppi_noeppi.libx.mod.ModX,java.lang.Class,net.minecraft.world.inventory.MenuType,net.minecraft.world.level.block.state.BlockBehaviour.Properties)" class="member-name-link">BlockMenu(ModX, Class&lt;T&gt;, MenuType&lt;C&gt;, BlockBehaviour.Properties)</a> - Constructor for class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockMenu</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html#%3Cinit%3E(io.github.noeppi_noeppi.libx.mod.ModX,java.lang.Class,net.minecraft.world.inventory.MenuType,net.minecraft.world.level.block.state.BlockBehaviour.Properties,net.minecraft.world.item.Item.Properties)" class="member-name-link">BlockMenu(ModX, Class&lt;T&gt;, MenuType&lt;C&gt;, BlockBehaviour.Properties, Item.Properties)</a> - Constructor for class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html#%3Cinit%3E(net.minecraft.world.inventory.MenuType,int,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.entity.player.Inventory,net.minecraft.world.entity.player.Player,int,int)" class="member-name-link">BlockMenu(MenuType&lt;? extends BlockMenu&gt;, int, Level, BlockPos, Inventory, Player, int, int)</a> - Constructor for class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/BlockStateProviderBase.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockStateProviderBase</a> - Class in <a href="io/github/noeppi_noeppi/libx/data/provider/package-summary.html">io.github.noeppi_noeppi.libx.data.provider</a></dt>
 <dd>
@@ -861,17 +858,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a container type for an <a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>EntityMenu</code></a>.</div>
 </dd>
-<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#createMenuType(io.github.noeppi_noeppi.libx.fi.Function5)" class="member-name-link">createMenuType(Function5&lt;Integer, Level, BlockPos, Inventory, Player, T&gt;)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html#createMenuType(io.github.noeppi_noeppi.libx.fi.Function5)" class="member-name-link">createMenuType(Function5&lt;Integer, Level, BlockPos, Inventory, Player, T&gt;)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></dt>
 <dd>
-<div class="block">Creates a menu type for a <a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockEntityMenu</code></a>.</div>
+<div class="block">Creates a menu type for a <a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockMenu</code></a>.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html#createMenuType(io.github.noeppi_noeppi.libx.fi.Function6)" class="member-name-link">createMenuType(Function6&lt;MenuType&lt;T&gt;, Integer, Level, Integer, Inventory, Player, T&gt;)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">EntityMenu</a></dt>
 <dd>
 <div class="block">Creates a menu type for an <a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>EntityMenu</code></a>.</div>
 </dd>
-<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#createMenuType(io.github.noeppi_noeppi.libx.fi.Function6)" class="member-name-link">createMenuType(Function6&lt;MenuType&lt;T&gt;, Integer, Level, BlockPos, Inventory, Player, T&gt;)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html#createMenuType(io.github.noeppi_noeppi.libx.fi.Function6)" class="member-name-link">createMenuType(Function6&lt;MenuType&lt;T&gt;, Integer, Level, BlockPos, Inventory, Player, T&gt;)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></dt>
 <dd>
-<div class="block">Creates a menu type for a <a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockEntityMenu</code></a>.</div>
+<div class="block">Creates a menu type for a <a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockMenu</code></a>.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler.html#createUnrestrictedCapability()" class="member-name-link">createUnrestrictedCapability()</a> - Method in class io.github.noeppi_noeppi.libx.inventory.<a href="io/github/noeppi_noeppi/libx/inventory/BaseItemStackHandler.html" title="class in io.github.noeppi_noeppi.libx.inventory">BaseItemStackHandler</a></dt>
 <dd>
@@ -1729,9 +1726,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/base/FluidBase.html#getAdditionalRegisters(net.minecraft.resources.ResourceLocation)" class="member-name-link">getAdditionalRegisters(ResourceLocation)</a> - Method in class io.github.noeppi_noeppi.libx.base.<a href="io/github/noeppi_noeppi/libx/base/FluidBase.html" title="class in io.github.noeppi_noeppi.libx.base">FluidBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html#getAdditionalRegisters(net.minecraft.resources.ResourceLocation)" class="member-name-link">getAdditionalRegisters(ResourceLocation)</a> - Method in class io.github.noeppi_noeppi.libx.base.<a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="class in io.github.noeppi_noeppi.libx.base">MenuBlock</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/base/tile/BlockBE.html#getAdditionalRegisters(net.minecraft.resources.ResourceLocation)" class="member-name-link">getAdditionalRegisters(ResourceLocation)</a> - Method in class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/BlockBE.html" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockBE</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html#getAdditionalRegisters(net.minecraft.resources.ResourceLocation)" class="member-name-link">getAdditionalRegisters(ResourceLocation)</a> - Method in class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html#getAdditionalRegisters(net.minecraft.resources.ResourceLocation)" class="member-name-link">getAdditionalRegisters(ResourceLocation)</a> - Method in class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="class in io.github.noeppi_noeppi.libx.base.tile">MenuBlockBE</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/mod/registration/Registerable.html#getAdditionalRegisters(net.minecraft.resources.ResourceLocation)" class="member-name-link">getAdditionalRegisters(ResourceLocation)</a> - Method in interface io.github.noeppi_noeppi.libx.mod.registration.<a href="io/github/noeppi_noeppi/libx/mod/registration/Registerable.html" title="interface in io.github.noeppi_noeppi.libx.mod.registration">Registerable</a></dt>
 <dd>
@@ -1921,7 +1920,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets the position of the block being ticked.</div>
 </dd>
-<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#getPos()" class="member-name-link">getPos()</a> - Method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html#getPos()" class="member-name-link">getPos()</a> - Method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/util/NBTX.html#getPos(net.minecraft.nbt.CompoundTag,java.lang.String)" class="member-name-link">getPos(CompoundTag, String)</a> - Static method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/NBTX.html" title="class in io.github.noeppi_noeppi.libx.util">NBTX</a></dt>
 <dd>
@@ -2686,13 +2685,33 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/slot/OutputSlot.html#mayPlace(net.minecraft.world.item.ItemStack)" class="member-name-link">mayPlace(ItemStack)</a> - Method in class io.github.noeppi_noeppi.libx.menu.slot.<a href="io/github/noeppi_noeppi/libx/menu/slot/OutputSlot.html" title="class in io.github.noeppi_noeppi.libx.menu.slot">OutputSlot</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html#menu" class="member-name-link">menu</a> - Variable in class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html#menu" class="member-name-link">menu</a> - Variable in class io.github.noeppi_noeppi.libx.base.<a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="class in io.github.noeppi_noeppi.libx.base">MenuBlock</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html#menu" class="member-name-link">menu</a> - Variable in class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="class in io.github.noeppi_noeppi.libx.base.tile">MenuBlockBE</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/MenuBase.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.menu">MenuBase</a> - Class in <a href="io/github/noeppi_noeppi/libx/menu/package-summary.html">io.github.noeppi_noeppi.libx.menu</a></dt>
 <dd>
 <div class="block">A base class for <code>menus</code>.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/MenuBase.html#%3Cinit%3E(net.minecraft.world.inventory.MenuType,int,net.minecraft.world.entity.player.Inventory)" class="member-name-link">MenuBase(MenuType&lt;?&gt;, int, Inventory)</a> - Constructor for class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/MenuBase.html" title="class in io.github.noeppi_noeppi.libx.menu">MenuBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.base">MenuBlock</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="type parameter in MenuBlock">C</a> extends <a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a>&gt; - Class in <a href="io/github/noeppi_noeppi/libx/base/package-summary.html">io.github.noeppi_noeppi.libx.base</a></dt>
+<dd>
+<div class="block">This class registers a menu with the Block
+ This also makes the Screen appear on right-click.</div>
+</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html#%3Cinit%3E(io.github.noeppi_noeppi.libx.mod.ModX,net.minecraft.world.inventory.MenuType,net.minecraft.world.level.block.state.BlockBehaviour.Properties)" class="member-name-link">MenuBlock(ModX, MenuType&lt;C&gt;, BlockBehaviour.Properties)</a> - Constructor for class io.github.noeppi_noeppi.libx.base.<a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="class in io.github.noeppi_noeppi.libx.base">MenuBlock</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html#%3Cinit%3E(io.github.noeppi_noeppi.libx.mod.ModX,net.minecraft.world.inventory.MenuType,net.minecraft.world.level.block.state.BlockBehaviour.Properties,net.minecraft.world.item.Item.Properties)" class="member-name-link">MenuBlock(ModX, MenuType&lt;C&gt;, BlockBehaviour.Properties, Item.Properties)</a> - Constructor for class io.github.noeppi_noeppi.libx.base.<a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="class in io.github.noeppi_noeppi.libx.base">MenuBlock</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.base.tile">MenuBlockBE</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="type parameter in MenuBlockBE">T</a> extends net.minecraft.world.level.block.entity.BlockEntity,<wbr><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="type parameter in MenuBlockBE">C</a> extends <a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a>&lt;<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="type parameter in MenuBlockBE">T</a>&gt;&gt; - Class in <a href="io/github/noeppi_noeppi/libx/base/tile/package-summary.html">io.github.noeppi_noeppi.libx.base.tile</a></dt>
+<dd>
+<div class="block">This class registers a menu to it's <code>block entity type</code> and handles the gui
+ opening when the block is right clicked.</div>
+</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html#%3Cinit%3E(io.github.noeppi_noeppi.libx.mod.ModX,java.lang.Class,net.minecraft.world.inventory.MenuType,net.minecraft.world.level.block.state.BlockBehaviour.Properties)" class="member-name-link">MenuBlockBE(ModX, Class&lt;T&gt;, MenuType&lt;C&gt;, BlockBehaviour.Properties)</a> - Constructor for class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="class in io.github.noeppi_noeppi.libx.base.tile">MenuBlockBE</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html#%3Cinit%3E(io.github.noeppi_noeppi.libx.mod.ModX,java.lang.Class,net.minecraft.world.inventory.MenuType,net.minecraft.world.level.block.state.BlockBehaviour.Properties,net.minecraft.world.item.Item.Properties)" class="member-name-link">MenuBlockBE(ModX, Class&lt;T&gt;, MenuType&lt;C&gt;, BlockBehaviour.Properties, Item.Properties)</a> - Constructor for class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="class in io.github.noeppi_noeppi.libx.base.tile">MenuBlockBE</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/crafting/ingredient/MergedIngredient.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.crafting.ingredient">MergedIngredient</a> - Class in <a href="io/github/noeppi_noeppi/libx/crafting/ingredient/package-summary.html">io.github.noeppi_noeppi.libx.crafting.ingredient</a></dt>
 <dd>
@@ -2951,13 +2970,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Opens a menu for a <code>player</code>.</div>
 </dd>
-<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#openMenu(net.minecraft.server.level.ServerPlayer,net.minecraft.world.inventory.MenuType,net.minecraft.network.chat.Component,net.minecraft.core.BlockPos)" class="member-name-link">openMenu(ServerPlayer, MenuType&lt;? extends BlockEntityMenu&lt;?&gt;&gt;, Component, BlockPos)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
-<dd>
-<div class="block">Opens a <a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockEntityMenu</code></a> for a player.</div>
-</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html#openMenu(net.minecraft.server.level.ServerPlayer,net.minecraft.world.inventory.MenuType,net.minecraft.network.chat.Component,net.minecraft.world.entity.Entity)" class="member-name-link">openMenu(ServerPlayer, MenuType&lt;? extends BlockEntityMenu&lt;?&gt;&gt;, Component, Entity)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">EntityMenu</a></dt>
 <dd>
 <div class="block">Opens an <a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>EntityMenu</code></a> for a player.</div>
+</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html#openMenu(net.minecraft.server.level.ServerPlayer,net.minecraft.world.inventory.MenuType,net.minecraft.network.chat.Component,net.minecraft.core.BlockPos)" class="member-name-link">openMenu(ServerPlayer, MenuType&lt;? extends BlockMenu&gt;, Component, BlockPos)</a> - Static method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></dt>
+<dd>
+<div class="block">Opens a <a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu"><code>BlockMenu</code></a> for a player.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/config/gui/ConfigEditor.html#option(io.github.noeppi_noeppi.libx.config.gui.ConfigEditor)" class="member-name-link">option(ConfigEditor&lt;T&gt;)</a> - Static method in interface io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/ConfigEditor.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">ConfigEditor</a></dt>
 <dd>
@@ -3074,7 +3093,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/MenuBase.html#playerinventory" class="member-name-link">playerinventory</a> - Variable in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/MenuBase.html" title="class in io.github.noeppi_noeppi.libx.menu">MenuBase</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#pos" class="member-name-link">pos</a> - Variable in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html#pos" class="member-name-link">pos</a> - Variable in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/crafting/ingredient/PotionIngredient.html#potion" class="member-name-link">potion</a> - Variable in class io.github.noeppi_noeppi.libx.crafting.ingredient.<a href="io/github/noeppi_noeppi/libx/crafting/ingredient/PotionIngredient.html" title="class in io.github.noeppi_noeppi.libx.crafting.ingredient">PotionIngredient</a></dt>
 <dd>
@@ -3926,7 +3945,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/inventory/VanillaWrapper.html#stillValid(net.minecraft.world.entity.player.Player)" class="member-name-link">stillValid(Player)</a> - Method in class io.github.noeppi_noeppi.libx.inventory.<a href="io/github/noeppi_noeppi/libx/inventory/VanillaWrapper.html" title="class in io.github.noeppi_noeppi.libx.inventory">VanillaWrapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html#stillValid(net.minecraft.world.entity.player.Player)" class="member-name-link">stillValid(Player)</a> - Method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockEntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockEntityMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html#stillValid(net.minecraft.world.entity.player.Player)" class="member-name-link">stillValid(Player)</a> - Method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">BlockMenu</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html#stillValid(net.minecraft.world.entity.player.Player)" class="member-name-link">stillValid(Player)</a> - Method in class io.github.noeppi_noeppi.libx.menu.<a href="io/github/noeppi_noeppi/libx/menu/EntityMenu.html" title="class in io.github.noeppi_noeppi.libx.menu">EntityMenu</a></dt>
 <dd>&nbsp;</dd>
@@ -4191,7 +4210,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Updates a previously created widget for example after a screen resize.</div>
 </dd>
-<dt><a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html#use(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.entity.player.Player,net.minecraft.world.InteractionHand,net.minecraft.world.phys.BlockHitResult)" class="member-name-link">use(BlockState, Level, BlockPos, Player, InteractionHand, BlockHitResult)</a> - Method in class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/BlockMenu.html" title="class in io.github.noeppi_noeppi.libx.base.tile">BlockMenu</a></dt>
+<dt><a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html#use(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.entity.player.Player,net.minecraft.world.InteractionHand,net.minecraft.world.phys.BlockHitResult)" class="member-name-link">use(BlockState, Level, BlockPos, Player, InteractionHand, BlockHitResult)</a> - Method in class io.github.noeppi_noeppi.libx.base.<a href="io/github/noeppi_noeppi/libx/base/MenuBlock.html" title="class in io.github.noeppi_noeppi.libx.base">MenuBlock</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html#use(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.entity.player.Player,net.minecraft.world.InteractionHand,net.minecraft.world.phys.BlockHitResult)" class="member-name-link">use(BlockState, Level, BlockPos, Player, InteractionHand, BlockHitResult)</a> - Method in class io.github.noeppi_noeppi.libx.base.tile.<a href="io/github/noeppi_noeppi/libx/base/tile/MenuBlockBE.html" title="class in io.github.noeppi_noeppi.libx.base.tile">MenuBlockBE</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:V">V</h2>
