@@ -1,13 +1,13 @@
 package io.github.noeppi_noeppi.libx.menu;
 
-import com.mojang.datafixers.util.Function5;
+import io.github.noeppi_noeppi.libx.fi.Function5;
 import io.github.noeppi_noeppi.libx.fi.Function6;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -22,54 +22,53 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A {@link DefaultMenu} for entities.
+ * A {@link DefaultMenu} for menus related to a block in the world.
  */
-public abstract class EntityMenu<T extends Entity> extends DefaultMenu {
+public class BlockMenu extends DefaultMenu {
 
-    public final T entity;
-    
-    public EntityMenu(@Nullable MenuType<?> type, int windowId, Level level, int entityId, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
+    protected final BlockPos pos;
+
+    public BlockMenu(@Nullable MenuType<? extends BlockMenu> type, int windowId, Level level, BlockPos pos, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
         super(type, windowId, level, playerContainer, player, firstOutputSlot, firstInventorySlot);
-        //noinspection unchecked
-        this.entity = (T) level.getEntity(entityId);
+        this.pos = pos;
     }
 
     @Override
     public boolean stillValid(@Nonnull Player player) {
-        return stillValid(ContainerLevelAccess.create(this.level, this.entity.blockPosition()), this.player, this.level.getBlockState(this.entity.blockPosition()).getBlock());
+        return stillValid(ContainerLevelAccess.create(this.level, this.pos), this.player, this.level.getBlockState(this.pos).getBlock());
     }
 
-    public T getEntity() {
-        return this.entity;
-    }
-
-    /**
-     * Creates a container type for an {@link EntityMenu}.
-     *
-     * @param constructor A method reference to the menus constructor.
-     */
-    public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function5<Integer, Level, Integer, Inventory, Player, T> constructor) {
-        return IForgeMenuType.create((windowId1, inv, data) -> constructor.apply(windowId1, inv.player.level, data.readInt(), inv, inv.player));
+    public BlockPos getPos() {
+        return this.pos;
     }
 
     /**
-     * Creates a menu type for an {@link EntityMenu}.
+     * Creates a menu type for a {@link BlockMenu}.
      *
      * @param constructor A method reference to the menus constructor.
      */
-    public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function6<MenuType<T>, Integer, Level, Integer, Inventory, Player, T> constructor) {
+    public static <T extends BlockMenu> MenuType<T> createMenuType(Function5<Integer, Level, BlockPos, Inventory, Player, T> constructor) {
+        return IForgeMenuType.create((windowId, inv, data) -> constructor.apply(windowId, inv.player.level, data.readBlockPos(), inv, inv.player));
+    }
+
+    /**
+     * Creates a menu type for a {@link BlockMenu}.
+     *
+     * @param constructor A method reference to the menus constructor.
+     */
+    public static <T extends BlockMenu> MenuType<T> createMenuType(Function6<MenuType<T>, Integer, Level, BlockPos, Inventory, Player, T> constructor) {
         AtomicReference<MenuType<T>> typeRef = new AtomicReference<>(null);
-        MenuType<T> type = IForgeMenuType.create((windowId, inv, data) -> constructor.apply(typeRef.get(), windowId, inv.player.level, data.readInt(), inv, inv.player));
+        MenuType<T> type = IForgeMenuType.create((windowId, inv, data) -> constructor.apply(typeRef.get(), windowId, inv.player.level, data.readBlockPos(), inv, inv.player));
         typeRef.set(type);
         return type;
     }
 
     /**
-     * Opens an {@link EntityMenu} for a player.
+     * Opens a {@link BlockMenu} for a player.
      */
-    public static void openMenu(ServerPlayer player, MenuType<? extends BlockEntityMenu<?>> menu, Component title, Entity entity) {
+    public static void openMenu(ServerPlayer player, MenuType<? extends BlockMenu> menu, Component title, BlockPos pos) {
         MenuProvider containerProvider = new MenuProvider() {
-            
+
             @Nonnull
             @Override
             public Component getDisplayName() {
@@ -79,10 +78,10 @@ public abstract class EntityMenu<T extends Entity> extends DefaultMenu {
             @Override
             public AbstractContainerMenu createMenu(int containerId, @Nonnull Inventory inventory, @Nonnull Player player) {
                 FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-                buffer.writeInt(entity.getId());
+                buffer.writeBlockPos(pos);
                 return menu.create(containerId, inventory, buffer);
             }
         };
-        NetworkHooks.openGui(player, containerProvider, buffer -> buffer.writeInt(entity.getId()));
+        NetworkHooks.openGui(player, containerProvider, pos);
     }
 }
