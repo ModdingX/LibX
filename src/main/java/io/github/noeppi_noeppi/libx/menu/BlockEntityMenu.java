@@ -80,25 +80,4 @@ public class BlockEntityMenu<T extends BlockEntity> extends DefaultMenu {
         typeRef.set(type);
         return type;
     }
-
-    /**
-     * Opens a {@link BlockEntityMenu} for a player.
-     */
-    public static void openMenu(ServerPlayer player, MenuType<? extends BlockEntityMenu<?>> menu, Component title, BlockPos pos) {
-        MenuProvider containerProvider = new MenuProvider() {
-            @Nonnull
-            @Override
-            public Component getDisplayName() {
-                return title;
-            }
-
-            @Override
-            public AbstractContainerMenu createMenu(int containerId, @Nonnull Inventory inventory, @Nonnull Player player) {
-                FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-                buffer.writeBlockPos(pos);
-                return menu.create(containerId, inventory, buffer);
-            }
-        };
-        NetworkHooks.openGui(player, containerProvider, pos);
-    }
 }
