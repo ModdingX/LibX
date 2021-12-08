@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.base.MenuBlock;
 import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.core.BlockPos;
@@ -27,16 +28,16 @@ import java.util.Set;
  * 
  * @see BlockEntityMenu
  */
-public class BlockMenu<T extends BlockEntity, C extends BlockEntityMenu<T>> extends BlockBE<T> {
+public class BEMenuBlock<T extends BlockEntity, C extends BlockEntityMenu<T>> extends BlockBE<T> {
 
     public final MenuType<C> menu;
 
-    public BlockMenu(ModX mod, Class<T> beClass, MenuType<C> menu, Properties properties) {
+    public BEMenuBlock(ModX mod, Class<T> beClass, MenuType<C> menu, Properties properties) {
         super(mod, beClass, properties);
         this.menu = menu;
     }
 
-    public BlockMenu(ModX mod, Class<T> beClass, MenuType<C> menu, Properties properties, Item.Properties itemProperties) {
+    public BEMenuBlock(ModX mod, Class<T> beClass, MenuType<C> menu, Properties properties, Item.Properties itemProperties) {
         super(mod, beClass, properties, itemProperties);
         this.menu = menu;
     }
@@ -52,7 +53,7 @@ public class BlockMenu<T extends BlockEntity, C extends BlockEntityMenu<T>> exte
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         if (!level.isClientSide) {
             //noinspection ConstantConditions
-            BlockEntityMenu.openMenu((ServerPlayer) player, this.menu, new TranslatableComponent("screen." + BlockMenu.this.mod.modid + "." + BlockMenu.this.getRegistryName().getPath()), pos);
+            MenuBlock.openMenu((ServerPlayer) player, this.menu, new TranslatableComponent("screen." + BEMenuBlock.this.mod.modid + "." + BEMenuBlock.this.getRegistryName().getPath()), pos);
         }
         return InteractionResult.SUCCESS;
     }
