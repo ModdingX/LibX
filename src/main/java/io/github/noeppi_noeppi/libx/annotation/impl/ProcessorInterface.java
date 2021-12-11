@@ -1,6 +1,8 @@
 package io.github.noeppi_noeppi.libx.annotation.impl;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import io.github.noeppi_noeppi.libx.codec.MoreCodecs;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -42,6 +44,10 @@ public class ProcessorInterface {
     
     public static <T> MapCodec<Registry<T>> registryCodec(ResourceKey<Registry<T>> registry) {
         return RegistryLookupCodec.create(registry);
+    }
+    
+    public static <T extends Enum<T>> Codec<T> enumCodec(Class<T> clazz) {
+        return MoreCodecs.enumCodec(clazz);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

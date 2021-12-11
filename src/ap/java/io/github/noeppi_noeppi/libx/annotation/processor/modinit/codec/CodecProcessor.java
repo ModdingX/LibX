@@ -6,6 +6,7 @@ import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 
 import javax.annotation.Nullable;
 import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
@@ -18,6 +19,7 @@ public class CodecProcessor {
     public static final List<CodecType> CODECS = List.of(
             new RegistryType(),
             new DynamicType(),
+            new EnumType(),
             new ParamType()
     );
     
@@ -180,4 +182,21 @@ public class CodecProcessor {
             return getter;
         }
     }
+    
+    // null = could not infer element type of list
+    @Nullable
+    public static ListInfo getNestedListInfo(TypeMirror baseType, ModEnv env) {
+        int nesting = 0;
+        while (baseType.getKind() == TypeKind.DECLARED && baseType instanceof DeclaredType listType && env.sameErasure(baseType, env.forClass(List.class))) {
+            List<? extends TypeMirror> generics = listType.getTypeArguments();
+            if (generics.size() != 1) {
+                return null;
+            }
+            nesting += 1;
+            baseType = generics.get(0);
+        }
+        return new ListInfo(nesting, baseType);
+    }
+    
+    public record ListInfo(int nesting, TypeMirror elementType) {}
 }
