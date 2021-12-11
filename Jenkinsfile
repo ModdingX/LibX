@@ -24,10 +24,10 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build and Publish') {
             steps {
                 echo 'Building'
-                sh './gradlew build'
+                sh './gradlew build curseforge modrinth publish'
             }
         }
 
@@ -37,26 +37,5 @@ pipeline {
                 archiveArtifacts 'build/libs*/*jar'
             }
         }
-
-       stage('Upload artifacts to CurseForge') {
-           steps {
-               echo 'Uploading to CurseForge'
-               sh './gradlew curseforge'
-           }
-       }
-       
-       stage('Upload artifacts to Modrinth') {
-           steps {
-               echo 'Uploading to Modrinth'
-               sh './gradlew modrinth'
-           }
-       }
-
-       stage('Publish artifacts') {
-           steps {
-               echo 'Publishing'
-               sh './gradlew publish'
-           }
-       }
     }
 }
