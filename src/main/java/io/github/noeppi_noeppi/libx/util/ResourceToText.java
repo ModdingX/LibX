@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Translates {@link ResourceLocation resource locations} into {@link Component text components}.
  * 
- * @deprecated use a {@link TextComponent}. For the copy to clipboard on click, use 
+ * @deprecated use a {@link TextComponent}. For the copy to clipboard on click, use {@link ComponentUtil#withCopyAction(Component, String)}
  */
 @Deprecated(forRemoval = true)
 @RemoveIn(minecraft = "1.18.2")

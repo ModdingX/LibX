@@ -34,7 +34,7 @@ pipeline {
         stage('Archive artifacts') {
             steps {
                 echo 'Archive'
-                archiveArtifacts 'build/libs*/*jar'
+                archiveArtifacts 'build/libs*/*.jar'
             }
         }
     }
