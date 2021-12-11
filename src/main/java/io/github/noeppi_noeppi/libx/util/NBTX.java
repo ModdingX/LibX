@@ -1,10 +1,11 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -14,12 +15,15 @@ import javax.annotation.Nullable;
 /**
  * Utilities to deal with NBT.
  */
-@Experimental
 public class NBTX {
 
     /**
      * Store a {@link BlockPos} in a {@link CompoundTag} with a given key.
+     * 
+     * @deprecated Use {@link NbtUtils#writeBlockPos(BlockPos)}
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public static void putPos(CompoundTag nbt, String key, BlockPos pos) {
         nbt.put(key, new IntArrayTag(new int[]{ pos.getX(), pos.getY(), pos.getZ() }));
     }
@@ -27,8 +31,12 @@ public class NBTX {
     /**
      * Get a {@link BlockPos} from a {@link CompoundTag} stored with a given key or null if there's no such
      * block pos.
+     * 
+     * @deprecated Use {@link NbtUtils#readBlockPos(CompoundTag)}
      */
     @Nullable
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public static BlockPos getPos(CompoundTag nbt, String key) {
         if (nbt.contains(key, Tag.TAG_INT_ARRAY)) {
             int[] list = nbt.getIntArray(key);
@@ -43,6 +51,8 @@ public class NBTX {
      * Get a {@link BlockPos} from a {@link CompoundTag} stored with a given key or the default value if there's
      * no such block pos.
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public static BlockPos getPos(CompoundTag nbt, String key, BlockPos defaultValue) {
         BlockPos pos = getPos(nbt, key);
         return pos == null ? defaultValue : pos;

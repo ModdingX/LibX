@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.util;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.*;
@@ -9,17 +10,15 @@ import java.util.stream.Collectors;
 
 /**
  * Translates {@link Tag Named Binary Tag} into {@link MutableComponent text components}.
+ * 
+ * @deprecated Use {@link NbtUtils#toPrettyComponent(Tag)} instead.
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.18.2")
 public class NbtToText {
 
-    private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("libx.misc.copy_nbt"));
+    private static final HoverEvent COPY_NBT = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("libx.misc.copy"));
 
-    /**
-     * As the fancy colored {@link NbtComponent nbt components} are only available for
-     * {@link NbtComponent.BlockNbtComponent blocks}, {@link NbtComponent.EntityNbtComponent entities}
-     * and {@link NbtComponent.StorageNbtComponent world storage} by default, this translates a piece of NBT
-     * to a colored {@link Component text component}.
-     */
     public static MutableComponent toText(Tag nbt) {
         Style copyTag = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, nbt.toString())).withHoverEvent(COPY_NBT);
         return toTextInternal(nbt).withStyle(copyTag);

@@ -1,8 +1,13 @@
 package io.github.noeppi_noeppi.libx.util;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -10,6 +15,8 @@ import java.util.Optional;
  */
 public class ComponentUtil {
 
+    private static final HoverEvent HOVER_COPY = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("libx.misc.copy"));
+    
     /**
      * Gets a {@link Component text component} as a string formatted with ANSI escape codes to
      * be printed on the console.
@@ -70,5 +77,57 @@ public class ComponentUtil {
     
     private static void reset(StringBuilder sb) {
         sb.append("\u001B[0m");
+    }
+
+    /**
+     * Turns a {@link JsonElement} to a {@link Component} with syntax highlighting that can be used for display.
+     */
+    public static Component toPrettyComponent(JsonElement json) {
+        if (json.isJsonNull()) {
+            return new TextComponent("null").withStyle(ChatFormatting.RED);
+        } else if (json instanceof JsonPrimitive primitive) {
+            if (primitive.isString()) {
+                return new TextComponent(primitive.toString()).withStyle(ChatFormatting.GREEN);
+            } else {
+                return new TextComponent(primitive.toString()).withStyle(ChatFormatting.GOLD);
+            }
+        } else if (json instanceof JsonArray array) {
+            MutableComponent tc = new TextComponent("[");
+            boolean first = true;
+            for (JsonElement element : array) {
+                if (first) {
+                    first = false;
+                } else {
+                    tc.append(new TextComponent(", "));
+                }
+                tc = tc.append(toPrettyComponent(element));
+            }
+            tc = tc.append(new TextComponent("]"));
+            return tc;
+        } else if (json instanceof JsonObject object) {
+            MutableComponent tc = new TextComponent("{");
+            boolean first = true;
+            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                if (first) {
+                    first = false;
+                } else {
+                    tc.append(new TextComponent(", "));
+                }
+                tc = tc.append(new TextComponent(new JsonPrimitive(entry.getKey()).toString()).withStyle(ChatFormatting.AQUA))
+                        .append(new TextComponent(": "))
+                        .append(toPrettyComponent(entry.getValue()));
+            }
+            tc = tc.append(new TextComponent("}"));
+            return tc;
+        } else {
+            throw new IllegalArgumentException("JSON type unknown: " + json.getClass());
+        }
+    }
+
+    /**
+     * Adds a {@link ClickEvent click event} to the given component to copy the given text to clipboard.
+     */
+    public static Component withCopyAction(Component component, String copyText) {
+        return component.copy().withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copyText)).withHoverEvent(HOVER_COPY));
     }
 }

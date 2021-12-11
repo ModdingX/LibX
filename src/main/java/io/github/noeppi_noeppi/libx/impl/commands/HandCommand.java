@@ -4,31 +4,28 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
-import io.github.noeppi_noeppi.libx.util.JsonToText;
-import io.github.noeppi_noeppi.libx.util.NbtToJson;
-import io.github.noeppi_noeppi.libx.util.NbtToText;
-import io.github.noeppi_noeppi.libx.util.ResourceToText;
+import io.github.noeppi_noeppi.libx.util.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class HandCommand implements Command<CommandSourceStack> {
 
     @Override
     public int run(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        NbtOutputType format = CommandUtil.getArgumentOrDefault(ctx, "output_format", NbtOutputType.class, NbtOutputType.NBT);
-
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
@@ -48,24 +45,17 @@ public class HandCommand implements Command<CommandSourceStack> {
 
         NbtPathArgument.NbtPath path = CommandUtil.getArgumentOrDefault(ctx, "nbt_path", NbtPathArgument.NbtPath.class, null);
 
-        //noinspection ConstantConditions
-        MutableComponent tc = ResourceToText.toText(item.getRegistryName());
+        ResourceLocation id = Objects.requireNonNull(item.getRegistryName());
+        MutableComponent tc = ComponentUtil.withCopyAction(new TextComponent(id.toString()), id.toString()).copy();
 
         if (count != 1) {
             tc = tc.append(new TextComponent(" ")).append(new TextComponent(Integer.toString(count)));
         }
 
         if (nbt != null && !nbt.isEmpty()) {
-            List<Tag> printNBT = Collections.singletonList(nbt);
-            if (path != null) {
-                printNBT = path.get(nbt);
-            }
-
+            List<Tag> printNBT = path == null ? List.of(nbt) : path.get(nbt);
             for (Tag element : printNBT) {
-                tc = tc.append(new TextComponent(" "))
-                        .append(format == NbtOutputType.NBT ?
-                                NbtToText.toText(nbt) :
-                                JsonToText.toText(NbtToJson.getJson(element, true)));
+                tc = tc.append(new TextComponent(" ")).append(ComponentUtil.withCopyAction(NbtUtils.toPrettyComponent(element), element.toString()));
             }
         }
 

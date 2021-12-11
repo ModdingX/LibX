@@ -1,8 +1,5 @@
 {
-  "libx.misc.copy_id": "Klicke, um die ID in der Zwischenablage zu speichern",
-  "libx.misc.copy_modlist": "Klicke, um die Mod-Liste in der Zwischenablage zu speichern",
-  "libx.misc.copy_nbt": "Klicke, um NBT-Daten in der Zwischenablage zu speichern",
-  "libx.misc.copy_json": "Klicke, um JSON-Daten in der Zwischenablage zu speichern",
+  "libx.misc.copy": "Klicke zum Kopieren.",
   "libx.command.argument.enum.invalid": "Ungültiger %s-Wert: %s",
   "libx.command.entitydata.modified": "NBT-Daten von %s Mobs wurden geändert.",
   "libx.command.entitydata.modified_player": "NBT-Daten von %s Mobs wurden geändert. (Achtung: Du hast Spieler-NBT geändert))",

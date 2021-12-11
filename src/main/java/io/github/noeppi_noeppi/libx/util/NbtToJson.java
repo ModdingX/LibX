@@ -1,11 +1,16 @@
 package io.github.noeppi_noeppi.libx.util;
 
 import com.google.gson.*;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.nbt.*;
 
 /**
  * Provides a way to convert NBT to json just as JsonToNBT does the other way round.
+ * 
+ * @deprecated It never worked consistently. Take a look at {@link com.mojang.serialization.Codec codecs} to solve things like this.
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class NbtToJson {
 
     /**
