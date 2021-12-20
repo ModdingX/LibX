@@ -17,7 +17,7 @@ A library mod for minecraft.
 [[dependencies.libx]]
     modId="forge"
     mandatory=true
-    versionRange="[39.0.0,)"
+    versionRange="[39.0.6,)"
     ordering="NONE"
     side="BOTH"
 
