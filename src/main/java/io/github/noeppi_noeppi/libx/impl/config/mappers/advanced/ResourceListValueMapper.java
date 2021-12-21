@@ -72,6 +72,6 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<ResourceList> createEditor(ValidatorInfo<?> validator) {
-        return ConfigEditor.custom(ResourceList.WHITELIST, ResourceListContent::new);
+        return ConfigEditor.custom(ResourceList.ALLOW_LIST, ResourceListContent::new);
     }
 }

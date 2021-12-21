@@ -28,7 +28,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     // because of conflicting methods.
     private final ParentProvider provider;
 
-    private final Set<ResourceLocation> blacklist = new HashSet<>();
+    private final Set<ResourceLocation> ignored = new HashSet<>();
     private final Map<ResourceLocation, SoundDefinitionBuilder> sounds = new HashMap<>();
 
     public SoundDefinitionProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper helper) {
@@ -59,7 +59,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
      * This sound will not be processed by the default generator
      */
     protected void ignore(ResourceLocation sound) {
-        this.blacklist.add(sound);
+        this.ignored.add(sound);
     }
 
     protected abstract void setup();
@@ -116,7 +116,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         this.setup();
 
         for (ResourceLocation id : ForgeRegistries.SOUND_EVENTS.getKeys()) {
-            if (this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(id)) {
+            if (this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(id)) {
                 SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(id);
                 if (sound != null) {
                     this.defaultSound(id, sound);

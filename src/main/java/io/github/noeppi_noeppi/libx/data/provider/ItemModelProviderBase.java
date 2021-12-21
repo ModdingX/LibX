@@ -42,7 +42,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     protected final ModX mod;
 
     private final Set<Item> handheld = new HashSet<>();
-    private final Set<Item> blacklist = new HashSet<>();
+    private final Set<Item> ignored = new HashSet<>();
 
     public ItemModelProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
         super(generator, mod.modid, fileHelper);
@@ -66,7 +66,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
      * This item will not be processed by the generator.
      */
     protected void manualModel(Item item) {
-        this.blacklist.add(item);
+        this.ignored.add(item);
     }
 
     @Override
@@ -75,7 +75,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
         for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys()) {
             Item item = ForgeRegistries.ITEMS.getValue(id);
-            if (item != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(item)) {
+            if (item != null && this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(item)) {
                 if (item instanceof BlockItem blockItem) {
                     this.defaultBlock(id, blockItem);
                 } else if (this.handheld.contains(item)) {

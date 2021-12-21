@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -23,12 +24,12 @@ import java.util.stream.Collectors;
  * A {@link Predicate} for {@link ResourceLocation resource locations} implemented as
  * a list of rules that will be applied one after another. The first rule that matches
  * a resource location determines the result.
- * The resource list can either be a white list or a black list. If it is a whitelist,
+ * The resource list can either be a white list or a black list. If it is an allow list,
  * by default a matching rule will make the {@link #test(ResourceLocation) test} function
- * return true. If it's a blacklist it'll return false by default for matching rules.
- * For whitelists if no rule matches {@code false} is returned. For blacklists it's
+ * return true. If it's a deny list it'll return false by default for matching rules.
+ * For allow lists if no rule matches {@code false} is returned. For deny lists it's
  * {@code true}.
- * Rules on a whitelist can also make the {@code test} method false and the other
+ * Rules on an allow list can also make the {@code test} method false and the other
  * way round.
  * The order of the rules is important. Rules that are added first will have a higher
  * priority and only the first matching rule will be applied.
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
  * 
  * <h3>ResourceLists in LibX configs</h3>
  * 
- * This explains, how a resource list is used inj a config. In the {@code whitelist} field you can specify
+ * This explains, how a resource list is used inj a config. In the {@code allowList} field you can specify
  * whether all entries will be accepted by default or rejected.
  * 
  * {@code elements} is an array of rules. Each resource location that is matched against this list, will
@@ -46,10 +47,10 @@ import java.util.stream.Collectors;
  * 
  * Rules are resource locations, where asterisks (*) can be added to match any number of characters.
  * However, an asterisk can not match a colon. The nly exception to this is the single asterisk which matches
- * everything. When a rule is matched, it will yield the result specified in `whitelist` as a result. To alter
- * this, add a plus (+) or a minus (-) in front of the rule. This will make it a whitelist or blacklist rule
+ * everything. When a rule is matched, it will yield the result specified in `allowList` as a result. To alter
+ * this, add a plus (+) or a minus (-) in front of the rule. This will make it a allow or deny rule
  * respectively. You can also add regex rules. These are json objects with two keys: `allow` - a boolean that
- * specifies whether this is a whitelist or blacklist rule and `regex` - which is a regex that must match the
+ * specifies whether this is an allow or a deny rule and `regex` - which is a regex that must match the
  * resource location.
  */
 public class ResourceList implements Predicate<ResourceLocation> {
@@ -57,26 +58,40 @@ public class ResourceList implements Predicate<ResourceLocation> {
     /**
      * A resource list that accepts every item.
      */
-    public static final ResourceList WHITELIST = new ResourceList(true, b -> {});
+    public static final ResourceList ALLOW_LIST = new ResourceList(true, b -> {});
     
     /**
      * A resource list that denies every item.
      */
-    public static final ResourceList BLACKLIST = new ResourceList(false, b -> {});
+    public static final ResourceList DENY_LIST = new ResourceList(false, b -> {});
 
+    /**
+     * @deprecated Use {@link #ALLOW_LIST}
+     */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
+    public static final ResourceList WHITELIST = ALLOW_LIST;
+    
+    /**
+     * @deprecated Use {@link #DENY_LIST}
+     */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
+    public static final ResourceList BLACKLIST = DENY_LIST;
+    
     private static final WildcardString NAMESPACE_MC = new WildcardString(List.of("minecraft"));
     
-    private final boolean whitelist;
+    private final boolean allowList;
     private final List<Rule> rules;
 
     /**
      * Creates a new resource list.
      * 
-     * @param whitelist Whether this is a whitelist or a blacklist
+     * @param allowList Whether this is an allow list or a deny list
      * @param rules A consumer that gets a {@code RuleBuilder} and should build the rules.
      */
-    public ResourceList(boolean whitelist, Consumer<RuleBuilder> rules) {
-        this.whitelist = whitelist;
+    public ResourceList(boolean allowList, Consumer<RuleBuilder> rules) {
+        this.allowList = allowList;
         RuleBuilder builder = new RuleBuilder();
         rules.accept(builder);
         this.rules = builder.rulesBuilderList.build();
@@ -86,7 +101,12 @@ public class ResourceList implements Predicate<ResourceLocation> {
      * Reads a resource list from JSON.
      */
     public ResourceList(JsonObject json) {
-        this.whitelist = !json.has("whitelist") || json.get("whitelist").getAsBoolean();
+        // TODO remove in 1.19
+        if (json.has("whitelist")) {
+            this.allowList = json.get("whitelist").getAsBoolean();
+        } else {
+            this.allowList = !json.has("allow_list") || json.get("allow_list").getAsBoolean();
+        }
         if (!json.has("elements")) {
             throw new IllegalStateException("Resource list has no member 'elements': " + json);
         }
@@ -109,7 +129,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
      * Reads a resource list from a {@link FriendlyByteBuf}.
      */
     public ResourceList(FriendlyByteBuf buffer) {
-        this.whitelist = buffer.readBoolean();
+        this.allowList = buffer.readBoolean();
         int ruleSize = buffer.readVarInt();
         ImmutableList.Builder<Rule> rules = ImmutableList.builder();
         for (int i = 0; i < ruleSize; i++) {
@@ -123,7 +143,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
      */
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("whitelist", this.whitelist);
+        json.addProperty("allow_list", this.allowList);
         JsonArray array = new JsonArray();
         for (Rule rule : this.rules) {
             array.add(rule.toJson());
@@ -136,16 +156,25 @@ public class ResourceList implements Predicate<ResourceLocation> {
      * Writes this resource list to a {@link FriendlyByteBuf}.
      */
     public void toNetwork(FriendlyByteBuf buffer) {
-        buffer.writeBoolean(this.whitelist);
+        buffer.writeBoolean(this.allowList);
         buffer.writeVarInt(this.rules.size());
         this.rules.forEach(rule -> rule.toNetwork(buffer));
     }
 
     /**
-     * Gets whether this ResourceList is a whitelist or a blacklist.
+     * Gets whether this ResourceList is an allow list or a deny list.
      */
+    public boolean isAllowList() {
+        return this.allowList;
+    }
+
+    /**
+     * @deprecated use {@link #isAllowList()}
+     */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public boolean isWhitelist() {
-        return this.whitelist;
+        return this.isAllowList();
     }
 
     /**
@@ -166,7 +195,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
                 return value;
             }
         }
-        return !this.whitelist;
+        return !this.allowList;
     }
 
     private Rule parseRule(JsonElement json) {
@@ -295,7 +324,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         public Boolean test(ResourceLocation rl) {
             if (this.namespace.matcher.get().test(rl.getNamespace())
                     && this.path.matcher.get().test(rl.getPath())) {
-                return this.allow == null ? ResourceList.this.whitelist : this.allow;
+                return this.allow == null ? ResourceList.this.allowList : this.allow;
             } else {
                 return null;
             }
@@ -360,7 +389,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         @Override
         public Boolean test(ResourceLocation rl) {
             if (this.matcher.get().test(rl.toString())) {
-                return this.allow == null ? ResourceList.this.whitelist : this.allow;
+                return this.allow == null ? ResourceList.this.allowList : this.allow;
             } else {
                 return null;
             }
@@ -431,7 +460,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
 
         /**
          * Adds a simple rule that only matches the given {@link ResourceLocation}.
-         * When this rule matches it will return the whitelist state of the resource list
+         * When this rule matches it will return the allow list state of the resource list
          * as result.
          */
         public void simple(ResourceLocation rl) {
@@ -451,7 +480,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
          * match any amount of characters in the {@link ResourceLocation}. However an asterisk can never
          * match a colon.
          * The special case '*' matches every {@link ResourceLocation}.
-         * By default this will return the whitelist state of the resource list as result.
+         * By default this will return the allow list state of the resource list as result.
          * To change this prepend a plus (+) to make it return true or a minus (-) to make
          * it return false on a match.
          */
@@ -461,7 +490,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
 
         /**
          * Adds a rule that checks that a resource location matches a regex.
-         * When this rule matches it will return the whitelist state of the resource list
+         * When this rule matches it will return the allow list state of the resource list
          * as result.
          */
         public void regex(@RegEx String regex) {

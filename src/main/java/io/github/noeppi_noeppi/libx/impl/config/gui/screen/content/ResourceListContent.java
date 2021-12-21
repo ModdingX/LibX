@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
 
 public class ResourceListContent implements ConfigScreenContent<ResourceList> {
     
-    private boolean whitelist;
+    private boolean allowList;
     private final List<ResourceList.RuleEntry> list;
     private Consumer<ResourceList> inputChanged;
     
@@ -42,14 +42,14 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
     private final List<EntryWidgets> entryWidgets;
 
     public ResourceListContent(ResourceList value) {
-        this.whitelist = value.isWhitelist();
+        this.allowList = value.isAllowList();
         this.list = new ArrayList<>(value.getRules());
         
         this.typeEditor = ConfigEditor.toggle(List.of(true, false), v -> {
             if (v) {
-                return new TranslatableComponent("libx.config.gui.resource_list.type", new TranslatableComponent("libx.config.gui.resource_list.type_whitelist"));
+                return new TranslatableComponent("libx.config.gui.resource_list.type", new TranslatableComponent("libx.config.gui.resource_list.type_allow_list"));
             } else {
-                return new TranslatableComponent("libx.config.gui.resource_list.type", new TranslatableComponent("libx.config.gui.resource_list.type_blacklist"));
+                return new TranslatableComponent("libx.config.gui.resource_list.type", new TranslatableComponent("libx.config.gui.resource_list.type_deny_list"));
             }
         });
         
@@ -88,7 +88,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
 
     private void update() {
         if (this.inputChanged != null) {
-            this.inputChanged.accept(new ResourceList(this.whitelist, builder -> this.list.forEach(entry -> {
+            this.inputChanged.accept(new ResourceList(this.allowList, builder -> this.list.forEach(entry -> {
                 try {
                     if (!entry.regex()) {
                         String prefix = "";
@@ -128,11 +128,11 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
             }
         });
         
-        WidgetProperties<Boolean> typeProperties = new WidgetProperties<>(screen.width - padding - 120, 0, 120, 20, whitelist -> {
-            this.whitelist = whitelist;
+        WidgetProperties<Boolean> typeProperties = new WidgetProperties<>(screen.width - padding - 120, 0, 120, 20, allowList -> {
+            this.allowList = allowList;
             this.update();
         });
-        AbstractWidget typeWidget = EditorHelper.create(screen, this.typeEditor, this.whitelist, this.typeWidget, typeProperties);
+        AbstractWidget typeWidget = EditorHelper.create(screen, this.typeEditor, this.allowList, this.typeWidget, typeProperties);
         consumer.accept(typeWidget);
         this.typeWidget = typeWidget;
         
