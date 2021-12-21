@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <h3>simple</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">simple</span><wbr><span class="parameters">(net.minecraft.resources.ResourceLocation&nbsp;rl)</span></div>
 <div class="block">Adds a simple rule that only matches the given <code>ResourceLocation</code>.
- When this rule matches it will return the whitelist state of the resource list
+ When this rule matches it will return the allow list state of the resource list
  as result.</div>
 </section>
 </li>
@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
  match any amount of characters in the <code>ResourceLocation</code>. However an asterisk can never
  match a colon.
  The special case '*' matches every <code>ResourceLocation</code>.
- By default this will return the whitelist state of the resource list as result.
+ By default this will return the allow list state of the resource list as result.
  To change this prepend a plus (+) to make it return true or a minus (-) to make
  it return false on a match.</div>
 </section>
@@ -180,7 +180,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">regex</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.1/javax/annotation/RegEx.html" title="class or interface in javax.annotation" class="external-link">@RegEx</a>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;regex)</span></div>
 <div class="block">Adds a rule that checks that a resource location matches a regex.
- When this rule matches it will return the whitelist state of the resource list
+ When this rule matches it will return the allow list state of the resource list
  as result.</div>
 </section>
 </li>

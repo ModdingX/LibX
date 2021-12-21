@@ -88,12 +88,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">A <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link"><code>Predicate</code></a> for <code>resource locations</code> implemented as
  a list of rules that will be applied one after another. The first rule that matches
  a resource location determines the result.
- The resource list can either be a white list or a black list. If it is a whitelist,
+ The resource list can either be a white list or a black list. If it is an allow list,
  by default a matching rule will make the <a href="#test(net.minecraft.resources.ResourceLocation)"><code>test</code></a> function
- return true. If it's a blacklist it'll return false by default for matching rules.
- For whitelists if no rule matches <code>false</code> is returned. For blacklists it's
+ return true. If it's a deny list it'll return false by default for matching rules.
+ For allow lists if no rule matches <code>false</code> is returned. For deny lists it's
  <code>true</code>.
- Rules on a whitelist can also make the <code>test</code> method false and the other
+ Rules on an allow list can also make the <code>test</code> method false and the other
  way round.
  The order of the rules is important. Rules that are added first will have a higher
  priority and only the first matching rule will be applied.
@@ -103,7 +103,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  
  <h3>ResourceLists in LibX configs</h3>
  
- This explains, how a resource list is used inj a config. In the <code>whitelist</code> field you can specify
+ This explains, how a resource list is used inj a config. In the <code>allowList</code> field you can specify
  whether all entries will be accepted by default or rejected.
  
  <code>elements</code> is an array of rules. Each resource location that is matched against this list, will
@@ -111,10 +111,10 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  
  Rules are resource locations, where asterisks (*) can be added to match any number of characters.
  However, an asterisk can not match a colon. The nly exception to this is the single asterisk which matches
- everything. When a rule is matched, it will yield the result specified in `whitelist` as a result. To alter
- this, add a plus (+) or a minus (-) in front of the rule. This will make it a whitelist or blacklist rule
+ everything. When a rule is matched, it will yield the result specified in `allowList` as a result. To alter
+ this, add a plus (+) or a minus (-) in front of the rule. This will make it a allow or deny rule
  respectively. You can also add regex rules. These are json objects with two keys: `allow` - a boolean that
- specifies whether this is a whitelist or blacklist rule and `regex` - which is a regex that must match the
+ specifies whether this is an allow or a deny rule and `regex` - which is a regex that must match the
  resource location.</div>
 </section>
 <section class="summary">
@@ -151,14 +151,28 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></code></div>
-<div class="col-second even-row-color"><code><a href="#BLACKLIST" class="member-name-link">BLACKLIST</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ALLOW_LIST" class="member-name-link">ALLOW_LIST</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A resource list that accepts every item.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#BLACKLIST" class="member-name-link">BLACKLIST</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#DENY_LIST"><code>DENY_LIST</code></a></div>
+</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DENY_LIST" class="member-name-link">DENY_LIST</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">A resource list that denies every item.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#WHITELIST" class="member-name-link">WHITELIST</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">A resource list that accepts every item.</div>
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#ALLOW_LIST"><code>ALLOW_LIST</code></a></div>
+</div>
 </div>
 </div>
 </section>
@@ -171,7 +185,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(boolean,java.util.function.Consumer)" class="member-name-link">ResourceList</a><wbr>(boolean&nbsp;whitelist,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(boolean,java.util.function.Consumer)" class="member-name-link">ResourceList</a><wbr>(boolean&nbsp;allowList,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="ResourceList.RuleBuilder.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList.RuleBuilder</a>&gt;&nbsp;rules)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a new resource list.</div>
@@ -192,7 +206,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -204,23 +218,30 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Gets a list of <a href="ResourceList.RuleEntry.html" title="class in io.github.noeppi_noeppi.libx.util"><code>rule entries</code></a> for this ResourceList.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isWhitelist()" class="member-name-link">isWhitelist</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAllowList()" class="member-name-link">isAllowList</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets whether this ResourceList is a whitelist or a blacklist.</div>
+<div class="block">Gets whether this ResourceList is an allow list or a deny list.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#test(net.minecraft.resources.ResourceLocation)" class="member-name-link">test</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;rl)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#isWhitelist()" class="member-name-link">isWhitelist</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">use <a href="#isAllowList()"><code>isAllowList()</code></a></div>
+</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#test(net.minecraft.resources.ResourceLocation)" class="member-name-link">test</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;rl)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Tests whether the given <code>ResourceLocation</code> is on this resource list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.8/com.google.gson/com/google/gson/JsonObject.html" title="class or interface in com.google.gson" class="external-link">JsonObject</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toJson()" class="member-name-link">toJson</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.8/com.google.gson/com/google/gson/JsonObject.html" title="class or interface in com.google.gson" class="external-link">JsonObject</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toJson()" class="member-name-link">toJson</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Serialises this resource list to JSON.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toNetwork(net.minecraft.network.FriendlyByteBuf)" class="member-name-link">toNetwork</a><wbr>(net.minecraft.network.FriendlyByteBuf&nbsp;buffer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toNetwork(net.minecraft.network.FriendlyByteBuf)" class="member-name-link">toNetwork</a><wbr>(net.minecraft.network.FriendlyByteBuf&nbsp;buffer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes this resource list to a <code>FriendlyByteBuf</code>.</div>
 </div>
 </div>
@@ -244,17 +265,39 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="ALLOW_LIST">
+<h3>ALLOW_LIST</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></span>&nbsp;<span class="element-name">ALLOW_LIST</span></div>
+<div class="block">A resource list that accepts every item.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="DENY_LIST">
+<h3>DENY_LIST</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></span>&nbsp;<span class="element-name">DENY_LIST</span></div>
+<div class="block">A resource list that denies every item.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="WHITELIST">
 <h3>WHITELIST</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></span>&nbsp;<span class="element-name">WHITELIST</span></div>
-<div class="block">A resource list that accepts every item.</div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../annotation/meta/RemoveIn.html" title="annotation interface in io.github.noeppi_noeppi.libx.annotation.meta">@RemoveIn</a>(<a href="../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.19")
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></span>&nbsp;<span class="element-name">WHITELIST</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#ALLOW_LIST"><code>ALLOW_LIST</code></a></div>
+</div>
 </section>
 </li>
 <li>
 <section class="detail" id="BLACKLIST">
 <h3>BLACKLIST</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></span>&nbsp;<span class="element-name">BLACKLIST</span></div>
-<div class="block">A resource list that denies every item.</div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../annotation/meta/RemoveIn.html" title="annotation interface in io.github.noeppi_noeppi.libx.annotation.meta">@RemoveIn</a>(<a href="../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.19")
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></span>&nbsp;<span class="element-name">BLACKLIST</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#DENY_LIST"><code>DENY_LIST</code></a></div>
+</div>
 </section>
 </li>
 </ul>
@@ -268,12 +311,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(boolean,java.util.function.Consumer)">
 <h3>ResourceList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ResourceList</span><wbr><span class="parameters">(boolean&nbsp;whitelist,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ResourceList</span><wbr><span class="parameters">(boolean&nbsp;allowList,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="ResourceList.RuleBuilder.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList.RuleBuilder</a>&gt;&nbsp;rules)</span></div>
 <div class="block">Creates a new resource list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>whitelist</code> - Whether this is a whitelist or a blacklist</dd>
+<dd><code>allowList</code> - Whether this is an allow list or a deny list</dd>
 <dd><code>rules</code> - A consumer that gets a <code>RuleBuilder</code> and should build the rules.</dd>
 </dl>
 </section>
@@ -315,10 +358,21 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
+<section class="detail" id="isAllowList()">
+<h3>isAllowList</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isAllowList</span>()</div>
+<div class="block">Gets whether this ResourceList is an allow list or a deny list.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="isWhitelist()">
 <h3>isWhitelist</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isWhitelist</span>()</div>
-<div class="block">Gets whether this ResourceList is a whitelist or a blacklist.</div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../annotation/meta/RemoveIn.html" title="annotation interface in io.github.noeppi_noeppi.libx.annotation.meta">@RemoveIn</a>(<a href="../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.19")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isWhitelist</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">use <a href="#isAllowList()"><code>isAllowList()</code></a></div>
+</div>
 </section>
 </li>
 <li>

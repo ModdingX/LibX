@@ -135,6 +135,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the value of the <code>allow</code> record component.</div>
 </dd>
+<dt><a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#ALLOW_LIST" class="member-name-link">ALLOW_LIST</a> - Static variable in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></dt>
+<dd>
+<div class="block">A resource list that accepts every item.</div>
+</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/LootBuilders.html#alternative(net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder...)" class="member-name-link">alternative(LootPoolEntryContainer.Builder&lt;?&gt;...)</a> - Static method in class io.github.noeppi_noeppi.libx.data.<a href="io/github/noeppi_noeppi/libx/data/LootBuilders.html" title="class in io.github.noeppi_noeppi.libx.data">LootBuilders</a></dt>
 <dd>
 <div class="block">Gets a loot builder for alternative loot.</div>
@@ -285,7 +289,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#BLACKLIST" class="member-name-link">BLACKLIST</a> - Static variable in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></dt>
 <dd>
-<div class="block">A resource list that denies every item.</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#DENY_LIST"><code>ResourceList.DENY_LIST</code></a></div>
+</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/recipe/SmeltingExtension.html#blasting(net.minecraft.resources.ResourceLocation,net.minecraft.tags.Tag,net.minecraft.world.level.ItemLike,float,int)" class="member-name-link">blasting(ResourceLocation, Tag&lt;Item&gt;, ItemLike, float, int)</a> - Method in interface io.github.noeppi_noeppi.libx.data.provider.recipe.<a href="io/github/noeppi_noeppi/libx/data/provider/recipe/SmeltingExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe">SmeltingExtension</a></dt>
 <dd>
@@ -1050,6 +1056,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/github/noeppi_noeppi/libx/config/gui/InputProperties.html#defaultValue()" class="member-name-link">defaultValue()</a> - Method in interface io.github.noeppi_noeppi.libx.config.gui.<a href="io/github/noeppi_noeppi/libx/config/gui/InputProperties.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">InputProperties</a></dt>
 <dd>
 <div class="block">gets the default value for newly created inputs that have no other default value available.</div>
+</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#DENY_LIST" class="member-name-link">DENY_LIST</a> - Static variable in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></dt>
+<dd>
+<div class="block">A resource list that denies every item.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/command/EnumArgument2.Serializer.html#deserializeFromNetwork(net.minecraft.network.FriendlyByteBuf)" class="member-name-link">deserializeFromNetwork(FriendlyByteBuf)</a> - Method in class io.github.noeppi_noeppi.libx.command.<a href="io/github/noeppi_noeppi/libx/command/EnumArgument2.Serializer.html" title="class in io.github.noeppi_noeppi.libx.command">EnumArgument2.Serializer</a></dt>
 <dd>&nbsp;</dd>
@@ -2339,6 +2349,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/world/package-summary.html">io.github.noeppi_noeppi.libx.world</a> - package io.github.noeppi_noeppi.libx.world</dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#isAllowList()" class="member-name-link">isAllowList()</a> - Method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></dt>
+<dd>
+<div class="block">Gets whether this ResourceList is an allow list or a deny list.</div>
+</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/event/ClickBlockEmptyHandEvent.html#isCancelable()" class="member-name-link">isCancelable()</a> - Method in class io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/ClickBlockEmptyHandEvent.html" title="class in io.github.noeppi_noeppi.libx.event">ClickBlockEmptyHandEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/event/RandomTickEvent.html#isCancelable()" class="member-name-link">isCancelable()</a> - Method in class io.github.noeppi_noeppi.libx.event.<a href="io/github/noeppi_noeppi/libx/event/RandomTickEvent.html" title="class in io.github.noeppi_noeppi.libx.event">RandomTickEvent</a></dt>
@@ -2394,7 +2408,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#isWhitelist()" class="member-name-link">isWhitelist()</a> - Method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></dt>
 <dd>
-<div class="block">Gets whether this ResourceList is a whitelist or a blacklist.</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">use <a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#isAllowList()"><code>ResourceList.isAllowList()</code></a></div>
+</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#item()" class="member-name-link">item()</a> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase</a></dt>
 <dd>
@@ -4383,7 +4399,9 @@ the order they are declared.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#WHITELIST" class="member-name-link">WHITELIST</a> - Static variable in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ResourceList.html" title="class in io.github.noeppi_noeppi.libx.util">ResourceList</a></dt>
 <dd>
-<div class="block">A resource list that accepts every item.</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#ALLOW_LIST"><code>ResourceList.ALLOW_LIST</code></a></div>
+</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/config/gui/WidgetProperties.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.config.gui">WidgetProperties</a>&lt;<a href="io/github/noeppi_noeppi/libx/config/gui/WidgetProperties.html" title="type parameter in WidgetProperties">T</a>&gt; - Record Class in <a href="io/github/noeppi_noeppi/libx/config/gui/package-summary.html">io.github.noeppi_noeppi.libx.config.gui</a></dt>
 <dd>
