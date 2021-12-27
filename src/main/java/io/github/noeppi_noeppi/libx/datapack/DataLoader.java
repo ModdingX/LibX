@@ -146,12 +146,12 @@ public class DataLoader {
      * @return A list of resources. Their ids will have {@code basePath} and {@code suffix} stripped.
      */
     public static List<ResourceEntry> locate(ResourceManager rm, String basePath, @Nullable String suffix, boolean recursive) {
-        Collection<ResourceLocation> ids = rm.listResources(basePath, file -> file.endsWith(".json"));
+        Collection<ResourceLocation> ids = rm.listResources(basePath, file -> suffix == null || file.endsWith("." + suffix));
         ImmutableList.Builder<ResourceEntry> list = ImmutableList.builder();
         for (ResourceLocation id : ids) {
             if (!id.getPath().startsWith(basePath + "/")) continue;
             if (suffix != null && !id.getPath().endsWith("." + suffix)) continue;
-            String realPath = id.getPath().substring(basePath.length() + 1);
+            String realPath = id.getPath().substring(basePath.length() + 1, id.getPath().length() - (suffix == null ? 0 : (suffix.length() + 1)));
             if (realPath.isEmpty() || (!recursive && realPath.contains("/"))) continue;
             list.add(new ResourceEntry(new ResourceLocation(id.getNamespace(), realPath), () -> rm.getResource(id)));
         }
