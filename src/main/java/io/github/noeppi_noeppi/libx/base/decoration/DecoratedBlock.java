@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * A block that registeras some decoration blocks with it based on
+ * A block that registers some decoration blocks with it based on
  * a {@link DecorationContext}.
  */
 public class DecoratedBlock extends BlockBase {
