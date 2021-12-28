@@ -6,6 +6,7 @@ import io.github.noeppi_noeppi.libx.data.provider.CommonTagsProviderBase;
 import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.*;
 import io.github.noeppi_noeppi.libx.impl.tags.InternalTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 
 public class DecorationTags {
     
@@ -63,6 +64,10 @@ public class DecorationTags {
     }
     
     private static boolean isWood(DecoratedBlock block) {
-        return block.getContext() == DecorationContext.PLANKS;
+        if (block.defaultBlockState().getMaterial() == Material.WOOD || block.defaultBlockState().getMaterial() == Material.NETHER_WOOD) {
+            return true;
+        } else {
+            return block.getContext() == DecorationContext.PLANKS;
+        }
     }
 }
