@@ -13,7 +13,7 @@ import net.minecraft.resources.RegistryWriteOps;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 /**
- * Provides some utility methods to encode and decode thing usin ga codec for a
+ * Provides some utility methods to encode and decode thing using a codec for a
  * specific {@link DynamicOps}.
  * 
  * {@link CodecOps} for {@link JsonOps json} and {@link NbtOps nbt} can be found in {@link CodecHelper}.
@@ -55,7 +55,7 @@ public class CodecOps<E> {
     /**
      * Writes an element using a code.
      * 
-     * @param resultType The class tah the result is expected to have. It is ensured,
+     * @param resultType The class that the result is expected to have. It is ensured,
      *                   that the result is of this class. If the codec produces data
      *                   of another class, an exception will be thrown.
      */
@@ -66,7 +66,7 @@ public class CodecOps<E> {
     /**
      * Writes an element using a code.
      * 
-     * @param resultType The class tah the result is expected to have. It is ensured,
+     * @param resultType The class that the result is expected to have. It is ensured,
      *                   that the result is of this class. If the codec produces data
      *                   of another class, an exception will be thrown.
      * @param registries The {@link RegistryAccess} to provide for registry
