@@ -61,7 +61,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
     protected final ModX mod;
     protected final DataGenerator generator;
 
-    private final Set<Block> blacklist = new HashSet<>();
+    private final Set<Block> ignored = new HashSet<>();
     private final Map<Block, Function<Block, LootTable.Builder>> functionMap = new HashMap<>();
 
     public BlockLootProviderBase(ModX mod, DataGenerator generator) {
@@ -73,7 +73,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
      * The given block will not be processed by this provider. Useful when you want to create the loot table manually.
      */
     protected void customLootTable(Block block) {
-        this.blacklist.add(block);
+        this.ignored.add(block);
     }
 
     /**
@@ -104,7 +104,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
 
         for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
             Block block = ForgeRegistries.BLOCKS.getValue(id);
-            if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.blacklist.contains(block)) {
+            if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(block)) {
                 Function<Block, LootTable.Builder> loot;
                 if (this.functionMap.containsKey(block)) {
                     loot = this.functionMap.get(block);
