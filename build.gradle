@@ -26,7 +26,7 @@ dependencies {
     annotationProcessor sourceSets.ap.output
     implementation sourceSets.ap.output
     
-    coremods 'io.github.noeppi_noeppi.misc:CoreModTypes:5.0.1-1'
+    coremods 'io.github.noeppi_noeppi.misc:CoreModTypes:5.0.2-1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'

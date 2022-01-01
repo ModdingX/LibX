@@ -79,7 +79,7 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
 
     @Override
     public Optional<Enum<?>> correct(JsonElement json, ConfigCorrection<Enum<?>> correction) {
-        if (json.isJsonPrimitive() && json.isJsonNull()) {
+        if (json.isJsonPrimitive() || json.isJsonNull()) {
             String str = json.isJsonNull() ? "null" : json.getAsString().toLowerCase(Locale.ROOT).strip();
             Enum<?>[] enums = this.clazz.getEnumConstants();
             for (Enum<?> e : enums) {
