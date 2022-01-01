@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
 import io.github.noeppi_noeppi.libx.impl.codec.EnumCodec;
 import io.github.noeppi_noeppi.libx.impl.codec.ForgeRegistryCodec;
 import io.github.noeppi_noeppi.libx.impl.codec.OptionCodec;
@@ -16,6 +17,7 @@ import java.util.Optional;
 /**
  * Provides additional {@link Codec codecs}.
  */
+@Experimental
 public class MoreCodecs {
 
     /**

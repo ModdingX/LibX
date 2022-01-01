@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.RegistryReadOps;
@@ -17,6 +18,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
  * 
  * {@link CodecOps} for {@link JsonOps json} and {@link NbtOps nbt} can be found in {@link CodecHelper}.
  */
+@Experimental
 public class CodecOps<E> {
     
     private final Class<E> baseClass;
