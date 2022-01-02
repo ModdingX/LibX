@@ -27,6 +27,7 @@ public class DatagenProcessor {
         }
         List<ExecutableElement> ctors = element.getEnclosedElements().stream()
                 .filter(e -> e.getKind() == ElementKind.CONSTRUCTOR)
+                .filter(e -> e.getModifiers().contains(Modifier.PUBLIC))
                 .filter(e -> e instanceof ExecutableElement)
                 .map(e -> (ExecutableElement) e)
                 .toList();
@@ -34,7 +35,7 @@ public class DatagenProcessor {
         if (ctors.isEmpty()) {
             args = List.of();
         } else if (ctors.size() != 1) {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "Class annotated with @Datagen can only have one constructor.", element);
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Class annotated with @Datagen can only have one public constructor.", element);
             return;
         } else {
             ExecutableElement ctor = ctors.get(0);
