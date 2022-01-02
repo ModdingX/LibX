@@ -12,6 +12,7 @@ io.github.noeppi_noeppi.libx.base.decoration
 io.github.noeppi_noeppi.libx.base.tile
 io.github.noeppi_noeppi.libx.block
 io.github.noeppi_noeppi.libx.capability
+io.github.noeppi_noeppi.libx.codec
 io.github.noeppi_noeppi.libx.command
 io.github.noeppi_noeppi.libx.config
 io.github.noeppi_noeppi.libx.config.correct
