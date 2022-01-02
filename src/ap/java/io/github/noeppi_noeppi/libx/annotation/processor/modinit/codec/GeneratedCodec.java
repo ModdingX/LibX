@@ -17,7 +17,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         this.params = List.copyOf(params);
     }
 
-    public static sealed abstract class CodecElement permits CodecParam, CodecDynamic, CodecRegistry {
+    public static sealed abstract class CodecElement permits CodecParam, CodecDynamic, CodecRegistry, CodecEnum {
 
         public final String typeFqn;
         public final String typeFqnBoxed;
@@ -34,10 +34,10 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
 
         public final String name;
         public final String codecFqn;
-        public final boolean list;
+        public final int list;
         public final String getter;
 
-        public CodecParam(String name, String typeFqn, String typeFqnBoxed, String codecFqn, boolean list, String getter) {
+        public CodecParam(String name, String typeFqn, String typeFqnBoxed, String codecFqn, int list, String getter) {
             super(typeFqn, typeFqnBoxed);
             this.name = name;
             this.codecFqn = codecFqn;
@@ -48,7 +48,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         @Override
         public void writeCode(Writer writer) throws IOException {
             writer.write(this.codecFqn);
-            if (this.list) {
+            for (int i = 0; i < this.list; i++) {
                 writer.write(".listOf()");
             }
             writer.write(".fieldOf(\"" + ModInit.quote(this.name) + "\")");
@@ -110,6 +110,32 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
                 writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">getCodecDefaultRegistryKey(" + this.registryTypeFqn + ".class)");
                 writer.write(")");
             }
+            writer.write(".forGetter(" + this.getter + ")");
+        }
+    }
+
+    public static final class CodecEnum extends CodecElement {
+
+        public final String name;
+        public final String enumClass;
+        public final int list;
+        public final String getter;
+
+        public CodecEnum(String name, String typeFqn, String typeFqnBoxed, String enumClass, int list, String getter) {
+            super(typeFqn, typeFqnBoxed);
+            this.name = name;
+            this.enumClass = enumClass;
+            this.list = list;
+            this.getter = getter;
+        }
+
+        @Override
+        public void writeCode(Writer writer) throws IOException {
+            writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.enumClass + ">enumCodec(" + this.enumClass + ".class)");
+            for (int i = 0; i < this.list; i++) {
+                writer.write(".listOf()");
+            }
+            writer.write(".fieldOf(\"" + ModInit.quote(this.name) + "\")");
             writer.write(".forGetter(" + this.getter + ")");
         }
     }

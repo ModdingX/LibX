@@ -22,11 +22,7 @@ public class RegistryType implements CodecType {
     @Override
     public boolean matches(Element param, String name, ModEnv env) {
         Element element = env.types().asElement(param.asType());
-        if (element instanceof TypeElement type) {
-            return env.elements().getBinaryName(type).contentEquals(Classes.REGISTRY);
-        } else {
-            return false;
-        }
+        return element instanceof TypeElement type && env.elements().getBinaryName(type).contentEquals(Classes.REGISTRY);
     }
 
     @Override

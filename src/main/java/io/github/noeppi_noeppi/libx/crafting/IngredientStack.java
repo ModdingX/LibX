@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.crafting;
 
 import com.google.gson.JsonObject;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -24,9 +25,18 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     }
 
     /**
+     * @deprecated Renamed  to {@link #isEmpty()} to match official names better.
+     */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
+    public boolean empty() {
+        return this.isEmpty();
+    }
+    
+    /**
      * Returns whether the count is 0 or {@link Ingredient#isEmpty()} return true.
      */
-    public boolean empty() {
+    public boolean isEmpty() {
         return this.count == 0 || this.ingredient.isEmpty();
     }
 

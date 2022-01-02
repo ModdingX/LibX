@@ -13,7 +13,6 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -34,24 +33,18 @@ public class ParamType implements CodecType {
     public GeneratedCodec.CodecElement generate(Element param, String name, GetterSupplier getter, ModEnv env) throws FailureException {
         String typeFqn = param.asType().toString();
         String typeFqnBoxed = env.boxed(param.asType()).toString();
-        String codecFqn;
-        boolean list;
-        if (param.asType().getKind() == TypeKind.DECLARED && param.asType() instanceof DeclaredType listType && env.sameErasure(param.asType(), env.forClass(List.class))) {
-            List<? extends TypeMirror> generics = listType.getTypeArguments();
-            if (generics.size() != 1) {
-                env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for parameterized list type.", param);
-                throw new FailureException();
-            }
-            codecFqn = getCodecFqn(generics.get(0), param, env);
-            list = true;
-        } else {
-            codecFqn = getCodecFqn(param.asType(), param, env);
-            list = false;
+        
+        CodecProcessor.ListInfo list = CodecProcessor.getNestedListInfo(param.asType(), env);
+        if (list == null) {
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't get a Codec for parameterized list type: Failed to infer element type.", param);
+            throw new FailureException();
         }
+        
+        String codecFqn = getCodecFqn(list.elementType(), param, env);
         if (codecFqn == null) {
             throw new FailureException();
         }
-        return new GeneratedCodec.CodecParam(name, typeFqn, typeFqnBoxed, codecFqn, list, getter.get());
+        return new GeneratedCodec.CodecParam(name, typeFqn, typeFqnBoxed, codecFqn, list.nesting(), getter.get());
     }
 
     @Nullable
