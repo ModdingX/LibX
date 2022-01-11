@@ -22,6 +22,8 @@ sourceSets {
     }
 }
 
+project.addModSourceSet(sourceSets.ap)
+
 dependencies {
     annotationProcessor sourceSets.ap.output
     implementation sourceSets.ap.output
