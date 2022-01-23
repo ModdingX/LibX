@@ -1,8 +1,9 @@
-package io.github.noeppi_noeppi.libx.impl.commands;
+package io.github.noeppi_noeppi.libx.impl.commands.client;
 
 import com.google.common.collect.Streams;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
+import io.github.noeppi_noeppi.libx.util.ComponentUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 import net.minecraftforge.fml.ModList;
@@ -15,8 +16,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModListCommand implements Command<CommandSourceStack> {
-
-    private static final HoverEvent COPY_MODLIST = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("libx.misc.copy_modlist"));
     
     public final boolean detailed;
 
@@ -38,15 +37,12 @@ public class ModListCommand implements Command<CommandSourceStack> {
                         ": " + mod.getDescription().split("\n")[0].trim() : ""))
                 .map(TextComponent::new);
         //noinspection UnstableApiUsage
-        List<MutableComponent> lines = Streams.mapWithIndex(lineStream, (line, idx) -> Objects.requireNonNull(line).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(idx % 2 == 0 ? 0xFFFF00 : 0xFF00F6))))
-                .map(line -> line.withStyle(Style.EMPTY.withHoverEvent(COPY_MODLIST)))
-                .collect(Collectors.toList());
+        List<MutableComponent> lines = Streams.mapWithIndex(lineStream, (line, idx) -> Objects.requireNonNull(line).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(idx % 2 == 0 ? 0xBDBD28 : 0x8C4489)))).toList();
         String copyToClipboard = lines.stream()
                 .map(Component::getString)
                 .collect(Collectors.joining("\n"));
-        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copyToClipboard);
         lines.stream()
-                .map(line -> line.withStyle(Style.EMPTY.withClickEvent(clickEvent)))
+                .map(line -> ComponentUtil.withCopyAction(line, copyToClipboard))
                 .forEach(line -> context.getSource().sendSuccess(line, false));
         
         return 0;

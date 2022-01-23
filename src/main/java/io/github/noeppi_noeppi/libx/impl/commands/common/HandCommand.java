@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.impl.commands;
+package io.github.noeppi_noeppi.libx.impl.commands.common;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
@@ -22,6 +22,7 @@ import net.minecraft.world.item.Items;
 import java.util.List;
 import java.util.Objects;
 
+// Not a client command as the client does not have the full stack tag
 public class HandCommand implements Command<CommandSourceStack> {
 
     @Override

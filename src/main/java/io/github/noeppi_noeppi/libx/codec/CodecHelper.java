@@ -48,4 +48,41 @@ public class CodecHelper {
             return DataResult.error(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
+
+    /**
+     * Takes a number of {@link DataResult}s and returns the first result that is a
+     * success. If there is no success in all the parameters, returns the first 
+     * {@link DataResult} that has a partial success. If all {@link DataResult}s are
+     * failures, the last failure is returned.
+     */
+    @SafeVarargs
+    public static <T> DataResult<T> or(Supplier<DataResult<T>>... results) {
+        //noinspection unchecked
+        Supplier<DataResult<T>>[] resultsEvaluated = new Supplier[results.length];
+        for (int i = 0; i < results.length; i++) {
+            DataResult<T> result = results[i].get();
+            resultsEvaluated[i] = () -> result;
+            if (result.result().isPresent()) {
+                return result;
+            }
+        }
+        return orPartial(resultsEvaluated);
+    }
+
+    /**
+     * Takes a number of {@link DataResult}s and returns the first result that is
+     * either a success or a partial success. If there is no success in all the
+     * parameters, the last failure is returned.
+     */
+    @SafeVarargs
+    public static <T> DataResult<T> orPartial(Supplier<DataResult<T>>... results) {
+        DataResult<T> current = DataResult.error("Empty OR-chain.");
+        for (Supplier<DataResult<T>> resultSupplier : results) {
+            current = resultSupplier.get();
+            if (current.resultOrPartial(err -> {}).isPresent()) {
+                return current;
+            }
+        }
+        return current;
+    }
 }

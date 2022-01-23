@@ -8,7 +8,8 @@ import io.github.noeppi_noeppi.libx.crafting.ingredient.NbtIngredient;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.PotionIngredient;
 import io.github.noeppi_noeppi.libx.impl.BlockEntityUpdateQueue;
 import io.github.noeppi_noeppi.libx.impl.InternalDataGen;
-import io.github.noeppi_noeppi.libx.impl.commands.CommandsImpl;
+import io.github.noeppi_noeppi.libx.impl.commands.client.ClientCommandsImpl;
+import io.github.noeppi_noeppi.libx.impl.commands.common.CommandsImpl;
 import io.github.noeppi_noeppi.libx.impl.config.ConfigEvents;
 import io.github.noeppi_noeppi.libx.impl.crafting.recipe.EmptyRecipe;
 import io.github.noeppi_noeppi.libx.impl.datapack.DynamicDatapackLocator;
@@ -63,6 +64,7 @@ public final class LibX extends ModX {
         MinecraftForge.EVENT_BUS.addListener(ClientTickHandler::tick);
         MinecraftForge.EVENT_BUS.addListener(BlockEntityUpdateQueue::tick);
         MinecraftForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> MinecraftForge.EVENT_BUS.addListener(ClientCommandsImpl::registerClientCommands));
         MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 
         CraftingHelper.register(this.resource("effect"), EffectIngredient.Serializer.INSTANCE);

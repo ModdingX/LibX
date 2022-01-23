@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.impl.commands;
+package io.github.noeppi_noeppi.libx.impl.commands.common;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;

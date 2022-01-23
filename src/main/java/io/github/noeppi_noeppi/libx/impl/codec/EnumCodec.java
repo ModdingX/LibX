@@ -40,19 +40,33 @@ public class EnumCodec<A extends Enum<A>> implements Codec<A> {
     @Override
     public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> ops, T input) {
         if (ops.compressMaps() && !this.extensible) {
-            return ops.getNumberValue(input)
-                    .flatMap(number -> CodecHelper.doesNotThrow(() -> {
-                        A[] elems = this.clazz.getEnumConstants();
-                        try {
-                            return elems[number.intValue()];
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            throw new IllegalStateException("Invalid enum constant id: " + number + " (" + number.intValue() + ")");
-                        }
-                    })).map(r -> Pair.of(r, ops.empty()));
+            return CodecHelper.or(
+                    () -> this.decodeById(ops, input),
+                    () -> this.decodeByName(ops, input)
+            );
         } else {
-            return ops.getStringValue(input)
+            return CodecHelper.or(
+                    () -> this.decodeByName(ops, input),
+                    () -> this.decodeById(ops, input)
+            );
+        }
+    }
+    
+    private <T> DataResult<Pair<A, T>> decodeById(DynamicOps<T> ops, T input) {
+        return ops.getNumberValue(input)
+                .flatMap(number -> CodecHelper.doesNotThrow(() -> {
+                    A[] elems = this.clazz.getEnumConstants();
+                    try {
+                        return elems[number.intValue()];
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        throw new IllegalStateException("Invalid enum constant id: " + number + " (" + number.intValue() + ")");
+                    }
+                })).map(r -> Pair.of(r, ops.empty()));
+    }
+    
+    private <T> DataResult<Pair<A, T>> decodeByName(DynamicOps<T> ops, T input) {
+        return ops.getStringValue(input)
                     .flatMap(str -> CodecHelper.doesNotThrow(() -> Enum.valueOf(this.clazz, str)))
                     .map(r -> Pair.of(r, ops.empty()));
-        }
     }
 }

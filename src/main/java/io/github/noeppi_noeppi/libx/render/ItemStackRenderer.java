@@ -86,7 +86,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
                     if (pair.getRight()) {
                         if (!defaultTags.containsKey(teType)) {
                             setLevelAndState(blockEntity, state);
-                            defaultTags.put(teType, blockEntity.save(new CompoundTag()));
+                            defaultTags.put(teType, blockEntity.saveWithFullMetadata());
                         }
 
                         CompoundTag nbt = stack.getTag();
