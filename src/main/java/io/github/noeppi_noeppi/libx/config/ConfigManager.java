@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonParseException;
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.config.validator.DoubleRange;
 import io.github.noeppi_noeppi.libx.crafting.IngredientStack;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
@@ -95,7 +96,7 @@ import java.util.*;
  * You need to register that type via {@link ConfigManager#registerValueMapper(String, ValueMapper)} (or
  * {@link ConfigManager#registerValueMapper(String, GenericValueMapper)} for generic value mappers).
  * Then you can use that type in a config. Custom registered value mappers are unique for each mod, so
- * you and another mod can add different value mappers for the same class. However you can't add two
+ * you and another mod can add different value mappers for the same class. However, you can't add two
  * value mappers for the same class in one mod.
  * 
  * By default the following types are supported:
@@ -203,11 +204,34 @@ public class ConfigManager {
     }
 
     /**
-     * Forces a reload of all configs. <b>This will not sync the config tough. Use forceResync for this.</b>
+     * Forces reload of all configs. <b>This will not sync the config tough. Use forceResync for this.</b>
+     * 
+     * @deprecated Use {@link #reloadCommon()} or {@link #reloadClient()}.
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public static void reloadAll() {
         for (Class<?> configClass : configs.keySet()) {
-            reloadConfig(configClass);
+            reloadConfig(configClass, true, true);
+        }
+    }
+
+    /**
+     * Forces reload of all common configs. <b>This will not sync the config though. Use {@link #forceResync(ServerPlayer)} for this.</b>
+     */
+    public static void reloadCommon() {
+        for (Class<?> configClass : configs.keySet()) {
+            reloadConfig(configClass, true, false);
+        }
+    }
+    
+    /**
+     * Forces reload of all client configs.
+     */
+    public static void reloadClient() {
+        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) return;
+        for (Class<?> configClass : configs.keySet()) {
+            reloadConfig(configClass, false, true);
         }
     }
     
@@ -231,22 +255,29 @@ public class ConfigManager {
     }
 
     /**
-     * Forces a reload of one config. <b>This will not sync the config tough. Use forceResync for this.</b>
+     * Forces reload of one config. <b>This will not sync the config tough. Use {@link #forceResync(ServerPlayer, Class)} for this.</b>
      */
     public static void reloadConfig(Class<?> configClass) {
+        reloadConfig(configClass, true, true);
+    }
+    
+    private static void reloadConfig(Class<?> configClass, boolean allowCommon, boolean allowClient) {
+        if (!allowCommon && !allowClient) return;
         if (!configIds.containsValue(configClass)) {
             throw new IllegalArgumentException("Class " + configClass + " is not registered as a config.");
         }
         try {
             ConfigImpl config = ConfigImpl.getConfig(configIds.inverse().get(configClass));
-            if (!config.clientConfig || FMLEnvironment.dist == Dist.CLIENT) {
-                ConfigState state = config.readFromFileOrCreateByDefault();
-                config.saveState(state);
-                if (!config.isShadowed()) {
-                    state.apply();
+            if (config.clientConfig ? allowClient : allowCommon) {
+                if (!config.clientConfig || FMLEnvironment.dist == Dist.CLIENT) {
+                    ConfigState state = config.readFromFileOrCreateByDefault();
+                    config.saveState(state);
+                    if (!config.isShadowed()) {
+                        state.apply();
+                    }
+                    config.reloadClientWorldState();
+                    MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path, config.path));
                 }
-                config.reloadClientWorldState();
-                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
             LibX.logger.error("Failed to reload config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);

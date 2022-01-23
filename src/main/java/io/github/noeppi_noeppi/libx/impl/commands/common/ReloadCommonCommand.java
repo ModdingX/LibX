@@ -8,15 +8,15 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-public class ReloadCommand implements Command<CommandSourceStack> {
+public class ReloadCommonCommand implements Command<CommandSourceStack> {
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) {
-        ConfigManager.reloadAll();
+        ConfigManager.reloadCommon();
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             ConfigManager.forceResync(null);
         }
-        context.getSource().sendSuccess(new TranslatableComponent("libx.command.reload"), true);
+        context.getSource().sendSuccess(new TranslatableComponent("libx.command.reload.common"), true);
         return 0;
     }
 }

@@ -10,6 +10,10 @@ public class ClientCommandsImpl {
                 Commands.literal("modlist").executes(new ModListCommand(false)).then(
                         Commands.literal("detailed").executes(new ModListCommand(true))
                 )
+        ).then(
+                Commands.literal("reload").then(
+                        Commands.literal("client").executes(new ReloadClientCommand())
+                )
         ));
     }
 }

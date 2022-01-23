@@ -19,7 +19,9 @@ public class CommandsImpl {
                                 .then(Commands.argument("nbt", CompoundTagArgument.compoundTag()).executes(new EntityDataCommand()))
                 )
         ).then(
-                Commands.literal("reload").requires(source -> source.hasPermission(2)).executes(new ReloadCommand())
+                Commands.literal("reload").then(
+                        Commands.literal("common").requires(source -> source.hasPermission(2)).executes(new ReloadCommonCommand())
+                )
         ));
     }
 }
