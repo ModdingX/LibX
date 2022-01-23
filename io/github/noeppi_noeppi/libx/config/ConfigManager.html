@@ -142,7 +142,7 @@ loadScripts(document, 'script');</script>
  You need to register that type via <a href="#registerValueMapper(java.lang.String,io.github.noeppi_noeppi.libx.config.ValueMapper)"><code>registerValueMapper(String, ValueMapper)</code></a> (or
  <a href="#registerValueMapper(java.lang.String,io.github.noeppi_noeppi.libx.config.GenericValueMapper)"><code>registerValueMapper(String, GenericValueMapper)</code></a> for generic value mappers).
  Then you can use that type in a config. Custom registered value mappers are unique for each mod, so
- you and another mod can add different value mappers for the same class. However you can't add two
+ you and another mod can add different value mappers for the same class. However, you can't add two
  value mappers for the same class in one mod.
  
  By default the following types are supported:
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -263,15 +263,27 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Registers a new <a href="ValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config"><code>ValueMapper</code></a> that can be used to serialise config values.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#reloadAll()" class="member-name-link">reloadAll</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#reloadCommon()"><code>reloadCommon()</code></a> or <a href="#reloadClient()"><code>reloadClient()</code></a>.</div>
+</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reloadClient()" class="member-name-link">reloadClient</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Forces reload of all client configs.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reloadAll()" class="member-name-link">reloadAll</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reloadCommon()" class="member-name-link">reloadCommon</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Forces a reload of all configs.</div>
+<div class="block">Forces reload of all common configs.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reloadConfig(java.lang.Class)" class="member-name-link">reloadConfig</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;configClass)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Forces a reload of one config.</div>
+<div class="block">Forces reload of one config.</div>
 </div>
 </div>
 </div>
@@ -364,15 +376,34 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reloadAll()">
 <h3>reloadAll</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reloadAll</span>()</div>
-<div class="block">Forces a reload of all configs. <b>This will not sync the config tough. Use forceResync for this.</b></div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../annotation/meta/RemoveIn.html" title="annotation interface in io.github.noeppi_noeppi.libx.annotation.meta">@RemoveIn</a>(<a href="../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.19")
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reloadAll</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#reloadCommon()"><code>reloadCommon()</code></a> or <a href="#reloadClient()"><code>reloadClient()</code></a>.</div>
+</div>
+<div class="block">Forces reload of all configs. <b>This will not sync the config tough. Use forceResync for this.</b></div>
+</section>
+</li>
+<li>
+<section class="detail" id="reloadCommon()">
+<h3>reloadCommon</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reloadCommon</span>()</div>
+<div class="block">Forces reload of all common configs. <b>This will not sync the config though. Use <a href="#forceResync(net.minecraft.server.level.ServerPlayer)"><code>forceResync(ServerPlayer)</code></a> for this.</b></div>
+</section>
+</li>
+<li>
+<section class="detail" id="reloadClient()">
+<h3>reloadClient</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reloadClient</span>()</div>
+<div class="block">Forces reload of all client configs.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="reloadConfig(java.lang.Class)">
 <h3>reloadConfig</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reloadConfig</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;configClass)</span></div>
-<div class="block">Forces a reload of one config. <b>This will not sync the config tough. Use forceResync for this.</b></div>
+<div class="block">Forces reload of one config. <b>This will not sync the config tough. Use <a href="#forceResync(net.minecraft.server.level.ServerPlayer,java.lang.Class)"><code>forceResync(ServerPlayer, Class)</code></a> for this.</b></div>
 </section>
 </li>
 <li>
