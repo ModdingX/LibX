@@ -142,6 +142,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Wraps a value into a <code>DataResult</code>.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.DataResult&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#or(java.util.function.Supplier...)" class="member-name-link">or</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.DataResult&lt;T&gt;&gt;...&nbsp;results)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Takes a number of <code>DataResult</code>s and returns the first result that is a
+ success.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.DataResult&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#orPartial(java.util.function.Supplier...)" class="member-name-link">orPartial</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.DataResult&lt;T&gt;&gt;...&nbsp;results)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Takes a number of <code>DataResult</code>s and returns the first result that is
+ either a success or a partial success.</div>
+</div>
 </div>
 </div>
 </div>
@@ -215,6 +227,29 @@ loadScripts(document, 'script');</script>
 <div class="block">Wraps a value into a <code>DataResult</code>. If the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> does not throw, the result
  will be successful and contain the value. If the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> throws an exception, the
  result will be a failure with the error message of the exception.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="or(java.util.function.Supplier...)">
+<h3>or</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
+<span class="return-type">com.mojang.serialization.DataResult&lt;T&gt;</span>&nbsp;<span class="element-name">or</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.DataResult&lt;T&gt;&gt;...&nbsp;results)</span></div>
+<div class="block">Takes a number of <code>DataResult</code>s and returns the first result that is a
+ success. If there is no success in all the parameters, returns the first 
+ <code>DataResult</code> that has a partial success. If all <code>DataResult</code>s are
+ failures, the last failure is returned.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="orPartial(java.util.function.Supplier...)">
+<h3>orPartial</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
+<span class="return-type">com.mojang.serialization.DataResult&lt;T&gt;</span>&nbsp;<span class="element-name">orPartial</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.DataResult&lt;T&gt;&gt;...&nbsp;results)</span></div>
+<div class="block">Takes a number of <code>DataResult</code>s and returns the first result that is
+ either a success or a partial success. If there is no success in all the
+ parameters, the last failure is returned.</div>
 </section>
 </li>
 </ul>
