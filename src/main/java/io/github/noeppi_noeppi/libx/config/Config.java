@@ -15,4 +15,6 @@ public @interface Config {
      * The comment for this config value.
      */
     String[] value() default {};
+
+    String modid() default "";
 }
