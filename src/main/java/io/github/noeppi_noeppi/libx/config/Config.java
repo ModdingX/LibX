@@ -16,5 +16,8 @@ public @interface Config {
      */
     String[] value() default {};
 
+    /**
+     * The mod id of the mod which needs to be loaded to generate this config value in the file.
+     */
     String modid() default "";
 }

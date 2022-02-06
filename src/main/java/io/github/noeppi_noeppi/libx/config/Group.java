@@ -17,7 +17,7 @@ public @interface Group {
     String[] value() default {};
 
     /**
-     * A modid of a mod which needs to be loaded to generate this config group in json.
+     * The mod id of the mod which needs to be loaded to generate this config group in the file.
      */
     String modid() default "";
 }
