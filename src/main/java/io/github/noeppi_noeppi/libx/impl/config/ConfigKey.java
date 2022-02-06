@@ -88,7 +88,7 @@ public class ConfigKey {
             if (config == null) {
                 return null;
             }
-            if (!config.modid().isEmpty() && !ModList.get().isLoaded(config.modid())) {
+            if (!config.requiresMod().isEmpty() && !ModList.get().isLoaded(config.requiresMod())) {
                 return null;
             }
             field.setAccessible(true);

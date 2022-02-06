@@ -19,5 +19,5 @@ public @interface Group {
     /**
      * The mod id of the mod which needs to be loaded to generate this config group in the file.
      */
-    String modid() default "";
+    String requiresMod() default "";
 }

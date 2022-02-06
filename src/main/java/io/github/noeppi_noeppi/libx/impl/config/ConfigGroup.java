@@ -47,7 +47,7 @@ public class ConfigGroup {
             }
             @Nullable
             Group group = type.getAnnotation(Group.class);
-            if (group != null && !group.modid().isEmpty() && !ModList.get().isLoaded(group.modid())) {
+            if (group != null && !group.requiresMod().isEmpty() && !ModList.get().isLoaded(group.requiresMod())) {
                 return null;
             }
             List<String> path = new ArrayList<>();
