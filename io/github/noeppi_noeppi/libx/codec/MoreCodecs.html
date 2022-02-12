@@ -94,9 +94,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#UNIT" class="member-name-link">UNIT</a></code></div>
+<div class="col-first even-row-color"><code>static final com.mojang.serialization.Codec&lt;net.minecraft.world.item.ItemStack&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#SAFE_ITEM_STACK" class="member-name-link">SAFE_ITEM_STACK</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">A <code>Codec</code> for <code>item stacks</code> that will encode the stack as NBT when using
+ NBT dynamic ops, as recipe JSON when using JSON dynamic ops and as a string containing the NBT tag
+ if using some other dynamic ops.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#UNIT" class="member-name-link">UNIT</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">A codec for the <code>Unit</code> constant that encodes to nothing.</div>
 </div>
 </div>
@@ -131,6 +138,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#error(java.lang.String)" class="member-name-link">error</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a codec that always errors with the given message.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#error(java.lang.String,java.lang.String)" class="member-name-link">error</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encodeMsg,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;decodeMsg)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a codec that always errors with the given messages.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#option(com.mojang.serialization.Codec)" class="member-name-link">option</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -140,6 +158,19 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#registry(net.minecraftforge.registries.IForgeRegistry)" class="member-name-link">registry</a><wbr>(net.minecraftforge.registries.IForgeRegistry&lt;T&gt;&nbsp;registry)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a codec that encodes a <code>IForgeRegistryEntry</code> as a string using its registry name.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(com.mojang.serialization.Codec,io.github.noeppi_noeppi.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
+ <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
+ matching <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec"><code>TypedEncoder</code></a>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(io.github.noeppi_noeppi.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(<a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
+ matching <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec"><code>TypedEncoder</code></a>.</div>
 </div>
 </div>
 </div>
@@ -165,6 +196,15 @@ loadScripts(document, 'script');</script>
 <div class="block">A codec for the <code>Unit</code> constant that encodes to nothing.</div>
 </section>
 </li>
+<li>
+<section class="detail" id="SAFE_ITEM_STACK">
+<h3>SAFE_ITEM_STACK</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.world.item.ItemStack&gt;</span>&nbsp;<span class="element-name">SAFE_ITEM_STACK</span></div>
+<div class="block">A <code>Codec</code> for <code>item stacks</code> that will encode the stack as NBT when using
+ NBT dynamic ops, as recipe JSON when using JSON dynamic ops and as a string containing the NBT tag
+ if using some other dynamic ops.</div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -188,6 +228,21 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="error(java.lang.String)">
+<h3>error</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">error</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="block">Gets a codec that always errors with the given message.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="error(java.lang.String,java.lang.String)">
+<h3>error</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">error</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encodeMsg,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;decodeMsg)</span></div>
+<div class="block">Gets a codec that always errors with the given messages.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="option(com.mojang.serialization.Codec)">
 <h3>option</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
@@ -209,6 +264,27 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters-long">&lt;T extends net.minecraftforge.registries.IForgeRegistryEntry&lt;T&gt;&gt;</span>
 <span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">registry</span><wbr><span class="parameters">(net.minecraftforge.registries.IForgeRegistry&lt;T&gt;&nbsp;registry)</span></div>
 <div class="block">Gets a codec that encodes a <code>IForgeRegistryEntry</code> as a string using its registry name.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="typeMapped(io.github.noeppi_noeppi.libx.codec.TypedEncoder...)">
+<h3>typeMapped</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">typeMapped</span><wbr><span class="parameters">(<a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</span></div>
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
+ matching <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec"><code>TypedEncoder</code></a>.
+ If no <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec"><code>TypedEncoder</code></a> matches, an error will be returned.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="typeMapped(com.mojang.serialization.Codec,io.github.noeppi_noeppi.libx.codec.TypedEncoder...)">
+<h3>typeMapped</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">typeMapped</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
+ <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</span></div>
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
+ matching <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec"><code>TypedEncoder</code></a>.
+ If no <a href="TypedEncoder.html" title="interface in io.github.noeppi_noeppi.libx.codec"><code>TypedEncoder</code></a> matches, the fallback is used.</div>
 </section>
 </li>
 </ul>
