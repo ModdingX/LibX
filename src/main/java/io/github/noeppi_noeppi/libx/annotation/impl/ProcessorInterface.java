@@ -23,6 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
@@ -87,5 +88,9 @@ public class ProcessorInterface {
     
     public static <K, V> LazyMapBuilder<K, V> lazyMapBuilder() {
         return new LazyMapBuilder<>();
+    }
+
+    public static boolean requiresMod(String modid) {
+        return !modid.isEmpty() && ModList.get().isLoaded(modid);
     }
 }

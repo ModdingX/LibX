@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.annotation.processor.Classes;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec.GeneratedCodec;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.config.RegisteredConfig;
@@ -56,9 +57,15 @@ public class ModInit  {
     public void addConfigMapper(String classFqn, boolean genericType) {
         this.configMappers.add(new RegisteredMapper(classFqn, genericType));
     }
-    
+
+    @RemoveIn(minecraft = "1.19")
+    @Deprecated
     public void addConfig(String name, boolean client, String classFqn) {
-        this.configs.add(new RegisteredConfig(name, client, classFqn));
+        this.addConfig(name, client, "", classFqn);
+    }
+
+    public void addConfig(String name, boolean client, String requiresMod, String classFqn) {
+        this.configs.add(new RegisteredConfig(name, client, requiresMod, classFqn));
     }
     
     public void addCodec(GeneratedCodec codec) {
@@ -129,7 +136,7 @@ public class ModInit  {
                 writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerValueMapper(\"" + quote(this.modid) + "\",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
             }
             for (RegisteredConfig config : this.configs) {
-                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerConfig(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
+                writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".requiresMod(\"" + config.requiresMod() + "\"))" + Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerConfig(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
             }
             if (!allReg.isEmpty()) {
                 writer.write("((" + Classes.sourceName(Classes.MODX_REGISTRATION) + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");

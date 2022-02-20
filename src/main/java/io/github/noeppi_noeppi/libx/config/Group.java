@@ -15,9 +15,4 @@ public @interface Group {
      * The comment for this config group.
      */
     String[] value() default {};
-
-    /**
-     * The mod id of the mod which needs to be loaded to generate this config group in the file.
-     */
-    String requiresMod() default "";
 }

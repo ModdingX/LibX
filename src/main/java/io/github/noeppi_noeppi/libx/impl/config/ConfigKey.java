@@ -7,7 +7,6 @@ import io.github.noeppi_noeppi.libx.config.ValidatorInfo;
 import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.impl.config.validators.ConfiguredValidator;
 import io.github.noeppi_noeppi.libx.util.ClassUtil;
-import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
@@ -86,9 +85,6 @@ public class ConfigKey {
             }
             Config config = field.getAnnotation(Config.class);
             if (config == null) {
-                return null;
-            }
-            if (!config.requiresMod().isEmpty() && !ModList.get().isLoaded(config.requiresMod())) {
                 return null;
             }
             field.setAccessible(true);

@@ -2,7 +2,6 @@ package io.github.noeppi_noeppi.libx.impl.config;
 
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.config.Group;
-import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Modifier;
@@ -47,9 +46,6 @@ public class ConfigGroup {
             }
             @Nullable
             Group group = type.getAnnotation(Group.class);
-            if (group != null && !group.requiresMod().isEmpty() && !ModList.get().isLoaded(group.requiresMod())) {
-                return null;
-            }
             List<String> path = new ArrayList<>();
             path.add(0, type.getSimpleName());
             Class<?> currentStep = type.getDeclaringClass();
