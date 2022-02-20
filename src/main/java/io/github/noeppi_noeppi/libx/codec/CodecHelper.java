@@ -9,6 +9,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 /**
@@ -41,9 +42,9 @@ public class CodecHelper {
      * will be successful and contain the value. If the {@link Supplier} throws an exception, the
      * result will be a failure with the error message of the exception.
      */
-    public static <T> DataResult<T> doesNotThrow(Supplier<T> value) {
+    public static <T> DataResult<T> doesNotThrow(Callable<T> value) {
         try {
-            return DataResult.success(value.get());
+            return DataResult.success(value.call());
         } catch (Exception e) {
             return DataResult.error(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
