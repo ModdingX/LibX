@@ -90,7 +90,7 @@ public class ProcessorInterface {
         return new LazyMapBuilder<>();
     }
 
-    public static boolean requiresMod(String modid) {
-        return !modid.isEmpty() && ModList.get().isLoaded(modid);
+    public static boolean isModLoaded(String modid) {
+        return ModList.get().isLoaded(modid);
     }
 }
