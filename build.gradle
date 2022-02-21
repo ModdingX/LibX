@@ -6,6 +6,7 @@ apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/mod.gradle'
 
 apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.javadoc'
 apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.coremods'
+apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.cursedep'
 
 configurations {
     apCompileOnly
@@ -27,11 +28,13 @@ project.addModSourceSet(sourceSets.ap)
 dependencies {
     annotationProcessor sourceSets.ap.output
     implementation sourceSets.ap.output
-    
+
     coremods 'io.github.noeppi_noeppi.misc:CoreModTypes:5.0.2-1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+
+    runtimeOnly curse.pack(426926, 3622727, [412525, "applied-energistics-2", "aeinfinitybooster", "beyond-earth", "space-bosstools-giselle-addon"])
 }
 
 test {
