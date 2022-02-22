@@ -37,5 +37,6 @@ io.github.noeppi_noeppi.libx.network
 io.github.noeppi_noeppi.libx.render
 io.github.noeppi_noeppi.libx.render.block
 io.github.noeppi_noeppi.libx.screen
+io.github.noeppi_noeppi.libx.screen.text
 io.github.noeppi_noeppi.libx.util
 io.github.noeppi_noeppi.libx.world
