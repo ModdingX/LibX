@@ -20,6 +20,12 @@ public class SimpleLayout implements ComponentLayout {
         this.lines = List.copyOf(lines);
     }
 
+    @Nullable
+    @Override
+    public Component title() {
+        return this.title;
+    }
+
     @Override
     public List<AlignedComponent> alignComponents(Font font, int width) {
         ImmutableList.Builder<AlignedComponent> list = ImmutableList.builder();
