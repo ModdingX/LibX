@@ -8,6 +8,7 @@ import io.github.noeppi_noeppi.libx.annotation.processor.modinit.data.DatagenEnt
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.model.LoadableModel;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.register.RegistrationEntry;
 
+import javax.annotation.Nullable;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
@@ -48,19 +49,19 @@ public class ModInit  {
         List<RegistrationEntry> list = this.registration.get(priority);
         list.addAll(entries);
     }
-    
+
     public void addModel(String classFqn, String fieldName, String modelNamespace, String modelPath) {
         this.models.add(new LoadableModel(classFqn, fieldName, modelNamespace.isEmpty() ? this.modid : modelNamespace, modelPath));
     }
-    
-    public void addConfigMapper(String classFqn, boolean genericType) {
-        this.configMappers.add(new RegisteredMapper(classFqn, genericType));
+
+    public void addConfigMapper(String classFqn, @Nullable String requiresMod, boolean genericType) {
+        this.configMappers.add(new RegisteredMapper(classFqn, requiresMod, genericType));
     }
 
-    public void addConfig(String name, boolean client, String requiresMod, String classFqn) {
+    public void addConfig(String name, boolean client, @Nullable String requiresMod, String classFqn) {
         this.configs.add(new RegisteredConfig(name, client, requiresMod, classFqn));
     }
-    
+
     public void addCodec(GeneratedCodec codec) {
         this.codecs.add(codec);
     }
@@ -126,14 +127,20 @@ public class ModInit  {
             writer.write("public static void init(" + Classes.sourceName(Classes.MODX) + " mod){");
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
             for (RegisteredMapper mapper : this.configMappers) {
+                if (mapper.requiresMod() != null) {
+                    writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(\"" + quote(mapper.requiresMod()) + "\")){");
+                }
                 writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerValueMapper(\"" + quote(this.modid) + "\",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
+                if (mapper.requiresMod() != null) {
+                    writer.write("}");
+                }
             }
             for (RegisteredConfig config : this.configs) {
-                if (!config.requiresMod().isEmpty()) {
+                if (config.requiresMod() != null) {
                     writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(\"" + quote(config.requiresMod()) + "\")){");
                 }
                 writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerConfig(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
-                if (!config.requiresMod().isEmpty()) {
+                if (config.requiresMod() != null) {
                     writer.write("}");
                 }
             }

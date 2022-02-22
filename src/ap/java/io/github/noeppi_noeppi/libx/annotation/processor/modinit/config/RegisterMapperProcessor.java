@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit.config;
 
+import io.github.noeppi_noeppi.libx.annotation.config.RegisterMapper;
 import io.github.noeppi_noeppi.libx.annotation.processor.Classes;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModEnv;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
@@ -30,7 +31,8 @@ public class RegisterMapperProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't use @RegisterMapper on class that is no value mapper.", element);
             return;
         }
+        RegisterMapper registerMapper = element.getAnnotation(RegisterMapper.class);
         ModInit mod = env.getMod(element);
-        mod.addConfigMapper(parent.getQualifiedName() + "." + element.getSimpleName(), !typeElem.getTypeParameters().isEmpty());
+        mod.addConfigMapper(parent.getQualifiedName() + "." + element.getSimpleName(), registerMapper.requiresMod().isEmpty() ? null : registerMapper.requiresMod(), !typeElem.getTypeParameters().isEmpty());
     }
 }
