@@ -68,7 +68,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
                 builder.addRecipe(recipe);
                 builder.addCondition(TrueCondition.INSTANCE);
                 builder.addRecipe(EmptyRecipe.empty(recipe.getId()));
-                builder.build(this.consumer, recipe.getId());
+                builder.build(base, recipe.getId());
             };
         }
         this.setupExtensions();
