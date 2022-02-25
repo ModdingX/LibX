@@ -1,19 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit.config;
 
-import java.util.Objects;
+import javax.annotation.Nullable;
 
-public record RegisteredConfig(String name, boolean client, String classFqn) {
+public record RegisteredConfig(String name, boolean client, @Nullable String requiresMod, String classFqn) {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
-        RegisteredConfig that = (RegisteredConfig) o;
-        return this.client == that.client && Objects.equals(this.name, that.name) && Objects.equals(this.classFqn, that.classFqn);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.name, this.client, this.classFqn);
-    }
 }

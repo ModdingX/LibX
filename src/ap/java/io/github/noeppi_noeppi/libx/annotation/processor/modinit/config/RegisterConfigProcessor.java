@@ -23,6 +23,6 @@ public class RegisterConfigProcessor {
         }
         RegisterConfig registerConfig = element.getAnnotation(RegisterConfig.class);
         ModInit mod = env.getMod(element);
-        mod.addConfig(registerConfig.value(), registerConfig.client(), parent.getQualifiedName() + "." + element.getSimpleName());
+        mod.addConfig(registerConfig.value(), registerConfig.client(), registerConfig.requiresMod().isEmpty() ? null : registerConfig.requiresMod(), parent.getQualifiedName() + "." + element.getSimpleName());
     }
 }
