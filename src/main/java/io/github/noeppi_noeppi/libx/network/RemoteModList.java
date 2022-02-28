@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.libx.network;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,12 +22,12 @@ public class RemoteModList {
     }
     
     /**
-     * Creates a {@link Component} from a translation key.
+     * Creates a {@link MutableComponent} from a translation key.
      * If the given player has the given mod installed, it will result in a {@link TranslatableComponent}.
      * If the player does not have the mod installed, the key is translated on the server and the result
      * is a {@link TextComponent} with the translated text in english.
      */
-    public static Component translate(ServerPlayer player, String modid, String translationKey, Object... args) {
+    public static MutableComponent translate(ServerPlayer player, String modid, String translationKey, Object... args) {
         if (hasMod(player, modid)) {
             return new TranslatableComponent(translationKey, args);
         } else {
