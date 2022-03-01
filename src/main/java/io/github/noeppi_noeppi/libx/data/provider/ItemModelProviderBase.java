@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A base class for item model provider. An extending class should call the
@@ -103,7 +104,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     }
 
     protected void defaultBlock(ResourceLocation id, BlockItem item) {
-        if (isItemStackRenderer(RenderProperties.get(item))) {
+        if (isItemStackRenderer(item)) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(SPECIAL_BLOCK_PARENT));
         } else if (item.getBlock() instanceof DecoratedFenceBlock decorated) {
             ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
@@ -130,12 +131,22 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         }
     }
 
-    private static boolean isItemStackRenderer(IItemRenderProperties properties) {
+    private static boolean isItemStackRenderer(Item item) {
         try {
-            properties.getItemStackRenderer();
+            IItemRenderProperties properties = RenderProperties.get(item);
+            if (properties != IItemRenderProperties.DUMMY) {
+                properties.getItemStackRenderer();
+            } else {
+                // Forge no longer calls this during datagen
+                // so we need to do it manually
+                AtomicReference<IItemRenderProperties> ref = new AtomicReference<>(null);
+                item.initializeClient(ref::set);
+                properties = ref.get();
+                if (properties != null) properties.getItemStackRenderer();
+            }
         } catch (RendererOnDataGenException e) {
             return true;
-        } catch (Exception e) {
+        } catch (Exception | NoClassDefFoundError e) {
             return false;
         }
         return false;

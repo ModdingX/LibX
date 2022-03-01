@@ -19,4 +19,9 @@ public @interface RegisterConfig {
      * Whether the config is a client config.
      */
     boolean client() default false;
+
+    /**
+     * The mod id of the mod which needs to be loaded to generate this config file.
+     */
+    String requiresMod() default "";
 }

@@ -11,4 +11,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface RegisterMapper {
 
+    /**
+     * The mod id of the mod which needs to be loaded to register this mapper.
+     */
+    String requiresMod() default "";
 }

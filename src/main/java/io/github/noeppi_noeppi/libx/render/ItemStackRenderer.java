@@ -134,4 +134,17 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
             return INSTANCE.get();
         }
     }
+    
+    /**
+     * Creates some {@link IItemRenderProperties} for with use the {@link ItemStackRenderer}.
+     */
+    public static IItemRenderProperties createProperties() {
+        return new IItemRenderProperties() {
+            
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return ItemStackRenderer.get();
+            }
+        };
+    }
 }
