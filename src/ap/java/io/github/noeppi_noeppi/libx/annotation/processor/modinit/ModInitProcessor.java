@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.modinit;
 
-import io.github.noeppi_noeppi.libx.annotation.codec.Lookup;
 import io.github.noeppi_noeppi.libx.annotation.codec.Param;
 import io.github.noeppi_noeppi.libx.annotation.codec.PrimaryConstructor;
 import io.github.noeppi_noeppi.libx.annotation.config.RegisterConfig;
@@ -42,7 +41,6 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 RegisterMapper.class,
                 PrimaryConstructor.class,
                 Param.class,
-                Lookup.class,
                 Datagen.class
         };
     }
@@ -81,6 +79,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 //
             }
         }
+        
         for (Element element : roundEnv.getElementsAnnotatedWith(Model.class)) {
             try {
                 ModelProcessor.processModel(element, this);
@@ -88,6 +87,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 //
             }
         }
+        
         for (Element element : roundEnv.getElementsAnnotatedWith(RegisterMapper.class)) {
             try {
                 RegisterMapperProcessor.processRegisterMapper(element, this);
@@ -95,6 +95,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 //
             }
         }
+        
         for (Element element : roundEnv.getElementsAnnotatedWith(RegisterConfig.class)) {
             try {
                 RegisterConfigProcessor.processRegisterConfig(element, this);
@@ -102,6 +103,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 //
             }
         }
+        
         for (Element element : roundEnv.getElementsAnnotatedWith(Param.class)) {
             try {
                 CodecProcessor.processAnyParam(element, "Param", this);
@@ -109,13 +111,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 //
             }
         }
-        for (Element element : roundEnv.getElementsAnnotatedWith(Lookup.class)) {
-            try {
-                CodecProcessor.processAnyParam(element, "Lookup", this);
-            } catch (FailureException e) {
-                //
-            }
-        }
+        
         for (Element element : roundEnv.getElementsAnnotatedWith(PrimaryConstructor.class)) {
             try {
                 CodecProcessor.processPrimaryConstructor(element, this);
@@ -123,6 +119,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 //
             }
         }
+        
         for (Element element : roundEnv.getElementsAnnotatedWith(Datagen.class)) {
             try {
                 DatagenProcessor.processDatagen(element, this);
@@ -130,6 +127,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 //
             }
         }
+        
         for (ModInit mod : this.modInits.values()) {
             mod.write(this.filer(), this.messager());
         }

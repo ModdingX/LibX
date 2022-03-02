@@ -3,7 +3,6 @@ package io.github.noeppi_noeppi.libx.annotation.processor.modinit.codec;
 import io.github.noeppi_noeppi.libx.annotation.processor.Classes;
 import io.github.noeppi_noeppi.libx.annotation.processor.modinit.ModInit;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
@@ -17,7 +16,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         this.params = List.copyOf(params);
     }
 
-    public static sealed abstract class CodecElement permits CodecParam, CodecDynamic, CodecRegistry, CodecEnum {
+    public static sealed abstract class CodecElement permits CodecParam, CodecDynamic, CodecEnum {
 
         public final String typeFqn;
         public final String typeFqnBoxed;
@@ -74,42 +73,6 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
             writer.write("((" + Classes.sourceName(Classes.MAP_CODEC) + "<" + this.typeFqnBoxed + ">)");
             writer.write(this.factoryFqn);
             writer.write("(\"" + ModInit.quote(this.name) + "\"))");
-            writer.write(".forGetter(" + this.getter + ")");
-        }
-    }
-    
-    public static final class CodecRegistry extends CodecElement {
-
-        @Nullable
-        public final String registryNamespace;
-        @Nullable
-        public final String registryPath;
-        public final String registryTypeStr;
-        public final String registryTypeFqn;
-        public final String getter;
-
-        public CodecRegistry(String typeFqn, String typeFqnBoxed, @Nullable String registryNamespace, @Nullable String registryPath, String registryTypeStr, String registryTypeFqn, String getter) {
-            super(typeFqn, typeFqnBoxed);
-            this.registryNamespace = registryNamespace;
-            this.registryPath = registryPath;
-            this.registryTypeStr = registryTypeStr;
-            this.registryTypeFqn = registryTypeFqn;
-            this.getter = getter;
-        }
-
-        @Override
-        public void writeCode(Writer writer) throws IOException {
-            if (this.registryNamespace != null && this.registryPath != null) {
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">registryCodec(");
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">rootKey(");
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + ModInit.quote(this.registryNamespace) + "\",\"" + ModInit.quote(this.registryPath) + "\")");
-                writer.write(")");
-                writer.write(")");
-            } else {
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">registryCodec(");
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".<" + this.registryTypeStr + ">getCodecDefaultRegistryKey(" + this.registryTypeFqn + ".class)");
-                writer.write(")");
-            }
             writer.write(".forGetter(" + this.getter + ")");
         }
     }
