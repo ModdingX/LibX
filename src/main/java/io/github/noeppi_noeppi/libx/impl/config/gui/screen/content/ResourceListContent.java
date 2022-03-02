@@ -104,7 +104,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
                 } catch (IllegalStateException | PatternSyntaxException e) {
                     // Probably invalid input before the regex state got changed
                     // Just ignore it for now. The user will see the entry go red
-                    // anyways
+                    // anyway
                 }
             })));
         }

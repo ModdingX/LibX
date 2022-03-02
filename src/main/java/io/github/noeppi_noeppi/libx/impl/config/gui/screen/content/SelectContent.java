@@ -56,7 +56,7 @@ public class SelectContent<T> implements ConfigScreenContent<T> {
         int padding = Math.max(0, screen.width - 200) / 2;
         for (T elem : this.list) {
             Component name = this.nameFactory.apply(elem);
-            if (search.strip().isEmpty() || name.getString().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {
+            if (search.isBlank() || name.getString().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {
                 consumer.accept(new Button(padding, y, 200, 20, name, b -> {}) {
 
                     @Override

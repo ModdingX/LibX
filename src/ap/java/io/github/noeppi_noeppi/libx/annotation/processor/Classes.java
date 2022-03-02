@@ -1,7 +1,5 @@
 package io.github.noeppi_noeppi.libx.annotation.processor;
 
-import java.util.Set;
-
 public class Classes {
 
     public static final String MODX = "io.github.noeppi_noeppi.libx.mod.ModX";
