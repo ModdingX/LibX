@@ -27,6 +27,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -51,8 +52,8 @@ public final class LibX extends ModX {
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
         
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicDatapackLocator::locatePacks);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(GlobalLootModifierSerializer.class, this::registerLootData);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(MenuType.class, this::registerContainers);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, this::registerRecipes);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(BlockOverlayQuadCache::resourcesReload));
@@ -100,7 +101,8 @@ public final class LibX extends ModX {
     }
 
     // We can't do this in setup as it would not be available for `runData`
-    private void registerMisc(RegistryEvent.NewRegistry event) {
+    // Must be one of the RegistryEvent.Register events as in that time registries are not frozen
+    private void registerLootData(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
         Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, AllLootEntry.TYPE);
     }
     
