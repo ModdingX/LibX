@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
-import io.github.noeppi_noeppi.libx.util.*;
+import io.github.noeppi_noeppi.libx.util.ComponentUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.nbt.CompoundTag;
