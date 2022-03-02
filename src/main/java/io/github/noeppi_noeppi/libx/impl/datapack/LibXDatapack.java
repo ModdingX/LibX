@@ -50,7 +50,7 @@ public class LibXDatapack extends PathResourcePack {
         // cpw said everything would be open. Now sjh isn't.
         // Well reflection does the trick.
         if ("cpw.mods.niofs.union.UnionPath".equals(path.getClass().getName())) {
-            LibX.logger.warn("A LibX datapack was created with a UnionPath. These are currently buggy. See https://github.com/MinecraftForge/securejarhandler/pull/4");
+            LibX.getInstance().logger.warn("A LibX datapack was created with a UnionPath. These are currently buggy. See https://github.com/MinecraftForge/securejarhandler/pull/4");
             // hacky workaround that should keep things working:
             String pathStr = path.toString();
             if (pathStr.startsWith("/") || pathStr.startsWith(File.separator)) {

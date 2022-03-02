@@ -30,12 +30,12 @@ public class ConfigShadowSerializer implements PacketSerializer<ConfigShadowSeri
         ConfigImpl config = ConfigImpl.getConfigNullable(configId);
         int size = buffer.readVarInt();
         if (config == null) {
-            LibX.logger.warn("Received shadow message for unknown config: '" + configId + "'. Ignoring");
+            LibX.getInstance().logger.warn("Received shadow message for unknown config: '" + configId + "'. Ignoring");
             // Skip the bytes we don't know about.
             buffer.skipBytes(size);
             return new ConfigShadowMessage(null, null);
         } else if (config.clientConfig) {
-            LibX.logger.warn("Received shadow message for not-synced config: '" + configId + "'. Ignoring");
+            LibX.getInstance().logger.warn("Received shadow message for not-synced config: '" + configId + "'. Ignoring");
             // Skip the bytes we don't know about.
             buffer.skipBytes(size);
             return new ConfigShadowMessage(null, null);

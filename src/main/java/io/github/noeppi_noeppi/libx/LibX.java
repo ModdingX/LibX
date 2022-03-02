@@ -34,16 +34,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * LibX instance class.
  */
 @Mod("libx")
 public final class LibX extends ModX {
-
-    public static final Logger logger = LogManager.getLogger();
     
     private static LibX instance;
     private static CommonNetwork networkWrapper;
@@ -55,7 +51,6 @@ public final class LibX extends ModX {
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
         
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerMisc);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicDatapackLocator::locatePacks);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(MenuType.class, this::registerContainers);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, this::registerRecipes);

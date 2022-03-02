@@ -10,8 +10,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 
@@ -57,7 +57,7 @@ public abstract class ModX {
         if (mod == null) throw new IllegalStateException("Mod class has no @Mod annotation.");
         this.modid = mod.value();
 
-        this.logger = LogManager.getLogger(this.modid);
+        this.logger = LoggerFactory.getLogger(this.modid);
         this.tab = tab;
 
         ModInternal.init(this, FMLJavaModLoadingContext.get());

@@ -52,7 +52,7 @@ public class GenericMenu extends MenuBase {
         if (validators.containsKey(validatorId)) {
             validator = validators.get(validatorId);
         } else {
-            LibX.logger.warn("Received invalid validator for generic container. Validator: " + validatorId);
+            LibX.getInstance().logger.warn("Received invalid validator for generic container. Validator: " + validatorId);
             validator = validators.get(EMPTY_VALIDATOR);
         }
         int[] slotLimits = new int[size];
@@ -153,7 +153,7 @@ public class GenericMenu extends MenuBase {
                 if (validators.containsKey(validatorId == null ? EMPTY_VALIDATOR : validatorId)) {
                     validator = validators.get(validatorId);
                 } else {
-                    LibX.logger.warn("Generic container created with invalid validator. Validator ID: " + validatorId);
+                    LibX.getInstance().logger.warn("Generic container created with invalid validator. Validator ID: " + validatorId);
                     validator = validators.get(EMPTY_VALIDATOR);
                 }
                 return new GenericMenu(containerId, new GenericContainerSlotValidationWrapper(inventory, validator, null), inv);
