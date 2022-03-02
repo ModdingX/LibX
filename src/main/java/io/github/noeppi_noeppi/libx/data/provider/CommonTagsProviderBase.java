@@ -12,10 +12,7 @@ import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -46,7 +43,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     private boolean isSetup = false;
     // Copies must happen at last so we store them
     private final List<Runnable> itemCopies = new ArrayList<>();
-    private final List<Pair<Tag.Named<Fluid>, Tag.Named<Block>>> fluidCopies = new ArrayList<>();
+    private final List<Pair<TagKey<Fluid>, TagKey<Block>>> fluidCopies = new ArrayList<>();
     
     private boolean hasLibXInternalTags = false;
 
@@ -108,35 +105,35 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for an {@link Item}
      */
-    public TagsProvider.TagAppender<Item> item(Tag.Named<Item> tag) {
+    public TagsProvider.TagAppender<Item> item(TagKey<Item> tag) {
         return this.itemTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Block}
      */
-    public TagsProvider.TagAppender<Block> block(Tag.Named<Block> tag) {
+    public TagsProvider.TagAppender<Block> block(TagKey<Block> tag) {
         return this.blockTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Fluid}
      */
-    public TagsProvider.TagAppender<Fluid> fluid(Tag.Named<Fluid> tag) {
+    public TagsProvider.TagAppender<Fluid> fluid(TagKey<Fluid> tag) {
         return this.fluidTags.tag(tag);
     }
 
     /**
      * Copies all entries from a block tag to an item tag.
      */
-    public void copyBlock(Tag.Named<Block> from, Tag.Named<Item> to) {
+    public void copyBlock(TagKey<Block> from, TagKey<Item> to) {
         this.itemCopies.add(() -> this.itemTags.copy(from, to));
     }
 
     /**
      * Copies all entries from a fluid tag to a block tag.
      */
-    public void copyFluid(Tag.Named<Fluid> from, Tag.Named<Block> to) {
+    public void copyFluid(TagKey<Fluid> from, TagKey<Block> to) {
         this.fluidCopies.add(Pair.of(from, to));
     }
 
@@ -154,13 +151,13 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     private void initInternalTags() {
         if (!this.hasLibXInternalTags) {
             this.hasLibXInternalTags = true;
-            for (Map.Entry<Tag.Named<Item>, Tag.Named<Item>> entry : InternalTags.Items.getTags().entrySet()) {
+            for (Map.Entry<TagKey<Item>, TagKey<Item>> entry : InternalTags.Items.getTags().entrySet()) {
                 this.item(entry.getValue());
             }
-            for (Map.Entry<Tag.Named<Block>, Tag.Named<Block>> entry : InternalTags.Blocks.getTags().entrySet()) {
+            for (Map.Entry<TagKey<Block>, TagKey<Block>> entry : InternalTags.Blocks.getTags().entrySet()) {
                 this.block(entry.getValue());
             }
-            for (Map.Entry<Tag.Named<Block>, Tag.Named<Item>> entry : InternalTags.Items.getCopies().entrySet()) {
+            for (Map.Entry<TagKey<Block>, TagKey<Item>> entry : InternalTags.Items.getCopies().entrySet()) {
                 this.copyBlock(entry.getKey(), entry.getValue());
             }
         }
@@ -183,7 +180,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
                 this.builders.putAll(this.tagCache);
             }
             // Add fluid copies
-            for (Pair<Tag.Named<Fluid>, Tag.Named<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
+            for (Pair<TagKey<Fluid>, TagKey<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
                 TagsProvider.TagAppender<Block> builder = this.tag(copy.getRight());
                 for (ResourceLocation entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
                     Fluid fluid = ForgeRegistries.FLUIDS.getValue(entry);
@@ -202,7 +199,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public TagsProvider.TagAppender<Block> tag(@Nonnull Tag.Named<Block> tag) {
+        public TagsProvider.TagAppender<Block> tag(@Nonnull TagKey<Block> tag) {
             return super.tag(tag);
         }
 
@@ -242,12 +239,12 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public TagsProvider.TagAppender<Item> tag(@Nonnull Tag.Named<Item> tag) {
+        public TagsProvider.TagAppender<Item> tag(@Nonnull TagKey<Item> tag) {
             return super.tag(tag);
         }
 
         @Override
-        public void copy(@Nonnull Tag.Named<Block> blockTag, @Nonnull Tag.Named<Item> itemTag) {
+        public void copy(@Nonnull TagKey<Block> blockTag, @Nonnull TagKey<Item> itemTag) {
             super.copy(blockTag, itemTag);
         }
 
@@ -284,15 +281,15 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public TagsProvider.TagAppender<Fluid> tag(@Nonnull Tag.Named<Fluid> tag) {
+        public TagsProvider.TagAppender<Fluid> tag(@Nonnull TagKey<Fluid> tag) {
             return super.tag(tag);
         }
 
-        public List<ResourceLocation> getTagInfo(Tag.Named<Fluid> tag) {
+        public List<ResourceLocation> getTagInfo(TagKey<Fluid> tag) {
             TagsProvider.TagAppender<Fluid> builder = this.tag(tag);
             return builder.getInternalBuilder().getEntries()
-                    .filter(p -> p.getEntry() instanceof Tag.ElementEntry)
-                    .map(p -> new ResourceLocation(((Tag.ElementEntry) p.getEntry()).toString()))
+                    .filter(p -> p.entry() instanceof Tag.ElementEntry)
+                    .map(p -> new ResourceLocation(((Tag.ElementEntry) p.entry()).toString()))
                     .collect(Collectors.toList());
         }
 

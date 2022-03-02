@@ -6,7 +6,7 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -80,7 +80,7 @@ public class ObjectCraftingBuilder {
     private static Ingredient getIngredient(ObjectReader reader) {
         return ObjectCraftingBuilder.first(
                 () -> reader.optConsume(ItemLike.class).map(Ingredient::of),
-                () -> reader.optConsume(Tag.class).map(Ingredient::of),
+                () -> reader.optConsume(TagKey.class).map(Ingredient::of),
                 () -> reader.optConsume(Ingredient.class),
                 () -> reader.optConsume(List.class).map(list -> {
                     ObjectReader sub = new ObjectReader(list.toArray());

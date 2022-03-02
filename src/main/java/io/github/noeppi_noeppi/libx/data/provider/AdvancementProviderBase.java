@@ -14,6 +14,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -186,7 +187,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * the inventory at the same time.
      */
     @SafeVarargs
-    public final CriterionTriggerInstance items(Tag<Item>... items) {
+    public final CriterionTriggerInstance items(TagKey<Item>... items) {
         return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
         
@@ -209,7 +210,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link TaskFactory} that adds a task for every item given to this method.
      */
     @SafeVarargs
-    public final TaskFactory itemTasks(Tag<Item>... items) {
+    public final TaskFactory itemTasks(TagKey<Item>... items) {
         return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
 
@@ -230,7 +231,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
      */
-    public CriterionTriggerInstance eat(Tag<Item> food) {
+    public CriterionTriggerInstance eat(TagKey<Item> food) {
         return this.eat(ItemPredicate.Builder.item().of(food).build());
     }
 
@@ -290,7 +291,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
-    public ItemPredicate stack(Tag<Item> item, Enchantment... enchs) {
+    public ItemPredicate stack(TagKey<Item> item, Enchantment... enchs) {
         ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(item);
         for (Enchantment ench : enchs) {
             builder.hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(1)));

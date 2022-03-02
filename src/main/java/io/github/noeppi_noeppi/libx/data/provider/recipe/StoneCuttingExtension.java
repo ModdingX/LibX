@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.data.provider.recipe;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -31,14 +32,14 @@ public interface StoneCuttingExtension extends RecipeExtension {
     /**
      * Adds a stone cutting recipe with the given input and output.
      */
-    default void stoneCutting(Tag<Item> input, ItemLike output) {
+    default void stoneCutting(TagKey<Item> input, ItemLike output) {
         this.stoneCutting(Ingredient.of(input), output);
     }
 
     /**
      * Adds a stone cutting recipe with the given input, output and output amount.
      */
-    default void stoneCutting(Tag<Item> input, ItemLike output, int amount) {
+    default void stoneCutting(TagKey<Item> input, ItemLike output, int amount) {
         this.stoneCutting(Ingredient.of(input), output, amount);
     }
 
