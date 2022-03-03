@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
  it won't be posted for the offhand. For this cancel <code>PlayerInteractEvent.RightClickBlock</code>
  on the client.
  Returning <code>InteractionResult.SUCCESS</code> will swing the arm. However it will first try to
- propagate to the off hand. So in order to swing the main hand, the event for the main hand has to
+ propagate to the offhand. So in order to swing the main hand, the event for the main hand has to
  return <code>InteractionResult.SUCCESS</code> and for the offhand <code>InteractionResult.PASS</code>.</div>
 </section>
 <section class="summary">

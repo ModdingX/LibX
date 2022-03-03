@@ -200,7 +200,7 @@ implements net.minecraft.data.DataProvider</span></div>
 <div class="block">Gets a <code>criterion</code> that requires a player to consume (eat/drink) an item.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.advancements.CriterionTriggerInstance</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eat(net.minecraft.tags.Tag)" class="member-name-link">eat</a><wbr>(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;&nbsp;food)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eat(net.minecraft.tags.TagKey)" class="member-name-link">eat</a><wbr>(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;&nbsp;food)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets a <code>criterion</code> that requires a player to consume (eat/drink) an item.</div>
 </div>
@@ -234,7 +234,7 @@ implements net.minecraft.data.DataProvider</span></div>
  the inventory at the same time.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final net.minecraft.advancements.CriterionTriggerInstance</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#items(net.minecraft.tags.Tag...)" class="member-name-link">items</a><wbr>(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#items(net.minecraft.tags.TagKey...)" class="member-name-link">items</a><wbr>(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets a <code>criterion</code> that requires all of the given items to be in
  the inventory at the same time.</div>
@@ -251,7 +251,7 @@ implements net.minecraft.data.DataProvider</span></div>
 <div class="block">Gets a <a href="AdvancementProviderBase.TaskFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><code>AdvancementProviderBase.TaskFactory</code></a> that adds a task for every item given to this method.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="AdvancementProviderBase.TaskFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">AdvancementProviderBase.TaskFactory</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#itemTasks(net.minecraft.tags.Tag...)" class="member-name-link">itemTasks</a><wbr>(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#itemTasks(net.minecraft.tags.TagKey...)" class="member-name-link">itemTasks</a><wbr>(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets a <a href="AdvancementProviderBase.TaskFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><code>AdvancementProviderBase.TaskFactory</code></a> that adds a task for every item given to this method.</div>
 </div>
@@ -291,7 +291,7 @@ implements net.minecraft.data.DataProvider</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setup()" class="member-name-link">setup</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.advancements.critereon.ItemPredicate</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stack(net.minecraft.tags.Tag,net.minecraft.world.item.enchantment.Enchantment...)" class="member-name-link">stack</a><wbr>(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;&nbsp;item,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stack(net.minecraft.tags.TagKey,net.minecraft.world.item.enchantment.Enchantment...)" class="member-name-link">stack</a><wbr>(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;&nbsp;item,
  net.minecraft.world.item.enchantment.Enchantment...&nbsp;enchs)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets an <code>ItemPredicate</code> for an item and optionally some enchantments.</div>
@@ -498,10 +498,10 @@ implements net.minecraft.data.DataProvider</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="items(net.minecraft.tags.Tag...)">
+<section class="detail" id="items(net.minecraft.tags.TagKey...)">
 <h3>items</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">net.minecraft.advancements.CriterionTriggerInstance</span>&nbsp;<span class="element-name">items</span><wbr><span class="parameters">(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">net.minecraft.advancements.CriterionTriggerInstance</span>&nbsp;<span class="element-name">items</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</span></div>
 <div class="block">Gets a <code>criterion</code> that requires all of the given items to be in
  the inventory at the same time.</div>
 </section>
@@ -522,10 +522,10 @@ implements net.minecraft.data.DataProvider</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="itemTasks(net.minecraft.tags.Tag...)">
+<section class="detail" id="itemTasks(net.minecraft.tags.TagKey...)">
 <h3>itemTasks</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="AdvancementProviderBase.TaskFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">AdvancementProviderBase.TaskFactory</a></span>&nbsp;<span class="element-name">itemTasks</span><wbr><span class="parameters">(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="AdvancementProviderBase.TaskFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider">AdvancementProviderBase.TaskFactory</a></span>&nbsp;<span class="element-name">itemTasks</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;...&nbsp;items)</span></div>
 <div class="block">Gets a <a href="AdvancementProviderBase.TaskFactory.html" title="interface in io.github.noeppi_noeppi.libx.data.provider"><code>AdvancementProviderBase.TaskFactory</code></a> that adds a task for every item given to this method.</div>
 </section>
 </li>
@@ -544,9 +544,9 @@ implements net.minecraft.data.DataProvider</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="eat(net.minecraft.tags.Tag)">
+<section class="detail" id="eat(net.minecraft.tags.TagKey)">
 <h3>eat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.minecraft.advancements.CriterionTriggerInstance</span>&nbsp;<span class="element-name">eat</span><wbr><span class="parameters">(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;&nbsp;food)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.minecraft.advancements.CriterionTriggerInstance</span>&nbsp;<span class="element-name">eat</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;&nbsp;food)</span></div>
 <div class="block">Gets a <code>criterion</code> that requires a player to consume (eat/drink) an item.</div>
 </section>
 </li>
@@ -602,9 +602,9 @@ implements net.minecraft.data.DataProvider</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="stack(net.minecraft.tags.Tag,net.minecraft.world.item.enchantment.Enchantment...)">
+<section class="detail" id="stack(net.minecraft.tags.TagKey,net.minecraft.world.item.enchantment.Enchantment...)">
 <h3>stack</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.minecraft.advancements.critereon.ItemPredicate</span>&nbsp;<span class="element-name">stack</span><wbr><span class="parameters">(net.minecraft.tags.Tag&lt;net.minecraft.world.item.Item&gt;&nbsp;item,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.minecraft.advancements.critereon.ItemPredicate</span>&nbsp;<span class="element-name">stack</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;&nbsp;item,
  net.minecraft.world.item.enchantment.Enchantment...&nbsp;enchs)</span></div>
 <div class="block">Gets an <code>ItemPredicate</code> for an item and optionally some enchantments.</div>
 </section>

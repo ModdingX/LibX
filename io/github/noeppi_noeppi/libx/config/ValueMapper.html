@@ -71,7 +71,7 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">io.github.noeppi_noeppi.libx.config</a></div>
-<h1 title="Interface ValueMapper" class="title">Interface ValueMapper&lt;T,<wbr>E extends <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.8/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;</h1>
+<h1 title="Interface ValueMapper" class="title">Interface ValueMapper&lt;T,<wbr>E extends <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;</h1>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="CommonValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">CommonValueMapper</a>&lt;T,<wbr>E&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">ValueMapper&lt;T,<wbr>E extends <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.8/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;</span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">ValueMapper&lt;T,<wbr>E extends <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;</span><span class="extends-implements">
 extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_noeppi.libx.config">CommonValueMapper</a>&lt;T,<wbr>E&gt;</span></div>
 <div class="block">A way to serialise values of a specific type for a config file. See <a href="ConfigManager.html" title="class in io.github.noeppi_noeppi.libx.config"><code>ConfigManager</code></a> for
  more info.</div>
@@ -103,7 +103,7 @@ extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_no
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#correct(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection)" class="member-name-link">correct</a><wbr>(<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.8/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&nbsp;json,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#correct(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection)" class="member-name-link">correct</a><wbr>(<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&nbsp;json,
  <a href="correct/ConfigCorrection.html" title="interface in io.github.noeppi_noeppi.libx.config.correct">ConfigCorrection</a>&lt;<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;&nbsp;correction)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Corrects a config value.</div>
@@ -157,7 +157,7 @@ extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_no
 <h3 id="fromJson(com.google.gson.JsonElement)">fromJson</h3>
 <div class="member-signature"><span class="return-type"><a href="ValueMapper.html" title="type parameter in ValueMapper">T</a></span>&nbsp;<span class="element-name">fromJson</span><wbr><span class="parameters">(<a href="ValueMapper.html" title="type parameter in ValueMapper">E</a>&nbsp;json)</span></div>
 <div class="block">Reads an object from JSON. If the json is invalid you may either throw
- an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> or a <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.8/com.google.gson/com/google/gson/JsonParseException.html" title="class or interface in com.google.gson" class="external-link"><code>JsonParseException</code></a> to end
+ an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> or a <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonParseException.html" title="class or interface in com.google.gson" class="external-link"><code>JsonParseException</code></a> to end
  config parsing with an error, or just correct errors yourself and return
  default values.</div>
 <dl class="notes">
@@ -201,7 +201,7 @@ extends <a href="CommonValueMapper.html" title="interface in io.github.noeppi_no
 <li>
 <section class="detail" id="correct(com.google.gson.JsonElement,io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection)">
 <h3>correct</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;</span>&nbsp;<span class="element-name">correct</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.8/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&nbsp;json,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;</span>&nbsp;<span class="element-name">correct</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&nbsp;json,
  <a href="correct/ConfigCorrection.html" title="interface in io.github.noeppi_noeppi.libx.config.correct">ConfigCorrection</a>&lt;<a href="ValueMapper.html" title="type parameter in ValueMapper">T</a>&gt;&nbsp;correction)</span></div>
 <div class="block">Corrects a config value. This is only called if <a href="#fromJson(E)"><code>fromJson(JsonElement)</code></a> fails.
  Here the raw json for the config value is passed. Also a <a href="correct/ConfigCorrection.html" title="interface in io.github.noeppi_noeppi.libx.config.correct"><code>ConfigCorrection</code></a> is
