@@ -56,7 +56,7 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
     }
     
     private static boolean search(ConfigKey key, ConfigScreen<ConfigKey> screen, String query) {
-        return query.strip().isEmpty() || String.join(".", key.path).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
+        return query.isBlank() || String.join(".", key.path).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
                 || key.comment.stream().anyMatch(str -> str.toLowerCase(Locale.ROOT).contains(query));
     }
 }

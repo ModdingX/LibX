@@ -6,6 +6,7 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -44,7 +45,7 @@ public interface RecipeExtension {
     /**
      * Builds an {@link CriterionTriggerInstance advancement criterion} for the given {@link Tag tag}.
      */
-    CriterionTriggerInstance criterion(Tag<Item> item);
+    CriterionTriggerInstance criterion(TagKey<Item> item);
     
     /**
      * Builds an {@link CriterionTriggerInstance advancement criterion} that requires all of the given

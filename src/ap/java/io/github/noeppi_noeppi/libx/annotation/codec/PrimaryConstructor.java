@@ -28,8 +28,6 @@ import java.lang.annotation.*;
  * <li>
  *     <ul>{@link Param Parameter Fields}. These are the default for everything
  *     that is not covered by a different type.</ul>
- *     <ul>{@link Lookup Registry Lookup Fields}. All parameters with a vanilla
- *     registry type default to this parameter type.</ul>
  * </li>
  */
 @Retention(RetentionPolicy.SOURCE)

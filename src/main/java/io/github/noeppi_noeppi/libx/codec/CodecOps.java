@@ -7,10 +7,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.resources.RegistryReadOps;
-import net.minecraft.resources.RegistryResourceAccess;
-import net.minecraft.resources.RegistryWriteOps;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.RegistryOps;
 
 /**
  * Provides some utility methods to encode and decode thing using a codec for a
@@ -73,7 +70,7 @@ public class CodecOps<E> {
      *                   aware codecs.
      */
     public <T, R extends E> R write(Codec<T> codec, T value, Class<R> resultType, RegistryAccess registries) {
-        return encodeWith(codec, value, RegistryWriteOps.create(this.ops, registries), this.baseClass, resultType);
+        return encodeWith(codec, value, RegistryOps.create(this.ops, registries), this.baseClass, resultType);
     }
 
     /**
@@ -86,21 +83,10 @@ public class CodecOps<E> {
     /**
      * Reads a value using a codec.
      * 
-     * @param registries The {@link RegistryAccess} to provide for registry
-     *                   aware codecs.
+     * @param registries The {@link RegistryAccess} to provide for registry aware codecs.
      */
-    public <T> T read(Codec<T> codec, E value, RegistryAccess registries, ResourceManager resources) {
-        return decodeWith(codec, value, RegistryReadOps.create(this.ops, resources, registries));
-    }
-
-    /**
-     * Reads a value using a codec.
-     *
-     * @param registries The {@link RegistryAccess} to provide for registry
-     *                   aware codecs.
-     */
-    public <T> T read(Codec<T> codec, E value, RegistryAccess registries, RegistryResourceAccess resourceAccess) {
-        return decodeWith(codec, value, RegistryReadOps.create(this.ops, resourceAccess, registries));
+    public <T> T read(Codec<T> codec, E value, RegistryAccess registries) {
+        return decodeWith(codec, value, RegistryOps.create(this.ops, registries));
     }
 
     private static <T, E, R extends E> R encodeWith(Codec<T> codec, T value, DynamicOps<E> ops, Class<E> baseClass, Class<R> resultType) {

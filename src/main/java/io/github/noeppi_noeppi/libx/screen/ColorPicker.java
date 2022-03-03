@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * A widgets that lets a user select a {@link TextColor colour}.
+ * A widget that lets a user select a {@link TextColor colour}.
  */
 public class ColorPicker extends Panel {
 

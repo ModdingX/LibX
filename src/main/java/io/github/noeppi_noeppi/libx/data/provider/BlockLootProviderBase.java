@@ -13,7 +13,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -466,7 +466,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
     /**
      * Gets a loot condition builder for a match tool condition.
      */
-    public MatchToolBuilder matchTool(Tag<Item> item) {
+    public MatchToolBuilder matchTool(TagKey<Item> item) {
         return new MatchToolBuilder(ItemPredicate.Builder.item().of(item));
     }
 

@@ -9,7 +9,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
@@ -139,7 +139,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     }
 
     @Override
-    public AbstractCriterionTriggerInstance criterion(Tag<Item> item) {
+    public AbstractCriterionTriggerInstance criterion(TagKey<Item> item) {
         return has(item);
     }
 

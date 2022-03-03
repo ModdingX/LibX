@@ -32,7 +32,7 @@ public class RecordConfigScreen extends ConfigScreen<RecordConfigScreen.Entry> {
     }
 
     private static boolean search(Entry elem, ConfigScreen<Entry> screen, String query) {
-        return query.strip().isEmpty() || elem.component().getName().toLowerCase().contains(query.toLowerCase());
+        return query.isBlank() || elem.component().getName().toLowerCase().contains(query.toLowerCase());
     }
     
     public record Entry(RecordComponent component, TypesafeMapper mapper, Supplier<Object> value, Consumer<Object> inputChanged) {}

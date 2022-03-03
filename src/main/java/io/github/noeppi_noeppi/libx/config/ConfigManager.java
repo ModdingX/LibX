@@ -250,7 +250,7 @@ public class ConfigManager {
                 MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.INITIAL, config.clientConfig, config.path, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
-            LibX.logger.error("Failed to load config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
+            LibX.getInstance().logger.error("Failed to load config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
         }
     }
 
@@ -280,7 +280,7 @@ public class ConfigManager {
                 }
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
-            LibX.logger.error("Failed to reload config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
+            LibX.getInstance().logger.error("Failed to reload config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
         }
     }
 
@@ -299,7 +299,7 @@ public class ConfigManager {
                 NetworkImpl.getImpl().channel.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
             }
         } else {
-            LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
+            LibX.getInstance().logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
         }
     }
 
@@ -316,7 +316,7 @@ public class ConfigManager {
                 }
             }
         } else {
-            LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
+            LibX.getInstance().logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
         }
     }
 

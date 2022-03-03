@@ -7,7 +7,7 @@ function initializeCoreMod(): CoreMods {
         'type': 'METHOD',
         'class': 'net.minecraft.world.level.levelgen.WorldGenSettings',
         'methodName': '<init>',
-        'methodDesc': '(JZZLnet/minecraft/core/MappedRegistry;Ljava/util/Optional;)V'
+        'methodDesc': '(JZZLnet/minecraft/core/Registry;Ljava/util/Optional;)V'
       },
       'transformer': function(method: MethodNode) {
         const target = new InsnList();

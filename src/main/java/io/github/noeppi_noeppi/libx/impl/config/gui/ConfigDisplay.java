@@ -45,7 +45,7 @@ public class ConfigDisplay {
             if (entry.getKey().mapper.type().isAssignableFrom(value.getClass())) {
                 map.put(entry.getKey(), value);
             } else {
-                LibX.logger.warn("Failed to create config state from user input: Editor produced invalid type. Expected: " + entry.getKey().mapper.type() + ", Got: " + value.getClass() + ", using fallback.");
+                LibX.getInstance().logger.warn("Failed to create config state from user input: Editor produced invalid type. Expected: " + entry.getKey().mapper.type() + ", Got: " + value.getClass() + ", using fallback.");
                 map.put(entry.getKey(), entry.getValue().defaultValue);
             }
         }
@@ -93,7 +93,7 @@ public class ConfigDisplay {
 
         public void setValue(T value) {
             if (!this.key.mapper.type().isAssignableFrom(value.getClass())) {
-                LibX.logger.warn("Failed to store config value from user input: Editor produced invalid type. Expected: " + this.key.mapper.type() + ", Got: " + value.getClass() + ", ignoring.");
+                LibX.getInstance().logger.warn("Failed to store config value from user input: Editor produced invalid type. Expected: " + this.key.mapper.type() + ", Got: " + value.getClass() + ", ignoring.");
             } else {
                 if (this.value != value) {
                     //noinspection unchecked
