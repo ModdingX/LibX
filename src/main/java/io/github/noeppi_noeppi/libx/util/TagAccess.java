@@ -16,7 +16,7 @@ import java.util.Random;
 
 /**
  * A class to help accessing {@link TagKey tags} in a more user friendly way.
- * A {@link TagAccess} can contains a {@link RegistryAccess} to allow accessing
+ * A {@link TagAccess} can contain a {@link RegistryAccess} to allow accessing
  * dynamic registries. If that is not required, the {@link #ROOT} tag access can
  * be used.
  */
@@ -48,7 +48,6 @@ public class TagAccess {
     /**
      * Creates a new {@link TagAccess} for a given {@link Level}.
      */
-    
     public static TagAccess create(Level level) {
         return create(level.registryAccess());
     }
@@ -82,7 +81,6 @@ public class TagAccess {
     /**
      * Gets a random element from a tag.
      */
-    
     public <T> Optional<T> random(TagKey<T> key, Random random) {
         return this.resolve(key.registry()).getTag(key).flatMap(tag -> tag.getRandomElement(random)).map(Holder::value);
     }
