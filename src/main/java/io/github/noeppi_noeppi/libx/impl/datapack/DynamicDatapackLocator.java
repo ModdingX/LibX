@@ -41,7 +41,7 @@ public class DynamicDatapackLocator implements RepositorySource {
             String name = LibXDatapack.PREFIX + "/" + id.getNamespace() + ":" + id.getPath();
             IModFileInfo fileInfo = ModList.get().getModFileById(id.getNamespace());
             if (fileInfo == null || fileInfo.getFile() == null) {
-                LibX.getInstance().logger.warn("Can't create dynamic datapack " + id + ": Invalid mod file: " + fileInfo);
+                LibX.logger.warn("Can't create dynamic datapack " + id + ": Invalid mod file: " + fileInfo);
             } else {
                 Pack pack = Pack.create(name, false,
                         () -> new LibXDatapack(fileInfo.getFile(), id.getPath()), factory,

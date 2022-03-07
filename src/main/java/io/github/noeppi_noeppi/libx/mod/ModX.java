@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
@@ -30,7 +31,11 @@ public abstract class ModX {
 
     /**
      * A {@link Logger} for the mod.
+     * @deprecated The logger is hard to use and causes problems during parallel mod initialisation.
+     *             You should create your own logger for your mod.
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public final Logger logger;
 
     /**

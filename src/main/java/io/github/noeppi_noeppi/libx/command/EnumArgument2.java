@@ -83,7 +83,7 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
             try {
                 return new EnumArgument2(Class.forName(name));
             } catch (ClassNotFoundException e) {
-                LibX.getInstance().logger.warn("Can't get enum value of type " + name + "in command argument. " + e.getMessage());
+                LibX.logger.warn("Can't get enum value of type " + name + "in command argument. " + e.getMessage());
                 //noinspection ConstantConditions
                 return null;
             }
