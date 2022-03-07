@@ -140,7 +140,7 @@ public class ConfigImpl {
                 keysLeft.remove(key);
             }
             if (!keysLeft.isEmpty()) {
-                LibX.getInstance().logger.warn("Config " + this.id + ": There are additional fields on the client, not sent by the server. Using client values.");
+                LibX.logger.warn("Config " + this.id + ": There are additional fields on the client, not sent by the server. Using client values.");
             }
             return new ConfigState(this, values.build());
         } catch (ReflectiveOperationException e) {
@@ -157,7 +157,7 @@ public class ConfigImpl {
     
     public ConfigState readFromFileOrCreateBy(ConfigState state) throws IOException {
         if (!Files.isRegularFile(this.path)) {
-            LibX.getInstance().logger.info("Config '" + this.id + "' does not exist. Creating default.");
+            LibX.logger.info("Config '" + this.id + "' does not exist. Creating default.");
             state.writeToFile(null, null);
             return state;
         } else {
@@ -202,7 +202,7 @@ public class ConfigImpl {
                     if (value == null) throw new IllegalStateException("Config mapper reported null value.");
                     values.put(key, key.validate(value, "Invalid value in config file", needsCorrection));
                 } catch (Exception e) {
-                    LibX.getInstance().logger.warn("Failed to read config value " + String.join(".", key.path) + ". Correcting. Error: " + e.getMessage());
+                    LibX.logger.warn("Failed to read config value " + String.join(".", key.path) + ". Correcting. Error: " + e.getMessage());
                     CorrectionInstance<?, ?> correction = CorrectionInstance.create(parentConfig.getValue(key));
                     //noinspection unchecked
                     Object value = correction.correct(elem, (ValueMapper<Object, ?>) key.mapper, o -> o).orElse(parentConfig.getValue(key));
@@ -224,9 +224,9 @@ public class ConfigImpl {
         ConfigState state = new ConfigState(this, values.build());
         if (needsCorrection.get()) {
             if (path != null) {
-                LibX.getInstance().logger.info("Correcting config '" + this.id + "' at " + path.toAbsolutePath().normalize());
+                LibX.logger.info("Correcting config '" + this.id + "' at " + path.toAbsolutePath().normalize());
             } else {
-                LibX.getInstance().logger.info("Correcting config '" + this.id + "'");
+                LibX.logger.info("Correcting config '" + this.id + "'");
             }
             state.writeToFile(path, keysToCorrect);
         }
@@ -286,10 +286,10 @@ public class ConfigImpl {
     
     private void shadowBy(ConfigState state, boolean local, @Nullable Path loadPath) {
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-            LibX.getInstance().logger.error("Config shadow was called on a dedicated server. This should not happen!");
+            LibX.logger.error("Config shadow was called on a dedicated server. This should not happen!");
         }
         if (!this.shadowed && this.savedState == null) {
-            LibX.getInstance().logger.warn("Capturing config state for '" + this.id + "' before shadowing. This should not happen. Was the config not loaded properly?");
+            LibX.logger.warn("Capturing config state for '" + this.id + "' before shadowing. This should not happen. Was the config not loaded properly?");
             this.savedState = this.stateFromValues();
         }
         this.shadowed = true;
@@ -303,7 +303,7 @@ public class ConfigImpl {
         if (this.shadowed && this.savedState != null) {
             this.savedState.apply();
         } else if (this.shadowed) {
-            LibX.getInstance().logger.warn("Could not restore config: No saved state");
+            LibX.logger.warn("Could not restore config: No saved state");
         }
         this.shadowed = false;
         this.shadowedLocal = false;
@@ -319,7 +319,7 @@ public class ConfigImpl {
                     Path configDir = server.storageSource.getWorldDir().resolve("config");
                     Path configPath = resolveConfigPath(configDir, this.id);
                     if (this.savedState == null) {
-                        LibX.getInstance().logger.warn("Can't load world specific config for '" + this.id + "': No captured state. This should never happen.");
+                        LibX.logger.warn("Can't load world specific config for '" + this.id + "': No captured state. This should never happen.");
                     } else {
                         try {
                             if (Files.isRegularFile(configPath)) {
@@ -327,7 +327,7 @@ public class ConfigImpl {
                                 this.shadowBy(state, true, configPath);
                             }
                         } catch (IOException e) {
-                            LibX.getInstance().logger.warn("Can't load world specific config for '" + this.id + "': " + e.getMessage());
+                            LibX.logger.warn("Can't load world specific config for '" + this.id + "': " + e.getMessage());
                             e.printStackTrace();
                         }
                     }
@@ -354,7 +354,7 @@ public class ConfigImpl {
         try {
             newState.writeToFile(null, null);
         } catch (IOException e) {
-            LibX.getInstance().logger.warn("Failed to save config file from InGame values: " + e.getMessage(), e);
+            LibX.logger.warn("Failed to save config file from InGame values: " + e.getMessage(), e);
         }
     }
     
@@ -371,10 +371,10 @@ public class ConfigImpl {
 
     public ConfigState cachedOrCurrent() {
         if (FMLEnvironment.dist != Dist.DEDICATED_SERVER) {
-            LibX.getInstance().logger.error("Config cached or current method was called on a physical client. This should not happen!");
+            LibX.logger.error("Config cached or current method was called on a physical client. This should not happen!");
         }
         if (this.savedState == null) {
-            LibX.getInstance().logger.warn("Capturing config state for '" + this.id + "' on server. This should not happen. Was the config not loaded properly?");
+            LibX.logger.warn("Capturing config state for '" + this.id + "' on server. This should not happen. Was the config not loaded properly?");
             this.savedState = this.stateFromValues();
         }
         return this.savedState;

@@ -35,12 +35,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * LibX instance class.
  */
 @Mod("libx")
 public final class LibX extends ModX {
+    
+    public static final Logger logger = LoggerFactory.getLogger("libx");
     
     private static LibX instance;
     private static CommonNetwork networkWrapper;
