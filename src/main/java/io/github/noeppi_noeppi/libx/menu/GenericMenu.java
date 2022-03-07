@@ -40,7 +40,7 @@ import java.util.function.BiPredicate;
  */
 public class GenericMenu extends MenuBase {
 
-    private static final ResourceLocation EMPTY_VALIDATOR = new ResourceLocation(LibX.getInstance().modid, "nothing");
+    private static final ResourceLocation EMPTY_VALIDATOR = LibX.getInstance().resource("nothing");
     private static final Map<ResourceLocation, BiPredicate<Integer, ItemStack>> validators = new HashMap<>(Map.of(
             EMPTY_VALIDATOR, (slot, stack) -> true
     ));
