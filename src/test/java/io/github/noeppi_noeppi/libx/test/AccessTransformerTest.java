@@ -51,7 +51,7 @@ public class AccessTransformerTest {
                     this.testMethod(m.group(1), m.group(2), m.group(3), m.group(4));
                     continue;
                 }
-                fail("AccessTransformer line matches no pattern: " + line);
+                fail("AccessTransformer line matches no pattern. Is the comment with the mapped name missing? " + line);
             }
         }
     }
