@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
@@ -10,8 +11,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 
@@ -30,7 +31,11 @@ public abstract class ModX {
 
     /**
      * A {@link Logger} for the mod.
+     * @deprecated The logger is hard to use and causes problems during parallel mod initialisation.
+     *             You should create your own logger for your mod.
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public final Logger logger;
 
     /**
@@ -57,7 +62,7 @@ public abstract class ModX {
         if (mod == null) throw new IllegalStateException("Mod class has no @Mod annotation.");
         this.modid = mod.value();
 
-        this.logger = LogManager.getLogger(this.modid);
+        this.logger = LoggerFactory.getLogger(this.modid);
         this.tab = tab;
 
         ModInternal.init(this, FMLJavaModLoadingContext.get());

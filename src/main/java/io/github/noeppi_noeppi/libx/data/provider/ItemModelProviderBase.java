@@ -34,7 +34,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     public static final ResourceLocation GENERATED = new ResourceLocation("item/generated");
     public static final ResourceLocation HANDHELD = new ResourceLocation("item/handheld");
     public static final ResourceLocation DRIPPING_BUCKET = new ResourceLocation("forge", "bucket_drip");
-    public static final ResourceLocation SPECIAL_BLOCK_PARENT = new ResourceLocation(LibX.getInstance().modid, "item/base/special_block");
+    public static final ResourceLocation SPECIAL_BLOCK_PARENT = LibX.getInstance().resource("item/base/special_block");
     public static final ResourceLocation SPAWN_EGG_PARENT = new ResourceLocation("minecraft", "item/template_spawn_egg");
     public static final ResourceLocation FENCE_PARENT = new ResourceLocation("minecraft", "block/fence_inventory");
     public static final ResourceLocation BUTTON_PARENT = new ResourceLocation("minecraft", "block/button_inventory");

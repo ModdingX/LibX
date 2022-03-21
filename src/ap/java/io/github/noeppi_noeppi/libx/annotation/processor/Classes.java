@@ -1,7 +1,5 @@
 package io.github.noeppi_noeppi.libx.annotation.processor;
 
-import java.util.Set;
-
 public class Classes {
 
     public static final String MODX = "io.github.noeppi_noeppi.libx.mod.ModX";
@@ -24,7 +22,6 @@ public class Classes {
     public static final String MODEL_REGISTRY_EVENT = "net.minecraftforge.client.event.ModelRegistryEvent";
     public static final String MODEL_BAKE_EVENT = "net.minecraftforge.client.event.ModelBakeEvent";
     public static final String MODEL_BAKERY = "net.minecraftforge.client.model.ForgeModelBakery";
-    public static final String REGISTRY = "net.minecraft.core.Registry";
     public static final String CODEC = "com.mojang.serialization.Codec";
     public static final String MAP_CODEC = "com.mojang.serialization.MapCodec";
     public static final String RECORD_CODEC_BUILDER = "com.mojang.serialization.codecs.RecordCodecBuilder";
@@ -32,20 +29,6 @@ public class Classes {
     public static final String DATA_PROVIDER = "net.minecraft.data.DataProvider";
     public static final String DATA_GENERATOR = "net.minecraft.data.DataGenerator";
     public static final String DATA_FILE_HELPER = "net.minecraftforge.common.data.ExistingFileHelper";
-
-    // When something is added here, also add it to ProcessorInterface.getCodecDefaultRegistryKey
-    public static final Set<String> ALLOWED_REGISTRY_CODEC_TYPES = Set.of(
-            "net.minecraft.world.level.dimension.DimensionType",
-            "net.minecraft.world.level.biome.Biome",
-            "net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver",
-            "net.minecraft.world.level.levelgen.feature.ConfiguredFeature",
-            "net.minecraft.world.level.levelgen.placement.PlacedFeature",
-            "net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature",
-            "net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList",
-            "net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool",
-            "net.minecraft.world.level.levelgen.NoiseGeneratorSettings",
-            "net.minecraft.world.level.levelgen.synth.NormalNoise$NoiseParameters"
-    );
     
     public static String sourceName(String cls) {
         return cls.replace('$', '.');

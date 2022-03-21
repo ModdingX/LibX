@@ -3,10 +3,12 @@ package io.github.noeppi_noeppi.libx.impl.data.recipe;
 import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -80,7 +82,7 @@ public class ObjectCraftingBuilder {
     private static Ingredient getIngredient(ObjectReader reader) {
         return ObjectCraftingBuilder.first(
                 () -> reader.optConsume(ItemLike.class).map(Ingredient::of),
-                () -> reader.optConsume(Tag.class).map(Ingredient::of),
+                () -> reader.optConsume(TagKey.class).map(ObjectCraftingBuilder::createTagIngredient),
                 () -> reader.optConsume(Ingredient.class),
                 () -> reader.optConsume(List.class).map(list -> {
                     ObjectReader sub = new ObjectReader(list.toArray());
@@ -104,6 +106,12 @@ public class ObjectCraftingBuilder {
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid output at position " + reader.pos()));
     }
 
+    private static Ingredient createTagIngredient(TagKey<?> key) {
+        if (key.registry() != Registry.ITEM_REGISTRY) throw new IllegalArgumentException("Non-item tag in recipe: " + key);
+        //noinspection unchecked
+        return Ingredient.of((TagKey<Item>) key);
+    }
+    
     @SafeVarargs
     private static <T> Optional<T> first(Supplier<Optional<T>>... values) {
         for (Supplier<Optional<T>> value : values) {

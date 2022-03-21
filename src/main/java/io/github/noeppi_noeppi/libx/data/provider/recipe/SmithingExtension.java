@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.UpgradeRecipeBuilder;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -24,7 +24,7 @@ public interface SmithingExtension extends RecipeExtension {
     /**
      * Adds  a smithing recipe with the given inputs and output.
      */
-    default void smithing(ItemLike base, Tag<Item> addition, ItemLike result) {
+    default void smithing(ItemLike base, TagKey<Item> addition, ItemLike result) {
         this.smithing(Ingredient.of(base), Ingredient.of(addition), result);
     }
 
@@ -38,21 +38,21 @@ public interface SmithingExtension extends RecipeExtension {
     /**
      * Adds  a smithing recipe with the given inputs and output.
      */
-    default void smithing(Tag<Item> base, ItemLike addition, ItemLike result) {
+    default void smithing(TagKey<Item> base, ItemLike addition, ItemLike result) {
         this.smithing(Ingredient.of(base), Ingredient.of(addition), result);
     }
 
     /**
      * Adds  a smithing recipe with the given inputs and output.
      */
-    default void smithing(Tag<Item> base, Tag<Item> addition, ItemLike result) {
+    default void smithing(TagKey<Item> base, TagKey<Item> addition, ItemLike result) {
         this.smithing(Ingredient.of(base), Ingredient.of(addition), result);
     }
 
     /**
      * Adds  a smithing recipe with the given inputs and output.
      */
-    default void smithing(Tag<Item> base, Ingredient addition, ItemLike result) {
+    default void smithing(TagKey<Item> base, Ingredient addition, ItemLike result) {
         this.smithing(Ingredient.of(base), addition, result);
     }
 
@@ -66,7 +66,7 @@ public interface SmithingExtension extends RecipeExtension {
     /**
      * Adds  a smithing recipe with the given inputs and output.
      */
-    default void smithing(Ingredient base, Tag<Item> addition, ItemLike result) {
+    default void smithing(Ingredient base, TagKey<Item> addition, ItemLike result) {
         this.smithing(base, Ingredient.of(addition), result);
     }
 

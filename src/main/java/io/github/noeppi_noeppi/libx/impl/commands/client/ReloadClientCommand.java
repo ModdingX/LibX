@@ -5,8 +5,6 @@ import com.mojang.brigadier.context.CommandContext;
 import io.github.noeppi_noeppi.libx.config.ConfigManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public class ReloadClientCommand implements Command<CommandSourceStack> {
 

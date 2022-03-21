@@ -75,17 +75,21 @@ public class ConfigState {
     public String writeObject(@Nonnull Set<ConfigKey> keys, Set<ConfigGroup> groups, int pathStrip) {
         List<ConfigKey> simpleKeysSorted = keys.stream()
                 .filter(key -> key.path.size() == pathStrip + 1)
-                .sorted(ConfigKey.BY_PATH).collect(Collectors.toList());
+                .sorted(ConfigKey.BY_PATH).toList();
         
         Map<String, Set<ConfigKey>> subGroups = keys.stream()
                 .filter(key -> key.path.size() > pathStrip + 1)
                 .collect(Collectors.groupingBy(key -> key.path.get(pathStrip), Collectors.toSet()));
+        
+        boolean compact = keys.stream().allMatch(key -> key.comment.isEmpty()) && groups.isEmpty();
         
         StringBuilder builder = new StringBuilder();
         boolean first = true;
         for (ConfigKey key : simpleKeysSorted) {
             if (first) {
                 first = false;
+            } else if (compact) {
+                builder.append(",\n");
             } else {
                 builder.append(",\n\n");
             }
@@ -97,7 +101,7 @@ public class ConfigState {
             builder.append(this.specialString(json));
         }
         
-        List<String> subGroupKeys = subGroups.keySet().stream().sorted().collect(Collectors.toList());
+        List<String> subGroupKeys = subGroups.keySet().stream().sorted().toList();
         for (String group : subGroupKeys) {
             ConfigGroup cg = groups.stream()
                     .filter(g -> g.path.size() == pathStrip + 1)
@@ -130,7 +134,7 @@ public class ConfigState {
             return "[]";
         }
         if (json.isJsonArray() && json.getAsJsonArray().size() <= 5) {
-            List<JsonElement> list = Streams.stream(json.getAsJsonArray()).collect(Collectors.toList());
+            List<JsonElement> list = Streams.stream(json.getAsJsonArray()).toList();
             if (list.stream().allMatch(this::isSimple)) {
                 return "[ " + list.stream().map(ConfigImpl.GSON::toJson).collect(Collectors.joining(", ")) + " ]";
             }

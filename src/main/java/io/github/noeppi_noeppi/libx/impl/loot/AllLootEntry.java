@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 // A loot entry that merges multiple entries into one to be found in one roll.
 public class AllLootEntry extends CompositeEntryBase {
 
-    public static final ResourceLocation ID = new ResourceLocation(LibX.getInstance().modid, "all");
+    public static final ResourceLocation ID = LibX.getInstance().resource("all");
     public static final LootPoolEntryType TYPE = new LootPoolEntryType(CompositeEntryBase.createSerializer(AllLootEntry::new));
 
     public AllLootEntry(LootPoolEntryContainer[] children, LootItemCondition[] conditions) {
