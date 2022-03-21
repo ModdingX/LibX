@@ -81,11 +81,15 @@ public class ConfigState {
                 .filter(key -> key.path.size() > pathStrip + 1)
                 .collect(Collectors.groupingBy(key -> key.path.get(pathStrip), Collectors.toSet()));
         
+        boolean compact = keys.stream().allMatch(key -> key.comment.isEmpty()) && groups.isEmpty();
+        
         StringBuilder builder = new StringBuilder();
         boolean first = true;
         for (ConfigKey key : simpleKeysSorted) {
             if (first) {
                 first = false;
+            } else if (compact) {
+                builder.append(",\n");
             } else {
                 builder.append(",\n\n");
             }
