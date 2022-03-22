@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>net.minecraft.client.gui.components.events.GuiEventListener</code>, <code>net.minecraft.client.gui.components.Widget</code>, <code>net.minecraft.client.gui.narration.NarratableEntry</code>, <code>net.minecraft.client.gui.narration.NarrationSupplier</code></dd>
+<dd><code><a href="../config/gui/EditorOps.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">EditorOps</a></code>, <code>net.minecraft.client.gui.components.events.GuiEventListener</code>, <code>net.minecraft.client.gui.components.Widget</code>, <code>net.minecraft.client.gui.narration.NarratableEntry</code>, <code>net.minecraft.client.gui.narration.NarrationSupplier</code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -91,7 +91,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">Panel</span>
-<span class="extends-implements">extends net.minecraft.client.gui.components.AbstractWidget</span></div>
+<span class="extends-implements">extends net.minecraft.client.gui.components.AbstractWidget
+implements <a href="../config/gui/EditorOps.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">EditorOps</a></span></div>
 <div class="block">An <code>AbstractWidget</code> that is composed of multiple other widgets. These
  widgets are positioned relative to this widget. You can add these widgets in
  the constructor.</div>
@@ -181,42 +182,47 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#charTyped(char,int)" class="member-name-link">charTyped</a><wbr>(char&nbsp;value,
  int&nbsp;modifiers)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyPressed(int,int,int)" class="member-name-link">keyPressed</a><wbr>(int&nbsp;keyCode,
- int&nbsp;scanCode,
- int&nbsp;modifiers)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enabled(boolean)" class="member-name-link">enabled</a><wbr>(boolean&nbsp;enabled)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Marks a widget as enabled or diasabled.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyReleased(int,int,int)" class="member-name-link">keyReleased</a><wbr>(int&nbsp;keyCode,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyPressed(int,int,int)" class="member-name-link">keyPressed</a><wbr>(int&nbsp;keyCode,
  int&nbsp;scanCode,
  int&nbsp;modifiers)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseClicked(double,double,int)" class="member-name-link">mouseClicked</a><wbr>(double&nbsp;mouseX,
- double&nbsp;mouseY,
- int&nbsp;button)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyReleased(int,int,int)" class="member-name-link">keyReleased</a><wbr>(int&nbsp;keyCode,
+ int&nbsp;scanCode,
+ int&nbsp;modifiers)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseDragged(double,double,int,double,double)" class="member-name-link">mouseDragged</a><wbr>(double&nbsp;mouseX,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseClicked(double,double,int)" class="member-name-link">mouseClicked</a><wbr>(double&nbsp;mouseX,
+ double&nbsp;mouseY,
+ int&nbsp;button)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseDragged(double,double,int,double,double)" class="member-name-link">mouseDragged</a><wbr>(double&nbsp;mouseX,
  double&nbsp;mouseY,
  int&nbsp;button,
  double&nbsp;dragX,
  double&nbsp;dragY)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseReleased(double,double,int)" class="member-name-link">mouseReleased</a><wbr>(double&nbsp;mouseX,
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseReleased(double,double,int)" class="member-name-link">mouseReleased</a><wbr>(double&nbsp;mouseX,
  double&nbsp;mouseY,
  int&nbsp;button)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#render(com.mojang.blaze3d.vertex.PoseStack,int,int,float)" class="member-name-link">render</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#render(com.mojang.blaze3d.vertex.PoseStack,int,int,float)" class="member-name-link">render</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  int&nbsp;mouseX,
  int&nbsp;mouseY,
  float&nbsp;partialTicks)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput)" class="member-name-link">updateNarration</a><wbr>(net.minecraft.client.gui.narration.NarrationElementOutput&nbsp;output)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateNarration(net.minecraft.client.gui.narration.NarrationElementOutput)" class="member-name-link">updateNarration</a><wbr>(net.minecraft.client.gui.narration.NarrationElementOutput&nbsp;output)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -372,6 +378,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">keyPressed</span><wbr><span class="parameters">(int&nbsp;keyCode,
  int&nbsp;scanCode,
  int&nbsp;modifiers)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>keyPressed</code>&nbsp;in interface&nbsp;<code>net.minecraft.client.gui.components.events.GuiEventListener</code></dd>
+</dl>
 </section>
 </li>
 <li>
@@ -380,6 +390,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">keyReleased</span><wbr><span class="parameters">(int&nbsp;keyCode,
  int&nbsp;scanCode,
  int&nbsp;modifiers)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>keyReleased</code>&nbsp;in interface&nbsp;<code>net.minecraft.client.gui.components.events.GuiEventListener</code></dd>
+</dl>
 </section>
 </li>
 <li>
@@ -387,6 +401,10 @@ loadScripts(document, 'script');</script>
 <h3>charTyped</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">charTyped</span><wbr><span class="parameters">(char&nbsp;value,
  int&nbsp;modifiers)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>charTyped</code>&nbsp;in interface&nbsp;<code>net.minecraft.client.gui.components.events.GuiEventListener</code></dd>
+</dl>
 </section>
 </li>
 <li>
@@ -394,6 +412,22 @@ loadScripts(document, 'script');</script>
 <h3>updateNarration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateNarration</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.1/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
  net.minecraft.client.gui.narration.NarrationElementOutput&nbsp;output)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>updateNarration</code>&nbsp;in interface&nbsp;<code>net.minecraft.client.gui.narration.NarrationSupplier</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="enabled(boolean)">
+<h3>enabled</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">enabled</span><wbr><span class="parameters">(boolean&nbsp;enabled)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../config/gui/EditorOps.html#enabled(boolean)">EditorOps</a></code></span></div>
+<div class="block">Marks a widget as enabled or diasabled.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../config/gui/EditorOps.html#enabled(boolean)">enabled</a></code>&nbsp;in interface&nbsp;<code><a href="../config/gui/EditorOps.html" title="interface in io.github.noeppi_noeppi.libx.config.gui">EditorOps</a></code></dd>
+</dl>
 </section>
 </li>
 </ul>
