@@ -1,8 +1,9 @@
 package io.github.noeppi_noeppi.libx.impl.datapack;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.noeppi_noeppi.libx.LibX;
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
+import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.forgespi.locating.IModFile;
@@ -10,6 +11,7 @@ import net.minecraftforge.resource.PathResourcePack;
 
 import javax.annotation.Nonnull;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class LibXDatapack extends PathResourcePack {
@@ -17,12 +19,18 @@ public class LibXDatapack extends PathResourcePack {
     public static final int PACK_VERSION = 9;
     public static final String PREFIX = "libxdata";
 
+    private static final Gson GSON = Util.make(() -> {
+        GsonBuilder builder = new GsonBuilder();
+        builder.disableHtmlEscaping();
+        return builder.create();
+    });
+
     private final String packId;
     private final byte[] packMcmeta;
 
     public LibXDatapack(IModFile mod, String packId) {
-        // Get the base part of the mod in there and the noverride resolve
-        super(mod.getFileName() + "/" + packId, validatePath(mod.findResource(PREFIX)));
+        // Get the base part of the mod in there and the override resolve
+        super(mod.getFileName() + "/" + packId, mod.findResource(PREFIX));
         this.packId = packId;
         try {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -30,10 +38,9 @@ public class LibXDatapack extends PathResourcePack {
             JsonObject packFile = new JsonObject();
             JsonObject packSection = new JsonObject();
             packSection.addProperty("description", "Dynamic Datapack: " + mod.getFileName() + "/" + packId);
-            packSection.addProperty("pack_format", PACK_VERSION);
+            packSection.addProperty("pack_format", getPackFormat(mod));
             packFile.add("pack", packSection);
-            //noinspection UnnecessaryToStringCall
-            writer.write(packFile.toString() + "\n");
+            writer.write(GSON.toJson(packFile) + "\n");
             writer.close();
             bout.close();
             this.packMcmeta = bout.toByteArray();
@@ -42,24 +49,16 @@ public class LibXDatapack extends PathResourcePack {
         }
     }
     
-    // Deprecated, so it is removed in 1.19 when sjh is hopefully fixed.
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19")
-    @SuppressWarnings("DeprecatedIsStillUsed")
-    private static Path validatePath(Path path) {
-        // cpw said everything would be open. Now sjh isn't.
-        // Well reflection does the trick.
-        if ("cpw.mods.niofs.union.UnionPath".equals(path.getClass().getName())) {
-            LibX.logger.warn("A LibX datapack was created with a UnionPath. These are currently buggy. See https://github.com/MinecraftForge/securejarhandler/pull/4");
-            // hacky workaround that should keep things working:
-            String pathStr = path.toString();
-            if (pathStr.startsWith("/") || pathStr.startsWith(File.separator)) {
-                return path.getFileSystem().getPath(pathStr.substring(1));
-            } else {
-                return path;
+    private static int getPackFormat(IModFile mod) {
+        try {
+            Path path = mod.findResource("pack.mcmeta");
+            if (!Files.exists(path)) return PACK_VERSION;
+            try (Reader in = Files.newBufferedReader(path)) {
+                JsonObject packInfo = GSON.fromJson(in, JsonObject.class);
+                return packInfo.get("pack").getAsJsonObject().get("pack_format").getAsInt();
             }
-        } else {
-            return path;
+        } catch (Exception e) {
+            return PACK_VERSION;
         }
     }
     

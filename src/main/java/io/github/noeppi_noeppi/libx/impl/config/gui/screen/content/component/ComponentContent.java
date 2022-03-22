@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.component;
 
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigScreenContent;
+import io.github.noeppi_noeppi.libx.config.gui.EditorOps;
 import io.github.noeppi_noeppi.libx.config.gui.WidgetProperties;
 import io.github.noeppi_noeppi.libx.impl.config.gui.EditorHelper;
 import io.github.noeppi_noeppi.libx.impl.config.gui.screen.content.ListContent;
@@ -253,6 +254,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
             public void onPress() {
                 super.onPress();
                 ComponentContent.this.hasColor = this.selected();
+                EditorOps.wrap(ComponentContent.this.colorWidget).enabled(ComponentContent.this.hasColor);
                 ComponentContent.this.update();
             }
         };
@@ -264,6 +266,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
             this.color = color;
             this.update();
         });
+        EditorOps.wrap(this.colorWidget).enabled(this.hasColor);
         consumer.accept(this.colorWidget);
         
         y += (ColorPicker.HEIGHT + 5);

@@ -73,11 +73,6 @@ public class VanillaWrapper implements Container {
     }
 
     @Override
-    public int getMaxStackSize() {
-        return 64;
-    }
-
-    @Override
     public void setChanged() {
         if (this.changed != null) {
             this.changed.run();
@@ -90,24 +85,18 @@ public class VanillaWrapper implements Container {
     }
 
     @Override
-    public void startOpen(@Nonnull Player player) {
-
-    }
-
-    @Override
-    public void stopOpen(@Nonnull Player player) {
-
-    }
-
-    @Override
     public boolean canPlaceItem(int index, @Nonnull ItemStack stack) {
         return this.handler.isItemValid(index, stack);
     }
 
     @Override
     public void clearContent() {
-        for (int i = 0; i < this.handler.getSlots(); i++) {
-            this.handler.setStackInSlot(i, ItemStack.EMPTY);
+        if (this.handler instanceof IAdvancedItemHandlerModifiable adv) {
+            adv.clear();
+        } else {
+            for (int i = 0; i < this.handler.getSlots(); i++) {
+                this.handler.setStackInSlot(i, ItemStack.EMPTY);
+            }
         }
     }
 }

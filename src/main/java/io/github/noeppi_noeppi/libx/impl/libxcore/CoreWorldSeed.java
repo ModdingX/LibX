@@ -6,7 +6,7 @@ import net.minecraft.world.level.levelgen.WorldGenSettings;
 public class CoreWorldSeed {
 
     /**
-     * Patched into the private constructor of {@link WorldGenSettings}
+     * Patched into the main constructor of {@link WorldGenSettings}
      * before any {@code return} passing the {@code seed} parameter.
      */
     public static void setWorldSeed(long seed) {

@@ -45,7 +45,7 @@
   "libx.config.gui.component.underlined": "Unterstrichen: %s",
   "libx.config.gui.component.strikethrough": "Durchgestrichen: %s",
   "libx.config.gui.component.obfuscated": "Verdeckt: %s",
-  "libx.config.gui.component.siblings": "Zusätsliche Elemente",
+  "libx.config.gui.component.siblings": "Zusätzliche Elemente",
   "libx.config.gui.component.arguments": "Argumente",
   "libx.config.gui.component.type_text": "Text",
   "libx.config.gui.component.type_translate": "Übersetzung",
