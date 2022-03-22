@@ -66,6 +66,8 @@ public class ColorPicker extends Panel {
     private Consumer<TextColor> responder;
     private TextColor lastDelivered = null;
     
+    private boolean enabled;
+    
     public ColorPicker(Screen screen, int x, int y) {
         this(screen, x, y, null);
     }
@@ -95,6 +97,7 @@ public class ColorPicker extends Panel {
         } else {
             this.update();
         }
+        this.enabled = true;
     }
 
     /**
@@ -169,7 +172,11 @@ public class ColorPicker extends Panel {
             RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
             BufferBuilder vertex = Tesselator.getInstance().getBuilder();
             vertex.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
-            this.hsbMatrix.get().forEach(v -> v.add(vertex, matrix));
+            if (this.enabled) {
+                this.hsbMatrix.get().forEach(v -> v.add(vertex, matrix));
+            } else {
+                this.hsbMatrix.get().forEach(v -> v.addGrayscale(vertex, matrix));
+            }
             vertex.end();
             BufferUploader.end(vertex);
         }
@@ -179,12 +186,22 @@ public class ColorPicker extends Panel {
             RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
             BufferBuilder vertex = Tesselator.getInstance().getBuilder();
             vertex.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
-            this.huePanel.forEach(v -> v.add(vertex, matrix));
+            if (this.enabled) {
+                this.huePanel.forEach(v -> v.add(vertex, matrix));
+            } else {
+                this.huePanel.forEach(v -> v.addGrayscale(vertex, matrix));
+            }
             vertex.end();
             BufferUploader.end(vertex);
         }
         
         int colorValue = ((this.red & 0xFF) << 16) | ((this.green & 0xFF) << 8) | (this.blue & 0xFF);
+        int displayColor = colorValue;
+        if (!this.enabled) {
+            int value = Math.round((this.red + this.green + this.blue) / 3f) & 0xFF;
+            displayColor = (value << 16) | (value << 8) | value;
+        }
+        
         int highlightColor = this.brightness > 0.5 ? 0x000000 : 0xFFFFFF;
         
         RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
@@ -192,7 +209,7 @@ public class ColorPicker extends Panel {
         RenderHelper.rgb(highlightColor);
         GuiComponent.blit(poseStack, 115, 69, 20, 0, 0, 85, 31, 256, 256);
         
-        RenderHelper.rgb(colorValue);
+        RenderHelper.rgb(displayColor);
         GuiComponent.blit(poseStack, 116, 70, 40, 0, 0, 83, 29, 256, 256);
         
         String colorText = String.format("#%06X", colorValue);
@@ -204,31 +221,50 @@ public class ColorPicker extends Panel {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button) || this.updateColorValue(mouseX, mouseY);
+        if (super.mouseClicked(mouseX, mouseY, button)) {
+            return true;
+        } else {
+            return this.updateColorValue(mouseX, mouseY, mouseX, mouseY);
+        }
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY) || this.updateColorValue(mouseX, mouseY);
+        if (super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
+            return true;
+        } else {
+            return this.updateColorValue(mouseX, mouseY, mouseX - dragX, mouseY - dragY);
+        }
     }
     
-    private boolean updateColorValue(double mouseX, double mouseY) {
+    private boolean updateColorValue(double mouseX, double mouseY, double boundsX, double boundsY) {
+        if (!this.enabled) return false;
+        // boundsX and boundsY contains the last mouse position when dragging
+        // required to make it possible to get values from the border of the colour grid.
         mouseX -= this.x;
         mouseY -= this.y;
-        if (mouseX >= 0 && mouseX <= 100 && mouseY >= 0 && mouseY <= 100) {
-            this.saturation = (float) (mouseX / (float) 100);
-            this.brightness = (float) (1 - (mouseY / (float) 100));
+        boundsX -= this.x;
+        boundsY -= this.y;
+        if (boundsX >= 0 && boundsX <= 100 && boundsY >= 0 && boundsY <= 100) {
+            this.saturation = (float) (Mth.clamp(mouseX, 0, 100) / (float) 100);
+            this.brightness = (float) (1 - (Mth.clamp(mouseY, 0, 100) / (float) 100));
             this.updateRGB();
             this.focused = null;
             return true;
-        } else if (mouseX >= 105 && mouseX <= 110 && mouseY >= 0 && mouseY <= 100) {
-            this.hue = (float) (mouseY / (float) 100);
+        } else if (boundsX >= 105 && boundsX <= 110 && boundsY >= 0 && boundsY <= 100) {
+            this.hue = (float) (Mth.clamp(mouseY, 0, 100) / (float) 100);
             this.updateRGB();
             this.focused = null;
             return true;
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void enabled(boolean enabled) {
+        super.enabled(enabled);
+        this.enabled = enabled;
     }
 
     private record ColorValue(int red, int green, int blue) {
@@ -243,6 +279,11 @@ public class ColorPicker extends Panel {
         
         public void add(VertexConsumer vertex, Matrix4f matrix) {
             vertex.vertex(matrix, this.x, this.y, 20).color(this.color.red, this.color.green, this.color.blue, 255).uv(this.u, this.v).endVertex();
+        }
+        
+        public void addGrayscale(VertexConsumer vertex, Matrix4f matrix) {
+            int value = Math.round((this.color.red + this.color.green + this.color.blue) / 3f);
+            vertex.vertex(matrix, this.x, this.y, 20).color(value, value, value, 255).uv(this.u, this.v).endVertex();
         }
     }
     

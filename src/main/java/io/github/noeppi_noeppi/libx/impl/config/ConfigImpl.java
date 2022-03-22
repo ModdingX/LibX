@@ -11,6 +11,7 @@ import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.event.ConfigLoadedEvent;
 import io.github.noeppi_noeppi.libx.impl.config.correct.CorrectionInstance;
 import io.github.noeppi_noeppi.libx.impl.config.gui.ConfigDisplay;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConfigImpl {
 
-    public static final Gson GSON = net.minecraft.Util.make(() -> {
+    public static final Gson GSON = Util.make(() -> {
         GsonBuilder builder = new GsonBuilder();
         builder.disableHtmlEscaping();
         builder.setLenient();
@@ -41,7 +42,7 @@ public class ConfigImpl {
         return builder.create();
     });
 
-    public static final Gson INTERNAL = net.minecraft.Util.make(() -> {
+    public static final Gson INTERNAL = Util.make(() -> {
         GsonBuilder builder = new GsonBuilder();
         builder.disableHtmlEscaping();
         return builder.create();

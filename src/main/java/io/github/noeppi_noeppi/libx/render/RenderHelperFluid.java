@@ -26,8 +26,7 @@ public class RenderHelperFluid {
     }
 
     public static void renderFluid(PoseStack poseStack, MultiBufferSource buffer, int color, int x, int y, int width, int height) {
-        Fluid fluid = Fluids.WATER;
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluid.getAttributes().getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(Fluids.WATER.getAttributes().getStillTexture());
         renderFluid(poseStack, buffer, sprite, color, x, y, width, height);
     }
 

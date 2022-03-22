@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.noeppi_noeppi.libx.config.gui.EditorOps;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -18,7 +19,7 @@ import java.util.List;
  * widgets are positioned relative to this widget. You can add these widgets in
  * the constructor.
  */
-public abstract class Panel extends AbstractWidget {
+public abstract class Panel extends AbstractWidget implements EditorOps {
 
     protected final Screen screen;
     private final List<GuiEventListener> children = new ArrayList<>();
@@ -98,7 +99,7 @@ public abstract class Panel extends AbstractWidget {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return this.focused != null && this.screen.isDragging() && button == 0 && this.focused.mouseDragged(mouseX - this.x, mouseY - this.y, button, dragX, dragY);
+        return this.focused != null && this.screen.isDragging() && this.focused.mouseDragged(mouseX - this.x, mouseY - this.y, button, dragX - this.x, dragY - this.y);
     }
 
     @Override
@@ -119,5 +120,12 @@ public abstract class Panel extends AbstractWidget {
     @Override
     public void updateNarration(@Nonnull NarrationElementOutput output) {
         //
+    }
+
+    @Override
+    public void enabled(boolean enabled) {
+        for (Widget child : this.renderables) {
+            EditorOps.wrap(child).enabled(enabled);
+        }
     }
 }
