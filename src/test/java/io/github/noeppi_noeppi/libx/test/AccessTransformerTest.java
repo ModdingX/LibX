@@ -23,8 +23,8 @@ public class AccessTransformerTest {
     
     private static final Pattern CLASS_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")");
     private static final Pattern FIELD_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+(" + IDENT + ")\\s*#\\s*(" + IDENT + ")");
-    private static final Pattern CTOR_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+<init>\\s*(.+?)");
-    private static final Pattern METHOD_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+(" + IDENT + ")\\s*(.+?)\\s+#\\s*(" + IDENT + ")");
+    private static final Pattern CTOR_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+<init>\\s*(.+?)(\\s*?:#\\s*<init>)?");
+    private static final Pattern METHOD_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+(" + IDENT + ")\\s*(.+?)\\s*#\\s*(" + IDENT + ")");
     
     @Test
     public void testAT() throws Throwable {
