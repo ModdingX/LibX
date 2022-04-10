@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.impl.datapack;
 
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.datapack.DynamicDatapacks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
@@ -10,14 +11,15 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModFileInfo;
 
 import javax.annotation.Nonnull;
-import java.util.HashSet;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class DynamicDatapackLocator implements RepositorySource {
     
     private static final DynamicDatapackLocator INSTANCE = new DynamicDatapackLocator();
-    private static final Set<ResourceLocation> enabledPacks = new HashSet<>();
+    private static final Map<ResourceLocation, DynamicDatapacks.PackFactory> enabledPacks = new HashMap<>();
     
     private DynamicDatapackLocator() {
         
@@ -27,24 +29,26 @@ public class DynamicDatapackLocator implements RepositorySource {
         event.addRepositorySource(INSTANCE);
     }
     
-    public static synchronized void enablePack(ResourceLocation id) {
-        enabledPacks.add(id);
+    public static synchronized void enablePack(ResourceLocation id, @Nullable DynamicDatapacks.PackFactory pack) {
+        enabledPacks.put(id, pack == null ? LibXDatapack::new : pack);
     }
     
     public static synchronized boolean isEnabled(ResourceLocation id) {
-        return enabledPacks.contains(id);
+        return enabledPacks.containsKey(id);
     }
     
     @Override
     public void loadPacks(@Nonnull Consumer<Pack> packs, @Nonnull Pack.PackConstructor factory) {
-        for (ResourceLocation id : enabledPacks) {
+        for (Map.Entry<ResourceLocation, DynamicDatapacks.PackFactory> entry : enabledPacks.entrySet()) {
+            ResourceLocation id = entry.getKey();
+            DynamicDatapacks.PackFactory packFactory = entry.getValue();
             String name = LibXDatapack.PREFIX + "/" + id.getNamespace() + ":" + id.getPath();
             IModFileInfo fileInfo = ModList.get().getModFileById(id.getNamespace());
             if (fileInfo == null || fileInfo.getFile() == null) {
                 LibX.logger.warn("Can't create dynamic datapack " + id + ": Invalid mod file: " + fileInfo);
             } else {
                 Pack pack = Pack.create(name, false,
-                        () -> new LibXDatapack(fileInfo.getFile(), id.getPath()), factory,
+                        () -> packFactory.create(fileInfo.getFile(), id.getPath()), factory,
                         Pack.Position.BOTTOM, PackSource.DEFAULT
                 );
                 if (pack != null) {

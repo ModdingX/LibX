@@ -15,7 +15,6 @@ import net.minecraft.resources.RegistryOps;
  * 
  * {@link CodecOps} for {@link JsonOps json} and {@link NbtOps nbt} can be found in {@link CodecHelper}.
  */
-@Experimental
 public class CodecOps<E> {
     
     private final Class<E> baseClass;

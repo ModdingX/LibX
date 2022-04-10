@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 /**
  * Some utilities to deal with {@link Codec codecs}.
  */
-@Experimental
 public class CodecHelper {
 
     /**

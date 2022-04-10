@@ -1,65 +1,31 @@
 package io.github.noeppi_noeppi.libx.impl.datapack;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import net.minecraft.Util;
+import io.github.noeppi_noeppi.libx.datapack.DatapackHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.forgespi.locating.IModFile;
 import net.minecraftforge.resource.PathResourcePack;
 
 import javax.annotation.Nonnull;
-import java.io.*;
-import java.nio.file.Files;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.function.Supplier;
 
 public class LibXDatapack extends PathResourcePack {
 
     public static final int PACK_VERSION = 9;
     public static final String PREFIX = "libxdata";
-
-    private static final Gson GSON = Util.make(() -> {
-        GsonBuilder builder = new GsonBuilder();
-        builder.disableHtmlEscaping();
-        return builder.create();
-    });
-
+    
     private final String packId;
-    private final byte[] packMcmeta;
+    private final Supplier<InputStream> packMcmeta;
 
     public LibXDatapack(IModFile mod, String packId) {
         // Get the base part of the mod in there and the override resolve
         super(mod.getFileName() + "/" + packId, mod.findResource(PREFIX));
         this.packId = packId;
-        try {
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            Writer writer = new OutputStreamWriter(bout);
-            JsonObject packFile = new JsonObject();
-            JsonObject packSection = new JsonObject();
-            packSection.addProperty("description", "Dynamic Datapack: " + mod.getFileName() + "/" + packId);
-            packSection.addProperty("pack_format", getPackFormat(mod));
-            packFile.add("pack", packSection);
-            writer.write(GSON.toJson(packFile) + "\n");
-            writer.close();
-            bout.close();
-            this.packMcmeta = bout.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to create dynamic datapack", e);
-        }
-    }
-    
-    private static int getPackFormat(IModFile mod) {
-        try {
-            Path path = mod.findResource("pack.mcmeta");
-            if (!Files.exists(path)) return PACK_VERSION;
-            try (Reader in = Files.newBufferedReader(path)) {
-                JsonObject packInfo = GSON.fromJson(in, JsonObject.class);
-                return packInfo.get("pack").getAsJsonObject().get("pack_format").getAsInt();
-            }
-        } catch (Exception e) {
-            return PACK_VERSION;
-        }
+        this.packMcmeta = DatapackHelper.generatePackMeta(mod, "Dynamic Datapack: " + mod.getFileName() + "/" + packId);
     }
     
     @Override
@@ -75,7 +41,7 @@ public class LibXDatapack extends PathResourcePack {
     @Nonnull
     @Override
     protected InputStream getResource(@Nonnull String name) throws IOException {
-        return name.equals(PACK_META) ? new ByteArrayInputStream(this.packMcmeta) : super.getResource(name);
+        return name.equals(PACK_META) ? this.packMcmeta.get() : super.getResource(name);
     }
 
     @Nonnull
