@@ -488,6 +488,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a new cached value.</div>
 </dd>
+<dt><a href="io/github/noeppi_noeppi/libx/util/ClassUtil.html#calledBy(java.lang.Class)" class="member-name-link">calledBy(Class&lt;?&gt;)</a> - Static method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ClassUtil.html" title="class in io.github.noeppi_noeppi.libx.util">ClassUtil</a></dt>
+<dd>
+<div class="block">Gets whether the given class is found somewhere in the call hierarchy from this method.</div>
+</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/util/ClassUtil.html#calledBy(java.lang.Class,java.lang.String,java.lang.Class...)" class="member-name-link">calledBy(Class&lt;?&gt;, String, Class&lt;?&gt;...)</a> - Static method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ClassUtil.html" title="class in io.github.noeppi_noeppi.libx.util">ClassUtil</a></dt>
+<dd>
+<div class="block">Gets whether the given method is found somewhere in the call hierarchy from this method.</div>
+</dd>
+<dt><a href="io/github/noeppi_noeppi/libx/util/ClassUtil.html#callerClass(int)" class="member-name-link">callerClass(int)</a> - Static method in class io.github.noeppi_noeppi.libx.util.<a href="io/github/noeppi_noeppi/libx/util/ClassUtil.html" title="class in io.github.noeppi_noeppi.libx.util">ClassUtil</a></dt>
+<dd>
+<div class="block">Gets the caller class for method call, the gven amount of stack frames up.</div>
+</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/recipe/SmeltingExtension.html#campfire(net.minecraft.resources.ResourceLocation,net.minecraft.tags.TagKey,net.minecraft.world.level.ItemLike,float,int)" class="member-name-link">campfire(ResourceLocation, TagKey&lt;Item&gt;, ItemLike, float, int)</a> - Method in interface io.github.noeppi_noeppi.libx.data.provider.recipe.<a href="io/github/noeppi_noeppi/libx/data/provider/recipe/SmeltingExtension.html" title="interface in io.github.noeppi_noeppi.libx.data.provider.recipe">SmeltingExtension</a></dt>
 <dd>
 <div class="block">Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.</div>
@@ -1554,7 +1566,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Field name of the codec field.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html#fieldOf(java.lang.String)" class="member-name-link">fieldOf(String)</a> - Static method in class io.github.noeppi_noeppi.libx.world.<a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">WorldSeedHolder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
+&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/CommonTagsProviderBase.html#fileHelper" class="member-name-link">fileHelper</a> - Variable in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/CommonTagsProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">CommonTagsProviderBase</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html#first(io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase.LootFactory...)" class="member-name-link">first(BlockLootProviderBase.LootFactory...)</a> - Method in class io.github.noeppi_noeppi.libx.data.provider.<a href="io/github/noeppi_noeppi/libx/data/provider/BlockLootProviderBase.html" title="class in io.github.noeppi_noeppi.libx.data.provider">BlockLootProviderBase</a></dt>
@@ -2125,6 +2139,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html#getSeed()" class="member-name-link">getSeed()</a> - Static method in class io.github.noeppi_noeppi.libx.world.<a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">WorldSeedHolder</a></dt>
 <dd>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Gets the world seed to be used in codecs.</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/crafting/ingredient/EffectIngredient.html#getSerializer()" class="member-name-link">getSerializer()</a> - Method in class io.github.noeppi_noeppi.libx.crafting.ingredient.<a href="io/github/noeppi_noeppi/libx/crafting/ingredient/EffectIngredient.html" title="class in io.github.noeppi_noeppi.libx.crafting.ingredient">EffectIngredient</a></dt>
@@ -4860,10 +4875,19 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" class="type-name-link" title="class in io.github.noeppi_noeppi.libx.world">WorldSeedHolder</a> - Class in <a href="io/github/noeppi_noeppi/libx/world/package-summary.html">io.github.noeppi_noeppi.libx.world</a></dt>
 <dd>
-<div class="block">Provides a way to get the seed for the current world.</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Since 1.18.2, the world seed is initialised too late to be used in chunk
+             generator and biome source codecs and will yield wrong results there. After
+             the level has been constructed, the seed is obtainable using
+             <code>level.getServer().getWorldData().worldGenSettings().seed()</code> from a
+             <code>ServerLevel</code>.
+             <b>Using this in worldgen codecs can lead to chunk errors, don't do this.</b></div>
+</div>
 </dd>
 <dt><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html#%3Cinit%3E()" class="member-name-link">WorldSeedHolder()</a> - Constructor for class io.github.noeppi_noeppi.libx.world.<a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">WorldSeedHolder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
+&nbsp;</dd>
 <dt><a href="io/github/noeppi_noeppi/libx/screen/text/AlignedComponent.html#wrap()" class="member-name-link">wrap()</a> - Method in record class io.github.noeppi_noeppi.libx.screen.text.<a href="io/github/noeppi_noeppi/libx/screen/text/AlignedComponent.html" title="class in io.github.noeppi_noeppi.libx.screen.text">AlignedComponent</a></dt>
 <dd>
 <div class="block">Returns the value of the <a href="./io/github/noeppi_noeppi/libx/screen/text/AlignedComponent.html#param-wrap"><code>wrap</code></a> record component.</div>

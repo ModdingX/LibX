@@ -105,6 +105,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="deprecation-comment">Use <a href="io/github/noeppi_noeppi/libx/util/ResourceList.html#ALLOW_LIST"><code>ResourceList.ALLOW_LIST</code></a></div>
 </div>
+<div class="col-summary-item-name even-row-color"><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">io.github.noeppi_noeppi.libx.world.WorldSeedHolder</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Since 1.18.2, the world seed is initialised too late to be used in chunk
+             generator and biome source codecs and will yield wrong results there. After
+             the level has been constructed, the seed is obtainable using
+             <code>level.getServer().getWorldData().worldGenSettings().seed()</code> from a
+             <code>ServerLevel</code>.
+             <b>Using this in worldgen codecs can lead to chunk errors, don't do this.</b></div>
+</div>
 </div>
 </div>
 </li>
@@ -119,6 +128,15 @@ loadScripts(document, 'script');</script>
 <div class="col-summary-item-name even-row-color"><a href="io/github/noeppi_noeppi/libx/util/NbtToJson.html" title="class in io.github.noeppi_noeppi.libx.util">io.github.noeppi_noeppi.libx.util.NbtToJson</a></div>
 <div class="col-last even-row-color">
 <div class="deprecation-comment">It never worked consistently. Take a look at <code>codecs</code> to solve things like this.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="io/github/noeppi_noeppi/libx/world/WorldSeedHolder.html" title="class in io.github.noeppi_noeppi.libx.world">io.github.noeppi_noeppi.libx.world.WorldSeedHolder</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">Since 1.18.2, the world seed is initialised too late to be used in chunk
+             generator and biome source codecs and will yield wrong results there. After
+             the level has been constructed, the seed is obtainable using
+             <code>level.getServer().getWorldData().worldGenSettings().seed()</code> from a
+             <code>ServerLevel</code>.
+             <b>Using this in worldgen codecs can lead to chunk errors, don't do this.</b></div>
 </div>
 </div>
 </div>
