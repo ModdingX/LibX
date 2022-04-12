@@ -10,6 +10,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -27,6 +29,7 @@ public class RegistrationDispatcher {
     
     private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> forgeEntries;
     private final Map<Registry<?>, Map<ResourceKey<?>, Object>> vanillaEntries;
+    private final List<Registerable> registerables;
     
     public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
         this.modid = modid;
@@ -34,6 +37,7 @@ public class RegistrationDispatcher {
         this.resolvedRegistries = new HashMap<>();
         this.forgeEntries = new HashMap<>();
         this.vanillaEntries = new HashMap<>();
+        this.registerables = new ArrayList<>();
     }
     
     private <T> Optional<ResolvedRegistry<T>> registry(ResourceKey<? extends Registry<T>> key) {
@@ -45,10 +49,11 @@ public class RegistrationDispatcher {
         }
     }
     
-    private <T> Supplier<Holder<T>> register(ResourceKey<? extends Registry<T>> registry, String id, T value) {
+    public <T> Supplier<Holder<T>> register(ResourceKey<? extends Registry<T>> registry, String id, T value) {
         synchronized (this.LOCK) {
             if (value instanceof Registerable registerable) {
-                // TODO additional elements
+                this.registerables.add(registerable);
+                registerable.buildAdditionalRegisters(new EntryCollector(id));
             }
             ResourceKey<T> resourceKey = ResourceKey.create(registry, new ResourceLocation(this.modid, id));
             if (registry != ModXRegistration.ANY_REGISTRY) {
@@ -69,7 +74,12 @@ public class RegistrationDispatcher {
     
     private <T> void addEntry(Map<T, Map<ResourceKey<?>, Object>> entries, T key, ResourceKey<?> resourceKey, Object element) {
         synchronized (this.LOCK) {
-            entries.computeIfAbsent(key, k -> new HashMap<>()).put(resourceKey, element);
+            Map<ResourceKey<?>, Object> entryMap = entries.computeIfAbsent(key, k -> new HashMap<>());
+            if (entryMap.containsKey(resourceKey)) {
+                throw new IllegalStateException("Duplicate element for registration: " + resourceKey + " with value " + element);
+            } else {
+                entryMap.put(resourceKey, element);
+            }
         }
     }
     
@@ -99,6 +109,43 @@ public class RegistrationDispatcher {
                     Registry.register((Registry<Object>) registryEntry.getKey(), (ResourceKey<Object>) elementEntry.getKey(), elementEntry.getValue());
                 }
             }
+        }
+    }
+    
+    public void registerCommon(FMLCommonSetupEvent event) {
+        this.registerables.forEach(reg -> reg.registerCommon(event::enqueueWork));
+    }
+    
+    public void registerClient(FMLClientSetupEvent event) {
+        this.registerables.forEach(reg -> reg.registerClient(event::enqueueWork));
+    }
+    
+    private class EntryCollector implements Registerable.EntryCollector {
+
+        private final String baseId;
+
+        private EntryCollector(String baseId) {
+            this.baseId = baseId;
+        }
+
+        @Override
+        public <T> void register(ResourceKey<? extends Registry<T>> registry, T value) {
+            RegistrationDispatcher.this.register(registry, this.baseId, value);
+        }
+
+        @Override
+        public <T> void registerNamed(ResourceKey<? extends Registry<T>> registry, String name, T value) {
+            RegistrationDispatcher.this.register(registry, this.baseId + "_" + name, value);
+        }
+
+        @Override
+        public <T> Holder<T> createHolder(ResourceKey<? extends Registry<T>> registry, T value) {
+            return RegistrationDispatcher.this.register(registry, this.baseId, value).get();
+        }
+
+        @Override
+        public <T> Holder<T> createNamedHolder(ResourceKey<? extends Registry<T>> registry, String name, T value) {
+            return RegistrationDispatcher.this.register(registry, this.baseId + "_" + name, value).get();
         }
     }
 }
