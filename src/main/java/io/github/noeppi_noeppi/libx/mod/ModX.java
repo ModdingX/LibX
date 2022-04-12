@@ -3,7 +3,6 @@ package io.github.noeppi_noeppi.libx.mod;
 import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.impl.config.ModMappers;
-import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -77,7 +76,7 @@ public abstract class ModX {
         // As the generated code registers registration handlers this will produce a null pointer exception
         // as the list of handlers will be null. So for instances of ModXRegistration we don't call it here
         // but in the constructor of ModXRegistration
-        if (!(this instanceof ModXRegistration)) {
+        if (!(this instanceof ModXRegistration) && !(this instanceof io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration)) {
             ModInternal.get(this).callGeneratedCode();
         }
     }

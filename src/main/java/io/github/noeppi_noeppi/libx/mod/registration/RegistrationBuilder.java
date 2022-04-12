@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.libx.mod.registration;
 
 import com.google.common.collect.ImmutableList;
 import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
-import io.github.noeppi_noeppi.libx.impl.registration.BuiltinTransformers;
+import io.github.noeppi_noeppi.libx.impl.registration.old.BuiltinTransformers;
 
 import java.util.ArrayList;
 import java.util.List;
