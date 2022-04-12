@@ -35,6 +35,10 @@ dependencies {
     testImplementation 'net.minecraftforge:srgutils:0.4.9'
 }
 
+compileJava.options.compilerArgs += [
+        '-Amod.properties.strict_onlyin=true'
+]
+
 test {
     dependsOn createSrgToMcp // Needed, so the tests can load mappings
     useJUnitPlatform()
