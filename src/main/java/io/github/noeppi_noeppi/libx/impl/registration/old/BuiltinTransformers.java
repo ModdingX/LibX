@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.impl.registration;
+package io.github.noeppi_noeppi.libx.impl.registration.old;
 
 import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.registration.RegistryTransformer;
