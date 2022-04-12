@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.base;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -22,7 +23,11 @@ import java.util.stream.Stream;
 
 /**
  * Base class for {@link Item items} which have an inventory. This will provide the capability to the item.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<CompoundTag>> extends ItemBase {
 
     private final Function<Runnable, T> inventoryFactory;

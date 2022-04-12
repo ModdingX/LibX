@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.base.decoration;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock;
 import io.github.noeppi_noeppi.libx.base.decoration.DecorationContext;
 import io.github.noeppi_noeppi.libx.fi.Function3;
@@ -13,6 +14,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> {
 
     private final Supplier<Item.Properties> properties;

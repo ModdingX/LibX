@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -56,7 +57,11 @@ import java.util.function.Predicate;
  * 
  * With registry transformers you can register literally everything. See {@link #initRegistration(RegistrationBuilder)}
  * for more information about registry conditions and transformers.
+ * 
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public abstract class ModXRegistration extends ModX {
 
     private final Object registrationLock = new Object();

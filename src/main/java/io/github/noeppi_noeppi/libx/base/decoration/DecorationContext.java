@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.base.decoration;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +13,11 @@ import java.util.stream.Collectors;
 /**
  * A context that defines, what {@link DecorationType elements} should be registered with a
  * {@link DecoratedBlock}.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class DecorationContext {
 
     /**
