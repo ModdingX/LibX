@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 public class OnlyInProcessor extends Processor {
 
-
     @Override
     public Class<?>[] getTypes() {
         return new Class[]{};
