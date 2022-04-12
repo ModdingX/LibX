@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.processor.meta;
 
 import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
+import io.github.noeppi_noeppi.libx.annotation.processor.ExternalProperties;
 import io.github.noeppi_noeppi.libx.annotation.processor.Processor;
 
 import javax.annotation.processing.RoundEnvironment;
