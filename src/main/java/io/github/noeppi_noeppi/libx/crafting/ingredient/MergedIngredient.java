@@ -4,11 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
@@ -22,7 +24,11 @@ import java.util.stream.Stream;
 /**
  * Vanilla provides a way to merge vanilla ingredients. However this does not work with modded ingredients.
  * So this provides a method to merge multiple ingredients that also works with mod ingredients.
+ * 
+ * @deprecated Use {@link CompoundIngredient}
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class MergedIngredient extends Ingredient {
 
     private final List<Ingredient> ingredients;
@@ -34,14 +40,22 @@ public class MergedIngredient extends Ingredient {
     
     /**
      * Merges some ingredients together. If only vanilla ingredients are used, this will use vanilla merging.
+     * 
+     * @deprecated Use {@link CompoundIngredient#of(Ingredient...)}
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public static Ingredient mergeIngredients(Ingredient... ingredients) {
         return mergeIngredients(Arrays.asList(ingredients));
     }
 
     /**
      * Merges some ingredients together. If only vanilla ingredients are used, this will use vanilla merging.
+     * 
+     * @deprecated Use {@link CompoundIngredient#of(Ingredient...)}
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public static Ingredient mergeIngredients(List<Ingredient> ingredients) {
         if (ingredients.isEmpty()) {
             return Ingredient.EMPTY;
@@ -53,7 +67,7 @@ public class MergedIngredient extends Ingredient {
                     .flatMap(i -> Arrays.stream(i.values))
             );
         } else if (ingredients.stream().anyMatch(Ingredient::isVanilla)) {
-            // We ave at least some vanilla ingredients.
+            // We have at least some vanilla ingredients.
             // Merge them first
             Ingredient vanilla = Ingredient.fromValues(ingredients.stream()
                     .filter(Ingredient::isVanilla)

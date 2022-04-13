@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.crafting.CompoundIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,10 @@ public interface RecipeExtension {
                 } else if (entry instanceof Ingredient.TagValue value) {
                     instances.add(this.criterion(ItemPredicate.Builder.item().of(value.tag).build()));
                 }
+            }
+        } else if (item instanceof CompoundIngredient cmp) {
+            for (Ingredient i : cmp.getChildren()) {
+                instances.addAll(this.criteria(i));
             }
         } else if (item instanceof MergedIngredient merged) {
             for (Ingredient i : merged.getIngredients()) {

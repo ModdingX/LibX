@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.impl.data.recipe;
 
-import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeExtension;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.core.Registry;
@@ -12,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.crafting.CompoundIngredient;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -88,7 +88,7 @@ public class ObjectCraftingBuilder {
                     ObjectReader sub = new ObjectReader(list.toArray());
                     List<Ingredient> subList = new ArrayList<>();
                     while (sub.hasNext()) subList.add(getIngredient(sub));
-                    return MergedIngredient.mergeIngredients(subList);
+                    return CompoundIngredient.of(subList.toArray(new Ingredient[]{}));
                 })
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid ingredient at position " + reader.pos()));
     }

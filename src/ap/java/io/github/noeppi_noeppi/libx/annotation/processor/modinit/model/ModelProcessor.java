@@ -18,11 +18,15 @@ public class ModelProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@Model can only be used on public static non-final fields.");
             return;
         }
+        if (!element.getEnclosingElement().getModifiers().contains(Modifier.PUBLIC)) {
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "@Model can't be used in private type.");
+            return;
+        }
         Element typeElement = env.typeElement(Classes.BAKED_MODEL);
         if (!env.sameErasure(element.asType(), typeElement.asType())) {
-                env.messager().printMessage(Diagnostic.Kind.ERROR, "Field annotated @Model needs a type of " + Classes.BAKED_MODEL + ".");
-                return;
-            }
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Field annotated @Model needs a type of " + Classes.BAKED_MODEL + ".");
+            return;
+        }
         Model model = element.getAnnotation(Model.class);
         env.getMod(element).addModel(parent.getQualifiedName().toString(), element.getSimpleName().toString(), model.namespace(), model.value());
     }
