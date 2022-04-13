@@ -9,7 +9,10 @@ import io.github.noeppi_noeppi.libx.util.ClassUtil;
 import net.minecraft.server.WorldStem;
 import net.minecraft.server.level.ServerLevel;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * Provides a way to get the seed for the current world.
@@ -32,7 +35,11 @@ public class WorldSeedHolder {
         try {
             // Find out if we are in a worldgen codec and log a message
             if (ClassUtil.calledBy(WorldStem.class, "m_206911_", WorldStem.InitConfig.class, WorldStem.DataPackConfigSupplier.class, WorldStem.WorldDataSupplier.class, Executor.class, Executor.class)) {
-                LibX.logger.warn("Use of WorldSeedHolder#getSeed from worldgen codec detected. Since 1.18.2 this no longer works and will produce wrong results. Caller class: " + ClassUtil.callerClass(1) + " / " + ClassUtil.callerClass(2));
+                String trace = Arrays.stream(new Exception().getStackTrace())
+                        .dropWhile(t -> Objects.equals(t.getClassName(), WorldSeedHolder.class.getCanonicalName()))
+                        .takeWhile(t -> !Objects.equals(t.getClassName(), WorldStem.class.getCanonicalName()))
+                        .map(t -> " > " + t).collect(Collectors.joining("\n"));
+                LibX.logger.error("Use of WorldSeedHolder#getSeed from worldgen codec detected. Since 1.18.2 this no longer works and will produce wrong results.\n" + trace);
             }
         } catch (Exception | NoClassDefFoundError e) {
             //
