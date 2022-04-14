@@ -17,7 +17,7 @@ public class DatagenProcessor {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Can't use @Datagen on element that is not a class.", element);
             return;
         }
-        if (element.getModifiers().contains(Modifier.PUBLIC)) {
+        if (!element.getModifiers().contains(Modifier.PUBLIC)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Class used with @Datagen is not public.", element);
             return;
         }
