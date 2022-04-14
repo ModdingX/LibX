@@ -2,12 +2,10 @@ package io.github.noeppi_noeppi.libx.mod;
 
 import io.github.noeppi_noeppi.libx.impl.ModInternal;
 import io.github.noeppi_noeppi.libx.impl.registration.RegistrationDispatcher;
-import io.github.noeppi_noeppi.libx.registration.Registerable;
 import io.github.noeppi_noeppi.libx.registration.RegistrationBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.EventBus;
@@ -21,9 +19,6 @@ import java.util.function.Predicate;
 
 public abstract class ModXRegistration extends ModX {
     
-    // Don't use LibX#resource because of classloading order.
-    public static final ResourceKey<? extends Registry<Registerable>> ANY_REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation("libx", "any"));
-
     private final RegistrationDispatcher dispatcher;
     
     protected ModXRegistration() {
@@ -56,15 +51,11 @@ public abstract class ModXRegistration extends ModX {
 
     protected abstract void initRegistration(RegistrationBuilder builder);
     
-    public final <T> void register(String id, Registerable value) {
-        this.register(ANY_REGISTRY, id, value);
-    }
-    
-    public final <T> void register(ResourceKey<? extends Registry<T>> registry, String id, T value) {
+    public final <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         this.dispatcher.register(registry, id, value);
     }
     
-    public final <T> Holder<T> createHolder(ResourceKey<? extends Registry<T>> registry, String id, T value) {
+    public final <T> Holder<T> createHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         return this.dispatcher.register(registry, id, value).get();
     }
 }

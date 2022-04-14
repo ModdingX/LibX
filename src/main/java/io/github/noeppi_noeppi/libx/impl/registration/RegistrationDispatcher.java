@@ -1,21 +1,25 @@
 package io.github.noeppi_noeppi.libx.impl.registration;
 
-import io.github.noeppi_noeppi.libx.mod.ModXRegistration;
 import io.github.noeppi_noeppi.libx.registration.Registerable;
 import io.github.noeppi_noeppi.libx.registration.RegistrationBuilder;
+import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
 import io.github.noeppi_noeppi.libx.registration.resolution.RegistryResolver;
 import io.github.noeppi_noeppi.libx.registration.resolution.ResolvedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class RegistrationDispatcher {
@@ -29,7 +33,7 @@ public class RegistrationDispatcher {
     
     private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> forgeEntries;
     private final Map<Registry<?>, Map<ResourceKey<?>, Object>> vanillaEntries;
-    private final List<Registerable> registerables;
+    private final List<NamedRegisterable> registerables;
     
     public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
         this.modid = modid;
@@ -49,14 +53,19 @@ public class RegistrationDispatcher {
         }
     }
     
-    public <T> Supplier<Holder<T>> register(ResourceKey<? extends Registry<T>> registry, String id, T value) {
+    public <T> Supplier<Holder<T>> register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         synchronized (this.LOCK) {
+            ResourceLocation rl = new ResourceLocation(this.modid, id);
+            
+            @Nullable
+            ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
+            
             if (value instanceof Registerable registerable) {
-                this.registerables.add(registerable);
+                this.registerables.add(new NamedRegisterable(rl, resourceKey, registerable));
                 registerable.buildAdditionalRegisters(new EntryCollector(id));
             }
-            ResourceKey<T> resourceKey = ResourceKey.create(registry, new ResourceLocation(this.modid, id));
-            if (registry != ModXRegistration.ANY_REGISTRY) {
+            
+            if (registry != null) {
                 ResolvedRegistry<T> resolved = this.registry(registry).orElseThrow(() -> new NoSuchElementException("Failed to resolve registry " + registry));
                 if (resolved instanceof ResolvedRegistry.Forge<?>) {
                     this.addEntry(this.forgeEntries, registry, resourceKey, value);
@@ -66,7 +75,7 @@ public class RegistrationDispatcher {
                 return () -> resolved.createHolder(resourceKey);
             } else {
                 return () -> {
-                    throw new IllegalStateException("Can't create holders for the " + ModXRegistration.ANY_REGISTRY.location() + " registry");
+                    throw new IllegalStateException("Can't create holders without registry.");
                 };
             }
         }
@@ -129,23 +138,34 @@ public class RegistrationDispatcher {
         }
 
         @Override
-        public <T> void register(ResourceKey<? extends Registry<T>> registry, T value) {
+        public <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, T value) {
             RegistrationDispatcher.this.register(registry, this.baseId, value);
         }
 
         @Override
-        public <T> void registerNamed(ResourceKey<? extends Registry<T>> registry, String name, T value) {
+        public <T> void registerNamed(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value) {
             RegistrationDispatcher.this.register(registry, this.baseId + "_" + name, value);
         }
 
         @Override
-        public <T> Holder<T> createHolder(ResourceKey<? extends Registry<T>> registry, T value) {
+        public <T> Holder<T> createHolder(@Nullable ResourceKey<? extends Registry<T>> registry, T value) {
             return RegistrationDispatcher.this.register(registry, this.baseId, value).get();
         }
 
         @Override
-        public <T> Holder<T> createNamedHolder(ResourceKey<? extends Registry<T>> registry, String name, T value) {
+        public <T> Holder<T> createNamedHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value) {
             return RegistrationDispatcher.this.register(registry, this.baseId + "_" + name, value).get();
+        }
+    }
+    
+    private record NamedRegisterable(ResourceLocation id, @Nullable ResourceKey<?> key, Registerable value) {
+
+        public void registerCommon(Consumer<Runnable> enqueue) {
+            this.value().registerCommon(new RegistrationContext(this.id(), this.key(), enqueue));
+        }
+
+        public void registerClient(Consumer<Runnable> enqueue) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> this.value().registerClient(new RegistrationContext(this.id(), this.key(), enqueue)));
         }
     }
 }
