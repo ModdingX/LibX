@@ -24,7 +24,7 @@ public class RemoveInProcessor extends Processor {
         for (Element element : roundEnv.getElementsAnnotatedWith(RemoveIn.class)) {
             Deprecated deprecated = element.getAnnotation(Deprecated.class);
             if (deprecated == null || !deprecated.forRemoval()) {
-                this.messager().printMessage(Diagnostic.Kind.ERROR, "Elements annotated with @RemoveIn must ba annotated with @Deprecated(forRemoval = true)", element);
+                this.messager().printMessage(Diagnostic.Kind.ERROR, "Elements annotated with @RemoveIn must be annotated with @Deprecated(forRemoval = true)", element);
                 continue;
             }
             RemoveIn remove = element.getAnnotation(RemoveIn.class);

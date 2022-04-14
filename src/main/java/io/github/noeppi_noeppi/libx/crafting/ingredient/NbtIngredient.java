@@ -2,17 +2,21 @@ package io.github.noeppi_noeppi.libx.crafting.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.NBTIngredient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
+// TODO rename in 1.19 and use share tag by default because ingredients are
+//  synced with the client.
 /**
  * An ingredient that unlike the one by forge does not check the share tag but the actual
  * ItemStack tag.
@@ -32,6 +36,11 @@ public class NbtIngredient extends Ingredient {
         this(stack, false);
     }
 
+    /**
+     * @deprecated Use {@link NBTIngredient} for exact matches
+     */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.19")
     public NbtIngredient(ItemStack stack, boolean exactMatch) {
         super(Stream.of(new Ingredient.ItemValue(stack)));
         this.stack = stack.copy();
