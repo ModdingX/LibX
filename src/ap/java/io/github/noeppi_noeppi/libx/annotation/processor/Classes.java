@@ -8,6 +8,7 @@ public class Classes {
     public static final String FOR_MOD = "io.github.noeppi_noeppi.libx.annotation.ForMod";
     public static final String DIST = "net.minecraftforge.api.distmarker.Dist";
     public static final String ONLY_IN = "net.minecraftforge.api.distmarker.OnlyIn";
+    public static final String ONLY_INS = "net.minecraftforge.api.distmarker.OnlyIns";
     public static final String DIST_EXECUTOR = "net.minecraftforge.fml.DistExecutor";
 
     public static final String PROCESSOR_INTERFACE = "io.github.noeppi_noeppi.libx.annotation.impl.ProcessorInterface";
