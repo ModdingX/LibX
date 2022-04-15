@@ -37,16 +37,33 @@ public interface IAdvancedItemHandler extends IItemHandler {
      * However it checks for {@link IItemHandler#isItemValid(int, ItemStack)}.</b>
      */
     default boolean hasSpaceFor(List<ItemStack> stacks) {
+        return this.hasSpaceFor(stacks, 0, this.getSlots());
+    }
+
+    /**
+     * Gets whether the item handler has space for all the items given. <b>This does not check whether
+     * the item handler can take the stacks via {@link IItemHandler#insertItem(int, ItemStack, boolean)}.
+     * However it checks for {@link IItemHandler#isItemValid(int, ItemStack)}.</b>
+     * 
+     * @param startInclusive The first slot to test.
+     * @param endExclusive The first slot to after the range of slots to test.
+     */
+    default boolean hasSpaceFor(List<ItemStack> stacks, int startInclusive, int endExclusive) {
         if (stacks.isEmpty()) {
             return true;
         } else if (stacks.size() == 1) {
-            return this.insertItem(stacks.get(0), true).isEmpty();
+            ItemStack remainder = stacks.get(0).copy();
+            for (int slot = startInclusive; slot < endExclusive; slot++) {
+                remainder = this.insertItem(slot, remainder, true);
+                if (remainder.isEmpty()) return true;
+            }
+            return remainder.isEmpty();
         } else {
             Map<Integer, ItemStack> copies = new HashMap<>();
             for (ItemStack stack : stacks) {
                 if (!stack.isEmpty()) {
                     int amountLeft = stack.getCount();
-                    for (int slot = 0; slot < this.getSlots(); slot++) {
+                    for (int slot = startInclusive; slot < endExclusive; slot++) {
                         if (this.isItemValid(slot, stack)) {
                             ItemStack content = copies.getOrDefault(slot, this.getStackInSlot(slot));
                             if (content.isEmpty()) {
