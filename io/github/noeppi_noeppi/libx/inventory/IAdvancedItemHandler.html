@@ -126,15 +126,22 @@ extends net.minecraftforge.items.IItemHandler</span></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Gets whether the item handler has space for all the items given.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default net.minecraft.world.item.ItemStack</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#insertItem(net.minecraft.world.item.ItemStack,boolean)" class="member-name-link">insertItem</a><wbr>(net.minecraft.world.item.ItemStack&nbsp;stack,
- boolean&nbsp;simulate)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#hasSpaceFor(java.util.List,int,int)" class="member-name-link">hasSpaceFor</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;net.minecraft.world.item.ItemStack&gt;&nbsp;stacks,
+ int&nbsp;startInclusive,
+ int&nbsp;endExclusive)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Gets whether the item handler has space for all the items given.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default net.minecraft.world.item.ItemStack</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#insertItem(net.minecraft.world.item.ItemStack,boolean)" class="member-name-link">insertItem</a><wbr>(net.minecraft.world.item.ItemStack&nbsp;stack,
+ boolean&nbsp;simulate)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Works like <code>IItemHandler.insertItem(int, ItemStack, boolean)</code> but without a specific slot.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="IAdvancedItemHandler.html" title="interface in io.github.noeppi_noeppi.libx.inventory">IAdvancedItemHandler</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#wrap(net.minecraftforge.items.IItemHandler)" class="member-name-link">wrap</a><wbr>(net.minecraftforge.items.IItemHandler&nbsp;handler)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="IAdvancedItemHandler.html" title="interface in io.github.noeppi_noeppi.libx.inventory">IAdvancedItemHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#wrap(net.minecraftforge.items.IItemHandler)" class="member-name-link">wrap</a><wbr>(net.minecraftforge.items.IItemHandler&nbsp;handler)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates a new IAdvancedItemHandler from an <code>IItemHandler</code>.</div>
 </div>
 </div>
@@ -169,6 +176,22 @@ extends net.minecraftforge.items.IItemHandler</span></div>
 <div class="block">Gets whether the item handler has space for all the items given. <b>This does not check whether
  the item handler can take the stacks via <code>IItemHandler.insertItem(int, ItemStack, boolean)</code>.
  However it checks for <code>IItemHandler.isItemValid(int, ItemStack)</code>.</b></div>
+</section>
+</li>
+<li>
+<section class="detail" id="hasSpaceFor(java.util.List,int,int)">
+<h3>hasSpaceFor</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasSpaceFor</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;net.minecraft.world.item.ItemStack&gt;&nbsp;stacks,
+ int&nbsp;startInclusive,
+ int&nbsp;endExclusive)</span></div>
+<div class="block">Gets whether the item handler has space for all the items given. <b>This does not check whether
+ the item handler can take the stacks via <code>IItemHandler.insertItem(int, ItemStack, boolean)</code>.
+ However it checks for <code>IItemHandler.isItemValid(int, ItemStack)</code>.</b></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>startInclusive</code> - The first slot to test.</dd>
+<dd><code>endExclusive</code> - The first slot to after the range of slots to test.</dd>
+</dl>
 </section>
 </li>
 <li>
