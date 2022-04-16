@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Range;
 import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
@@ -80,9 +80,16 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        super.deserializeNBT(nbt);
-        this.setSize(this.size);
+    protected void onLoad() {
+        if (this.stacks.size() != this.size) {
+            // BaseItemStackHandler does not allow setting the size through NBT
+            // Don't use setSize as it will clear the contents
+            NonNullList<ItemStack> oldStacks = this.stacks;
+            this.stacks = NonNullList.withSize(this.size, ItemStack.EMPTY);
+            for (int slot = 0; slot < Math.min(oldStacks.size(), this.size); slot++) {
+                this.stacks.set(slot, oldStacks.get(slot));
+            }
+        }
     }
 
     /**
