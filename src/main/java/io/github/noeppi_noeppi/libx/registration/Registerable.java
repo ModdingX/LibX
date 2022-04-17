@@ -10,12 +10,12 @@ import javax.annotation.Nullable;
 
 public interface Registerable {
     
-    default void registerCommon(RegistrationContext ctx) {
+    default void registerCommon(SetupContext ctx) {
         
     }
     
     @OnlyIn(Dist.CLIENT)
-    default void registerClient(RegistrationContext ctx) {
+    default void registerClient(SetupContext ctx) {
         
     }
     

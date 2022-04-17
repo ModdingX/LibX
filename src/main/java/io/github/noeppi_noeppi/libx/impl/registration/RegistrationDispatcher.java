@@ -1,8 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.registration;
 
-import io.github.noeppi_noeppi.libx.registration.Registerable;
-import io.github.noeppi_noeppi.libx.registration.RegistrationBuilder;
-import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
+import io.github.noeppi_noeppi.libx.registration.*;
 import io.github.noeppi_noeppi.libx.registration.resolution.RegistryResolver;
 import io.github.noeppi_noeppi.libx.registration.resolution.ResolvedRegistry;
 import net.minecraft.core.Holder;
@@ -21,6 +19,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class RegistrationDispatcher {
     
@@ -29,6 +28,8 @@ public class RegistrationDispatcher {
     private final String modid;
     
     private final List<RegistryResolver> resolvers;
+    private final List<RegistryCondition> conditions;
+    private final List<RegistryTransformer> transformers;
     private final Map<ResourceKey<? extends Registry<?>>, Optional<ResolvedRegistry<?>>> resolvedRegistries;
     
     private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> forgeEntries;
@@ -38,6 +39,8 @@ public class RegistrationDispatcher {
     public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
         this.modid = modid;
         this.resolvers = result.resolvers();
+        this.conditions = result.conditions();
+        this.transformers = result.transformers();
         this.resolvedRegistries = new HashMap<>();
         this.forgeEntries = new HashMap<>();
         this.vanillaEntries = new HashMap<>();
@@ -60,9 +63,22 @@ public class RegistrationDispatcher {
             @Nullable
             ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
             
+            RegistrationContext ctx = new RegistrationContext(new ResourceLocation(this.modid, id), registry);
+            
+            List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
+            if (!failedConditions.isEmpty()) {
+                return () -> {
+                    throw new IllegalStateException("Can't create holder, object not registered due to failed conditions: [ " + failedConditions.stream().map(Object::toString).collect(Collectors.joining(", ")) + " ]");
+                };
+            }
+            
+            EntryCollector collector = new EntryCollector(id);
+            
+            this.transformers.forEach(transformer -> transformer.buildAdditionalRegisters(ctx, value, collector));
+            
             if (value instanceof Registerable registerable) {
-                this.registerables.add(new NamedRegisterable(rl, resourceKey, registerable));
-                registerable.buildAdditionalRegisters(new EntryCollector(id));
+                this.registerables.add(new NamedRegisterable(ctx, registerable));
+                registerable.buildAdditionalRegisters(collector);
             }
             
             if (registry != null) {
@@ -158,14 +174,14 @@ public class RegistrationDispatcher {
         }
     }
     
-    private record NamedRegisterable(ResourceLocation id, @Nullable ResourceKey<?> key, Registerable value) {
+    private record NamedRegisterable(RegistrationContext ctx, Registerable value) {
 
         public void registerCommon(Consumer<Runnable> enqueue) {
-            this.value().registerCommon(new RegistrationContext(this.id(), this.key(), enqueue));
+            this.value().registerCommon(new SetupContext(this.ctx(), enqueue));
         }
 
         public void registerClient(Consumer<Runnable> enqueue) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> this.value().registerClient(new RegistrationContext(this.id(), this.key(), enqueue)));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> this.value().registerClient(new SetupContext(this.ctx(), enqueue)));
         }
     }
 }
