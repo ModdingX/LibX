@@ -36,7 +36,8 @@ dependencies {
 }
 
 compileJava.options.compilerArgs += [
-        '-Amod.properties.strict_onlyin=true'
+        '-Amod.properties.strict_onlyin=true',
+        '-Amod.properties.strict_super=true'
 ]
 
 test {
