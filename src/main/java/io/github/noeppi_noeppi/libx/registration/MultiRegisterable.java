@@ -7,6 +7,7 @@ import net.minecraft.core.Holder;
 // passed registry is used for children
 public interface MultiRegisterable<T> {
     
+    // TODO strict super
     default void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector<T> builder) {
         
     }

@@ -19,6 +19,7 @@ public interface Registerable {
         
     }
     
+    // TODO strict super
     default void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector builder) {
         
     }
