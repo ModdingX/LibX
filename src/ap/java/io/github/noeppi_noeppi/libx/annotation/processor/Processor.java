@@ -3,17 +3,18 @@ package io.github.noeppi_noeppi.libx.annotation.processor;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.MirroredTypeException;
-import javax.lang.model.type.MirroredTypesException;
-import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.*;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class Processor extends AbstractProcessor implements ProcessorEnv {
 
@@ -24,6 +25,8 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
     private Map<String, String> options;
     
     private Set<String> supported = null;
+    
+    private RoundEnvironment roundEnv = null;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -271,7 +274,59 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
     }
 
     @Override
+    public List<TypeElement> getAllProcessedTypes() {
+        if (this.roundEnv == null) throw new IllegalStateException("round environment not initialised. This is an error in the AP " + this.getClass());
+        List<TypeElement> allTypes = new ArrayList<>();
+        for (Element root : this.roundEnv.getRootElements()) {
+            this.addAllToList(root, allTypes);
+        }
+        return List.copyOf(allTypes);
+    }
+    
+    private void addAllToList(Element element, List<TypeElement> allTypes) {
+        if ((element.getKind().isClass() || element.getKind().isInterface()) && element instanceof TypeElement type) {
+            allTypes.add(type);
+            type.getEnclosedElements().forEach(e -> this.addAllToList(e, allTypes));
+        }
+    }
+
+    @Override
+    public <T> Map<String, Set<T>> getPossibleOverrideMap(TypeElement element, Function<ExecutableElement, Optional<T>> factory) {
+        Map<String, Set<T>> possibleOverrides = new HashMap<>();
+        List<TypeElement> parents = this.types().directSupertypes(element.asType()).stream()
+                .flatMap(t -> t.getKind() == TypeKind.DECLARED && t instanceof DeclaredType declared ? Stream.of(declared.asElement()) : Stream.empty())
+                .filter(e -> e.getKind().isClass() || e.getKind().isInterface())
+                .flatMap(e -> e instanceof TypeElement te ? Stream.of(te) : Stream.empty())
+                .toList();
+        for (TypeElement parent : parents) {
+            for (Element member : this.elements().getAllMembers(parent)) {
+                if (member.getKind() == ElementKind.METHOD && member instanceof ExecutableElement executable) {
+                    Optional<T> mapValue = factory.apply(executable);
+                    mapValue.ifPresent(t -> possibleOverrides.computeIfAbsent(executable.getSimpleName().toString(), k -> new HashSet<>()).add(t));
+                }
+            }
+        }
+        return Map.copyOf(possibleOverrides);
+    }
+
+    @Override
+    public List<ExecutableElement> getAllOverriddenMethods(ExecutableElement element) {
+        if ((element.getEnclosingElement().getKind().isClass() || element.getEnclosingElement().getKind().isInterface()) && element.getEnclosingElement() instanceof TypeElement type) {
+            String elemName = element.getSimpleName().toString();
+            Map<String, Set<ExecutableElement>> map = this.getPossibleOverrideMap(type, ex -> Optional.of(ex).filter(e -> elemName.equals(e.getSimpleName().toString())));
+            if (map.containsKey(elemName)) {
+                return List.of();
+            } else {
+                return map.get(elemName).stream().filter(ex -> this.elements.overrides(element, ex, type)).toList();
+            }
+        } else {
+            return List.of();
+        }
+    }
+
+    @Override
     public final boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        this.roundEnv = roundEnv;
         this.run(annotations, roundEnv);
         return false;
     }

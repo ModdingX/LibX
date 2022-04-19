@@ -1,0 +1,42 @@
+// Very temporary fix because of https://youtrack.jetbrains.com/issue/IDEA-292250
+// FIXME remove as soon as possible
+
+repositories {
+    maven { url = 'https://maven.minecraftforge.net/' }
+    maven { url = 'https://libraries.minecraft.net/' }
+    maven { url = 'https://maven.parchmentmc.org/' }
+    maven { url = 'https://plugins.gradle.org/m2/' }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url = 'https://noeppi-noeppi.github.io/MinecraftUtilities/maven/' }
+    mavenCentral()
+}
+
+dependencies {
+    classpath('net.minecraftforge:artifactural') {
+        version { strictly '3.0.8' }
+        force = true
+        transitive = false
+    }
+    classpath('net.minecraftforge:unsafe') {
+        version { strictly '0.2.0' }
+        force = true
+        transitive = false
+    }
+    classpath('org.apache.logging.log4j:log4j-api') {
+        version { strictly '[2.17.2,)' }
+        force = true
+    }
+    classpath('org.apache.logging.log4j:log4j-core') {
+        version { strictly '[2.17.2,)' }
+        force = true
+    }
+    
+    classpath('net.minecraftforge.gradle:ForgeGradle') { version { strictly '5.1.31' } }
+    classpath('io.github.noeppi_noeppi.tools:ModGradle') { version { strictly '2.0.14' } }
+    classpath('org.parchmentmc:librarian') { version { strictly '1.2.0' } }
+    classpath('gradle.plugin.com.matthewprenger:CurseGradle') { version { strictly '1.4.0' } }
+    classpath('com.modrinth.minotaur:Minotaur') { version { strictly '2.1.1' } }
+    classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    classpath 'org.apache.maven:maven-artifact:3.8.4'
+    classpath 'com.google.code.findbugs:jsr305:3.0.2'
+}

@@ -58,6 +58,7 @@ public interface RecipeExtension {
      * Gets a list of criteria that should be ORed, meaning that the recipe should unlock when one of
      * them is completed instead of all of them.
      */
+    @SuppressWarnings("removal")
     default List<CriterionTriggerInstance> criteria(Ingredient item) {
         List<CriterionTriggerInstance> instances = new ArrayList<>();
         if (item.isVanilla()) {
