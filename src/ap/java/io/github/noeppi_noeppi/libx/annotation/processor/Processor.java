@@ -314,7 +314,7 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
         if ((element.getEnclosingElement().getKind().isClass() || element.getEnclosingElement().getKind().isInterface()) && element.getEnclosingElement() instanceof TypeElement type) {
             String elemName = element.getSimpleName().toString();
             Map<String, Set<ExecutableElement>> map = this.getPossibleOverrideMap(type, ex -> Optional.of(ex).filter(e -> elemName.equals(e.getSimpleName().toString())));
-            if (map.containsKey(elemName)) {
+            if (!map.containsKey(elemName)) {
                 return List.of();
             } else {
                 return map.get(elemName).stream().filter(ex -> this.elements.overrides(element, ex, type)).toList();
