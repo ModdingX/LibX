@@ -56,14 +56,31 @@ public class RegistrationDispatcher {
         }
     }
     
-    public <T> Supplier<Holder<T>> register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
+    public <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
         synchronized (this.LOCK) {
             ResourceLocation rl = new ResourceLocation(this.modid, id);
-            
             @Nullable
             ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
+            RegistrationContext ctx = new RegistrationContext(new ResourceLocation(this.modid, id), resourceKey);
+
+            if (this.conditions.stream().allMatch(condition -> condition.shouldRegisterMulti(ctx, registry, value))) {
+                MultiEntryCollector<T> collector = new MultiEntryCollector<>(this, registry, id);
+                this.transformers.forEach(transformer -> transformer.transformMulti(ctx, registry, value, collector));
+                value.buildAdditionalRegisters(ctx, collector);
+            }
+        }
+    }
+    
+    public <T> Supplier<Holder<T>> register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
+        synchronized (this.LOCK) {
+            if (value instanceof MultiRegisterable<?>) {
+                throw new IllegalArgumentException("Can't register MultiRegistrable. Use #registerMulti instead: " + registry + "/" + this.modid + ":" + id + " @ " + value);
+            }
             
-            RegistrationContext ctx = new RegistrationContext(new ResourceLocation(this.modid, id), registry);
+            ResourceLocation rl = new ResourceLocation(this.modid, id);
+            @Nullable
+            ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
+            RegistrationContext ctx = new RegistrationContext(new ResourceLocation(this.modid, id), resourceKey);
             
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
             if (!failedConditions.isEmpty()) {
@@ -72,13 +89,13 @@ public class RegistrationDispatcher {
                 };
             }
             
-            EntryCollector collector = new EntryCollector(id);
+            SingleEntryCollector collector = new SingleEntryCollector(this, id);
             
-            this.transformers.forEach(transformer -> transformer.buildAdditionalRegisters(ctx, value, collector));
+            this.transformers.forEach(transformer -> transformer.transform(ctx, value, collector));
             
             if (value instanceof Registerable registerable) {
                 this.registerables.add(new NamedRegisterable(ctx, registerable));
-                registerable.buildAdditionalRegisters(collector);
+                registerable.buildAdditionalRegisters(ctx, collector);
             }
             
             if (registry != null) {
@@ -143,35 +160,6 @@ public class RegistrationDispatcher {
     
     public void registerClient(FMLClientSetupEvent event) {
         this.registerables.forEach(reg -> reg.registerClient(event::enqueueWork));
-    }
-    
-    private class EntryCollector implements Registerable.EntryCollector {
-
-        private final String baseId;
-
-        private EntryCollector(String baseId) {
-            this.baseId = baseId;
-        }
-
-        @Override
-        public <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, T value) {
-            RegistrationDispatcher.this.register(registry, this.baseId, value);
-        }
-
-        @Override
-        public <T> void registerNamed(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value) {
-            RegistrationDispatcher.this.register(registry, this.baseId + "_" + name, value);
-        }
-
-        @Override
-        public <T> Holder<T> createHolder(@Nullable ResourceKey<? extends Registry<T>> registry, T value) {
-            return RegistrationDispatcher.this.register(registry, this.baseId, value).get();
-        }
-
-        @Override
-        public <T> Holder<T> createNamedHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value) {
-            return RegistrationDispatcher.this.register(registry, this.baseId + "_" + name, value).get();
-        }
     }
     
     private record NamedRegisterable(RegistrationContext ctx, Registerable value) {
