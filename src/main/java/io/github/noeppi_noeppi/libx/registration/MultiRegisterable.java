@@ -1,12 +1,6 @@
 package io.github.noeppi_noeppi.libx.registration;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 // Can't be registered into any registry
 // doing so will fail
