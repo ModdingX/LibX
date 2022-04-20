@@ -145,7 +145,7 @@ public class ComponentUtil {
     
     /**
      * Gets a sub-sequence from the given {@link FormattedCharSequence}. The sub sequence will include
-     * all characters between {@code start} (inclusive) and {@code end} exclusive. {@code start} and
+     * all characters between {@code start} (inclusive) and {@code end} (exclusive). {@code start} and
      * {@code end} may not be negative but may be greater that the length of the sequence.
      */
     public static FormattedCharSequence subSequence(FormattedCharSequence text, int start, int end) {
