@@ -6,9 +6,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
+import net.minecraft.util.FormattedCharSequence;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Utilities for {@link Component text components}.
@@ -129,5 +131,43 @@ public class ComponentUtil {
      */
     public static Component withCopyAction(Component component, String copyText) {
         return component.copy().withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copyText)).withHoverEvent(HOVER_COPY));
+    }
+
+
+    /**
+     * Gets a sub-sequence from the given {@link FormattedCharSequence}. The sub sequence will include
+     * all characters from {@code start} (inclusive) to the end of the sequence.
+     */
+    public static FormattedCharSequence subSequence(FormattedCharSequence text, int start) {
+        if (start == 0) return text;
+        return subSequence(text, start, Integer.MAX_VALUE - 1);
+    }
+    
+    /**
+     * Gets a sub-sequence from the given {@link FormattedCharSequence}. The sub sequence will include
+     * all characters between {@code start} (inclusive) and {@code end} exclusive. {@code start} and
+     * {@code end} may not be negative but may be greater that the length of the sequence.
+     */
+    public static FormattedCharSequence subSequence(FormattedCharSequence text, int start, int end) {
+        if (start < 0 || end < 0) throw new IllegalArgumentException("Negative bounds");
+        if (end <= start) return FormattedCharSequence.EMPTY;
+        return sink -> {
+            AtomicInteger relOff = new AtomicInteger(0);
+            AtomicInteger total = new AtomicInteger(0);
+            return text.accept((relPosition, style, codePoint) -> {
+                int current = total.getAndIncrement();
+                if (current == start) {
+                    relOff.set(-relPosition);
+                } else if (relPosition == 0) {
+                    // Next sequence, reset offset
+                    relOff.set(0);
+                }
+                if (current >= start && current < end) {
+                    return sink.accept(relPosition + relOff.get(), style, codePoint);
+                } else {
+                    return true;
+                }
+            });
+        };
     }
 }
