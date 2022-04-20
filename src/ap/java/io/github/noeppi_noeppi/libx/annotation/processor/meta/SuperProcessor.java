@@ -46,7 +46,7 @@ public class SuperProcessor extends Processor {
                     if (!member.getModifiers().contains(Modifier.ABSTRACT) && !member.getModifiers().contains(Modifier.NATIVE) && !member.getModifiers().contains(Modifier.FINAL)) {
                         List<ExecutableElement> overridden = this.getAllOverriddenMethods(executable);
                         if (overridden.stream().anyMatch(ov -> this.hasSuperOverrideAnnotation(ov, strictSuper))) {
-                            this.messager().printMessage(Diagnostic.Kind.ERROR, "Method should be annotated with @OverridingMethodsMustInvokeSuper.", executable);
+                            this.messager().printMessage(strictSuper ? Diagnostic.Kind.ERROR : Diagnostic.Kind.WARNING, "Method should be annotated with @OverridingMethodsMustInvokeSuper.", executable);
                         }
                     }
                 }
