@@ -19,14 +19,17 @@ public interface Registerable {
         
     }
     
-    default void buildAdditionalRegisters(EntryCollector builder) {
+    default void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector builder) {
         
-    } 
+    }
     
     interface EntryCollector {
-        
+
         <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, T value);
         <T> void registerNamed(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value);
+        
+        <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, MultiRegisterable<T> value);
+        <T> void registerMultiNamed(@Nullable ResourceKey<? extends Registry<T>> registry, String name, MultiRegisterable<T> value);
         
         <T> Holder<T> createHolder(@Nullable ResourceKey<? extends Registry<T>> registry, T value);
         <T> Holder<T> createNamedHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value);
