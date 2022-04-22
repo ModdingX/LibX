@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * A registration builder is used to configure the LibX registration system and adjust the behaviour of it.
+ */
 public class RegistrationBuilder {
     
     private final List<RegistryResolver> resolvers;
@@ -24,14 +27,21 @@ public class RegistrationBuilder {
         this.conditions = new ArrayList<>();
         this.transformers = new ArrayList<>();
     }
-    
-    public RegistrationBuilder resolve(RegistryResolver resolver) {
+
+    /**
+     * Adds a {@link RegistryResolver}. The resolvers are queried in the order they were added. The first
+     * resolver that matches a registry will be used. By default there are resolvers for forge registries,
+     * {@link Registry vanilla registries} and {@link BuiltinRegistries vanilla builtin registries}.
+     */
+    public void resolve(RegistryResolver resolver) {
         this.resolvers.add(resolver);
-        return this;
     }
-    
-    public <T> RegistrationBuilder resolve(ResourceKey<? extends Registry<T>> id, ResolvedRegistry<T> registry) {
-        return this.resolve(new RegistryResolver() {
+
+    /**
+     * Adds a registry resolver that resolves to the given registry for the given registry key.
+     */
+    public <T> void resolve(ResourceKey<? extends Registry<T>> id, ResolvedRegistry<T> registry) {
+        this.resolve(new RegistryResolver() {
             
             @Override
             public <A> Optional<ResolvedRegistry<A>> resolve(ResourceKey<? extends Registry<A>> key) {
@@ -41,18 +51,27 @@ public class RegistrationBuilder {
         });
     }
     
-    public <T> RegistrationBuilder resolve(ResourceKey<? extends Registry<T>> id, Registry<T> registry) {
-        return this.resolve(id, new ResolvedRegistry.Vanilla<>(registry));
-    }
-    
-    public RegistrationBuilder condition(RegistryCondition condition) {
-        this.conditions.add(condition);
-        return this;
+    /**
+     * Adds a registry resolver that resolves to the given registry for the given registry key.
+     */
+    public <T> void resolve(ResourceKey<? extends Registry<T>> id, Registry<T> registry) {
+        this.resolve(id, new ResolvedRegistry.Vanilla<>(registry));
     }
 
-    public RegistrationBuilder transformer(RegistryTransformer transformer) {
+    /**
+     * Adds a new {@link RegistryCondition} that must match each object that is passed to the system in order
+     * to be registered.
+     */
+    public void condition(RegistryCondition condition) {
+        this.conditions.add(condition);
+    }
+    
+    /**
+     * Adds a new {@link RegistryTransformer} that can add additional objects that are registered with each
+     * object registered through the LibX registration system.
+     */
+    public void transformer(RegistryTransformer transformer) {
         this.transformers.add(transformer);
-        return this;
     }
     
     public Result build() {

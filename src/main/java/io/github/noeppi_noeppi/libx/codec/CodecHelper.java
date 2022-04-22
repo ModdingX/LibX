@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 
