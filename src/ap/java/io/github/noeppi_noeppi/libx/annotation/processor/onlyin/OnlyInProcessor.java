@@ -12,7 +12,6 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class OnlyInProcessor extends Processor {
 
@@ -65,33 +64,19 @@ public class OnlyInProcessor extends Processor {
                 }
             }
         }
-        for (Element root : roundEnv.getRootElements()) {
-            if ((root.getKind().isClass() || root.getKind().isInterface()) && root instanceof TypeElement type) {
-                Map<String, Set<DistOverride>> possibleOverrides = new HashMap<>();
-                List<TypeElement> parents = this.types().directSupertypes(type.asType()).stream()
-                        .flatMap(t -> t.getKind() == TypeKind.DECLARED && t instanceof DeclaredType declared ? Stream.of(declared.asElement()) : Stream.empty())
-                        .filter(e -> e.getKind().isClass() || e.getKind().isInterface())
-                        .flatMap(e -> e instanceof TypeElement te ? Stream.of(te) : Stream.empty())
-                        .toList();
-                for (TypeElement parent : parents) {
-                    for (Element member : this.elements().getAllMembers(parent)) {
-                        if (member.getKind() == ElementKind.METHOD && member instanceof ExecutableElement executable) {
-                            Dist memberDist = this.distFor(executable, false);
-                            if (memberDist != null) {
-                                possibleOverrides.computeIfAbsent(executable.getSimpleName().toString(), k -> new HashSet<>()).add(new DistOverride(executable, memberDist));
-                            }
-                        }
-                    }
-                }
-                for (Element member : type.getEnclosedElements()) {
-                    if (member.getKind() == ElementKind.METHOD && member instanceof ExecutableElement executable && possibleOverrides.containsKey(member.getSimpleName().toString())) {
-                        Set<Dist> parentDists = possibleOverrides.get(member.getSimpleName().toString()).stream()
-                                .filter(ov -> this.elements().overrides(executable, ov.element(), type))
-                                .map(DistOverride::dist)
-                                .collect(Collectors.toUnmodifiableSet());
-                        if (parentDists.size() == 1 && this.distFor(executable, true) != parentDists.iterator().next()) {
-                            this.messager().printMessage(Diagnostic.Kind.WARNING, "Not annotated method overrides method annotated with @OnlyIn(" + parentDists.iterator().next().name() + ")", member);
-                        }
+        for (TypeElement type : this.getAllProcessedTypes()) {
+            Map<String, Set<DistOverride>> possibleOverrides = this.getPossibleOverrideMap(type, executable -> {
+                Dist memberDist = this.distFor(executable, false);
+                return memberDist == null ? Optional.empty() : Optional.of(new DistOverride(executable, memberDist));
+            });
+            for (Element member : type.getEnclosedElements()) {
+                if (member.getKind() == ElementKind.METHOD && member instanceof ExecutableElement executable && possibleOverrides.containsKey(member.getSimpleName().toString())) {
+                    Set<Dist> parentDists = possibleOverrides.get(member.getSimpleName().toString()).stream()
+                            .filter(ov -> this.elements().overrides(executable, ov.element(), type))
+                            .map(DistOverride::dist)
+                            .collect(Collectors.toUnmodifiableSet());
+                    if (parentDists.size() == 1 && this.distFor(executable, true) != parentDists.iterator().next()) {
+                        this.messager().printMessage(Diagnostic.Kind.WARNING, "Not annotated method overrides method annotated with @OnlyIn(" + parentDists.iterator().next().name() + ")", member);
                     }
                 }
             }

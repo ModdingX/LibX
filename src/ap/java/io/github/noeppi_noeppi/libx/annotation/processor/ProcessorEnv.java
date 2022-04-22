@@ -4,6 +4,7 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
@@ -11,6 +12,8 @@ import javax.lang.model.util.Types;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -37,4 +40,7 @@ public interface ProcessorEnv {
     List<? extends TypeMirror> classTypes(Supplier<List<Class<?>>> accessor);
     TypeMirror boxed(TypeMirror type);
     TypeMirror unboxed(TypeMirror type);
+    List<TypeElement> getAllProcessedTypes();
+    <T> Map<String, Set<T>> getPossibleOverrideMap(TypeElement element, Function<ExecutableElement, Optional<T>> factory);
+    List<ExecutableElement> getAllOverriddenMethods(ExecutableElement element);
 }
