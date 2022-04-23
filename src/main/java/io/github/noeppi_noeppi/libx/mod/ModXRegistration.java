@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * You should extends this instead of {@link ModX} if you want to use the LibX registration system.
+ * You need to extends this instead of {@link ModX} if you want to use the LibX registration system.
  *
  * This works like this:
  *

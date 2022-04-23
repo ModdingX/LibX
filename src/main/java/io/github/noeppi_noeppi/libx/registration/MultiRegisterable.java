@@ -12,7 +12,7 @@ public interface MultiRegisterable<T> {
 
     /**
      * Registers additional objects. These objects will be registered with the id and registry of
-     * this object and an optionally a name suffix.
+     * this object and and optionally a name suffix.
      */
     @SuperChainRequired
     default void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector<T> builder) {
@@ -20,7 +20,7 @@ public interface MultiRegisterable<T> {
     }
 
     /**
-     * Interface to collect additional objects tha tare registered together with a {@link MultiRegisterable}.
+     * Interface to collect additional objects that are registered together with a {@link MultiRegisterable}.
      */
     interface EntryCollector<T> {
 

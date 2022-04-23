@@ -46,7 +46,7 @@ public class FluidBase implements Registerable, ItemLike {
     private final BucketItem bucket;
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -55,7 +55,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -64,7 +64,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -73,7 +73,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -82,7 +82,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -91,7 +91,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -100,7 +100,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -109,7 +109,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -118,7 +118,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -127,7 +127,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -136,7 +136,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -145,7 +145,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -154,7 +154,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -163,7 +163,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -172,7 +172,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -181,13 +181,13 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @param sourceFactory   A factory to create a still fluid from the fluids properties. In most cases this will just be a constructor reference.
      * @param flowingFactory  A factory to create a flowing fluid from the fluids properties. In most cases this will just be a constructor reference.
-     * @param attributes      A function to modify the attribute builder to alter the fluids attributes
-     * @param blockProperties The properties for the fluids block
-     * @param itemProperties  The properties for the bucket item
+     * @param attributes      A function to modify the attribute builder to alter the fluids attributes.
+     * @param blockProperties The properties for the fluids block.
+     * @param itemProperties  The properties for the bucket item.
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this.mod = mod;

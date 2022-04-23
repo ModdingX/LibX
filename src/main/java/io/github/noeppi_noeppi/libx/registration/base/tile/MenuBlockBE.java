@@ -26,7 +26,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
 
 /**
- * This class registers a menu to it's {@link BlockEntityType block entity type} and handles the gui
+ * This class registers a menu to its {@link BlockEntityType block entity type} and handles the gui
  * opening when the block is right clicked. You still need to manually register the screen on the client
  * <p>
  * Note: You need to register the Screen by yourself using the {@link MenuScreens} register function.

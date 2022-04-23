@@ -48,8 +48,8 @@ public class BlockEntityBase extends BlockEntity {
     }
 
     /**
-     * This will update the block entity when on the client using {@link #getUpdateTag()}
-     * and {@link #handleUpdateTag(CompoundTag)}.
+     * If the block entity is loaded on the logical client, this will update the block entity using
+     * {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)}.
      */
     @Override
     public void onLoad() {
@@ -60,8 +60,9 @@ public class BlockEntityBase extends BlockEntity {
     }
 
     /**
-     * This will update the block entity to all clients that are tracking it when called on the server
-     * using {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)} at the end of this tick.
+     * When called on the logival server, this will update the block entity to all clients that are
+     * tracking it  using {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)} at the end
+     * of the current tick.
      */
     public void setDispatchable() {
         if (this.level != null && !this.level.isClientSide) {

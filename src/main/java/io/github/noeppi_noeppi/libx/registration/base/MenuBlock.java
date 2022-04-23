@@ -23,7 +23,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
 
 /**
- * This class registers a menu with the Block
+ * This class registers a menu with the Block.
  * This also makes the Screen appear on right-click.
  * <p>
  * Note: You need to register the Screen by yourself using the {@link MenuScreens} register function.

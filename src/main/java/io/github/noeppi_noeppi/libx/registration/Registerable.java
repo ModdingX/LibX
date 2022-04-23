@@ -33,7 +33,7 @@ public interface Registerable {
 
     /**
      * Registers additional objects. Those may be {@link Registerable} as well. These objects will be registered
-     * with the id of this object and an optionally a name suffix.
+     * with the id of this object and and optionally a name suffix.
      */
     @SuperChainRequired
     default void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector builder) {
@@ -41,7 +41,7 @@ public interface Registerable {
     }
 
     /**
-     * Interface to collect additional objects tha tare registered together with a {@link Registerable}.
+     * Interface to collect additional objects that are registered together with a {@link Registerable}.
      */
     interface EntryCollector {
 
