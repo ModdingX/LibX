@@ -60,8 +60,8 @@ public class BlockEntityBase extends BlockEntity {
     }
 
     /**
-     * When called on the logival server, this will update the block entity to all clients that are
-     * tracking it  using {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)} at the end
+     * When called on the logical server, this will update the block entity to all clients that are
+     * tracking it using {@link #getUpdateTag()} and {@link #handleUpdateTag(CompoundTag)} at the end
      * of the current tick.
      */
     public void setDispatchable() {
