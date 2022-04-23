@@ -8,6 +8,10 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Provides some data that is present during registration like the id and registry key of the object
+ * being registered.
+ */
 public sealed class RegistrationContext permits SetupContext {
 
     private final ResourceLocation id;
@@ -23,14 +27,25 @@ public sealed class RegistrationContext permits SetupContext {
         }
     }
 
+    /**
+     * Gets the id of the object being registered.
+     */
     public ResourceLocation id() {
         return this.id;
     }
 
+    /**
+     * Gets the {@link ResourceKey} of the object being registered. If the object is registered
+     * without a registry key, the {@link Optional} will be empty.
+     */
     public Optional<ResourceKey<?>> key() {
         return this.key;
     }
-    
+
+    /**
+     * Gets the registry key of the registry the object is registered in. If the object is registered
+     * without a registry key, the {@link Optional} will be empty.
+     */
     public Optional<ResourceKey<? extends Registry<?>>> registry() {
         return this.registry;
     }

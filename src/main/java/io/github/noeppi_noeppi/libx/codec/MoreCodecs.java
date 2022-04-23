@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
 import io.github.noeppi_noeppi.libx.crafting.CraftingHelper2;
 import io.github.noeppi_noeppi.libx.impl.codec.*;
 import net.minecraft.nbt.CompoundTag;

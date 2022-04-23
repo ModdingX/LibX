@@ -36,17 +36,19 @@ public class SuperProcessor extends Processor {
     public void run(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         boolean strictSuper = this.options().containsKey("mod.properties.strict_super") && Boolean.parseBoolean(this.options().get("mod.properties.strict_super"));
         for (Element element : roundEnv.getElementsAnnotatedWith(SuperChainRequired.class)) {
-            if (element.getKind() != ElementKind.METHOD || element.getModifiers().contains(Modifier.STATIC) || !element.getModifiers().contains(Modifier.ABSTRACT)) {
+            if (element.getKind() != ElementKind.METHOD || element.getModifiers().contains(Modifier.STATIC) || (!element.getModifiers().contains(Modifier.ABSTRACT) && !element.getModifiers().contains(Modifier.DEFAULT))) {
                 this.messager().printMessage(Diagnostic.Kind.ERROR, "@SuperChainRequired can only be used on non-static abstract methods.", element);
             }
         }
         for (TypeElement type : this.getAllProcessedTypes()) {
-            for (Element member : type.getEnclosedElements()) {
-                if (member.getKind() == ElementKind.METHOD && member instanceof ExecutableElement executable && !this.hasSuperOverrideAnnotation(executable, true)) {
-                    if (!member.getModifiers().contains(Modifier.ABSTRACT) && !member.getModifiers().contains(Modifier.NATIVE) && !member.getModifiers().contains(Modifier.FINAL)) {
-                        List<ExecutableElement> overridden = this.getAllOverriddenMethods(executable);
-                        if (overridden.stream().anyMatch(ov -> this.hasSuperOverrideAnnotation(ov, strictSuper))) {
-                            this.messager().printMessage(strictSuper ? Diagnostic.Kind.ERROR : Diagnostic.Kind.WARNING, "Method should be annotated with @OverridingMethodsMustInvokeSuper.", executable);
+            if (!type.getModifiers().contains(Modifier.FINAL)) {
+                for (Element member : type.getEnclosedElements()) {
+                    if (member.getKind() == ElementKind.METHOD && member instanceof ExecutableElement executable && !this.hasSuperOverrideAnnotation(executable, true)) {
+                        if (!member.getModifiers().contains(Modifier.ABSTRACT) && !member.getModifiers().contains(Modifier.NATIVE) && !member.getModifiers().contains(Modifier.FINAL)) {
+                            List<ExecutableElement> overridden = this.getAllOverriddenMethods(executable);
+                            if (overridden.stream().anyMatch(ov -> this.hasSuperOverrideAnnotation(ov, strictSuper))) {
+                                this.messager().printMessage(strictSuper ? Diagnostic.Kind.ERROR : Diagnostic.Kind.WARNING, "Method should be annotated with @OverridingMethodsMustInvokeSuper.", executable);
+                            }
                         }
                     }
                 }

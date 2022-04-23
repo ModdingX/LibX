@@ -30,6 +30,9 @@ public class RegistrationDispatcher {
     private final List<RegistryResolver> resolvers;
     private final List<RegistryCondition> conditions;
     private final List<RegistryTransformer> transformers;
+    
+    private boolean hasRegistrationRun;
+    private final List<Runnable> registrationHandlers;
     private final Map<ResourceKey<? extends Registry<?>>, Optional<ResolvedRegistry<?>>> resolvedRegistries;
     
     private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> forgeEntries;
@@ -41,10 +44,31 @@ public class RegistrationDispatcher {
         this.resolvers = result.resolvers();
         this.conditions = result.conditions();
         this.transformers = result.transformers();
+        this.hasRegistrationRun = false;
+        this.registrationHandlers = new ArrayList<>();
         this.resolvedRegistries = new HashMap<>();
         this.forgeEntries = new HashMap<>();
         this.vanillaEntries = new HashMap<>();
         this.registerables = new ArrayList<>();
+    }
+    
+    private void runRegistration() {
+        synchronized (this.LOCK) {
+            if (this.hasRegistrationRun) {
+                return;
+            } else {
+                this.hasRegistrationRun = true;
+            }
+        }
+        // Must run registration handlers outside of synchronized block
+        // so #register is not blocked.
+        this.registrationHandlers.forEach(Runnable::run);
+    }
+    
+    public void addRegistrationHandler(Runnable handler) {
+        synchronized (this.LOCK) {
+            this.registrationHandlers.add(handler);
+        }
     }
     
     private <T> Optional<ResolvedRegistry<T>> registry(ResourceKey<? extends Registry<T>> key) {
@@ -126,6 +150,7 @@ public class RegistrationDispatcher {
     }
     
     public void registerForge(RegistryEvent.Register<? extends IForgeRegistryEntry<?>> event) {
+        this.runRegistration();
         ResourceKey<? extends Registry<?>> key = ResourceKey.createRegistryKey(event.getName());
         Map<ResourceKey<?>, Object> map = this.forgeEntries.get(key);
         if (map != null) {
@@ -144,6 +169,7 @@ public class RegistrationDispatcher {
     }
     
     public void registerVanilla() {
+        this.runRegistration();
         synchronized (this.LOCK) {
             for (Map.Entry<Registry<?>, Map<ResourceKey<?>, Object>> registryEntry : this.vanillaEntries.entrySet()) {
                 for (Map.Entry<ResourceKey<?>, Object> elementEntry : registryEntry.getValue().entrySet()) {

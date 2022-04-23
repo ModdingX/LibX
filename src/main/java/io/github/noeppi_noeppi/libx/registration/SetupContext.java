@@ -6,6 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+/**
+ * An extension of {@link RegistrationContext} that is used during setup phase.
+ */
 public final class SetupContext extends RegistrationContext {
     
     private final Consumer<Runnable> enqueue;
@@ -19,6 +22,9 @@ public final class SetupContext extends RegistrationContext {
         this.enqueue = enqueue;
     }
 
+    /**
+     * Enqueues a given {@link Runnable} into the synchronous work queue.
+     */
     public void enqueue(Runnable action) {
         this.enqueue.accept(action);
     }
