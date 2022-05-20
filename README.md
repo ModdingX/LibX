@@ -27,3 +27,7 @@ dependencies {
 **The wiki can be found at https://git.io/wikix**
 
 **Join the dev discord: https://discord.gg/NfwG6txUN6**
+
+### The future branch
+
+The `future` branch is used to implement breaking changes that will be merged in the next major minecraft release.
