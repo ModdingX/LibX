@@ -36,7 +36,7 @@ public abstract class NetworkX {
                 remote -> this.protocol.client().predicate.test(this.protocol.version(), remote),
                 remote -> this.protocol.server().predicate.test(this.protocol.version(), remote)
         );
-        ModInternal.get(mod).addSetupTask(this::registerPackets);
+        ModInternal.get(mod).addSetupTask(this::registerPackets, false);
     }
 
     /**

@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -12,7 +13,11 @@ import java.util.function.Consumer;
 /**
  * Everything that is registered to {@link ModXRegistration} that implements this can specify dependencies
  * and things to be done during setup phase.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public interface Registerable {
 
     /**

@@ -88,7 +88,7 @@ public class ClassUtil {
     }
 
     /**
-     * Gets the caller class for method call, the gven amount of stack frames up. This skips
+     * Gets the caller class for method call, the given amount of stack frames up. This skips
      * reflection frames.
      * 
      * @param level How many stack frames this should go up. {@code 0} means the method that

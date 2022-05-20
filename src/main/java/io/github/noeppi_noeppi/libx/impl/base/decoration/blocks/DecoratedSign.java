@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.base.decoration.blocks;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock;
 import io.github.noeppi_noeppi.libx.base.decoration.SignAccess;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -27,6 +28,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class DecoratedSign implements Registerable, SignAccess {
 
     public final ModX mod;

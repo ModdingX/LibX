@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.base;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,11 @@ import java.util.function.UnaryOperator;
 /**
  * A {@link Registerable} that registers a {@link Fluid fluid}, a flowing fluid,
  * a {@link LiquidBlock liquid block} and a {@link BucketItem bucket item}.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class FluidBase implements Registerable, ItemLike {
 
     protected final ModX mod;

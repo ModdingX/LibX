@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
 import io.github.noeppi_noeppi.libx.menu.BlockMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
@@ -32,7 +33,11 @@ import java.util.Set;
  * register function. This can be done on clientSetup or by overriding the initializeClient method on your block.
  *
  * @see BlockEntityMenu
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class MenuBlockBE<T extends BlockEntity, C extends BlockEntityMenu<T>> extends BlockBE<T> {
 
     public final MenuType<C> menu;

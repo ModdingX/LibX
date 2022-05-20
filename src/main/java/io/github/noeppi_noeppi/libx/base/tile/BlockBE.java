@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
@@ -40,7 +41,11 @@ import java.util.Set;
  * 
  * The block entity class can implement {@link TickableBlock} and {@link GameEventBlock}. This class will then
  * generate a matching {@link BlockEntityTicker} and a {@link GameEventListener} if required.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityBlock {
 
     private final Class<T> beClass;

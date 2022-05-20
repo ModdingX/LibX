@@ -1,5 +1,7 @@
 package io.github.noeppi_noeppi.libx.annotation.registration;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
+
 import java.lang.annotation.*;
 
 /**
@@ -9,7 +11,11 @@ import java.lang.annotation.*;
  * 
  * By default the name from the field is taken and translated to snake case. To explicitly set a name use
  * {@link RegName @RegName}.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 @Documented

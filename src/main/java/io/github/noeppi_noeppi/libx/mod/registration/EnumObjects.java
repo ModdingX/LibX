@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import org.apache.commons.lang3.tuple.Pair;
@@ -18,7 +19,11 @@ import java.util.function.Function;
  *
  * @param <E> The type of the enum to use.
  * @param <T> The type of the thing to register.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class EnumObjects<E extends Enum<E>, T> implements Registerable {
     
     private final T defaultValue;

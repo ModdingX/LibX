@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.BlockEntityUpdateQueue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +19,11 @@ import java.util.Set;
 
 /**
  * A base class for {@link BlockEntity block entities}. This provides some useful methods.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class BlockEntityBase extends BlockEntity {
 
     private final Set<Capability<?>> caps;

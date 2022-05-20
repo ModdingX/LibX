@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.libx.base.decoration;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +14,11 @@ import java.util.NoSuchElementException;
 /**
  * A block that registers some decoration blocks with it based on
  * a {@link DecorationContext}.
+ * 
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class DecoratedBlock extends BlockBase {
 
     private final DecorationContext context;

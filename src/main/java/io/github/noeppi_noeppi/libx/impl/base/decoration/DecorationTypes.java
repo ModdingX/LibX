@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.base.decoration;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock;
 import io.github.noeppi_noeppi.libx.base.decoration.DecorationType;
 import io.github.noeppi_noeppi.libx.impl.base.decoration.blocks.*;
@@ -9,6 +10,8 @@ import java.util.function.Function;
 
 // Extra class, so we can access the types with impl classes in their generic signature
 // but expose them with non impl classes.
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class DecorationTypes {
     
     public static final DecorationType<DecoratedBlock> BASE = new BaseDecorationType<>("", Function.identity());

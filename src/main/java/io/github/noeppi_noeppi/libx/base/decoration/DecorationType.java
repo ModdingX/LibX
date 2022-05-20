@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.base.decoration;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.impl.base.decoration.DecorationTypes;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.world.level.block.*;
@@ -10,7 +11,11 @@ import java.util.Set;
 /**
  * Something that is registered together with a {@link DecoratedBlock}.
  * @param <T>
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public interface DecorationType<T> {
 
     /**

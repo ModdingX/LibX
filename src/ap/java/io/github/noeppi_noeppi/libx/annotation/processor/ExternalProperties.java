@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.annotation.processor;
 
-import io.github.noeppi_noeppi.libx.annotation.processor.ProcessorEnv;
 import io.github.noeppi_noeppi.libx.annotation.processor.meta.ArtifactVersion;
 
 import javax.annotation.Nullable;

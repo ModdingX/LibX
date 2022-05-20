@@ -1,7 +1,8 @@
 package io.github.noeppi_noeppi.libx.mod.registration;
 
 import com.google.common.collect.ImmutableList;
-import io.github.noeppi_noeppi.libx.impl.registration.BuiltinTransformers;
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
+import io.github.noeppi_noeppi.libx.impl.registration.old.BuiltinTransformers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,11 @@ import java.util.List;
  * 
  * @see RegistryTransformer
  * @see RegistryCondition
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class RegistrationBuilder {
     
     private int version = -1;

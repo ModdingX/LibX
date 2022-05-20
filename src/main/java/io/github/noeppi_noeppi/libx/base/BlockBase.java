@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.base;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
@@ -16,7 +17,11 @@ import java.util.function.Consumer;
 /**
  * Base class for {@link Block blocks} for mods using {@link ModXRegistration}. This will automatically set the
  * creative tab if it's defined in the mod and register a {@link BlockItem block item}.
+ *
+ * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class BlockBase extends Block implements Registerable {
 
     protected final ModX mod;

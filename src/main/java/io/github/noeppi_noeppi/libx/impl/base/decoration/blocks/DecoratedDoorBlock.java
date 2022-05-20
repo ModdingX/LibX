@@ -1,5 +1,6 @@
 package io.github.noeppi_noeppi.libx.impl.base.decoration.blocks;
 
+import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock;
 import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -17,6 +18,8 @@ import javax.annotation.Nonnull;
 import java.util.Random;
 import java.util.function.Consumer;
 
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.19")
 public class DecoratedDoorBlock extends DoorBlock implements Registerable {
 
     public final DecoratedBlock parent;

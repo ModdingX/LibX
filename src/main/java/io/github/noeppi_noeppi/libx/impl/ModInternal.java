@@ -47,17 +47,23 @@ public class ModInternal {
     @Nullable
     private final Class<?> modInitClass;
     private final List<Runnable> setupTasks;
+    private final List<Runnable> queueSetupTasks;
 
     private ModInternal(ModX mod, FMLJavaModLoadingContext ctx) {
         this.mod = mod;
         this.modInitClass = ClassUtil.forName(mod.getClass().getName() + "$");
         this.setupTasks = new ArrayList<>();
+        this.queueSetupTasks = new ArrayList<>();
 
         ctx.getModEventBus().addListener(this::runSetup);
     }
 
-    public void addSetupTask(Runnable task) {
-        this.setupTasks.add(task);
+    public void addSetupTask(Runnable task, boolean enqueue) {
+        if (enqueue) {
+            this.queueSetupTasks.add(task);
+        } else {
+            this.setupTasks.add(task);
+        }
     }
 
     public void callGeneratedCode() {
@@ -91,6 +97,6 @@ public class ModInternal {
 
     private void runSetup(FMLCommonSetupEvent event) {
         this.setupTasks.forEach(Runnable::run);
+        this.queueSetupTasks.forEach(event::enqueueWork);
     }
 }
-
