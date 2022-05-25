@@ -1,23 +1,36 @@
 package io.github.noeppi_noeppi.libx.impl.commands.client;
 
 import com.google.common.collect.Sets;
+import com.google.gson.stream.JsonReader;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
+import io.github.noeppi_noeppi.libx.impl.Executor;
+import io.github.noeppi_noeppi.libx.screen.text.ComponentLayout;
+import io.github.noeppi_noeppi.libx.screen.text.TextScreen;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.*;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.loading.StringUtils;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 import net.minecraftforge.forgespi.language.IModInfo;
 
+import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +70,7 @@ public class ReportCommand implements Command<CommandSourceStack> {
 
         appendDependencies(Sets.newHashSet("minecraft", "forge", modid), body, modInfo);
 
-        appendSection(body, "## Logs\n*insert log here via pastebin.com, gist.com, or any other service*");
+        appendSection(body, "## Logs\n*insert log here via pastebin.com, gist.com, or any other service. For more information, visit https://git.io/mclogs#en*");
         appendSection(body, "## Description\n1. \n2. ");
 
         if (modInfo.getOwningFile() instanceof ModFileInfo fileInfo) {
@@ -82,11 +95,24 @@ public class ReportCommand implements Command<CommandSourceStack> {
                     String username = split[i++];
                     String repo = split[i];
 
-                    String repoUrl = "https://github.com/" + username + "/" + repo;
-                    String finalUrl = repoUrl + "/issues/new?body=" + URLEncoder.encode(body.toString(), StandardCharsets.UTF_8);
-                    context.getSource().sendSuccess(new TranslatableComponent("libx.command.open_issue_github", new TextComponent(repoUrl).withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD))).withStyle(Style.EMPTY
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, finalUrl))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("chat.link.open")))), false);
+                    Executor.enqueueClientWork(() -> {
+                        PasteHandler pasteHandler = uploadLog();
+                        if (pasteHandler != null) {
+                            appendSection(body, "## Log\n" + pasteHandler.paste);
+                        }
+
+                        String repoUrl = "https://github.com/" + username + "/" + repo;
+                        String finalUrl = repoUrl + "/issues/new?body=" + URLEncoder.encode(body.toString(), StandardCharsets.UTF_8);
+                        ComponentLayout layout = ComponentLayout.simple(
+                                new TranslatableComponent("libx.command.open_issue_github"),
+                                new TextComponent(repoUrl).withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD)).withStyle(Style.EMPTY
+                                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, finalUrl))
+                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("chat.link.open")))),
+                                new TextComponent("Delete Log").withStyle(Style.EMPTY
+                                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, pasteHandler != null ? pasteHandler.edit : "Sorry, not possible")))
+                        );
+                        Minecraft.getInstance().setScreen(new TextScreen(layout));
+                    });
                 }
                 case GITLAB -> {
                     String[] split = issueUrl.getPath().split("/");
@@ -135,6 +161,67 @@ public class ReportCommand implements Command<CommandSourceStack> {
                 alreadyHandled.add(modid);
                 appendDependencies(alreadyHandled, builder, dependency);
             }
+        }
+    }
+
+    private static PasteHandler uploadLog() {
+        try {
+            Path latestLog = FMLPaths.GAMEDIR.get().resolve("logs").resolve("latest.log");
+            FileInputStream stream = new FileInputStream(latestLog.toFile());
+            URI uri = URI.create("https://paste.melanx.de/create?title=" + Minecraft.getInstance().player.getDisplayName().getString());
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(uri)
+                    .POST(HttpRequest.BodyPublishers.ofString(readFromInputStream(stream)))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return new PasteHandler(response.body());
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
+    private static String readFromInputStream(InputStream inputStream) throws IOException {
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
+            }
+        }
+        return resultStringBuilder.toString();
+    }
+
+    private static class PasteHandler {
+
+        private final String paste;
+        private final String edit;
+
+        public PasteHandler(String jsonString) {
+            String paste = "";
+            String edit = "";
+
+            try {
+                JsonReader reader = new JsonReader(new StringReader(jsonString));
+                reader.beginObject();
+                while (reader.hasNext()) {
+                    String name = reader.nextName();
+                    if (name.equals("url")) {
+                        paste = reader.nextString();
+                    } else if (name.equals("edit")) {
+                        edit = "https://paste.melanx.de/delete/" + reader.nextString();
+                    } else {
+                        reader.skipValue();
+                    }
+                }
+                reader.endObject();
+            } catch (IOException e) {
+                LibX.logger.warn("Failed to create paste handler", e);
+            }
+
+            this.paste = paste;
+            this.edit = edit;
         }
     }
 
