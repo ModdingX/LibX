@@ -31,7 +31,7 @@ public class RemoteModList {
         if (hasMod(player, modid)) {
             return new TranslatableComponent(translationKey, args);
         } else {
-            return new TextComponent(ForgeI18n.parseMessage(translationKey, args));
+            return new TextComponent(String.format(ForgeI18n.getPattern(translationKey), args));
         }
     }
 }
