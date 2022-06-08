@@ -3,6 +3,7 @@ package io.github.noeppi_noeppi.libx.screen.text;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.noeppi_noeppi.libx.impl.screen.text.TextScreenContent;
 import io.github.noeppi_noeppi.libx.render.RenderHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
@@ -74,5 +75,10 @@ public class TextScreen extends Screen {
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    protected void insertText(@Nonnull String text, boolean overwrite) {
+        Minecraft.getInstance().openChatScreen(text);
     }
 }

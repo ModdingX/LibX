@@ -50,6 +50,7 @@ public final class LibX extends ModX {
     private static LibX instance;
     private static CommonNetwork networkWrapper;
 
+    @SuppressWarnings("removal")
     public LibX() {
         instance = this;
         NetworkImpl network = new NetworkImpl(this);

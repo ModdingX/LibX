@@ -33,11 +33,18 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
+    testImplementation 'net.minecraftforge:srgutils:0.4.9'
 
 //    runtimeOnly curse.pack(426926, 3622727, [412525, "applied-energistics-2", "aeinfinitybooster", "beyond-earth", "space-bosstools-giselle-addon"])
 }
 
+compileJava.options.compilerArgs += [
+        '-Amod.properties.strict_onlyin=true',
+        '-Amod.properties.strict_super=true'
+]
+
 test {
+    dependsOn createSrgToMcp // Needed, so the tests can load mappings
     useJUnitPlatform()
 }
 

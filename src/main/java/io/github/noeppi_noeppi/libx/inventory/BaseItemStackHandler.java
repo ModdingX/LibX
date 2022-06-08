@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Range;
 import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,6 +28,7 @@ import java.util.stream.IntStream;
  */
 public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedItemHandlerModifiable {
 
+    private final int size;
     private final int defaultSlotLimit;
     private final Set<Integer> insertionOnlySlots;
     private final Set<Integer> outputSlots;
@@ -39,6 +41,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
 
     private BaseItemStackHandler(int size, int defaultSlotLimit, Set<Integer> insertionOnlySlots, Set<Integer> outputSlots, Map<Integer, Integer> slotLimits, Map<Integer, Predicate<ItemStack>> slotValidators, Consumer<Integer> contentsChanged) {
         super(size);
+        this.size = size;
         this.defaultSlotLimit = defaultSlotLimit;
         this.insertionOnlySlots = ImmutableSet.copyOf(insertionOnlySlots);
         this.outputSlots = ImmutableSet.copyOf(outputSlots);
@@ -76,9 +79,21 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         }
     }
 
+    @Override
+    protected void onLoad() {
+        if (this.stacks.size() != this.size) {
+            // BaseItemStackHandler does not allow setting the size through NBT
+            // Don't use setSize as it will clear the contents
+            NonNullList<ItemStack> oldStacks = this.stacks;
+            this.stacks = NonNullList.withSize(this.size, ItemStack.EMPTY);
+            for (int slot = 0; slot < Math.min(oldStacks.size(), this.size); slot++) {
+                this.stacks.set(slot, oldStacks.get(slot));
+            }
+        }
+    }
+
     /**
-     * Gets a vanilla container that wraps around this item handler. Marking the vanilla container dirty
-     * will notify an content change for every slot of this item handler.
+     * Gets a vanilla container that wraps around this item handler.
      */
     public Container toVanilla() {
         if (this.vanilla == null) this.vanilla = new VanillaWrapper(this, null);
@@ -362,7 +377,6 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
          */
         public Builder validator(Predicate<ItemStack> validator, Range<Integer> slots) {
             IntStream.range(0, this.size).filter(slots::contains).forEach(slot -> this.slotValidators.put(slot, validator));
-
             return this;
         }
 

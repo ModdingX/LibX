@@ -24,7 +24,6 @@ import java.util.Optional;
 /**
  * Provides additional {@link Codec codecs}.
  */
-@Experimental
 public class MoreCodecs {
 
     /**

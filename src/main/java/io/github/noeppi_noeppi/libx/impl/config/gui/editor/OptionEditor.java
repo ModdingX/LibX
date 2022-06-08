@@ -87,5 +87,10 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
             }
             this.inputChanged.accept(this.box.selected() ? Optional.of(this.value) : Optional.empty());
         }
+
+        @Override
+        public void enabled(boolean enabled) {
+            EditorOps.wrap(this.box).enabled(enabled);
+        }
     }
 }

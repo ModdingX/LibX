@@ -8,6 +8,8 @@ import io.github.noeppi_noeppi.libx.config.ValueMapper;
 import io.github.noeppi_noeppi.libx.config.correct.ConfigCorrection;
 import io.github.noeppi_noeppi.libx.config.gui.ConfigEditor;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -81,6 +83,7 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Optional<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
         return ConfigEditor.option(mapper.createEditor(ValidatorInfo.empty()));
     }
