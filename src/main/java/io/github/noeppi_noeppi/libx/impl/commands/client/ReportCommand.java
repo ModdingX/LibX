@@ -9,8 +9,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.noeppi_noeppi.libx.LibX;
 import io.github.noeppi_noeppi.libx.command.CommandUtil;
 import io.github.noeppi_noeppi.libx.impl.Executor;
-import io.github.noeppi_noeppi.libx.screen.text.ComponentLayout;
-import io.github.noeppi_noeppi.libx.screen.text.TextScreen;
+import io.github.noeppi_noeppi.libx.impl.screen.ReportScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
@@ -96,22 +95,22 @@ public class ReportCommand implements Command<CommandSourceStack> {
                     String repo = split[i];
 
                     Executor.enqueueClientWork(() -> {
-                        PasteHandler pasteHandler = uploadLog();
-                        if (pasteHandler != null) {
-                            appendSection(body, "## Log\n" + pasteHandler.paste);
-                        }
-
-                        String repoUrl = "https://github.com/" + username + "/" + repo;
-                        String finalUrl = repoUrl + "/issues/new?body=" + URLEncoder.encode(body.toString(), StandardCharsets.UTF_8);
-                        ComponentLayout layout = ComponentLayout.simple(
-                                new TranslatableComponent("libx.command.open_issue_github"),
-                                new TextComponent(repoUrl).withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD)).withStyle(Style.EMPTY
-                                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, finalUrl))
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("chat.link.open")))),
-                                new TextComponent("Delete Log").withStyle(Style.EMPTY
-                                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, pasteHandler != null ? pasteHandler.edit : "Sorry, not possible")))
-                        );
-                        Minecraft.getInstance().setScreen(new TextScreen(layout));
+//                        PasteHandler pasteHandler = uploadLog();
+//                        if (pasteHandler != null) {
+//                            appendSection(body, "## Log\n" + pasteHandler.paste);
+//                        }
+//
+//                        String repoUrl = "https://github.com/" + username + "/" + repo;
+//                        String finalUrl = repoUrl + "/issues/new?body=" + URLEncoder.encode(body.toString(), StandardCharsets.UTF_8);
+//                        ComponentLayout layout = ComponentLayout.simple(
+//                                new TranslatableComponent("libx.command.open_issue_github"),
+//                                new TextComponent(repoUrl).withStyle(Style.EMPTY.withColor(ChatFormatting.GOLD)).withStyle(Style.EMPTY
+//                                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, finalUrl))
+//                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("chat.link.open")))),
+//                                new TextComponent("Delete Log").withStyle(Style.EMPTY
+//                                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, pasteHandler != null ? pasteHandler.edit : "Sorry, not possible")))
+//                        );
+                        Minecraft.getInstance().setScreen(new ReportScreen(new TranslatableComponent("libx.command.open_issue_github")));
                     });
                 }
                 case GITLAB -> {
@@ -168,6 +167,7 @@ public class ReportCommand implements Command<CommandSourceStack> {
         try {
             Path latestLog = FMLPaths.GAMEDIR.get().resolve("logs").resolve("latest.log");
             FileInputStream stream = new FileInputStream(latestLog.toFile());
+            //noinspection ConstantConditions
             URI uri = URI.create("https://paste.melanx.de/create?title=" + Minecraft.getInstance().player.getDisplayName().getString());
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -225,7 +225,7 @@ public class ReportCommand implements Command<CommandSourceStack> {
         }
     }
 
-    enum IssueHost {
+    public enum IssueHost {
         GITHUB("github.com"),
         GITLAB("gitlab.com"),
         CUSTOM("");
