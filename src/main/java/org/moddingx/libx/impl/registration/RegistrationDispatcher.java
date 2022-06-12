@@ -15,8 +15,10 @@ import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
 import org.moddingx.libx.registration.*;
 import org.moddingx.libx.registration.resolution.RegistryResolver;
 import org.moddingx.libx.registration.resolution.ResolvedRegistry;
+import org.moddingx.libx.registration.tracking.RegistryTracker;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -113,6 +115,7 @@ public class RegistrationDispatcher {
             }
             
             ResourceLocation rl = new ResourceLocation(this.modid, id);
+            
             @Nullable
             ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
             RegistrationContext ctx = new RegistrationContext(rl, resourceKey);
@@ -208,6 +211,12 @@ public class RegistrationDispatcher {
     
     public void registerClient(FMLClientSetupEvent event) {
         this.registerables.forEach(reg -> reg.registerClient(event::enqueueWork));
+    }
+    
+    public void notifyRegisterField(IForgeRegistry<?> registry, String id, Field field) {
+        if (this.trackingEnabled) {
+            RegistryTracker.track(registry, field, new ResourceLocation(this.modid, id));
+        }
     }
     
     private record NamedRegisterable(RegistrationContext ctx, Registerable value) {

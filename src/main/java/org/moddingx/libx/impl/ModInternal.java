@@ -3,6 +3,7 @@ package org.moddingx.libx.impl;
 import com.mojang.serialization.Codec;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.moddingx.libx.impl.registration.RegistrationDispatcher;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.ClassUtil;
 
@@ -48,16 +49,22 @@ public class ModInternal {
     private final Class<?> modInitClass;
     private final List<Runnable> setupTasks;
     private final List<Runnable> queueSetupTasks;
+    private RegistrationDispatcher registrationDispatcher;
 
     private ModInternal(ModX mod, FMLJavaModLoadingContext ctx) {
         this.mod = mod;
         this.modInitClass = ClassUtil.forName(mod.getClass().getName() + "$");
         this.setupTasks = new ArrayList<>();
         this.queueSetupTasks = new ArrayList<>();
+        this.registrationDispatcher = null;
 
         ctx.getModEventBus().addListener(this::runSetup);
     }
 
+    public void initRegistration(RegistrationDispatcher dispatcher) {
+        this.registrationDispatcher = dispatcher;
+    }
+    
     public void addSetupTask(Runnable task, boolean enqueue) {
         if (enqueue) {
             this.queueSetupTasks.add(task);
@@ -92,6 +99,14 @@ public class ModInternal {
             }
         } else {
             return null;
+        }
+    }
+    
+    public RegistrationDispatcher getRegistrationDispatcher() {
+        if (this.registrationDispatcher == null) {
+            throw new NoSuchElementException(this.mod.modid + " has no registration dispatcher. This is an error in LibX.");
+        } else {
+            return this.registrationDispatcher;
         }
     }
 

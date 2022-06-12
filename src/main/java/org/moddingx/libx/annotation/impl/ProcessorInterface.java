@@ -1,8 +1,10 @@
 package org.moddingx.libx.annotation.impl;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -11,8 +13,17 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.codec.MoreCodecs;
+import org.moddingx.libx.impl.ModInternal;
+import org.moddingx.libx.impl.reflect.ReflectionHacks;
+import org.moddingx.libx.mod.ModX;
+import org.moddingx.libx.mod.ModXRegistration;
+import org.moddingx.libx.registration.MultiRegisterable;
 
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
 public class ProcessorInterface {
@@ -23,6 +34,35 @@ public class ProcessorInterface {
     
     public static ResourceLocation newRL(String namespace, String path) {
         return new ResourceLocation(namespace, path);
+    }
+    
+    public static void register(ModX mod, @Nullable ResourceKey<? extends Registry<?>> registryKey, String name, Object value, @Nullable Field field, boolean multi) {
+        if (!(mod instanceof ModXRegistration reg)) throw new IllegalStateException("Can't register to a non-ModXRegistration mod.");
+        if (multi) {
+            if (!(value instanceof MultiRegisterable<?> multiReg)) throw new IllegalStateException("Can't multi-register a non-MultiRegisterable.");
+            //noinspection unchecked
+            reg.registerMulti((ResourceKey<? extends Registry<Object>>) registryKey, name, (MultiRegisterable<Object>) multiReg);
+        } else {
+            //noinspection unchecked
+            reg.register((ResourceKey<? extends Registry<Object>>) registryKey, name, value);
+            
+            // Only directly add registry tracking for actually registered stuff, MultiRegisterable has no real registry
+            if (registryKey != null && field != null) {
+                IForgeRegistry<?> forgeRegistry = RegistryManager.ACTIVE.getRegistry(registryKey.location());
+                if (forgeRegistry != null) {
+                    ModInternal.get(mod).getRegistrationDispatcher().notifyRegisterField(forgeRegistry, name, field);
+                }
+            }
+        }
+    }
+    
+    // For code with checked exceptions that we know are never thrown
+    public static void runUnchecked(ThrowingRunnable runnable) {
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            ReflectionHacks.throwUnchecked(e);
+        }
     }
     
     public static <T extends Enum<T>> Codec<T> enumCodec(Class<T> clazz) {
@@ -55,5 +95,11 @@ public class ProcessorInterface {
 
     public static boolean isModLoaded(String modid) {
         return ModList.get().isLoaded(modid);
+    }
+    
+    @FunctionalInterface
+    public static interface ThrowingRunnable {
+        
+        public void run() throws Exception;
     }
 }

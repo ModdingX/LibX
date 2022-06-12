@@ -75,6 +75,7 @@ public abstract class ModXRegistration extends ModX {
         RegistrationBuilder builder = new RegistrationBuilder();
         this.initRegistration(builder);
         this.dispatcher = new RegistrationDispatcher(this.modid, builder.build());
+        ModInternal.get(this).initRegistration(this.dispatcher);
         
         try {
             Method method = EventBus.class.getDeclaredMethod("addListener", EventPriority.class, Predicate.class, Class.class, Consumer.class);
