@@ -1,32 +1,32 @@
 # LibX
 
-[![CurseForge](http://cf.way2muchnoise.eu/full_412525_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/libx)
+[![CurseForge](https://cf.way2muchnoise.eu/full_412525_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/libx)
+[![Modrinth](https://modrinth-utils.vercel.app/api/badge/downloads?id=qEH6GYul&logo=true)](https://www.curseforge.com/minecraft/mc-mods/libx)
 [![Issues](https://img.shields.io/github/issues/noeppi-noeppi/LibX)](https://github.com/noeppi-noeppi/LibX/issues)
 
-LibX is a library mod for minecraft by [MelanX](https://www.curseforge.com/members/melanx/projects) and [noeppi_noeppi](https://www.curseforge.com/members/noeppinoeppi/projects).
-
+LibX is the library mod of [ModdingX](https://moddingx.org/).
 
 ### How to use LibX in a dev environment
 
 ```groovy
 repositories {
     maven {
-        name = 'MelanX Maven'
-        url = 'https://maven.melanx.de/'
+        name = 'ModdingX Maven'
+        url = 'https://maven.moddingx.org/'
     }
 }
 
 dependencies {
-    annotationProcessor fg.deobf("io.github.noeppi_noeppi.mods:LibX:${mc_version}-${libx-version}")
-    implementation fg.deobf("io.github.noeppi_noeppi.mods:LibX:${mc_version}-${libx-version}")
+    annotationProcessor fg.deobf("org.moddingx:LibX:${mc_version}-${libx-version}")
+    implementation fg.deobf("org.moddingx:LibX:${mc_version}-${libx-version}")
 }
 ```
 
-**Javadoc can be found at https://git.io/libx**
+**Javadoc can be found at https://moddingx.org/libx**
 
-**The wiki can be found at https://git.io/wikix**
+**The wiki can be found at https://moddingx.org/wiki**
 
-**Join the dev discord: https://discord.gg/NfwG6txUN6**
+**Join the dev discord: https://moddingx.org/discord**
 
 ### The future branch
 

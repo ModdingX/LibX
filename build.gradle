@@ -1,11 +1,11 @@
 buildscript {
-    apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/buildscript.gradle', to: buildscript
+    apply from: 'https://moddingx.github.io/ModUtils/v4/buildscript.gradle', to: buildscript
 }
 
-apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/mod.gradle'
+apply from: 'https://moddingx.github.io/ModUtils/v4/mod.gradle'
 
-apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.javadoc'
-apply plugin: 'io.github.noeppi_noeppi.tools.modgradle.coremods'
+apply plugin: 'org.moddingx.modgradle.javadoc'
+apply plugin: 'org.moddingx.modgradle.coremods'
 
 configurations {
     apCompileOnly
@@ -28,11 +28,11 @@ dependencies {
     annotationProcessor sourceSets.ap.output
     implementation sourceSets.ap.output
     
-    coremods 'io.github.noeppi_noeppi.misc:CoreModTypes:5.0.2-1'
+    coremods 'org.moddingx:CoreModTypes:5.0.2-2'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
-    testImplementation 'net.minecraftforge:srgutils:0.4.9'
+    testImplementation 'net.minecraftforge:srgutils:0.4.11'
 }
 
 compileJava.options.compilerArgs += [
