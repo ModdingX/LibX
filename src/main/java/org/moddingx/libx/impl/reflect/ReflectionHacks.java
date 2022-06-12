@@ -1,6 +1,6 @@
-package io.github.noeppi_noeppi.libx.impl.reflect;
+package org.moddingx.libx.impl.reflect;
 
-import io.github.noeppi_noeppi.libx.util.LazyValue;
+import org.moddingx.libx.util.LazyValue;
 import sun.misc.Unsafe;
 
 import javax.annotation.Nullable;
@@ -15,7 +15,7 @@ public class ReflectionHacks {
             field.setAccessible(true);
             return (Unsafe) field.get(null);
         } catch (Exception e) {
-            throw new IllegalStateException("ReflectionHacks: Can't retrieve the unsafe.", e);
+            throw new IllegalStateException("ReflectionHacks: Couldn't get the Unsafe.", e);
         }
     });
     
@@ -37,7 +37,7 @@ public class ReflectionHacks {
         }
         if (field.getType() == void.class) {
             throw new IllegalStateException("Field with void type");
-        } else if (field.getDeclaringClass().isEnum() && Modifier.isStatic(field.getModifiers())) {
+        } else if (field.isEnumConstant()) {
             throw new IllegalStateException("Can't change enum field");
         } else if (field.getType() == boolean.class) {
             if (value == null) throw new NullPointerException("Null primitive for field: " + field);

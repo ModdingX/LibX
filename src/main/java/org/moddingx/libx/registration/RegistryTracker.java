@@ -1,13 +1,13 @@
-package io.github.noeppi_noeppi.libx.mod.registration;
+package org.moddingx.libx.registration;
 
-import io.github.noeppi_noeppi.libx.LibX;
-import io.github.noeppi_noeppi.libx.annotation.meta.Experimental;
-import io.github.noeppi_noeppi.libx.impl.reflect.ReflectionHacks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolderRegistry;
 import org.apache.commons.lang3.tuple.Pair;
+import org.moddingx.libx.LibX;
+import org.moddingx.libx.annotation.meta.Experimental;
+import org.moddingx.libx.impl.reflect.ReflectionHacks;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

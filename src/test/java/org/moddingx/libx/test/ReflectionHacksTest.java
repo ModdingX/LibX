@@ -1,6 +1,6 @@
-package io.github.noeppi_noeppi.libx.test;
+package org.moddingx.libx.test;
 
-import io.github.noeppi_noeppi.libx.impl.reflect.ReflectionHacks;
+import org.moddingx.libx.impl.reflect.ReflectionHacks;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
