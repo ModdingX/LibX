@@ -204,19 +204,6 @@ public class ConfigManager {
     }
 
     /**
-     * Forces reload of all configs. <b>This will not sync the config tough. Use forceResync for this.</b>
-     * 
-     * @deprecated Use {@link #reloadCommon()} or {@link #reloadClient()}.
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19")
-    public static void reloadAll() {
-        for (Class<?> configClass : configs.keySet()) {
-            reloadConfig(configClass, true, true);
-        }
-    }
-
-    /**
      * Forces reload of all common configs. <b>This will not sync the config though. Use {@link #forceResync(ServerPlayer)} for this.</b>
      */
     public static void reloadCommon() {

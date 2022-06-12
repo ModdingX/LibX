@@ -23,15 +23,6 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     public boolean test(ItemStack stack) {
         return stack.getCount() >= this.count && this.ingredient.test(stack);
     }
-
-    /**
-     * @deprecated Renamed  to {@link #isEmpty()} to match official names better.
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19")
-    public boolean empty() {
-        return this.isEmpty();
-    }
     
     /**
      * Returns whether the count is 0 or {@link Ingredient#isEmpty()} return true.

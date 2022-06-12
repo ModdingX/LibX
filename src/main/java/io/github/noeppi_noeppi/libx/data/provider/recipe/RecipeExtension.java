@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.data.provider.recipe;
 
-import io.github.noeppi_noeppi.libx.crafting.ingredient.MergedIngredient;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;

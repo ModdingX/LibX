@@ -64,20 +64,6 @@ public class ResourceList implements Predicate<ResourceLocation> {
      * A resource list that denies every item.
      */
     public static final ResourceList DENY_LIST = new ResourceList(false, b -> {});
-
-    /**
-     * @deprecated Use {@link #ALLOW_LIST}
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19")
-    public static final ResourceList WHITELIST = ALLOW_LIST;
-    
-    /**
-     * @deprecated Use {@link #DENY_LIST}
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19")
-    public static final ResourceList BLACKLIST = DENY_LIST;
     
     private static final WildcardString NAMESPACE_MC = new WildcardString(List.of("minecraft"));
     
@@ -101,12 +87,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
      * Reads a resource list from JSON.
      */
     public ResourceList(JsonObject json) {
-        // TODO remove in 1.19
-        if (json.has("whitelist")) {
-            this.allowList = json.get("whitelist").getAsBoolean();
-        } else {
-            this.allowList = !json.has("allow_list") || json.get("allow_list").getAsBoolean();
-        }
+        this.allowList = !json.has("allow_list") || json.get("allow_list").getAsBoolean();
         if (!json.has("elements")) {
             throw new IllegalStateException("Resource list has no member 'elements': " + json);
         }
@@ -166,15 +147,6 @@ public class ResourceList implements Predicate<ResourceLocation> {
      */
     public boolean isAllowList() {
         return this.allowList;
-    }
-
-    /**
-     * @deprecated use {@link #isAllowList()}
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19")
-    public boolean isWhitelist() {
-        return this.isAllowList();
     }
 
     /**

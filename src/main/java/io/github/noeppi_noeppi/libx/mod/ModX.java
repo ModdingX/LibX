@@ -29,15 +29,6 @@ public abstract class ModX {
     public final String modid;
 
     /**
-     * A {@link Logger} for the mod.
-     * @deprecated The logger is hard to use and causes problems during parallel mod initialisation.
-     *             You should create your own logger for your mod.
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19")
-    public final Logger logger;
-
-    /**
      * A creative tab for the mod.
      */
     @Nullable
