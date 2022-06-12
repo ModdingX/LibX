@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.base;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,21 +16,17 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Base class for {@link Item items} which have an inventory. This will provide the capability to the item.
- *
- * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<CompoundTag>> extends ItemBase {
 
     private final Function<Runnable, T> inventoryFactory;
-
+    
     /**
      * Creates a new item with inventory.
      * 
@@ -42,10 +37,12 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
         super(mod, properties);
         this.inventoryFactory = inventoryFactory;
     }
-    
+
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag capTag) {
+        ICapabilityProvider parent = super.initCapabilities(stack, capTag);
+        
         LazyOptional<IItemHandlerModifiable> inventoryCapability = LazyOptional.of(() -> {
             AtomicReference<T> handler = new AtomicReference<>(null);
             handler.set(this.inventoryFactory.apply(() -> {
@@ -61,11 +58,15 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
         });
         
         return new ICapabilityProvider() {
+            
             @Nonnull
             @Override
             public <C> LazyOptional<C> getCapability(@Nonnull Capability<C> cap, @Nullable Direction side) {
-                //noinspection unchecked
-                return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (LazyOptional<C>) inventoryCapability : LazyOptional.empty();
+                if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+                    return inventoryCapability.cast();
+                } else {
+                    return parent == null ? LazyOptional.empty() : parent.getCapability(cap, side);
+                }
             }
         };
     }
@@ -85,16 +86,15 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
     }
     
     /**
-     * Gets a stream containing the inventory of an {@link ItemStack} or an empty stream if the ItemStack
-     * doesn't have the item handler capability or the item handler is not an instance of
-     * {@link IItemHandlerModifiable}.
+     * Gets an {@link Optional} containing the inventory of an {@link ItemStack} or an empty optional if the ItemStack
+     * doesn't have the item handler capability or the item handler is not an instance of {@link IItemHandlerModifiable}.
      */
-    public static Stream<IItemHandlerModifiable> getInventoryStream(ItemStack stack) {
+    public static Optional<IItemHandlerModifiable> getInventoryOption(ItemStack stack) {
         IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve().orElse(null);
         if (handler instanceof IItemHandlerModifiable modifiable) {
-            return Stream.of(modifiable);
+            return Optional.of(modifiable);
         } else {
-            return Stream.empty();
+            return Optional.empty();
         }
     }
 }

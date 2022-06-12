@@ -1,13 +1,12 @@
 package io.github.noeppi_noeppi.libx.base;
 
-import com.google.common.collect.ImmutableSet;
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.menu.BlockMenu;
 import io.github.noeppi_noeppi.libx.mod.ModX;
+import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,39 +18,36 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- * This class registers a menu with the Block
+ * This class registers a menu with the Block.
  * This also makes the Screen appear on right-click.
  * <p>
- * Note: You need to register the Screen by yourself using the {@link MenuScreens}
- * register function. This can be done on clientSetup or by overriding the initializeClient method on your block.
+ * Note: You need to register the Screen by yourself using the {@link MenuScreens} register function.
  *
  * @see BlockMenu
- *
- * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 public class MenuBlock<C extends BlockMenu> extends BlockBase {
 
     public final MenuType<C> menu;
 
     public MenuBlock(ModX mod, MenuType<C> menu, Properties properties) {
-        super(mod, properties);
-        this.menu = menu;
+        this(mod, menu, properties, new Item.Properties());
     }
 
-    public MenuBlock(ModX mod, MenuType<C> menu, Properties properties, Item.Properties itemProperties) {
+    public MenuBlock(ModX mod, MenuType<C> menu, Properties properties, @Nullable Item.Properties itemProperties) {
         super(mod, properties, itemProperties);
         this.menu = menu;
     }
 
     @Override
-    public Set<Object> getAdditionalRegisters(ResourceLocation id) {
-        return ImmutableSet.builder().addAll(super.getAdditionalRegisters(id)).add(this.menu).build();
+    @OverridingMethodsMustInvokeSuper
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        super.registerAdditional(ctx, builder);
+        builder.register(Registry.MENU_REGISTRY, this.menu);
     }
 
     @Nonnull

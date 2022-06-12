@@ -3,7 +3,7 @@ package io.github.noeppi_noeppi.libx.annotation.processor;
 public class Classes {
 
     public static final String MODX = "io.github.noeppi_noeppi.libx.mod.ModX";
-    public static final String MODX_REGISTRATION = "io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration";
+    public static final String MODX_REGISTRATION = "io.github.noeppi_noeppi.libx.mod.ModXRegistration";
     public static final String MOD = "net.minecraftforge.fml.common.Mod";
     public static final String FOR_MOD = "io.github.noeppi_noeppi.libx.annotation.ForMod";
     public static final String DIST = "net.minecraftforge.api.distmarker.Dist";

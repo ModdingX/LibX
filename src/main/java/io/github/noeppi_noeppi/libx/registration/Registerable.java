@@ -36,7 +36,7 @@ public interface Registerable {
      * with the id of this object and optionally a name suffix.
      */
     @SuperChainRequired
-    default void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector builder) {
+    default void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         
     }
 

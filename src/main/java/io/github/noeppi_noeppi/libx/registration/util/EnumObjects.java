@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 /**
  * A {@link MultiRegisterable} that registers multiple objects, one for each value of an enum. This is
- * done via {@link MultiRegisterable#buildAdditionalRegisters(RegistrationContext, EntryCollector)} so
+ * done via {@link MultiRegisterable#registerAdditional(RegistrationContext, EntryCollector)} so
  * the enum names will be applied automatically.
  *
  * @param <E> The type of the enum to use.
@@ -66,7 +66,7 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    public void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector<T> builder) {
+    public void registerAdditional(RegistrationContext ctx, EntryCollector<T> builder) {
         for (Map.Entry<E, T> entry : this.map.entrySet()) {
             builder.registerNamed(entry.getKey().name().toLowerCase(Locale.ROOT), entry.getValue());
         }

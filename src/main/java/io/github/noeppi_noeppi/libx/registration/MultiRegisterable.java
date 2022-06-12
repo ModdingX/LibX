@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 /**
  * Base interface for classes that act as a container for other objects. A {@link MultiRegisterable}
  * can't be directly registered into a registry, however the registry specified with it is used as
- * default in {@link #buildAdditionalRegisters(RegistrationContext, EntryCollector)}.
+ * default in {@link #registerAdditional(RegistrationContext, EntryCollector)}.
  */
 public interface MultiRegisterable<T> {
 
@@ -15,7 +15,7 @@ public interface MultiRegisterable<T> {
      * this object and optionally a name suffix.
      */
     @SuperChainRequired
-    default void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector<T> builder) {
+    default void registerAdditional(RegistrationContext ctx, EntryCollector<T> builder) {
         
     }
 

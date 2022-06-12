@@ -1,8 +1,9 @@
 package io.github.noeppi_noeppi.libx.base;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
+import io.github.noeppi_noeppi.libx.registration.Registerable;
+import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -21,20 +22,15 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
  * A {@link Registerable} that registers a {@link Fluid fluid}, a flowing fluid,
  * a {@link LiquidBlock liquid block} and a {@link BucketItem bucket item}.
- *
- * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
  */
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 public class FluidBase implements Registerable, ItemLike {
 
     protected final ModX mod;
@@ -50,7 +46,7 @@ public class FluidBase implements Registerable, ItemLike {
     private final BucketItem bucket;
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -59,7 +55,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -68,7 +64,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -77,7 +73,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -86,7 +82,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -95,7 +91,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -104,7 +100,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -113,7 +109,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -122,7 +118,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -131,7 +127,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -140,7 +136,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -149,7 +145,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -158,7 +154,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -167,7 +163,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -176,7 +172,7 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @see #FluidBase(ModX, Function, Function, UnaryOperator, BlockBehaviour.Properties, Item.Properties)
      */
@@ -185,13 +181,13 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     /**
-     * Creates a new instance of FluidBase
+     * Creates a new instance of FluidBase.
      *
      * @param sourceFactory   A factory to create a still fluid from the fluids properties. In most cases this will just be a constructor reference.
      * @param flowingFactory  A factory to create a flowing fluid from the fluids properties. In most cases this will just be a constructor reference.
-     * @param attributes      A function to modify the attribute builder to alter the fluids attributes
-     * @param blockProperties The properties for the fluids block
-     * @param itemProperties  The properties for the bucket item
+     * @param attributes      A function to modify the attribute builder to alter the fluids attributes.
+     * @param blockProperties The properties for the fluids block.
+     * @param itemProperties  The properties for the bucket item.
      */
     public FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, UnaryOperator<FluidAttributes.Builder> attributes, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this.mod = mod;
@@ -290,18 +286,13 @@ public class FluidBase implements Registerable, ItemLike {
     }
 
     @Override
-    public Set<Object> getAdditionalRegisters(ResourceLocation id) {
-        this.init(id);
-        return Set.of(this.source, this.block);
-    }
-
-    @Override
-    public Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
-        this.init(id);
-        return Map.of(
-                "flowing", this.flowing,
-                "bucket", this.bucket
-        );
+    @OverridingMethodsMustInvokeSuper
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        this.init(ctx.id());
+        builder.register(Registry.FLUID_REGISTRY, this.source);
+        builder.registerNamed(Registry.FLUID_REGISTRY, "flowing", this.flowing);
+        builder.register(Registry.BLOCK_REGISTRY, this.block);
+        builder.registerNamed(Registry.ITEM_REGISTRY, "bucket", this.bucket);
     }
 
     private void init(ResourceLocation id) {

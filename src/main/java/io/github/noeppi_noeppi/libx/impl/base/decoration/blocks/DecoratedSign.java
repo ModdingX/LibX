@@ -1,14 +1,16 @@
 package io.github.noeppi_noeppi.libx.impl.base.decoration.blocks;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock;
 import io.github.noeppi_noeppi.libx.base.decoration.SignAccess;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
+import io.github.noeppi_noeppi.libx.registration.Registerable;
+import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
+import io.github.noeppi_noeppi.libx.registration.SetupContext;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
@@ -23,13 +25,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 public class DecoratedSign implements Registerable, SignAccess {
 
     public final ModX mod;
@@ -47,29 +46,27 @@ public class DecoratedSign implements Registerable, SignAccess {
     }
 
     @Override
-    public Set<Object> getAdditionalRegisters(ResourceLocation id) {
-        this.init(id);
-        return Set.of(this.standing, this.beType, this.item);
+    @OverridingMethodsMustInvokeSuper
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        this.init(ctx.id());
+        builder.register(Registry.BLOCK_REGISTRY, this.standing);
+        builder.register(Registry.BLOCK_ENTITY_TYPE_REGISTRY, this.beType);
+        builder.register(Registry.ITEM_REGISTRY, this.item);
+        builder.registerNamed(Registry.BLOCK_REGISTRY, "wall", this.wall);
     }
 
     @Override
-    public Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
-        this.init(id);
-        return Map.of("wall", this.wall);
-    }
-
-    @Override
-    public void registerCommon(ResourceLocation id, Consumer<Runnable> defer) {
-        this.init(id);
-        defer.accept(() -> WoodType.register(this.wood));
+    public void registerCommon(SetupContext ctx) {
+        this.init(ctx.id());
+        ctx.enqueue(() -> WoodType.register(this.wood));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
-        this.init(id);
+    public void registerClient(SetupContext ctx) {
+        this.init(ctx.id());
         BlockEntityRenderers.register(this.beType, SignRenderer::new);
-        defer.accept(() -> Sheets.addWoodType(this.wood));
+        ctx.enqueue(() -> Sheets.addWoodType(this.wood));
     }
 
     private synchronized void init(ResourceLocation id) {

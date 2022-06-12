@@ -5,7 +5,7 @@ import io.github.noeppi_noeppi.libx.impl.registration.RegistrationDispatcher;
 import io.github.noeppi_noeppi.libx.registration.MultiRegisterable;
 import io.github.noeppi_noeppi.libx.registration.Registerable;
 import io.github.noeppi_noeppi.libx.registration.RegistrationBuilder;
-import io.github.noeppi_noeppi.libx.registration.base.tile.BlockBE;
+import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

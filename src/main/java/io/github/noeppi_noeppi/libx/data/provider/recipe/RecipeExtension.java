@@ -57,7 +57,6 @@ public interface RecipeExtension {
      * Gets a list of criteria that should be ORed, meaning that the recipe should unlock when one of
      * them is completed instead of all of them.
      */
-    @SuppressWarnings("removal")
     default List<CriterionTriggerInstance> criteria(Ingredient item) {
         List<CriterionTriggerInstance> instances = new ArrayList<>();
         if (item.isVanilla()) {
@@ -70,10 +69,6 @@ public interface RecipeExtension {
             }
         } else if (item instanceof CompoundIngredient cmp) {
             for (Ingredient i : cmp.getChildren()) {
-                instances.addAll(this.criteria(i));
-            }
-        } else if (item instanceof MergedIngredient merged) {
-            for (Ingredient i : merged.getIngredients()) {
                 instances.addAll(this.criteria(i));
             }
         } else {

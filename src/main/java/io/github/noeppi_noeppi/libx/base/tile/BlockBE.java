@@ -1,9 +1,9 @@
-package io.github.noeppi_noeppi.libx.registration.base.tile;
+package io.github.noeppi_noeppi.libx.base.tile;
 
+import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.ModXRegistration;
 import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
-import io.github.noeppi_noeppi.libx.registration.base.BlockBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
@@ -77,8 +77,8 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    public void buildAdditionalRegisters(RegistrationContext ctx, EntryCollector builder) {
-        super.buildAdditionalRegisters(ctx, builder);
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        super.registerAdditional(ctx, builder);
         builder.register(Registry.BLOCK_ENTITY_TYPE_REGISTRY, this.beType);
     }
 

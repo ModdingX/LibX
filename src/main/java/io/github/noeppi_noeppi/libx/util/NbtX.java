@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * Utilities to deal with NBT.
  */
-public class NBTX {
+public class NbtX {
 
     /**
      * Stores a {@link ResourceLocation} in a {@link CompoundTag} with a given key.
@@ -45,7 +45,7 @@ public class NBTX {
     /**
      * Stores the location of a {@link ResourceKey}. This will <b>not</b> store the registry.
      * 
-     * @see NBTX#putRL(CompoundTag, String, ResourceLocation)
+     * @see NbtX#putRL(CompoundTag, String, ResourceLocation)
      */
     public static void putResourceKey(CompoundTag nbt, String key, ResourceKey<?> rl) {
         putRL(nbt, key, rl.location());
@@ -54,7 +54,7 @@ public class NBTX {
     /**
      * Gets a {@link ResourceKey}. This will only load the location, the {@link Registry} must be provided by the caller.
      * 
-     * @see NBTX#getResource(CompoundTag, String) 
+     * @see NbtX#getResource(CompoundTag, String) 
      */
     @Nullable
     public static <T> ResourceKey<T> getResourceKey(CompoundTag nbt, String key, ResourceKey<Registry<T>> registry) {
@@ -69,7 +69,7 @@ public class NBTX {
     /**
      * Gets a {@link ResourceKey}. This will only load the location, the {@link Registry} must be provided by the caller.
      * 
-     * @see NBTX#getResource(CompoundTag, String, ResourceLocation)
+     * @see NbtX#getResource(CompoundTag, String, ResourceLocation)
      */
     public static <T> ResourceKey<T> getResourceKey(CompoundTag nbt, String key, ResourceKey<Registry<T>> registry, ResourceKey<T> defaultValue) {
         ResourceKey<T> rl = getResourceKey(nbt, key, registry);

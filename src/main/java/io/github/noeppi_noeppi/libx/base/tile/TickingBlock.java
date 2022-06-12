@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.registration.base.tile;
+package io.github.noeppi_noeppi.libx.base.tile;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;

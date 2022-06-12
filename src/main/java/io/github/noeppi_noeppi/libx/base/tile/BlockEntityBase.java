@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.registration.base.tile;
+package io.github.noeppi_noeppi.libx.base.tile;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.noeppi_noeppi.libx.LibX;

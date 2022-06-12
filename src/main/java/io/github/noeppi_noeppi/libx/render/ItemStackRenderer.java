@@ -4,7 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
 import io.github.noeppi_noeppi.libx.impl.RendererOnDataGenException;
 import io.github.noeppi_noeppi.libx.registration.Registerable;
-import io.github.noeppi_noeppi.libx.registration.base.BlockBase;
+import io.github.noeppi_noeppi.libx.base.BlockBase;
+import io.github.noeppi_noeppi.libx.registration.SetupContext;
 import io.github.noeppi_noeppi.libx.util.LazyValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -39,7 +40,7 @@ import java.util.function.Consumer;
  * <ul>
  *     <li>Add custom {@link IItemRenderProperties render properties} to your item through
  *     {@link Item#initializeClient(Consumer)} or {@link BlockBase#initializeItemClient(Consumer)}</li>
- *     <li>In {@link Registerable#registerClient(ResourceLocation, Consumer)} call
+ *     <li>In {@link Registerable#registerClient(SetupContext)} call
  *     {@link ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)}</li>
  * </ul>
  * 

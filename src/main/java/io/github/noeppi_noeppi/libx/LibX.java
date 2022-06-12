@@ -47,7 +47,6 @@ public final class LibX extends ModX {
     private static LibX instance;
     private static CommonNetwork networkWrapper;
 
-    @SuppressWarnings("removal")
     public LibX() {
         instance = this;
         NetworkImpl network = new NetworkImpl(this);
@@ -69,8 +68,6 @@ public final class LibX extends ModX {
 
         CraftingHelper.register(this.resource("effect"), EffectIngredient.Serializer.INSTANCE);
         CraftingHelper.register(this.resource("potion"), PotionIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(this.resource("nbt"), NbtIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(this.resource("merged"), MergedIngredient.Serializer.INSTANCE);
     }
 
     @Override

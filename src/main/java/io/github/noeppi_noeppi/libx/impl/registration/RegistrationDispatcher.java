@@ -90,7 +90,7 @@ public class RegistrationDispatcher {
             if (this.conditions.stream().allMatch(condition -> condition.shouldRegisterMulti(ctx, registry, value))) {
                 MultiEntryCollector<T> collector = new MultiEntryCollector<>(this, registry, id);
                 this.transformers.forEach(transformer -> transformer.transformMulti(ctx, registry, value, collector));
-                value.buildAdditionalRegisters(ctx, collector);
+                value.registerAdditional(ctx, collector);
             }
         }
     }
@@ -119,7 +119,7 @@ public class RegistrationDispatcher {
             
             if (value instanceof Registerable registerable) {
                 this.registerables.add(new NamedRegisterable(ctx, registerable));
-                registerable.buildAdditionalRegisters(ctx, collector);
+                registerable.registerAdditional(ctx, collector);
             }
             
             if (registry != null) {

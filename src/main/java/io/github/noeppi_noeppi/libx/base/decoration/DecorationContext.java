@@ -2,28 +2,25 @@ package io.github.noeppi_noeppi.libx.base.decoration;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.mod.registration.Registerable;
-import net.minecraft.resources.ResourceLocation;
+import io.github.noeppi_noeppi.libx.registration.Registerable;
+import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * A context that defines, what {@link DecorationType elements} should be registered with a
- * {@link DecoratedBlock}.
- *
- * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
+ * A context that defines, what {@link DecorationType elements} should be registered with a {@link DecoratedBlock}.
  */
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 public class DecorationContext {
 
     /**
      * Generic context. Registers {@link DecorationType#SLAB slabs} and {@link DecorationType#STAIR stairs}.
      */
-    public static final DecorationContext GENERIC = new DecorationContext("stone",
+    public static final DecorationContext GENERIC = new DecorationContext("generic",
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIR
     );
 
@@ -98,25 +95,22 @@ public class DecorationContext {
     
     public RegistrationInfo register(ModX mod, DecoratedBlock block) {
         ImmutableMap.Builder<DecorationType<?>, Object> elementMap = ImmutableMap.builder();
-        ImmutableMap.Builder<String, Object> registerMap = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Registerable> registerMap = ImmutableMap.builder();
         for (Map.Entry<String, DecorationType<?>> entry : this.types.entrySet()) {
-            Object element = entry.getValue().registration(mod, this, block);
+            DecorationType.DecorationElement<?, ?> element = entry.getValue().element(mod, this, block);
+            Objects.requireNonNull(element.element(), "DecorationType registered a null element: "+ entry.getKey() + " - " + entry.getValue());
             elementMap.put(entry.getValue(), element);
+            // Don't add base type to register map, as it is registered through the DecoratedBock class itself.
             if (!entry.getKey().isEmpty()) {
-                //noinspection unchecked
-                Set<Object> additional = ((DecorationType<Object>) entry.getValue()).additionalRegistration(mod, this, block, element);
-                if (additional.isEmpty()) {
-                    registerMap.put(entry.getKey(), element);
-                } else {
-                    registerMap.put(entry.getKey(), new Registerable() {
-                        @Override
-                        public Set<Object> getAdditionalRegisters(ResourceLocation id) {
-                            Set<Object> set = new HashSet<>(additional);
-                            set.add(element);
-                            return Collections.unmodifiableSet(set);
-                        }
-                    });
-                }
+                registerMap.put(entry.getKey(), new Registerable() {
+                    
+                    @Override
+                    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+                        element.registerTo(builder);
+                        //noinspection unchecked
+                        ((DecorationType<Object>) entry.getValue()).registerAdditional(mod, DecorationContext.this, block, element.element(), ctx, builder);
+                    }
+                });
             }
         }
         return new RegistrationInfo(elementMap.build(), registerMap.build());
@@ -127,5 +121,6 @@ public class DecorationContext {
         return this.name + "[" + this.types.values().stream().map(DecorationType::name).filter(s -> !s.isEmpty()).sorted().collect(Collectors.joining(",")) + "]";
     }
 
-    public static record RegistrationInfo(Map<DecorationType<?>, Object> elementMap, Map<String, Object> registerMap) {}
+    // registerMap entries are registered without a registry
+    public static record RegistrationInfo(Map<DecorationType<?>, Object> elementMap, Map<String, Registerable> registerMap) {}
 }

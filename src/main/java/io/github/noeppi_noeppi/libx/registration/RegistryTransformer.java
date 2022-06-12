@@ -16,7 +16,7 @@ public interface RegistryTransformer {
     /**
      * Registers additional objects to the given object.
      * 
-     * @see Registerable#buildAdditionalRegisters(RegistrationContext, Registerable.EntryCollector)
+     * @see Registerable#registerAdditional(RegistrationContext, Registerable.EntryCollector)
      */
     default void transform(RegistrationContext ctx, Object value, Registerable.EntryCollector collector) {
         
@@ -25,7 +25,7 @@ public interface RegistryTransformer {
     /**
      * Registers additional objects to the given object.
      *
-     * @see MultiRegisterable#buildAdditionalRegisters(RegistrationContext, MultiRegisterable.EntryCollector)
+     * @see MultiRegisterable#registerAdditional(RegistrationContext, MultiRegisterable.EntryCollector)
      */
     default <T> void transformMulti(RegistrationContext ctx, @Nullable ResourceKey<? extends Registry<T>> registry, Object value, MultiRegisterable.EntryCollector<T> collector) {
         

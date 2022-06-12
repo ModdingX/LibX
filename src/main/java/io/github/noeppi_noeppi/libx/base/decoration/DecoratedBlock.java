@@ -1,29 +1,24 @@
 package io.github.noeppi_noeppi.libx.base.decoration;
 
-import com.google.common.collect.ImmutableMap;
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.BlockBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.resources.ResourceLocation;
+import io.github.noeppi_noeppi.libx.registration.Registerable;
+import io.github.noeppi_noeppi.libx.registration.RegistrationContext;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * A block that registers some decoration blocks with it based on
- * a {@link DecorationContext}.
- * 
- * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
+ * A block that registers some decoration blocks with it based on a {@link DecorationContext}.
  */
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 public class DecoratedBlock extends BlockBase {
 
     private final DecorationContext context;
     private final Map<DecorationType<?>, Object> elements;
-    private final Map<String, Object> registerMap;
+    private final Map<String, Registerable> registerMap;
     
     public DecoratedBlock(ModX mod, DecorationContext context, Properties properties) {
         this(mod, context, properties, new Item.Properties());
@@ -38,11 +33,12 @@ public class DecoratedBlock extends BlockBase {
     }
     
     @Override
-    public Map<String, Object> getNamedAdditionalRegisters(ResourceLocation id) {
-        return ImmutableMap.<String, Object>builder()
-                .putAll(super.getNamedAdditionalRegisters(id))
-                .putAll(this.registerMap)
-                .build();
+    @OverridingMethodsMustInvokeSuper
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        super.registerAdditional(ctx, builder);
+        for (Map.Entry<String, Registerable> entry : this.registerMap.entrySet()) {
+            builder.registerNamed(null, entry.getKey(), entry.getValue());
+        }
     }
 
     /**

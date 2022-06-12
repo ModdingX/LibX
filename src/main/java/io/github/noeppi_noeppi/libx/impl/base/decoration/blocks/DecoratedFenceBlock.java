@@ -1,6 +1,5 @@
 package io.github.noeppi_noeppi.libx.impl.base.decoration.blocks;
 
-import io.github.noeppi_noeppi.libx.annotation.meta.RemoveIn;
 import io.github.noeppi_noeppi.libx.base.decoration.DecoratedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -11,8 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 public class DecoratedFenceBlock extends FenceBlock {
 
     public final DecoratedBlock parent;
