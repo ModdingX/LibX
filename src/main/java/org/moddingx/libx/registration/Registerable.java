@@ -5,10 +5,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.mod.ModXRegistration;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 
 /**
  * Everything that is registered to {@link ModXRegistration} that implements this can specify dependencies
@@ -41,7 +43,7 @@ public interface Registerable {
     }
     
     @SuperChainRequired
-    default void initTracking(RegistrationContext ctx) {
+    default void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
         
     }
 
@@ -83,5 +85,25 @@ public interface Registerable {
          * Same as {@link #registerNamed(ResourceKey, String, Object)} but creates a {@link Holder} for the object.
          */
         <T> Holder<T> createNamedHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value);
+    }
+
+    /**
+     * Some helpful methods to track elements with names depending on this elements registry name.
+     */
+    interface TrackingCollector {
+
+        /**
+         * Tracks a field with a value with the same registry name as this object, registered in the given registry
+         * that is stored in the given field. The field must not be static and must be a field of the class that
+         * implements {@link Registerable}
+         */
+        void track(IForgeRegistry<?> registry, Field field);
+        
+        /**
+         * Tracks a field with a value with the same registry name as this object with a given suffix, registered
+         * in the given registry that is stored in the given field. The field must not be static and must be a
+         * field of the class that implements {@link Registerable}
+         */
+        void trackNamed(IForgeRegistry<?> registry, String name, Field field);
     }
 }

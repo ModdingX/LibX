@@ -18,16 +18,28 @@ import java.util.stream.Stream;
  */
 public class RegistrationBuilder {
     
+    private boolean tracking;
     private final List<RegistryResolver> resolvers;
     private final List<RegistryCondition> conditions;
     private final List<RegistryTransformer> transformers;
     
     public RegistrationBuilder() {
+        this.tracking = false;
         this.resolvers = new ArrayList<>();
         this.conditions = new ArrayList<>();
         this.transformers = new ArrayList<>();
     }
 
+    /**
+     * Enables automatic registry tracking. That means when registering objects, 
+     * {@link Registerable#initTracking(RegistrationContext, Registerable.TrackingCollector)}
+     * is called. In order for registry tracking to properly work, you need to manually track the fields
+     * holding your values. ModInit will do this automatically if this option here is enabled.
+     */
+    public void enableRegistryTracking() {
+        this.tracking = true;
+    }
+    
     /**
      * Adds a {@link RegistryResolver}. The resolvers are queried in the order they were added. The first
      * resolver that matches a registry will be used. By default there are resolvers for forge registries,
@@ -80,8 +92,8 @@ public class RegistrationBuilder {
                 new VanillaRegistryResolver(Registry.REGISTRY),
                 new VanillaRegistryResolver(BuiltinRegistries.REGISTRY)
         )).toList();
-        return new Result(resolvers, List.copyOf(this.conditions), List.copyOf(this.transformers));
+        return new Result(this.tracking, resolvers, List.copyOf(this.conditions), List.copyOf(this.transformers));
     }
     
-    public static record Result(List<RegistryResolver> resolvers, List<RegistryCondition> conditions, List<RegistryTransformer> transformers) {}
+    public static record Result(boolean tracking, List<RegistryResolver> resolvers, List<RegistryCondition> conditions, List<RegistryTransformer> transformers) {}
 }

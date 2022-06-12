@@ -1,4 +1,4 @@
-package org.moddingx.libx.registration;
+package org.moddingx.libx.registration.tracking;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -6,6 +6,8 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolderRegistry;
 import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.impl.registration.tracking.TrackingData;
+import org.moddingx.libx.registration.Registerable;
+import org.moddingx.libx.registration.RegistrationContext;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -43,10 +45,10 @@ public class RegistryTracker {
      * This will not ensure the field holds the value matching the registry at the time, the method is called. If the
      * object instance is garbage collected, the tracking will be removed.
      * 
-     * If a field is tracked in {@link Registerable#initTracking(RegistrationContext)} and the tracking of the
-     * {@link Registerable} is initialised because the parent object changed due to registry tracking, it will be
-     * ensured, that the field is updated as soon as possible to reflect the current registry change. This does not
-     * hold true if the tracking is initialised during first registering.
+     * If a field is tracked in {@link Registerable#initTracking(RegistrationContext, Registerable.TrackingCollector)}
+     * and the tracking of the {@link Registerable} is initialised because the parent object changed due to registry
+     * tracking, it will be ensured, that the field is updated as soon as possible to reflect the current registry
+     * change. This does not hold true if the tracking is initialised during first registering.
      * 
      * @param registry The registry used to track the field.
      * @param field The field to track.

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
 import org.moddingx.libx.registration.*;
 import org.moddingx.libx.registration.resolution.RegistryResolver;
 import org.moddingx.libx.registration.resolution.ResolvedRegistry;
@@ -27,6 +28,7 @@ public class RegistrationDispatcher {
     
     private final String modid;
     
+    private final boolean trackingEnabled;
     private final List<RegistryResolver> resolvers;
     private final List<RegistryCondition> conditions;
     private final List<RegistryTransformer> transformers;
@@ -41,6 +43,7 @@ public class RegistrationDispatcher {
     
     public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
         this.modid = modid;
+        this.trackingEnabled = result.tracking();
         this.resolvers = result.resolvers();
         this.conditions = result.conditions();
         this.transformers = result.transformers();
@@ -91,6 +94,14 @@ public class RegistrationDispatcher {
                 MultiEntryCollector<T> collector = new MultiEntryCollector<>(this, registry, id);
                 this.transformers.forEach(transformer -> transformer.transformMulti(ctx, registry, value, collector));
                 value.registerAdditional(ctx, collector);
+
+                if (this.trackingEnabled) {
+                    try {
+                        value.initTracking(ctx, new TrackingInstance(rl, value));
+                    } catch (ReflectiveOperationException e) {
+                        throw new IllegalStateException("Failed to initialise multi registry tracking for " + id + " in " + registry + ": " + value, e);
+                    }
+                }
             }
         }
     }
@@ -104,7 +115,7 @@ public class RegistrationDispatcher {
             ResourceLocation rl = new ResourceLocation(this.modid, id);
             @Nullable
             ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
-            RegistrationContext ctx = new RegistrationContext(new ResourceLocation(this.modid, id), resourceKey);
+            RegistrationContext ctx = new RegistrationContext(rl, resourceKey);
             
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
             if (!failedConditions.isEmpty()) {
@@ -129,6 +140,17 @@ public class RegistrationDispatcher {
                 } else if (resolved instanceof ResolvedRegistry.Vanilla<T> vanilla) {
                     this.addEntry(this.vanillaEntries, vanilla.registry(), resourceKey, value);
                 }
+                
+                if (value instanceof Registerable registerable) {
+                    if (this.trackingEnabled) {
+                        try {
+                            registerable.initTracking(ctx, new TrackingInstance(rl, value));
+                        } catch (ReflectiveOperationException e) {
+                            throw new IllegalStateException("Failed to initialise registry tracking for " + id + " in " + registry + ": " + value, e);
+                        }
+                    }
+                }
+                
                 return () -> resolved.createHolder(resourceKey);
             } else {
                 return () -> {

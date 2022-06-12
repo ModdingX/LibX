@@ -20,7 +20,7 @@ public interface MultiRegisterable<T> {
     }
 
     @SuperChainRequired
-    default void initTracking(RegistrationContext ctx) {
+    default void initTracking(RegistrationContext ctx, Registerable.TrackingCollector builder) throws ReflectiveOperationException {
 
     }
 

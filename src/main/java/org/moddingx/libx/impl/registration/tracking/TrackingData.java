@@ -142,10 +142,14 @@ public final class TrackingData<T extends IForgeRegistryEntry<T>> {
                 // Submit it to be done before the next round
                 enqueue.accept(() -> {
                     RegistrationContext ctx = new RegistrationContext(id, this.registry.getRegistryKey());
-                    if (value instanceof Registerable registerable) {
-                        registerable.initTracking(ctx);
-                    } else if (value instanceof MultiRegisterable<?> registerable) {
-                        registerable.initTracking(ctx);
+                    try {
+                        if (value instanceof Registerable registerable) {
+                            registerable.initTracking(ctx, new TrackingInstance(id, value));
+                        } else if (value instanceof MultiRegisterable<?> registerable) {
+                            registerable.initTracking(ctx, new TrackingInstance(id, value));
+                        }
+                    } catch (ReflectiveOperationException e) {
+                        LibX.logger.error("Failed to update instance tracking for " + value + " (" + id + "/" + this.registry.getRegistryName() + ")", e);
                     }
                 });
                 valueUpdate.accept(value);
