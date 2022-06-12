@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.base.MenuBlock;
 import org.moddingx.libx.menu.BlockEntityMenu;
 import org.moddingx.libx.menu.BlockMenu;
 import org.moddingx.libx.mod.ModX;
@@ -53,6 +55,13 @@ public class MenuBlockBE<T extends BlockEntity, C extends BlockEntityMenu<T>> ex
     public void registerAdditional(RegistrationContext ctx, Registerable.EntryCollector builder) {
         super.registerAdditional(ctx, builder);
         builder.register(Registry.MENU_REGISTRY, this.menu);
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
+        super.initTracking(ctx, builder);
+        builder.track(ForgeRegistries.CONTAINERS, MenuBlockBE.class.getDeclaredField("menu"));
     }
 
     @Nonnull

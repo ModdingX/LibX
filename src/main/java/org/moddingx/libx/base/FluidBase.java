@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
@@ -293,6 +294,16 @@ public class FluidBase implements Registerable, ItemLike {
         builder.registerNamed(Registry.FLUID_REGISTRY, "flowing", this.flowing);
         builder.register(Registry.BLOCK_REGISTRY, this.block);
         builder.registerNamed(Registry.ITEM_REGISTRY, "bucket", this.bucket);
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
+        this.init(ctx.id());
+        builder.track(ForgeRegistries.FLUIDS, FluidBase.class.getDeclaredField("source"));
+        builder.trackNamed(ForgeRegistries.FLUIDS, "flowing", FluidBase.class.getDeclaredField("flowing"));
+        builder.track(ForgeRegistries.BLOCKS, FluidBase.class.getDeclaredField("block"));
+        builder.trackNamed(ForgeRegistries.ITEMS, "bucket", FluidBase.class.getDeclaredField("bucket"));
     }
 
     private void init(ResourceLocation id) {

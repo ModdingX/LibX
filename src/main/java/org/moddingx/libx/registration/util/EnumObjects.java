@@ -1,14 +1,15 @@
 package org.moddingx.libx.registration.util;
 
-import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.registration.MultiRegisterable;
+import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -36,7 +37,7 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
             throw new IllegalStateException("Non-enum class in EnumObjects: " + cls.getName());
         }
         T defaultValue = null;
-        ImmutableMap.Builder<E, T> builder = ImmutableMap.builder();
+        this.map = new HashMap<>();
         this.keys = cls.getEnumConstants();
         if (this.keys.length == 0) {
             throw new IllegalStateException("EnumObjects cannot be used with empty enums.");
@@ -44,10 +45,9 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
         for (E e : this.keys) {
             T t = factory.apply(e);
             if (defaultValue == null) defaultValue = t;
-            builder.put(e, t);
+            this.map.put(e, t);
         }
         this.defaultValue = Objects.requireNonNull(defaultValue, "EnumObjects cannot be used with empty enums.");
-        this.map = builder.build();
     }
 
     /**
@@ -69,6 +69,19 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
     public void registerAdditional(RegistrationContext ctx, EntryCollector<T> builder) {
         for (Map.Entry<E, T> entry : this.map.entrySet()) {
             builder.registerNamed(entry.getKey().name().toLowerCase(Locale.ROOT), entry.getValue());
+        }
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void initTracking(RegistrationContext ctx, Registerable.TrackingCollector builder) throws ReflectiveOperationException {
+        ResourceKey<? extends Registry<?>> registryKey = ctx.registry().orElse(null);
+        IForgeRegistry<?> registry = registryKey == null ? null : RegistryManager.ACTIVE.getRegistry(registryKey.location());
+        if (registry != null) {
+            for (E key : this.keys) {
+                //noinspection unchecked
+                builder.runNamed(registry, key.name().toLowerCase(Locale.ROOT), value -> this.map.put(key, (T) value));
+            }
         }
     }
 }

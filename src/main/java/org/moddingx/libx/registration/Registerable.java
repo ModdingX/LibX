@@ -6,11 +6,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.mod.ModXRegistration;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.util.function.Consumer;
 
 /**
  * Everything that is registered to {@link ModXRegistration} that implements this can specify dependencies
@@ -93,17 +95,27 @@ public interface Registerable {
     interface TrackingCollector {
 
         /**
-         * Tracks a field with a value with the same registry name as this object, registered in the given registry
-         * that is stored in the given field. The field must not be static and must be a field of the class that
-         * implements {@link Registerable}
+         * Tracks a field with a value with the same registry name as the current object, registered in the given
+         * registry that is stored in the given field. The field must not be static and must be a field of the
+         * class that implements {@link Registerable}
          */
         void track(IForgeRegistry<?> registry, Field field);
         
         /**
-         * Tracks a field with a value with the same registry name as this object with a given suffix, registered
-         * in the given registry that is stored in the given field. The field must not be static and must be a
-         * field of the class that implements {@link Registerable}
+         * Tracks a field with a value with the same registry name as the current object with a given suffix,
+         * registered in the given registry that is stored in the given field. The field must not be static
+         * and must be a field of the class that implements {@link Registerable}
          */
         void trackNamed(IForgeRegistry<?> registry, String name, Field field);
+        
+        /**
+         * Adds a registry tracking action with the same registry name as the current object.
+         */
+        public <T extends IForgeRegistryEntry<T>> void run(IForgeRegistry<T> registry, Consumer<T> action);
+        
+        /**
+         * Adds a registry tracking action with the same registry name as the current object with a given suffix.
+         */
+        public <T extends IForgeRegistryEntry<T>> void runNamed(IForgeRegistry<T> registry, String name, Consumer<T> action);
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
@@ -80,6 +81,13 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         super.registerAdditional(ctx, builder);
         builder.register(Registry.BLOCK_ENTITY_TYPE_REGISTRY, this.beType);
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
+        super.initTracking(ctx, builder);
+        builder.track(ForgeRegistries.BLOCK_ENTITIES, BlockBE.class.getDeclaredField("beType"));
     }
 
     @Nullable

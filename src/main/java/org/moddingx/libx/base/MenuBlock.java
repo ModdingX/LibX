@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.menu.BlockMenu;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
@@ -49,6 +50,13 @@ public class MenuBlock<C extends BlockMenu> extends BlockBase {
     public void registerAdditional(RegistrationContext ctx, Registerable.EntryCollector builder) {
         super.registerAdditional(ctx, builder);
         builder.register(Registry.MENU_REGISTRY, this.menu);
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
+        super.initTracking(ctx, builder);
+        builder.track(ForgeRegistries.CONTAINERS, MenuBlock.class.getDeclaredField("menu"));
     }
 
     @Nonnull
