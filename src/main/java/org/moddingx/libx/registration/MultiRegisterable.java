@@ -19,6 +19,11 @@ public interface MultiRegisterable<T> {
         
     }
 
+    @SuperChainRequired
+    default void initTracking(RegistrationContext ctx) {
+
+    }
+
     /**
      * Interface to collect additional objects that are registered together with a {@link MultiRegisterable}.
      */

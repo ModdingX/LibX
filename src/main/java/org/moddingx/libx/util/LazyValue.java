@@ -14,6 +14,7 @@ public class LazyValue<T> {
 
     private Supplier<? extends T> supplier;
     private T value;
+    private Exception evaluationException;
 
     /**
      * Creates a new lazy value. the supplier will be called once when
@@ -22,6 +23,7 @@ public class LazyValue<T> {
     public LazyValue(@Nonnull Supplier<? extends T> supplier) {
         this.supplier = supplier;
         this.value = null;
+        this.evaluationException = null;
     }
 
     /**
@@ -37,10 +39,21 @@ public class LazyValue<T> {
      */
     public T get() {
         if (this.supplier != null) {
-            this.value = this.supplier.get();
-            this.supplier = null;
+            try {
+                this.value = this.supplier.get();
+                this.supplier = null;
+            } catch (Exception e) {
+                this.value = null;
+                this.evaluationException = e;
+            } finally {
+                this.supplier = null;
+            }
         }
-        return this.value;
+        if (this.evaluationException != null) {
+            throw new IllegalStateException("Evaluation of LazyValue failed", this.evaluationException);
+        } else {
+            return this.value;
+        }
     }
 
     /**

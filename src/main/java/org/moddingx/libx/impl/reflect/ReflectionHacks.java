@@ -19,6 +19,10 @@ public class ReflectionHacks {
         }
     });
     
+    public static void throwUnchecked(Throwable t) {
+        unsafe.get().throwException(t);
+    }
+    
     public static void setFinalField(Field field, Object instance, @Nullable Object value) {
         Object base;
         long offset;

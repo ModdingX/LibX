@@ -39,6 +39,11 @@ public interface Registerable {
     default void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         
     }
+    
+    @SuperChainRequired
+    default void initTracking(RegistrationContext ctx) {
+        
+    }
 
     /**
      * Interface to collect additional objects that are registered together with a {@link Registerable}.

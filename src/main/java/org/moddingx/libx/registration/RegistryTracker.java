@@ -4,13 +4,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolderRegistry;
-import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.LibX;
 import org.moddingx.libx.annotation.meta.Experimental;
-import org.moddingx.libx.impl.reflect.ReflectionHacks;
+import org.moddingx.libx.impl.registration.tracking.TrackingData;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -24,87 +21,94 @@ public class RegistryTracker {
 
     private static final Object LOCK = new Object();
     
-    private static final Map<ResourceLocation, RegistryData<?>> trackedRegistries = new HashMap<>();
-    private static final Set<Field> trackedFields = new HashSet<>();
+    private static boolean registeredToObjectHolders = false;
+    private static final Map<ResourceLocation, TrackingData<?>> trackedRegistries = new HashMap<>();
 
     /**
-     * Add a field to the list of tracked fields. It will then be updated whenever the registry value changes.
+     * Add a static field to the list of tracked fields. It will then be updated whenever the registry value changes.
      * This will not ensure the field holds the value matching the registry at the time, the method is called.
      * 
      * @param registry The registry used to track the field.
      * @param field The field to track.
-     * @param id The {@link ResourceLocation} used for registering the object
+     * @param id The {@link ResourceLocation} used for registered the object
      */
-    public static <T extends IForgeRegistryEntry<T>> void trackField(IForgeRegistry<T> registry, Field field, ResourceLocation id) {
+    public static <T extends IForgeRegistryEntry<T>> void track(IForgeRegistry<T> registry, Field field, ResourceLocation id) {
         synchronized (LOCK) {
-            if (trackedFields.contains(field)) {
-                throw new IllegalStateException("Can't track registry element field: Field already tracked: " + field);
+            trackingData(registry).addStatic(id, field);
+        }
+    }
+    
+    /**
+     * Add an instance field to the list of tracked fields. It will then be updated whenever the registry value changes.
+     * This will not ensure the field holds the value matching the registry at the time, the method is called. If the
+     * object instance is garbage collected, the tracking will be removed.
+     * 
+     * If a field is tracked in {@link Registerable#initTracking(RegistrationContext)} and the tracking of the
+     * {@link Registerable} is initialised because the parent object changed due to registry tracking, it will be
+     * ensured, that the field is updated as soon as possible to reflect the current registry change. This does not
+     * hold true if the tracking is initialised during first registering.
+     * 
+     * @param registry The registry used to track the field.
+     * @param field The field to track.
+     * @param instance The object instance on which the field is updated.
+     * @param id The {@link ResourceLocation} used for registered the object
+     */
+    public static <T extends IForgeRegistryEntry<T>> void track(IForgeRegistry<T> registry, Field field, Object instance, ResourceLocation id) {
+        synchronized (LOCK) {
+            trackingData(registry).addInstance(id, field, instance);
+        }
+    }
+    
+    /**
+     * Add an action that is invoked whenever the object with the given id changes in the registry. The action is tied
+     * to an instance object and won't be called any longer if the instance object is garbage collected.
+     * hold true if the tracking is initialised during first registering.
+     * 
+     * @param registry The registry used to track the field.
+     * @param action The action to run when the object updates in the registry.
+     * @param instance The object instance to which the action is tied.
+     * @param id The {@link ResourceLocation} used for registered the object
+     */
+    public static <T extends IForgeRegistryEntry<T>> void run(IForgeRegistry<T> registry, Consumer<T> action, Object instance, ResourceLocation id) {
+        synchronized (LOCK) {
+            trackingData(registry).addAction(id, instance, action);
+        }
+    }
+    
+    private static <T extends IForgeRegistryEntry<T>> TrackingData<T> trackingData(IForgeRegistry<T> registry) {
+        synchronized (LOCK) {
+            if (!registeredToObjectHolders) {
+                ObjectHolderRegistry.addHandler(new UpdateConsumer());
+                registeredToObjectHolders = true;
             }
-            trackedFields.add(field);
-            trackedRegistries.computeIfAbsent(registry.getRegistryName(), key -> {
-                RegistryData<T> data = new RegistryData<>(registry);
-                ObjectHolderRegistry.addHandler(data);
-                return data;
-            }).add(id, field);
+            //noinspection unchecked
+            return (TrackingData<T>) trackedRegistries.computeIfAbsent(registry.getRegistryName(), k -> new TrackingData<>(registry));
         }
     }
 
-    private static final class RegistryData<T extends IForgeRegistryEntry<T>> implements Consumer<Predicate<ResourceLocation>> {
+    private static class UpdateConsumer implements Consumer<Predicate<ResourceLocation>> {
 
-        public final ResourceLocation registryId;
-        public final IForgeRegistry<T> registry;
-        private final List<Pair<ResourceLocation, Field>> entries;
-
-        private RegistryData(IForgeRegistry<T> registry) {
-            this.registryId = registry.getRegistryName();
-            this.registry = registry;
-            this.entries = new ArrayList<>();
-        }
-
-        public void add(ResourceLocation id, Field field) {
-            if (!Modifier.isStatic(field.getModifiers())) {
-                throw new IllegalStateException("Can't track registry element field: Must be static: " + field);
-            } if (!this.registry.getRegistrySuperType().isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Can't track registry element field: Has type " + field.getType() + ", expected " + this.registry.getRegistrySuperType() + " for value of registry " + this.registryId);
-            } else {
-                this.entries.add(Pair.of(id, field));
-            }
-        }
-
+        private final List<Runnable> enqueuedTasks = new ArrayList<>();
+        private final Set<Object> objectsToUpdate = new HashSet<>();
+        
         @Override
         public void accept(Predicate<ResourceLocation> changed) {
-            if (changed.test(this.registryId)) {
-                for (Pair<ResourceLocation, Field> entry : this.entries) {
-                    try {
-                        //noinspection unchecked
-                        T oldValue = (T) entry.getValue().get(null);
-                        T value = this.registry.getValue(entry.getKey());
-                        if (value == null) {
-                            throw new IllegalStateException("Tracked registry object not present: " + this.registryId + " / " + entry.getKey() + ", was " + oldValue + " before.");
-                        } else if (entry.getValue().getType().isAssignableFrom(value.getClass())) {
-                            throw new IllegalStateException("Tracked registry object has invalid type: " + this.registryId + " / " + entry.getKey() + ", was " + oldValue + " before. Probably a failed registry replacement.");
-                        } else if (value != oldValue) {
-                            if (Modifier.isFinal(entry.getValue().getModifiers())) {
-                                try {
-                                    ReflectionHacks.setFinalField(entry.getValue(), null, value);
-                                } catch (Exception e) {
-                                    throw new ReflectiveOperationException("Failed to set final tracked registry field " + entry.getValue(), e);
-                                }
-                            } else {
-                                entry.getValue().setAccessible(true);
-                                entry.getValue().set(null, value);
-                            }
-                        }
-                    } catch (ReflectiveOperationException e) {
-                        LibX.logger.error("Failed to update registry object: " + this.registryId + " / " + entry.getKey(), e);
+            Predicate<Object> instanceChanged = null;
+            this.enqueuedTasks.clear();
+            this.objectsToUpdate.clear();
+            do {
+                // enqueued tasks must run without lock as it allows objects to register new registry tracing fields
+                this.enqueuedTasks.forEach(Runnable::run);
+                this.enqueuedTasks.clear();
+                this.objectsToUpdate.clear();
+                synchronized (LOCK) {
+                    for (Map.Entry<ResourceLocation, TrackingData<?>> entry : trackedRegistries.entrySet()) {
+                        entry.getValue().apply(changed, instanceChanged, this.enqueuedTasks::add, this.objectsToUpdate::add);
                     }
+                    Set<Object> objectsNextRound = Set.copyOf(this.objectsToUpdate);
+                    instanceChanged = objectsNextRound::contains;
                 }
-            }
-        }
-
-        @Override
-        public int hashCode() {
-            return this.registryId.hashCode();
+            } while (!this.enqueuedTasks.isEmpty() || !this.objectsToUpdate.isEmpty());
         }
     }
 }
