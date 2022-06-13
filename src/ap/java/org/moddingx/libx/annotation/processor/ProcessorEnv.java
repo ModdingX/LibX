@@ -29,6 +29,7 @@ public interface ProcessorEnv {
 
     TypeMirror forClass(Class<?> clazz);
     TypeMirror forClass(String binaryName);
+    TypeElement typeElement(TypeMirror type);
     TypeElement typeElement(Class<?> clazz);
     TypeElement typeElement(String binaryName);
     boolean isSuppressed(Element element, String warnings);

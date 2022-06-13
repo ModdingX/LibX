@@ -151,6 +151,20 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
     }
 
     @Override
+    public TypeElement typeElement(TypeMirror type) {
+        if (type.getKind() == TypeKind.DECLARED && type instanceof DeclaredType declared) {
+            Element elem = declared.asElement();
+            if ((elem.getKind().isClass() || elem.getKind().isInterface()) && elem instanceof TypeElement typeElem) {
+                return typeElem;
+            } else {
+                throw new IllegalArgumentException("Failed to resolve type " + type + ": " + elem + " is not at type");
+            }
+        } else {
+            throw new IllegalArgumentException("Failed to resolve type " + type + ": Not a class");
+        }
+    }
+    
+    @Override
     public TypeElement typeElement(Class<?> clazz) {
         TypeElement elem = this.elements.getTypeElement(clazz.getCanonicalName());
         if (elem == null) {

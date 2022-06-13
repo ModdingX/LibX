@@ -7,7 +7,8 @@ import java.lang.annotation.*;
  * The target registry is set by the value from {@link #registry()}. Use an empty string for no registry at all.
  * The registry is resolved by taking the value from {@link #registryClass()} and looking for a
  * {@code public static final} field with the name from {@link #registry()} that holds a
- * {@code ResourceKey<Registry<T>>} that links to the registry to use.
+ * {@code ResourceKey<Registry<T>>} that links to the registry to use. If {@link #registryClass()} is not given,
+ * {@code ForgeRegistries.Keys} and {@code Registry} are searched.
  * 
  * To ignore a field add {@link Reg.Exclude @Exclude} to it.
  * 
