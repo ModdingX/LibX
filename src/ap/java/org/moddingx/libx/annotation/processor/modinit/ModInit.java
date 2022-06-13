@@ -79,8 +79,7 @@ public class ModInit  {
             JavaFileObject file = filer.createSourceFile(((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + "." + this.modClass.getSimpleName() + "$", this.modClass);
             Writer writer = file.openWriter();
             writer.write("package " + ((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + ";");
-            // TODO 1.19: Don't suppress "removal"
-            writer.write("@" + SuppressWarnings.class.getCanonicalName() + "({\"all\",\"unchecked\",\"rawtypes\",\"deprecation\",\"removal\"})");
+            writer.write("@" + SuppressWarnings.class.getCanonicalName() + "({\"all\",\"unchecked\",\"rawtypes\",\"deprecation\"})");
             writer.write("public class " + this.modClass.getSimpleName() + "${");
             writer.write("private static " + Classes.sourceName(Classes.MODX) + " mod=null;");
             if (!this.codecs.isEmpty()) {
@@ -129,18 +128,18 @@ public class ModInit  {
             writer.write(this.modClass.getSimpleName() + "$.mod=mod;");
             for (RegisteredMapper mapper : this.configMappers) {
                 if (mapper.requiresMod() != null) {
-                    writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(\"" + quote(mapper.requiresMod()) + "\")){");
+                    writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(" + quote(mapper.requiresMod()) + ")){");
                 }
-                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerValueMapper(\"" + quote(this.modid) + "\",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
+                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerValueMapper(" + quote(this.modid) + ",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
                 if (mapper.requiresMod() != null) {
                     writer.write("}");
                 }
             }
             for (RegisteredConfig config : this.configs) {
                 if (config.requiresMod() != null) {
-                    writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(\"" + quote(config.requiresMod()) + "\")){");
+                    writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(" + quote(config.requiresMod()) + ")){");
                 }
-                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerConfig(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(this.modid) + "\",\"" + quote(config.name()) + "\")," + config.classFqn() + ".class," + config.client() + ");");
+                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerConfig(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(this.modid) + "," + quote(config.name()) + ")," + config.classFqn() + ".class," + config.client() + ");");
                 if (config.requiresMod() != null) {
                     writer.write("}");
                 }
@@ -161,7 +160,7 @@ public class ModInit  {
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
                 for (RegistrationEntry entry : allReg) {
-                    writer.write("((" + Classes.sourceName(Classes.MODX_REGISTRATION) + ")mod).register(\"" + quote(entry.registryName()) + "\"," + entry.fqn() + ");");
+                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".register(mod," + (entry.registryFqn() == null ? "null" : entry.registryFqn()) + "," + quote(entry.name()) + "," + entry.fieldClassFqn() + "." + entry.fieldName() + ",()->{" + entry.fieldClassFqn() + ".class.getDeclaredField(" + quote(entry.fieldName()) + ")}," + (entry.multi() ? "true" : "false") + ");");
                 }
                 writer.write("}");
             }
@@ -169,13 +168,13 @@ public class ModInit  {
                 writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void registerModels(" + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
-                    writer.write(Classes.sourceName(Classes.MODEL_BAKERY) + ".addSpecialModel(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
+                    writer.write(Classes.sourceName(Classes.MODEL_BAKERY) + ".addSpecialModel(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
                 }
                 writer.write("}");
                 writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void bakeModels(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
-                    writer.write(model.classFqn() + "." + quote(model.fieldName()) + "=event.getModelRegistry().get(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(\"" + quote(model.modelNamespace()) + "\",\"" + quote(model.modelPath()) + "\"));");
+                    writer.write(model.classFqn() + "." + model.fieldName() + "=event.getModelRegistry().get(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
                 }
                 writer.write("}");
             }
@@ -199,7 +198,7 @@ public class ModInit  {
     }
     
     public static String quote(String str) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("\"");
         for (char chr : str.toCharArray()) {
             if (chr == '\\') {
                 sb.append("\\\\");
@@ -221,6 +220,7 @@ public class ModInit  {
                 sb.append(chr);
             }
         }
+        sb.append("\"");
         return sb.toString();
     }
 }

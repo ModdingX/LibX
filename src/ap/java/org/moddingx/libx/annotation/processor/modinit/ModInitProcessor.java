@@ -14,8 +14,6 @@ import org.moddingx.libx.annotation.processor.modinit.config.RegisterMapperProce
 import org.moddingx.libx.annotation.processor.modinit.data.DatagenProcessor;
 import org.moddingx.libx.annotation.processor.modinit.model.ModelProcessor;
 import org.moddingx.libx.annotation.processor.modinit.register.RegisterClassProcessor;
-import org.moddingx.libx.annotation.registration.NoReg;
-import org.moddingx.libx.annotation.registration.RegName;
 import org.moddingx.libx.annotation.registration.RegisterClass;
 
 import javax.annotation.processing.RoundEnvironment;
@@ -34,8 +32,6 @@ public class ModInitProcessor extends Processor implements ModEnv {
     public Class<?>[] getTypes() {
         return new Class[]{
                 RegisterClass.class,
-                NoReg.class,
-                RegName.class,
                 Model.class,
                 RegisterConfig.class,
                 RegisterMapper.class,

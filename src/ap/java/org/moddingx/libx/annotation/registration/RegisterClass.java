@@ -1,26 +1,30 @@
 package org.moddingx.libx.annotation.registration;
 
-import org.moddingx.libx.annotation.meta.RemoveIn;
-
 import java.lang.annotation.*;
 
 /**
  * Can be applied to a class to register all {@code public static final} fields to a {@code ModXRegistration}.
+ * The target registry is set by the value from {@link #registry()}. Use an empty string for no registry at all.
+ * The registry is resolved by taking the value from {@link #registryClass()} and looking for a
+ * {@code public static final} field with the name from {@link #registry()} that holds a
+ * {@code ResourceKey<Registry<T>>} that links to the registry to use.
  * 
- * To ignore a field add {@link NoReg @NoReg} to it.
+ * To ignore a field add {@link Reg.Exclude @Exclude} to it.
  * 
  * By default the name from the field is taken and translated to snake case. To explicitly set a name use
- * {@link RegName @RegName}.
+ * {@link Reg.Name @Name}.
  *
- * @deprecated See https://gist.github.com/noeppi-noeppi/9de9b6af950ee02f2dee611742fe2d6d
+ * 
  */
-@Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.19")
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 @Documented
 public @interface RegisterClass {
 
+    String registry();
+    
+    Class<?> registryClass() default void.class;
+    
     /**
      * Higher priorities are registered first.
      */

@@ -3,8 +3,7 @@ package org.moddingx.libx.annotation.processor.modinit.register;
 import org.moddingx.libx.annotation.processor.Classes;
 import org.moddingx.libx.annotation.processor.modinit.ModEnv;
 import org.moddingx.libx.annotation.processor.modinit.ModInit;
-import org.moddingx.libx.annotation.registration.NoReg;
-import org.moddingx.libx.annotation.registration.RegName;
+import org.moddingx.libx.annotation.registration.Reg;
 import org.moddingx.libx.annotation.registration.RegisterClass;
 
 import javax.lang.model.element.*;
@@ -35,7 +34,7 @@ public class RegisterClassProcessor {
     }
     
     private static Stream<RegistrationEntry> fromElement(RegisterClass classAnnotation, Element element, ModEnv env) {
-        if (element.getKind() != ElementKind.FIELD || element.getAnnotation(NoReg.class) != null) {
+        if (element.getKind() != ElementKind.FIELD || element.getAnnotation(Reg.class) != null) {
             return Stream.empty();
         } else if (!(element.getEnclosingElement() instanceof QualifiedNameable)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for member: " + element, element.getEnclosingElement());

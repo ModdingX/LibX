@@ -1,36 +1,41 @@
 package org.moddingx.libx.annotation.processor.modinit.register;
 
 import org.moddingx.libx.annotation.processor.Processor;
-import org.moddingx.libx.annotation.registration.NoReg;
-import org.moddingx.libx.annotation.registration.RegName;
+import org.moddingx.libx.annotation.registration.Reg;
 import org.moddingx.libx.annotation.registration.RegisterClass;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
+import java.lang.annotation.Annotation;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class RegisterClassModifyProcessor extends Processor {
 
+    private static final Set<Class<? extends Annotation>> MODIFY_ANNOTATIONS = Set.of(Reg.Multi.class, Reg.Exclude.class, Reg.Name.class);
+    
     @Override
     public Class<?>[] getTypes() {
-        return new Class[]{ RegisterClass.class, NoReg.class, RegName.class };
+        return Stream.concat(Stream.of(Reg.class), MODIFY_ANNOTATIONS.stream()).toArray(Class[]::new);
     }
 
     @Override
     public void run(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(NoReg.class)) {
-            if (element.getEnclosingElement().getAnnotation(RegisterClass.class) == null) {
-                this.messager().printMessage(Diagnostic.Kind.ERROR, "Can not exclude value from automatic registration outside class annotated with @RegisterClass", element);
-            }
+        for (Element element : roundEnv.getElementsAnnotatedWith(Reg.class)) {
+            this.messager().printMessage(Diagnostic.Kind.ERROR, "@Reg is a container annotation an can't be directly used on elements.", element);
         }
-        for (Element element : roundEnv.getElementsAnnotatedWith(RegName.class)) {
-            if (element.getEnclosingElement().getAnnotation(RegisterClass.class) == null) {
-                this.messager().printMessage(Diagnostic.Kind.ERROR, "Can not alter registry name outside class annotated with @RegisterClass", element);
-            }
-            if (element.getAnnotation(NoReg.class) != null) {
-                this.messager().printMessage(Diagnostic.Kind.ERROR, "Can not alter registry name of ignored field.", element);
+        for (Class<? extends Annotation> modifyClass : MODIFY_ANNOTATIONS) {
+            for (Element element : roundEnv.getElementsAnnotatedWith(modifyClass)) {
+                if (element.getKind() != ElementKind.FIELD || !element.getModifiers().contains(Modifier.PUBLIC)
+                        || !element.getModifiers().contains(Modifier.STATIC) || !element.getModifiers().contains(Modifier.FINAL)) {
+                    this.messager().printMessage(Diagnostic.Kind.ERROR, "@" + modifyClass.getSimpleName() + " can only be used on public static final fields.", element);
+                } else if (element.getEnclosingElement().getKind() != ElementKind.CLASS || element.getEnclosingElement().getAnnotation(RegisterClass.class) == null) {
+                    this.messager().printMessage(Diagnostic.Kind.ERROR, "@" + modifyClass.getSimpleName() + " can only be used on in classes annotated with @RegisterClass.", element);
+                }
             }
         }
     }
