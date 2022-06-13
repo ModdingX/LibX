@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -144,12 +145,12 @@ public class EffectIngredient extends Ingredient {
         if (this.potionItem == null) {
             json.add("item", JsonNull.INSTANCE);
         } else {
-            json.addProperty("item", this.potionItem.getRegistryName().toString());
+            json.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.potionItem)).toString());
         }
         JsonArray jsonEffects = new JsonArray();
         for (MobEffectInstance effect : this.effects) {
             JsonObject effectJson = new JsonObject();
-            effectJson.addProperty("potion", effect.getEffect().getRegistryName().toString());
+            effectJson.addProperty("potion", Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect.getEffect())).toString());
             effectJson.addProperty("amplifier", effect.getAmplifier());
             effectJson.addProperty("duration", effect.getDuration());
             jsonEffects.add(effectJson);
@@ -245,13 +246,12 @@ public class EffectIngredient extends Ingredient {
         }
 
         @Override
-        @SuppressWarnings("ConstantConditions")
         public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull EffectIngredient ingredient) {
             buffer.writeBoolean(ingredient.potionItem != null);
-            if (ingredient.potionItem != null) buffer.writeResourceLocation(ingredient.potionItem.getRegistryName());
+            if (ingredient.potionItem != null) buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(ingredient.potionItem)));
             buffer.writeInt(ingredient.effects.size());
             for (MobEffectInstance effect : ingredient.effects) {
-                buffer.writeResourceLocation(effect.getEffect().getRegistryName());
+                buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.MOB_EFFECTS.getKey(effect.getEffect())));
                 buffer.writeInt(effect.getAmplifier());
                 buffer.writeInt(effect.getDuration());
             }

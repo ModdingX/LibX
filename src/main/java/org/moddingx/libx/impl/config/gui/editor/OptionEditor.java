@@ -3,7 +3,7 @@ package org.moddingx.libx.impl.config.gui.editor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.EditorOps;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -56,7 +56,7 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
             this.inputChanged = properties.inputChanged();
             this.value = value;
             
-            this.box = new Checkbox(0, 0, 20, Math.min(20, properties.height()), new TextComponent(""), selected, false) {
+            this.box = new Checkbox(0, 0, 20, Math.min(20, properties.height()), Component.empty(), selected, false) {
                 @Override
                 public void onPress() {
                     super.onPress();

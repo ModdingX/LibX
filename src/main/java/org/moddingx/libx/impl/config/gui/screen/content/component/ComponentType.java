@@ -10,16 +10,15 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public interface ComponentType<T extends MutableComponent> {
+public interface ComponentType {
     
     Component name();
-    T defaultValue();
+    MutableComponent defaultValue();
     
     // Non-null value = component is of matching type
     // State has been initialised
     // Result component must have all style and siblings removed
     @Nullable
-    MutableComponent init(Component component, Consumer<T> inputChanged);
+    MutableComponent init(Component component, Consumer<MutableComponent> inputChanged);
     void buildGui(Screen screen, ConfigScreenContent.ScreenManager manager, AtomicInteger y, Consumer<AbstractWidget> consumer);
-    
 }

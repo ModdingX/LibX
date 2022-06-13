@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
@@ -15,7 +16,7 @@ public class BeUpdateHandler {
             if (level == null)
                 return;
             BlockEntity be = level.getBlockEntity(msg.pos());
-            if (be != null && msg.id().equals(be.getType().getRegistryName())) {
+            if (be != null && msg.id().equals(ForgeRegistries.BLOCK_ENTITIES.getKey(be.getType()))) {
                 be.handleUpdateTag(msg.nbt());
             }
         });

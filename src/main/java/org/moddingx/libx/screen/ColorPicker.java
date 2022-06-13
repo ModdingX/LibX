@@ -9,9 +9,8 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import org.moddingx.libx.render.RenderHelper;
 import org.moddingx.libx.util.CachedValue;
@@ -178,7 +177,7 @@ public class ColorPicker extends Panel {
                 this.hsbMatrix.get().forEach(v -> v.addGrayscale(vertex, matrix));
             }
             vertex.end();
-            BufferUploader.end(vertex);
+            Tesselator.getInstance().end();
         }
         
         {
@@ -192,7 +191,7 @@ public class ColorPicker extends Panel {
                 this.huePanel.forEach(v -> v.addGrayscale(vertex, matrix));
             }
             vertex.end();
-            BufferUploader.end(vertex);
+            Tesselator.getInstance().end();
         }
         
         int colorValue = ((this.red & 0xFF) << 16) | ((this.green & 0xFF) << 8) | (this.blue & 0xFF);
@@ -343,7 +342,7 @@ public class ColorPicker extends Panel {
         private final Consumer<Integer> setter;
         
         public ValueSlider(int x, int y, int width, int height, String translationKey, Supplier<Integer> getter, Consumer<Integer> setter) {
-            super(x, y, width, height, new TextComponent(""), Mth.clamp(getter.get(), 0, 255) / 255d);
+            super(x, y, width, height, Component.empty(), Mth.clamp(getter.get(), 0, 255) / 255d);
             this.translationKey = translationKey;
             this.getter = getter;
             this.setter = setter;
@@ -351,7 +350,7 @@ public class ColorPicker extends Panel {
 
         @Override
         protected void updateMessage() {
-            this.setMessage(new TranslatableComponent(this.translationKey, this.getter.get()));
+            this.setMessage(Component.translatable(this.translationKey, this.getter.get()));
         }
 
         @Override

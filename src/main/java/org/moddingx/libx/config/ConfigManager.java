@@ -5,7 +5,6 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -52,12 +51,12 @@ import java.util.*;
  *     public static {@link Double double} another_value;
  *
  *     {@link Config @Config}("A component")
- *     public static {@link Component Component} component = new {@link TextComponent TextComponent}("LibX is fancy");
+ *     public static {@link Component Component} component = {@link Component Component}.{@link Component#literal(String) literal}("LibX is fancy");
  *
  *     public static class SubGroup {
  *
  *         {@link Config @Config}
- *         public static {@link List List}<{@link Integer Integer}> valueList = {@link List List}.{@link List#of() of}(1, 5, 23);
+ *         public static {@link List List}&lt;{@link Integer Integer}&gt; valueList = {@link List List}.{@link List#of() of}(1, 5, 23);
  *     }
  * }
  * </code>

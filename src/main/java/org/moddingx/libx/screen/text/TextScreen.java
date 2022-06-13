@@ -3,8 +3,8 @@ package org.moddingx.libx.screen.text;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import org.lwjgl.glfw.GLFW;
 import org.moddingx.libx.impl.screen.text.TextScreenContent;
 import org.moddingx.libx.render.RenderHelper;
@@ -29,7 +29,7 @@ public class TextScreen extends Screen {
     }
     
     public TextScreen(ComponentLayout layout, int width) {
-        super(Optional.ofNullable(layout.title()).orElse(new TextComponent("")));
+        super(Optional.ofNullable(layout.title()).orElse(Component.empty()));
         this.layout = layout;
         this.displayWidth = width;
         this.content = null;

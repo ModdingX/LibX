@@ -3,7 +3,6 @@ package org.moddingx.libx.config.gui;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.function.Consumer;
 
@@ -21,7 +20,7 @@ public interface ConfigScreenContent<T> {
      * Gets the message for the button that opens the screen.
      */
     default Component message() {
-        return new TranslatableComponent("libx.config.gui.edit");
+        return Component.translatable("libx.config.gui.edit");
     }
 
     /**

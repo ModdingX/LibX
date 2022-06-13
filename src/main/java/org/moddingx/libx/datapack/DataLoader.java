@@ -16,7 +16,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -49,9 +52,7 @@ public class DataLoader {
         // Don't use ImmutableMap.Builder because it would fail on duplicate keys
         Map<ResourceLocation, T> map = new HashMap<>();
         for (ResourceEntry entry : resources) {
-            try (Resource resource = entry.resource()) {
-                map.put(entry.id(), factory.apply(entry.id(), resource));
-            }
+            map.put(entry.id(), factory.apply(entry.id(), entry.resource()));
         }
         return ImmutableMap.copyOf(map);
     }
@@ -62,7 +63,7 @@ public class DataLoader {
      */
     public static <T> Map<ResourceLocation, T> collectText(List<ResourceEntry> resources, ResourceFactory<String, T> factory) throws IOException {
         return collect(resources, (id, resource) -> {
-            try (Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+            try (Reader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
                 return factory.apply(id, IOUtils.toString(reader));
             }
         });
@@ -74,7 +75,7 @@ public class DataLoader {
      */
     public static <T> Map<ResourceLocation, T> collectJson(List<ResourceEntry> resources, ResourceFactory<JsonElement, T> factory) throws IOException {
         return collect(resources, (id, resource) -> {
-            try (Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+            try (Reader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
                 return factory.apply(id, GSON.fromJson(reader, JsonElement.class));
             }
         });
@@ -86,9 +87,7 @@ public class DataLoader {
     public static <T> Stream<T> join(List<ResourceEntry> resources, ResourceFactory<Resource, T> factory) throws IOException {
         Stream.Builder<T> stream = Stream.builder();
         for (ResourceEntry entry : resources) {
-            try (Resource resource = entry.resource()) {
-                stream.add(factory.apply(entry.id(), resource));
-            }
+            stream.add(factory.apply(entry.id(), entry.resource()));
         }
         return stream.build();
     }
@@ -99,7 +98,7 @@ public class DataLoader {
      */
     public static <T> Stream<T> joinText(List<ResourceEntry> resources, ResourceFactory<String, T> factory) throws IOException {
         return join(resources, (id, resource) -> {
-            try (Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+            try (Reader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
                 return factory.apply(id, IOUtils.toString(reader));
             }
         });
@@ -111,7 +110,7 @@ public class DataLoader {
      */
     public static <T> Stream<T> joinJson(List<ResourceEntry> resources, ResourceFactory<JsonElement, T> factory) throws IOException {
         return join(resources, (id, resource) -> {
-            try (Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+            try (Reader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
                 return factory.apply(id, GSON.fromJson(reader, JsonElement.class));
             }
         });
@@ -129,9 +128,7 @@ public class DataLoader {
         ImmutableList.Builder<ResourceEntry> list = ImmutableList.builder();
         for (String namespace : namespaces) {
             ResourceLocation location = new ResourceLocation(namespace, fullPath);
-            if (rm.hasResource(location)) {
-                list.add(new ResourceEntry(new ResourceLocation(namespace, idPath), () -> rm.getResource(location)));
-            }
+            rm.getResource(location).ifPresent(res -> list.add(new ResourceEntry(new ResourceLocation(namespace, idPath), res)));
         }
         return list.build();
     }
@@ -147,14 +144,15 @@ public class DataLoader {
      * @return A list of resources. Their ids will have {@code basePath} and {@code suffix} stripped.
      */
     public static List<ResourceEntry> locate(ResourceManager rm, String basePath, @Nullable String suffix, boolean recursive) {
-        Collection<ResourceLocation> ids = rm.listResources(basePath, file -> suffix == null || file.endsWith("." + suffix));
+        Map<ResourceLocation, Resource> resources = rm.listResources(basePath, file -> suffix == null || file.getPath().endsWith("." + suffix));
         ImmutableList.Builder<ResourceEntry> list = ImmutableList.builder();
-        for (ResourceLocation id : ids) {
+        for (Map.Entry<ResourceLocation, Resource> entry : resources.entrySet()) {
+            ResourceLocation id = entry.getKey();
             if (!id.getPath().startsWith(basePath + "/")) continue;
             if (suffix != null && !id.getPath().endsWith("." + suffix)) continue;
             String realPath = id.getPath().substring(basePath.length() + 1, id.getPath().length() - (suffix == null ? 0 : (suffix.length() + 1)));
             if (realPath.isEmpty() || (!recursive && realPath.contains("/"))) continue;
-            list.add(new ResourceEntry(new ResourceLocation(id.getNamespace(), realPath), () -> rm.getResource(id)));
+            list.add(new ResourceEntry(new ResourceLocation(id.getNamespace(), realPath), entry.getValue()));
         }
         return list.build();
     }

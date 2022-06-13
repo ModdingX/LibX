@@ -4,9 +4,8 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.KeybindComponent;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.KeybindContents;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -18,16 +17,16 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class KeybindComponentType implements ComponentType<KeybindComponent> {
+public class KeybindComponentType implements ComponentType {
 
     // Keybinds may change so we only make it a cached value
     // that can be updated when required
     private final CachedValue<ConfigEditor<String>> keyEditor;
-    
+
     private String key = "";
     private AbstractWidget keyWidget;
-    
-    private Consumer<KeybindComponent> inputChanged;
+
+    private Consumer<MutableComponent> inputChanged;
 
     public KeybindComponentType() {
         this.keyEditor = new CachedValue<>(() -> ConfigEditor.toggle(KeyMapping.ALL.keySet().stream().sorted().toList()));
@@ -35,26 +34,26 @@ public class KeybindComponentType implements ComponentType<KeybindComponent> {
 
     @Override
     public Component name() {
-        return new TranslatableComponent("libx.config.gui.component.type_key");
+        return Component.translatable("libx.config.gui.component.type_key");
     }
 
     @Override
-    public KeybindComponent defaultValue() {
+    public MutableComponent defaultValue() {
         if (KeyMapping.ALL.isEmpty()) {
-            return new KeybindComponent("");
+            return Component.keybind("");
         } else {
-            return new KeybindComponent(KeyMapping.ALL.keySet().stream().sorted().findFirst().get());
+            return Component.keybind(KeyMapping.ALL.keySet().stream().sorted().findFirst().get());
         }
     }
 
     @Nullable
     @Override
-    public MutableComponent init(Component component, Consumer<KeybindComponent> inputChanged) {
+    public MutableComponent init(Component component, Consumer<MutableComponent> inputChanged) {
         this.inputChanged = inputChanged;
-        if (component instanceof KeybindComponent kc) {
+        if (component.getContents() instanceof KeybindContents kc) {
             this.key = kc.getName();
             this.keyEditor.invalidate();
-            return kc.plainCopy();
+            return component.plainCopy();
         } else {
             return null;
         }
@@ -66,7 +65,7 @@ public class KeybindComponentType implements ComponentType<KeybindComponent> {
         WidgetProperties<String> properties = new WidgetProperties<>((screen.width - width) / 2, y.get(), width, 20, key -> {
             this.key = key;
             if (this.inputChanged != null) {
-                this.inputChanged.accept(new KeybindComponent(key));
+                this.inputChanged.accept(Component.keybind(key));
             }
         });
         this.keyWidget = EditorHelper.create(screen, this.keyEditor.get(), this.key, this.keyWidget, properties);

@@ -1,8 +1,8 @@
 package org.moddingx.libx.data.provider;
 
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -52,7 +52,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
      * This sound will not be processed by the default generator
      */
     protected void ignore(SoundEvent sound) {
-        this.ignore(Objects.requireNonNull(sound.getRegistryName()));
+        this.ignore(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(sound)));
     }
     
     /**
@@ -84,7 +84,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
      * Creates a new sound definition for the given sound event.
      */
     protected SoundDefinitionBuilder sound(SoundEvent sound) {
-        return this.sound(Objects.requireNonNull(sound.getRegistryName()), this.settings());
+        return this.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(sound)), this.settings());
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
      * Creates a new sound definition for the given sound event and default sound settings.
      */
     protected SoundDefinitionBuilder sound(SoundEvent sound, SoundSettingsBuilder settings) {
-        return this.sound(Objects.requireNonNull(sound.getRegistryName()), settings);
+        return this.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(sound)), settings);
     }
 
     /**
@@ -130,7 +130,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     }
 
     @Override
-    public void run(@Nonnull HashCache cache) throws IOException {
+    public void run(@Nonnull CachedOutput cache) throws IOException {
         this.provider.run(cache);
     }
 
@@ -356,7 +356,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * Adds another sound event as a sound for this definition. Also allows to then further customise the sound.
          */
         public SoundDefinitionBuilder effect(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
-            SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(event.getRegistryName()), SoundDefinition.SoundType.SOUND);
+            SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(event)), SoundDefinition.SoundType.SOUND);
             this.settings.applyTo(sound);
             configure.accept(sound);
             this.definition.with(sound);

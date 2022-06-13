@@ -3,8 +3,7 @@ package org.moddingx.libx.impl.config.gui.screen;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.ConfigKey;
 
@@ -14,9 +13,9 @@ import java.util.*;
 public class RootConfigScreen extends ConfigScreen<ConfigKey> {
 
     public RootConfigScreen(ConfigScreenManager manager, ConfigImpl config) {
-        super(manager, new TranslatableComponent("libx.config.gui.config.title", config.id.getPath()), buildGrouped(config), RootConfigScreen::createEntry, RootConfigScreen::search);
+        super(manager, Component.translatable("libx.config.gui.config.title", config.id.getPath()), buildGrouped(config), RootConfigScreen::createEntry, RootConfigScreen::search);
     }
-    
+
     private static Map<BuiltCategory, List<ConfigKey>> buildGrouped(ConfigImpl config) {
         Map<String, List<ConfigKey>> map = new HashMap<>();
         Map<String, BuiltCategory> categories = new HashMap<>();
@@ -30,11 +29,11 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
                         .filter(group -> categoryId.equals(String.join(".", group.path)))
                         .findFirst().map(group -> new BuiltCategory(
                                 String.join(".", group.path),
-                                new TextComponent(String.join(".", group.path)),
-                                group.comment.stream().map(TextComponent::new).collect(ImmutableList.toImmutableList())
+                                Component.literal(String.join(".", group.path)),
+                                group.comment.stream().map(Component::literal).collect(ImmutableList.toImmutableList())
                         )).orElseGet(() -> new BuiltCategory(
                                 String.join(".", key.path.subList(0, key.path.size() - 1)),
-                                new TextComponent(String.join(".", key.path.subList(0, key.path.size() - 1))),
+                                Component.literal(String.join(".", key.path.subList(0, key.path.size() - 1))),
                                 List.of()
                         )));
                 map.computeIfAbsent(categoryId, k -> new ArrayList<>()).add(key);
@@ -46,15 +45,15 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
         }
         return builder.build();
     }
-    
+
     private static BuiltEntry createEntry(ConfigKey key, ConfigScreen<ConfigKey> screen, @Nullable AbstractWidget old, int x, int y, int width, int height) {
         return new BuiltEntry(
-                new TextComponent(key.path.get(key.path.size() - 1)),
-                key.comment.stream().map(TextComponent::new).collect(ImmutableList.toImmutableList()),
+                Component.literal(key.path.get(key.path.size() - 1)),
+                key.comment.stream().map(Component::literal).collect(ImmutableList.toImmutableList()),
                 screen.display.createWidget(key, screen, old, x, y, width, height)
         );
     }
-    
+
     private static boolean search(ConfigKey key, ConfigScreen<ConfigKey> screen, String query) {
         return query.isBlank() || String.join(".", key.path).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
                 || key.comment.stream().anyMatch(str -> str.toLowerCase(Locale.ROOT).contains(query));

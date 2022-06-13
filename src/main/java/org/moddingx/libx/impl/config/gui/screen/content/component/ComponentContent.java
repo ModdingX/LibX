@@ -3,7 +3,10 @@ package org.moddingx.libx.impl.config.gui.screen.content.component;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.EditorOps;
@@ -30,12 +33,12 @@ public class ComponentContent implements ConfigScreenContent<Component> {
     // Non-null value means that component can't be edited, it is just
     // stored to use it as result for display.
     @Nullable
-    private final Component nonEditable; 
-    
+    private final Component nonEditable;
+
     private Consumer<Component> inputChanged;
 
-    private final Map<ComponentType<?>, MutableComponent> typeMap;
-    private ComponentType<?> currentType;
+    private final Map<ComponentType, MutableComponent> typeMap;
+    private ComponentType currentType;
     private MutableComponent base;
     private StyleSetting bold;
     private StyleSetting italic;
@@ -45,17 +48,17 @@ public class ComponentContent implements ConfigScreenContent<Component> {
     private boolean hasColor;
     private TextColor color;
     private List<Component> siblings;
-    
+
     private final CachedValue<Component> result;
-    
-    private final ConfigEditor<ComponentType<?>> typeEditor;
+
+    private final ConfigEditor<ComponentType> typeEditor;
     private final ConfigEditor<StyleSetting> boldEditor;
     private final ConfigEditor<StyleSetting> italicEditor;
     private final ConfigEditor<StyleSetting> underlinedEditor;
     private final ConfigEditor<StyleSetting> strikethroughEditor;
     private final ConfigEditor<StyleSetting> obfuscatedEditor;
     private final ConfigEditor<List<Component>> siblingEditor;
-    
+
     private TextWidget previewWidget;
     private AbstractWidget typeWidget;
     private AbstractWidget boldWidget;
@@ -65,18 +68,18 @@ public class ComponentContent implements ConfigScreenContent<Component> {
     private AbstractWidget obfuscatedWidget;
     private ColorPicker colorWidget;
     private AbstractWidget siblingWidget;
-    
+
     public ComponentContent(@Nonnull Component value) {
-        List<ComponentType<?>> types = List.of(
+        List<ComponentType> types = List.of(
                 new TextComponentType(),
                 new TranslationComponentType(),
                 new KeybindComponentType()
         );
-        
+
         this.typeMap = new HashMap<>();
-        ComponentType<?> type = null;
+        ComponentType type = null;
         MutableComponent cmp = null;
-        for (ComponentType<?> t : types) {
+        for (ComponentType t : types) {
             if (cmp == null) {
                 cmp = t.init(value, c -> {
                     this.typeMap.put(t, c);
@@ -103,7 +106,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
             this.currentType = type;
             this.typeMap.put(type, cmp);
             this.base = cmp;
-            
+
             // Must use value, not base as base loses all style information
             Style style = value.getStyle();
             this.bold = StyleSetting.get(style.bold);
@@ -113,24 +116,24 @@ public class ComponentContent implements ConfigScreenContent<Component> {
             this.obfuscated = StyleSetting.get(style.obfuscated);
             this.hasColor = style.getColor() != null;
             this.color = style.getColor() == null ? TextColor.fromRgb(0xFFFFFF) : style.getColor();
-            
+
             this.siblings = value.getSiblings();
         }
-        
+
         this.typeEditor = ConfigEditor.toggle(types, ComponentType::name);
-        this.boldEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> new TranslatableComponent("libx.config.gui.component.bold", new TranslatableComponent("libx.config.gui.component.style_setting." + s.value)));
-        this.italicEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> new TranslatableComponent("libx.config.gui.component.italic", new TranslatableComponent("libx.config.gui.component.style_setting." + s.value)));
-        this.underlinedEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> new TranslatableComponent("libx.config.gui.component.underlined", new TranslatableComponent("libx.config.gui.component.style_setting." + s.value)));
-        this.strikethroughEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> new TranslatableComponent("libx.config.gui.component.strikethrough", new TranslatableComponent("libx.config.gui.component.style_setting." + s.value)));
-        this.obfuscatedEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> new TranslatableComponent("libx.config.gui.component.obfuscated", new TranslatableComponent("libx.config.gui.component.style_setting." + s.value)));
-        this.siblingEditor = ConfigEditor.custom(List.of(), l -> new ListContent<>(l, ConfigEditor.custom(new TextComponent(""), ComponentContent::new)) {
+        this.boldEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.bold", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
+        this.italicEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.italic", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
+        this.underlinedEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.underlined", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
+        this.strikethroughEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.strikethrough", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
+        this.obfuscatedEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.obfuscated", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
+        this.siblingEditor = ConfigEditor.custom(List.of(), l -> new ListContent<>(l, ConfigEditor.custom(Component.empty(), ComponentContent::new)) {
 
             @Override
             public Component message() {
-                return new TranslatableComponent("libx.config.gui.component.siblings");
+                return Component.translatable("libx.config.gui.component.siblings");
             }
         });
-        
+
         this.result = new CachedValue<>(() -> {
             if (this.nonEditable != null) return this.nonEditable;
             MutableComponent tc = this.base.copy();
@@ -149,10 +152,10 @@ public class ComponentContent implements ConfigScreenContent<Component> {
             return tc;
         });
     }
-    
+
     @Override
     public Component title() {
-        return new TranslatableComponent("libx.config.gui.component.title");
+        return Component.translatable("libx.config.gui.component.title");
     }
 
     @Override
@@ -169,7 +172,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
     public void init(Consumer<Component> inputChanged) {
         this.inputChanged = inputChanged;
     }
-    
+
     private void update() {
         this.result.invalidate();
         if (this.previewWidget != null) {
@@ -187,13 +190,13 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         this.previewWidget = new PreviewWidget(screen, 20, y, screen.width - 40, 36, this.result.get());
         consumer.accept(this.previewWidget);
         y += 44;
-        
+
         if (this.nonEditable != null) {
-            consumer.accept(new TextWidget(screen, 20, y, screen.width - 40, 18, new TranslatableComponent("libx.config.gui.component.no_edit"), List.of()));
+            consumer.accept(new TextWidget(screen, 20, y, screen.width - 40, 18, Component.translatable("libx.config.gui.component.no_edit"), List.of()));
             return;
         }
 
-        WidgetProperties<ComponentType<?>> typeProperties = new WidgetProperties<>(5, y, 180, 20, type -> {
+        WidgetProperties<ComponentType> typeProperties = new WidgetProperties<>(5, y, 180, 20, type -> {
             this.currentType = type;
             this.base = this.typeMap.getOrDefault(type, type.defaultValue());
             this.update();
@@ -202,13 +205,13 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         this.typeWidget = EditorHelper.create(screen, this.typeEditor, this.currentType, this.typeWidget, typeProperties);
         consumer.accept(this.typeWidget);
         y += 27;
-        
+
         AtomicInteger atomicY = new AtomicInteger(y);
         this.currentType.buildGui(screen, manager, atomicY, consumer);
         y = atomicY.get();
-        
+
         y += 8;
-        
+
         int width = Math.min(180, (screen.width - 10 - (2 * 5)) / 3);
         WidgetProperties<StyleSetting> boldProperties = new WidgetProperties<>(5, y, width, 20, bold -> {
             this.bold = bold;
@@ -230,9 +233,9 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         });
         this.underlinedWidget = EditorHelper.create(screen, this.underlinedEditor, this.underlined, this.underlinedWidget, underlinedProperties);
         consumer.accept(this.underlinedWidget);
-        
+
         y += 23;
-        
+
         WidgetProperties<StyleSetting> strikethroughProperties = new WidgetProperties<>(5, y, width, 20, strikethrough -> {
             this.strikethrough = strikethrough;
             this.update();
@@ -246,10 +249,10 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         });
         this.obfuscatedWidget = EditorHelper.create(screen, this.obfuscatedEditor, this.obfuscated, this.obfuscatedWidget, obfuscatedProperties);
         consumer.accept(this.obfuscatedWidget);
-        
+
         y += 25;
 
-        Checkbox hasColorWidget = new Checkbox(14, y + ((ColorPicker.HEIGHT - 20) / 2), 20, 20, new TextComponent(""), this.hasColor, false) {
+        Checkbox hasColorWidget = new Checkbox(14, y + ((ColorPicker.HEIGHT - 20) / 2), 20, 20, Component.empty(), this.hasColor, false) {
             @Override
             public void onPress() {
                 super.onPress();
@@ -259,7 +262,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
             }
         };
         consumer.accept(hasColorWidget);
-        
+
         this.colorWidget = new ColorPicker(screen, 37, y, this.colorWidget);
         this.colorWidget.setColor(this.color);
         this.colorWidget.setResponder(color -> {
@@ -268,9 +271,9 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         });
         EditorOps.wrap(this.colorWidget).enabled(this.hasColor);
         consumer.accept(this.colorWidget);
-        
+
         y += (ColorPicker.HEIGHT + 5);
-        
+
         WidgetProperties<List<Component>> siblingProperties = new WidgetProperties<>(5, y, 180, 20, siblings -> {
             this.siblings = siblings;
             this.update();
@@ -278,7 +281,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         this.siblingWidget = EditorHelper.create(screen, this.siblingEditor, this.siblings, this.siblingWidget, siblingProperties);
         consumer.accept(this.siblingWidget);
     }
-    
+
     private enum StyleSetting {
         INHERIT(null),
         TRUE(true),

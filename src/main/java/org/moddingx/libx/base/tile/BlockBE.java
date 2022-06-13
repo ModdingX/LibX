@@ -2,7 +2,7 @@ package org.moddingx.libx.base.tile;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -116,7 +116,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
 
     @Nullable
     @Override
-    public <X extends BlockEntity> GameEventListener getListener(@Nonnull Level level, @Nonnull X blockEntity) {
+    public <X extends BlockEntity> GameEventListener getListener(@Nonnull ServerLevel level, @Nonnull X blockEntity) {
         if (blockEntity instanceof GameEventBlock eventBlock) {
             PositionSource source = new BlockPositionSource(blockEntity.getBlockPos());
             return new GameEventListener() {
@@ -133,8 +133,8 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                 }
 
                 @Override
-                public boolean handleGameEvent(@Nonnull Level level, @Nonnull GameEvent event, @Nullable Entity cause, @Nonnull BlockPos pos) {
-                    return eventBlock.notifyGameEvent(event, cause);
+                public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull GameEvent.Message message) {
+                    return eventBlock.notifyGameEvent(level, message);
                 }
             };
         } else {

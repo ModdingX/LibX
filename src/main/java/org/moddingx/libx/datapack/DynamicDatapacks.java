@@ -1,8 +1,6 @@
 package org.moddingx.libx.datapack;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackResources;
-import net.minecraftforge.forgespi.locating.IModFile;
 import org.moddingx.libx.impl.datapack.DynamicDatapackLocator;
 
 /**
@@ -20,15 +18,7 @@ public class DynamicDatapacks {
      * Enables a dynamic datapack.
      */
     public static void enablePack(String modId, String packName) {
-        DynamicDatapackLocator.enablePack(new ResourceLocation(modId, packName), null);
-    }
-    
-    /**
-     * Enables a dynamic datapack. Here a custom {@link PackFactory} can be provided to
-     * provide an entirely custom datapack
-     */
-    public static void enablePack(String modId, String packName, PackFactory factory) {
-        DynamicDatapackLocator.enablePack(new ResourceLocation(modId, packName), factory);
+        DynamicDatapackLocator.enablePack(new ResourceLocation(modId, packName));
     }
 
     /**
@@ -36,17 +26,5 @@ public class DynamicDatapacks {
      */
     public static boolean isEnabled(String modId, String packName) {
         return DynamicDatapackLocator.isEnabled(new ResourceLocation(modId, packName));
-    }
-
-    /**
-     * Interface to create a dynamic datapack.
-     */
-    @FunctionalInterface
-    public interface PackFactory {
-
-        /**
-         * Creates the {@link PackResources} from a given {@link IModFile mod file} and name.
-         */
-        PackResources create(IModFile modFile, String id);
     }
 }

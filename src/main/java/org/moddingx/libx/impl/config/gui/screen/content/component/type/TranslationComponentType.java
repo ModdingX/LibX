@@ -4,8 +4,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class TranslationComponentType implements ComponentType<TranslatableComponent> {
+public class TranslationComponentType implements ComponentType {
 
     private final ConfigEditor<String> editor;
     private final ConfigEditor<List<Component>> argEditor;
@@ -33,45 +32,45 @@ public class TranslationComponentType implements ComponentType<TranslatableCompo
     private List<Component> args;
     private AbstractWidget argWidget;
 
-    private Consumer<TranslatableComponent> inputChanged;
+    private Consumer<MutableComponent> inputChanged;
 
     public TranslationComponentType() {
         this.editor = ConfigEditor.input();
-        this.argEditor = ConfigEditor.custom(List.of(), l -> new ListContent<>(l, ConfigEditor.custom(new TextComponent(""), ComponentContent::new)) {
+        this.argEditor = ConfigEditor.custom(List.of(), l -> new ListContent<>(l, ConfigEditor.custom(Component.empty(), ComponentContent::new)) {
 
             @Override
             public Component message() {
-                return new TranslatableComponent("libx.config.gui.component.arguments");
+                return Component.translatable("libx.config.gui.component.arguments");
             }
         });
     }
 
     @Override
     public Component name() {
-        return new TranslatableComponent("libx.config.gui.component.type_translate");
+        return Component.translatable("libx.config.gui.component.type_translate");
     }
 
     @Override
-    public TranslatableComponent defaultValue() {
-        return new TranslatableComponent("");
+    public MutableComponent defaultValue() {
+        return Component.translatable("");
     }
 
     @Nullable
     @Override
-    public MutableComponent init(Component component, Consumer<TranslatableComponent> inputChanged) {
+    public MutableComponent init(Component component, Consumer<MutableComponent> inputChanged) {
         this.inputChanged = inputChanged;
-        if (component instanceof TranslatableComponent tc) {
+        if (component.getContents() instanceof TranslatableContents tc) {
             this.value = tc.getKey();
             this.args = Arrays.stream(tc.getArgs()).map(TranslationComponentType::wrap).toList();
-            return tc.plainCopy();
+            return component.plainCopy();
         } else {
             return null;
         }
     }
-    
+
     private void update() {
         if (this.inputChanged != null) {
-            this.inputChanged.accept(new TranslatableComponent(this.value, this.args.toArray()));
+            this.inputChanged.accept(Component.translatable(this.value, this.args.toArray()));
         }
     }
 
@@ -94,16 +93,16 @@ public class TranslationComponentType implements ComponentType<TranslatableCompo
         consumer.accept(this.argWidget);
         y.addAndGet(23);
     }
-    
+
     private static Component wrap(Object obj) {
         if (obj instanceof Component c) {
             return c;
         } else if (obj instanceof Formattable f) {
             Formatter formatter = new Formatter();
             f.formatTo(formatter, 0, -1, -1);
-            return new TextComponent(formatter.toString());
+            return Component.literal(formatter.toString());
         } else {
-            return new TextComponent(obj.toString());
+            return Component.literal(obj.toString());
         }
     }
 }

@@ -21,7 +21,6 @@ public class ForgeRegistryResolver implements RegistryResolver {
     public <T> Optional<ResolvedRegistry<T>> resolve(ResourceKey<? extends Registry<T>> key) {
         IForgeRegistry<?> registry = RegistryManager.ACTIVE.getRegistry(key.location());
         if (registry == null) return Optional.empty();
-        //noinspection unchecked
-        return Optional.of(new ResolvedRegistry.Forge<>(ResourceKey.createRegistryKey(registry.getRegistryName()), (Class<T>) registry.getRegistrySuperType()));
+        return Optional.of(new ResolvedRegistry.Forge<>(ResourceKey.createRegistryKey(registry.getRegistryName())));
     }
 }

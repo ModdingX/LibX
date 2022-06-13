@@ -21,6 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -102,9 +103,9 @@ public class PotionIngredient extends Ingredient {
         if (this.potionItem == null) {
             json.add("item", JsonNull.INSTANCE);
         } else {
-            json.addProperty("item", this.potionItem.getRegistryName().toString());
+            json.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.potionItem)).toString());
         }
-        json.addProperty("potion", this.potion.getRegistryName().toString());
+        json.addProperty("potion", Objects.requireNonNull(ForgeRegistries.POTIONS.getKey(this.potion)).toString());
         return json;
     }
 
@@ -159,11 +160,10 @@ public class PotionIngredient extends Ingredient {
         }
 
         @Override
-        @SuppressWarnings("ConstantConditions")
         public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull PotionIngredient ingredient) {
             buffer.writeBoolean(ingredient.potionItem != null);
-            if (ingredient.potionItem != null) buffer.writeResourceLocation(ingredient.potionItem.getRegistryName());
-            buffer.writeResourceLocation(ingredient.potion.getRegistryName());
+            if (ingredient.potionItem != null) buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(ingredient.potionItem)));
+            buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.POTIONS.getKey(ingredient.potion)));
         }
     }
 }

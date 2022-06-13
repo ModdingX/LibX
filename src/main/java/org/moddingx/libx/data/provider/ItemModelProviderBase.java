@@ -107,19 +107,19 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         if (isItemStackRenderer(item)) {
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(SPECIAL_BLOCK_PARENT));
         } else if (item.getBlock() instanceof DecoratedFenceBlock decorated) {
-            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(FENCE_PARENT)).texture("texture", texture);
         } else if (item.getBlock() instanceof DecoratedWoodButton decorated) {
-            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
         } else if (item.getBlock() instanceof DecoratedStoneButton decorated) {
-            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(BUTTON_PARENT)).texture("texture", texture);
         } else if (item.getBlock() instanceof DecoratedWallBlock decorated) {
-            ResourceLocation parentId = Objects.requireNonNull(decorated.parent.getRegistryName());
+            ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new AlwaysExistentModelFile(WALL_PARENT)).texture("wall", texture);
         } else if (item.getBlock() instanceof DecoratedTrapdoorBlock) {

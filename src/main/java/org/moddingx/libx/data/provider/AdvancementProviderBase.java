@@ -4,12 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -61,12 +59,12 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     @Override
-    public void run(@Nonnull HashCache cache) throws IOException {
+    public void run(@Nonnull CachedOutput cache) throws IOException {
         this.setup();
         for (Supplier<Advancement> supplier : this.advancements.values()) {
             Advancement advancement = supplier.get();
             Path path = this.generator.getOutputFolder().resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
-            DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path);
+            DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
         }
     }
 
@@ -163,7 +161,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * @param hidden Whether the advancement is hidden.
      */
     public Advancement dummy(ResourceLocation id, boolean hidden) {
-        return new Advancement(id, null, new DisplayInfo(new ItemStack(Items.BARRIER), new TextComponent(""), new TextComponent(""), null, FrameType.TASK, true, true, hidden), AdvancementRewards.EMPTY, new HashMap<>(), new String[][]{});
+        return new Advancement(id, null, new DisplayInfo(new ItemStack(Items.BARRIER), Component.empty(), Component.empty(), null, FrameType.TASK, true, true, hidden), AdvancementRewards.EMPTY, new HashMap<>(), new String[][]{});
     }
 
     private ResourceLocation idFor(String id) {
@@ -424,8 +422,8 @@ public abstract class AdvancementProviderBase implements DataProvider {
          */
         public AdvancementFactory display(ItemStack icon, FrameType frame, boolean toast, boolean chat, boolean hidden) {
             return this.display(icon,
-                    new TranslatableComponent("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".title"),
-                    new TranslatableComponent("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".description"),
+                    Component.translatable("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".title"),
+                    Component.translatable("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".description"),
                     frame, toast, chat, hidden
             );
         }

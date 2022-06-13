@@ -8,8 +8,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
@@ -42,7 +40,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
 
     @Override
     public Component title() {
-        return new TranslatableComponent("libx.config.gui.map.title");
+        return Component.translatable("libx.config.gui.map.title");
     }
 
     @Override
@@ -74,7 +72,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
             y += 23;
         }
         
-        Button button = new Button(3, y, 100, 20, new TranslatableComponent("libx.config.gui.map.new"), b -> {}) {
+        Button button = new Button(3, y, 100, 20, Component.translatable("libx.config.gui.map.new"), b -> {}) {
 
             @Override
             public void onPress() {
@@ -91,7 +89,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
         int width = Math.min(200, (screen.width - 64) / 2);
 
         AtomicReference<String> current = new AtomicReference<>(this.list.get(idx).getKey());
-        EditBox keyInput = new EditBox(Minecraft.getInstance().font, 3, y, width, 20, new TextComponent(""));
+        EditBox keyInput = new EditBox(Minecraft.getInstance().font, 3, y, width, 20, Component.empty());
         keyInput.setMaxLength(32767);
         keyInput.setValue(current.get());
         keyInput.setResponder(str -> {
@@ -111,7 +109,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
         this.widgets.set(idx, widget);
         consumer.accept(widget);
 
-        Button deleteEntryButton = new Button(screen.width - 28, y, 20, 20, new TextComponent("✖").withStyle(ChatFormatting.RED), b -> {}) {
+        Button deleteEntryButton = new Button(screen.width - 28, y, 20, 20, Component.literal("✖").withStyle(ChatFormatting.RED), b -> {}) {
 
             @Override
             public void onPress() {

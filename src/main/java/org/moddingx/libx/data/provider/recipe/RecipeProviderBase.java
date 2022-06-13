@@ -13,6 +13,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.TrueCondition;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;
 import org.moddingx.libx.mod.ModX;
 
@@ -111,7 +112,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
      * and the path being the registry path of the given item.
      */
     public ResourceLocation loc(ItemLike item) {
-        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
     }
 
     /**
@@ -120,7 +121,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
      * given suffix.
      */
     public ResourceLocation loc(ItemLike item, String suffix) {
-        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(item.asItem().getRegistryName()).getPath() + "_" + suffix);
+        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath() + "_" + suffix);
     }
 
     @Override

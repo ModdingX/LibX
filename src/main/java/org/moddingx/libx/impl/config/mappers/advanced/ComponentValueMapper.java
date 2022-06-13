@@ -2,7 +2,6 @@ package org.moddingx.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonElement;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.ValidatorInfo;
@@ -41,6 +40,6 @@ public class ComponentValueMapper implements ValueMapper<Component, JsonElement>
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Component> createEditor(ValidatorInfo<?> validator) {
-        return ConfigEditor.custom(new TextComponent(""), ComponentContent::new);
+        return ConfigEditor.custom(Component.empty(), ComponentContent::new);
     }
 }

@@ -8,10 +8,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Unit;
 import net.minecraftforge.server.command.EnumArgument;
 import org.moddingx.libx.LibX;
 
@@ -35,7 +37,7 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
     public static <R extends Enum<R>> EnumArgument2<R> enumArgument(Class<R> enumClass) {
         return new EnumArgument2<>(enumClass);
     }
-    
+
     private final Class<T> enumClass;
     private final DynamicCommandExceptionType invalidValue;
 
@@ -44,7 +46,7 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
             throw new IllegalArgumentException("Can't create enum argument for non-enum class.");
         }
         this.enumClass = enumClass;
-        this.invalidValue = new DynamicCommandExceptionType((name) -> new TranslatableComponent("libx.command.argument.enum.invalid", enumClass.getSimpleName(), name));
+        this.invalidValue = new DynamicCommandExceptionType((name) -> Component.translatable("libx.command.argument.enum.invalid", enumClass.getSimpleName(), name));
     }
 
     @Override
@@ -69,29 +71,68 @@ public class EnumArgument2<T extends Enum<T>> implements ArgumentType<T> {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static class Serializer implements ArgumentSerializer<EnumArgument2<?>> {
+    public static class Info implements ArgumentTypeInfo<EnumArgument2<?>, Info.Template> {
+
+        public static final Info INSTANCE = new Info();
+
+        private Info() {
+
+        }
 
         @Override
-        public void serializeToNetwork(EnumArgument2 argument, FriendlyByteBuf buffer) {
-            buffer.writeUtf(argument.enumClass.getName());
+        public void serializeToNetwork(@Nonnull Template template, @Nonnull FriendlyByteBuf buffer) {
+            buffer.writeUtf(template.enumClass.getName());
         }
 
         @Nonnull
         @Override
-        public EnumArgument2 deserializeFromNetwork(FriendlyByteBuf buffer) {
+        public Template deserializeFromNetwork(@Nonnull FriendlyByteBuf buffer) {
             String name = buffer.readUtf();
             try {
-                return new EnumArgument2(Class.forName(name));
+                Class<?> cls = Class.forName(name);
+                if (cls.isEnum()) {
+                    return new Template((Class<? extends Enum<?>>) cls);
+                } else {
+                    LibX.logger.warn("Can't get enum value of type " + name + " in command argument: No enum");
+                    return new Template(Unit.class);
+                }
             } catch (ClassNotFoundException e) {
-                LibX.logger.warn("Can't get enum value of type " + name + "in command argument. " + e.getMessage());
-                //noinspection ConstantConditions
-                return null;
+                LibX.logger.warn("Can't get enum value of type " + name + " in command argument: " + e.getMessage());
+                return new Template(Unit.class);
             }
         }
 
         @Override
-        public void serializeToJson(EnumArgument2 argument, JsonObject json) {
-            json.addProperty("enum", argument.enumClass.getName());
+        public void serializeToJson(@Nonnull Template template, @Nonnull JsonObject json) {
+            json.addProperty("enum", template.enumClass.getName());
+        }
+
+        @Nonnull
+        @Override
+        public Template unpack(@Nonnull EnumArgument2<?> arg) {
+            return new Template(arg.enumClass);
+        }
+
+        public class Template implements ArgumentTypeInfo.Template<EnumArgument2<?>> {
+
+            final Class<? extends Enum<?>> enumClass;
+
+            private Template(Class<? extends Enum<?>> enumClass) {
+                this.enumClass = enumClass;
+            }
+
+            @Nonnull
+            @Override
+            @SuppressWarnings({"unchecked", "rawtypes"})
+            public EnumArgument2<?> instantiate(@Nonnull CommandBuildContext ctx) {
+                return new EnumArgument2<>((Class) this.enumClass);
+            }
+
+            @Nonnull
+            @Override
+            public ArgumentTypeInfo<EnumArgument2<?>, ?> type() {
+                return Info.this;
+            }
         }
     }
 }

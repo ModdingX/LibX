@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -16,7 +17,7 @@ public class CraftingHelper2 {
     
     public static JsonObject serializeItemStack(ItemStack stack, boolean writeNBT) {
         JsonObject json = new JsonObject();
-        json.addProperty("item", Objects.requireNonNull(stack.getItem().getRegistryName(), "Can't serialize ItemStack: Item has no registry name: " + stack.getItem()).toString());
+        json.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem()), "Can't serialize ItemStack: Item has no registry name: " + stack.getItem()).toString());
         json.addProperty("count", stack.getCount());
         if (writeNBT) {
             CompoundTag stackTag = stack.hasTag() ? stack.getTag() : null;

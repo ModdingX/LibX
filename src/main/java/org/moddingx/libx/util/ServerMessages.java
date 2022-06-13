@@ -37,7 +37,7 @@ public class ServerMessages {
         if (server != null) {
             server.getPlayerList().getPlayers().forEach(player -> {
                 if (condition.test(player)) {
-                    player.sendMessage(message, player.getUUID());
+                    player.sendSystemMessage(message);
                 }
             });
         }

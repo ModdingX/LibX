@@ -12,17 +12,17 @@ import java.io.IOException;
 public class ResourceEntry {
 
     private final ResourceLocation id;
-    private final ResourceSupplier resource;
+    private final Resource resource;
 
     /**
      * Creates a new resource entry.
      * 
      * @param id The id of the resource
-     * @param resourceAccess A supplier that opens the {@link Resource}
+     * @param resource The resource
      */
-    public ResourceEntry(ResourceLocation id, ResourceSupplier resourceAccess) {
+    public ResourceEntry(ResourceLocation id, Resource resource) {
         this.id = id;
-        this.resource = resourceAccess;
+        this.resource = resource;
     }
 
     /**
@@ -36,11 +36,6 @@ public class ResourceEntry {
      * Opens a resource for this entry. The resource must be closed later.
      */
     public Resource resource() throws IOException {
-        return this.resource.get();
-    }
-    
-    public interface ResourceSupplier {
-        
-        Resource get() throws IOException;
+        return this.resource;
     }
 }

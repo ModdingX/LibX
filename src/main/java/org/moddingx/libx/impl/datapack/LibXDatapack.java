@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class LibXDatapack extends PathResourcePack {
 
-    public static final int PACK_VERSION = 9;
+    public static final int PACK_VERSION = 10;
     public static final String PREFIX = "libxdata";
     
     private final String packId;
@@ -25,7 +25,7 @@ public class LibXDatapack extends PathResourcePack {
         // Get the base part of the mod in there and the override resolve
         super(mod.getFileName() + "/" + packId, mod.findResource(PREFIX));
         this.packId = packId;
-        this.packMcmeta = DatapackHelper.generatePackMeta(mod, "Dynamic Datapack: " + mod.getFileName() + "/" + packId);
+        this.packMcmeta = DatapackHelper.generatePackMeta(mod, "Dynamic Datapack: " + mod.getFileName() + "/" + packId, PackType.SERVER_DATA);
     }
     
     @Override

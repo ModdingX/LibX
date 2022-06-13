@@ -3,7 +3,6 @@ package org.moddingx.libx.data.provider.recipe;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +42,7 @@ public interface RecipeExtension {
     CriterionTriggerInstance criterion(ItemLike item);
     
     /**
-     * Builds an {@link CriterionTriggerInstance advancement criterion} for the given {@link Tag tag}.
+     * Builds an {@link CriterionTriggerInstance advancement criterion} for the given {@link TagKey tag}.
      */
     CriterionTriggerInstance criterion(TagKey<Item> item);
     

@@ -3,7 +3,6 @@ package org.moddingx.libx.impl.config.gui.screen;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import org.moddingx.libx.config.ValidatorInfo;
 import org.moddingx.libx.config.gui.WidgetProperties;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
@@ -25,7 +24,7 @@ public class RecordConfigScreen extends ConfigScreen<RecordConfigScreen.Entry> {
     private static BuiltEntry createEntry(Entry elem, ConfigScreen<Entry> screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height) {
         WidgetProperties<Object> properties = new WidgetProperties<>(x, y, width, height, elem.inputChanged());
         return new BuiltEntry(
-                new TextComponent(elem.component().getName()),
+                Component.literal(elem.component().getName()),
                 ImmutableList.of(),
                 EditorHelper.create(screen, elem.mapper().createEditor(ValidatorInfo.empty()), elem.value().get(), oldWidget, properties)
         );

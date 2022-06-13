@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
@@ -30,7 +30,7 @@ public class EntityDataCommand implements Command<CommandSourceStack> {
         for (Entity entity : entities) {
             if (entity instanceof Player) {
                 if (!context.getSource().hasPermission(4)) {
-                    throw new SimpleCommandExceptionType(new TranslatableComponent("libx.command.entitydata.player_modify_no_permission")).create();
+                    throw new SimpleCommandExceptionType(Component.translatable("libx.command.entitydata.player_modify_no_permission")).create();
                 } else {
                     players = true;
                 }
@@ -44,7 +44,7 @@ public class EntityDataCommand implements Command<CommandSourceStack> {
             entity.load(entityNBT);
             entity.setUUID(uid);
         }
-        context.getSource().sendSuccess(new TranslatableComponent(players ? "libx.command.entitydata.modified_player" : "libx.command.entitydata.modified", entities.size()), true);
+        context.getSource().sendSuccess(Component.translatable(players ? "libx.command.entitydata.modified_player" : "libx.command.entitydata.modified", entities.size()), true);
         
         return 0;
     }

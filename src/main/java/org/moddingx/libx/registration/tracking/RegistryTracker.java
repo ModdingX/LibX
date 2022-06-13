@@ -2,7 +2,6 @@ package org.moddingx.libx.registration.tracking;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolderRegistry;
 import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.impl.registration.tracking.TrackingData;
@@ -34,7 +33,7 @@ public class RegistryTracker {
      * @param field The field to track.
      * @param id The {@link ResourceLocation} used for registered the object
      */
-    public static <T extends IForgeRegistryEntry<T>> void track(IForgeRegistry<T> registry, Field field, ResourceLocation id) {
+    public static <T> void track(IForgeRegistry<T> registry, Field field, ResourceLocation id) {
         synchronized (LOCK) {
             trackingData(registry).addStatic(id, field);
         }
@@ -55,7 +54,7 @@ public class RegistryTracker {
      * @param instance The object instance on which the field is updated.
      * @param id The {@link ResourceLocation} used for registered the object
      */
-    public static <T extends IForgeRegistryEntry<T>> void track(IForgeRegistry<T> registry, Field field, Object instance, ResourceLocation id) {
+    public static <T> void track(IForgeRegistry<T> registry, Field field, Object instance, ResourceLocation id) {
         synchronized (LOCK) {
             trackingData(registry).addInstance(id, field, instance);
         }
@@ -71,13 +70,13 @@ public class RegistryTracker {
      * @param instance The object instance to which the action is tied.
      * @param id The {@link ResourceLocation} used for registered the object
      */
-    public static <T extends IForgeRegistryEntry<T>> void run(IForgeRegistry<T> registry, Consumer<T> action, Object instance, ResourceLocation id) {
+    public static <T> void run(IForgeRegistry<T> registry, Consumer<T> action, Object instance, ResourceLocation id) {
         synchronized (LOCK) {
             trackingData(registry).addAction(id, instance, action);
         }
     }
     
-    private static <T extends IForgeRegistryEntry<T>> TrackingData<T> trackingData(IForgeRegistry<T> registry) {
+    private static <T> TrackingData<T> trackingData(IForgeRegistry<T> registry) {
         synchronized (LOCK) {
             if (!registeredToObjectHolders) {
                 ObjectHolderRegistry.addHandler(new UpdateConsumer());

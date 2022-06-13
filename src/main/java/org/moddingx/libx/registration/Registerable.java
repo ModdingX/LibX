@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.mod.ModXRegistration;
 
@@ -111,11 +110,11 @@ public interface Registerable {
         /**
          * Adds a registry tracking action with the same registry name as the current object.
          */
-        public <T extends IForgeRegistryEntry<T>> void run(IForgeRegistry<T> registry, Consumer<T> action);
+        public <T> void run(IForgeRegistry<T> registry, Consumer<T> action);
         
         /**
          * Adds a registry tracking action with the same registry name as the current object with a given suffix.
          */
-        public <T extends IForgeRegistryEntry<T>> void runNamed(IForgeRegistry<T> registry, String name, Consumer<T> action);
+        public <T> void runNamed(IForgeRegistry<T> registry, String name, Consumer<T> action);
     }
 }

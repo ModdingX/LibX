@@ -3,7 +3,7 @@ package org.moddingx.libx.base;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -64,7 +64,7 @@ public class MenuBlock<C extends BlockMenu> extends BlockBase {
     @SuppressWarnings("deprecation")
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         if (!level.isClientSide && player instanceof ServerPlayer sp) {
-            BlockMenu.openMenu(sp, this.menu, new TranslatableComponent("screen." + MenuBlock.this.mod.modid + "." + Objects.requireNonNull(MenuBlock.this.getRegistryName()).getPath()), pos);
+            BlockMenu.openMenu(sp, this.menu, Component.translatable("screen." + MenuBlock.this.mod.modid + "." + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(MenuBlock.this)).getPath()), pos);
         }
         return InteractionResult.SUCCESS;
     }

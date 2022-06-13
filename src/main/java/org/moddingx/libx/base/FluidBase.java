@@ -2,7 +2,6 @@ package org.moddingx.libx.base;
 
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -212,13 +211,13 @@ public class FluidBase implements Registerable, ItemLike {
             @Nonnull
             @Override
             public Component getName(@Nonnull ItemStack stack) {
-                return new TranslatableComponent("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
+                return Component.translatable("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
             }
 
             @Nonnull
             @Override
             public Component getDescription() {
-                return new TranslatableComponent("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
+                return Component.translatable("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getAttributes().getDisplayName(new FluidStack(this.getFluid(), FluidAttributes.BUCKET_VOLUME)));
             }
         };
     }

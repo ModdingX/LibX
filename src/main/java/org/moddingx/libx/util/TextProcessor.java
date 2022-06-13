@@ -2,7 +2,10 @@ package org.moddingx.libx.util;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,14 +70,14 @@ public class TextProcessor {
      * Processes a single-line string.
      */
     public Component processLine(String line) {
-        if (line.isEmpty()) return new TextComponent("");
+        if (line.isEmpty()) return Component.empty();
         Matcher m = CONTROL_PATTERN.matcher(line);
-        MutableComponent tc = new TextComponent("");
+        MutableComponent tc = Component.empty();
         int idx = 0;
         Style style = Style.EMPTY;
         while (m.find()) {
             if (idx < m.start()) {
-                tc.append(new TextComponent(line.substring(idx, m.start())).withStyle(style));
+                tc.append(Component.literal(line.substring(idx, m.start())).withStyle(style));
             }
             idx = m.end();
             String cmd = m.group(1).trim();
@@ -96,7 +99,7 @@ public class TextProcessor {
                     } else if ("u".equalsIgnoreCase(part.strip()) || "underline".equalsIgnoreCase(part.strip())) {
                         style = style.withUnderlined(true);
                     } else if ("s".equalsIgnoreCase(part.strip()) || "strikethrough".equalsIgnoreCase(part.strip())) {
-                        style = style.setStrikethrough(true);
+                        style = style.withStrikethrough(true);
                     } else {
                         last: {
                             for (ChatFormatting tf : ChatFormatting.values()) {
@@ -112,7 +115,7 @@ public class TextProcessor {
             }
         }
         if (idx < line.length()) {
-            tc.append(new TextComponent(line.substring(idx)).withStyle(style));
+            tc.append(Component.literal(line.substring(idx)).withStyle(style));
         }
         return tc;
     }

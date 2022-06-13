@@ -106,29 +106,29 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      */
     protected void defaultState(ResourceLocation id, Block block, Supplier<ModelFile> model) {
         if (block instanceof DecoratedSlabBlock decorated) {
-            this.slabBlock(decorated, textureId(decorated.parent.getRegistryName()), textureId(decorated.parent.getRegistryName()));
+            this.slabBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))), textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedStairBlock decorated) {
-            this.stairsBlock(decorated, textureId(decorated.parent.getRegistryName()));
+            this.stairsBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedWallBlock decorated) {
-            this.wallBlock(decorated, textureId(decorated.parent.getRegistryName()));
+            this.wallBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedFenceBlock decorated) {
-            this.fenceBlock(decorated, textureId(decorated.parent.getRegistryName()));
+            this.fenceBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedFenceGateBlock decorated) {
-            this.fenceGateBlock(decorated, textureId(decorated.parent.getRegistryName()));
+            this.fenceGateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedWoodButton decorated) {
-            this.buttonBlock(decorated, textureId(decorated.parent.getRegistryName()));
+            this.buttonBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedStoneButton decorated) {
-            this.buttonBlock(decorated, textureId(decorated.parent.getRegistryName()));
+            this.buttonBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedPressurePlate decorated) {
-            this.pressurePlateBlock(decorated, textureId(decorated.parent.getRegistryName()));
+            this.pressurePlateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedDoorBlock decorated) {
             this.doorBlock(decorated, textureId(id, "bottom"), textureId(id, "top"));
         } else if (block instanceof DecoratedTrapdoorBlock decorated) {
             this.trapdoorBlock(decorated, textureId(id), true);
         } else if (block instanceof DecoratedSign.Standing decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(decorated.parent.getRegistryName()))));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
         } else if (block instanceof DecoratedSign.Wall decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(decorated.parent.getRegistryName()))));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
@@ -158,7 +158,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
                 return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
             }
         } else if (block instanceof LeavesBlock) {
-            return this.models().withExistingParent(Objects.requireNonNull(block.getRegistryName()).getPath(), LEAVES_PARENT).texture("all", this.blockTexture(block));
+            return this.models().withExistingParent(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath(), LEAVES_PARENT).texture("all", this.blockTexture(block));
         } else {
             return this.cubeAll(block);
         }
@@ -168,7 +168,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * Creates a block state and models for a button.
      */
     public void buttonBlock(Block block, ResourceLocation texture) {
-        ResourceLocation blockId = Objects.requireNonNull(block.getRegistryName());
+        ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
 
         ModelFile model = this.models().withExistingParent(blockId.getPath(), BUTTON_PARENT)
                 .texture("texture", texture);
@@ -203,7 +203,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * Creates a block state and models for a pressure plate.
      */
     public void pressurePlateBlock(Block block, ResourceLocation texture) {
-        ResourceLocation blockId = Objects.requireNonNull(block.getRegistryName());
+        ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
 
         ModelFile model = this.models().withExistingParent(blockId.getPath(), PRESSURE_PLATE_PARENT)
                 .texture("texture", texture);

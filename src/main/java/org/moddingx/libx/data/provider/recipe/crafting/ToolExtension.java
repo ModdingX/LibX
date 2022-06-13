@@ -3,9 +3,11 @@ package org.moddingx.libx.data.provider.recipe.crafting;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.data.provider.recipe.RecipeExtension;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
  * A {@link RecipeExtension} that adds the ability to add common tool recipes easily.
@@ -16,7 +18,7 @@ public interface ToolExtension extends RecipeExtension {
      * Creates tool recipes for a material. All the tool items may be null in which case the recipe is not created.
      */
     default void makeTools(ItemLike material, @Nullable ItemLike sword, @Nullable ItemLike axe,
-                             @Nullable ItemLike pick, @Nullable ItemLike shovel, @Nullable ItemLike hoe) {
+                           @Nullable ItemLike pick, @Nullable ItemLike shovel, @Nullable ItemLike hoe) {
 
         if (sword != null) {
             ShapedRecipeBuilder.shaped(sword)
@@ -25,7 +27,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m")
                     .pattern("m")
                     .pattern("s")
-                    .group(material.asItem().getRegistryName() + "_sword")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_sword")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material, "sword"));
@@ -38,7 +40,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mm")
                     .pattern("sm")
                     .pattern("s ")
-                    .group(material.asItem().getRegistryName() + "_axe")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_axe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material, "axe"));
@@ -51,7 +53,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mmm")
                     .pattern(" s ")
                     .pattern(" s ")
-                    .group(material.asItem().getRegistryName() + "_pick")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_pick")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material, "pick"));
@@ -64,7 +66,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m")
                     .pattern("s")
                     .pattern("s")
-                    .group(material.asItem().getRegistryName() + "_shovel")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_shovel")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material, "shovel"));
@@ -77,7 +79,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mm")
                     .pattern("s ")
                     .pattern("s ")
-                    .group(material.asItem().getRegistryName() + "_hoe")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_hoe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material, "hoe"));
@@ -88,14 +90,14 @@ public interface ToolExtension extends RecipeExtension {
      * Creates armor recipes for a material. All the armor items may be null in which case the recipe is not created.
      */
     default void makeArmor(ItemLike material, @Nullable ItemLike helmet, @Nullable ItemLike chestplate,
-                             @Nullable ItemLike leggings, @Nullable ItemLike boots) {
+                           @Nullable ItemLike leggings, @Nullable ItemLike boots) {
 
         if (helmet != null) {
             ShapedRecipeBuilder.shaped(helmet)
                     .define('m', material)
                     .pattern("mmm")
                     .pattern("m m")
-                    .group(material.asItem().getRegistryName() + "_helmet")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_helmet")
                     .unlockedBy("has_item", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material.asItem(), "helmet"));
         }
@@ -106,7 +108,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m m")
                     .pattern("mmm")
                     .pattern("mmm")
-                    .group(material.asItem().getRegistryName() + "_chestplate")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_chestplate")
                     .unlockedBy("has_item", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material.asItem(), "chestplate"));
         }
@@ -117,7 +119,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mmm")
                     .pattern("m m")
                     .pattern("m m")
-                    .group(material.asItem().getRegistryName() + "_leggings")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_leggings")
                     .unlockedBy("has_item", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material.asItem(), "leggings"));
         }
@@ -127,7 +129,7 @@ public interface ToolExtension extends RecipeExtension {
                     .define('m', material)
                     .pattern("m m")
                     .pattern("m m")
-                    .group(material.asItem().getRegistryName() + "_boots")
+                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_boots")
                     .unlockedBy("has_item", this.criterion(material))
                     .save(this.consumer(), this.provider().loc(material.asItem(), "boots"));
         }

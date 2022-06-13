@@ -1,8 +1,8 @@
 package org.moddingx.libx.data.provider;
 
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -21,8 +21,10 @@ import org.moddingx.libx.impl.tags.InternalTags;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A provider for {@link BlockTags block}, {@link ItemTags item} and {@link FluidTags fluid} tags.
@@ -57,9 +59,9 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         this.blockTags = new BlockTagProviderBase(generator, mod.modid, fileHelper);
         this.itemTags = new ItemTagProviderBase(generator, mod.modid, fileHelper, this.blockTags);
         this.fluidTags = new FluidTagProviderBase(generator, mod.modid, fileHelper);
-        generator.addProvider(this.blockTags);
-        generator.addProvider(this.itemTags);
-        generator.addProvider(this.fluidTags);
+        generator.addProvider(true, this.blockTags);
+        generator.addProvider(true, this.itemTags);
+        generator.addProvider(true, this.fluidTags);
     }
 
     public abstract void setup();
@@ -67,17 +69,20 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     private void doSetup() {
         if (this.getClass() == InternalTagProvider.class) this.initInternalTags();
         this.setup();
-        ForgeRegistries.BLOCKS.getValues().stream()
-                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+        ForgeRegistries.BLOCKS.getEntries().stream()
+                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                .map(Map.Entry::getValue)
                 .forEach(block -> {
                     DecorationTags.addTags(block, this, this::initInternalTags);
                     this.defaultBlockTags(block);
                 });
-        ForgeRegistries.ITEMS.getValues().stream()
-                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+        ForgeRegistries.ITEMS.getEntries().stream()
+                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                .map(Map.Entry::getValue)
                 .forEach(this::defaultItemTags);
-        ForgeRegistries.FLUIDS.getValues().stream()
-                .filter(i -> this.mod.modid.equals(Objects.requireNonNull(i.getRegistryName()).getNamespace()))
+        ForgeRegistries.FLUIDS.getEntries().stream()
+                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                .map(Map.Entry::getValue)
                 .forEach(this::defaultFluidTags);
     }
 
@@ -144,7 +149,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     }
 
     @Override
-    public void run(@Nonnull HashCache cache) {
+    public void run(@Nonnull CachedOutput cache) {
         // We don't do anything here, everything is done by the three child providers
     }
     
@@ -165,7 +170,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
     private class BlockTagProviderBase extends BlockTagsProvider {
 
-        private Map<ResourceLocation, Tag.Builder> tagCache;
+        private Map<ResourceLocation, TagBuilder> tagCache;
 
         protected BlockTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
             super(generator, modid, fileHelper);
@@ -192,7 +197,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         }
 
         @Override
-        public void run(@Nonnull HashCache cache) {
+        public void run(@Nonnull CachedOutput cache) {
             this.tagCache = new HashMap<>(this.builders);
             super.run(cache);
         }
@@ -212,7 +217,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
     private class ItemTagProviderBase extends ItemTagsProvider {
 
-        private Map<ResourceLocation, Tag.Builder> tagCache;
+        private Map<ResourceLocation, TagBuilder> tagCache;
 
         protected ItemTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
             super(generator, blockTags, modid, fileHelper);
@@ -232,7 +237,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         }
 
         @Override
-        public void run(@Nonnull HashCache cache) {
+        public void run(@Nonnull CachedOutput cache) {
             this.tagCache = new HashMap<>(this.builders);
             super.run(cache);
         }
@@ -257,7 +262,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
     private class FluidTagProviderBase extends FluidTagsProvider {
 
-        private Map<ResourceLocation, Tag.Builder> tagCache;
+        private Map<ResourceLocation, TagBuilder> tagCache;
 
         protected FluidTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
             super(generator, modid, fileHelper);
@@ -274,7 +279,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         }
 
         @Override
-        public void run(@Nonnull HashCache cache) {
+        public void run(@Nonnull CachedOutput cache) {
             this.tagCache = new HashMap<>(this.builders);
             super.run(cache);
         }
@@ -287,10 +292,10 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         public List<ResourceLocation> getTagInfo(TagKey<Fluid> tag) {
             TagsProvider.TagAppender<Fluid> builder = this.tag(tag);
-            return builder.getInternalBuilder().getEntries()
-                    .filter(p -> p.entry() instanceof Tag.ElementEntry)
-                    .map(p -> new ResourceLocation(((Tag.ElementEntry) p.entry()).toString()))
-                    .collect(Collectors.toList());
+            return builder.getInternalBuilder().entries.stream()
+                    .filter(p -> !p.tag)
+                    .map(TagEntry::getId)
+                    .toList();
         }
 
         @Nonnull

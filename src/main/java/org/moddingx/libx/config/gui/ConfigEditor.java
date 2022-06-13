@@ -3,7 +3,6 @@ package org.moddingx.libx.config.gui;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import org.moddingx.libx.config.ValidatorInfo;
 import org.moddingx.libx.impl.config.gui.editor.*;
 import org.moddingx.libx.impl.config.gui.screen.content.SelectContent;
@@ -68,7 +67,7 @@ public interface ConfigEditor<T> {
      * or a sub screen so select the element, depending on the amount of elements given.
      */
     static <T> ConfigEditor<T> toggle(List<T> elems) {
-        return toggle(elems, e -> new TextComponent(e.toString()));
+        return toggle(elems, e -> Component.literal(e.toString()));
     }
 
     /**

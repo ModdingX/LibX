@@ -33,7 +33,7 @@ public sealed interface ResolvedRegistry<T> permits ResolvedRegistry.Forge, Reso
         throw new IllegalStateException("The registry " + this.getClass().getSimpleName() + "[" + this.registryKey() + "] can't be used to create holders");
     }
     
-    record Forge<T>(ResourceKey<? extends Registry<T>> registryKey, Class<T> superType) implements ResolvedRegistry<T> {}
+    record Forge<T>(ResourceKey<? extends Registry<T>> registryKey) implements ResolvedRegistry<T> {}
     
     record Vanilla<T>(Registry<T> registry) implements ResolvedRegistry<T> {
         
@@ -45,7 +45,9 @@ public sealed interface ResolvedRegistry<T> permits ResolvedRegistry.Forge, Reso
         @Override
         public Holder<T> createHolder(ResourceKey<T> key) {
             try {
-                return this.registry().getOrCreateHolder(key);
+                // TODO
+                return null;
+//                return this.registry().getOrCreateHolder(key);
             } catch(IllegalStateException e) {
                 return ResolvedRegistry.super.createHolder(key);
             }

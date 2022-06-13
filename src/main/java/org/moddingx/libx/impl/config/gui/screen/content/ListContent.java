@@ -6,8 +6,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
@@ -34,7 +32,7 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
 
     @Override
     public Component title() {
-        return new TranslatableComponent("libx.config.gui.list.title");
+        return Component.translatable("libx.config.gui.list.title");
     }
 
     @Override
@@ -63,7 +61,7 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
 
         int width = 200 + (23 * 3);
         int padding = Math.max(0, screen.width - width) / 2;
-        Button button = new Button(padding, y, 100, 20, new TranslatableComponent("libx.config.gui.list.new"), b -> {}) {
+        Button button = new Button(padding, y, 100, 20, Component.translatable("libx.config.gui.list.new"), b -> {}) {
 
             @Override
             public void onPress() {
@@ -88,21 +86,21 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         this.widgets.set(idx, widget);
         consumer.accept(widget);
 
-        addControlButton(consumer, padding + 203, y, new TextComponent("\u2b06"), idx > 0, () -> {
+        addControlButton(consumer, padding + 203, y, Component.literal("\u2b06"), idx > 0, () -> {
             move(this.list, idx, idx - 1);
             move(this.widgets, idx, idx - 1);
             this.update();
             manager.rebuild();
         });
 
-        addControlButton(consumer, padding + 226, y, new TextComponent("\u2b07"), idx < this.list.size() - 1, () -> {
+        addControlButton(consumer, padding + 226, y, Component.literal("\u2b07"), idx < this.list.size() - 1, () -> {
             move(this.list, idx, idx + 1);
             move(this.widgets, idx, idx + 1);
             this.update();
             manager.rebuild();
         });
 
-        addControlButton(consumer, padding + 249, y, new TextComponent("\u2716").withStyle(ChatFormatting.RED), true, () -> {
+        addControlButton(consumer, padding + 249, y, Component.literal("\u2716").withStyle(ChatFormatting.RED), true, () -> {
             this.list.remove(idx);
             this.widgets.remove(idx);
             this.update();

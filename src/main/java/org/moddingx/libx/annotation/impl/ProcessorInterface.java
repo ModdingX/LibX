@@ -78,7 +78,7 @@ public class ProcessorInterface {
     }
     
     public static void addDataProvider(GatherDataEvent event, DataProvider provider) {
-        event.getGenerator().addProvider(provider);
+        event.getGenerator().addProvider(true, provider);
     }
     
     public static DataGenerator getDataGenerator(GatherDataEvent event) {

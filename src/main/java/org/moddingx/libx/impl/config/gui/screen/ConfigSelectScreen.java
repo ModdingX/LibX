@@ -3,8 +3,7 @@ package org.moddingx.libx.impl.config.gui.screen;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.moddingx.libx.impl.config.ConfigImpl;
 
@@ -19,7 +18,7 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
     private final Screen root;
     
     public ConfigSelectScreen(Function<ConfigImpl, Screen> factory, List<ConfigImpl> configs, Screen root) {
-        super(new TranslatableComponent("libx.config.gui.selection.title"), null, false);
+        super(Component.translatable("libx.config.gui.selection.title"), null, false);
         this.factory = factory;
         this.configs = configs;
         this.root = root;
@@ -30,7 +29,7 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
         int y = 5;
         int buttonWidth = Math.min(200, this.width - 10);
         for (ConfigImpl config : this.configs) {
-            consumer.accept(new Button((this.width - buttonWidth) / 2, y, buttonWidth, 20, new TextComponent(config.id.getPath()), button -> this.mc.setScreen(this.factory.apply(config))));
+            consumer.accept(new Button((this.width - buttonWidth) / 2, y, buttonWidth, 20, Component.literal(config.id.getPath()), button -> this.mc.setScreen(this.factory.apply(config))));
             y += 25;
         }
     }

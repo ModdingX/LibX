@@ -4,7 +4,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public class SelectContent<T> implements ConfigScreenContent<T> {
 
     @Override
     public Component title() {
-        return new TranslatableComponent("libx.config.gui.select.title");
+        return Component.translatable("libx.config.gui.select.title");
     }
 
     @Override

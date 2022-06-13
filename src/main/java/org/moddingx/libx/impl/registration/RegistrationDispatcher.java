@@ -5,12 +5,11 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegisterEvent;
 import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
 import org.moddingx.libx.registration.*;
 import org.moddingx.libx.registration.resolution.RegistryResolver;
@@ -39,8 +38,10 @@ public class RegistrationDispatcher {
     private final List<Runnable> registrationHandlers;
     private final Map<ResourceKey<? extends Registry<?>>, Optional<ResolvedRegistry<?>>> resolvedRegistries;
     
+    // TODO Merge all entries together and have unified way to create holders (forge first, then vanilla)
+    //  Remove registry resolving
     private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> forgeEntries;
-    private final Map<Registry<?>, Map<ResourceKey<?>, Object>> vanillaEntries;
+    private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> vanillaEntries;
     private final List<NamedRegisterable> registerables;
     
     public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
@@ -140,8 +141,8 @@ public class RegistrationDispatcher {
                 ResolvedRegistry<T> resolved = this.registry(registry).orElseThrow(() -> new NoSuchElementException("Failed to resolve registry " + registry));
                 if (resolved instanceof ResolvedRegistry.Forge<?>) {
                     this.addEntry(this.forgeEntries, registry, resourceKey, value);
-                } else if (resolved instanceof ResolvedRegistry.Vanilla<T> vanilla) {
-                    this.addEntry(this.vanillaEntries, vanilla.registry(), resourceKey, value);
+                } else if (resolved instanceof ResolvedRegistry.Vanilla<T>) {
+                    this.addEntry(this.vanillaEntries, registry, resourceKey, value);
                 }
                 
                 if (value instanceof Registerable registerable) {
@@ -174,35 +175,26 @@ public class RegistrationDispatcher {
         }
     }
     
-    public void registerForge(RegistryEvent.Register<? extends IForgeRegistryEntry<?>> event) {
+    public void registerBy(RegisterEvent event) {
         this.runRegistration();
-        ResourceKey<? extends Registry<?>> key = ResourceKey.createRegistryKey(event.getName());
-        Map<ResourceKey<?>, Object> map = this.forgeEntries.get(key);
-        if (map != null) {
-            for (Map.Entry<ResourceKey<?>, Object> entry : map.entrySet()) {
-                if (!(entry.getValue() instanceof IForgeRegistryEntry<?>)) {
-                    throw new IllegalStateException("Can't register object into forge registry that is not an instance of IForgeRegistryEntry: " + entry.getValue() + " (" + entry.getKey() + ")");
-                } else if (!event.getRegistry().getRegistrySuperType().isAssignableFrom(entry.getValue().getClass())) {
-                    throw new IllegalStateException("Can't register object into forge registry: Type mismatch: " + entry.getValue() + " (" + entry.getKey() + ") expected " + event.getRegistry().getRegistrySuperType() + ", got " + entry.getClass());
-                } else {
-                    ((IForgeRegistryEntry<?>) entry.getValue()).setRegistryName(entry.getKey().location());
-                    //noinspection unchecked,rawtypes
-                    ((IForgeRegistry) event.getRegistry()).register((IForgeRegistryEntry<?>) entry.getValue());
-                }
-            }
-        }
-    }
-    
-    public void registerVanilla() {
-        this.runRegistration();
-        synchronized (this.LOCK) {
-            for (Map.Entry<Registry<?>, Map<ResourceKey<?>, Object>> registryEntry : this.vanillaEntries.entrySet()) {
-                for (Map.Entry<ResourceKey<?>, Object> elementEntry : registryEntry.getValue().entrySet()) {
-                    //noinspection unchecked
-                    Registry.register((Registry<Object>) registryEntry.getKey(), (ResourceKey<Object>) elementEntry.getKey(), elementEntry.getValue());
-                }
-            }
-        }
+        
+//        IForgeRegistry<?> forgeRegistry = event.getForgeRegistry();
+//        if (forgeRegistry != null) {
+//            Map<ResourceKey<?>, Object> map = this.forgeEntries.get(event.getRegistryKey());
+//            if (map != null) {
+//                for (Map.Entry<ResourceKey<?>, Object> entry : map.entrySet()) {
+//                    //noinspection unchecked,rawtypes
+//                    ((IForgeRegistry) forgeRegistry).register(entry.getKey().location(), entry.getValue());
+//                }
+//            }
+//        }
+//        
+//        Registry<?> vanillaRegistry = event.getVanillaRegistry();
+//        if (vanillaRegistry != null) {
+//            Map<ResourceKey<?>, Object> map = this.vanillaEntries.get(event.getRegistryKey());
+//        }
+        
+        // TODO add when forge + vanilla entries are merged
     }
     
     public void registerCommon(FMLCommonSetupEvent event) {

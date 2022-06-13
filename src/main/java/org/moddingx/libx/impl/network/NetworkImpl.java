@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.network.NetworkX;
 
@@ -62,15 +63,13 @@ public final class NetworkImpl extends NetworkX {
     void updateBE(PacketDistributor.PacketTarget target, Level level, BlockPos pos) {
         if (!level.isClientSide && this.canSend()) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be == null)
-                return;
+            if (be == null) return;
             CompoundTag nbt = be.getUpdateTag();
             //noinspection ConstantConditions
             if (nbt == null)
                 return;
-            ResourceLocation id = be.getType().getRegistryName();
-            if (id == null)
-                return;
+            ResourceLocation id = ForgeRegistries.BLOCK_ENTITIES.getKey(be.getType());
+            if (id == null) return;
             this.channel.send(target, new BeUpdateSerializer.BeUpdateMessage(pos, id, nbt));
         }
     }

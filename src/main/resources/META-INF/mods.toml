@@ -1,7 +1,7 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[41,)"
 license="APACHE-2.0"
-issueTrackerURL="https://github.com/noeppi-noeppi/LibX/issues"
+issueTrackerURL="https://github.com/ModdingX/LibX/issues"
 
 [[mods]]
 modId="libx"
@@ -9,7 +9,7 @@ version="${file.jarVersion}"
 displayName="LibX"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/libx"
 updateJSONURL="https://assets.melanx.de/updates/libx.json"
-authors="noeppi_noeppi, MelanX"
+authors="ModdingX"
 description='''
 A library mod for minecraft.
 '''
@@ -17,13 +17,13 @@ A library mod for minecraft.
 [[dependencies.libx]]
     modId="forge"
     mandatory=true
-    versionRange="[40.0.48,)"
+    versionRange="[41.0.22,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.libx]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,)"
+    versionRange="[1.19,)"
     ordering="NONE"
     side="BOTH"

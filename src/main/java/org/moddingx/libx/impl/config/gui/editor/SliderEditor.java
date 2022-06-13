@@ -3,7 +3,7 @@ package org.moddingx.libx.impl.config.gui.editor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -52,7 +52,7 @@ public class SliderEditor<T> implements ConfigEditor<T> {
         }
         
         public SliderWidget(Function<Double, T> factory, WidgetProperties<T> properties, T current, double state) {
-            super(properties.x(), properties.y(), properties.width(), properties.height(), new TextComponent(""), state);
+            super(properties.x(), properties.y(), properties.width(), properties.height(), Component.empty(), state);
             this.factory = factory;
             this.inputChanged = properties.inputChanged();
             this.current = current;
@@ -62,7 +62,7 @@ public class SliderEditor<T> implements ConfigEditor<T> {
 
         @Override
         protected void updateMessage() {
-            this.setMessage(new TextComponent(this.current.toString()));
+            this.setMessage(Component.literal(this.current.toString()));
         }
 
         @Override

@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.ValidatorInfo;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -102,7 +101,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
         private final LazyValue<List<RecordConfigScreen.Entry>> entries;
 
         public RecordButton(ConfigScreenManager manager, Class<T> clazz, List<TypesafeMapper> mappers, Constructor<T> ctor, List<Object> values, WidgetProperties<T> properties) {
-            super(properties.x(), properties.y(), properties.width(), properties.height(), new TranslatableComponent("libx.config.gui.edit"), b -> {});
+            super(properties.x(), properties.y(), properties.width(), properties.height(), Component.translatable("libx.config.gui.edit"), b -> {});
             this.manager = manager;
             this.clazz = clazz;
             this.ctor = ctor;
@@ -127,7 +126,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
         
         @Override
         public void onPress() {
-            this.manager.open(new RecordConfigScreen(this.manager, new TextComponent(this.clazz.getSimpleName()), this.entries.get()));
+            this.manager.open(new RecordConfigScreen(this.manager, Component.literal(this.clazz.getSimpleName()), this.entries.get()));
         }
         
         private void update(int idx, Object value) {

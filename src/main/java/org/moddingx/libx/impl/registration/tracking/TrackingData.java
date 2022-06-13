@@ -2,7 +2,6 @@ package org.moddingx.libx.impl.registration.tracking;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 import org.moddingx.libx.registration.MultiRegisterable;
@@ -17,7 +16,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public final class TrackingData<T extends IForgeRegistryEntry<T>> {
+public final class TrackingData<T> {
 
     public final ResourceLocation registryId;
     public final IForgeRegistry<T> registry;
@@ -39,8 +38,6 @@ public final class TrackingData<T extends IForgeRegistryEntry<T>> {
     public synchronized void addStatic(ResourceLocation id, Field field) {
         if (!Modifier.isStatic(field.getModifiers())) {
             throw new IllegalStateException("Can't track registry element field: Must be static: " + field);
-        } else if (!this.registry.getRegistrySuperType().isAssignableFrom(field.getType())) {
-            throw new IllegalStateException("Can't track registry element field: Has type " + field.getType() + ", expected " + this.registry.getRegistrySuperType() + " for value of registry " + this.registryId);
         } else {
             TrackedFieldKey key = TrackedFieldKey.create(field, null);
             if (!this.trackedFields.contains(key)) {
@@ -53,8 +50,6 @@ public final class TrackingData<T extends IForgeRegistryEntry<T>> {
     public synchronized void addInstance(ResourceLocation id, Field field, Object instance) {
         if (Modifier.isStatic(field.getModifiers())) {
             throw new IllegalStateException("Can't track registry instance field: Must not be static: " + field);
-        } else if (!this.registry.getRegistrySuperType().isAssignableFrom(field.getType())) {
-            throw new IllegalStateException("Can't track registry instance field: Has type " + field.getType() + ", expected " + this.registry.getRegistrySuperType() + " for value of registry " + this.registryId);
         } else if (!field.getDeclaringClass().isAssignableFrom(instance.getClass())) {
             throw new IllegalStateException("Can't track registry instance field: Instance object is of type " + instance.getClass() + ", expected " + field.getDeclaringClass() + ".");
         } else {

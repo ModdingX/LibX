@@ -14,8 +14,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -61,14 +59,14 @@ public abstract class ConfigBaseScreen extends Screen {
     @Override
     protected void init() {
         if (this.manager != null) {
-            Button back = new Button(5, 5, 42, 20, new TextComponent("\u2190 ").append(new TranslatableComponent("libx.config.gui.back")), button -> this.manager.close());
+            Button back = new Button(5, 5, 42, 20, Component.literal("\u2190 ").append(Component.translatable("libx.config.gui.back")), button -> this.manager.close());
             this.addRenderableWidget(back);
         }
 
         if (this.hasSearchBar) {
             boolean shouldFocus = this.searchBar != null && this.searchBar.isFocused();
             boolean isActive = this.searchBar != null && this.getFocused() == this.searchBar;
-            this.searchBar = new EditBox(this.mc.font, 20, 18 + this.mc.font.lineHeight, this.width - 40, 20, this.searchBar, new TranslatableComponent("libx.config.gui.search.title"));
+            this.searchBar = new EditBox(this.mc.font, 20, 18 + this.mc.font.lineHeight, this.width - 40, 20, this.searchBar, Component.translatable("libx.config.gui.search.title"));
             this.searchBar.setMaxLength(32767);
             this.searchBar.setFocus(shouldFocus);
             this.addRenderableWidget(this.searchBar);

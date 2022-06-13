@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -56,7 +56,7 @@ public class ConfigDisplay {
         DisplayValue<?> value = this.values.get(key);
         if (value == null) {
             // Dummy
-            return new AbstractWidget(x, y, width, height, new TextComponent("DUMMY")) {
+            return new AbstractWidget(x, y, width, height, Component.literal("DUMMY")) {
                 @Override
                 public void updateNarration(@Nonnull NarrationElementOutput narration) {
                     //

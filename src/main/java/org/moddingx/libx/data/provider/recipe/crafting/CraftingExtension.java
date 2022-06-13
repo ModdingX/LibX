@@ -1,7 +1,7 @@
 package org.moddingx.libx.data.provider.recipe.crafting;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -33,7 +33,7 @@ public interface CraftingExtension extends RecipeExtension {
      * 
      * <ul>
      *     <li>An {@link ItemLike}</li>
-     *     <li>An {@link Tag Tag&lt;Item&gt;}</li>
+     *     <li>An {@link TagKey TagKey&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>
@@ -61,7 +61,7 @@ public interface CraftingExtension extends RecipeExtension {
      *
      * <ul>
      *     <li>An {@link ItemLike}</li>
-     *     <li>An {@link Tag Tag&lt;Item&gt;}</li>
+     *     <li>An {@link TagKey TagKey&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>

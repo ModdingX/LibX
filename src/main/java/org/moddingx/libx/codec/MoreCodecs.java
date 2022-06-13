@@ -12,7 +12,6 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.moddingx.libx.crafting.CraftingHelper2;
 import org.moddingx.libx.impl.codec.*;
 
@@ -84,9 +83,10 @@ public class MoreCodecs {
     }
 
     /**
-     * Gets a codec that encodes a {@link IForgeRegistryEntry} as a string using its registry name.
+     * Gets a codec that encodes a forge registry entry as a string using its registry name.
      */
-    public static <T extends IForgeRegistryEntry<T>> Codec<T> registry(IForgeRegistry<T> registry) {
+    // TODO remove ?
+    public static <T> Codec<T> registry(IForgeRegistry<T> registry) {
         return ForgeRegistryCodec.get(registry);
     }
 

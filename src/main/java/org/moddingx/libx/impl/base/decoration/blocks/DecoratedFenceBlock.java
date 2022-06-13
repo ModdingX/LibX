@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FenceBlock;
@@ -8,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class DecoratedFenceBlock extends FenceBlock {
 
@@ -20,8 +20,8 @@ public class DecoratedFenceBlock extends FenceBlock {
     }
 
     @Override
-    public void animateTick(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Random rand) {
-        this.parent.animateTick(state, level, pos, rand);
+    public void animateTick(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull RandomSource random) {
+        this.parent.animateTick(state, level, pos, random);
     }
 
     @Override

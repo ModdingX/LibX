@@ -7,8 +7,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
@@ -29,51 +27,51 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 
 public class ResourceListContent implements ConfigScreenContent<ResourceList> {
-    
+
     private boolean allowList;
     private final List<ResourceList.RuleEntry> list;
     private Consumer<ResourceList> inputChanged;
-    
+
     private final ConfigEditor<Boolean> typeEditor;
     private final ConfigEditor<Boolean> entryTypeEditor;
     private final ConfigEditor<Mode> modeEditor;
-    
+
     private AbstractWidget typeWidget;
     private final List<EntryWidgets> entryWidgets;
 
     public ResourceListContent(ResourceList value) {
         this.allowList = value.isAllowList();
         this.list = new ArrayList<>(value.getRules());
-        
+
         this.typeEditor = ConfigEditor.toggle(List.of(true, false), v -> {
             if (v) {
-                return new TranslatableComponent("libx.config.gui.resource_list.type", new TranslatableComponent("libx.config.gui.resource_list.type_allow_list"));
+                return Component.translatable("libx.config.gui.resource_list.type", Component.translatable("libx.config.gui.resource_list.type_allow_list"));
             } else {
-                return new TranslatableComponent("libx.config.gui.resource_list.type", new TranslatableComponent("libx.config.gui.resource_list.type_deny_list"));
+                return Component.translatable("libx.config.gui.resource_list.type", Component.translatable("libx.config.gui.resource_list.type_deny_list"));
             }
         });
-        
+
         this.entryTypeEditor = ConfigEditor.toggle(List.of(false, true), v -> {
             if (v) {
-                return new TranslatableComponent("libx.config.gui.resource_list.entry_type", new TranslatableComponent("libx.config.gui.resource_list.entry_type_regex"));
+                return Component.translatable("libx.config.gui.resource_list.entry_type", Component.translatable("libx.config.gui.resource_list.entry_type_regex"));
             } else {
-                return new TranslatableComponent("libx.config.gui.resource_list.entry_type", new TranslatableComponent("libx.config.gui.resource_list.entry_type_simple"));
+                return Component.translatable("libx.config.gui.resource_list.entry_type", Component.translatable("libx.config.gui.resource_list.entry_type_simple"));
             }
         });
-        
+
         this.modeEditor = ConfigEditor.toggle(List.of(Mode.DEFAULT, Mode.ALLOW, Mode.DENY), v -> switch (v) {
-            case DEFAULT -> new TranslatableComponent("libx.config.gui.resource_list.entry_mode", new TranslatableComponent("libx.config.gui.resource_list.entry_mode_default"));
-            case ALLOW -> new TranslatableComponent("libx.config.gui.resource_list.entry_mode", new TranslatableComponent("libx.config.gui.resource_list.entry_mode_allow"));
-            case DENY -> new TranslatableComponent("libx.config.gui.resource_list.entry_mode", new TranslatableComponent("libx.config.gui.resource_list.entry_mode_deny"));
+            case DEFAULT -> Component.translatable("libx.config.gui.resource_list.entry_mode", Component.translatable("libx.config.gui.resource_list.entry_mode_default"));
+            case ALLOW -> Component.translatable("libx.config.gui.resource_list.entry_mode", Component.translatable("libx.config.gui.resource_list.entry_mode_allow"));
+            case DENY -> Component.translatable("libx.config.gui.resource_list.entry_mode", Component.translatable("libx.config.gui.resource_list.entry_mode_deny"));
         });
-        
+
         this.typeWidget = null;
         this.entryWidgets = new ArrayList<>(IntStream.range(0, this.list.size()).mapToObj(i -> EntryWidgets.EMPTY).toList());
     }
 
     @Override
     public Component title() {
-        return new TranslatableComponent("libx.config.gui.resource_list.title");
+        return Component.translatable("libx.config.gui.resource_list.title");
     }
 
     @Override
@@ -114,9 +112,9 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
     public void buildGui(Screen screen, ScreenManager manager, String search, Consumer<AbstractWidget> consumer) {
         int width = (2 * (75 + 3)) + 180 + (23 * 3);
         int padding = Math.max(0, screen.width - width) / 2;
-        
+
         consumer.accept(new TextWidget(screen, (int) (padding * 0.7), 1, screen.width - (2 * padding) - 120, 18,
-                new TranslatableComponent("libx.config.gui.resource_list.info").withStyle(Style.EMPTY.withUnderlined(true).withColor(ChatFormatting.BLUE)), List.of()) {
+                Component.translatable("libx.config.gui.resource_list.info").withStyle(Style.EMPTY.withUnderlined(true).withColor(ChatFormatting.BLUE)), List.of()) {
 
             @Override
             public void onClick(double mouseX, double mouseY) {
@@ -127,7 +125,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
                 }
             }
         });
-        
+
         WidgetProperties<Boolean> typeProperties = new WidgetProperties<>(screen.width - padding - 120, 0, 120, 20, allowList -> {
             this.allowList = allowList;
             this.update();
@@ -135,14 +133,14 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
         AbstractWidget typeWidget = EditorHelper.create(screen, this.typeEditor, this.allowList, this.typeWidget, typeProperties);
         consumer.accept(typeWidget);
         this.typeWidget = typeWidget;
-        
+
         int y = 28;
         for (int i = 0; i < this.list.size(); i++) {
             this.addEntryWidgets(screen, manager, consumer, i, y, padding);
             y += 23;
         }
-        
-        Button button = new Button(padding, y, 100, 20, new TranslatableComponent("libx.config.gui.resource_list.new"), b -> {}) {
+
+        Button button = new Button(padding, y, 100, 20, Component.translatable("libx.config.gui.resource_list.new"), b -> {}) {
 
             @Override
             public void onPress() {
@@ -158,7 +156,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
     private void addEntryWidgets(Screen screen, ScreenManager manager, Consumer<AbstractWidget> consumer, int idx, int y, int padding) {
         ResourceList.RuleEntry current = this.list.get(idx);
         EntryWidgets widgets = this.entryWidgets.get(idx);
-        
+
         InputProperties<String> input = new InputProperties<>() {
 
             @Override
@@ -202,7 +200,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
             if (widget instanceof InputEditor.InputWidget<?>) {
                 //noinspection unchecked
                 ((InputEditor.InputWidget<String>) widget).getValidInput().ifPresent(str -> this.list.set(idx, new ResourceList.RuleEntry(str, type, old.allow())));
-                
+
             }
             this.update();
         });
@@ -216,43 +214,43 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
         });
         AbstractWidget modeWidget = EditorHelper.create(screen, this.modeEditor, Mode.get(current.allow()), widgets.mode(), modeProperties);
         consumer.accept(modeWidget);
-        
+
         this.entryWidgets.set(idx, new EntryWidgets(typeWidget, modeWidget, widget));
 
-        ListContent.addControlButton(consumer, padding + 339, y, new TextComponent("⬆"), idx > 0, () -> {
+        ListContent.addControlButton(consumer, padding + 339, y, Component.literal("⬆"), idx > 0, () -> {
             ListContent.move(this.list, idx, idx - 1);
             ListContent.move(this.entryWidgets, idx, idx - 1);
             this.update();
             manager.rebuild();
         });
 
-        ListContent.addControlButton(consumer, padding + 362, y, new TextComponent("⬇"), idx < this.list.size() - 1, () -> {
+        ListContent.addControlButton(consumer, padding + 362, y, Component.literal("⬇"), idx < this.list.size() - 1, () -> {
             ListContent.move(this.list, idx, idx + 1);
             ListContent.move(this.entryWidgets, idx, idx + 1);
             this.update();
             manager.rebuild();
         });
 
-        ListContent.addControlButton(consumer, padding + 385, y, new TextComponent("✖").withStyle(ChatFormatting.RED), true, () -> {
+        ListContent.addControlButton(consumer, padding + 385, y, Component.literal("✖").withStyle(ChatFormatting.RED), true, () -> {
             this.list.remove(idx);
             this.entryWidgets.remove(idx);
             this.update();
             manager.rebuild();
         });
     }
-    
+
     private enum Mode {
         DEFAULT(null),
         ALLOW(true),
         DENY(false);
-        
+
         @Nullable
         public final Boolean mode;
 
         Mode(@Nullable Boolean mode) {
             this.mode = mode;
         }
-        
+
         public static Mode get(@Nullable Boolean mode) {
             if (mode == null) {
                 return DEFAULT;
@@ -261,9 +259,9 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
             }
         }
     }
-    
+
     private record EntryWidgets(@Nullable AbstractWidget type, @Nullable AbstractWidget mode, @Nullable AbstractWidget input) {
-        
+
         public static final EntryWidgets EMPTY = new EntryWidgets(null, null, null);
     }
 }

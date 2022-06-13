@@ -7,12 +7,12 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * A class to help accessing {@link TagKey tags} in a more user friendly way.
@@ -81,7 +81,7 @@ public class TagAccess {
     /**
      * Gets a random element from a tag.
      */
-    public <T> Optional<T> random(TagKey<T> key, Random random) {
+    public <T> Optional<T> random(TagKey<T> key, RandomSource random) {
         return this.resolve(key.registry()).getTag(key).flatMap(tag -> tag.getRandomElement(random)).map(Holder::value);
     }
     

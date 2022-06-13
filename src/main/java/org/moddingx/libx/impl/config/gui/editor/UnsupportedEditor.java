@@ -6,7 +6,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.EditorOps;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -40,10 +39,10 @@ public class UnsupportedEditor<T> implements ConfigEditor<T> {
     }
     
     private AbstractWidget create(Screen screen, WidgetProperties<T> properties) {
-        Button button = new UnsupportedButton(properties.x(), properties.y(), properties.width(), properties.height(), new TranslatableComponent("libx.config.editor.unsupported.title").withStyle(ChatFormatting.RED), b -> {}) {
+        Button button = new UnsupportedButton(properties.x(), properties.y(), properties.width(), properties.height(), Component.translatable("libx.config.editor.unsupported.title").withStyle(ChatFormatting.RED), b -> {}) {
             @Override
             public void renderToolTip(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
-                screen.renderTooltip(poseStack, List.of(new TranslatableComponent("libx.config.editor.unsupported.description")), Optional.empty(), mouseX, mouseY);
+                screen.renderTooltip(poseStack, List.of(Component.translatable("libx.config.editor.unsupported.description")), Optional.empty(), mouseX, mouseY);
             }
         };
         button.active = false;

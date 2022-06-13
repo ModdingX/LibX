@@ -7,9 +7,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.EventBus;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.moddingx.libx.base.tile.BlockBE;
 import org.moddingx.libx.impl.ModInternal;
@@ -19,9 +16,6 @@ import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationBuilder;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Method;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 /**
  * You need to extends this instead of {@link ModX} if you want to use the LibX registration system.
@@ -77,16 +71,7 @@ public abstract class ModXRegistration extends ModX {
         this.dispatcher = new RegistrationDispatcher(this.modid, builder.build());
         ModInternal.get(this).initRegistration(this.dispatcher);
         
-        try {
-            Method method = EventBus.class.getDeclaredMethod("addListener", EventPriority.class, Predicate.class, Class.class, Consumer.class);
-            method.setAccessible(true);
-            method.invoke(FMLJavaModLoadingContext.get().getModEventBus(), EventPriority.NORMAL, (Predicate<Object>) obj -> true, RegistryEvent.Register.class, (Consumer<RegistryEvent.Register<?>>) this.dispatcher::registerForge);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Could not add generic listener to listen to all registry events for mod " + this.modid + ".", e);
-        }
-        
-        ModInternal.get(this).addSetupTask(this.dispatcher::registerVanilla, true);
-
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this.dispatcher::registerBy);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this.dispatcher::registerCommon);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this.dispatcher::registerClient);
         

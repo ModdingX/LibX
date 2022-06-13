@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.base.decoration.blocks;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
@@ -14,7 +15,6 @@ import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.SetupContext;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class DecoratedDoorBlock extends DoorBlock implements Registerable {
 
@@ -32,8 +32,8 @@ public class DecoratedDoorBlock extends DoorBlock implements Registerable {
     }
 
     @Override
-    public void animateTick(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Random rand) {
-        this.parent.animateTick(state, level, pos, rand);
+    public void animateTick(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull RandomSource random) {
+        this.parent.animateTick(state, level, pos, random);
     }
 
     @Override

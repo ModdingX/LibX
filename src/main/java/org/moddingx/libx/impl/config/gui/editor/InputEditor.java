@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.ValidatorInfo;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
@@ -54,7 +54,7 @@ public class InputEditor<T> implements ConfigEditor<T> {
         private String last = null;
 
         private InputWidget(InputProperties<T> input, ValidatorInfo<?> validator, WidgetProperties<T> properties, String initialValue) {
-            super(Minecraft.getInstance().font, properties.x(), properties.y(), properties.width(), properties.height(), new TextComponent(""));
+            super(Minecraft.getInstance().font, properties.x(), properties.y(), properties.width(), properties.height(), Component.empty());
             this.input = input;
             this.validator = validator;
             this.setMaxLength(32767);

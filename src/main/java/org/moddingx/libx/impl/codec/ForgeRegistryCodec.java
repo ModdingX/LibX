@@ -6,17 +6,17 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.moddingx.libx.codec.CodecHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ForgeRegistryCodec<A extends IForgeRegistryEntry<A>> implements Codec<A> {
+// TODO still needed?
+public class ForgeRegistryCodec<A> implements Codec<A> {
     
     private static final Map<IForgeRegistry<?>, ForgeRegistryCodec<?>> INSTANCES = new HashMap<>();
     
-    public static synchronized <A extends IForgeRegistryEntry<A>> ForgeRegistryCodec<A> get(IForgeRegistry<A> registry) {
+    public static synchronized <A> ForgeRegistryCodec<A> get(IForgeRegistry<A> registry) {
         //noinspection unchecked
         return (ForgeRegistryCodec<A>) INSTANCES.computeIfAbsent(registry, ForgeRegistryCodec::new);
     }
@@ -30,7 +30,7 @@ public class ForgeRegistryCodec<A extends IForgeRegistryEntry<A>> implements Cod
     @Override
     public <T> DataResult<T> encode(A input, DynamicOps<T> ops, T prefix) {
         ResourceLocation id = this.registry.getKey(input);
-        if (id == null) return DataResult.error("Value not present in registry " + this.registry.getRegistrySuperType() + ": " + input);
+        if (id == null) return DataResult.error("Value not present in registry " + this.registry.getRegistryName() + ": " + input);
         return ops.mergeToPrimitive(prefix, ops.createString(id.toString()));
     }
 
@@ -38,7 +38,7 @@ public class ForgeRegistryCodec<A extends IForgeRegistryEntry<A>> implements Cod
     public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> ops, T input) {
         return ops.getStringValue(input)
                 .flatMap(str -> CodecHelper.nonNull(ResourceLocation.tryParse(str), "Invalid resource location: " + str))
-                .flatMap(id -> CodecHelper.nonNull(this.registry.getValue(id), "Value not present in registry " + this.registry.getRegistrySuperType() + ": " + id))
+                .flatMap(id -> CodecHelper.nonNull(this.registry.getValue(id), "Value not present in registry " + this.registry.getRegistryName() + ": " + id))
                 .map(r -> Pair.of(r, ops.empty()));
     }
 }

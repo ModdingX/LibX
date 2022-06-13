@@ -3,7 +3,7 @@ package org.moddingx.libx.impl.config.gui.editor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.WidgetProperties;
 
@@ -23,7 +23,7 @@ public class CheckEditor implements ConfigEditor<Boolean> {
     @Override
     public AbstractWidget createWidget(Screen screen, Boolean initialValue, WidgetProperties<Boolean> properties) {
         int padding = Math.max(0, properties.width() - 20) / 2;
-        return new Checkbox(padding + properties.x(), properties.y(), 20, properties.height(), new TextComponent(""), initialValue, false) {
+        return new Checkbox(padding + properties.x(), properties.y(), 20, properties.height(), Component.empty(), initialValue, false) {
             @Override
             public void onPress() {
                 super.onPress();
@@ -36,7 +36,7 @@ public class CheckEditor implements ConfigEditor<Boolean> {
     public AbstractWidget updateWidget(Screen screen, AbstractWidget oldWidget, WidgetProperties<Boolean> properties) {
         if (oldWidget instanceof Checkbox old) {
             int padding = Math.max(0, properties.width() - 20) / 2;
-            return new Checkbox(padding + properties.x(), properties.y(), 20, properties.height(), new TextComponent(""), old.selected(), false) {
+            return new Checkbox(padding + properties.x(), properties.y(), 20, properties.height(), Component.empty(), old.selected(), false) {
                 @Override
                 public void onPress() {
                     super.onPress();

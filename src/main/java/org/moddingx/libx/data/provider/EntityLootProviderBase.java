@@ -2,9 +2,9 @@ package org.moddingx.libx.data.provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -79,7 +79,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
     }
 
     @Override
-    public void run(@Nonnull HashCache cache) throws IOException {
+    public void run(@Nonnull CachedOutput cache) throws IOException {
         this.setup();
 
         Map<ResourceLocation, LootTable.Builder> tables = new HashMap<>();
@@ -102,7 +102,7 @@ public abstract class EntityLootProviderBase implements DataProvider {
 
         for (Map.Entry<ResourceLocation, LootTable.Builder> e : tables.entrySet()) {
             Path path = getPath(this.generator.getOutputFolder(), e.getKey());
-            DataProvider.save(GSON, cache, LootTables.serialize(e.getValue().setParamSet(LootContextParamSets.ENTITY).build()), path);
+            DataProvider.saveStable(cache, LootTables.serialize(e.getValue().setParamSet(LootContextParamSets.ENTITY).build()), path);
         }
     }
 

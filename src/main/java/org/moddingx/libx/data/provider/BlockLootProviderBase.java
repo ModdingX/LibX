@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -97,7 +97,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
     }
 
     @Override
-    public void run(@Nonnull HashCache cache) throws IOException {
+    public void run(@Nonnull CachedOutput cache) throws IOException {
         this.setup();
 
         Map<ResourceLocation, LootTable.Builder> tables = new HashMap<>();
@@ -120,7 +120,7 @@ public abstract class BlockLootProviderBase implements DataProvider {
 
         for (Map.Entry<ResourceLocation, LootTable.Builder> e : tables.entrySet()) {
             Path path = getPath(this.generator.getOutputFolder(), e.getKey());
-            DataProvider.save(GSON, cache, LootTables.serialize(e.getValue().setParamSet(LootContextParamSets.BLOCK).build()), path);
+            DataProvider.saveStable(cache, LootTables.serialize(e.getValue().setParamSet(LootContextParamSets.BLOCK).build()), path);
         }
     }
 

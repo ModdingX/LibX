@@ -3,9 +3,9 @@ package org.moddingx.libx.impl.config.gui.screen.content.component.type;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.LiteralContents;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -16,14 +16,14 @@ import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class TextComponentType implements ComponentType<TextComponent> {
-    
+public class TextComponentType implements ComponentType {
+
     private final ConfigEditor<String> editor;
-    
+
     private String value = "";
     private AbstractWidget widget;
-    
-    private Consumer<TextComponent> inputChanged;
+
+    private Consumer<MutableComponent> inputChanged;
 
     public TextComponentType() {
         this.editor = ConfigEditor.input();
@@ -31,21 +31,24 @@ public class TextComponentType implements ComponentType<TextComponent> {
 
     @Override
     public Component name() {
-        return new TranslatableComponent("libx.config.gui.component.type_text");
+        return Component.translatable("libx.config.gui.component.type_text");
     }
 
     @Override
-    public TextComponent defaultValue() {
-        return new TextComponent("");
+    public MutableComponent defaultValue() {
+        return Component.literal("");
     }
 
     @Nullable
     @Override
-    public MutableComponent init(Component component, Consumer<TextComponent> inputChanged) {
+    public MutableComponent init(Component component, Consumer<MutableComponent> inputChanged) {
         this.inputChanged = inputChanged;
-        if (component instanceof TextComponent tc) {
-            this.value = tc.getText();
-            return tc.plainCopy();
+        if (component.getContents() == ComponentContents.EMPTY) {
+            this.value = "";
+            return component.plainCopy();
+        } else if (component.getContents() instanceof LiteralContents lc) {
+            this.value = lc.text();
+            return component.plainCopy();
         } else {
             return null;
         }
@@ -57,7 +60,7 @@ public class TextComponentType implements ComponentType<TextComponent> {
         WidgetProperties<String> properties = new WidgetProperties<>((screen.width - width) / 2, y.get(), width, 20, value -> {
             this.value = value;
             if (this.inputChanged != null) {
-                this.inputChanged.accept(new TextComponent(value));
+                this.inputChanged.accept(Component.literal(value));
             }
         });
         this.widget = EditorHelper.create(screen, this.editor, this.value, this.widget, properties);

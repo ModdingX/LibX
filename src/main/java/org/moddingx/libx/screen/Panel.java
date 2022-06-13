@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.EditorOps;
 
 import javax.annotation.Nonnull;
@@ -29,7 +29,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     protected GuiEventListener focused = null;
 
     public Panel(Screen screen, int x, int y, int width, int height) {
-        super(x, y, width, height, new TextComponent(""));
+        super(x, y, width, height, Component.empty());
         this.screen = screen;
     }
 

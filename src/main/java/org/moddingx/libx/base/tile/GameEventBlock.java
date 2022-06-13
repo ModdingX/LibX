@@ -1,11 +1,9 @@
 package org.moddingx.libx.base.tile;
 
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
-
-import javax.annotation.Nullable;
 
 /**
  * A {@link BlockEntity} used with {@link BlockBE} can implement this. Then a {@link GameEventListener} to
@@ -25,5 +23,5 @@ public interface GameEventBlock {
      * 
      * @return {@code true} to indicate the event was handled, {@code false} otherwise.
      */
-    boolean notifyGameEvent(GameEvent event, @Nullable Entity source);
+    boolean notifyGameEvent(ServerLevel level, GameEvent.Message message);
 }

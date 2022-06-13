@@ -5,7 +5,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -53,7 +52,7 @@ public class SimpleSelectEditor<T> implements ConfigEditor<T> {
         private int idx;
 
         public ToggleWidget(List<T> list, Function<T, Component> nameFactory, int idx, WidgetProperties<T> properties) {
-            super(properties.x(), properties.y(), properties.width(), properties.height(), new TextComponent(""), b -> {});
+            super(properties.x(), properties.y(), properties.width(), properties.height(), Component.empty(), b -> {});
             this.list = list;
             this.nameFactory = nameFactory;
             this.inputChanged = properties.inputChanged();

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.ValidatorInfo;
@@ -113,6 +113,6 @@ public class EnumValueMappers implements ValueMapper<Enum<?>, JsonPrimitive> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Enum<?>> createEditor(ValidatorInfo<?> validator) {
-        return ConfigEditor.toggle(ImmutableList.copyOf(this.clazz.getEnumConstants()), e -> new TextComponent(e.name().toLowerCase(Locale.ROOT)));
+        return ConfigEditor.toggle(ImmutableList.copyOf(this.clazz.getEnumConstants()), e -> Component.literal(e.name().toLowerCase(Locale.ROOT)));
     }
 }
