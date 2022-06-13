@@ -114,18 +114,22 @@ public class RegisterClassProcessor {
                 env.messager().printMessage(Diagnostic.Kind.WARNING, "Skipping non-public and non-private member for automatic registration. Use @Reg.Exclude to suppress.", element);
                 return Stream.empty();
             }
-            
-            
-            
-            boolean hasMultiType = env.types().isSubtype(element.asType(), env.forClass(Classes.MULTI_REGISTERABLE));
+
             boolean multi = element.getAnnotation(Reg.Multi.class) != null;
-            boolean maybeMissingMultiAnnotation = !multi && hasMultiType;
-            
-            if (target.baseType != null && !env.types().isSubtype(element.asType(), target.baseType)) {
-                env.messager().printMessage(Diagnostic.Kind.ERROR, "Field has invalid type for target registry" + (maybeMissingMultiAnnotation ? " (Missing @Reg.Multi ?)" : "") + ": expected " + target.baseType, element);
-                return Stream.empty();
-            } else if (maybeMissingMultiAnnotation && !env.isSuppressed(element, "registration")) {
-                env.messager().printMessage(Diagnostic.Kind.WARNING, "Field has is an instance of MultiRegisterable. Missing @Reg.Multi ?", element);
+            boolean hasMultiType = env.types().isSubtype(element.asType(), env.forClass(Classes.MULTI_REGISTERABLE));
+
+            if (multi) {
+                if (!hasMultiType || !env.types().isSubtype(generic(element, element.asType(), "Invalid generic type for MultiRegisterable", env), target.baseType)) {
+                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Field has invalid type for target registry: expected MultiRegisterable<" + target.baseType + ">", element);
+                    return Stream.empty();
+                }
+            } else {
+                if (target.baseType != null && !env.types().isSubtype(element.asType(), target.baseType)) {
+                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Field has invalid type for target registry" + (hasMultiType ? " (Missing @Reg.Multi ?)" : "") + ": expected " + target.baseType, element);
+                    return Stream.empty();
+                } else if (hasMultiType && !env.isSuppressed(element, "registration")) {
+                    env.messager().printMessage(Diagnostic.Kind.WARNING, "Field has is an instance of MultiRegisterable. Missing @Reg.Multi ?", element);
+                }
             }
             
             String name;
