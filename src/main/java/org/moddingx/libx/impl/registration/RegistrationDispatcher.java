@@ -1,7 +1,9 @@
 package org.moddingx.libx.impl.registration;
 
+import com.mojang.serialization.DataResult;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -10,9 +12,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
 import org.moddingx.libx.registration.*;
-import org.moddingx.libx.registration.resolution.RegistryResolver;
 import org.moddingx.libx.registration.resolution.ResolvedRegistry;
 import org.moddingx.libx.registration.tracking.RegistryTracker;
 
@@ -30,32 +32,24 @@ public class RegistrationDispatcher {
     private final String modid;
     
     private final boolean trackingEnabled;
-    private final List<RegistryResolver> resolvers;
     private final List<RegistryCondition> conditions;
     private final List<RegistryTransformer> transformers;
     
     private boolean hasRegistrationRun;
     private final List<Runnable> registrationHandlers;
-    private final Map<ResourceKey<? extends Registry<?>>, Optional<ResolvedRegistry<?>>> resolvedRegistries;
     
-    // TODO Merge all entries together and have unified way to create holders (forge first, then vanilla)
-    //  Remove registry resolving
-    private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> forgeEntries;
-    private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> vanillaEntries;
+    private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> allEntries;
     private final List<NamedRegisterable> registerables;
     
     public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
         this.modid = modid;
         this.trackingEnabled = result.tracking();
-        this.resolvers = result.resolvers();
         this.conditions = result.conditions();
         this.transformers = result.transformers();
         this.hasRegistrationRun = false;
         this.registrationHandlers = new ArrayList<>();
-        this.resolvedRegistries = new HashMap<>();
-        this.forgeEntries = new HashMap<>();
-        this.vanillaEntries = new HashMap<>();
-        this.registerables = new ArrayList<>();
+        this.allEntries = new HashMap<>();
+        this.registerables = new LinkedList<>();
     }
     
     private void runRegistration() {
@@ -73,16 +67,10 @@ public class RegistrationDispatcher {
     
     public void addRegistrationHandler(Runnable handler) {
         synchronized (this.LOCK) {
+            if (this.hasRegistrationRun) {
+                throw new IllegalStateException("Can't add a registration handler after the registration has run.");
+            }
             this.registrationHandlers.add(handler);
-        }
-    }
-    
-    private <T> Optional<ResolvedRegistry<T>> registry(ResourceKey<? extends Registry<T>> key) {
-        synchronized (this.LOCK) {
-            //noinspection unchecked
-            return (Optional<ResolvedRegistry<T>>) (Optional<?>) this.resolvedRegistries.computeIfAbsent(key, k ->
-                    (Optional<ResolvedRegistry<?>>) (Optional<?>) this.resolvers.stream().flatMap(resolver -> resolver.resolve(key).stream()).findFirst()
-            );
         }
     }
     
@@ -132,41 +120,36 @@ public class RegistrationDispatcher {
             
             this.transformers.forEach(transformer -> transformer.transform(ctx, value, collector));
             
+            if (registry != null) {
+                this.addEntry(resourceKey, value);
+            }
+            
             if (value instanceof Registerable registerable) {
                 this.registerables.add(new NamedRegisterable(ctx, registerable));
                 registerable.registerAdditional(ctx, collector);
             }
             
             if (registry != null) {
-                ResolvedRegistry<T> resolved = this.registry(registry).orElseThrow(() -> new NoSuchElementException("Failed to resolve registry " + registry));
-                if (resolved instanceof ResolvedRegistry.Forge<?>) {
-                    this.addEntry(this.forgeEntries, registry, resourceKey, value);
-                } else if (resolved instanceof ResolvedRegistry.Vanilla<T>) {
-                    this.addEntry(this.vanillaEntries, registry, resourceKey, value);
-                }
-                
-                if (value instanceof Registerable registerable) {
-                    if (this.trackingEnabled) {
-                        try {
-                            registerable.initTracking(ctx, new TrackingInstance(rl, value));
-                        } catch (ReflectiveOperationException e) {
-                            throw new IllegalStateException("Failed to initialise registry tracking for " + id + " in " + registry + ": " + value, e);
-                        }
+                if (value instanceof Registerable registerable && this.trackingEnabled) {
+                    try {
+                        registerable.initTracking(ctx, new TrackingInstance(rl, value));
+                    } catch (ReflectiveOperationException e) {
+                        throw new IllegalStateException("Failed to initialise registry tracking for " + id + " in " + registry + ": " + value, e);
                     }
                 }
                 
-                return () -> resolved.createHolder(resourceKey);
+                return () -> this.createHolder(resourceKey);
             } else {
                 return () -> {
-                    throw new IllegalStateException("Can't create holders without registry.");
+                    throw new IllegalStateException("Can't create holder for " + rl + " without registry.");
                 };
             }
         }
     }
     
-    private <T> void addEntry(Map<T, Map<ResourceKey<?>, Object>> entries, T key, ResourceKey<?> resourceKey, Object element) {
+    private void addEntry(ResourceKey<?> resourceKey, Object element) {
         synchronized (this.LOCK) {
-            Map<ResourceKey<?>, Object> entryMap = entries.computeIfAbsent(key, k -> new HashMap<>());
+            Map<ResourceKey<?>, Object> entryMap = this.allEntries.computeIfAbsent(ResourceKey.createRegistryKey(resourceKey.registry()), k -> new HashMap<>());
             if (entryMap.containsKey(resourceKey)) {
                 throw new IllegalStateException("Duplicate element for registration: " + resourceKey + " with value " + element);
             } else {
@@ -175,26 +158,45 @@ public class RegistrationDispatcher {
         }
     }
     
+    private <T> Holder<T> createHolder(ResourceKey<T> resourceKey) {
+        // Forge registries can't create holders before an item is registered
+        // Use the vanilla registry
+        
+        Registry<?> theRegistry = Registry.REGISTRY.get(resourceKey.registry());
+        if (theRegistry == null) theRegistry = BuiltinRegistries.REGISTRY.get(resourceKey.registry());
+        
+        //noinspection unchecked
+        Registry<T> registry = (Registry<T>) theRegistry;
+        
+        if (registry == null) {
+            if (RegistryManager.ACTIVE.getRegistry(resourceKey.registry()) != null) {
+                throw new IllegalStateException("Can't create holder for " + resourceKey + ": Registry is a forge registry without a wrapped vanilla registry.");
+            } else {
+                throw new IllegalStateException("Can't create holder for " + resourceKey + ": Registry not found.");
+            }
+        } else {
+            DataResult<Holder<T>> result = registry.getOrCreateHolder(resourceKey);
+            if (result.result().isPresent()) {
+                return result.result().get();
+            } else {
+                String err = result.error().map(DataResult.PartialResult::message).orElse("Unknown error");
+                throw new IllegalStateException("Failed to create holder for " + resourceKey + ": " + err);
+            }
+        }
+    }
+    
     public void registerBy(RegisterEvent event) {
         this.runRegistration();
         
-//        IForgeRegistry<?> forgeRegistry = event.getForgeRegistry();
-//        if (forgeRegistry != null) {
-//            Map<ResourceKey<?>, Object> map = this.forgeEntries.get(event.getRegistryKey());
-//            if (map != null) {
-//                for (Map.Entry<ResourceKey<?>, Object> entry : map.entrySet()) {
-//                    //noinspection unchecked,rawtypes
-//                    ((IForgeRegistry) forgeRegistry).register(entry.getKey().location(), entry.getValue());
-//                }
-//            }
-//        }
-//        
-//        Registry<?> vanillaRegistry = event.getVanillaRegistry();
-//        if (vanillaRegistry != null) {
-//            Map<ResourceKey<?>, Object> map = this.vanillaEntries.get(event.getRegistryKey());
-//        }
-        
-        // TODO add when forge + vanilla entries are merged
+        Map<ResourceKey<?>, Object> map = this.allEntries.get(event.getRegistryKey());
+        if (map != null) {
+            //noinspection unchecked
+            event.register((ResourceKey<Registry<Object>>) event.getRegistryKey(), reg -> {
+                for (Map.Entry<ResourceKey<?>, Object> entry : map.entrySet()) {
+                    reg.register(entry.getKey().location(), entry.getValue());
+                }
+            });
+        }
     }
     
     public void registerCommon(FMLCommonSetupEvent event) {
