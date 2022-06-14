@@ -4,6 +4,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.*;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
+import org.moddingx.libx.data.provider.BlockStateProviderBase;
+import org.moddingx.libx.data.provider.CommonTagsProviderBase;
+import org.moddingx.libx.data.provider.recipe.DefaultExtension;
 import org.moddingx.libx.impl.base.decoration.DecorationTypes;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
@@ -13,6 +16,9 @@ import javax.annotation.Nullable;
 
 /**
  * Something that is registered together with a {@link DecoratedBlock}.
+ * 
+ * All builtin decoration types provide datagen through {@link BlockStateProviderBase}, {@link CommonTagsProviderBase}
+ * and a special the recipe extension: {@link DefaultExtension}.
  */
 public interface DecorationType<T> {
 
