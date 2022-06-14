@@ -64,18 +64,15 @@ public class RecipeHelper {
     /**
      * Takes a list of {@link ItemStack ItemStacks} and stacks them up so multiple ItemStacks that can be
      * stacked are transformed into one.
-     *
-     * @param ignoreMaxStackSize Whether this should create ItemStacks with a stack size
-     *                           greater than the maximum.
      */
-    public static List<ItemStack> stackUp(List<ItemStack> stacks, boolean ignoreMaxStackSize) {
+    public static List<ItemStack> stackUp(List<ItemStack> stacks) {
         List<ItemStack> stacked = new ArrayList<>();
         for (ItemStack stack : stacks) {
             if (!stack.isEmpty()) {
                 int itemsLeft = stack.getCount();
                 for (ItemStack used : stacked) {
                     if (ItemStack.isSameItemSameTags(stack, used)) {
-                        int stackTransfer = ignoreMaxStackSize ? itemsLeft : Math.min(itemsLeft, used.getMaxStackSize() - used.getCount());
+                        int stackTransfer = Math.min(itemsLeft, used.getMaxStackSize() - used.getCount());
                         if (stackTransfer < 0) {
                             stackTransfer = 0;
                         }

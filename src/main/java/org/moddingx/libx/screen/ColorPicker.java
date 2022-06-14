@@ -176,7 +176,6 @@ public class ColorPicker extends Panel {
             } else {
                 this.hsbMatrix.get().forEach(v -> v.addGrayscale(vertex, matrix));
             }
-            vertex.end();
             Tesselator.getInstance().end();
         }
         
@@ -190,7 +189,6 @@ public class ColorPicker extends Panel {
             } else {
                 this.huePanel.forEach(v -> v.addGrayscale(vertex, matrix));
             }
-            vertex.end();
             Tesselator.getInstance().end();
         }
         

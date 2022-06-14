@@ -93,11 +93,10 @@ public final class LibX extends ModX {
         return networkWrapper;
     }
 
-    // We can't do this in setup as it would not be available for `runData`
-    // Must be one of the RegistryEvent.Register events as in that time registries are not frozen
     private void registerStuff(RegisterEvent event) {
         event.register(Registry.LOOT_ENTRY_REGISTRY, AllLootEntry.ID, () -> AllLootEntry.TYPE);
         event.register(Registry.MENU_REGISTRY, this.resource("generic"), () -> GenericMenu.TYPE);
+        event.register(Registry.RECIPE_TYPE_REGISTRY, EmptyRecipe.ID, () -> EmptyRecipe.TYPE);
         event.register(Registry.RECIPE_SERIALIZER_REGISTRY, EmptyRecipe.ID, () -> EmptyRecipe.Serializer.INSTANCE);
         event.register(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, this.resource("enum"), () -> EnumArgument2.Info.INSTANCE);
     }

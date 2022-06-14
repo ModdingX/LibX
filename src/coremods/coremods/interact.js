@@ -18,7 +18,7 @@ function initializeCoreMod() {
                 target.add(new coremods_1.VarInsnNode(coremods_1.Opcodes.ALOAD, 3));
                 target.add(new coremods_1.VarInsnNode(coremods_1.Opcodes.ALOAD, 4));
                 target.add(new coremods_1.VarInsnNode(coremods_1.Opcodes.ALOAD, 5));
-                target.add(coremods_1.ASMAPI.buildMethodCall('io/github/noeppi_noeppi/libx/impl/libxcore/CoreInteract', 'useItemOn', '(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;', coremods_1.ASMAPI.MethodType.STATIC));
+                target.add(coremods_1.ASMAPI.buildMethodCall('org/moddingx/libx/impl/libxcore/CoreInteract', 'useItemOn', '(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;', coremods_1.ASMAPI.MethodType.STATIC));
                 target.add(new coremods_1.InsnNode(coremods_1.Opcodes.DUP));
                 target.add(new coremods_1.JumpInsnNode(coremods_1.Opcodes.IFNULL, label));
                 target.add(new coremods_1.InsnNode(coremods_1.Opcodes.ARETURN));

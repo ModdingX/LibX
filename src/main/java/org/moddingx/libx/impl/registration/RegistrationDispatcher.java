@@ -15,7 +15,6 @@ import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
 import org.moddingx.libx.registration.*;
-import org.moddingx.libx.registration.resolution.ResolvedRegistry;
 import org.moddingx.libx.registration.tracking.RegistryTracker;
 
 import javax.annotation.Nullable;

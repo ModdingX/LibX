@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 public class EmptyRecipe implements Recipe<Container> {
     
     public static final ResourceLocation ID = LibX.getInstance().resource("empty");
-    public static final RecipeType<EmptyRecipe> TYPE = RecipeType.register(ID.toString());
+    public static final RecipeType<EmptyRecipe> TYPE = RecipeType.simple(ID);
     
     private final ResourceLocation id;
 
@@ -119,6 +119,7 @@ public class EmptyRecipe implements Recipe<Container> {
     }
     
     public static FinishedRecipe empty(ResourceLocation id) {
+        
         return new FinishedRecipe() {
 
             @Override

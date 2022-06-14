@@ -28,7 +28,7 @@ function initializeCoreMod(): CoreMods {
         target.add(new VarInsnNode(Opcodes.ALOAD, 4));
         target.add(new VarInsnNode(Opcodes.ALOAD, 5));
         target.add(ASMAPI.buildMethodCall(
-            'io/github/noeppi_noeppi/libx/impl/libxcore/CoreInteract',
+            'org/moddingx/libx/impl/libxcore/CoreInteract',
             'useItemOn', '(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;',
             ASMAPI.MethodType.STATIC
         ));
