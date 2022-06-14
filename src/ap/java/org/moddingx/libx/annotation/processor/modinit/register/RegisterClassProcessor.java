@@ -96,7 +96,7 @@ public class RegisterClassProcessor {
     }
     
     private static Stream<RegistrationEntry> fromElement(RegisterClass classAnnotation, Element element, TargetRegistry target, ModEnv env) {
-        if (element.getKind() != ElementKind.FIELD || element.getAnnotation(Reg.class) != null) {
+        if (element.getKind() != ElementKind.FIELD || element.getAnnotation(Reg.Exclude.class) != null) {
             return Stream.empty();
         } else if (!(element.getEnclosingElement() instanceof QualifiedNameable qualified)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for member: " + element, element.getEnclosingElement());
@@ -116,7 +116,7 @@ public class RegisterClassProcessor {
             }
 
             boolean multi = element.getAnnotation(Reg.Multi.class) != null;
-            boolean hasMultiType = env.types().isSubtype(element.asType(), env.forClass(Classes.MULTI_REGISTERABLE));
+            boolean hasMultiType = env.subTypeErasure(element.asType(), env.forClass(Classes.MULTI_REGISTERABLE));
 
             if (multi) {
                 if (!hasMultiType || !env.types().isSubtype(generic(element, element.asType(), "Invalid generic type for MultiRegisterable", env), target.baseType)) {

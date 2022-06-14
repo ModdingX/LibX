@@ -13,6 +13,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryManager;
+import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
 import org.moddingx.libx.registration.*;
 import org.moddingx.libx.registration.tracking.RegistryTracker;
@@ -37,7 +38,7 @@ public class RegistrationDispatcher {
     private boolean hasRegistrationRun;
     private final List<Runnable> registrationHandlers;
     
-    private final Map<ResourceKey<? extends Registry<?>>, Map<ResourceKey<?>, Object>> allEntries;
+    private final Map<ResourceKey<? extends Registry<?>>, RegistryData> allEntries;
     private final List<NamedRegisterable> registerables;
     
     public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
@@ -148,12 +149,8 @@ public class RegistrationDispatcher {
     
     private void addEntry(ResourceKey<?> resourceKey, Object element) {
         synchronized (this.LOCK) {
-            Map<ResourceKey<?>, Object> entryMap = this.allEntries.computeIfAbsent(ResourceKey.createRegistryKey(resourceKey.registry()), k -> new HashMap<>());
-            if (entryMap.containsKey(resourceKey)) {
-                throw new IllegalStateException("Duplicate element for registration: " + resourceKey + " with value " + element);
-            } else {
-                entryMap.put(resourceKey, element);
-            }
+            RegistryData data = this.allEntries.computeIfAbsent(ResourceKey.createRegistryKey(resourceKey.registry()), k -> new RegistryData());
+            data.add(resourceKey, element);
         }
     }
     
@@ -187,11 +184,11 @@ public class RegistrationDispatcher {
     public void registerBy(RegisterEvent event) {
         this.runRegistration();
         
-        Map<ResourceKey<?>, Object> map = this.allEntries.get(event.getRegistryKey());
-        if (map != null) {
+        RegistryData data = this.allEntries.get(event.getRegistryKey());
+        if (data != null) {
             //noinspection unchecked
             event.register((ResourceKey<Registry<Object>>) event.getRegistryKey(), reg -> {
-                for (Map.Entry<ResourceKey<?>, Object> entry : map.entrySet()) {
+                for (Map.Entry<ResourceKey<?>, Object> entry : data.values()) {
                     reg.register(entry.getKey().location(), entry.getValue());
                 }
             });
@@ -220,6 +217,25 @@ public class RegistrationDispatcher {
 
         public void registerClient(Consumer<Runnable> enqueue) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> this.value().registerClient(new SetupContext(this.ctx(), enqueue)));
+        }
+    }
+
+    private static final class RegistryData {
+
+        private final Set<ResourceKey<?>> keys = new HashSet<>();
+        private final List<Pair<ResourceKey<?>, Object>> values = new ArrayList<>();
+
+        public void add(ResourceKey<?> key, Object value) {
+            if (this.keys.contains(key)) {
+                throw new IllegalStateException("Duplicate element for registration: " + key + " with value " + value);
+            } else {
+                this.keys.add(key);
+                this.values.add(Pair.of(key, value));
+            }
+        }
+
+        public List<Pair<ResourceKey<?>, Object>> values() {
+            return Collections.unmodifiableList(this.values);
         }
     }
 }

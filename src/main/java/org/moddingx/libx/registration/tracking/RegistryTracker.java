@@ -94,6 +94,7 @@ public class RegistryTracker {
         
         @Override
         public void accept(Predicate<ResourceLocation> changed) {
+            Predicate<ResourceLocation> registryChanged = changed;
             Predicate<Object> instanceChanged = null;
             this.enqueuedTasks.clear();
             this.objectsToUpdate.clear();
@@ -104,10 +105,11 @@ public class RegistryTracker {
                 this.objectsToUpdate.clear();
                 synchronized (LOCK) {
                     for (Map.Entry<ResourceLocation, TrackingData<?>> entry : trackedRegistries.entrySet()) {
-                        entry.getValue().apply(changed, instanceChanged, this.enqueuedTasks::add, this.objectsToUpdate::add);
+                        entry.getValue().apply(registryChanged, instanceChanged, this.enqueuedTasks::add, this.objectsToUpdate::add);
                     }
                     Set<Object> objectsNextRound = Set.copyOf(this.objectsToUpdate);
                     instanceChanged = objectsNextRound::contains;
+                    registryChanged = rl -> true; // In second round, everything that is now outdated needs updating, no matter of the registry
                 }
             } while (!this.enqueuedTasks.isEmpty() || !this.objectsToUpdate.isEmpty());
         }

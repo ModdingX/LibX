@@ -159,9 +159,11 @@ public class ModInit  {
             writer.write("}");
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".runUnchecked(()->{");
                 for (RegistrationEntry entry : allReg) {
-                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".register(mod," + (entry.registryFqn() == null ? "null" : entry.registryFqn()) + "," + quote(entry.name()) + "," + entry.fieldClassFqn() + "." + entry.fieldName() + ",()->{" + entry.fieldClassFqn() + ".class.getDeclaredField(" + quote(entry.fieldName()) + ")}," + (entry.multi() ? "true" : "false") + ");");
+                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".register(mod," + (entry.registryFqn() == null ? "null" : entry.registryFqn()) + "," + quote(entry.name()) + "," + entry.fieldClassFqn() + "." + entry.fieldName() + ",()->{return " + entry.fieldClassFqn() + ".class.getDeclaredField(" + quote(entry.fieldName()) + ");}," + (entry.multi() ? "true" : "false") + ");");
                 }
+                writer.write("});");
                 writer.write("}");
             }
             if (!this.models.isEmpty()) {
