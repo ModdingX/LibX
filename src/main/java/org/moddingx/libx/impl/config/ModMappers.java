@@ -37,10 +37,10 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 // special allowed types
-// enums
-// pair
-// triple
-// record
+//  enums
+//  pair
+//  triple
+//  record
 public class ModMappers {
 
     private static final Map<String, ModMappers> modMappers = new HashMap<>();
@@ -54,7 +54,7 @@ public class ModMappers {
         }
     }
 
-    private static final Map<Class<?>, CommonValueMapper<?, ?>> globalMappers = Stream.of(
+    private static final Map<Class<?>, ValueMapper<?, ?>> globalMappers = Stream.of(
             SimpleValueMappers.BOOLEAN,
             SimpleValueMappers.BYTE,
             SimpleValueMappers.SHORT,
@@ -63,16 +63,19 @@ public class ModMappers {
             SimpleValueMappers.FLOAT,
             SimpleValueMappers.DOUBLE,
             SimpleValueMappers.STRING,
-            OptionValueMapper.INSTANCE,
-            ListValueMapper.INSTANCE,
-            MapValueMapper.INSTANCE,
             ResourceValueMapper.INSTANCE,
             IngredientValueMapper.INSTANCE,
             ComponentValueMapper.INSTANCE,
             ResourceListValueMapper.INSTANCE,
             IngredientStackValueMapper.INSTANCE,
             UidValueMapper.INSTANCE
-    ).collect(ImmutableMap.toImmutableMap(CommonValueMapper::type, Function.identity()));
+    ).collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
+    
+    private static final Map<Class<?>, GenericValueMapper<?, ?, ?>> globalGenericMappers = Stream.of(
+            OptionValueMapper.INSTANCE,
+            ListValueMapper.INSTANCE,
+            MapValueMapper.INSTANCE
+    ).collect(ImmutableMap.toImmutableMap(GenericValueMapper::type, Function.identity()));
 
     private static final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> globalValidators = Stream.of(
             SimpleValidators.SHORT,
@@ -84,7 +87,8 @@ public class ModMappers {
 
 
     private final String modid;
-    private final Map<Class<?>, CommonValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Class<?>, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Class<?>, GenericValueMapper<?, ?, ?>> genericMappers = Collections.synchronizedMap(new HashMap<>());
     private final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> validators = Collections.synchronizedMap(new HashMap<>());
     private ModConfigGuiAdapter adapter = null;
     
@@ -93,21 +97,21 @@ public class ModMappers {
     }
 
     public void registerValueMapper(ValueMapper<?, ?> mapper) {
-        this.doRegisterValueMapper(mapper);
+        this.doRegisterValueMapper(this.mappers, globalMappers, mapper.type(), mapper);
     }
 
     public void registerValueMapper(GenericValueMapper<?, ?, ?> mapper) {
-        this.doRegisterValueMapper(mapper);
+        this.doRegisterValueMapper(this.genericMappers, globalGenericMappers, mapper.type(), mapper);
     }
 
-    private void doRegisterValueMapper(CommonValueMapper<?, ?> mapper) {
-        if (this.mappers.containsKey(mapper.type())) {
-            throw new IllegalStateException("Config mapper for type '" + mapper.type() + "' is already registered.");
+    private <T> void doRegisterValueMapper(Map<Class<?>, T> map, Map<Class<?>, T> globalMap, Class<?> type, T mapper) {
+        if (map.containsKey(type)) {
+            throw new IllegalStateException("Config mapper for type '" + type + "' is already registered.");
         } else {
-            if (globalMappers.containsKey(mapper.type())) {
-                LibX.logger.warn(this.modid + " registers a custom value mapper for type " + mapper.type() + " even if there's a builtin one. This is discouraged.");
+            if (globalMap.containsKey(type)) {
+                LibX.logger.warn(this.modid + " registers a custom value mapper for type " + type + ", shading a builtin one. This is discouraged.");
             }
-            this.mappers.put(mapper.type(), mapper);
+            map.put(type, mapper);
         }
     }
 
@@ -138,30 +142,26 @@ public class ModMappers {
             //noinspection unchecked
             return new RecordValueMapper<>((Class<? extends Record>) cls, this::getMapper);
         }
-        CommonValueMapper<?, ?> mapper = null;
+
         if (this.mappers.containsKey(cls)) {
-            mapper = this.mappers.get(cls);
+           return this.mappers.get(cls);
+        } else if (this.genericMappers.containsKey(cls)) {
+            return this.resolveGeneric(this.genericMappers.get(cls), type);
         } else if (globalMappers.containsKey(cls)) {
-            mapper = globalMappers.get(cls);
-        }
-        if (mapper instanceof ValueMapper<?, ?> valueMapper) {
-            return valueMapper;
-        } else if (mapper instanceof GenericValueMapper<?, ?, ?> genericMapper) {
-            if (!(type instanceof ParameterizedType)) {
-                throw new IllegalStateException("Generic value mapper used on type without generics.");
-            }
-            Type[] args = ((ParameterizedType) type).getActualTypeArguments();
-            if (args.length <= genericMapper.getGenericElementPosition()) {
-                throw new IllegalStateException("Generic value mapper used on type with too less generics: Expected at least " + (genericMapper.getGenericElementPosition() + 1) + ", got " + args.length);
-            }
-            ValueMapper<Object, JsonElement> childMapper = this.getWrappedMapperUnsafe(type, genericMapper.getGenericElementPosition());
-            //noinspection unchecked
-            return new WrappedGenericMapper<>((GenericValueMapper<Object, JsonElement, Object>) genericMapper, childMapper);
+            return globalMappers.get(cls);
+        } else if (globalGenericMappers.containsKey(cls)) {
+            return this.resolveGeneric(globalGenericMappers.get(cls), type);
         } else {
             throw new IllegalStateException("No config mapper found for type " + type + " (" + cls + ")");
         }
     }
 
+    private <T, E extends JsonElement> ValueMapper<T, E> resolveGeneric(GenericValueMapper<T, E, ?> mapper, Type type) {
+        ValueMapper<Object, JsonElement> childMapper = this.getWrappedMapperUnsafe(type, mapper.getGenericElementPosition());
+        //noinspection unchecked
+        return new WrappedGenericMapper<>((GenericValueMapper<T, E, Object>) mapper, childMapper);
+    }
+    
     private ValueMapper<Object, JsonElement> getWrappedMapperUnsafe(Type type, int genericPosition) {
         if (!(type instanceof ParameterizedType)) {
             throw new IllegalStateException("Generic value mapper used on type without generics.");

@@ -9,6 +9,7 @@ import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.impl.config.ConfigImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,7 +19,17 @@ import java.util.Optional;
  * @param <T> The type that this mapper can serialise.
  * @param <E> The JSON element type this mapper uses.
  */
-public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper<T, E> {
+public interface ValueMapper<T, E extends JsonElement> {
+
+    /**
+     * Gets the class of the type that this mapper can serialise.
+     */
+    Class<T> type();
+
+    /**
+     * Gets the class of the JSON element type this mapper uses.
+     */
+    Class<E> element();
 
     /**
      * Reads an object from JSON. If the json is invalid you may either throw
@@ -53,6 +64,13 @@ public interface ValueMapper<T, E extends JsonElement> extends CommonValueMapper
      */
     default void toNetwork(T value, FriendlyByteBuf buffer) {
         buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJson(value)), 0x40000);
+    }
+
+    /**
+     * Returns a list of comment lines that will be added to the values specified in {@link Config @Config}.
+     */
+    default List<String> comment() {
+        return List.of();
     }
 
     /**

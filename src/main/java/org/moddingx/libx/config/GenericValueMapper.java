@@ -8,6 +8,7 @@ import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.impl.config.ConfigImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,7 +30,17 @@ import java.util.Optional;
  * @param <E> The JSON element type this mapper uses.
  * @param <C> The element type. Should be a type variable in most cases.
  */
-public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonValueMapper<T, E> {
+public interface GenericValueMapper<T, E extends JsonElement, C> {
+
+    /**
+     * Gets the class of the type that this mapper can serialise.
+     */
+    Class<T> type();
+
+    /**
+     * Gets the class of the JSON element type this mapper uses.
+     */
+    Class<E> element();
 
     /**
      * The position which generic type argument should be used to retrieve a value mapper. Indices
@@ -59,6 +70,13 @@ public interface GenericValueMapper<T, E extends JsonElement, C> extends CommonV
      */
     default void toNetwork(T value, FriendlyByteBuf buffer, ValueMapper<C, JsonElement> mapper) {
         buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJson(value, mapper)), 0x40000);
+    }
+
+    /**
+     * Returns a list of comment lines that will be added to the values specified in {@link Config @Config}.
+     */
+    default List<String> comment() {
+        return List.of();
     }
     
     /**

@@ -2,11 +2,16 @@ package org.moddingx.libx.data.provider.recipe;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.base.decoration.DecorationType;
 import org.moddingx.libx.impl.data.recipe.DecorationRecipes;
 import org.moddingx.libx.mod.ModX;
 
 import java.util.Map;
 
+/**
+ * Recipe extension to add some default recipes. Currently this adds recipes for all
+ * builtin {@link DecorationType decoration types}.
+ */
 public interface DefaultExtension extends RecipeExtension {
     
     static void setup(ModX mod, DefaultExtension ext) {

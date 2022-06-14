@@ -240,7 +240,7 @@ public class ConfigManager {
     }
 
     /**
-     * Forces reload of one config. <b>This will not sync the config tough. Use {@link #forceResync(ServerPlayer, Class)} for this.</b>
+     * Forces reload of one config. <b>This will not sync the config though. Use {@link #forceResync(ServerPlayer, Class)} for this.</b>
      */
     public static void reloadConfig(Class<?> configClass) {
         reloadConfig(configClass, true, true);
