@@ -2,6 +2,7 @@ package org.moddingx.libx.registration;
 
 import net.minecraft.core.Holder;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
+import org.moddingx.libx.registration.tracking.RegistryTracker;
 
 /**
  * Base interface for classes that act as a container for other objects. A {@link MultiRegisterable}
@@ -19,6 +20,10 @@ public interface MultiRegisterable<T> {
         
     }
 
+    /**
+     * Adds fields with additional registry values to the {@link RegistryTracker}. This is only called, if
+     * {@link RegistrationBuilder#enableRegistryTracking()} is set.
+     */
     @SuperChainRequired
     default void initTracking(RegistrationContext ctx, Registerable.TrackingCollector builder) throws ReflectiveOperationException {
 

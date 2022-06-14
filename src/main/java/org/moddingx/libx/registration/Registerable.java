@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.mod.ModXRegistration;
+import org.moddingx.libx.registration.tracking.RegistryTracker;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -42,7 +43,11 @@ public interface Registerable {
     default void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         
     }
-    
+
+    /**
+     * Adds fields with additiona lregistry values to the {@link RegistryTracker}. This is only called, if
+     * {@link RegistrationBuilder#enableRegistryTracking()} is set.
+     */
     @SuperChainRequired
     default void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
         

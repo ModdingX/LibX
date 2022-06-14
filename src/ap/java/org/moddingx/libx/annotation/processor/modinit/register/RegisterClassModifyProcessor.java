@@ -35,6 +35,8 @@ public class RegisterClassModifyProcessor extends Processor {
                     this.messager().printMessage(Diagnostic.Kind.ERROR, "@" + modifyClass.getSimpleName() + " can only be used on public static final fields.", element);
                 } else if (element.getEnclosingElement().getKind() != ElementKind.CLASS || element.getEnclosingElement().getAnnotation(RegisterClass.class) == null) {
                     this.messager().printMessage(Diagnostic.Kind.ERROR, "@" + modifyClass.getSimpleName() + " can only be used on in classes annotated with @RegisterClass.", element);
+                } else if (modifyClass != Reg.Exclude.class && element.getAnnotation(Reg.Exclude.class) != null) {
+                    this.messager().printMessage(Diagnostic.Kind.ERROR, "@" + modifyClass.getSimpleName() + " can't be used on fields excluded from registration.", element);
                 }
             }
         }
