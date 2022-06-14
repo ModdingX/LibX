@@ -18,32 +18,32 @@ import java.util.stream.Collectors;
 public class DecorationContext {
 
     /**
-     * Generic context. Registers {@link DecorationType#SLAB slabs} and {@link DecorationType#STAIR stairs}.
+     * Generic context. Registers {@link DecorationType#SLAB slabs} and {@link DecorationType#STAIRS stairs}.
      */
     public static final DecorationContext GENERIC = new DecorationContext("generic",
-            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIR
+            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS
     );
 
     /**
      * Decoration context for wooden planks. Registers {@link DecorationType#SLAB slabs},
-     * {@link DecorationType#STAIR stairs}, {@link DecorationType#FENCE fences},
+     * {@link DecorationType#STAIRS stairs}, {@link DecorationType#FENCE fences},
      * {@link DecorationType#FENCE_GATE fence gates}, {@link DecorationType#WOOD_BUTTON buttons},
      * {@link DecorationType#WOOD_PRESSURE_PLATE pressure plates}, {@link DecorationType#DOOR doors},
      * {@link DecorationType#TRAPDOOR trapdoors} and {@link DecorationType#SIGN signs}.
      */
     public static final DecorationContext PLANKS = new DecorationContext("planks",
-            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIR, DecorationType.FENCE,
+            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.FENCE,
             DecorationType.FENCE_GATE, DecorationType.WOOD_BUTTON, DecorationType.WOOD_PRESSURE_PLATE,
             DecorationType.DOOR, DecorationType.TRAPDOOR, DecorationType.SIGN
     );
 
     /**
      * Decoration context for stone blocks. Registers {@link DecorationType#SLAB slabs},
-     * {@link DecorationType#STAIR stairs}, {@link DecorationType#WALL walls},
+     * {@link DecorationType#STAIRS stairs}, {@link DecorationType#WALL walls},
      * {@link DecorationType#STONE_BUTTON buttons} and {@link DecorationType#STONE_PRESSURE_PLATE pressure plates}.
      */
     public static final DecorationContext STONE = new DecorationContext("stone",
-            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIR, DecorationType.WALL,
+            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.WALL,
             DecorationType.STONE_BUTTON, DecorationType.STONE_PRESSURE_PLATE
     );
     

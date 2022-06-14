@@ -22,7 +22,7 @@ public interface DecorationType<T> {
     DecorationType<DecoratedBlock> BASE = DecorationTypes.BASE;
     
     DecorationType<? extends SlabBlock> SLAB = DecorationTypes.SLAB;
-    DecorationType<? extends StairBlock> STAIR = DecorationTypes.STAIR;
+    DecorationType<? extends StairBlock> STAIRS = DecorationTypes.STAIRS;
     DecorationType<? extends WallBlock> WALL = DecorationTypes.WALL;
     DecorationType<? extends FenceBlock> FENCE = DecorationTypes.FENCE;
     DecorationType<? extends FenceGateBlock> FENCE_GATE = DecorationTypes.FENCE_GATE;

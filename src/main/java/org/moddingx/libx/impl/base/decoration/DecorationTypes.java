@@ -15,7 +15,7 @@ public class DecorationTypes {
     public static final DecorationType<DecoratedBlock> BASE = new BaseDecorationType<>("", null, Function.identity());
     
     public static final DecorationType<DecoratedSlabBlock> SLAB = new BlockDecorationType<>("slab", Registry.BLOCK_REGISTRY, DecoratedSlabBlock::new);
-    public static final DecorationType<DecoratedStairBlock> STAIR = new BlockDecorationType<>("stair", Registry.BLOCK_REGISTRY, DecoratedStairBlock::new);
+    public static final DecorationType<DecoratedStairBlock> STAIRS = new BlockDecorationType<>("stairs", Registry.BLOCK_REGISTRY, DecoratedStairBlock::new);
     public static final DecorationType<DecoratedWallBlock> WALL = new BlockDecorationType<>("wall", Registry.BLOCK_REGISTRY, DecoratedWallBlock::new);
     public static final DecorationType<DecoratedFenceBlock> FENCE = new BlockDecorationType<>("fence", Registry.BLOCK_REGISTRY, DecoratedFenceBlock::new);
     public static final DecorationType<DecoratedFenceGateBlock> FENCE_GATE = new BlockDecorationType<>("fence_gate", Registry.BLOCK_REGISTRY, DecoratedFenceGateBlock::new);
