@@ -83,14 +83,6 @@ public class MoreCodecs {
     }
 
     /**
-     * Gets a codec that encodes a forge registry entry as a string using its registry name.
-     */
-    // TODO remove ?
-    public static <T> Codec<T> registry(IForgeRegistry<T> registry) {
-        return ForgeRegistryCodec.get(registry);
-    }
-
-    /**
      * Gets a type mapped codec that will try to encode and decode values with the first
      * matching {@link TypedEncoder}.
      * If no {@link TypedEncoder} matches, an error will be returned.

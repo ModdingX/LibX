@@ -1,11 +1,14 @@
 package org.moddingx.libx.data.provider;
 
+import com.mojang.serialization.Lifecycle;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeRegistryTagsProvider;
+import net.minecraftforge.registries.GameData;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.moddingx.libx.mod.ModX;
 
@@ -19,35 +22,47 @@ import java.util.Map;
  * {@link #setup() setup}. With {@link #defaultTags(Object)}, you can add default tags
  * that can be retrieved from the element.
  */
-// TODO still needed?
-public abstract class TagProviderBase<T> extends ForgeRegistryTagsProvider<T> {
+public abstract class TagProviderBase<T> extends TagsProvider<T> {
 
     protected final ModX mod;
-    protected final IForgeRegistry<T> registry;
+    
+    @Nullable
+    protected final IForgeRegistry<T> forgeRegistry;
 
-    /**
-     * Creates a new tag provider base
-     */
-    protected TagProviderBase(ModX mod, DataGenerator generator, IForgeRegistry<T> registry, @Nullable ExistingFileHelper fileHelper) {
+    
+    protected TagProviderBase(ModX mod, DataGenerator generator, @Nonnull Registry<T> registry, @Nullable ExistingFileHelper fileHelper) {
         super(generator, registry, mod.modid, fileHelper);
         this.mod = mod;
-        this.registry = registry;
+        this.forgeRegistry = null;
+    }
+    
+    protected TagProviderBase(ModX mod, DataGenerator generator, @Nonnull IForgeRegistry<T> registry, @Nullable ExistingFileHelper fileHelper) {
+        super(generator, wrapForge(registry), mod.modid, fileHelper);
+        this.mod = mod;
+        this.forgeRegistry = registry;
     }
 
     @Override
     protected final void addTags() {
         this.setup();
 
-        this.registry.getEntries().stream()
-                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
-                .map(Map.Entry::getValue)
-                .forEach(this::defaultTags);
+        if (this.forgeRegistry != null) {
+            this.forgeRegistry.getEntries().stream()
+                    .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                    .map(Map.Entry::getValue)
+                    .forEach(this::defaultTags);
+        } else {
+            this.registry.entrySet().stream()
+                    .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                    .map(Map.Entry::getValue)
+                    .forEach(this::defaultTags);
+        }
     }
 
     @Nonnull
     @Override
     public final String getName() {
-        return this.mod.modid + " " + this.registry.getRegistryName() + " tags";
+        return this.mod.modid + " " + (this.forgeRegistry == null ? this.registry.key().location() : this.forgeRegistry.getRegistryName()) + " tags";
     }
 
     /**
@@ -61,5 +76,15 @@ public abstract class TagProviderBase<T> extends ForgeRegistryTagsProvider<T> {
      */
     public void defaultTags(T element) {
 
+    }
+
+    private static <T> Registry<T> wrapForge(IForgeRegistry<T> forgeRegistry) {
+        if (forgeRegistry.tags() == null) {
+            throw new IllegalArgumentException("Registry has no tag support: " + forgeRegistry.getRegistryName());
+        } else if (forgeRegistry.getDefaultKey() == null) {
+            return GameData.getWrapper(forgeRegistry.getRegistryKey(), Lifecycle.experimental());
+        } else {
+            return GameData.getWrapper(forgeRegistry.getRegistryKey(), Lifecycle.experimental(), "default");
+        }
     }
 }
