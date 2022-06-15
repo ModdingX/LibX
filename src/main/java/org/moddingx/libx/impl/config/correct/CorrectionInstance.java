@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.config.correct;
 
 import com.google.gson.JsonElement;
-import org.moddingx.libx.config.ValueMapper;
+import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.util.LazyValue;
 

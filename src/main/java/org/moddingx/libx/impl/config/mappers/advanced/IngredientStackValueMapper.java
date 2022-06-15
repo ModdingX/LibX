@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.moddingx.libx.config.ValidatorInfo;
-import org.moddingx.libx.config.ValueMapper;
+import org.moddingx.libx.config.validator.ValidatorInfo;
+import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.crafting.IngredientStack;
 

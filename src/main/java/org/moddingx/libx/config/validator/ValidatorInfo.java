@@ -1,4 +1,4 @@
-package org.moddingx.libx.config;
+package org.moddingx.libx.config.validator;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Proxy;

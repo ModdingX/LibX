@@ -2,9 +2,9 @@ package org.moddingx.libx.impl.config;
 
 import com.google.common.collect.ImmutableList;
 import org.moddingx.libx.config.Config;
-import org.moddingx.libx.config.ConfigValidator;
-import org.moddingx.libx.config.ValidatorInfo;
-import org.moddingx.libx.config.ValueMapper;
+import org.moddingx.libx.config.validator.ConfigValidator;
+import org.moddingx.libx.config.validator.ValidatorInfo;
+import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.impl.config.validators.ConfiguredValidator;
 import org.moddingx.libx.util.ClassUtil;
 

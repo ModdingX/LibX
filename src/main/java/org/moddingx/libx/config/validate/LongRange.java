@@ -1,4 +1,4 @@
-package org.moddingx.libx.config.validator;
+package org.moddingx.libx.config.validate;
 
 import java.lang.annotation.*;
 

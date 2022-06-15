@@ -2,7 +2,7 @@ package org.moddingx.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
-import org.moddingx.libx.config.ValueMapper;
+import org.moddingx.libx.config.mapper.ValueMapper;
 
 public class TypesafeMapper extends JsonTypesafeMapper<Object> {
     

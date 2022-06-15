@@ -1,8 +1,8 @@
 package org.moddingx.libx.impl.config.validators;
 
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.config.ConfigValidator;
-import org.moddingx.libx.config.ValidatorInfo;
+import org.moddingx.libx.config.validator.ConfigValidator;
+import org.moddingx.libx.config.validator.ValidatorInfo;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;

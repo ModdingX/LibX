@@ -17,7 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.config.ValueMapper;
+import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.event.ConfigLoadedEvent;
 import org.moddingx.libx.impl.config.correct.CorrectionInstance;
 import org.moddingx.libx.impl.config.gui.ConfigDisplay;

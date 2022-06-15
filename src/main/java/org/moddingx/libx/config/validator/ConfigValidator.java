@@ -1,4 +1,6 @@
-package org.moddingx.libx.config;
+package org.moddingx.libx.config.validator;
+
+import org.moddingx.libx.config.Config;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
