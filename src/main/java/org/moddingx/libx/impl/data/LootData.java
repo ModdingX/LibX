@@ -10,7 +10,6 @@ import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 

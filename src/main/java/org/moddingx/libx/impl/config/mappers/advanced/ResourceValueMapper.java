@@ -5,10 +5,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.moddingx.libx.config.validator.ValidatorInfo;
-import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
+import org.moddingx.libx.config.mapper.ValueMapper;
+import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.util.Misc;
 
 public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPrimitive> {

@@ -1,8 +1,8 @@
 package org.moddingx.libx.impl.config.validators;
 
 import net.minecraft.util.Mth;
-import org.moddingx.libx.config.validator.ConfigValidator;
 import org.moddingx.libx.config.validate.*;
+import org.moddingx.libx.config.validator.ConfigValidator;
 
 import java.util.List;
 import java.util.Optional;

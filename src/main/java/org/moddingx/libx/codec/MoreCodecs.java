@@ -11,9 +11,11 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.moddingx.libx.crafting.CraftingHelper2;
-import org.moddingx.libx.impl.codec.*;
+import org.moddingx.libx.impl.codec.EnumCodec;
+import org.moddingx.libx.impl.codec.ErrorCodec;
+import org.moddingx.libx.impl.codec.OptionCodec;
+import org.moddingx.libx.impl.codec.TypeMappedCodec;
 
 import java.util.ArrayList;
 import java.util.List;

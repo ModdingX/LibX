@@ -5,9 +5,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.moddingx.libx.config.validator.ValidatorInfo;
-import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.gui.ConfigEditor;
+import org.moddingx.libx.config.mapper.ValueMapper;
+import org.moddingx.libx.config.validator.ValidatorInfo;
 
 public class IngredientValueMapper implements ValueMapper<Ingredient, JsonElement> {
 

@@ -4,10 +4,10 @@ import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.moddingx.libx.config.validator.ValidatorInfo;
-import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
+import org.moddingx.libx.config.mapper.ValueMapper;
+import org.moddingx.libx.config.validator.ValidatorInfo;
 
 import java.util.List;
 import java.util.Optional;

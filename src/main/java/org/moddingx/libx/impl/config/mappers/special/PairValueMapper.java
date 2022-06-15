@@ -7,10 +7,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.config.validator.ValidatorInfo;
-import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
+import org.moddingx.libx.config.mapper.ValueMapper;
+import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.impl.config.gui.editor.PairEditor;
 
 import java.util.Map;

@@ -3,8 +3,8 @@ package org.moddingx.libx.impl.config.gui.screen;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
-import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.config.gui.WidgetProperties;
+import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
 import org.moddingx.libx.impl.config.wrapper.TypesafeMapper;
 
