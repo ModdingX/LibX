@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 import org.moddingx.libx.impl.base.fluid.DefaultRenderProperties;
 import org.moddingx.libx.impl.base.fluid.FluidTypeBase;
 import org.moddingx.libx.mod.ModX;
@@ -26,6 +25,7 @@ import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
 import java.util.function.Consumer;
