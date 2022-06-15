@@ -5,7 +5,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import org.moddingx.libx.data.provider.CommonTagsProviderBase;
+import org.moddingx.libx.datagen.provider.CommonTagsProviderBase;
 import org.moddingx.libx.mod.ModX;
 
 import java.util.Map;

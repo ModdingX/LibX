@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider.recipe;
+package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.resources.ResourceLocation;
 import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;

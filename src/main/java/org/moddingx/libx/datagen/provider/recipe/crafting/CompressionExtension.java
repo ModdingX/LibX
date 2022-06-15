@@ -1,9 +1,9 @@
-package org.moddingx.libx.data.provider.recipe.crafting;
+package org.moddingx.libx.datagen.provider.recipe.crafting;
 
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
-import org.moddingx.libx.data.provider.recipe.RecipeExtension;
+import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
 /**
  * A {@link RecipeExtension} with default methods for compressing things.

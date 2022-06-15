@@ -1,10 +1,10 @@
-package org.moddingx.libx.data.provider.recipe.crafting;
+package org.moddingx.libx.datagen.provider.recipe.crafting;
 
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.data.provider.recipe.RecipeExtension;
+import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

@@ -4,7 +4,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationContext;
-import org.moddingx.libx.data.provider.CommonTagsProviderBase;
+import org.moddingx.libx.datagen.provider.CommonTagsProviderBase;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.impl.tags.InternalTags;
 

@@ -1,4 +1,4 @@
-package org.moddingx.libx.data;
+package org.moddingx.libx.datagen;
 
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.EntryGroup;

@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider.recipe;
+package org.moddingx.libx.datagen.provider.recipe;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;

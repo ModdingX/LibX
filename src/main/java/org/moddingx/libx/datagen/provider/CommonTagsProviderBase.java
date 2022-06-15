@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider;
+package org.moddingx.libx.datagen.provider;
 
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;

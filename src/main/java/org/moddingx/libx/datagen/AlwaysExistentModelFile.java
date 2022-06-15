@@ -1,4 +1,4 @@
-package org.moddingx.libx.data;
+package org.moddingx.libx.datagen;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ModelFile;

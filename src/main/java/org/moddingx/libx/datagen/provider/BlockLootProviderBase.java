@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider;
+package org.moddingx.libx.datagen.provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,7 +34,7 @@ import net.minecraft.world.level.storage.loot.providers.number.BinomialDistribut
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.data.LootBuilders;
+import org.moddingx.libx.datagen.LootBuilders;
 import org.moddingx.libx.impl.data.LootData;
 import org.moddingx.libx.mod.ModX;
 

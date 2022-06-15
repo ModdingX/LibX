@@ -1,11 +1,11 @@
-package org.moddingx.libx.data.provider.recipe.crafting;
+package org.moddingx.libx.datagen.provider.recipe.crafting;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import org.moddingx.libx.data.provider.recipe.RecipeExtension;
+import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 import org.moddingx.libx.impl.data.recipe.ObjectCraftingBuilder;
 
 /**

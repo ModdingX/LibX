@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider;
+package org.moddingx.libx.datagen.provider;
 
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;

@@ -1,4 +1,4 @@
 /**
  * Contains utilities for datagen.
  */
-package org.moddingx.libx.data;
+package org.moddingx.libx.datagen;

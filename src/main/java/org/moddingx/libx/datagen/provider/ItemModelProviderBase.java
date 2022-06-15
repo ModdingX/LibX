@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider;
+package org.moddingx.libx.datagen.provider;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +13,7 @@ import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuil
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.data.AlwaysExistentModelFile;
+import org.moddingx.libx.datagen.AlwaysExistentModelFile;
 import org.moddingx.libx.impl.RendererOnDataGenException;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.mod.ModX;

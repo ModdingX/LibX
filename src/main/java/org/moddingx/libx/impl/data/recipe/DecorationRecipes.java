@@ -2,7 +2,7 @@ package org.moddingx.libx.impl.data.recipe;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
-import org.moddingx.libx.data.provider.recipe.RecipeExtension;
+import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 
 public class DecorationRecipes {

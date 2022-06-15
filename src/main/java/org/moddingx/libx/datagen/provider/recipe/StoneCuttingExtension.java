@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider.recipe;
+package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;

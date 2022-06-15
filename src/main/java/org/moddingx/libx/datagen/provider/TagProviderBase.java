@@ -1,4 +1,4 @@
-package org.moddingx.libx.data.provider;
+package org.moddingx.libx.datagen.provider;
 
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.Registry;
