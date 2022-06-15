@@ -1,7 +1,5 @@
 package org.moddingx.libx.datagen.provider;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.CachedOutput;
@@ -36,9 +34,7 @@ import java.util.stream.Collectors;
  * and {@link #advancement(String)} methods in {@link #setup() setup}.
  */
 public abstract class AdvancementProviderBase implements DataProvider {
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
+    
     protected final ModX mod;
     protected final DataGenerator generator;
     private final Map<ResourceLocation, Supplier<Advancement>> advancements = new HashMap<>();

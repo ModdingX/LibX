@@ -10,6 +10,8 @@ import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class LootData {
@@ -30,19 +32,15 @@ public class LootData {
         return entry;
     }
     
-    public static <T> LootPoolEntryContainer.Builder<?> combineBy(Function<LootPoolEntryContainer.Builder<?>[], LootPoolEntryContainer.Builder<?>> combineFunc, Function<T, LootPoolEntryContainer.Builder<?>> extract, T[] loot) {
-        LootPoolEntryContainer.Builder<?>[] builder = new LootPoolEntryContainer.Builder<?>[loot.length];
-        for (int i = 0; i < loot.length; i++) {
-            builder[i] = extract.apply(loot[i]);
-        }
-        return combineBy(combineFunc, builder);
+    public static <T> LootPoolEntryContainer.Builder<?> combineBy(Function<List<LootPoolEntryContainer.Builder<?>>, LootPoolEntryContainer.Builder<?>> combineFunc, Function<T, LootPoolEntryContainer.Builder<?>> extract, List<T> loot) {
+        return combineBy(combineFunc, loot.stream().map(extract).toList());
     }
     
-    public static LootPoolEntryContainer.Builder<?> combineBy(Function<LootPoolEntryContainer.Builder<?>[], LootPoolEntryContainer.Builder<?>> combineFunc, LootPoolEntryContainer.Builder<?>[] loot) {
-        if (loot.length == 0) {
+    public static LootPoolEntryContainer.Builder<?> combineBy(Function<List<LootPoolEntryContainer.Builder<?>>, LootPoolEntryContainer.Builder<?>> combineFunc, List<LootPoolEntryContainer.Builder<?>> loot) {
+        if (loot.isEmpty()) {
             return EmptyLootItem.emptyItem();
-        } else if (loot.length == 1) {
-            return loot[0];
+        } else if (loot.size() == 1) {
+            return loot.get(0);
         } else {
             return combineFunc.apply(loot);
         }

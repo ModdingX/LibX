@@ -18,29 +18,29 @@ public class LootBuilders {
     /**
      * Gets a loot builder for a loot entry that selects all items fro mall its children at once.
      */
-    public static LootPoolEntryContainer.Builder<?> all(LootPoolEntryContainer.Builder<?>... entries) {
-        return new AllLootBuilder(entries);
+    public static LootPoolEntryContainer.Builder<?> all(List<LootPoolEntryContainer.Builder<?>> entries) {
+        return new AllLootBuilder(entries.toArray(new LootPoolEntryContainer.Builder[0]));
     }
     
     /**
      * Gets a loot builder for group loot.
      */
-    public static LootPoolEntryContainer.Builder<?> group(LootPoolEntryContainer.Builder<?>... entries) {
-        return new GroupLootBuilder(entries);
+    public static LootPoolEntryContainer.Builder<?> group(List<LootPoolEntryContainer.Builder<?>> entries) {
+        return new GroupLootBuilder(entries.toArray(new LootPoolEntryContainer.Builder[0]));
     }
     
     /**
      * Gets a loot builder for alternative loot.
      */
-    public static LootPoolEntryContainer.Builder<?> alternative(LootPoolEntryContainer.Builder<?>... entries) {
-        return AlternativesEntry.alternatives(entries);
+    public static LootPoolEntryContainer.Builder<?> alternative(List<LootPoolEntryContainer.Builder<?>> entries) {
+        return AlternativesEntry.alternatives(entries.toArray(new LootPoolEntryContainer.Builder[0]));
     }
     
     /**
      * Gets a loot builder for sequence loot.
      */
-    public static LootPoolEntryContainer.Builder<?> sequence(LootPoolEntryContainer.Builder<?>... entries) {
-        return new SequenceLootBuilder(entries);
+    public static LootPoolEntryContainer.Builder<?> sequence(List<LootPoolEntryContainer.Builder<?>> entries) {
+        return new SequenceLootBuilder(entries.toArray(new LootPoolEntryContainer.Builder[0]));
     }
     
     private static class AllLootBuilder extends LootPoolEntryContainer.Builder<AllLootBuilder> {

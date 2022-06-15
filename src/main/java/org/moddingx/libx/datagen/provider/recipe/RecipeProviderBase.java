@@ -102,7 +102,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
             } catch (IllegalAccessException e) {
                 throw new IllegalStateException("Can't access recipe extension setup method: " + method.getDeclaringClass().getName() + "#setup", e);
             } catch (InvocationTargetException e) {
-                throw new RuntimeException("Failed to run recipe extension setup: " + method.getDeclaringClass().getName(), e);
+                throw new RuntimeException("Failed to run recipe extension setup: " + method.getDeclaringClass().getName(), e.getTargetException());
             }
         }
     }
