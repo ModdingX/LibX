@@ -35,9 +35,11 @@ public class Classes {
     public static final String DATA_PROVIDER = "net.minecraft.data.DataProvider";
     public static final String DATA_GENERATOR = "net.minecraft.data.DataGenerator";
     public static final String DATA_FILE_HELPER = "net.minecraftforge.common.data.ExistingFileHelper";
-    
+
     public static final String OVERRIDING_METHODS_SUPER = "javax.annotation.OverridingMethodsMustInvokeSuper";
-    
+    public static final String JETBRAINS_NOTNULL = "org.jetbrains.annotations.NotNull";
+    public static final String JETBRAINS_NULLABLE = "org.jetbrains.annotations.Nullable";
+
     public static String sourceName(String cls) {
         return cls.replace('$', '.');
     }

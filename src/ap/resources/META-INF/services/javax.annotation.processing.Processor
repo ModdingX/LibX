@@ -2,6 +2,7 @@ org.moddingx.libx.annotation.processor.meta.ExperimentalProcessor
 org.moddingx.libx.annotation.processor.meta.RemoveInProcessor
 org.moddingx.libx.annotation.processor.meta.SuperProcessor
 org.moddingx.libx.annotation.processor.misc.ConfigProcessor
+org.moddingx.libx.annotation.processor.misc.FindBugsProcessor
 org.moddingx.libx.annotation.processor.modinit.ModInitProcessor
 org.moddingx.libx.annotation.processor.modinit.register.RegisterClassModifyProcessor
 org.moddingx.libx.annotation.processor.onlyin.OnlyInProcessor
