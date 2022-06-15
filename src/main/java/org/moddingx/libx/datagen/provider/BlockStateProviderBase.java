@@ -9,18 +9,23 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.LazyValue;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
@@ -152,11 +157,16 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      */
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateDefinition().getPossibleStates().stream().allMatch(state -> state.getRenderShape() != RenderShape.MODEL)) {
-//            if (block instanceof LiquidBlock liquidBlock) {
-//                return this.models().getBuilder(id.getPath()).texture("particle", liquidBlock.getFluid().getAttributes().getStillTexture()); // TODO
-//            } else {
-            return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
-//            }
+            if (block instanceof LiquidBlock liquidBlock) {
+                Optional<ResourceLocation> tex = fluidTextureId(liquidBlock.getFluid());
+                if (tex.isPresent()) {
+                    return this.models().getBuilder(id.getPath()).texture("particle", tex.get());
+                } else {
+                    return this.models().getBuilder(id.getPath());
+                }
+            } else {
+                return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
+            }
         } else if (block instanceof LeavesBlock) {
             return this.models().withExistingParent(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath(), LEAVES_PARENT).texture("all", this.blockTexture(block));
         } else {
@@ -224,5 +234,28 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     private static ResourceLocation textureId(ResourceLocation blockId, String suffix) {
         Objects.requireNonNull(blockId);
         return new ResourceLocation(blockId.getNamespace(), "block/" + blockId.getPath() + "_" + suffix);
+    }
+
+    private static Optional<ResourceLocation> fluidTextureId(Fluid fluid) {
+        try {
+            IFluidTypeRenderProperties properties = RenderProperties.get(fluid);
+            if (properties != IFluidTypeRenderProperties.DUMMY) {
+                return Optional.ofNullable(properties.getStillTexture());
+            } else {
+                // Forge no longer calls this during datagen
+                // so we need to do it manually
+                AtomicReference<IFluidTypeRenderProperties> ref = new AtomicReference<>(null);
+                fluid.getFluidType().initializeClient(ref::set);
+                properties = ref.get();
+                if (properties != null) {
+                    return Optional.ofNullable(properties.getStillTexture());
+                } else {
+                    return Optional.empty();
+                }
+            }
+        } catch (Exception | NoClassDefFoundError e) {
+            LibX.logger.warn("Failed to load fluid render properties", e);
+            return Optional.empty();
+        }
     }
 }
