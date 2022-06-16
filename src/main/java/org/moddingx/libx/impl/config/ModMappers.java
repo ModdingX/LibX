@@ -135,7 +135,15 @@ public class ModMappers {
 
     private ValueMapper<?, ?> getMapper(Type type) {
         Class<?> cls = ClassUtil.boxed(getTypeClass(type));
-        if (cls.isEnum()) {
+        if (this.mappers.containsKey(cls)) {
+            return this.mappers.get(cls);
+        } else if (this.genericMappers.containsKey(cls)) {
+            return this.resolveGeneric(this.genericMappers.get(cls), type);
+        } else if (globalMappers.containsKey(cls)) {
+            return globalMappers.get(cls);
+        } else if (globalGenericMappers.containsKey(cls)) {
+            return this.resolveGeneric(globalGenericMappers.get(cls), type);
+        } else if (cls.isEnum()) {
             //noinspection unchecked
             return EnumValueMappers.getMapper((Class<? extends Enum<?>>) cls);
         } else if (cls == Pair.class) {
@@ -145,16 +153,6 @@ public class ModMappers {
         } else if (cls.isRecord()) {
             //noinspection unchecked
             return new RecordValueMapper<>((Class<? extends Record>) cls, this::getMapper);
-        }
-
-        if (this.mappers.containsKey(cls)) {
-           return this.mappers.get(cls);
-        } else if (this.genericMappers.containsKey(cls)) {
-            return this.resolveGeneric(this.genericMappers.get(cls), type);
-        } else if (globalMappers.containsKey(cls)) {
-            return globalMappers.get(cls);
-        } else if (globalGenericMappers.containsKey(cls)) {
-            return this.resolveGeneric(globalGenericMappers.get(cls), type);
         } else {
             throw new IllegalStateException("No config mapper found for type " + type + " (" + cls + ")");
         }
