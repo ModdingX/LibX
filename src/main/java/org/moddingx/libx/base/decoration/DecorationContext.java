@@ -2,10 +2,12 @@ package org.moddingx.libx.base.decoration;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.world.level.material.Material;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +22,7 @@ public class DecorationContext {
     /**
      * Generic context. Registers {@link DecorationType#SLAB slabs} and {@link DecorationType#STAIRS stairs}.
      */
-    public static final DecorationContext GENERIC = new DecorationContext("generic",
+    public static final DecorationContext GENERIC = new DecorationContext("generic", BaseMaterial.GENERIC,
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS
     );
 
@@ -31,7 +33,7 @@ public class DecorationContext {
      * {@link DecorationType#WOOD_PRESSURE_PLATE pressure plates}, {@link DecorationType#DOOR doors},
      * {@link DecorationType#TRAPDOOR trapdoors} and {@link DecorationType#SIGN signs}.
      */
-    public static final DecorationContext PLANKS = new DecorationContext("planks",
+    public static final DecorationContext PLANKS = new DecorationContext("planks", BaseMaterial.WOOD,
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.FENCE,
             DecorationType.FENCE_GATE, DecorationType.WOOD_BUTTON, DecorationType.WOOD_PRESSURE_PLATE,
             DecorationType.DOOR, DecorationType.TRAPDOOR, DecorationType.SIGN
@@ -42,23 +44,25 @@ public class DecorationContext {
      * {@link DecorationType#STAIRS stairs}, {@link DecorationType#WALL walls},
      * {@link DecorationType#STONE_BUTTON buttons} and {@link DecorationType#STONE_PRESSURE_PLATE pressure plates}.
      */
-    public static final DecorationContext STONE = new DecorationContext("stone",
+    public static final DecorationContext STONE = new DecorationContext("stone", BaseMaterial.STONE,
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.WALL,
             DecorationType.STONE_BUTTON, DecorationType.STONE_PRESSURE_PLATE
     );
     
     private final String name;
+    private final BaseMaterial baseMaterial;
     private final Map<String, DecorationType<?>> types;
     private final Set<DecorationType<?>> typeSet;
 
     /**
      * Creates a new decoration context.
-     * 
+     *
      * @param name The name of the context.
      * @param types The types to register. This must include {@link DecorationType#BASE}.
      */
-    public DecorationContext(String name, DecorationType<?>... types) {
+    public DecorationContext(String name, BaseMaterial baseMaterial, DecorationType<?>... types) {
         this.name = name;
+        this.baseMaterial = baseMaterial;
         Map<String, DecorationType<?>> typeMap = new HashMap<>();
         for (DecorationType<?> type : types) {
             String typeName = type.name();
@@ -78,7 +82,14 @@ public class DecorationContext {
     }
 
     /**
-     * Gets whether this context has a given {@link DecorationType}
+     * Gets the base material of the {@link DecorationContext}.
+     */
+    public BaseMaterial baseMaterial() {
+        return this.baseMaterial;
+    }
+
+    /**
+     * Gets whether this context has a given {@link DecorationType}.
      */
     public boolean has(DecorationType<?> type) {
         if (type == DecorationType.BASE) return true;
@@ -121,6 +132,26 @@ public class DecorationContext {
         return this.name + "[" + this.types.values().stream().map(DecorationType::name).filter(s -> !s.isEmpty()).sorted().collect(Collectors.joining(",")) + "]";
     }
 
+    /**
+     * Provides a material type for {@link DecorationContext}.
+     */
+    public enum BaseMaterial {
+        GENERIC(null),
+        WOOD(Material.WOOD),
+        STONE(Material.STONE),
+        MINERAL(Material.METAL);
+
+        /**
+         * A {@link Material} field
+         */
+        @Nullable
+        public final Material material;
+
+        BaseMaterial(@Nullable Material material) {
+            this.material = material;
+        }
+    }
+
     // registerMap entries are registered without a registry
-    public static record RegistrationInfo(Map<DecorationType<?>, Object> elementMap, Map<String, Registerable> registerMap) {}
+    public record RegistrationInfo(Map<DecorationType<?>, Object> elementMap, Map<String, Registerable> registerMap) {}
 }
