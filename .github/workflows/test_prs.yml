@@ -1,11 +1,12 @@
-name: 'Deploy Javadoc 📖'
+name: 'Test pull request 📋'
 on:
-  push:
+  pull_request:
     branches:
+      - '1.18'
       - '1.19'
 
 jobs:
-  deploy:
+  test:
     if: startsWith(github.repository, 'ModdingX/') # don't run this in forks
     runs-on: ubuntu-latest
     steps:
@@ -13,21 +14,12 @@ jobs:
         uses: 'actions/checkout@v3'
         with:
           persist-credentials: false
-          
+
       - name: 'Install Java 🍵'
         uses: 'actions/setup-java@v3'
         with:
           distribution: 'temurin'
           java-version: '17'
-          
-      - name: 'Install and Build 🔧'
-        run: './gradlew javadoc'
 
-      - name: 'Deploy 🚀'
-        uses: 'JamesIves/github-pages-deploy-action@v4.3.3'
-        with:
-          branch: gh-pages
-          folder: 'build/docs/javadoc'
-          clean: true
-          git-config-name: 'Github Actions'
-          git-config-email: '<>'
+      - name: 'Run tests 📋'
+        run: './gradlew test'
