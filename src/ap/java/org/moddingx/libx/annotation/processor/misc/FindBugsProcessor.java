@@ -26,6 +26,13 @@ public class FindBugsProcessor extends Processor {
     }
 
     @Override
+    public Set<String> getSupportedOptions() {
+        Set<String> set = new HashSet<>(super.getSupportedAnnotationTypes());
+        set.add("mod.properties.force_findbugs");
+        return set;
+    }
+
+    @Override
     public void run(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (!this.options().containsKey("mod.properties.force_findbugs") || !Boolean.parseBoolean(this.options().get("mod.properties.force_findbugs"))) return;
         for (Element element : roundEnv.getElementsAnnotatedWith(this.typeElement(Classes.JETBRAINS_NOTNULL))) {
