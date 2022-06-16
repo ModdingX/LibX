@@ -113,6 +113,7 @@ public final class TrackingData<T> {
     
     private void updateFrom(ResourceLocation id, Field field, Object instance, Consumer<Runnable> enqueue, Consumer<Object> valueUpdate) {
         try {
+            field.setAccessible(true);
             //noinspection unchecked
             T oldValue = (T) field.get(instance);
             T value = this.registry.getValue(id);

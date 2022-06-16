@@ -14,7 +14,7 @@ public final class SetupContext extends RegistrationContext {
     private final Consumer<Runnable> enqueue;
 
     public SetupContext(RegistrationContext ctx, Consumer<Runnable> enqueue) {
-        this(ctx.id(), ctx.registry().orElse(null), enqueue);
+        this(ctx.id(), ctx.key().orElse(null), enqueue);
     }
     
     public SetupContext(ResourceLocation id, @Nullable ResourceKey<?> key, Consumer<Runnable> enqueue) {
