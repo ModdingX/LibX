@@ -93,9 +93,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DecorationContext.RegistrationInfo.html" class="type-name-link" title="class in org.moddingx.libx.base.decoration">DecorationContext.RegistrationInfo</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="DecorationContext.BaseMaterial.html" class="type-name-link" title="enum class in org.moddingx.libx.base.decoration">DecorationContext.BaseMaterial</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Provides a material type for <a href="DecorationContext.html" title="class in org.moddingx.libx.base.decoration"><code>DecorationContext</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="DecorationContext.RegistrationInfo.html" class="type-name-link" title="class in org.moddingx.libx.base.decoration">DecorationContext.RegistrationInfo</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -134,7 +139,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,org.moddingx.libx.base.decoration.DecorationType...)" class="member-name-link">DecorationContext</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,org.moddingx.libx.base.decoration.DecorationContext.BaseMaterial,org.moddingx.libx.base.decoration.DecorationType...)" class="member-name-link">DecorationContext</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="DecorationContext.BaseMaterial.html" title="enum class in org.moddingx.libx.base.decoration">DecorationContext.BaseMaterial</a>&nbsp;baseMaterial,
  <a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a>&lt;?&gt;...&nbsp;types)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a new decoration context.</div>
@@ -153,21 +159,26 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#has(org.moddingx.libx.base.decoration.DecorationType)" class="member-name-link">has</a><wbr>(<a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a>&lt;?&gt;&nbsp;type)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DecorationContext.BaseMaterial.html" title="enum class in org.moddingx.libx.base.decoration">DecorationContext.BaseMaterial</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#baseMaterial()" class="member-name-link">baseMaterial</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets whether this context has a given <a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration"><code>DecorationType</code></a></div>
+<div class="block">Gets the base material of the <a href="DecorationContext.html" title="class in org.moddingx.libx.base.decoration"><code>DecorationContext</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DecorationContext.RegistrationInfo.html" title="class in org.moddingx.libx.base.decoration">DecorationContext.RegistrationInfo</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(org.moddingx.libx.mod.ModX,org.moddingx.libx.base.decoration.DecoratedBlock)" class="member-name-link">register</a><wbr>(<a href="../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
- <a href="DecoratedBlock.html" title="class in org.moddingx.libx.base.decoration">DecoratedBlock</a>&nbsp;block)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a>&lt;?&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#types()" class="member-name-link">types</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#has(org.moddingx.libx.base.decoration.DecorationType)" class="member-name-link">has</a><wbr>(<a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a>&lt;?&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets whether this context has a given <a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration"><code>DecorationType</code></a>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DecorationContext.RegistrationInfo.html" title="class in org.moddingx.libx.base.decoration">DecorationContext.RegistrationInfo</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(org.moddingx.libx.mod.ModX,org.moddingx.libx.base.decoration.DecoratedBlock)" class="member-name-link">register</a><wbr>(<a href="../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
+ <a href="DecoratedBlock.html" title="class in org.moddingx.libx.base.decoration">DecoratedBlock</a>&nbsp;block)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a>&lt;?&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#types()" class="member-name-link">types</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets all supported <a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration"><code>DecorationType</code></a>s.</div>
 </div>
 </div>
@@ -223,9 +234,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,org.moddingx.libx.base.decoration.DecorationType...)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,org.moddingx.libx.base.decoration.DecorationContext.BaseMaterial,org.moddingx.libx.base.decoration.DecorationType...)">
 <h3>DecorationContext</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DecorationContext</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="DecorationContext.BaseMaterial.html" title="enum class in org.moddingx.libx.base.decoration">DecorationContext.BaseMaterial</a>&nbsp;baseMaterial,
  <a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a>&lt;?&gt;...&nbsp;types)</span></div>
 <div class="block">Creates a new decoration context.</div>
 <dl class="notes">
@@ -244,10 +256,17 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="baseMaterial()">
+<h3>baseMaterial</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DecorationContext.BaseMaterial.html" title="enum class in org.moddingx.libx.base.decoration">DecorationContext.BaseMaterial</a></span>&nbsp;<span class="element-name">baseMaterial</span>()</div>
+<div class="block">Gets the base material of the <a href="DecorationContext.html" title="class in org.moddingx.libx.base.decoration"><code>DecorationContext</code></a>.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="has(org.moddingx.libx.base.decoration.DecorationType)">
 <h3>has</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">has</span><wbr><span class="parameters">(<a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a>&lt;?&gt;&nbsp;type)</span></div>
-<div class="block">Gets whether this context has a given <a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration"><code>DecorationType</code></a></div>
+<div class="block">Gets whether this context has a given <a href="DecorationType.html" title="interface in org.moddingx.libx.base.decoration"><code>DecorationType</code></a>.</div>
 </section>
 </li>
 <li>
