@@ -27,7 +27,3 @@ dependencies {
 **The wiki can be found at https://moddingx.org/wiki**
 
 **Join the dev discord: https://moddingx.org/discord**
-
-### The future branch
-
-The `future` branch is used to implement breaking changes that will be merged in the next major minecraft release.
