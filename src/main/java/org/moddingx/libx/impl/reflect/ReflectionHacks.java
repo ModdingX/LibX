@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.reflect;
 
-import org.moddingx.libx.util.LazyValue;
+import org.moddingx.libx.util.lazy.LazyValue;
 import sun.misc.Unsafe;
 
 import javax.annotation.Nullable;

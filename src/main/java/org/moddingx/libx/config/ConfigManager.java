@@ -27,7 +27,7 @@ import org.moddingx.libx.impl.config.ConfigState;
 import org.moddingx.libx.impl.config.ModMappers;
 import org.moddingx.libx.impl.network.ConfigShadowSerializer;
 import org.moddingx.libx.impl.network.NetworkImpl;
-import org.moddingx.libx.util.ResourceList;
+import org.moddingx.libx.util.data.ResourceList;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

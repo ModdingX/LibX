@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.command.CommandUtil;
-import org.moddingx.libx.util.ComponentUtil;
+import org.moddingx.libx.util.game.ComponentUtil;
 
 import java.util.List;
 import java.util.Objects;

@@ -27,7 +27,7 @@ import org.moddingx.libx.datagen.provider.ItemModelProviderBase;
 import org.moddingx.libx.impl.RendererOnDataGenException;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.SetupContext;
-import org.moddingx.libx.util.LazyValue;
+import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import java.util.*;

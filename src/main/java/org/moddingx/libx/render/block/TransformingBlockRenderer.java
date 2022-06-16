@@ -13,12 +13,12 @@ import javax.annotation.Nonnull;
  * methode takes care of the {@link PoseStack pose stack} being pushed and popped.
  * @param <T>
  */
-public abstract class DecoratedBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
+public abstract class TransformingBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
     @Override
     public final void render(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
         poseStack.pushPose();
-        this.decorate(blockEntity, partialTicks, poseStack);
+        this.transform(blockEntity, partialTicks, poseStack);
         this.doRender(blockEntity, partialTicks, poseStack, buffer, light, overlay);
         poseStack.popPose();
     }
@@ -26,7 +26,7 @@ public abstract class DecoratedBlockRenderer<T extends BlockEntity> implements B
     /**
      * Applies the pre-redner transformation to the {@link PoseStack pose stack}.
      */
-    protected abstract void decorate(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack);
+    protected abstract void transform(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack);
     
     /**
      * Renders the {@link BlockEntity block entity}.

@@ -1,7 +1,7 @@
 package org.moddingx.libx.capability;
 
 import net.minecraftforge.energy.IEnergyStorage;
-import org.moddingx.libx.util.LongAmountToIntUtil;
+import org.moddingx.libx.util.game.LongAmountToIntUtil;
 
 /**
  * An {@link IEnergyStorage} that allows storing the energy value as long. 

@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.lazy;
 
 import java.util.HashMap;
 import java.util.Map;

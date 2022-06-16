@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.data;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;

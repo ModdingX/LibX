@@ -14,10 +14,10 @@ import javax.annotation.Nonnull;
  * depending on the facing. This may only be used with blocks that have the property {@link BlockStateProperties#FACING}.
  * The {@link BlockEntity block entity} should be rendered as if it was facing up.
  */
-public abstract class DirectionalBlockRenderer<T extends BlockEntity> extends DecoratedBlockRenderer<T> {
+public abstract class DirectionalBlockRenderer<T extends BlockEntity> extends TransformingBlockRenderer<T> {
 
     @Override
-    protected final void decorate(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack) {
+    protected final void transform(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack) {
         Direction facing = blockEntity.getBlockState().getValue(BlockStateProperties.FACING);
         float xRot = switch (facing) {
             case UP -> 0;

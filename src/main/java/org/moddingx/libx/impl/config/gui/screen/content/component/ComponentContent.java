@@ -18,7 +18,7 @@ import org.moddingx.libx.impl.config.gui.screen.content.component.type.TextCompo
 import org.moddingx.libx.impl.config.gui.screen.content.component.type.TranslationComponentType;
 import org.moddingx.libx.impl.config.gui.screen.widget.TextWidget;
 import org.moddingx.libx.screen.ColorPicker;
-import org.moddingx.libx.util.CachedValue;
+import org.moddingx.libx.util.lazy.CachedValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.data;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
@@ -8,6 +8,7 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.moddingx.libx.LibX;
+import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nullable;
 import javax.annotation.RegEx;

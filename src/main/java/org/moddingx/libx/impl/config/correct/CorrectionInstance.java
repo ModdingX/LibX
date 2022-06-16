@@ -3,7 +3,7 @@ package org.moddingx.libx.impl.config.correct;
 import com.google.gson.JsonElement;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.mapper.ValueMapper;
-import org.moddingx.libx.util.LazyValue;
+import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

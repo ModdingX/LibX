@@ -16,7 +16,7 @@ import org.moddingx.libx.impl.config.gui.EditorHelper;
 import org.moddingx.libx.impl.config.gui.editor.InputEditor;
 import org.moddingx.libx.impl.config.gui.screen.widget.TextWidget;
 import org.moddingx.libx.impl.config.mappers.advanced.ResourceListValueMapper;
-import org.moddingx.libx.util.ResourceList;
+import org.moddingx.libx.util.data.ResourceList;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

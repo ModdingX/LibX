@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.game;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.ChatFormatting;

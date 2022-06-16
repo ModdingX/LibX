@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.lazy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

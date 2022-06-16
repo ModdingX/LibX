@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.lazy;
 
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraftforge.common.util.LazyOptional;

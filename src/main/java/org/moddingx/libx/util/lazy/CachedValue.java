@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.lazy;
 
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;

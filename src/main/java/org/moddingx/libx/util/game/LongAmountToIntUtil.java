@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.game;
 
 import net.minecraft.util.Mth;
 import net.minecraftforge.energy.IEnergyStorage;

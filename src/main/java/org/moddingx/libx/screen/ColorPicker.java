@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.Mth;
 import org.moddingx.libx.render.RenderHelper;
-import org.moddingx.libx.util.CachedValue;
+import org.moddingx.libx.util.lazy.CachedValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

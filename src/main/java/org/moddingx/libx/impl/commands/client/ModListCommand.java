@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
-import org.moddingx.libx.util.ComponentUtil;
+import org.moddingx.libx.util.game.ComponentUtil;
 
 import java.util.Comparator;
 import java.util.List;

@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.mod.ModX;
-import org.moddingx.libx.util.LazyValue;
+import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import java.util.*;

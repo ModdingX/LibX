@@ -8,7 +8,7 @@ import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.impl.config.gui.screen.content.ResourceListContent;
-import org.moddingx.libx.util.ResourceList;
+import org.moddingx.libx.util.data.ResourceList;
 
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -11,7 +11,7 @@ import org.moddingx.libx.config.gui.WidgetProperties;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.ConfigKey;
 import org.moddingx.libx.impl.config.ConfigState;
-import org.moddingx.libx.util.CachedValue;
+import org.moddingx.libx.util.lazy.CachedValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

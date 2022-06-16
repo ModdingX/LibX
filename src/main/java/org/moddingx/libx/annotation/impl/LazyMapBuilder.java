@@ -1,8 +1,8 @@
 package org.moddingx.libx.annotation.impl;
 
 import com.google.common.collect.ImmutableMap;
-import org.moddingx.libx.util.LazyImmutableMap;
-import org.moddingx.libx.util.LazyValue;
+import org.moddingx.libx.util.lazy.LazyImmutableMap;
+import org.moddingx.libx.util.lazy.LazyValue;
 
 import java.util.Map;
 import java.util.function.Supplier;

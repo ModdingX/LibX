@@ -12,7 +12,7 @@ import org.moddingx.libx.impl.config.gui.EditorHelper;
 import org.moddingx.libx.impl.config.gui.screen.ConfigScreenManager;
 import org.moddingx.libx.impl.config.gui.screen.RecordConfigScreen;
 import org.moddingx.libx.impl.config.wrapper.TypesafeMapper;
-import org.moddingx.libx.util.LazyValue;
+import org.moddingx.libx.util.lazy.LazyValue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.RecordComponent;

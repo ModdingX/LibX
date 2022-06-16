@@ -9,7 +9,7 @@ import org.moddingx.libx.config.gui.WidgetProperties;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
 import org.moddingx.libx.impl.config.gui.screen.ConfigScreenManager;
 import org.moddingx.libx.impl.config.gui.screen.CustomConfigScreen;
-import org.moddingx.libx.util.LazyValue;
+import org.moddingx.libx.util.lazy.LazyValue;
 
 import java.util.function.Function;
 

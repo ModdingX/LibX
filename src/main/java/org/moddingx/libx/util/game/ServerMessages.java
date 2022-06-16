@@ -1,4 +1,4 @@
-package org.moddingx.libx.util;
+package org.moddingx.libx.util.game;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;

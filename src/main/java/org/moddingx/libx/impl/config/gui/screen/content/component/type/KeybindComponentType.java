@@ -11,7 +11,7 @@ import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.WidgetProperties;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
 import org.moddingx.libx.impl.config.gui.screen.content.component.ComponentType;
-import org.moddingx.libx.util.CachedValue;
+import org.moddingx.libx.util.lazy.CachedValue;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
