@@ -51,9 +51,9 @@ jar {
     from sourceSets.ap.output
 }
 
-//sourceJarConfigure {
-//    sourceSets.ap.java.srcDirs.forEach { additionalSourceDir it }
-//}
+sourceJarConfigure {
+    sourceSets.ap.java.srcDirs.forEach { additionalSourceDir it }
+}
 
 javadocConfigure {
     from sourceSets.ap.java.sourceDirectories
