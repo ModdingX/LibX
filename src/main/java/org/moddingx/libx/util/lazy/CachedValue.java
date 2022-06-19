@@ -34,6 +34,20 @@ public class CachedValue<T> {
     }
 
     /**
+     * Returns a new cached value. If this cached value is currently valid, the new cached value
+     * will include the currently valid value. After that both values can be invalidated independent
+     * of each other.
+     */
+    public CachedValue<T> copy() {
+        CachedValue<T> copy = new CachedValue<>(this.supplier);
+        if (this.valid) {
+            copy.value = this.value;
+            copy.valid = true;
+        }
+        return copy;
+    }
+
+    /**
      * Invalidates the cached value.
      */
     public void invalidate() {
