@@ -5,11 +5,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.IOUtils;
+import org.moddingx.libx.codec.CodecHelper;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -35,6 +37,16 @@ public class DataLoader {
         return builder.create();
     });
 
+    /**
+     * Loads json data from a base path. For example if the base path is {@code a/b} and there are the json files
+     * {@code a/b/c.json} and {@code a/b/d/e.json}, the resulting ids will be {@code modid:c} and {@code modid:d/e}.
+     *
+     * @param codec A {@link Codec} to create the resulting objects.
+     */
+    public static <T> Map<ResourceLocation, T> loadJson(ResourceManager rm, String basePath, Codec<T> codec) throws IOException {
+        return loadJson(rm, basePath, (id, json) -> CodecHelper.JSON.read(codec, json));
+    }
+    
     /**
      * Loads json data from a base path. For example if the base path is {@code a/b} and there are the json files
      * {@code a/b/c.json} and {@code a/b/d/e.json}, the resulting ids will be {@code modid:c} and {@code modid:d/e}.
@@ -69,6 +81,14 @@ public class DataLoader {
         });
     }
 
+    /**
+     * Collects data from the given {@link Resource resources} by a given {@link Codec}. The contents of the
+     * resource are mapped to a {@link JsonElement} first.
+     */
+    public static <T> Map<ResourceLocation, T> collectJson(List<ResourceEntry> resources, Codec<T> codec) throws IOException {
+        return collectJson(resources, (id, json) -> CodecHelper.JSON.read(codec, json));
+    }
+    
     /**
      * Collects data from the given {@link Resource resources} by a given factory. The contents of the
      * resource are mapped to a {@link JsonElement} first.
