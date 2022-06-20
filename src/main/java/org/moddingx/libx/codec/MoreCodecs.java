@@ -5,6 +5,8 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapLike;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
@@ -12,14 +14,13 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import org.moddingx.libx.crafting.CraftingHelper2;
-import org.moddingx.libx.impl.codec.EnumCodec;
-import org.moddingx.libx.impl.codec.ErrorCodec;
-import org.moddingx.libx.impl.codec.OptionCodec;
-import org.moddingx.libx.impl.codec.TypeMappedCodec;
+import org.moddingx.libx.impl.codec.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Provides additional {@link Codec codecs}.
@@ -84,6 +85,21 @@ public class MoreCodecs {
         return EnumCodec.get(clazz);
     }
 
+    /**
+     * Creates a map dispatched codec. When encoding an element, it ist first decomposed into key and value.
+     * The key is used to obtain a codec to encode the value using the passed {@code valueCodecs} function.
+     * The {@link Codec} returned from that function <b>must</b> encode to a {@link MapLike}.
+     * After that, the key is encoded and merged into the {@link MapLike} from the value codec.
+     * 
+     * Decoding works the other way round in that the key is read first. Then the {@code valueCodecs} function
+     * is used to obtain a {@link Codec} to decode the value. In the end, both key and value are used to construct
+     * the resulting element. Both the {@link MapCodec} and the codecs returned from {@code valueCodecs} <b>must</b>
+     * be able to work with additional values, they don't know about.
+     */
+    public static <A, K, V> Codec<A> mapDispatch(MapCodec<K> keyCodec, Function<K, DataResult<Codec<V>>> valueCodecs, Function<A, Pair<K, V>> decompose, BiFunction<K, V, DataResult<A>> construct) {
+        return new MapDispatchedCodec<>(keyCodec, valueCodecs, decompose, construct);
+    }
+    
     /**
      * Gets a type mapped codec that will try to encode and decode values with the first
      * matching {@link TypedEncoder}.
