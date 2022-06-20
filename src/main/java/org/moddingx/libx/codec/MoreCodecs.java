@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.MapLike;
 import net.minecraft.nbt.CompoundTag;
@@ -19,8 +20,10 @@ import org.moddingx.libx.impl.codec.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Provides additional {@link Codec codecs}.
@@ -85,6 +88,50 @@ public class MoreCodecs {
         return EnumCodec.get(clazz);
     }
 
+    /**
+     * Excludes some keys from an {@link Encoder}. The encoder <b>must encode to a {@link MapLike}</b>.
+     */
+    public static <T> Encoder<T> excludeKeys(Encoder<T> encoder, String... excluded) {
+        return excludeKeys(encoder, Set.of(excluded));
+    }
+    
+    /**
+     * Excludes some keys from an {@link Encoder}. The encoder <b>must encode to a {@link MapLike}</b>.
+     */
+    public static <T> Encoder<T> excludeKeys(Encoder<T> encoder, Set<String> excluded) {
+        Set<String> copy = Set.copyOf(excluded);
+        return excludeKeys(encoder, new ElementFactory() {
+            
+            @Override
+            public <X> Stream<X> elements(DynamicOps<X> ops) {
+                return copy.stream().map(ops::createString);
+            }
+        });
+    }
+    
+    /**
+     * Excludes some keys from an {@link Encoder}. The encoder <b>must encode to a {@link MapLike}</b>.
+     */
+    public static <T> Encoder<T> excludeKeys(Encoder<T> encoder, ElementFactory excluded) {
+        return new ExcludeEncoder<>(encoder, excluded);
+    }
+    
+    /**
+     * Extends the give {@link Codec} with some new fields defined by the given {@link MapCodec}. The given
+     * codec <b>must</b> encode to a {@link MapLike}.
+     */
+    public static <M, E> Codec<Pair<M, E>> extend(Codec<M> codec, MapCodec<E> extension) {
+        return extend(codec, extension, Function.identity(), Pair::of);
+    }
+    
+    /**
+     * Extends the give {@link Codec} with some new fields defined by the given {@link MapCodec}. The given
+     * codec <b>must</b> encode to a {@link MapLike}.
+     */
+    public static <A, M, E> Codec<A> extend(Codec<M> codec, MapCodec<E> extension, Function<A, Pair<M, E>> decompose, BiFunction<M, E, A> construct) {
+        return mapDispatch(extension, key -> DataResult.success(codec), decompose.andThen(Pair::swap), (e, m) -> DataResult.success(construct.apply(m, e)));
+    }
+    
     /**
      * Creates a map dispatched codec. When encoding an element, it ist first decomposed into key and value.
      * The key is used to obtain a codec to encode the value using the passed {@code valueCodecs} function.
