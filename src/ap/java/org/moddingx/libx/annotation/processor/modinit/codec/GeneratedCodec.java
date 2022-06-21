@@ -50,7 +50,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
             for (int i = 0; i < this.list; i++) {
                 writer.write(".listOf()");
             }
-            writer.write(".fieldOf(\"" + ModInit.quote(this.name) + "\")");
+            writer.write(".fieldOf(" + ModInit.quote(this.name) + ")");
             writer.write(".forGetter(" + this.getter + ")");
         }
     }
@@ -72,7 +72,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
         public void writeCode(Writer writer) throws IOException {
             writer.write("((" + Classes.sourceName(Classes.MAP_CODEC) + "<" + this.typeFqnBoxed + ">)");
             writer.write(this.factoryFqn);
-            writer.write("(\"" + ModInit.quote(this.name) + "\"))");
+            writer.write("(" + ModInit.quote(this.name) + "))");
             writer.write(".forGetter(" + this.getter + ")");
         }
     }
@@ -98,7 +98,7 @@ public record GeneratedCodec(String fqn, List<CodecElement> params) {
             for (int i = 0; i < this.list; i++) {
                 writer.write(".listOf()");
             }
-            writer.write(".fieldOf(\"" + ModInit.quote(this.name) + "\")");
+            writer.write(".fieldOf(" + ModInit.quote(this.name) + ")");
             writer.write(".forGetter(" + this.getter + ")");
         }
     }
