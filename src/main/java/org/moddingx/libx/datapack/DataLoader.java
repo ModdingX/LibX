@@ -5,12 +5,16 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.IOUtils;
+import org.moddingx.libx.LibX;
 import org.moddingx.libx.codec.CodecHelper;
 
 import javax.annotation.Nullable;
@@ -44,7 +48,12 @@ public class DataLoader {
      * @param codec A {@link Codec} to create the resulting objects.
      */
     public static <T> Map<ResourceLocation, T> loadJson(ResourceManager rm, String basePath, Codec<T> codec) throws IOException {
-        return loadJson(rm, basePath, (id, json) -> CodecHelper.JSON.read(codec, json));
+        return loadJson(rm, basePath, (id, json) -> {
+            DataResult<T> result = codec.decode(JsonOps.INSTANCE, json).map(Pair::getFirst);
+            if (result.result().isPresent()) return result.result().get();
+            LibX.logger.error("Failed to load data entry " + id + ": " + result.error().map(DataResult.PartialResult::message).orElse("Unknown error"));
+            return null;
+        });
     }
     
     /**
@@ -64,7 +73,8 @@ public class DataLoader {
         // Don't use ImmutableMap.Builder because it would fail on duplicate keys
         Map<ResourceLocation, T> map = new HashMap<>();
         for (ResourceEntry entry : resources) {
-            map.put(entry.id(), factory.apply(entry.id(), entry.resource()));
+            T value = factory.apply(entry.id(), entry.resource());
+            if (value != null) map.put(entry.id(), value);
         }
         return ImmutableMap.copyOf(map);
     }
@@ -107,7 +117,8 @@ public class DataLoader {
     public static <T> Stream<T> join(List<ResourceEntry> resources, ResourceFactory<Resource, T> factory) throws IOException {
         Stream.Builder<T> stream = Stream.builder();
         for (ResourceEntry entry : resources) {
-            stream.add(factory.apply(entry.id(), entry.resource()));
+            T value = factory.apply(entry.id(), entry.resource());
+            if (value != null) stream.add(value);
         }
         return stream.build();
     }
@@ -182,6 +193,7 @@ public class DataLoader {
      */
     public interface ResourceFactory<T, R> {
         
+        @Nullable
         R apply(ResourceLocation id, T value) throws IOException;
     }
 }
