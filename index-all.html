@@ -569,6 +569,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Collects data from the given <code>resources</code> by a given factory.</div>
 </dd>
+<dt><a href="org/moddingx/libx/datapack/DataLoader.html#collectJson(java.util.List,com.mojang.serialization.Codec)" class="member-name-link">collectJson(List&lt;ResourceEntry&gt;, Codec&lt;T&gt;)</a> - Static method in class org.moddingx.libx.datapack.<a href="org/moddingx/libx/datapack/DataLoader.html" title="class in org.moddingx.libx.datapack">DataLoader</a></dt>
+<dd>
+<div class="block">Collects data from the given <code>resources</code> by a given <code>Codec</code>.</div>
+</dd>
 <dt><a href="org/moddingx/libx/datapack/DataLoader.html#collectJson(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">collectJson(List&lt;ResourceEntry&gt;, DataLoader.ResourceFactory&lt;JsonElement, T&gt;)</a> - Static method in class org.moddingx.libx.datapack.<a href="org/moddingx/libx/datapack/DataLoader.html" title="class in org.moddingx.libx.datapack">DataLoader</a></dt>
 <dd>
 <div class="block">Collects data from the given <code>resources</code> by a given factory.</div>
@@ -763,6 +767,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/datagen/provider/recipe/SmeltingExtension.html#cooking(net.minecraft.world.level.ItemLike,net.minecraft.world.level.ItemLike,float,int)" class="member-name-link">cooking(ItemLike, ItemLike, float, int)</a> - Method in interface org.moddingx.libx.datagen.provider.recipe.<a href="org/moddingx/libx/datagen/provider/recipe/SmeltingExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">SmeltingExtension</a></dt>
 <dd>
 <div class="block">Adds a smelting recipe that can be performed in a regular furnace and a smoker.</div>
+</dd>
+<dt><a href="org/moddingx/libx/util/lazy/CachedValue.html#copy()" class="member-name-link">copy()</a> - Method in class org.moddingx.libx.util.lazy.<a href="org/moddingx/libx/util/lazy/CachedValue.html" title="class in org.moddingx.libx.util.lazy">CachedValue</a></dt>
+<dd>
+<div class="block">Returns a new cached value.</div>
 </dd>
 <dt><a href="org/moddingx/libx/network/EnumDataSerializer.html#copy(T)" class="member-name-link">copy(T)</a> - Method in class org.moddingx.libx.network.<a href="org/moddingx/libx/network/EnumDataSerializer.html" title="class in org.moddingx.libx.network">EnumDataSerializer</a></dt>
 <dd>&nbsp;</dd>
@@ -1447,6 +1455,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/annotation/meta/Experimental.html" class="type-name-link" title="annotation interface in org.moddingx.libx.annotation.meta">Experimental</a> - Annotation Interface in <a href="org/moddingx/libx/annotation/meta/package-summary.html">org.moddingx.libx.annotation.meta</a></dt>
 <dd>
 <div class="block">Elements annotated with <code>Experimental</code> are subject to change.</div>
+</dd>
+<dt><a href="org/moddingx/libx/codec/MoreCodecs.html#extend(com.mojang.serialization.Codec,com.mojang.serialization.MapCodec)" class="member-name-link">extend(Codec&lt;M&gt;, MapCodec&lt;E&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
+<dd>
+<div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>.</div>
+</dd>
+<dt><a href="org/moddingx/libx/codec/MoreCodecs.html#extend(com.mojang.serialization.Codec,com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.BiFunction)" class="member-name-link">extend(Codec&lt;M&gt;, MapCodec&lt;E&gt;, Function&lt;A, Pair&lt;M, E&gt;&gt;, BiFunction&lt;M, E, A&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
+<dd>
+<div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>.</div>
 </dd>
 <dt><a href="org/moddingx/libx/inventory/IAdvancedItemHandler.html#extractItem(int,boolean)" class="member-name-link">extractItem(int, boolean)</a> - Method in interface org.moddingx.libx.inventory.<a href="org/moddingx/libx/inventory/IAdvancedItemHandler.html" title="interface in org.moddingx.libx.inventory">IAdvancedItemHandler</a></dt>
 <dd>
@@ -2331,6 +2347,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Places the player inventory slots into the container.</div>
 </dd>
+<dt><a href="org/moddingx/libx/codec/MoreCodecs.html#lazy(java.util.function.Supplier)" class="member-name-link">lazy(Supplier&lt;Codec&lt;T&gt;&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
+<dd>
+<div class="block">Lazily wraps the given <code>Codec</code>.</div>
+</dd>
 <dt><a href="org/moddingx/libx/util/lazy/LazyImmutableMap.html" class="type-name-link" title="class in org.moddingx.libx.util.lazy">LazyImmutableMap</a>&lt;<a href="org/moddingx/libx/util/lazy/LazyImmutableMap.html" title="type parameter in LazyImmutableMap">K</a>,<wbr><a href="org/moddingx/libx/util/lazy/LazyImmutableMap.html" title="type parameter in LazyImmutableMap">V</a>&gt; - Class in <a href="org/moddingx/libx/util/lazy/package-summary.html">org.moddingx.libx.util.lazy</a></dt>
 <dd>
 <div class="block">An immutable map with lazy populated values.</div>
@@ -2365,6 +2385,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/command/EnumArgument2.html#listSuggestions(com.mojang.brigadier.context.CommandContext,com.mojang.brigadier.suggestion.SuggestionsBuilder)" class="member-name-link">listSuggestions(CommandContext&lt;S&gt;, SuggestionsBuilder)</a> - Method in class org.moddingx.libx.command.<a href="org/moddingx/libx/command/EnumArgument2.html" title="class in org.moddingx.libx.command">EnumArgument2</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datapack/DataLoader.html#loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,com.mojang.serialization.Codec)" class="member-name-link">loadJson(ResourceManager, String, Codec&lt;T&gt;)</a> - Static method in class org.moddingx.libx.datapack.<a href="org/moddingx/libx/datapack/DataLoader.html" title="class in org.moddingx.libx.datapack">DataLoader</a></dt>
+<dd>
+<div class="block">Loads json data from a base path.</div>
+</dd>
 <dt><a href="org/moddingx/libx/datapack/DataLoader.html#loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">loadJson(ResourceManager, String, DataLoader.ResourceFactory&lt;JsonElement, T&gt;)</a> - Static method in class org.moddingx.libx.datapack.<a href="org/moddingx/libx/datapack/DataLoader.html" title="class in org.moddingx.libx.datapack">DataLoader</a></dt>
 <dd>
 <div class="block">Loads json data from a base path.</div>
@@ -2481,6 +2505,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets a new lazy value that will hold the value of this lazy value applied to
  the mapper function.</div>
+</dd>
+<dt><a href="org/moddingx/libx/codec/MoreCodecs.html#mapDispatch(com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.Function,java.util.function.BiFunction)" class="member-name-link">mapDispatch(MapCodec&lt;K&gt;, Function&lt;K, DataResult&lt;Codec&lt;? extends V&gt;&gt;&gt;, Function&lt;A, Pair&lt;K, V&gt;&gt;, BiFunction&lt;K, V, DataResult&lt;A&gt;&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
+<dd>
+<div class="block">Creates a map dispatched codec.</div>
 </dd>
 <dt><a href="org/moddingx/libx/crafting/recipe/RecipeHelper.html#matches(net.minecraft.world.item.crafting.Recipe,java.util.List,boolean)" class="member-name-link">matches(Recipe&lt;?&gt;, List&lt;ItemStack&gt;, boolean)</a> - Static method in class org.moddingx.libx.crafting.recipe.<a href="org/moddingx/libx/crafting/recipe/RecipeHelper.html" title="class in org.moddingx.libx.crafting.recipe">RecipeHelper</a></dt>
 <dd>
@@ -3583,6 +3611,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/base/FluidBase.Builder.html#renderProperties(java.util.function.Supplier)" class="member-name-link">renderProperties(Supplier&lt;Supplier&lt;IFluidTypeRenderProperties&gt;&gt;)</a> - Method in class org.moddingx.libx.base.<a href="org/moddingx/libx/base/FluidBase.Builder.html" title="class in org.moddingx.libx.base">FluidBase.Builder</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/RenderHelper.html#renderText(java.lang.String,com.mojang.blaze3d.vertex.PoseStack)" class="member-name-link">renderText(String, PoseStack)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
+<dd>
+<div class="block">Renders a text with a gray semi-transparent background.</div>
+</dd>
+<dt><a href="org/moddingx/libx/render/RenderHelper.html#renderText(net.minecraft.network.chat.Component,com.mojang.blaze3d.vertex.PoseStack)" class="member-name-link">renderText(Component, PoseStack)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
+<dd>
+<div class="block">Renders a text with a gray semi-transparent background.</div>
+</dd>
+<dt><a href="org/moddingx/libx/render/RenderHelper.html#renderText(net.minecraft.util.FormattedCharSequence,com.mojang.blaze3d.vertex.PoseStack)" class="member-name-link">renderText(FormattedCharSequence, PoseStack)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
 <dd>
 <div class="block">Renders a text with a gray semi-transparent background.</div>
 </dd>

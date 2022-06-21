@@ -132,34 +132,47 @@ loadScripts(document, 'script');</script>
 <div class="block">Collects data from the given <code>resources</code> by a given factory.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.resources.ResourceLocation,<wbr>T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#collectJson(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">collectJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
- <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>,<wbr>T&gt;&nbsp;factory)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#collectJson(java.util.List,com.mojang.serialization.Codec)" class="member-name-link">collectJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
+ com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Collects data from the given <code>resources</code> by a given factory.</div>
+<div class="block">Collects data from the given <code>resources</code> by a given <code>Codec</code>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.resources.ResourceLocation,<wbr>T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#collectText(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">collectText</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
- <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;&nbsp;factory)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#collectJson(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">collectJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
+ <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>,<wbr>T&gt;&nbsp;factory)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Collects data from the given <code>resources</code> by a given factory.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#join(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">join</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.resources.ResourceLocation,<wbr>T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#collectText(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">collectText</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
+ <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;&nbsp;factory)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Collects data from the given <code>resources</code> by a given factory.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#join(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">join</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
  <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;net.minecraft.server.packs.resources.Resource,<wbr>T&gt;&nbsp;factory)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Joins data from the given <code>resources</code> by a given factory into a stream.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#joinJson(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">joinJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
+ <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>,<wbr>T&gt;&nbsp;factory)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Joins data from the given <code>resources</code> by a given factory into a stream.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#joinJson(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">joinJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
- <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>,<wbr>T&gt;&nbsp;factory)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#joinText(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">joinText</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
+ <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;&nbsp;factory)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Joins data from the given <code>resources</code> by a given factory into a stream.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#joinText(java.util.List,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">joinText</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
- <a href="DataLoader.ResourceFactory.html" title="interface in org.moddingx.libx.datapack">DataLoader.ResourceFactory</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;&nbsp;factory)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.resources.ResourceLocation,<wbr>T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,com.mojang.serialization.Codec)" class="member-name-link">loadJson</a><wbr>(net.minecraft.server.packs.resources.ResourceManager&nbsp;rm,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;basePath,
+ com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Joins data from the given <code>resources</code> by a given factory into a stream.</div>
+<div class="block">Loads json data from a base path.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.resources.ResourceLocation,<wbr>T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">loadJson</a><wbr>(net.minecraft.server.packs.resources.ResourceManager&nbsp;rm,
@@ -215,6 +228,24 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,com.mojang.serialization.Codec)">
+<h3>loadJson</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
+<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.resources.ResourceLocation,<wbr>T&gt;</span>&nbsp;<span class="element-name">loadJson</span><wbr><span class="parameters">(net.minecraft.server.packs.resources.ResourceManager&nbsp;rm,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;basePath,
+ com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</span>
+                                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Loads json data from a base path. For example if the base path is <code>a/b</code> and there are the json files
+ <code>a/b/c.json</code> and <code>a/b/d/e.json</code>, the resulting ids will be <code>modid:c</code> and <code>modid:d/e</code>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>codec</code> - A <code>Codec</code> to create the resulting objects.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,org.moddingx.libx.datapack.DataLoader.ResourceFactory)">
 <h3>loadJson</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
@@ -255,6 +286,21 @@ loadScripts(document, 'script');</script>
                                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Collects data from the given <code>resources</code> by a given factory. The contents of the
  resource are mapped to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> first.</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="collectJson(java.util.List,com.mojang.serialization.Codec)">
+<h3>collectJson</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
+<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.resources.ResourceLocation,<wbr>T&gt;</span>&nbsp;<span class="element-name">collectJson</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a>&gt;&nbsp;resources,
+ com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</span>
+                                                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Collects data from the given <code>resources</code> by a given <code>Codec</code>. The contents of the
+ resource are mapped to a <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.8.9/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link"><code>JsonElement</code></a> first.</div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>

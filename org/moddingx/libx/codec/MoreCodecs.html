@@ -148,6 +148,38 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a codec that always errors with the given messages.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;M,<wbr>
+E&gt;&nbsp;com.mojang.serialization.Codec&lt;com.mojang.datafixers.util.Pair&lt;M,<wbr>E&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#extend(com.mojang.serialization.Codec,com.mojang.serialization.MapCodec)" class="member-name-link">extend</a><wbr>(com.mojang.serialization.Codec&lt;M&gt;&nbsp;codec,
+ com.mojang.serialization.MapCodec&lt;E&gt;&nbsp;extension)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;A,<wbr>
+M,<wbr>
+E&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#extend(com.mojang.serialization.Codec,com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.BiFunction)" class="member-name-link">extend</a><wbr>(com.mojang.serialization.Codec&lt;M&gt;&nbsp;codec,
+ com.mojang.serialization.MapCodec&lt;E&gt;&nbsp;extension,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;M,<wbr>E&gt;&gt;&nbsp;decompose,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;M,<wbr>E,<wbr>A&gt;&nbsp;construct)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#lazy(java.util.function.Supplier)" class="member-name-link">lazy</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.Codec&lt;T&gt;&gt;&nbsp;codec)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Lazily wraps the given <code>Codec</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;A,<wbr>
+K,<wbr>
+V&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#mapDispatch(com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.Function,java.util.function.BiFunction)" class="member-name-link">mapDispatch</a><wbr>(com.mojang.serialization.MapCodec&lt;K&gt;&nbsp;keyCodec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;K,<wbr>com.mojang.serialization.DataResult&lt;com.mojang.serialization.Codec&lt;? extends V&gt;&gt;&gt;&nbsp;valueCodecs,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;K,<wbr>V&gt;&gt;&nbsp;decompose,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;K,<wbr>V,<wbr>com.mojang.serialization.DataResult&lt;A&gt;&gt;&nbsp;construct)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a map dispatched codec.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#option(com.mojang.serialization.Codec)" class="member-name-link">option</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -250,6 +282,59 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;T&gt;&gt;</span>
 <span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">enumCodec</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;clazz)</span></div>
 <div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="extend(com.mojang.serialization.Codec,com.mojang.serialization.MapCodec)">
+<h3>extend</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;M,<wbr>
+E&gt;</span>
+<span class="return-type">com.mojang.serialization.Codec&lt;com.mojang.datafixers.util.Pair&lt;M,<wbr>E&gt;&gt;</span>&nbsp;<span class="element-name">extend</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;M&gt;&nbsp;codec,
+ com.mojang.serialization.MapCodec&lt;E&gt;&nbsp;extension)</span></div>
+<div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>. The given
+ codec <b>must</b> encode to a <code>MapLike</code>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="extend(com.mojang.serialization.Codec,com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.BiFunction)">
+<h3>extend</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;A,<wbr>
+M,<wbr>
+E&gt;</span>
+<span class="return-type">com.mojang.serialization.Codec&lt;A&gt;</span>&nbsp;<span class="element-name">extend</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;M&gt;&nbsp;codec,
+ com.mojang.serialization.MapCodec&lt;E&gt;&nbsp;extension,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;M,<wbr>E&gt;&gt;&nbsp;decompose,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;M,<wbr>E,<wbr>A&gt;&nbsp;construct)</span></div>
+<div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>. The given
+ codec <b>must</b> encode to a <code>MapLike</code>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="mapDispatch(com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.Function,java.util.function.BiFunction)">
+<h3>mapDispatch</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;A,<wbr>
+K,<wbr>
+V&gt;</span>
+<span class="return-type">com.mojang.serialization.Codec&lt;A&gt;</span>&nbsp;<span class="element-name">mapDispatch</span><wbr><span class="parameters">(com.mojang.serialization.MapCodec&lt;K&gt;&nbsp;keyCodec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;K,<wbr>com.mojang.serialization.DataResult&lt;com.mojang.serialization.Codec&lt;? extends V&gt;&gt;&gt;&nbsp;valueCodecs,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;K,<wbr>V&gt;&gt;&nbsp;decompose,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;K,<wbr>V,<wbr>com.mojang.serialization.DataResult&lt;A&gt;&gt;&nbsp;construct)</span></div>
+<div class="block">Creates a map dispatched codec. When encoding an element, it ist first decomposed into key and value.
+ The key is used to obtain a codec to encode the value using the passed <code>valueCodecs</code> function.
+ The <code>Codec</code> returned from that function <b>must</b> encode to a <code>MapLike</code>.
+ After that, the key is encoded and merged into the <code>MapLike</code> from the value codec.
+ 
+ Decoding works the other way round in that the key is read first. Then the <code>valueCodecs</code> function
+ is used to obtain a <code>Codec</code> to decode the value. In the end, both key and value are used to construct
+ the resulting element. Both the <code>MapCodec</code> and the codecs returned from <code>valueCodecs</code> <b>must</b>
+ be able to work with additional values, they don't know about.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="lazy(java.util.function.Supplier)">
+<h3>lazy</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">lazy</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.Codec&lt;T&gt;&gt;&nbsp;codec)</span></div>
+<div class="block">Lazily wraps the given <code>Codec</code>. Useful when codecs need to reference each other to recurse.</div>
 </section>
 </li>
 <li>
