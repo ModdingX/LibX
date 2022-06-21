@@ -51,7 +51,9 @@ public class DataLoader {
         return loadJson(rm, basePath, (id, json) -> {
             DataResult<T> result = codec.decode(JsonOps.INSTANCE, json).map(Pair::getFirst);
             if (result.result().isPresent()) return result.result().get();
-            LibX.logger.error("Failed to load data entry " + id + ": " + result.error().map(DataResult.PartialResult::message).orElse("Unknown error"));
+            String err = result.error().map(DataResult.PartialResult::message).orElse("Unknown error");
+            if (err.length() > 100) err = err.substring(0, 100) + " ...";
+            LibX.logger.error("Failed to load data entry " + id + ": " + err);
             return null;
         });
     }
