@@ -2,12 +2,7 @@ package org.moddingx.libx.codec;
 
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.Encoder;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.MapLike;
+import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
@@ -20,10 +15,9 @@ import org.moddingx.libx.impl.codec.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.function.Supplier;
 
 /**
  * Provides additional {@link Codec codecs}.
@@ -87,34 +81,6 @@ public class MoreCodecs {
     public static <T extends Enum<T>> Codec<T> enumCodec(Class<T> clazz) {
         return EnumCodec.get(clazz);
     }
-
-    /**
-     * Excludes some keys from an {@link Encoder}. The encoder <b>must encode to a {@link MapLike}</b>.
-     */
-    public static <T> Encoder<T> excludeKeys(Encoder<T> encoder, String... excluded) {
-        return excludeKeys(encoder, Set.of(excluded));
-    }
-    
-    /**
-     * Excludes some keys from an {@link Encoder}. The encoder <b>must encode to a {@link MapLike}</b>.
-     */
-    public static <T> Encoder<T> excludeKeys(Encoder<T> encoder, Set<String> excluded) {
-        Set<String> copy = Set.copyOf(excluded);
-        return excludeKeys(encoder, new ElementFactory() {
-            
-            @Override
-            public <X> Stream<X> elements(DynamicOps<X> ops) {
-                return copy.stream().map(ops::createString);
-            }
-        });
-    }
-    
-    /**
-     * Excludes some keys from an {@link Encoder}. The encoder <b>must encode to a {@link MapLike}</b>.
-     */
-    public static <T> Encoder<T> excludeKeys(Encoder<T> encoder, ElementFactory excluded) {
-        return new ExcludeEncoder<>(encoder, excluded);
-    }
     
     /**
      * Extends the give {@link Codec} with some new fields defined by the given {@link MapCodec}. The given
@@ -143,8 +109,15 @@ public class MoreCodecs {
      * the resulting element. Both the {@link MapCodec} and the codecs returned from {@code valueCodecs} <b>must</b>
      * be able to work with additional values, they don't know about.
      */
-    public static <A, K, V> Codec<A> mapDispatch(MapCodec<K> keyCodec, Function<K, DataResult<Codec<V>>> valueCodecs, Function<A, Pair<K, V>> decompose, BiFunction<K, V, DataResult<A>> construct) {
+    public static <A, K, V> Codec<A> mapDispatch(MapCodec<K> keyCodec, Function<K, DataResult<Codec<? extends V>>> valueCodecs, Function<A, Pair<K, V>> decompose, BiFunction<K, V, DataResult<A>> construct) {
         return new MapDispatchedCodec<>(keyCodec, valueCodecs, decompose, construct);
+    }
+
+    /**
+     * Lazily wraps the given {@link Codec}. Useful when codecs need to reference each other to recurse.
+     */
+    public static <T> Codec<T> lazy(Supplier<Codec<T>> codec) {
+        return new LazyCodec<>(codec);
     }
     
     /**

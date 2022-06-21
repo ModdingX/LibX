@@ -9,11 +9,11 @@ import java.util.function.Function;
 public class MapDispatchedCodec<A, K, V> implements Codec<A> {
 
     private final MapCodec<K> keyCodec;
-    private final Function<K, DataResult<Codec<V>>> valueCodecs;
+    private final Function<K, DataResult<Codec<? extends V>>> valueCodecs;
     private final Function<A, Pair<K, V>> decompose;
     private final BiFunction<K, V, DataResult<A>> construct;
 
-    public MapDispatchedCodec(MapCodec<K> keyCodec, Function<K, DataResult<Codec<V>>> valueCodecs, Function<A, Pair<K, V>> decompose, BiFunction<K, V, DataResult<A>> construct) {
+    public MapDispatchedCodec(MapCodec<K> keyCodec, Function<K, DataResult<Codec<? extends V>>> valueCodecs, Function<A, Pair<K, V>> decompose, BiFunction<K, V, DataResult<A>> construct) {
         this.keyCodec = keyCodec;
         this.valueCodecs = valueCodecs;
         this.decompose = decompose;
@@ -23,7 +23,8 @@ public class MapDispatchedCodec<A, K, V> implements Codec<A> {
     @Override
     public <T> DataResult<T> encode(A input, DynamicOps<T> ops, T prefix) {
         Pair<K, V> pair = this.decompose.apply(input);
-        return this.valueCodecs.apply(pair.getFirst())
+        //noinspection unchecked
+        return ((DataResult<Codec<V>>) (DataResult<?>) this.valueCodecs.apply(pair.getFirst()))
                 .mapError(err -> "No value codec available for " + pair.getFirst() + ": " + err)
                 .flatMap(valueCodec -> valueCodec
                         .encode(pair.getSecond(), ops, prefix)
