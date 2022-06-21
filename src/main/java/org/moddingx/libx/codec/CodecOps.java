@@ -1,5 +1,6 @@
 package org.moddingx.libx.codec;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
@@ -99,12 +100,6 @@ public class CodecOps<E> {
     }
 
     private static <T, E> T decodeWith(Codec<T> codec, E value, DynamicOps<E> ops) {
-        return codec.decode(ops, value).flatMap(pair -> {
-            if (ops.empty().equals(pair.getSecond())) {
-                return DataResult.success(pair.getFirst());
-            } else {
-                return DataResult.error("Input not fully consumed.");
-            }
-        }).getOrThrow(false, msg -> {});
+        return codec.decode(ops, value).map(Pair::getFirst).getOrThrow(false, msg -> {});
     }
 }

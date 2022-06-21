@@ -9,10 +9,6 @@ import java.lang.annotation.*;
  * 
  * The method must return a map codec with a matching type. As arguments, it
  * must accept a {@link String} which defines the field name.
- * 
- * For example using {@code @Dynamic(WorldSeedHolder.class)} on a parameter of type
- * {@link Long long} will get you a field codec for a long that defaults to the
- * current world seed.
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.RECORD_COMPONENT})

@@ -5,11 +5,17 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.IOUtils;
+import org.moddingx.libx.LibX;
+import org.moddingx.libx.codec.CodecHelper;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -38,6 +44,23 @@ public class DataLoader {
     /**
      * Loads json data from a base path. For example if the base path is {@code a/b} and there are the json files
      * {@code a/b/c.json} and {@code a/b/d/e.json}, the resulting ids will be {@code modid:c} and {@code modid:d/e}.
+     *
+     * @param codec A {@link Codec} to create the resulting objects.
+     */
+    public static <T> Map<ResourceLocation, T> loadJson(ResourceManager rm, String basePath, Codec<T> codec) throws IOException {
+        return loadJson(rm, basePath, (id, json) -> {
+            DataResult<T> result = codec.decode(JsonOps.INSTANCE, json).map(Pair::getFirst);
+            if (result.result().isPresent()) return result.result().get();
+            String err = result.error().map(DataResult.PartialResult::message).orElse("Unknown error");
+            if (err.length() > 100) err = err.substring(0, 100) + " ...";
+            LibX.logger.error("Failed to load data entry " + id + ": " + err);
+            return null;
+        });
+    }
+    
+    /**
+     * Loads json data from a base path. For example if the base path is {@code a/b} and there are the json files
+     * {@code a/b/c.json} and {@code a/b/d/e.json}, the resulting ids will be {@code modid:c} and {@code modid:d/e}.
      * 
      * @param factory A factory to create the resulting objects.
      */
@@ -52,7 +75,8 @@ public class DataLoader {
         // Don't use ImmutableMap.Builder because it would fail on duplicate keys
         Map<ResourceLocation, T> map = new HashMap<>();
         for (ResourceEntry entry : resources) {
-            map.put(entry.id(), factory.apply(entry.id(), entry.resource()));
+            T value = factory.apply(entry.id(), entry.resource());
+            if (value != null) map.put(entry.id(), value);
         }
         return ImmutableMap.copyOf(map);
     }
@@ -69,6 +93,14 @@ public class DataLoader {
         });
     }
 
+    /**
+     * Collects data from the given {@link Resource resources} by a given {@link Codec}. The contents of the
+     * resource are mapped to a {@link JsonElement} first.
+     */
+    public static <T> Map<ResourceLocation, T> collectJson(List<ResourceEntry> resources, Codec<T> codec) throws IOException {
+        return collectJson(resources, (id, json) -> CodecHelper.JSON.read(codec, json));
+    }
+    
     /**
      * Collects data from the given {@link Resource resources} by a given factory. The contents of the
      * resource are mapped to a {@link JsonElement} first.
@@ -87,7 +119,8 @@ public class DataLoader {
     public static <T> Stream<T> join(List<ResourceEntry> resources, ResourceFactory<Resource, T> factory) throws IOException {
         Stream.Builder<T> stream = Stream.builder();
         for (ResourceEntry entry : resources) {
-            stream.add(factory.apply(entry.id(), entry.resource()));
+            T value = factory.apply(entry.id(), entry.resource());
+            if (value != null) stream.add(value);
         }
         return stream.build();
     }
@@ -162,6 +195,7 @@ public class DataLoader {
      */
     public interface ResourceFactory<T, R> {
         
+        @Nullable
         R apply(ResourceLocation id, T value) throws IOException;
     }
 }

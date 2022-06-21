@@ -7,7 +7,10 @@ import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 import org.moddingx.libx.LibX;
 
 /**
@@ -125,6 +128,22 @@ public class RenderHelper {
      * Renders a text with a gray semi-transparent background.
      */
     public static void renderText(String text, PoseStack poseStack) {
+        if (text.isEmpty()) return;
+        renderText(FormattedCharSequence.forward(text, Style.EMPTY), poseStack);
+    }
+    
+    /**
+     * Renders a text with a gray semi-transparent background.
+     */
+    public static void renderText(Component text, PoseStack poseStack) {
+        renderText(text.getVisualOrderText(), poseStack);
+    }
+    
+    /**
+     * Renders a text with a gray semi-transparent background.
+     */
+    public static void renderText(FormattedCharSequence text, PoseStack poseStack) {
+        if (Minecraft.getInstance().font.width(text) == 0) return;
         float widthHalf = Minecraft.getInstance().font.width(text) / 2f;
         float heightHalf = Minecraft.getInstance().font.lineHeight / 2f;
 
