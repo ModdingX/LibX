@@ -22,7 +22,7 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
 
     static {
         try {
-            INFO_URL = new URL("https://moddingx.org/libx/org/moddingx/libx/util/ResourceList.html#use_resource_lists_in_configs");
+            INFO_URL = new URL("https://moddingx.org/libx/org/moddingx/libx/util/data/ResourceList.html#use_resource_lists_in_configs");
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
