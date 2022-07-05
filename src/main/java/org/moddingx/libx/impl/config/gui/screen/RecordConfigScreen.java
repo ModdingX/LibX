@@ -3,10 +3,9 @@ package org.moddingx.libx.impl.config.gui.screen;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
+import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.WidgetProperties;
-import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
-import org.moddingx.libx.impl.config.wrapper.TypesafeMapper;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.RecordComponent;
@@ -26,7 +25,7 @@ public class RecordConfigScreen extends ConfigScreen<RecordConfigScreen.Entry> {
         return new BuiltEntry(
                 Component.literal(elem.component().getName()),
                 ImmutableList.of(),
-                EditorHelper.create(screen, elem.mapper().createEditor(ValidatorInfo.empty()), elem.value().get(), oldWidget, properties)
+                EditorHelper.create(screen, elem.editorFactory().get(), elem.value().get(), oldWidget, properties)
         );
     }
 
@@ -34,5 +33,5 @@ public class RecordConfigScreen extends ConfigScreen<RecordConfigScreen.Entry> {
         return query.isBlank() || elem.component().getName().toLowerCase().contains(query.toLowerCase());
     }
     
-    public record Entry(RecordComponent component, TypesafeMapper mapper, Supplier<Object> value, Consumer<Object> inputChanged) {}
+    public record Entry(RecordComponent component, Supplier<ConfigEditor<Object>> editorFactory, Supplier<Object> value, Consumer<Object> inputChanged) {}
 }

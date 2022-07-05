@@ -6,7 +6,7 @@ import java.lang.annotation.*;
  * Config validator annotation that checks whether an integer is in a range of allowed values.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.RECORD_COMPONENT})
 @Documented
 public @interface IntRange {
 

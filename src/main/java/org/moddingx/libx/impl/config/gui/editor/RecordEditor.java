@@ -11,7 +11,7 @@ import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
 import org.moddingx.libx.impl.config.gui.screen.ConfigScreenManager;
 import org.moddingx.libx.impl.config.gui.screen.RecordConfigScreen;
-import org.moddingx.libx.impl.config.wrapper.TypesafeMapper;
+import org.moddingx.libx.impl.config.mappers.special.RecordValueMapper;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import java.lang.reflect.Constructor;
@@ -19,26 +19,30 @@ import java.lang.reflect.RecordComponent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class RecordEditor<T extends Record> implements ConfigEditor<T> {
 
     private final Class<T> clazz;
-    private final List<TypesafeMapper> mappers;
+    private final List<Supplier<ConfigEditor<Object>>> editors;
     private final Constructor<T> ctor;
     
     private final LazyValue<T> defaultValue;
     private final LazyValue<ConfigEditor<T>> unsupported;
 
-    public RecordEditor(Class<T> clazz, List<TypesafeMapper> mappers, Constructor<T> ctor) {
+    public RecordEditor(Class<T> clazz, List<RecordValueMapper.EntryData> entries, Constructor<T> ctor) {
         this.clazz = clazz;
-        this.mappers = mappers;
+        this.editors = entries.stream().map(entry -> (Supplier<ConfigEditor<Object>>) () -> {
+            ValidatorInfo<?> validator = entry.validator() == null ? ValidatorInfo.empty() : entry.validator().access();
+            return entry.mapper().createEditor(validator);
+        }).toList();
         this.ctor = ctor;
         
         this.defaultValue = new LazyValue<>(() -> {
             RecordComponent[] parts = this.clazz.getRecordComponents();
             Object[] values = new Object[parts.length];
             for (int i = 0; i < parts.length; i++) {
-                values[i] = this.mappers.get(i).createEditor(ValidatorInfo.empty()).defaultValue();
+                values[i] = this.editors.get(i).get().defaultValue();
             }
             try {
                 return this.ctor.newInstance(values);
@@ -63,13 +67,13 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
             RecordComponent[] parts = this.clazz.getRecordComponents();
             try {
                 for (RecordComponent part : parts) {
-                    values.add(part.getAccessor().invoke(initialValue));
+                    values.add(RecordValueMapper.accessComponent(part, initialValue));
                 }
             } catch (ReflectiveOperationException e) {
                 e.printStackTrace();
                 return this.unsupported.get().createWidget(screen, initialValue, properties);
             }
-            return new RecordButton<>(manager, this.clazz, this.mappers, this.ctor, values.build(), properties);
+            return new RecordButton<>(manager, this.clazz, this.editors, this.ctor, values.build(), properties);
         } else {
             return this.unsupported.get().createWidget(screen, initialValue, properties);
         }
@@ -81,7 +85,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
             ConfigScreenManager manager = EditorHelper.getManager(screen);
             if (manager != null) {
                 //noinspection unchecked
-                return new RecordButton<>(manager, this.clazz, this.mappers, this.ctor, ((RecordButton<T>) old).values, properties);
+                return new RecordButton<>(manager, this.clazz, this.editors, this.ctor, ((RecordButton<T>) old).values, properties);
             } else {
                 return this.unsupported.get().updateWidget(screen, old, properties);
             }
@@ -100,7 +104,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
         
         private final LazyValue<List<RecordConfigScreen.Entry>> entries;
 
-        public RecordButton(ConfigScreenManager manager, Class<T> clazz, List<TypesafeMapper> mappers, Constructor<T> ctor, List<Object> values, WidgetProperties<T> properties) {
+        public RecordButton(ConfigScreenManager manager, Class<T> clazz, List<Supplier<ConfigEditor<Object>>> editors, Constructor<T> ctor, List<Object> values, WidgetProperties<T> properties) {
             super(properties.x(), properties.y(), properties.width(), properties.height(), Component.translatable("libx.config.gui.edit"), b -> {});
             this.manager = manager;
             this.clazz = clazz;
@@ -115,7 +119,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
                 for (int i = 0; i < components.length; i++) {
                     int idx = i;
                     entries.add(new RecordConfigScreen.Entry(
-                            components[idx], mappers.get(idx),
+                            components[idx], editors.get(idx),
                             () -> this.values.get(idx),
                             e -> this.update(idx, e)
                     ));

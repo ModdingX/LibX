@@ -3,9 +3,14 @@ package org.moddingx.libx.impl.config.validators;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.validator.ConfigValidator;
 import org.moddingx.libx.config.validator.ValidatorInfo;
+import org.moddingx.libx.impl.config.ModMappers;
+import org.moddingx.libx.util.ClassUtil;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.RecordComponent;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -62,5 +67,34 @@ public class ConfiguredValidator<T, A extends Annotation> {
                 return ConfiguredValidator.this.validator.type().isAssignableFrom(value.getClass()) && ConfiguredValidator.this.validator.validate((T) value, ConfiguredValidator.this.annotation).isEmpty();
             }
         };
+    }
+
+    @Nullable
+    public static ConfiguredValidator<?, ?> create(String modid, Field field) {
+        return create(modid, field, field.getType());
+    }
+
+    @Nullable
+    public static ConfiguredValidator<?, ?> create(String modid, RecordComponent component) {
+        return create(modid, component, component.getType());
+    }
+    
+    @Nullable
+    private static ConfiguredValidator<?, ?> create(String modid, AnnotatedElement element, Class<?> elementType) {
+        ConfiguredValidator<?, ?> validator = null;
+        for (Annotation annotation : element.getAnnotations()) {
+            ConfigValidator<?, ?> v = ModMappers.get(modid).getValidatorByAnnotation(annotation.getClass());
+            if (v != null) {
+                if (validator != null) {
+                    throw new IllegalStateException("A config key may only have one validator annotation but two are given: " + validator.getAnnotationClass().getName() + " and " + annotation.getClass().getName());
+                } else if (!v.type().isAssignableFrom(ClassUtil.boxed(elementType))) {
+                    throw new IllegalStateException("Invalid config validator annotation: @" + v.annotation().getSimpleName() + " requires elements of type " + v.type().getName() + " but was used on an element of type " + elementType.getName());
+                } else {
+                    //noinspection unchecked
+                    validator = new ConfiguredValidator<>((ConfigValidator<Object, Annotation>) v, annotation);
+                }
+            }
+        }
+        return validator;
     }
 }

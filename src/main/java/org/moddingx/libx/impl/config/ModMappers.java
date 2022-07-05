@@ -152,7 +152,7 @@ public class ModMappers {
             return new TripleValueMapper<>(this.getWrappedMapperUnsafe(type, 0), this.getWrappedMapperUnsafe(type, 1), this.getWrappedMapperUnsafe(type, 2));
         } else if (cls.isRecord()) {
             //noinspection unchecked
-            return new RecordValueMapper<>((Class<? extends Record>) cls, this::getMapper);
+            return new RecordValueMapper<>(this.modid, (Class<? extends Record>) cls, this::getMapper);
         } else {
             throw new IllegalStateException("No config mapper found for type " + type + " (" + cls + ")");
         }
