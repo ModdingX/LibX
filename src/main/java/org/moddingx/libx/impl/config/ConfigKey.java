@@ -3,13 +3,12 @@ package org.moddingx.libx.impl.config;
 import com.google.common.collect.ImmutableList;
 import org.moddingx.libx.config.Config;
 import org.moddingx.libx.config.mapper.ValueMapper;
-import org.moddingx.libx.config.validator.ConfigValidator;
 import org.moddingx.libx.config.validator.ValidatorInfo;
+import org.moddingx.libx.impl.config.mappers.special.RecordValueMapper;
 import org.moddingx.libx.impl.config.validators.ConfiguredValidator;
 import org.moddingx.libx.util.ClassUtil;
 
 import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -57,16 +56,20 @@ public class ConfigKey {
         if (!ClassUtil.boxed(this.field.getType()).isAssignableFrom(value.getClass())) {
             throw new IllegalStateException("LibX config internal error: Can't validate value of type " + value.getClass()  +" (expected " + this.field.getType() + ")");
         }
+        
+        Object result = value;
         if (this.validator != null) {
             //noinspection unchecked
-            Object result = ((ConfiguredValidator<Object, ?>) this.validator).validate(value, action, this.path, needsCorrection);
-            if (!ClassUtil.boxed(this.field.getType()).isAssignableFrom(result.getClass())) {
-                throw new IllegalStateException("A config validator changed the type of a config key: " + result.getClass()  +" (expected " + this.field.getType() + ")");
-            }
-            return result;
-        } else {
-            return value;
+            result = ((ConfiguredValidator<Object, ?>) this.validator).validate(value, action, this.path, needsCorrection);
+        } else if (this.mapper instanceof RecordValueMapper<?> recordMapper && this.mapper.type().isAssignableFrom(value.getClass())) {
+            //noinspection unchecked
+            result = ((RecordValueMapper<Record>) recordMapper).validate((Record) value, action, this.path, needsCorrection);
         }
+
+        if (!ClassUtil.boxed(this.field.getType()).isAssignableFrom(result.getClass())) {
+            throw new IllegalStateException("A config validator changed the type of a config key: " + result.getClass()  +" (expected " + this.field.getType() + ")");
+        }
+        return result;
     }
     
     public ValidatorInfo<?> validatorAccess() {
@@ -98,20 +101,7 @@ public class ConfigKey {
                 path.add(0, currentStep.getSimpleName());
                 currentStep = currentStep.getDeclaringClass();
             }
-            ConfiguredValidator<?, ?> validator = null;
-            for (Annotation annotation : field.getAnnotations()) {
-                ConfigValidator<?, ?> v = ModMappers.get(modid).getValidatorByAnnotation(annotation.getClass());
-                if (v != null) {
-                    if (validator != null) {
-                        throw new IllegalStateException("A config key may only have one validator annotation but two are given: " + validator.getAnnotationClass().getName() + " and " + annotation.getClass().getName());
-                    } else if (!v.type().isAssignableFrom(ClassUtil.boxed(field.getType()))) {
-                        throw new IllegalStateException("Invalid config validator annotation: @" + v.annotation().getSimpleName() + " requires elements of type " + v.type().getName() + " but was used on an element of type " + field.getType().getName());
-                    } else {
-                        //noinspection unchecked
-                        validator = new ConfiguredValidator<>((ConfigValidator<Object, Annotation>) v, annotation);
-                    }
-                }
-            }
+            ConfiguredValidator<?, ?> validator = ConfiguredValidator.create(modid, field);
             return new ConfigKey(field, ModMappers.get(modid).getMapper(field), ImmutableList.copyOf(path), ImmutableList.copyOf(config.value()), validator);
         } catch (SecurityException e) {
             throw new IllegalStateException("Failed to create config key for field " + field, e);
