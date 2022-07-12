@@ -8,8 +8,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -21,15 +20,15 @@ public class RenderHelperFluid {
     public static void renderFluid(PoseStack poseStack, MultiBufferSource buffer, FluidStack stack, int x, int y, int width, int height) {
         if (!stack.isEmpty()) {
             Fluid fluid = stack.getFluid();
-            IFluidTypeRenderProperties properties = RenderProperties.get(fluid);
-            int color = properties.getColorTint(stack);
+            IClientFluidTypeExtensions properties = IClientFluidTypeExtensions.of(fluid);
+            int color = properties.getTintColor(stack);
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(properties.getStillTexture(stack));
             renderFluid(poseStack, buffer, sprite, color, x, y, width, height);
         }
     }
 
     public static void renderFluid(PoseStack poseStack, MultiBufferSource buffer, int color, int x, int y, int width, int height) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(RenderProperties.get(Fluids.WATER).getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
         renderFluid(poseStack, buffer, sprite, color, x, y, width, height);
     }
 

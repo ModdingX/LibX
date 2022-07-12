@@ -60,7 +60,7 @@ public class MenuBlockBE<T extends BlockEntity, C extends BlockEntityMenu<T>> ex
     @OverridingMethodsMustInvokeSuper
     public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
         super.initTracking(ctx, builder);
-        builder.track(ForgeRegistries.CONTAINERS, MenuBlockBE.class.getDeclaredField("menu"));
+        builder.track(ForgeRegistries.MENU_TYPES, MenuBlockBE.class.getDeclaredField("menu"));
     }
 
     @Nonnull

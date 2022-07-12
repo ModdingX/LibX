@@ -68,7 +68,7 @@ public final class NetworkImpl extends NetworkX {
             //noinspection ConstantConditions
             if (nbt == null)
                 return;
-            ResourceLocation id = ForgeRegistries.BLOCK_ENTITIES.getKey(be.getType());
+            ResourceLocation id = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(be.getType());
             if (id == null) return;
             this.channel.send(target, new BeUpdateSerializer.BeUpdateMessage(pos, id, nbt));
         }

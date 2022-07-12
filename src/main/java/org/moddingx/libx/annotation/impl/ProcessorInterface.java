@@ -1,18 +1,20 @@
 package org.moddingx.libx.annotation.impl;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.codec.MoreCodecs;
@@ -73,6 +75,10 @@ public class ProcessorInterface {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.NORMAL, false, event, listener);
     }
     
+    public static <T extends Event> void addLowModListener(Class<T> event, Consumer<T> listener) {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, false, event, listener);
+    }
+    
     public static <T extends Event> void addForgeListener(Class<T> event, Consumer<T> listener) {
         MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, event, listener);
     }
@@ -95,6 +101,18 @@ public class ProcessorInterface {
 
     public static boolean isModLoaded(String modid) {
         return ModList.get().isLoaded(modid);
+    }
+    
+    public static void addSpecialModel(ModelEvent.RegisterAdditional event, ResourceLocation id) {
+        event.register(id);
+    }
+    
+    public static BakedModel getSpecialModel(ModelEvent.BakingCompleted event, ResourceLocation id) {
+        if (event.getModels().containsKey(id)) {
+            return event.getModels().get(id);
+        } else {
+            throw new IllegalStateException("Model not loaded: " + id);
+        }
     }
     
     @FunctionalInterface

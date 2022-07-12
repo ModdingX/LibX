@@ -1,18 +1,13 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.registration.Registerable;
-import org.moddingx.libx.registration.SetupContext;
 
 import javax.annotation.Nonnull;
 
@@ -23,12 +18,6 @@ public class DecoratedTrapdoorBlock extends TrapDoorBlock implements Registerabl
     public DecoratedTrapdoorBlock(DecoratedBlock parent) {
         super(Properties.copy(parent));
         this.parent = parent;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerClient(SetupContext ctx) {
-        ctx.enqueue(() -> ItemBlockRenderTypes.setRenderLayer(this, RenderType.cutout()));
     }
 
     @Override

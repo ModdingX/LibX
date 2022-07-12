@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider;
 
 import net.minecraft.core.Direction;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -10,20 +11,20 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
-import net.minecraftforge.client.RenderProperties;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
+import net.minecraftforge.client.RenderTypeGroup;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
+import org.moddingx.libx.impl.data.TypedBlockModelProvider;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -45,14 +46,22 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     public static final ResourceLocation PRESSED_PRESSURE_PLATE_PARENT = new ResourceLocation("minecraft", "block/pressure_plate_down");
 
     protected final ModX mod;
+    protected final DataGenerator generator;
+    protected final ExistingFileHelper fileHelper;
 
-    private static final Set<Block> manualState = new HashSet<>();
-    private static final Set<Block> existingModel = new HashSet<>();
-    private static final Map<Block, ModelFile> customModel = new HashMap<>();
+    private final Set<Block> manualState = new HashSet<>();
+    private final Set<Block> existingModel = new HashSet<>();
+    private final Map<Block, ModelFile> customModel = new HashMap<>();
+    
+    @Nullable
+    private ResourceLocation currentRenderTypes = null;
+    private final Map<ResourceLocation, TypedBlockModelProvider> typedModelProviders = new HashMap<>();
 
     public BlockStateProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
         super(generator, mod.modid, fileHelper);
         this.mod = mod;
+        this.generator = generator;
+        this.fileHelper = fileHelper;
     }
 
     @Nonnull
@@ -65,21 +74,46 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * The provider will not process this block.
      */
     protected void manualState(Block b) {
-        manualState.add(b);
+        this.manualState.add(b);
     }
 
     /**
      * The provider will add a block state for a custom manual model
      */
     protected void manualModel(Block b) {
-        existingModel.add(b);
+        this.existingModel.add(b);
     }
 
     /**
      * The provider will add a block state with the given model
      */
     protected void manualModel(Block b, ModelFile model) {
-        customModel.put(b, model);
+        this.customModel.put(b, model);
+    }
+    
+    @Override
+    public BlockModelProvider models() {
+        return this.models(this.currentRenderTypes);
+    }
+
+    /**
+     * Gets a {@link BlockModelProvider} which assigns the given {@link RenderTypeGroup} to each created builder.
+     * 
+     * @param renderTypes The default {@link RenderTypeGroup} to use, or {@code null} for no render types (ie the default {@link BlockModelProvider})
+     */
+    protected BlockModelProvider models(@Nullable ResourceLocation renderTypes) {
+        if (renderTypes == null) {
+            return super.models();
+        } else {
+            return this.typedModelProviders.computeIfAbsent(renderTypes, k -> new TypedBlockModelProvider(this.generator, this.mod.modid, this.fileHelper, renderTypes));
+        }
+    }
+
+    /**
+     * Makes {@link #models()} behave as if it {@link #models(ResourceLocation)} was called with the given argument.
+     */
+    protected void setRenderType(@Nullable ResourceLocation renderTypes) {
+        this.currentRenderTypes = renderTypes;
     }
 
     @Override
@@ -88,16 +122,25 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
 
         for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
             Block block = ForgeRegistries.BLOCKS.getValue(id);
-            if (block != null && this.mod.modid.equals(id.getNamespace()) && !manualState.contains(block)) {
-                if (existingModel.contains(block)) {
+            if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.manualState.contains(block)) {
+                if (this.existingModel.contains(block)) {
                     this.defaultState(id, block, () -> this.models().getExistingFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
-                } else if (customModel.containsKey(block)) {
-                    this.defaultState(id, block, () -> customModel.get(block));
+                } else if (this.customModel.containsKey(block)) {
+                    this.defaultState(id, block, () -> this.customModel.get(block));
                 } else {
                     LazyValue<ModelFile> defaultModel = new LazyValue<>(() -> this.defaultModel(id, block));
                     this.defaultState(id, block, defaultModel::get);
                 }
             }
+        }
+    }
+
+    @Override
+    public void run(CachedOutput cache) throws IOException {
+        super.run(cache);
+        // Generate all models from providers for different render types
+        for (TypedBlockModelProvider provider : this.typedModelProviders.values()) {
+            provider.generateAll(cache);
         }
     }
 
@@ -127,9 +170,13 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         } else if (block instanceof DecoratedPressurePlate decorated) {
             this.pressurePlateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedDoorBlock decorated) {
+            this.setRenderType(RenderTypes.CUTOUT);
             this.doorBlock(decorated, textureId(id, "bottom"), textureId(id, "top"));
+            this.setRenderType(null);
         } else if (block instanceof DecoratedTrapdoorBlock decorated) {
+            this.setRenderType(RenderTypes.CUTOUT);
             this.trapdoorBlock(decorated, textureId(id), true);
+            this.setRenderType(null);
         } else if (block instanceof DecoratedSign.Standing decorated) {
             this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
         } else if (block instanceof DecoratedSign.Wall decorated) {
@@ -238,17 +285,18 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
 
     private static Optional<ResourceLocation> fluidTextureId(Fluid fluid) {
         try {
-            IFluidTypeRenderProperties properties = RenderProperties.get(fluid);
-            if (properties != IFluidTypeRenderProperties.DUMMY) {
-                return Optional.ofNullable(properties.getStillTexture());
+            
+            IClientFluidTypeExtensions ext = IClientFluidTypeExtensions.of(fluid);
+            if (ext != IClientFluidTypeExtensions.DEFAULT) {
+                return Optional.ofNullable(ext.getStillTexture());
             } else {
                 // Forge no longer calls this during datagen
                 // so we need to do it manually
-                AtomicReference<IFluidTypeRenderProperties> ref = new AtomicReference<>(null);
+                AtomicReference<IClientFluidTypeExtensions> ref = new AtomicReference<>(null);
                 fluid.getFluidType().initializeClient(ref::set);
-                properties = ref.get();
-                if (properties != null) {
-                    return Optional.ofNullable(properties.getStillTexture());
+                ext = ref.get();
+                if (ext != null) {
+                    return Optional.ofNullable(ext.getStillTexture());
                 } else {
                     return Optional.empty();
                 }
@@ -257,5 +305,22 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             LibX.logger.warn("Failed to load fluid render properties", e);
             return Optional.empty();
         }
+    }
+
+    /**
+     * Provides keys for builtin {@link RenderTypeGroup render types} to use.
+     */
+    public static class RenderTypes {
+        
+        private RenderTypes() {
+            
+        }
+        
+        public static final ResourceLocation SOLID = new ResourceLocation("minecraft", "solid");
+        public static final ResourceLocation CUTOUT = new ResourceLocation("minecraft", "cutout");
+        public static final ResourceLocation CUTOUT_MIPPED = new ResourceLocation("minecraft", "cutout_mipped");
+        public static final ResourceLocation CUTOUT_MIPPED_ALL = new ResourceLocation("minecraft", "cutout_mipped_all");
+        public static final ResourceLocation TRANSLUCENT = new ResourceLocation("minecraft", "translucent");
+        public static final ResourceLocation TRIPWIRE = new ResourceLocation("minecraft", "tripwire");
     }
 }

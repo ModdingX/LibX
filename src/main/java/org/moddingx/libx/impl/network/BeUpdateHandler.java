@@ -16,7 +16,7 @@ public class BeUpdateHandler {
             if (level == null)
                 return;
             BlockEntity be = level.getBlockEntity(msg.pos());
-            if (be != null && msg.id().equals(ForgeRegistries.BLOCK_ENTITIES.getKey(be.getType()))) {
+            if (be != null && msg.id().equals(ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(be.getType()))) {
                 be.handleUpdateTag(msg.nbt());
             }
         });
