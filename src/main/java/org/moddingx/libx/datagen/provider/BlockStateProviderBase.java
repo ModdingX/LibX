@@ -170,13 +170,9 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         } else if (block instanceof DecoratedPressurePlate decorated) {
             this.pressurePlateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedDoorBlock decorated) {
-            this.setRenderType(RenderTypes.CUTOUT);
-            this.doorBlock(decorated, textureId(id, "bottom"), textureId(id, "top"));
-            this.setRenderType(null);
+            this.doorBlockWithRenderType(decorated, textureId(id, "bottom"), textureId(id, "top"), RenderTypes.CUTOUT);
         } else if (block instanceof DecoratedTrapdoorBlock decorated) {
-            this.setRenderType(RenderTypes.CUTOUT);
-            this.trapdoorBlock(decorated, textureId(id), true);
-            this.setRenderType(null);
+            this.trapdoorBlockWithRenderType(decorated, textureId(id), true, RenderTypes.CUTOUT);
         } else if (block instanceof DecoratedSign.Standing decorated) {
             this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
         } else if (block instanceof DecoratedSign.Wall decorated) {
