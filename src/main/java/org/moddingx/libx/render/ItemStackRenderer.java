@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.base.BlockBase;
@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  * This class is meant to apply a {@link BlockEntityRenderer} to items. Using it is really straightforward:
  * 
  * <ul>
- *     <li>Add custom {@link IItemRenderProperties render properties} to your item through
+ *     <li>Add custom {@link IClientItemExtensions render properties} to your item through
  *     {@link Item#initializeClient(Consumer)} or {@link BlockBase#initializeItemClient(Consumer)}</li>
  *     <li>In {@link Registerable#registerClient(SetupContext)} call
  *     {@link ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)}</li>
@@ -136,13 +136,13 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     }
     
     /**
-     * Creates some {@link IItemRenderProperties} for with use the {@link ItemStackRenderer}.
+     * Creates some {@link IClientItemExtensions} for with use the {@link ItemStackRenderer}.
      */
-    public static IItemRenderProperties createProperties() {
-        return new IItemRenderProperties() {
+    public static IClientItemExtensions createProperties() {
+        return new IClientItemExtensions() {
             
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return ItemStackRenderer.get();
             }
         };

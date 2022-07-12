@@ -82,6 +82,6 @@ public class BlockMenu extends DefaultMenu {
                 return menu.create(containerId, inventory, buffer);
             }
         };
-        NetworkHooks.openGui(player, containerProvider, pos);
+        NetworkHooks.openScreen(player, containerProvider, pos);
     }
 }

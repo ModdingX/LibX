@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 public abstract class EntityLootProviderBase extends LootProviderBase<EntityType<?>> {
 
     protected EntityLootProviderBase(ModX mod, DataGenerator generator) {
-        super(mod, generator, "entities", LootContextParamSets.ENTITY, ForgeRegistries.ENTITIES);
+        super(mod, generator, "entities", LootContextParamSets.ENTITY, ForgeRegistries.ENTITY_TYPES);
     }
 
     @Nullable

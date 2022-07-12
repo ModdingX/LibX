@@ -87,7 +87,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
     @OverridingMethodsMustInvokeSuper
     public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
         super.initTracking(ctx, builder);
-        builder.track(ForgeRegistries.BLOCK_ENTITIES, BlockBE.class.getDeclaredField("beType"));
+        builder.track(ForgeRegistries.BLOCK_ENTITY_TYPES, BlockBE.class.getDeclaredField("beType"));
     }
 
     @Nullable

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -45,7 +45,7 @@ public class FluidBase implements Registerable, ItemLike {
     private final FluidType.Properties properties;
 
     @Nullable
-    private final Supplier<Supplier<IFluidTypeRenderProperties>> renderProperties;
+    private final Supplier<Supplier<IClientFluidTypeExtensions>> renderProperties;
 
     private boolean initialised;
 
@@ -56,7 +56,7 @@ public class FluidBase implements Registerable, ItemLike {
     private final LiquidBlock block;
     private final BucketItem bucket;
 
-    private FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, FluidType.Properties properties, @Nullable Supplier<Supplier<IFluidTypeRenderProperties>> renderProperties, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
+    private FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, FluidType.Properties properties, @Nullable Supplier<Supplier<IClientFluidTypeExtensions>> renderProperties, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this.mod = mod;
         this.sourceFactory = sourceFactory;
         this.flowingFactory = flowingFactory;
@@ -69,7 +69,7 @@ public class FluidBase implements Registerable, ItemLike {
         this.bucket = new BucketItem(this::getSource, itemProperties.stacksTo(1)) {
 
             @Override
-            public ItemStack getContainerItem(ItemStack stack) {
+            public ItemStack getCraftingRemainingItem(ItemStack stack) {
                 return new ItemStack(Items.BUCKET);
             }
 
@@ -223,7 +223,7 @@ public class FluidBase implements Registerable, ItemLike {
         private Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory;
 
         @Nullable
-        private Supplier<Supplier<IFluidTypeRenderProperties>> renderProperties;
+        private Supplier<Supplier<IClientFluidTypeExtensions>> renderProperties;
         private FluidType.Properties properties;
         private BlockBehaviour.Properties blockProperties;
         private Item.Properties itemProperties;
@@ -252,7 +252,7 @@ public class FluidBase implements Registerable, ItemLike {
             return this;
         }
 
-        public Builder renderProperties(Supplier<Supplier<IFluidTypeRenderProperties>> renderProperties) {
+        public Builder renderProperties(Supplier<Supplier<IClientFluidTypeExtensions>> renderProperties) {
             this.renderProperties = renderProperties;
             return this;
         }

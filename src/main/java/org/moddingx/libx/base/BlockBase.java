@@ -4,7 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
@@ -53,7 +53,7 @@ public class BlockBase extends Block implements Registerable {
             this.item = new BlockItem(this, itemProperties) {
                 
                 @Override
-                public void initializeClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+                public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
                     BlockBase.this.initializeItemClient(consumer);
                 }
             };
@@ -64,7 +64,7 @@ public class BlockBase extends Block implements Registerable {
      * Called from the item for this block from {@link Item#initializeClient(Consumer)}.
      * Can be used to set client properties for the block item.
      */
-    protected void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+    protected void initializeItemClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
 
     }
 

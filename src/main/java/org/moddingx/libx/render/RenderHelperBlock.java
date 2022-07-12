@@ -19,7 +19,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
 
 import java.util.List;
@@ -90,14 +90,14 @@ public class RenderHelperBlock {
             VertexConsumer vertex = Minecraft.getInstance().renderBuffers().crumblingBufferSource().getBuffer(RENDER_TYPE_BREAK);
             for (Direction direction : Direction.values()) {
                 random.setSeed(positionRandom);
-                List<BakedQuad> list = model.getQuads(state, direction, random, EmptyModelData.INSTANCE);
+                List<BakedQuad> list = model.getQuads(state, direction, random, ModelData.EMPTY, null);
                 if (!list.isEmpty()) {
                     renderBlockOverlayQuad(DefaultVertexFormat.BLOCK, poseStack.last(), vertex, list, light, overlay, sprite, dirs);
                 }
             }
 
             random.setSeed(positionRandom);
-            List<BakedQuad> list = model.getQuads(state, null, random, EmptyModelData.INSTANCE);
+            List<BakedQuad> list = model.getQuads(state, null, random, ModelData.EMPTY, null);
             if (!list.isEmpty()) {
                 renderBlockOverlayQuad(DefaultVertexFormat.BLOCK, poseStack.last(), vertex, list, light, overlay, sprite, dirs);
             }

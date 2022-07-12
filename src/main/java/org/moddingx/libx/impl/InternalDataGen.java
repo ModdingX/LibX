@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl;
 
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.tags.InternalTagProvider;
 

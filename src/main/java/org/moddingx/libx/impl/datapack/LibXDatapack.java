@@ -3,7 +3,7 @@ package org.moddingx.libx.impl.datapack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.forgespi.locating.IModFile;
-import net.minecraftforge.resource.PathResourcePack;
+import net.minecraftforge.resource.PathPackResources;
 import org.moddingx.libx.datapack.DatapackHelper;
 
 import javax.annotation.Nonnull;
@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.function.Supplier;
 
-public class LibXDatapack extends PathResourcePack {
+public class LibXDatapack extends PathPackResources {
 
     public static final int PACK_VERSION = 10;
     public static final String PREFIX = "libxdata";

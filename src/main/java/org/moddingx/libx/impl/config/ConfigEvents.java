@@ -16,7 +16,7 @@ public class ConfigEvents {
     @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void serverPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (!event.getPlayer().level.isClientSide && event.getPlayer() instanceof ServerPlayer serverPlayer && FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
+        if (!event.getEntity().level.isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer && FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             ConfigManager.forceResync(serverPlayer);
         }
     }
@@ -24,7 +24,7 @@ public class ConfigEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void clientPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (!event.getPlayer().level.isClientSide && FMLEnvironment.dist == Dist.CLIENT) {
+        if (!event.getEntity().level.isClientSide && FMLEnvironment.dist == Dist.CLIENT) {
             for (ConfigImpl config : ConfigImpl.getAllConfigs()) {
                 config.reloadClientWorldState();
             }
@@ -33,7 +33,7 @@ public class ConfigEvents {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void clientPlayerLeave(ClientPlayerNetworkEvent.LoggedOutEvent event) {
+    public void clientPlayerLeave(ClientPlayerNetworkEvent.LoggingOut event) {
         for (ResourceLocation id : ConfigManager.configs()) {
             ConfigImpl config = ConfigImpl.getConfig(id);
             if (!config.clientConfig) {

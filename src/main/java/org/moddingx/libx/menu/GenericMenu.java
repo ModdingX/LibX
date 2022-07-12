@@ -159,7 +159,7 @@ public class GenericMenu extends MenuBase {
                 return new GenericMenu(containerId, new GenericContainerSlotValidationWrapper(inventory, validator, null), inv);
             }
         };
-        NetworkHooks.openGui(player, provider, buffer -> {
+        NetworkHooks.openScreen(player, provider, buffer -> {
             buffer.writeVarInt(inventory.getSlots());
             buffer.writeResourceLocation(validatorId == null ? EMPTY_VALIDATOR : validatorId);
             for (int i = 0; i < inventory.getSlots(); i++) {

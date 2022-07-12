@@ -6,11 +6,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraftforge.client.IItemRenderProperties;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuilder;
+import net.minecraftforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
@@ -94,10 +93,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         if (item instanceof SpawnEggItem) {
             this.withExistingParent(id.getPath(), SPAWN_EGG_PARENT);
         } else if (item instanceof BucketItem bucketItem) {
-            this.withExistingParent(id.getPath(), DRIPPING_BUCKET)
-                    .texture("base", this.modLoc("item/" + id.getPath()))
-                    .customLoader(DynamicBucketModelBuilder::begin)
-                    .fluid(bucketItem.getFluid());
+            this.withExistingParent(id.getPath(), DRIPPING_BUCKET).texture("base", this.modLoc("item/" + id.getPath())).customLoader(DynamicFluidContainerModelBuilder::begin).fluid(bucketItem.getFluid());
         } else {
             this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         }
@@ -133,16 +129,16 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
 
     private static boolean isItemStackRenderer(Item item) {
         try {
-            IItemRenderProperties properties = RenderProperties.get(item);
-            if (properties != IItemRenderProperties.DUMMY) {
-                properties.getItemStackRenderer();
+            IClientItemExtensions properties = IClientItemExtensions.of(item);
+            if (properties != IClientItemExtensions.DEFAULT) {
+                properties.getCustomRenderer();
             } else {
                 // Forge no longer calls this during datagen
                 // so we need to do it manually
-                AtomicReference<IItemRenderProperties> ref = new AtomicReference<>(null);
+                AtomicReference<IClientItemExtensions> ref = new AtomicReference<>(null);
                 item.initializeClient(ref::set);
                 properties = ref.get();
-                if (properties != null) properties.getItemStackRenderer();
+                if (properties != null) properties.getCustomRenderer();
             }
         } catch (RendererOnDataGenException e) {
             return true;
