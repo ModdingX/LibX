@@ -2,7 +2,7 @@ package org.moddingx.libx.impl.config.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModContainer;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.gui.screen.ConfigScreenManager;
@@ -29,7 +29,7 @@ public class ModConfigGuiAdapter {
     public synchronized void checkRegister() {
         if (!this.hasRegisteredExt && ConfigImpl.getAllConfigs().stream().anyMatch(config -> this.modid.equals(config.id.getNamespace()))) {
             this.hasRegisteredExt = true;
-            this.context.registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory(this::createScreen));
+            this.context.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(this::createScreen));
         }
     }
     

@@ -10,8 +10,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -238,17 +237,18 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
 
     private static Optional<ResourceLocation> fluidTextureId(Fluid fluid) {
         try {
-            IFluidTypeRenderProperties properties = RenderProperties.get(fluid);
-            if (properties != IFluidTypeRenderProperties.DUMMY) {
-                return Optional.ofNullable(properties.getStillTexture());
+            
+            IClientFluidTypeExtensions ext = IClientFluidTypeExtensions.of(fluid);
+            if (ext != IClientFluidTypeExtensions.DEFAULT) {
+                return Optional.ofNullable(ext.getStillTexture());
             } else {
                 // Forge no longer calls this during datagen
                 // so we need to do it manually
-                AtomicReference<IFluidTypeRenderProperties> ref = new AtomicReference<>(null);
+                AtomicReference<IClientFluidTypeExtensions> ref = new AtomicReference<>(null);
                 fluid.getFluidType().initializeClient(ref::set);
-                properties = ref.get();
-                if (properties != null) {
-                    return Optional.ofNullable(properties.getStillTexture());
+                ext = ref.get();
+                if (ext != null) {
+                    return Optional.ofNullable(ext.getStillTexture());
                 } else {
                     return Optional.empty();
                 }

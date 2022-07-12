@@ -56,7 +56,7 @@ public class MenuBlock<C extends BlockMenu> extends BlockBase {
     @OverridingMethodsMustInvokeSuper
     public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
         super.initTracking(ctx, builder);
-        builder.track(ForgeRegistries.CONTAINERS, MenuBlock.class.getDeclaredField("menu"));
+        builder.track(ForgeRegistries.MENU_TYPES, MenuBlock.class.getDeclaredField("menu"));
     }
 
     @Nonnull

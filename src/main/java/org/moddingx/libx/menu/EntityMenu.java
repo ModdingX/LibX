@@ -83,6 +83,6 @@ public abstract class EntityMenu<T extends Entity> extends DefaultMenu {
                 return menu.create(containerId, inventory, buffer);
             }
         };
-        NetworkHooks.openGui(player, containerProvider, buffer -> buffer.writeInt(entity.getId()));
+        NetworkHooks.openScreen(player, containerProvider, buffer -> buffer.writeInt(entity.getId()));
     }
 }
