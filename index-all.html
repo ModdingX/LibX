@@ -371,6 +371,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#%3Cinit%3E(org.moddingx.libx.mod.ModX,net.minecraft.data.DataGenerator,net.minecraftforge.common.data.ExistingFileHelper)" class="member-name-link">BlockStateProviderBase(ModX, DataGenerator, ExistingFileHelper)</a> - Constructor for class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a> - Class in <a href="org/moddingx/libx/datagen/provider/package-summary.html">org.moddingx.libx.datagen.provider</a></dt>
+<dd>
+<div class="block">Provides keys for builtin <code>render types</code> to use.</div>
+</dd>
 <dt><a href="org/moddingx/libx/util/ClassUtil.html#boxed(java.lang.Class)" class="member-name-link">boxed(Class&lt;?&gt;)</a> - Static method in class org.moddingx.libx.util.<a href="org/moddingx/libx/util/ClassUtil.html" title="class in org.moddingx.libx.util">ClassUtil</a></dt>
 <dd>
 <div class="block">Returns the given class unless it's a primitive class in which
@@ -528,6 +532,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the value of the <a href="./org/moddingx/libx/network/NetworkX.Protocol.html#param-client"><code>client</code></a> record component.</div>
 </dd>
+<dt><a href="org/moddingx/libx/base/FluidBase.Builder.html#clientExtensions(java.util.function.Supplier)" class="member-name-link">clientExtensions(Supplier&lt;Supplier&lt;IClientFluidTypeExtensions&gt;&gt;)</a> - Method in class org.moddingx.libx.base.<a href="org/moddingx/libx/base/FluidBase.Builder.html" title="class in org.moddingx.libx.base">FluidBase.Builder</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/LibX.html#clientSetup(net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent)" class="member-name-link">clientSetup(FMLClientSetupEvent)</a> - Method in class org.moddingx.libx.<a href="org/moddingx/libx/LibX.html" title="class in org.moddingx.libx">LibX</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/mod/ModX.html#clientSetup(net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent)" class="member-name-link">clientSetup(FMLClientSetupEvent)</a> - Method in class org.moddingx.libx.mod.<a href="org/moddingx/libx/mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a></dt>
@@ -910,7 +916,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/render/ItemStackRenderer.html#createProperties()" class="member-name-link">createProperties()</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/ItemStackRenderer.html" title="class in org.moddingx.libx.render">ItemStackRenderer</a></dt>
 <dd>
-<div class="block">Creates some <code>IItemRenderProperties</code> for with use the <a href="org/moddingx/libx/render/ItemStackRenderer.html" title="class in org.moddingx.libx.render"><code>ItemStackRenderer</code></a>.</div>
+<div class="block">Creates some <code>IClientItemExtensions</code> for with use the <a href="org/moddingx/libx/render/ItemStackRenderer.html" title="class in org.moddingx.libx.render"><code>ItemStackRenderer</code></a>.</div>
 </dd>
 <dt><a href="org/moddingx/libx/inventory/BaseItemStackHandler.html#createUnrestrictedCapability()" class="member-name-link">createUnrestrictedCapability()</a> - Method in class org.moddingx.libx.inventory.<a href="org/moddingx/libx/inventory/BaseItemStackHandler.html" title="class in org.moddingx.libx.inventory">BaseItemStackHandler</a></dt>
 <dd>
@@ -965,6 +971,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The given item will get the given loot table.</div>
 </dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html#CUTOUT" class="member-name-link">CUTOUT</a> - Static variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html#CUTOUT_MIPPED" class="member-name-link">CUTOUT_MIPPED</a> - Static variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html#CUTOUT_MIPPED_ALL" class="member-name-link">CUTOUT_MIPPED_ALL</a> - Static variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
@@ -1346,6 +1358,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/network/PacketSerializer.html#encode(T,net.minecraft.network.FriendlyByteBuf)" class="member-name-link">encode(T, FriendlyByteBuf)</a> - Method in interface org.moddingx.libx.network.<a href="org/moddingx/libx/network/PacketSerializer.html" title="interface in org.moddingx.libx.network">PacketSerializer</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#endOverlayBatch()" class="member-name-link">endOverlayBatch()</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
+<dd>
+<div class="block">Invokes <code>MultiBufferSource.BufferSource.endBatch(RenderType)</code> on the crumbling buffer with the <code>RenderType</code>
+ used for custom overlays and crumbling.</div>
+</dd>
 <dt><a href="org/moddingx/libx/registration/SetupContext.html#enqueue(java.lang.Runnable)" class="member-name-link">enqueue(Runnable)</a> - Method in class org.moddingx.libx.registration.<a href="org/moddingx/libx/registration/SetupContext.html" title="class in org.moddingx.libx.registration">SetupContext</a></dt>
 <dd>
 <div class="block">Enqueues a given <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link"><code>Runnable</code></a> into the synchronous work queue.</div>
@@ -1495,6 +1512,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Field name of the codec field.</div>
 </dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#fileHelper" class="member-name-link">fileHelper</a> - Variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/CommonTagsProviderBase.html#fileHelper" class="member-name-link">fileHelper</a> - Variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/CommonTagsProviderBase.html" title="class in org.moddingx.libx.datagen.provider">CommonTagsProviderBase</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/loot/EntityLootProviderBase.html#fire()" class="member-name-link">fire()</a> - Method in class org.moddingx.libx.datagen.provider.loot.<a href="org/moddingx/libx/datagen/provider/loot/EntityLootProviderBase.html" title="class in org.moddingx.libx.datagen.provider.loot">EntityLootProviderBase</a></dt>
@@ -1663,6 +1682,8 @@ loadScripts(document, 'script');</script>
  a dynamically generated <code>pack.mcmeta</code> based on the given mod file.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/AdvancementProviderBase.html#generator" class="member-name-link">generator</a> - Variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/AdvancementProviderBase.html" title="class in org.moddingx.libx.datagen.provider">AdvancementProviderBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#generator" class="member-name-link">generator</a> - Variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/CommonTagsProviderBase.html#generator" class="member-name-link">generator</a> - Variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/CommonTagsProviderBase.html" title="class in org.moddingx.libx.datagen.provider">CommonTagsProviderBase</a></dt>
 <dd>&nbsp;</dd>
@@ -2100,7 +2121,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">First load of the config.</div>
 </dd>
-<dt><a href="org/moddingx/libx/base/BlockBase.html#initializeItemClient(java.util.function.Consumer)" class="member-name-link">initializeItemClient(Consumer&lt;IItemRenderProperties&gt;)</a> - Method in class org.moddingx.libx.base.<a href="org/moddingx/libx/base/BlockBase.html" title="class in org.moddingx.libx.base">BlockBase</a></dt>
+<dt><a href="org/moddingx/libx/base/BlockBase.html#initializeItemClient(java.util.function.Consumer)" class="member-name-link">initializeItemClient(Consumer&lt;IClientItemExtensions&gt;)</a> - Method in class org.moddingx.libx.base.<a href="org/moddingx/libx/base/BlockBase.html" title="class in org.moddingx.libx.base">BlockBase</a></dt>
 <dd>
 <div class="block">Called from the item for this block from <code>Item.initializeClient(Consumer)</code>.</div>
 </dd>
@@ -2385,6 +2406,18 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/command/EnumArgument2.html#listSuggestions(com.mojang.brigadier.context.CommandContext,com.mojang.brigadier.suggestion.SuggestionsBuilder)" class="member-name-link">listSuggestions(CommandContext&lt;S&gt;, SuggestionsBuilder)</a> - Method in class org.moddingx.libx.command.<a href="org/moddingx/libx/command/EnumArgument2.html" title="class in org.moddingx.libx.command">EnumArgument2</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/RenderHelperLevel.html#loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,double,double,double)" class="member-name-link">loadCameraPosition(Camera, PoseStack, double, double, double)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></dt>
+<dd>
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>.</div>
+</dd>
+<dt><a href="org/moddingx/libx/render/RenderHelperLevel.html#loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.core.BlockPos)" class="member-name-link">loadCameraPosition(Camera, PoseStack, BlockPos)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></dt>
+<dd>
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>.</div>
+</dd>
+<dt><a href="org/moddingx/libx/render/RenderHelperLevel.html#loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.world.phys.Vec3)" class="member-name-link">loadCameraPosition(Camera, PoseStack, Vec3)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></dt>
+<dd>
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>.</div>
+</dd>
 <dt><a href="org/moddingx/libx/datapack/DataLoader.html#loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,com.mojang.serialization.Codec)" class="member-name-link">loadJson(ResourceManager, String, Codec&lt;T&gt;)</a> - Static method in class org.moddingx.libx.datapack.<a href="org/moddingx/libx/datapack/DataLoader.html" title="class in org.moddingx.libx.datapack">DataLoader</a></dt>
 <dd>
 <div class="block">Loads json data from a base path.</div>
@@ -2392,18 +2425,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/datapack/DataLoader.html#loadJson(net.minecraft.server.packs.resources.ResourceManager,java.lang.String,org.moddingx.libx.datapack.DataLoader.ResourceFactory)" class="member-name-link">loadJson(ResourceManager, String, DataLoader.ResourceFactory&lt;JsonElement, T&gt;)</a> - Static method in class org.moddingx.libx.datapack.<a href="org/moddingx/libx/datapack/DataLoader.html" title="class in org.moddingx.libx.datapack">DataLoader</a></dt>
 <dd>
 <div class="block">Loads json data from a base path.</div>
-</dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperLevel.html#loadProjection(com.mojang.blaze3d.vertex.PoseStack,double,double,double)" class="member-name-link">loadProjection(PoseStack, double, double, double)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></dt>
-<dd>
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>.</div>
-</dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperLevel.html#loadProjection(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.core.BlockPos)" class="member-name-link">loadProjection(PoseStack, BlockPos)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></dt>
-<dd>
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>.</div>
-</dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperLevel.html#loadProjection(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.world.phys.Vec3)" class="member-name-link">loadProjection(PoseStack, Vec3)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></dt>
-<dd>
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/recipe/RecipeProviderBase.html#loc(net.minecraft.world.level.ItemLike)" class="member-name-link">loc(ItemLike)</a> - Method in class org.moddingx.libx.datagen.provider.recipe.<a href="org/moddingx/libx/datagen/provider/recipe/RecipeProviderBase.html" title="class in org.moddingx.libx.datagen.provider.recipe">RecipeProviderBase</a></dt>
 <dd>
@@ -2651,6 +2672,12 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/annotation/model/Model.html" class="type-name-link" title="annotation interface in org.moddingx.libx.annotation.model">Model</a> - Annotation Interface in <a href="org/moddingx/libx/annotation/model/package-summary.html">org.moddingx.libx.annotation.model</a></dt>
 <dd>
 <div class="block">Can be attached to public static non-final baked model fields.</div>
+</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#models()" class="member-name-link">models()</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#models(net.minecraft.resources.ResourceLocation)" class="member-name-link">models(ResourceLocation)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase</a></dt>
+<dd>
+<div class="block">Gets a <code>BlockModelProvider</code> which assigns the given <code>RenderTypeGroup</code> to each created builder.</div>
 </dd>
 <dt><a href="org/moddingx/libx/mod/ModX.html#modid" class="member-name-link">modid</a> - Variable in class org.moddingx.libx.mod.<a href="org/moddingx/libx/mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a></dt>
 <dd>
@@ -3537,27 +3564,27 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/block/TransformingBlockRenderer.html#render(T,float,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int)" class="member-name-link">render(T, float, PoseStack, MultiBufferSource, int, int)</a> - Method in class org.moddingx.libx.render.block.<a href="org/moddingx/libx/render/block/TransformingBlockRenderer.html" title="class in org.moddingx.libx.render.block">TransformingBlockRenderer</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockBreak(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int,int)" class="member-name-link">renderBlockBreak(BlockState, PoseStack, MultiBufferSource, int, int, int)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
+<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockBreak(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,int,int,int)" class="member-name-link">renderBlockBreak(BlockState, PoseStack, int, int, int)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
 <dd>
 <div class="block">Renders the break effect for a <code>BlockState</code>.</div>
 </dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockBreak(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int,int,long)" class="member-name-link">renderBlockBreak(BlockState, PoseStack, MultiBufferSource, int, int, int, long)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
+<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockBreak(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,int,int,int,long)" class="member-name-link">renderBlockBreak(BlockState, PoseStack, int, int, int, long)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
 <dd>
 <div class="block">Renders the break effect for a <code>BlockState</code>.</div>
 </dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, MultiBufferSource, int, int, TextureAtlasSprite)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
+<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, int, int, TextureAtlasSprite)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
 <dd>
 <div class="block">Renders a block overlay on top of a <code>BlockState</code> with the same method as the crumbling is rendered.</div>
 </dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite,long)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, MultiBufferSource, int, int, TextureAtlasSprite, long)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
+<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite,long)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, int, int, TextureAtlasSprite, long)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
 <dd>
 <div class="block">Renders a block overlay on top of a <code>BlockState</code> with the same method as the crumbling is rendered.</div>
 </dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite,long,java.util.function.Predicate)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, MultiBufferSource, int, int, TextureAtlasSprite, long, Predicate&lt;Direction&gt;)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
+<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite,long,java.util.function.Predicate)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, int, int, TextureAtlasSprite, long, Predicate&lt;Direction&gt;)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
 <dd>
 <div class="block">Renders a block overlay on top of a <code>BlockState</code> with the same method as the crumbling is rendered.</div>
 </dd>
-<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite,java.util.function.Predicate)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, MultiBufferSource, int, int, TextureAtlasSprite, Predicate&lt;Direction&gt;)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
+<dt><a href="org/moddingx/libx/render/RenderHelperBlock.html#renderBlockOverlaySprite(net.minecraft.world.level.block.state.BlockState,com.mojang.blaze3d.vertex.PoseStack,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite,java.util.function.Predicate)" class="member-name-link">renderBlockOverlaySprite(BlockState, PoseStack, int, int, TextureAtlasSprite, Predicate&lt;Direction&gt;)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></dt>
 <dd>
 <div class="block">Renders a block overlay on top of a <code>BlockState</code> with the same method as the crumbling is rendered.</div>
 </dd>
@@ -3608,8 +3635,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Renders a texture colored with a given color.</div>
 </dd>
-<dt><a href="org/moddingx/libx/base/FluidBase.Builder.html#renderProperties(java.util.function.Supplier)" class="member-name-link">renderProperties(Supplier&lt;Supplier&lt;IFluidTypeRenderProperties&gt;&gt;)</a> - Method in class org.moddingx.libx.base.<a href="org/moddingx/libx/base/FluidBase.Builder.html" title="class in org.moddingx.libx.base">FluidBase.Builder</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/RenderHelper.html#renderText(java.lang.String,com.mojang.blaze3d.vertex.PoseStack)" class="member-name-link">renderText(String, PoseStack)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
 <dd>
 <div class="block">Renders a text with a gray semi-transparent background.</div>
@@ -3764,6 +3789,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/AdvancementProviderBase.html#run(net.minecraft.data.CachedOutput)" class="member-name-link">run(CachedOutput)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/AdvancementProviderBase.html" title="class in org.moddingx.libx.datagen.provider">AdvancementProviderBase</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#run(net.minecraft.data.CachedOutput)" class="member-name-link">run(CachedOutput)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/CommonTagsProviderBase.html#run(net.minecraft.data.CachedOutput)" class="member-name-link">run(CachedOutput)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/CommonTagsProviderBase.html" title="class in org.moddingx.libx.datagen.provider">CommonTagsProviderBase</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/loot/LootProviderBase.html#run(net.minecraft.data.CachedOutput)" class="member-name-link">run(CachedOutput)</a> - Method in class org.moddingx.libx.datagen.provider.loot.<a href="org/moddingx/libx/datagen/provider/loot/LootProviderBase.html" title="class in org.moddingx.libx.datagen.provider.loot">LootProviderBase</a></dt>
@@ -3833,6 +3860,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/inventory/VanillaWrapper.html#setItem(int,net.minecraft.world.item.ItemStack)" class="member-name-link">setItem(int, ItemStack)</a> - Method in class org.moddingx.libx.inventory.<a href="org/moddingx/libx/inventory/VanillaWrapper.html" title="class in org.moddingx.libx.inventory">VanillaWrapper</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#setRenderType(net.minecraft.resources.ResourceLocation)" class="member-name-link">setRenderType(ResourceLocation)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase</a></dt>
+<dd>
+<div class="block">Makes <a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#models()"><code>BlockStateProviderBase.models()</code></a> behave as if it <a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.html#models(net.minecraft.resources.ResourceLocation)"><code>BlockStateProviderBase.models(ResourceLocation)</code></a> was called with the given argument.</div>
+</dd>
 <dt><a href="org/moddingx/libx/screen/ColorPicker.html#setResponder(java.util.function.Consumer)" class="member-name-link">setResponder(Consumer&lt;TextColor&gt;)</a> - Method in class org.moddingx.libx.screen.<a href="org/moddingx/libx/screen/ColorPicker.html" title="class in org.moddingx.libx.screen">ColorPicker</a></dt>
 <dd>
 <div class="block">Sets a responder that is notified whenever the colour changes.</div>
@@ -4056,6 +4087,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A <a href="org/moddingx/libx/datagen/provider/recipe/RecipeExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe"><code>RecipeExtension</code></a> for recipes in the smithing table..</div>
 </dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html#SOLID" class="member-name-link">SOLID</a> - Static variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.html#sound(net.minecraft.resources.ResourceLocation)" class="member-name-link">sound(ResourceLocation)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.html" title="class in org.moddingx.libx.datagen.provider">SoundDefinitionProviderBase</a></dt>
 <dd>
 <div class="block">Creates a new sound definition for the given sound event.</div>
@@ -4445,7 +4478,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a <code>MutableComponent</code> from a translation key.</div>
 </dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html#TRANSLUCENT" class="member-name-link">TRANSLUCENT</a> - Static variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/base/decoration/DecorationType.html#TRAPDOOR" class="member-name-link">TRAPDOOR</a> - Static variable in interface org.moddingx.libx.base.decoration.<a href="org/moddingx/libx/base/decoration/DecorationType.html" title="interface in org.moddingx.libx.base.decoration">DecorationType</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html#TRIPWIRE" class="member-name-link">TRIPWIRE</a> - Static variable in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/BlockStateProviderBase.RenderTypes.html" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/config/correct/ConfigCorrection.html#tryCorrect(com.google.gson.JsonElement,org.moddingx.libx.config.mapper.ValueMapper,java.util.function.Function)" class="member-name-link">tryCorrect(JsonElement, ValueMapper&lt;U, ?&gt;, Function&lt;T, Optional&lt;U&gt;&gt;)</a> - Method in interface org.moddingx.libx.config.correct.<a href="org/moddingx/libx/config/correct/ConfigCorrection.html" title="interface in org.moddingx.libx.config.correct">ConfigCorrection</a></dt>
 <dd>

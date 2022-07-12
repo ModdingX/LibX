@@ -109,24 +109,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadProjection(com.mojang.blaze3d.vertex.PoseStack,double,double,double)" class="member-name-link">loadProjection</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,double,double,double)" class="member-name-link">loadCameraPosition</a><wbr>(net.minecraft.client.Camera&nbsp;camera,
+ com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  double&nbsp;x,
  double&nbsp;y,
  double&nbsp;z)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>.</div>
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadProjection(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.core.BlockPos)" class="member-name-link">loadProjection</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.core.BlockPos)" class="member-name-link">loadCameraPosition</a><wbr>(net.minecraft.client.Camera&nbsp;camera,
+ com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  net.minecraft.core.BlockPos&nbsp;pos)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>.</div>
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadProjection(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.world.phys.Vec3)" class="member-name-link">loadProjection</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.world.phys.Vec3)" class="member-name-link">loadCameraPosition</a><wbr>(net.minecraft.client.Camera&nbsp;camera,
+ com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  net.minecraft.world.phys.Vec3&nbsp;pos)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>.</div>
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>.</div>
 </div>
 </div>
 </div>
@@ -160,33 +163,36 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="loadProjection(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.core.BlockPos)">
-<h3>loadProjection</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadProjection</span><wbr><span class="parameters">(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<section class="detail" id="loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.core.BlockPos)">
+<h3>loadCameraPosition</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadCameraPosition</span><wbr><span class="parameters">(net.minecraft.client.Camera&nbsp;camera,
+ com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  net.minecraft.core.BlockPos&nbsp;pos)</span></div>
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>. This will move the pose stack to the
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>. This will move the pose stack to the
  given position in the world. Do not always use this with <code>(0, 0, 0)</code> and translate to the
  position you need afterwards as it will be buggy millions of blocks away because of rounding errors.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="loadProjection(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.world.phys.Vec3)">
-<h3>loadProjection</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadProjection</span><wbr><span class="parameters">(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<section class="detail" id="loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.world.phys.Vec3)">
+<h3>loadCameraPosition</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadCameraPosition</span><wbr><span class="parameters">(net.minecraft.client.Camera&nbsp;camera,
+ com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  net.minecraft.world.phys.Vec3&nbsp;pos)</span></div>
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>. This will move the pose stack to the
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>. This will move the pose stack to the
  given position in the world. Do not always use this with <code>(0, 0, 0)</code> and translate to the
  position you need afterwards as it will be buggy millions of blocks away because of rounding errors.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="loadProjection(com.mojang.blaze3d.vertex.PoseStack,double,double,double)">
-<h3>loadProjection</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadProjection</span><wbr><span class="parameters">(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+<section class="detail" id="loadCameraPosition(net.minecraft.client.Camera,com.mojang.blaze3d.vertex.PoseStack,double,double,double)">
+<h3>loadCameraPosition</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadCameraPosition</span><wbr><span class="parameters">(net.minecraft.client.Camera&nbsp;camera,
+ com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  double&nbsp;x,
  double&nbsp;y,
  double&nbsp;z)</span></div>
-<div class="block">This is meant to be called in <code>RenderLevelLastEvent</code>. This will move the pose stack to the
+<div class="block">This is meant to be called in <code>RenderLevelStageEvent</code>. This will move the pose stack to the
  given position in the world. Do not always use this with <code>(0, 0, 0)</code> and translate to the
  position you need afterwards as it will be buggy millions of blocks away because of rounding errors.</div>
 </section>

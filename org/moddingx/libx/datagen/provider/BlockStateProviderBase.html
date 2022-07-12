@@ -99,6 +99,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="nested-class-summary" id="nested-class-summary">
 <h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="BlockStateProviderBase.RenderTypes.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider">BlockStateProviderBase.RenderTypes</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Provides keys for builtin <code>render types</code> to use.</div>
+</div>
+</div>
 <div class="inherited-list">
 <h2 id="nested-classes-inherited-from-class-net.minecraftforge.client.model.generators.BlockStateProvider">Nested classes/interfaces inherited from class&nbsp;net.minecraftforge.client.model.generators.BlockStateProvider</h2>
 <code>net.minecraftforge.client.model.generators.BlockStateProvider.ConfiguredModelList</code></div>
@@ -115,6 +126,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final net.minecraft.resources.ResourceLocation</code></div>
 <div class="col-second even-row-color"><code><a href="#BUTTON_PARENT" class="member-name-link">BUTTON_PARENT</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>protected final net.minecraftforge.common.data.ExistingFileHelper</code></div>
+<div class="col-second odd-row-color"><code><a href="#fileHelper" class="member-name-link">fileHelper</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected final net.minecraft.data.DataGenerator</code></div>
+<div class="col-second even-row-color"><code><a href="#generator" class="member-name-link">generator</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final net.minecraft.resources.ResourceLocation</code></div>
 <div class="col-second odd-row-color"><code><a href="#LEAVES_PARENT" class="member-name-link">LEAVES_PARENT</a></code></div>
@@ -204,6 +221,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The provider will not process this block.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraftforge.client.model.generators.BlockModelProvider</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#models()" class="member-name-link">models</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected net.minecraftforge.client.model.generators.BlockModelProvider</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#models(net.minecraft.resources.ResourceLocation)" class="member-name-link">models</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;renderTypes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets a <code>BlockModelProvider</code> which assigns the given <code>RenderTypeGroup</code> to each created builder.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pressurePlateBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.ResourceLocation)" class="member-name-link">pressurePlateBlock</a><wbr>(net.minecraft.world.level.block.Block&nbsp;block,
  net.minecraft.resources.ResourceLocation&nbsp;texture)</code></div>
@@ -213,6 +238,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerStatesAndModels()" class="member-name-link">registerStatesAndModels</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run(net.minecraft.data.CachedOutput)" class="member-name-link">run</a><wbr>(net.minecraft.data.CachedOutput&nbsp;cache)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRenderType(net.minecraft.resources.ResourceLocation)" class="member-name-link">setRenderType</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;renderTypes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Makes <a href="#models()"><code>models()</code></a> behave as if it <a href="#models(net.minecraft.resources.ResourceLocation)"><code>models(ResourceLocation)</code></a> was called with the given argument.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setup()" class="member-name-link">setup</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
@@ -221,7 +254,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minecraftforge.client.model.generators.BlockStateProvider">Methods inherited from class&nbsp;net.minecraftforge.client.model.generators.BlockStateProvider</h3>
-<code>axisBlock, axisBlock, axisBlock, axisBlock, blockTexture, buttonBlock, buttonBlock, cubeAll, directionalBlock, directionalBlock, directionalBlock, directionalBlock, doorBlock, doorBlock, doorBlock, fenceBlock, fenceBlock, fenceGateBlock, fenceGateBlock, fenceGateBlock, fourWayBlock, fourWayMultipart, getMultipartBuilder, getVariantBuilder, horizontalBlock, horizontalBlock, horizontalBlock, horizontalBlock, horizontalBlock, horizontalFaceBlock, horizontalFaceBlock, horizontalFaceBlock, horizontalFaceBlock, itemModels, logBlock, mcLoc, models, modLoc, paneBlock, paneBlock, paneBlock, pressurePlateBlock, pressurePlateBlock, run, signBlock, signBlock, simpleBlock, simpleBlock, simpleBlock, simpleBlock, simpleBlockItem, slabBlock, slabBlock, slabBlock, stairsBlock, stairsBlock, stairsBlock, stairsBlock, stairsBlock, trapdoorBlock, trapdoorBlock, trapdoorBlock, wallBlock, wallBlock, wallBlock</code></div>
+<code>axisBlock, axisBlock, axisBlock, axisBlock, blockTexture, buttonBlock, buttonBlock, cubeAll, directionalBlock, directionalBlock, directionalBlock, directionalBlock, doorBlock, doorBlock, doorBlock, fenceBlock, fenceBlock, fenceGateBlock, fenceGateBlock, fenceGateBlock, fourWayBlock, fourWayMultipart, getMultipartBuilder, getVariantBuilder, horizontalBlock, horizontalBlock, horizontalBlock, horizontalBlock, horizontalBlock, horizontalFaceBlock, horizontalFaceBlock, horizontalFaceBlock, horizontalFaceBlock, itemModels, logBlock, mcLoc, modLoc, paneBlock, paneBlock, paneBlock, pressurePlateBlock, pressurePlateBlock, signBlock, signBlock, simpleBlock, simpleBlock, simpleBlock, simpleBlock, simpleBlockItem, slabBlock, slabBlock, slabBlock, stairsBlock, stairsBlock, stairsBlock, stairsBlock, stairsBlock, trapdoorBlock, trapdoorBlock, trapdoorBlock, wallBlock, wallBlock, wallBlock</code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -270,6 +303,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="mod">
 <h3>mod</h3>
 <div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a></span>&nbsp;<span class="element-name">mod</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="generator">
+<h3>generator</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">net.minecraft.data.DataGenerator</span>&nbsp;<span class="element-name">generator</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="fileHelper">
+<h3>fileHelper</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">net.minecraftforge.common.data.ExistingFileHelper</span>&nbsp;<span class="element-name">fileHelper</span></div>
 </section>
 </li>
 </ul>
@@ -332,12 +377,57 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="models()">
+<h3>models</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.minecraftforge.client.model.generators.BlockModelProvider</span>&nbsp;<span class="element-name">models</span>()</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code>models</code>&nbsp;in class&nbsp;<code>net.minecraftforge.client.model.generators.BlockStateProvider</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="models(net.minecraft.resources.ResourceLocation)">
+<h3>models</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">net.minecraftforge.client.model.generators.BlockModelProvider</span>&nbsp;<span class="element-name">models</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.1/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+ net.minecraft.resources.ResourceLocation&nbsp;renderTypes)</span></div>
+<div class="block">Gets a <code>BlockModelProvider</code> which assigns the given <code>RenderTypeGroup</code> to each created builder.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>renderTypes</code> - The default <code>RenderTypeGroup</code> to use, or <code>null</code> for no render types (ie the default <code>BlockModelProvider</code>)</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setRenderType(net.minecraft.resources.ResourceLocation)">
+<h3>setRenderType</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setRenderType</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.1/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+ net.minecraft.resources.ResourceLocation&nbsp;renderTypes)</span></div>
+<div class="block">Makes <a href="#models()"><code>models()</code></a> behave as if it <a href="#models(net.minecraft.resources.ResourceLocation)"><code>models(ResourceLocation)</code></a> was called with the given argument.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="registerStatesAndModels()">
 <h3>registerStatesAndModels</h3>
 <div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerStatesAndModels</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>registerStatesAndModels</code>&nbsp;in class&nbsp;<code>net.minecraftforge.client.model.generators.BlockStateProvider</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="run(net.minecraft.data.CachedOutput)">
+<h3>run</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">run</span><wbr><span class="parameters">(net.minecraft.data.CachedOutput&nbsp;cache)</span>
+         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>run</code>&nbsp;in interface&nbsp;<code>net.minecraft.data.DataProvider</code></dd>
+<dt>Overrides:</dt>
+<dd><code>run</code>&nbsp;in class&nbsp;<code>net.minecraftforge.client.model.generators.BlockStateProvider</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
 </dl>
 </section>
 </li>

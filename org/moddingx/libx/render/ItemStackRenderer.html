@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 <div class="block">This class is meant to apply a <code>BlockEntityRenderer</code> to items. Using it is really straightforward:
  
  <ul>
-     <li>Add custom <code>render properties</code> to your item through
+     <li>Add custom <code>client extensions</code> to your item through
      <code>Item.initializeClient(Consumer)</code> or <a href="../base/BlockBase.html#initializeItemClient(java.util.function.Consumer)"><code>BlockBase.initializeItemClient(Consumer)</code></a></li>
      <li>In <a href="../registration/Registerable.html#registerClient(org.moddingx.libx.registration.SetupContext)"><code>Registerable.registerClient(SetupContext)</code></a> call
      <a href="#addRenderBlock(net.minecraft.world.level.block.entity.BlockEntityType,boolean)"><code>addRenderBlock(BlockEntityType, boolean)</code></a></li>
@@ -148,10 +148,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Registers a <code>BlockEntityType</code> to be rendered with the ItemStackRenderer.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static net.minecraftforge.client.IItemRenderProperties</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static net.minecraftforge.client.extensions.common.IClientItemExtensions</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createProperties()" class="member-name-link">createProperties</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates some <code>IItemRenderProperties</code> for with use the <a href="ItemStackRenderer.html" title="class in org.moddingx.libx.render"><code>ItemStackRenderer</code></a>.</div>
+<div class="block">Creates some <code>IClientItemExtensions</code> for with use the <a href="ItemStackRenderer.html" title="class in org.moddingx.libx.render"><code>ItemStackRenderer</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ItemStackRenderer.html" title="class in org.moddingx.libx.render">ItemStackRenderer</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#get()" class="member-name-link">get</a>()</code></div>
@@ -250,8 +250,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createProperties()">
 <h3>createProperties</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">net.minecraftforge.client.IItemRenderProperties</span>&nbsp;<span class="element-name">createProperties</span>()</div>
-<div class="block">Creates some <code>IItemRenderProperties</code> for with use the <a href="ItemStackRenderer.html" title="class in org.moddingx.libx.render"><code>ItemStackRenderer</code></a>.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">net.minecraftforge.client.extensions.common.IClientItemExtensions</span>&nbsp;<span class="element-name">createProperties</span>()</div>
+<div class="block">Creates some <code>IClientItemExtensions</code> for with use the <a href="ItemStackRenderer.html" title="class in org.moddingx.libx.render"><code>ItemStackRenderer</code></a>.</div>
 </section>
 </li>
 </ul>
