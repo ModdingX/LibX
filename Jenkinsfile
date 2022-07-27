@@ -17,25 +17,26 @@ pipeline {
             }
         }
         
-        stage('Run Tests') {
-            steps {
-                echo 'Testing'
-                sh './gradlew test'
-            }
-        }
+//         stage('Run Tests') {
+//             steps {
+//                 echo 'Testing'
+//                 sh './gradlew test'
+//             }
+//         }
 
         stage('Build and Publish') {
             steps {
                 echo 'Building'
-                sh './gradlew build publish curseforge modrinth'
+                sh './gradlew build curseforge modrinth'
+//                 sh './gradlew build publish curseforge modrinth'
             }
         }
 
-        stage('Archive artifacts') {
-            steps {
-                echo 'Archive'
-                archiveArtifacts 'build/libs*/*.jar'
-            }
-        }
+//         stage('Archive artifacts') {
+//             steps {
+//                 echo 'Archive'
+//                 archiveArtifacts 'build/libs*/*.jar'
+//             }
+//         }
     }
 }
