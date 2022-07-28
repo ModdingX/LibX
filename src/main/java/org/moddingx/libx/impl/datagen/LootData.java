@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.data;
+package org.moddingx.libx.impl.datagen;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;

@@ -18,7 +18,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
-import org.moddingx.libx.impl.data.TypedBlockModelProvider;
+import org.moddingx.libx.impl.datagen.TypedBlockModelProvider;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.lazy.LazyValue;
 

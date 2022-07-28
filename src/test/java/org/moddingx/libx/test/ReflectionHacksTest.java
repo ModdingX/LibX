@@ -12,7 +12,7 @@ public class ReflectionHacksTest {
     public static final WrappedString staticField = new WrappedString("Hello, world!");
     
     @Test
-    public void testClasses() throws Throwable {
+    public void testReflectionHacks() throws Throwable {
         A a = new A("aaa", 42);
         B b = new B("bbb");
         

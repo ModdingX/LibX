@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.data.recipe;
+package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.core.Registry;

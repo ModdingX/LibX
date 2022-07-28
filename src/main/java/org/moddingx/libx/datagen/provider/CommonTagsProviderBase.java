@@ -15,7 +15,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.impl.data.DecorationTags;
+import org.moddingx.libx.impl.datagen.DecorationTags;
 import org.moddingx.libx.impl.tags.InternalTagProvider;
 import org.moddingx.libx.impl.tags.InternalTags;
 import org.moddingx.libx.mod.ModX;

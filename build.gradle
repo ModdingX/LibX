@@ -66,9 +66,9 @@ javadoc {
     options.destinationDirectory(file("build/docs/javadoc"))
     title("LibX ${base_version} JavaDoc")
     options.windowTitle("LibX ${base_version} JavaDoc")
-    options.header('<h3><a href="https://noeppi-noeppi.github.io/WikiX" target="_blank">Wiki</a>' \
+    options.header('<h3><a href="https://moddingx.github.io/WikiX" target="_blank">Wiki</a>' \
             + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
-            + '<a href="https://github.com/noeppi-noeppi/LibX" target="_blank">GitHub</a></h2>')
+            + '<a href="https://github.com/ModdingX/LibX" target="_blank">GitHub</a></h2>')
     options.memberLevel = JavadocMemberLevel.PROTECTED
 }
 

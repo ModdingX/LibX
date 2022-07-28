@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.data;
+package org.moddingx.libx.impl.datagen;
 
 import net.minecraft.world.level.block.Block;
 import org.moddingx.libx.base.decoration.DecorationContext;

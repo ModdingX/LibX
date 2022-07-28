@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ModsTomlTest {
 
     @Test
-    public void testClasses() throws Throwable {
+    public void testModsToml() throws Throwable {
         try (Reader in = new InputStreamReader(Objects.requireNonNull(LibX.class.getResourceAsStream("/META-INF/mods.toml"), "mods.toml file not found"))) {
             String version = GradleProperties.getProperty("forge_version").orElseThrow();
             String minecraft = version.substring(0, version.indexOf('-'));

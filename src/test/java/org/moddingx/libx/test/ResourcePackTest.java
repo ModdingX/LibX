@@ -21,8 +21,12 @@ public class ResourcePackTest {
     public void testPackVersion() throws Throwable {
         try (Reader in = new InputStreamReader(Objects.requireNonNull(LibX.class.getResourceAsStream("/pack.mcmeta"), "pack.mcmeta file not found"))) {
             JsonObject packInfo = new GsonBuilder().create().fromJson(in, JsonObject.class);
-            int packVersion = packInfo.get("pack").getAsJsonObject().get("pack_format").getAsInt();
-            assertEquals(SharedConstants.DATA_PACK_FORMAT, packVersion, "pack.mcmeta does not match current data version");
+            int mainPackVersion = packInfo.get("pack").getAsJsonObject().get("pack_format").getAsInt();
+            int resourcePackVersion = packInfo.get("pack").getAsJsonObject().get("forge:resource_pack_format").getAsInt();
+            int dataPackVersion = packInfo.get("pack").getAsJsonObject().get("forge:data_pack_format").getAsInt();
+            assertEquals(Math.max(SharedConstants.RESOURCE_PACK_FORMAT, SharedConstants.DATA_PACK_FORMAT), mainPackVersion, "pack.mcmeta does not match current resource/data version");
+            assertEquals(SharedConstants.RESOURCE_PACK_FORMAT, resourcePackVersion, "pack.mcmeta does not match current resource version");
+            assertEquals(SharedConstants.DATA_PACK_FORMAT, dataPackVersion, "pack.mcmeta does not match current data version");
             assertEquals(SharedConstants.DATA_PACK_FORMAT, LibXDatapack.PACK_VERSION, "Dynamic datapack version does not match current data version");
         }
     }
