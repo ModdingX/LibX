@@ -6,7 +6,7 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import javax.annotation.Nonnull;
 
 /**
- * {@link EntityDataSerializer Data serializers} for enums. You need to register them manually tough.
+ * {@link EntityDataSerializer Data serializers} for enums. It needs to be registered in order to be used.
  */
 public class EnumDataSerializer<T extends Enum<T>> implements EntityDataSerializer<T> {
     
