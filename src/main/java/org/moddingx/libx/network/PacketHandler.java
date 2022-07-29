@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 /**
  * An interface implementing the logic on how to handle a type of packet.
  * 
- * <b>Note that {@link PacketSerializer} and {@link PacketHandler} may not be implemented o the same class.</b>
+ * <b>Note that {@link PacketSerializer} and {@link PacketHandler} may not be implemented on the same class.</b>
  */
 public interface PacketHandler<T> {
 
@@ -19,7 +19,7 @@ public interface PacketHandler<T> {
     /**
      * Handles the given message.
      * 
-     * @return Whether the message was handles. This is ignored on the {@link Target#MAIN_THREAD main thread} target.
+     * @return Whether the message was handled. This is ignored on the {@link Target#MAIN_THREAD main thread} target.
      */
     public boolean handle(T msg, Supplier<NetworkEvent.Context> ctx);
 
@@ -34,7 +34,7 @@ public interface PacketHandler<T> {
         MAIN_THREAD,
 
         /**
-         * An async network thread. This target may also run on the game thread, but it doesn't need to..
+         * An async network thread. This target may also run on the game thread, but it doesn't need to.
          */
         NETWORK_THREAD
     }

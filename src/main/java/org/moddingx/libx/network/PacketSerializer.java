@@ -18,7 +18,7 @@ public interface PacketSerializer<T> {
     void encode(T msg, FriendlyByteBuf buffer);
 
     /**
-     * Encodes a message from a {@link FriendlyByteBuf}.
+     * Decodes a message from a {@link FriendlyByteBuf}.
      */
     T decode(FriendlyByteBuf buffer);
 }
