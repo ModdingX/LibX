@@ -25,7 +25,7 @@ import org.moddingx.libx.event.ConfigLoadedEvent;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.ConfigState;
 import org.moddingx.libx.impl.config.ModMappers;
-import org.moddingx.libx.impl.network.ConfigShadowSerializer;
+import org.moddingx.libx.impl.network.ConfigShadowMessage;
 import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.util.data.ResourceList;
 
@@ -284,7 +284,7 @@ public class ConfigManager {
             ConfigImpl config = ConfigImpl.getConfig(id);
             if (!config.clientConfig && NetworkImpl.getImpl().canSend()) {
                 PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                NetworkImpl.getImpl().channel.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                NetworkImpl.getImpl().channel.send(target, new ConfigShadowMessage(config, config.cachedOrCurrent()));
             }
         } else {
             LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
@@ -300,7 +300,7 @@ public class ConfigManager {
                 ConfigImpl config = ConfigImpl.getConfig(id);
                 if (!config.clientConfig && NetworkImpl.getImpl().canSend()) {
                     PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                    NetworkImpl.getImpl().channel.send(target, new ConfigShadowSerializer.ConfigShadowMessage(config, config.cachedOrCurrent()));
+                    NetworkImpl.getImpl().channel.send(target, new ConfigShadowMessage(config, config.cachedOrCurrent()));
                 }
             }
         } else {
