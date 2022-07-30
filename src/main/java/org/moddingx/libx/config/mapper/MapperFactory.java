@@ -14,7 +14,7 @@ public interface MapperFactory<T> {
     Class<T> type();
 
     /**
-     * Creates a new {@link ValueMapper} from the give {@link Context}.
+     * Creates a new {@link ValueMapper} from the given {@link Context}.
      */
     @Nullable
     ValueMapper<T, ?> create(Context ctx);
