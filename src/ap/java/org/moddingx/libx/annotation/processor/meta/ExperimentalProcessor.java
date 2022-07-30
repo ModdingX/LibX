@@ -24,7 +24,7 @@ public class ExperimentalProcessor extends Processor {
         for (Element element : roundEnv.getElementsAnnotatedWith(Experimental.class)) {
             Boolean release = ExternalProperties.release(this);
             if (release != null && release) {
-                this.messager().printMessage(Diagnostic.Kind.ERROR, "Releases may not contain experimental members.", element);
+                this.messager().printMessage(Diagnostic.Kind.WARNING, "Releases should not contain experimental members.", element);
             }
         }
     }

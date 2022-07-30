@@ -2,11 +2,13 @@ package org.moddingx.libx.datagen.provider.patchouli.page;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
+import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.BookProperties;
 
 /**
  * An interface that defines methods, instances of {@link Content} can use to build book pages.
  */
+@Experimental
 public interface PageBuilder {
 
     /**

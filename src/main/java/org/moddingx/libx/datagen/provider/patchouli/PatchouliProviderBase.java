@@ -6,6 +6,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.impl.datagen.FontLoader;
 import org.moddingx.libx.impl.datagen.patchouli.translate.TranslationManager;
 import org.moddingx.libx.mod.ModX;
@@ -22,6 +23,7 @@ import java.util.function.BiFunction;
 /**
  * A provider for patchouli categories and entries. This will not generate the {@code book.json} file.
  */
+@Experimental
 public abstract class PatchouliProviderBase implements DataProvider {
     
     protected final ModX mod;

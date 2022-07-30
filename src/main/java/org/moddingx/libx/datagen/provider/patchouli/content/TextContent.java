@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider.patchouli.content;
 
 import com.google.gson.JsonObject;
+import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
@@ -13,6 +14,7 @@ import java.util.List;
  * 
  * @param caption Whether this {@link TextContent} is a caption content.
  */
+@Experimental
 public record TextContent(String text, boolean caption) implements Content {
 
     @Override

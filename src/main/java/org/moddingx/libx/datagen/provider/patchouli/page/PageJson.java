@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.impl.datagen.FontLoader;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Some utilities for creating pages in a patchouli book.
  */
+@Experimental
 public class PageJson {
 
     /**

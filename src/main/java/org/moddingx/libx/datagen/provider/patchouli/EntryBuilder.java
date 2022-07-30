@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.content.TextContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
@@ -24,6 +25,7 @@ import java.util.function.Consumer;
 /**
  * Builder for a patchouli book entry.
  */
+@Experimental
 public class EntryBuilder {
     
     public final String id;
