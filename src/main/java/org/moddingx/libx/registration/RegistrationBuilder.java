@@ -48,5 +48,5 @@ public class RegistrationBuilder {
         return new Result(this.tracking, List.copyOf(this.conditions), List.copyOf(this.transformers));
     }
     
-    public static record Result(boolean tracking, List<RegistryCondition> conditions, List<RegistryTransformer> transformers) {}
+    public record Result(boolean tracking, List<RegistryCondition> conditions, List<RegistryTransformer> transformers) {}
 }

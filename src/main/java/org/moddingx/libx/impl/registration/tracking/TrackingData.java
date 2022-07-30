@@ -155,12 +155,12 @@ public final class TrackingData<T> {
         }
     }
 
-    private static record TrackedStaticField(ResourceLocation id, Field field) {}
-    private static record TrackedInstanceField(ResourceLocation id, Field field, WeakReference<Object> instance) {}
-    private static record TrackedInstanceAction<T>(ResourceLocation id, WeakReference<Object> instance, Consumer<T> action) {}
+    private record TrackedStaticField(ResourceLocation id, Field field) {}
+    private record TrackedInstanceField(ResourceLocation id, Field field, WeakReference<Object> instance) {}
+    private record TrackedInstanceAction<T>(ResourceLocation id, WeakReference<Object> instance, Consumer<T> action) {}
     
     // Provide key with weak reference that allows hashing on fields and their instance
-    private static record TrackedFieldKey(Field field, @Nullable WeakReference<Object> instance, int instanceHash) {
+    private record TrackedFieldKey(Field field, @Nullable WeakReference<Object> instance, int instanceHash) {
         
         public static TrackedFieldKey create(Field field, @Nullable Object instance) {
             return new TrackedFieldKey(field, instance == null ? null : new WeakReference<>(instance), System.identityHashCode(instance));

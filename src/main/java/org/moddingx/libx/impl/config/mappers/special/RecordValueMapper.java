@@ -40,7 +40,7 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
         ImmutableList.Builder<EntryData> entries = ImmutableList.builder();
         for (int i = 0; i < parts.length; i++) {
             types[i] = parts[i].getType();
-            TypesafeMapper mapper = new TypesafeMapper(mapperFunc.apply(parts[i].getGenericType()));
+            TypesafeMapper mapper = TypesafeMapper.of(mapperFunc.apply(parts[i].getGenericType()));
             ConfiguredValidator<?, ?> validator = ConfiguredValidator.create(modid, parts[i]);
             entries.add(new EntryData(mapper, validator));
         }

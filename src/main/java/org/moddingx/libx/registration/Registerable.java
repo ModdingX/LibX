@@ -115,11 +115,11 @@ public interface Registerable {
         /**
          * Adds a registry tracking action with the same registry name as the current object.
          */
-        public <T> void run(IForgeRegistry<T> registry, Consumer<T> action);
+        <T> void run(IForgeRegistry<T> registry, Consumer<T> action);
         
         /**
          * Adds a registry tracking action with the same registry name as the current object with a given suffix.
          */
-        public <T> void runNamed(IForgeRegistry<T> registry, String name, Consumer<T> action);
+        <T> void runNamed(IForgeRegistry<T> registry, String name, Consumer<T> action);
     }
 }

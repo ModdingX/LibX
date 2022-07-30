@@ -11,10 +11,11 @@ import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
-import org.moddingx.libx.impl.config.gui.screen.content.ListContent;
+import org.moddingx.libx.impl.config.gui.screen.content.CollectionContent;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray, T> {
 
@@ -103,6 +104,6 @@ public class ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<List<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
-        return ConfigEditor.custom(List.of(), list -> new ListContent<>(list, mapper.createEditor(ValidatorInfo.empty())));
+        return ConfigEditor.custom(List.of(), list -> new CollectionContent<>(list, mapper.createEditor(ValidatorInfo.empty()), Function.identity(), true));
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.PacketDistributor;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
+import org.moddingx.libx.config.mapper.MapperFactory;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validate.DoubleRange;
 import org.moddingx.libx.config.validator.ConfigValidator;
@@ -153,6 +155,9 @@ public class ConfigManager {
      * Registers a new {@link ValueMapper} that can be used to serialise config values.
      */
     public static void registerValueMapper(String modid, ValueMapper<?, ?> mapper) {
+        if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
+            LibX.logger.error("Wrong modid for value mapper, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+        }
         ModMappers.get(modid).registerValueMapper(mapper);
     }
     
@@ -160,7 +165,20 @@ public class ConfigManager {
      * Registers a new {@link GenericValueMapper} that can be used to serialise config values.
      */
     public static void registerValueMapper(String modid, GenericValueMapper<?, ?, ?> mapper) {
+        if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
+            LibX.logger.error("Wrong modid for generic value mapper, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+        }
         ModMappers.get(modid).registerValueMapper(mapper);
+    }
+    
+    /**
+     * Registers a new {@link MapperFactory} that can be used to create value mappers based on the generic type of the config key.
+     */
+    public static void registerValueMapperFactory(String modid, MapperFactory<?> factory) {
+        if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
+            LibX.logger.error("Wrong modid for value mapper factory, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+        }
+        ModMappers.get(modid).registerValueMapperFactory(factory);
     }
     
     /**

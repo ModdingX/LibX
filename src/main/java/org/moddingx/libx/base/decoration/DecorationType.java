@@ -55,7 +55,7 @@ public interface DecorationType<T> {
         //
     }
     
-    public static record DecorationElement<R, T extends R>(@Nullable ResourceKey<? extends Registry<R>> registry, T element) {
+    record DecorationElement<R, T extends R>(@Nullable ResourceKey<? extends Registry<R>> registry, T element) {
         
         public void registerTo(Registerable.EntryCollector builder) {
             builder.register(this.registry(), this.element());

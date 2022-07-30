@@ -166,7 +166,7 @@ public abstract class NetworkX {
      * @param client The behaviour for the client
      * @param server The behaviour for the dedicated server
      */
-    public static record Protocol(String version, ProtocolSide client, ProtocolSide server) {
+    public record Protocol(String version, ProtocolSide client, ProtocolSide server) {
 
         /**
          * Creates a new protocol with the given version, that is required on both sides.

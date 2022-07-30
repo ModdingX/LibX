@@ -3,7 +3,7 @@ package org.moddingx.libx.annotation.config;
 import java.lang.annotation.*;
 
 /**
- * Automatically registers a value mapper for the LibX config system. An annotated class
+ * Automatically registers a value mapper or mapper factory for the LibX config system. An annotated class
  * must define a public no-arg constructor.
  */
 @Retention(RetentionPolicy.SOURCE)
