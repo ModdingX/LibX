@@ -6,9 +6,17 @@ import org.moddingx.libx.config.mapper.ValueMapper;
 
 public class TypesafeMapper extends JsonTypesafeMapper<Object> {
     
-    public TypesafeMapper(ValueMapper<?, ?> mapper) {
+    private TypesafeMapper(ValueMapper<?, ?> mapper) {
         //noinspection unchecked
         super((ValueMapper<Object, ?>) mapper);
+    }
+    
+    public static TypesafeMapper of(ValueMapper<?, ?> mapper) {
+        if (mapper instanceof TypesafeMapper tm) {
+            return tm;
+        } else {
+            return new TypesafeMapper(mapper);
+        }
     }
 
     @Override

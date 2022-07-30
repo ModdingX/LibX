@@ -14,19 +14,19 @@ public interface PacketHandler<T> {
     /**
      * The target thread, this handler should run on.
      */
-    public Target target();
+    Target target();
 
     /**
      * Handles the given message.
      * 
      * @return Whether the message was handled. This is ignored on the {@link Target#MAIN_THREAD main thread} target.
      */
-    public boolean handle(T msg, Supplier<NetworkEvent.Context> ctx);
+    boolean handle(T msg, Supplier<NetworkEvent.Context> ctx);
 
     /**
      * A thread target for a {@link PacketHandler}.
      */
-    public enum Target {
+    enum Target {
 
         /**
          * The main thread, where the game logic happens.

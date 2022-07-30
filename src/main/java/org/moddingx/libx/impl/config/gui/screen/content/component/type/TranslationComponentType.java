@@ -9,7 +9,7 @@ import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.WidgetProperties;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
-import org.moddingx.libx.impl.config.gui.screen.content.ListContent;
+import org.moddingx.libx.impl.config.gui.screen.content.CollectionContent;
 import org.moddingx.libx.impl.config.gui.screen.content.component.ComponentContent;
 import org.moddingx.libx.impl.config.gui.screen.content.component.ComponentType;
 
@@ -20,6 +20,7 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class TranslationComponentType implements ComponentType {
 
@@ -36,7 +37,7 @@ public class TranslationComponentType implements ComponentType {
 
     public TranslationComponentType() {
         this.editor = ConfigEditor.input();
-        this.argEditor = ConfigEditor.custom(List.of(), l -> new ListContent<>(l, ConfigEditor.custom(Component.empty(), ComponentContent::new)) {
+        this.argEditor = ConfigEditor.custom(List.of(), l -> new CollectionContent<>(l, ConfigEditor.custom(Component.empty(), ComponentContent::new), Function.identity(), true) {
 
             @Override
             public Component message() {

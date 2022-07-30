@@ -217,21 +217,21 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
 
         this.entryWidgets.set(idx, new EntryWidgets(typeWidget, modeWidget, widget));
 
-        ListContent.addControlButton(consumer, padding + 339, y, Component.literal("⬆"), idx > 0, () -> {
-            ListContent.move(this.list, idx, idx - 1);
-            ListContent.move(this.entryWidgets, idx, idx - 1);
+        CollectionContent.addControlButton(consumer, padding + 339, y, Component.literal("⬆"), idx > 0, () -> {
+            CollectionContent.move(this.list, idx, idx - 1);
+            CollectionContent.move(this.entryWidgets, idx, idx - 1);
             this.update();
             manager.rebuild();
         });
 
-        ListContent.addControlButton(consumer, padding + 362, y, Component.literal("⬇"), idx < this.list.size() - 1, () -> {
-            ListContent.move(this.list, idx, idx + 1);
-            ListContent.move(this.entryWidgets, idx, idx + 1);
+        CollectionContent.addControlButton(consumer, padding + 362, y, Component.literal("⬇"), idx < this.list.size() - 1, () -> {
+            CollectionContent.move(this.list, idx, idx + 1);
+            CollectionContent.move(this.entryWidgets, idx, idx + 1);
             this.update();
             manager.rebuild();
         });
 
-        ListContent.addControlButton(consumer, padding + 385, y, Component.literal("✖").withStyle(ChatFormatting.RED), true, () -> {
+        CollectionContent.addControlButton(consumer, padding + 385, y, Component.literal("✖").withStyle(ChatFormatting.RED), true, () -> {
             this.list.remove(idx);
             this.entryWidgets.remove(idx);
             this.update();

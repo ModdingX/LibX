@@ -13,6 +13,7 @@ import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.Config;
 import org.moddingx.libx.config.Group;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
+import org.moddingx.libx.config.mapper.MapperFactory;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ConfigValidator;
 import org.moddingx.libx.impl.config.gui.ModConfigGuiAdapter;
@@ -21,22 +22,21 @@ import org.moddingx.libx.impl.config.mappers.advanced.*;
 import org.moddingx.libx.impl.config.mappers.generic.ListValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.MapValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.OptionValueMapper;
+import org.moddingx.libx.impl.config.mappers.generic.SetValueMapper;
 import org.moddingx.libx.impl.config.mappers.special.EnumValueMappers;
 import org.moddingx.libx.impl.config.mappers.special.PairValueMapper;
 import org.moddingx.libx.impl.config.mappers.special.RecordValueMapper;
 import org.moddingx.libx.impl.config.mappers.special.TripleValueMapper;
 import org.moddingx.libx.impl.config.validators.SimpleValidators;
 import org.moddingx.libx.impl.config.wrapper.JsonTypesafeMapper;
+import org.moddingx.libx.impl.config.wrapper.TypesafeMapper;
 import org.moddingx.libx.impl.config.wrapper.WrappedGenericMapper;
 import org.moddingx.libx.util.ClassUtil;
 
 import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -78,6 +78,7 @@ public class ModMappers {
     private static final Map<Class<?>, GenericValueMapper<?, ?, ?>> globalGenericMappers = Stream.of(
             OptionValueMapper.INSTANCE,
             ListValueMapper.INSTANCE,
+            SetValueMapper.INSTANCE,
             MapValueMapper.INSTANCE
     ).collect(ImmutableMap.toImmutableMap(GenericValueMapper::type, Function.identity()));
 
@@ -91,6 +92,7 @@ public class ModMappers {
 
 
     private final String modid;
+    private final Map<Class<?>, MapperFactory<?>> mapperFactories = Collections.synchronizedMap(new HashMap<>());
     private final Map<Class<?>, ValueMapper<?, ?>> mappers = Collections.synchronizedMap(new HashMap<>());
     private final Map<Class<?>, GenericValueMapper<?, ?, ?>> genericMappers = Collections.synchronizedMap(new HashMap<>());
     private final Map<Class<? extends Annotation>, ConfigValidator<?, ?>> validators = Collections.synchronizedMap(new HashMap<>());
@@ -101,18 +103,22 @@ public class ModMappers {
     }
 
     public void registerValueMapper(ValueMapper<?, ?> mapper) {
-        this.doRegisterValueMapper(this.mappers, globalMappers, mapper.type(), mapper);
+        this.doRegisterValueMapper(this.mappers, mapper.type(), mapper);
+    }
+    
+    public void registerValueMapperFactory(MapperFactory<?> factory) {
+        this.doRegisterValueMapper(this.mapperFactories, factory.type(), factory);
     }
 
     public void registerValueMapper(GenericValueMapper<?, ?, ?> mapper) {
-        this.doRegisterValueMapper(this.genericMappers, globalGenericMappers, mapper.type(), mapper);
+        this.doRegisterValueMapper(this.genericMappers, mapper.type(), mapper);
     }
 
-    private <T> void doRegisterValueMapper(Map<Class<?>, T> map, Map<Class<?>, T> globalMap, Class<?> type, T mapper) {
-        if (map.containsKey(type)) {
+    private <T> void doRegisterValueMapper(Map<Class<?>, T> map, Class<?> type, T mapper) {
+        if (this.mapperFactories.containsKey(type) || this.mappers.containsKey(type) || this.genericMappers.containsKey(type)) {
             throw new IllegalStateException("Config mapper for type '" + type + "' is already registered.");
         } else {
-            if (globalMap.containsKey(type)) {
+            if (globalMappers.containsKey(type) || globalGenericMappers.containsKey(type)) {
                 LibX.logger.warn(this.modid + " registers a custom value mapper for type " + type + ", shading a builtin one. This is discouraged.");
             }
             map.put(type, mapper);
@@ -135,7 +141,14 @@ public class ModMappers {
 
     private ValueMapper<?, ?> getMapper(Type type) {
         Class<?> cls = ClassUtil.boxed(getTypeClass(type));
-        if (this.mappers.containsKey(cls)) {
+        if (this.mapperFactories.containsKey(cls)) {
+            ValueMapper<?, ?> mapper = this.mapperFactories.get(cls).create(getTypeContext(type));
+            if (mapper == null) {
+                throw new IllegalStateException("Mapper undefined in factory for type " + type + " (" + cls + ")");
+            } else {
+                return TypesafeMapper.of(mapper);
+            }
+        } else if (this.mappers.containsKey(cls)) {
             return this.mappers.get(cls);
         } else if (this.genericMappers.containsKey(cls)) {
             return this.resolveGeneric(this.genericMappers.get(cls), type);
@@ -175,6 +188,21 @@ public class ModMappers {
         ValueMapper<?, ?> mapper = this.getMapper(args[genericPosition]);
         //noinspection unchecked
         return new JsonTypesafeMapper<>((ValueMapper<Object, ?>) mapper);
+    }
+    
+    private static MapperFactory.Context getTypeContext(Type type) {
+        return new MapperFactory.Context() {
+            
+            @Override
+            public Type getGenericType() {
+                return type;
+            }
+
+            @Override
+            public <T, C> ValueMapper<T, ?> wrap(GenericValueMapper<T, ?, C> mapper, ValueMapper<C, ?> child) {
+                return new WrappedGenericMapper<>(mapper, new JsonTypesafeMapper<>(child));
+            }
+        };
     }
     
     private static Class<?> getTypeClass(Type type) {

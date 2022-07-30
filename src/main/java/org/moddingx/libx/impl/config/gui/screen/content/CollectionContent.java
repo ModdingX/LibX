@@ -15,18 +15,24 @@ import org.moddingx.libx.impl.config.gui.EditorHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
-public class ListContent<T> implements ConfigScreenContent<List<T>> {
+public class CollectionContent<T, C> implements ConfigScreenContent<C> {
 
     private final ConfigEditor<T> editor;
+    private final Function<List<T>, C> factory;
+    private final boolean canReorder;
     private Consumer<List<T>> inputChanged;
     private final List<T> list;
     private final List<AbstractWidget> widgets;
 
-    public ListContent(List<T> value, ConfigEditor<T> editor) {
+    public CollectionContent(List<T> value, ConfigEditor<T> editor, Function<List<T>, C> factory, boolean canReorder) {
         this.editor = editor;
+        this.factory = factory;
         this.list = new ArrayList<>(value);
+        this.canReorder = canReorder;
+        //noinspection ConstantConditions
         this.widgets = new ArrayList<>(IntStream.range(0, this.list.size()).mapToObj(i -> (AbstractWidget) null).toList());
     }
 
@@ -41,8 +47,8 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
     }
 
     @Override
-    public void init(Consumer<List<T>> inputChanged) {
-        this.inputChanged = inputChanged;
+    public void init(Consumer<C> inputChanged) {
+        this.inputChanged = (list) -> inputChanged.accept(this.factory.apply(list));
     }
 
     private void update() {
@@ -65,9 +71,9 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
 
             @Override
             public void onPress() {
-                ListContent.this.list.add(ListContent.this.editor.defaultValue());
-                ListContent.this.widgets.add(null);
-                ListContent.this.update();
+                CollectionContent.this.list.add(CollectionContent.this.editor.defaultValue());
+                CollectionContent.this.widgets.add(null);
+                CollectionContent.this.update();
                 manager.rebuild();
             }
         };
@@ -75,7 +81,8 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
     }
     
     private void addEntryWidgets(Screen screen, ScreenManager manager, Consumer<AbstractWidget> consumer, int idx, int y) {
-        int width = 200 + (23 * 3);
+        int controlButtons = this.canReorder ? 3 : 1;
+        int width = 200 + (23 * controlButtons);
         int padding = Math.max(0, screen.width - width) / 2;
 
         WidgetProperties<T> properties = new WidgetProperties<>(padding, y, 200, 20, t -> {
@@ -86,21 +93,24 @@ public class ListContent<T> implements ConfigScreenContent<List<T>> {
         this.widgets.set(idx, widget);
         consumer.accept(widget);
 
-        addControlButton(consumer, padding + 203, y, Component.literal("\u2b06"), idx > 0, () -> {
-            move(this.list, idx, idx - 1);
-            move(this.widgets, idx, idx - 1);
-            this.update();
-            manager.rebuild();
-        });
+        if (this.canReorder) {
+            addControlButton(consumer, padding + 203, y, Component.literal("\u2b06"), idx > 0, () -> {
+                move(this.list, idx, idx - 1);
+                move(this.widgets, idx, idx - 1);
+                this.update();
+                manager.rebuild();
+            });
 
-        addControlButton(consumer, padding + 226, y, Component.literal("\u2b07"), idx < this.list.size() - 1, () -> {
-            move(this.list, idx, idx + 1);
-            move(this.widgets, idx, idx + 1);
-            this.update();
-            manager.rebuild();
-        });
+            addControlButton(consumer, padding + 226, y, Component.literal("\u2b07"), idx < this.list.size() - 1, () -> {
+                move(this.list, idx, idx + 1);
+                move(this.widgets, idx, idx + 1);
+                this.update();
+                manager.rebuild();
+            });
+        }
 
-        addControlButton(consumer, padding + 249, y, Component.literal("\u2716").withStyle(ChatFormatting.RED), true, () -> {
+        int delButtonPadding = this.canReorder ? 249 : 203;
+        addControlButton(consumer, padding + delButtonPadding, y, Component.literal("\u2716").withStyle(ChatFormatting.RED), true, () -> {
             this.list.remove(idx);
             this.widgets.remove(idx);
             this.update();

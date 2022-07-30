@@ -12,7 +12,7 @@ import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.EditorOps;
 import org.moddingx.libx.config.gui.WidgetProperties;
 import org.moddingx.libx.impl.config.gui.EditorHelper;
-import org.moddingx.libx.impl.config.gui.screen.content.ListContent;
+import org.moddingx.libx.impl.config.gui.screen.content.CollectionContent;
 import org.moddingx.libx.impl.config.gui.screen.content.component.type.KeybindComponentType;
 import org.moddingx.libx.impl.config.gui.screen.content.component.type.TextComponentType;
 import org.moddingx.libx.impl.config.gui.screen.content.component.type.TranslationComponentType;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ComponentContent implements ConfigScreenContent<Component> {
 
@@ -126,7 +127,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         this.underlinedEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.underlined", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
         this.strikethroughEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.strikethrough", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
         this.obfuscatedEditor = ConfigEditor.toggle(List.of(StyleSetting.INHERIT, StyleSetting.TRUE, StyleSetting.FALSE), s -> Component.translatable("libx.config.gui.component.obfuscated", Component.translatable("libx.config.gui.component.style_setting." + s.value)));
-        this.siblingEditor = ConfigEditor.custom(List.of(), l -> new ListContent<>(l, ConfigEditor.custom(Component.empty(), ComponentContent::new)) {
+        this.siblingEditor = ConfigEditor.custom(List.of(), l -> new CollectionContent<>(l, ConfigEditor.custom(Component.empty(), ComponentContent::new), Function.identity(), true) {
 
             @Override
             public Component message() {

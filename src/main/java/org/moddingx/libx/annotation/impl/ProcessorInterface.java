@@ -18,6 +18,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.codec.MoreCodecs;
+import org.moddingx.libx.config.ConfigManager;
+import org.moddingx.libx.config.mapper.GenericValueMapper;
+import org.moddingx.libx.config.mapper.MapperFactory;
+import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 import org.moddingx.libx.mod.ModX;
@@ -38,6 +42,22 @@ public class ProcessorInterface {
         return new ResourceLocation(namespace, path);
     }
     
+    public static void registerConfig(ModX mod, String name, Class<?> configClass, boolean client) {
+        ConfigManager.registerConfig(mod.resource(name), configClass, client);
+    }
+    
+    public static void registerConfigMapper(ModX mod, ValueMapper<?, ?> mapper) {
+        ConfigManager.registerValueMapper(mod.modid, mapper);
+    }
+    
+    public static void registerConfigMapper(ModX mod, GenericValueMapper<?, ?, ?> mapper) {
+        ConfigManager.registerValueMapper(mod.modid, mapper);
+    }
+    
+    public static void registerConfigMapper(ModX mod, MapperFactory<?> mapper) {
+        ConfigManager.registerValueMapperFactory(mod.modid, mapper);
+    }
+        
     public static void register(ModX mod, @Nullable ResourceKey<? extends Registry<?>> registryKey, String name, Object value, @Nullable FieldGetter field, boolean multi) throws ReflectiveOperationException {
         if (!(mod instanceof ModXRegistration reg)) throw new IllegalStateException("Can't register to a non-ModXRegistration mod.");
         if (multi) {
@@ -116,14 +136,14 @@ public class ProcessorInterface {
     }
     
     @FunctionalInterface
-    public static interface ThrowingRunnable {
+    public interface ThrowingRunnable {
         
-        public void run() throws Exception;
+        void run() throws Exception;
     }
     
     @FunctionalInterface
-    public static interface FieldGetter {
+    public interface FieldGetter {
         
-        public Field get() throws ReflectiveOperationException;
+        Field get() throws ReflectiveOperationException;
     }
 }

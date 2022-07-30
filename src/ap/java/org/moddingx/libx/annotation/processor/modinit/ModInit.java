@@ -54,8 +54,8 @@ public class ModInit  {
         this.models.add(new LoadableModel(classFqn, fieldName, modelNamespace.isEmpty() ? this.modid : modelNamespace, modelPath));
     }
 
-    public void addConfigMapper(String classFqn, @Nullable String requiresMod, boolean genericType) {
-        this.configMappers.add(new RegisteredMapper(classFqn, requiresMod, genericType));
+    public void addConfigMapper(String classFqn, String targetTypeSource, @Nullable String requiresMod, boolean genericType) {
+        this.configMappers.add(new RegisteredMapper(classFqn, targetTypeSource, requiresMod, genericType));
     }
 
     public void addConfig(String name, boolean client, @Nullable String requiresMod, String classFqn) {
@@ -130,7 +130,7 @@ public class ModInit  {
                 if (mapper.requiresMod() != null) {
                     writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(" + quote(mapper.requiresMod()) + ")){");
                 }
-                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerValueMapper(" + quote(this.modid) + ",new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".registerConfigMapper(mod,(" + mapper.targetTypeSource() + ")new " + mapper.classFqn() + (mapper.genericType() ? "<>" : "") + "());");
                 if (mapper.requiresMod() != null) {
                     writer.write("}");
                 }
@@ -139,7 +139,7 @@ public class ModInit  {
                 if (config.requiresMod() != null) {
                     writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isModLoaded(" + quote(config.requiresMod()) + ")){");
                 }
-                writer.write(Classes.sourceName(Classes.CONFIG_MANAGER) + ".registerConfig(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(this.modid) + "," + quote(config.name()) + ")," + config.classFqn() + ".class," + config.client() + ");");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".registerConfig(mod," + quote(config.name()) + "," + config.classFqn() + ".class," + config.client() + ");");
                 if (config.requiresMod() != null) {
                     writer.write("}");
                 }
