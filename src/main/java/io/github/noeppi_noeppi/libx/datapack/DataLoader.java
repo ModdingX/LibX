@@ -5,6 +5,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
+import io.github.noeppi_noeppi.libx.LibX;
+import io.github.noeppi_noeppi.libx.codec.CodecHelper;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -31,6 +37,23 @@ public class DataLoader {
         builder.setPrettyPrinting();
         return builder.create();
     });
+
+    /**
+     * Loads json data from a base path. For example if the base path is {@code a/b} and there are the json files
+     * {@code a/b/c.json} and {@code a/b/d/e.json}, the resulting ids will be {@code modid:c} and {@code modid:d/e}.
+     *
+     * @param codec A {@link Codec} to create the resulting objects.
+     */
+    public static <T> Map<ResourceLocation, T> loadJson(ResourceManager rm, String basePath, Codec<T> codec) throws IOException {
+        return loadJson(rm, basePath, (id, json) -> {
+            DataResult<T> result = codec.decode(JsonOps.INSTANCE, json).map(Pair::getFirst);
+            if (result.result().isPresent()) return result.result().get();
+            String err = result.error().map(DataResult.PartialResult::message).orElse("Unknown error");
+            if (err.length() > 100) err = err.substring(0, 100) + " ...";
+            LibX.logger.error("Failed to load data entry " + id + ": " + err);
+            return null;
+        });
+    }
 
     /**
      * Loads json data from a base path. For example if the base path is {@code a/b} and there are the json files
@@ -66,6 +89,14 @@ public class DataLoader {
                 return factory.apply(id, IOUtils.toString(reader));
             }
         });
+    }
+
+    /**
+     * Collects data from the given {@link Resource resources} by a given {@link Codec}. The contents of the
+     * resource are mapped to a {@link JsonElement} first.
+     */
+    public static <T> Map<ResourceLocation, T> collectJson(List<ResourceEntry> resources, Codec<T> codec) throws IOException {
+        return collectJson(resources, (id, json) -> CodecHelper.JSON.read(codec, json));
     }
 
     /**
