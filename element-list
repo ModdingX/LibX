@@ -27,6 +27,9 @@ org.moddingx.libx.datagen
 org.moddingx.libx.datagen.provider
 org.moddingx.libx.datagen.provider.loot
 org.moddingx.libx.datagen.provider.loot.entry
+org.moddingx.libx.datagen.provider.patchouli
+org.moddingx.libx.datagen.provider.patchouli.content
+org.moddingx.libx.datagen.provider.patchouli.page
 org.moddingx.libx.datagen.provider.recipe
 org.moddingx.libx.datagen.provider.recipe.crafting
 org.moddingx.libx.datapack
