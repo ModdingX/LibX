@@ -970,6 +970,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a new <code>LazyOptional</code> for an <code>IItemHandlerModifiable</code>.</div>
 </dd>
+<dt><a href="org/moddingx/libx/config/mapper/MapperFactory.html#create(org.moddingx.libx.config.mapper.MapperFactory.Context)" class="member-name-link">create(MapperFactory.Context)</a> - Method in interface org.moddingx.libx.config.mapper.<a href="org/moddingx/libx/config/mapper/MapperFactory.html" title="interface in org.moddingx.libx.config.mapper">MapperFactory</a></dt>
+<dd>
+<div class="block">Creates a new <a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="interface in org.moddingx.libx.config.mapper"><code>ValueMapper</code></a> from the given <a href="org/moddingx/libx/config/mapper/MapperFactory.Context.html" title="interface in org.moddingx.libx.config.mapper"><code>MapperFactory.Context</code></a>.</div>
+</dd>
 <dt><a href="org/moddingx/libx/inventory/BaseItemStackHandler.html#createCapability()" class="member-name-link">createCapability()</a> - Method in class org.moddingx.libx.inventory.<a href="org/moddingx/libx/inventory/BaseItemStackHandler.html" title="class in org.moddingx.libx.inventory">BaseItemStackHandler</a></dt>
 <dd>
 <div class="block">Creates a new <code>LazyOptional</code> for this inventory.</div>
@@ -1984,6 +1988,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The position which generic type argument should be used to retrieve a value mapper.</div>
 </dd>
+<dt><a href="org/moddingx/libx/config/mapper/MapperFactory.Context.html#getGenericType()" class="member-name-link">getGenericType()</a> - Method in interface org.moddingx.libx.config.mapper.<a href="org/moddingx/libx/config/mapper/MapperFactory.Context.html" title="interface in org.moddingx.libx.config.mapper">MapperFactory.Context</a></dt>
+<dd>
+<div class="block">The generic type of the config key.</div>
+</dd>
 <dt><a href="org/moddingx/libx/event/ClickBlockEmptyHandEvent.html#getHand()" class="member-name-link">getHand()</a> - Method in class org.moddingx.libx.event.<a href="org/moddingx/libx/event/ClickBlockEmptyHandEvent.html" title="class in org.moddingx.libx.event">ClickBlockEmptyHandEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/event/ClickBlockEmptyHandEvent.html#getHit()" class="member-name-link">getHit()</a> - Method in class org.moddingx.libx.event.<a href="org/moddingx/libx/event/ClickBlockEmptyHandEvent.html" title="class in org.moddingx.libx.event">ClickBlockEmptyHandEvent</a></dt>
@@ -2791,6 +2799,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a map dispatched codec.</div>
 </dd>
+<dt><a href="org/moddingx/libx/config/mapper/MapperFactory.html" class="type-name-link" title="interface in org.moddingx.libx.config.mapper">MapperFactory</a>&lt;<a href="org/moddingx/libx/config/mapper/MapperFactory.html" title="type parameter in MapperFactory">T</a>&gt; - Interface in <a href="org/moddingx/libx/config/mapper/package-summary.html">org.moddingx.libx.config.mapper</a></dt>
+<dd>
+<div class="block">A factory that creates a <a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="interface in org.moddingx.libx.config.mapper"><code>ValueMapper</code></a> by the generic type of a config key.</div>
+</dd>
+<dt><a href="org/moddingx/libx/config/mapper/MapperFactory.Context.html" class="type-name-link" title="interface in org.moddingx.libx.config.mapper">MapperFactory.Context</a> - Interface in <a href="org/moddingx/libx/config/mapper/package-summary.html">org.moddingx.libx.config.mapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/crafting/recipe/RecipeHelper.html#matches(net.minecraft.world.item.crafting.Recipe,java.util.List,boolean)" class="member-name-link">matches(Recipe&lt;?&gt;, List&lt;ItemStack&gt;, boolean)</a> - Static method in class org.moddingx.libx.crafting.recipe.<a href="org/moddingx/libx/crafting/recipe/RecipeHelper.html" title="class in org.moddingx.libx.crafting.recipe">RecipeHelper</a></dt>
 <dd>
 <div class="block">Checks whether all the ingredients of a recipe are present in a list of <code>ItemStack</code>s.</div>
@@ -3772,7 +3786,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/annotation/config/RegisterMapper.html" class="type-name-link" title="annotation interface in org.moddingx.libx.annotation.config">RegisterMapper</a> - Annotation Interface in <a href="org/moddingx/libx/annotation/config/package-summary.html">org.moddingx.libx.annotation.config</a></dt>
 <dd>
-<div class="block">Automatically registers a value mapper for the LibX config system.</div>
+<div class="block">Automatically registers a value mapper or mapper factory for the LibX config system.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/ItemModelProviderBase.html#registerModels()" class="member-name-link">registerModels()</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/ItemModelProviderBase.html" title="class in org.moddingx.libx.datagen.provider">ItemModelProviderBase</a></dt>
 <dd>&nbsp;</dd>
@@ -3824,6 +3838,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/config/ConfigManager.html#registerValueMapper(java.lang.String,org.moddingx.libx.config.mapper.ValueMapper)" class="member-name-link">registerValueMapper(String, ValueMapper&lt;?, ?&gt;)</a> - Static method in class org.moddingx.libx.config.<a href="org/moddingx/libx/config/ConfigManager.html" title="class in org.moddingx.libx.config">ConfigManager</a></dt>
 <dd>
 <div class="block">Registers a new <a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="interface in org.moddingx.libx.config.mapper"><code>ValueMapper</code></a> that can be used to serialise config values.</div>
+</dd>
+<dt><a href="org/moddingx/libx/config/ConfigManager.html#registerValueMapperFactory(java.lang.String,org.moddingx.libx.config.mapper.MapperFactory)" class="member-name-link">registerValueMapperFactory(String, MapperFactory&lt;?&gt;)</a> - Static method in class org.moddingx.libx.config.<a href="org/moddingx/libx/config/ConfigManager.html" title="class in org.moddingx.libx.config">ConfigManager</a></dt>
+<dd>
+<div class="block">Registers a new <a href="org/moddingx/libx/config/mapper/MapperFactory.html" title="interface in org.moddingx.libx.config.mapper"><code>MapperFactory</code></a> that can be used to create value mappers based on the generic type of the config key.</div>
 </dd>
 <dt><a href="org/moddingx/libx/registration/RegistrationBuilder.html" class="type-name-link" title="class in org.moddingx.libx.registration">RegistrationBuilder</a> - Class in <a href="org/moddingx/libx/registration/package-summary.html">org.moddingx.libx.registration</a></dt>
 <dd>
@@ -4951,6 +4969,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets the class of the type that this mapper can serialise.</div>
 </dd>
+<dt><a href="org/moddingx/libx/config/mapper/MapperFactory.html#type()" class="member-name-link">type()</a> - Method in interface org.moddingx.libx.config.mapper.<a href="org/moddingx/libx/config/mapper/MapperFactory.html" title="interface in org.moddingx.libx.config.mapper">MapperFactory</a></dt>
+<dd>
+<div class="block">The base class for which this factory creates mappers.</div>
+</dd>
 <dt><a href="org/moddingx/libx/config/mapper/ValueMapper.html#type()" class="member-name-link">type()</a> - Method in interface org.moddingx.libx.config.mapper.<a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="interface in org.moddingx.libx.config.mapper">ValueMapper</a></dt>
 <dd>
 <div class="block">Gets the class of the type that this mapper can serialise.</div>
@@ -5276,6 +5298,11 @@ the order they are declared.</div>
 <dt><a href="org/moddingx/libx/inventory/IAdvancedItemHandlerModifiable.html#wrap(net.minecraftforge.items.IItemHandlerModifiable)" class="member-name-link">wrap(IItemHandlerModifiable)</a> - Static method in interface org.moddingx.libx.inventory.<a href="org/moddingx/libx/inventory/IAdvancedItemHandlerModifiable.html" title="interface in org.moddingx.libx.inventory">IAdvancedItemHandlerModifiable</a></dt>
 <dd>
 <div class="block">Creates a new IAdvancedItemHandlerModifiable from an <code>IItemHandlerModifiable</code>.</div>
+</dd>
+<dt><a href="org/moddingx/libx/config/mapper/MapperFactory.Context.html#wrap(org.moddingx.libx.config.mapper.GenericValueMapper,org.moddingx.libx.config.mapper.ValueMapper)" class="member-name-link">wrap(GenericValueMapper&lt;T, ?, C&gt;, ValueMapper&lt;C, ?&gt;)</a> - Method in interface org.moddingx.libx.config.mapper.<a href="org/moddingx/libx/config/mapper/MapperFactory.Context.html" title="interface in org.moddingx.libx.config.mapper">MapperFactory.Context</a></dt>
+<dd>
+<div class="block">Wraps a <a href="org/moddingx/libx/config/mapper/GenericValueMapper.html" title="interface in org.moddingx.libx.config.mapper"><code>GenericValueMapper</code></a> into a regular <a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="interface in org.moddingx.libx.config.mapper"><code>ValueMapper</code></a> given a mapper for
+ the generic element type.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/CodecOps.html#write(com.mojang.serialization.Codec,T)" class="member-name-link">write(Codec&lt;T&gt;, T)</a> - Method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/CodecOps.html" title="class in org.moddingx.libx.codec">CodecOps</a></dt>
 <dd>
