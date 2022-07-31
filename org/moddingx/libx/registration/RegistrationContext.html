@@ -98,7 +98,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.resources.ResourceLocation,net.minecraft.resources.ResourceKey)" class="member-name-link">RegistrationContext</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;id,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.moddingx.libx.mod.ModXRegistration,net.minecraft.resources.ResourceLocation,net.minecraft.resources.ResourceKey)" class="member-name-link">RegistrationContext</a><wbr>(<a href="../mod/ModXRegistration.html" title="class in org.moddingx.libx.mod">ModXRegistration</a>&nbsp;mod,
+ net.minecraft.resources.ResourceLocation&nbsp;id,
  net.minecraft.resources.ResourceKey&lt;?&gt;&nbsp;key)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -125,9 +126,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <code>ResourceKey</code> of the object being registered.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.resources.ResourceKey&lt;? extends net.minecraft.core.Registry&lt;?&gt;&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registry()" class="member-name-link">registry</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../mod/ModXRegistration.html" title="class in org.moddingx.libx.mod">ModXRegistration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mod()" class="member-name-link">mod</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the mod to which object belongs.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.resources.ResourceKey&lt;? extends net.minecraft.core.Registry&lt;?&gt;&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registry()" class="member-name-link">registry</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the registry key of the registry the object is registered in.</div>
 </div>
 </div>
@@ -148,9 +154,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minecraft.resources.ResourceLocation,net.minecraft.resources.ResourceKey)">
+<section class="detail" id="&lt;init&gt;(org.moddingx.libx.mod.ModXRegistration,net.minecraft.resources.ResourceLocation,net.minecraft.resources.ResourceKey)">
 <h3>RegistrationContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RegistrationContext</span><wbr><span class="parameters">(net.minecraft.resources.ResourceLocation&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RegistrationContext</span><wbr><span class="parameters">(<a href="../mod/ModXRegistration.html" title="class in org.moddingx.libx.mod">ModXRegistration</a>&nbsp;mod,
+ net.minecraft.resources.ResourceLocation&nbsp;id,
  <a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
  net.minecraft.resources.ResourceKey&lt;?&gt;&nbsp;key)</span></div>
 </section>
@@ -163,6 +170,13 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="mod()">
+<h3>mod</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../mod/ModXRegistration.html" title="class in org.moddingx.libx.mod">ModXRegistration</a></span>&nbsp;<span class="element-name">mod</span>()</div>
+<div class="block">Gets the mod to which object belongs.</div>
+</section>
+</li>
 <li>
 <section class="detail" id="id()">
 <h3>id</h3>
