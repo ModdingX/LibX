@@ -17,6 +17,7 @@ public class ModInternal {
 
     private static final Object LOCK = new Object();
     private static final Map<Class<? extends ModX>, ModInternal> MAP = new HashMap<>();
+    private static final Map<String, ModInternal> ID_MAP = new HashMap<>();
 
     public static void init(ModX mod, FMLJavaModLoadingContext ctx) {
         synchronized (LOCK) {
@@ -26,7 +27,12 @@ public class ModInternal {
             if (MAP.containsKey(mod.getClass())) {
                 throw new IllegalStateException("ModInternal initialised twice for mod " + mod.getClass());
             }
-            MAP.put(mod.getClass(), new ModInternal(mod, ctx));
+            if (ID_MAP.containsKey(mod.modid)) {
+                throw new IllegalStateException("ModInternal initialised twice for modid " + mod.modid + " (Duplicate modid?)");
+            }
+            ModInternal modInternal = new ModInternal(mod, ctx);
+            MAP.put(mod.getClass(), modInternal);
+            ID_MAP.put(mod.modid, modInternal);
         }
     }
 
@@ -40,6 +46,16 @@ public class ModInternal {
                 throw new NoSuchElementException("ModInternal not found for mod " + modClass);
             }
             return MAP.get(modClass);
+        }
+    }
+    
+    public static Optional<ModInternal> get(String modid) {
+        synchronized (LOCK) {
+            if (ID_MAP.containsKey(modid)) {
+                return Optional.of(ID_MAP.get(modid));
+            }else {
+                return Optional.empty();
+            }
         }
     }
     
@@ -59,6 +75,10 @@ public class ModInternal {
         this.registrationDispatcher = null;
 
         ctx.getModEventBus().addListener(this::runSetup);
+    }
+    
+    public ModX instance() {
+        return this.mod;
     }
 
     public void initRegistration(RegistrationDispatcher dispatcher) {

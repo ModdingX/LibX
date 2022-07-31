@@ -2,6 +2,7 @@ package org.moddingx.libx.registration;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import org.moddingx.libx.mod.ModXRegistration;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -14,11 +15,11 @@ public final class SetupContext extends RegistrationContext {
     private final Consumer<Runnable> enqueue;
 
     public SetupContext(RegistrationContext ctx, Consumer<Runnable> enqueue) {
-        this(ctx.id(), ctx.key().orElse(null), enqueue);
+        this(ctx.mod(), ctx.id(), ctx.key().orElse(null), enqueue);
     }
     
-    public SetupContext(ResourceLocation id, @Nullable ResourceKey<?> key, Consumer<Runnable> enqueue) {
-        super(id, key);
+    public SetupContext(ModXRegistration mod, ResourceLocation id, @Nullable ResourceKey<?> key, Consumer<Runnable> enqueue) {
+        super(mod, id, key);
         this.enqueue = enqueue;
     }
 

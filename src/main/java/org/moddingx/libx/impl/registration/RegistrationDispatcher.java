@@ -15,6 +15,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
+import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.*;
 import org.moddingx.libx.registration.tracking.RegistryTracker;
 
@@ -29,7 +30,7 @@ public class RegistrationDispatcher {
     
     private final Object LOCK = new Object();
     
-    private final String modid;
+    private final ModXRegistration mod;
     
     private final boolean trackingEnabled;
     private final List<RegistryCondition> conditions;
@@ -41,8 +42,8 @@ public class RegistrationDispatcher {
     private final Map<ResourceKey<? extends Registry<?>>, RegistryData> allEntries;
     private final List<NamedRegisterable> registerables;
     
-    public RegistrationDispatcher(String modid, RegistrationBuilder.Result result) {
-        this.modid = modid;
+    public RegistrationDispatcher(ModXRegistration mod, RegistrationBuilder.Result result) {
+        this.mod = mod;
         this.trackingEnabled = result.tracking();
         this.conditions = result.conditions();
         this.transformers = result.transformers();
@@ -76,10 +77,10 @@ public class RegistrationDispatcher {
     
     public <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
         synchronized (this.LOCK) {
-            ResourceLocation rl = new ResourceLocation(this.modid, id);
+            ResourceLocation rl = new ResourceLocation(this.mod.modid, id);
             @Nullable
             ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
-            RegistrationContext ctx = new RegistrationContext(new ResourceLocation(this.modid, id), resourceKey);
+            RegistrationContext ctx = new RegistrationContext(this.mod, this.mod.resource(id), resourceKey);
 
             if (this.conditions.stream().allMatch(condition -> condition.shouldRegisterMulti(ctx, registry, value))) {
                 MultiEntryCollector<T> collector = new MultiEntryCollector<>(this, registry, id);
@@ -100,14 +101,14 @@ public class RegistrationDispatcher {
     public <T> Supplier<Holder<T>> register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         synchronized (this.LOCK) {
             if (value instanceof MultiRegisterable<?>) {
-                throw new IllegalArgumentException("Can't register MultiRegistrable. Use #registerMulti instead: " + registry + "/" + this.modid + ":" + id + " @ " + value);
+                throw new IllegalArgumentException("Can't register MultiRegistrable. Use #registerMulti instead: " + registry + "/" + this.mod.modid + ":" + id + " @ " + value);
             }
             
-            ResourceLocation rl = new ResourceLocation(this.modid, id);
+            ResourceLocation rl = this.mod.resource(id);
             
             @Nullable
             ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
-            RegistrationContext ctx = new RegistrationContext(rl, resourceKey);
+            RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
             
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
             if (!failedConditions.isEmpty()) {
@@ -205,7 +206,7 @@ public class RegistrationDispatcher {
     
     public void notifyRegisterField(IForgeRegistry<?> registry, String id, Field field) {
         if (this.trackingEnabled) {
-            RegistryTracker.track(registry, field, new ResourceLocation(this.modid, id));
+            RegistryTracker.track(registry, field, this.mod.resource(id));
         }
     }
     

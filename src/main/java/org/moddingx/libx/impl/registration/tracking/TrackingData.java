@@ -3,7 +3,9 @@ package org.moddingx.libx.impl.registration.tracking;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.moddingx.libx.LibX;
+import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
+import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.MultiRegisterable;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
@@ -137,15 +139,18 @@ public final class TrackingData<T> {
                 // Can't be done immediately or it would deadlock
                 // Submit it to be done before the next round
                 enqueue.accept(() -> {
-                    RegistrationContext ctx = new RegistrationContext(id, this.registry.getRegistryKey());
-                    try {
-                        if (value instanceof Registerable registerable) {
-                            registerable.initTracking(ctx, new TrackingInstance(id, value));
-                        } else if (value instanceof MultiRegisterable<?> registerable) {
-                            registerable.initTracking(ctx, new TrackingInstance(id, value));
+                    Optional<ModInternal> modInternal = ModInternal.get(id.getNamespace());
+                    if (modInternal.isPresent() && modInternal.get().instance() instanceof ModXRegistration mod) {
+                        RegistrationContext ctx = new RegistrationContext(mod, id, this.registry.getRegistryKey());
+                        try {
+                            if (value instanceof Registerable registerable) {
+                                registerable.initTracking(ctx, new TrackingInstance(id, value));
+                            } else if (value instanceof MultiRegisterable<?> registerable) {
+                                registerable.initTracking(ctx, new TrackingInstance(id, value));
+                            }
+                        } catch (ReflectiveOperationException e) {
+                            LibX.logger.error("Failed to update instance tracking for " + value + " (" + id + "/" + this.registry.getRegistryName() + ")", e);
                         }
-                    } catch (ReflectiveOperationException e) {
-                        LibX.logger.error("Failed to update instance tracking for " + value + " (" + id + "/" + this.registry.getRegistryName() + ")", e);
                     }
                 });
                 valueUpdate.accept(value);
