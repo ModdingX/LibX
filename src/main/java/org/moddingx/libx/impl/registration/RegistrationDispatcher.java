@@ -77,7 +77,7 @@ public class RegistrationDispatcher {
     
     public <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
         synchronized (this.LOCK) {
-            ResourceLocation rl = new ResourceLocation(this.mod.modid, id);
+            ResourceLocation rl = this.mod.resource(id);
             @Nullable
             ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
             RegistrationContext ctx = new RegistrationContext(this.mod, this.mod.resource(id), resourceKey);
