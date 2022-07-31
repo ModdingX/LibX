@@ -68,7 +68,7 @@ public abstract class ModXRegistration extends ModX {
 
         RegistrationBuilder builder = new RegistrationBuilder();
         this.initRegistration(builder);
-        this.dispatcher = new RegistrationDispatcher(this.modid, builder.build());
+        this.dispatcher = new RegistrationDispatcher(this, builder.build());
         ModInternal.get(this).initRegistration(this.dispatcher);
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this.dispatcher::registerBy);
