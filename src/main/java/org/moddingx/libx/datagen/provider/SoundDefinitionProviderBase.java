@@ -9,6 +9,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
 import net.minecraftforge.common.data.SoundDefinitionsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
@@ -345,18 +346,30 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
             return this;
         }
 
+        @Deprecated(forRemoval = true)
+        @RemoveIn(minecraft = "1.20")
+        public SoundDefinitionBuilder effect(SoundEvent event) {
+            return this.event(event);
+        }
+        
+        @Deprecated(forRemoval = true)
+        @RemoveIn(minecraft = "1.20")
+        public SoundDefinitionBuilder effect(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
+            return this.event(event, configure);
+        }
+        
         /**
          * Adds another sound event as a sound for this definition.
          */
-        public SoundDefinitionBuilder effect(SoundEvent event) {
-            return this.effect(event, sound -> {});
+        public SoundDefinitionBuilder event(SoundEvent event) {
+            return this.event(event, sound -> {});
         }
         
         /**
          * Adds another sound event as a sound for this definition. Also allows to then further customise the sound.
          */
-        public SoundDefinitionBuilder effect(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
-            SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(event)), SoundDefinition.SoundType.SOUND);
+        public SoundDefinitionBuilder event(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
+            SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(event)), SoundDefinition.SoundType.EVENT);
             this.settings.applyTo(sound);
             configure.accept(sound);
             this.definition.with(sound);
