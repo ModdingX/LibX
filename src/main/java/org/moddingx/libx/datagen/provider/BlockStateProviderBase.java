@@ -211,7 +211,9 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
                 return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
             }
         } else if (block instanceof LeavesBlock) {
-            return this.models().withExistingParent(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath(), LEAVES_PARENT).texture("all", this.blockTexture(block));
+            return this.models().withExistingParent(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath(), LEAVES_PARENT)
+                    .texture("all", this.blockTexture(block))
+                    .renderType(RenderTypes.CUTOUT_MIPPED);
         } else {
             return this.cubeAll(block);
         }
