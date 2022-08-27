@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="BlockLootProviderBase.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase</a></code>, <code><a href="EntityLootProviderBase.html" title="class in org.moddingx.libx.datagen.provider.loot">EntityLootProviderBase</a></code></dd>
+<dd><code><a href="BlockLootProviderBase.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase</a></code>, <code><a href="ChestLootProviderBase.html" title="class in org.moddingx.libx.datagen.provider.loot">ChestLootProviderBase</a></code>, <code><a href="EntityLootProviderBase.html" title="class in org.moddingx.libx.datagen.provider.loot">EntityLootProviderBase</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">LootProviderBase&lt;T&gt;</span>
@@ -132,19 +132,26 @@ implements net.minecraft.data.DataProvider</span></div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.moddingx.libx.mod.ModX,net.minecraft.data.DataGenerator,java.lang.String,net.minecraft.world.level.storage.loot.parameters.LootContextParamSet,java.util.function.Supplier)" class="member-name-link">LootProviderBase</a><wbr>(<a href="../../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.moddingx.libx.mod.ModX,net.minecraft.data.DataGenerator,java.lang.String,net.minecraft.world.level.storage.loot.parameters.LootContextParamSet,java.util.function.Function)" class="member-name-link">LootProviderBase</a><wbr>(<a href="../../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
+ net.minecraft.data.DataGenerator&nbsp;generator,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;folder,
+ net.minecraft.world.level.storage.loot.parameters.LootContextParamSet&nbsp;params,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="LootProviderBase.html" title="type parameter in LootProviderBase">T</a>,<wbr>net.minecraft.resources.ResourceLocation&gt;&nbsp;elementIds)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.moddingx.libx.mod.ModX,net.minecraft.data.DataGenerator,java.lang.String,net.minecraft.world.level.storage.loot.parameters.LootContextParamSet,java.util.function.Supplier)" class="member-name-link">LootProviderBase</a><wbr>(<a href="../../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
  net.minecraft.data.DataGenerator&nbsp;generator,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;folder,
  net.minecraft.world.level.storage.loot.parameters.LootContextParamSet&nbsp;params,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;net.minecraft.resources.ResourceLocation,<wbr><a href="LootProviderBase.html" title="type parameter in LootProviderBase">T</a>&gt;&gt;&gt;&nbsp;elements)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected </code></div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.moddingx.libx.mod.ModX,net.minecraft.data.DataGenerator,java.lang.String,net.minecraft.world.level.storage.loot.parameters.LootContextParamSet,net.minecraftforge.registries.IForgeRegistry)" class="member-name-link">LootProviderBase</a><wbr>(<a href="../../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected </code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.moddingx.libx.mod.ModX,net.minecraft.data.DataGenerator,java.lang.String,net.minecraft.world.level.storage.loot.parameters.LootContextParamSet,net.minecraftforge.registries.IForgeRegistry)" class="member-name-link">LootProviderBase</a><wbr>(<a href="../../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
  net.minecraft.data.DataGenerator&nbsp;generator,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;folder,
  net.minecraft.world.level.storage.loot.parameters.LootContextParamSet&nbsp;params,
  net.minecraftforge.registries.IForgeRegistry&lt;<a href="LootProviderBase.html" title="type parameter in LootProviderBase">T</a>&gt;&nbsp;registry)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -398,6 +405,16 @@ implements net.minecraft.data.DataProvider</span></div>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;folder,
  net.minecraft.world.level.storage.loot.parameters.LootContextParamSet&nbsp;params,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;net.minecraft.resources.ResourceLocation,<wbr><a href="LootProviderBase.html" title="type parameter in LootProviderBase">T</a>&gt;&gt;&gt;&nbsp;elements)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(org.moddingx.libx.mod.ModX,net.minecraft.data.DataGenerator,java.lang.String,net.minecraft.world.level.storage.loot.parameters.LootContextParamSet,java.util.function.Function)">
+<h3>LootProviderBase</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">LootProviderBase</span><wbr><span class="parameters">(<a href="../../../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
+ net.minecraft.data.DataGenerator&nbsp;generator,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;folder,
+ net.minecraft.world.level.storage.loot.parameters.LootContextParamSet&nbsp;params,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="LootProviderBase.html" title="type parameter in LootProviderBase">T</a>,<wbr>net.minecraft.resources.ResourceLocation&gt;&nbsp;elementIds)</span></div>
 </section>
 </li>
 </ul>
