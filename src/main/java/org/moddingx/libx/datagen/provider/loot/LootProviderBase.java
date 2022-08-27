@@ -66,6 +66,14 @@ public abstract class LootProviderBase<T> implements DataProvider {
         this.params = params;
         this.elements = elements;
     }
+    
+    protected LootProviderBase(ModX mod, DataGenerator generator, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
+        this.mod = mod;
+        this.generator = generator;
+        this.folder = folder;
+        this.params = params;
+        this.elements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
+    }
 
     protected abstract void setup();
 
