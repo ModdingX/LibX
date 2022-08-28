@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 public class DecoratedBlock extends BlockBase {
 
     private final DecorationContext context;
-    private final Map<DecorationType<?>, Object> elements;
+    private final Map<DecorationType<?>, DecorationType.DecorationElement<?, ?>> elements;
     private final Map<String, Registerable> registerMap;
     
     public DecoratedBlock(ModX mod, DecorationContext context, Properties properties) {
@@ -64,8 +64,7 @@ public class DecoratedBlock extends BlockBase {
             //noinspection unchecked
             return (T) this;
         } else if (this.has(type)) {
-            //noinspection unchecked
-            return (T) this.elements.get(type);
+            return (T) this.elements.get(type).element();
         } else {
             throw new NoSuchElementException("Decoration context " + this.context + " has no element of type " + type.name() + ": " + type);
         }

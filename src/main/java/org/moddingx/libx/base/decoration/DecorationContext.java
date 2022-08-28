@@ -105,7 +105,7 @@ public class DecorationContext {
     }
     
     public RegistrationInfo register(ModX mod, DecoratedBlock block) {
-        ImmutableMap.Builder<DecorationType<?>, Object> elementMap = ImmutableMap.builder();
+        ImmutableMap.Builder<DecorationType<?>, DecorationType.DecorationElement<?, ?>> elementMap = ImmutableMap.builder();
         ImmutableMap.Builder<String, Registerable> registerMap = ImmutableMap.builder();
         for (Map.Entry<String, DecorationType<?>> entry : this.types.entrySet()) {
             DecorationType.DecorationElement<?, ?> element = entry.getValue().element(mod, this, block);
@@ -153,5 +153,5 @@ public class DecorationContext {
     }
 
     // registerMap entries are registered without a registry
-    public record RegistrationInfo(Map<DecorationType<?>, Object> elementMap, Map<String, Registerable> registerMap) {}
+    public record RegistrationInfo(Map<DecorationType<?>, DecorationType.DecorationElement<?, ?>> elementMap, Map<String, Registerable> registerMap) {}
 }
