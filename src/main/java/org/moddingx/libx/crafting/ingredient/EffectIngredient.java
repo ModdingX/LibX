@@ -1,6 +1,5 @@
 package org.moddingx.libx.crafting.ingredient;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -79,7 +78,7 @@ public class EffectIngredient extends Ingredient {
     public EffectIngredient(@Nullable Item potionItem, List<MobEffectInstance> effects, boolean extraEffects, boolean higherAmplifier, boolean higherDuration) {
         super(Stream.empty());
         this.potionItem = potionItem;
-        this.effects = ImmutableList.copyOf(effects);
+        this.effects = List.copyOf(effects);
         this.extraEffects = extraEffects;
         this.higherAmplifier = higherAmplifier;
         this.higherDuration = higherDuration;

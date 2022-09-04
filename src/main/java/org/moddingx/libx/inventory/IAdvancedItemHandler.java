@@ -132,6 +132,8 @@ public interface IAdvancedItemHandler extends IItemHandler {
     static IAdvancedItemHandler wrap(IItemHandler handler) {
         if (handler instanceof IAdvancedItemHandler advanced) {
             return advanced;
+        } else if (handler instanceof IItemHandlerModifiable modifiable) {
+            return IAdvancedItemHandlerModifiable.wrap(modifiable);
         } else {
             return new IAdvancedItemHandler() {
 

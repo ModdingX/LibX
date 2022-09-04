@@ -8,7 +8,7 @@ import org.moddingx.libx.inventory.BaseItemStackHandler;
 import javax.annotation.Nonnull;
 
 /**
- * A slot that is meant to be used together with {@link BaseItemStackHandler}. the slot
+ * A slot that is meant to be used together with {@link BaseItemStackHandler}. The slot
  * will use the unrestricted item handler as inventory, but it will use the base inventory
  * for {@link #mayPlace(ItemStack)} to allow validators to run.
  */

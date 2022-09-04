@@ -17,7 +17,9 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.annotation.meta.RemoveIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,7 +32,12 @@ import java.util.stream.Stream;
  * is ignored.
  * 
  * Please check whether EffectIngredient matches your needs better as it does in most cases.
+ * 
+ * @deprecated Use a {@link PartialNBTIngredient} instead.
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.20")
+@SuppressWarnings("DeprecatedIsStillUsed")
 public class PotionIngredient extends Ingredient {
 
     /**

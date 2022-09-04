@@ -1,6 +1,5 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.DataGenerator;
@@ -59,17 +58,21 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
 
     @Override
     protected final void buildCraftingRecipes(@Nonnull Consumer<FinishedRecipe> base) {
-        List<ICondition> conditions = ImmutableList.copyOf(this.conditions());
+        List<ICondition> conditions = List.copyOf(this.conditions());
         if (conditions.isEmpty()) {
             this.consumer = base;
         } else {
             this.consumer = recipe -> {
-                ConditionalRecipe.Builder builder = ConditionalRecipe.builder();
-                conditions.forEach(builder::addCondition);
-                builder.addRecipe(recipe);
-                builder.addCondition(TrueCondition.INSTANCE);
-                builder.addRecipe(EmptyRecipe.empty(recipe.getId()));
-                builder.build(base, recipe.getId());
+                if (recipe.getType() == EmptyRecipe.Serializer.INSTANCE) {
+                    base.accept(recipe);
+                } else {
+                    ConditionalRecipe.Builder builder = ConditionalRecipe.builder();
+                    conditions.forEach(builder::addCondition);
+                    builder.addRecipe(recipe);
+                    builder.addCondition(TrueCondition.INSTANCE);
+                    builder.addRecipe(EmptyRecipe.empty(recipe.getId()));
+                    builder.build(base, recipe.getId());
+                }
             };
         }
         this.setupExtensions();

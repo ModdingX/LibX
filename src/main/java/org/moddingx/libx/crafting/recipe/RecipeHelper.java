@@ -40,7 +40,6 @@ public class RecipeHelper {
      *                   more items than the recipe requires.
      */
     public static boolean matches(Recipe<?> recipe, List<ItemStack> stacks, boolean exactMatch) {
-
         ArrayList<Integer> countsLeft = new ArrayList<>();
         for (ItemStack stack : stacks) {
             countsLeft.add(stack.isEmpty() ? 0 : stack.getCount());
