@@ -73,7 +73,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     protected void registerModels() {
         this.setup();
 
-        for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys()) {
+        for (ResourceLocation id : ForgeRegistries.ITEMS.getKeys().stream().sorted().toList()) {
             Item item = ForgeRegistries.ITEMS.getValue(id);
             if (item != null && this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(item)) {
                 if (item instanceof BlockItem blockItem) {

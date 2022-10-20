@@ -3,6 +3,7 @@ package org.moddingx.libx.datagen.provider.loot;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -56,7 +57,10 @@ public abstract class LootProviderBase<T> implements DataProvider {
     private final Map<T, Function<T, LootTable.Builder>> functionMap = new HashMap<>();
 
     protected LootProviderBase(ModX mod, DataGenerator generator, String folder, LootContextParamSet params, IForgeRegistry<T> registry) {
-        this(mod, generator, folder, params, () -> registry.getEntries().stream().map(entry -> Map.entry(entry.getKey().location(), entry.getValue())));
+        this(mod, generator, folder, params, () -> registry.getEntries().stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
+                .map(entry -> Map.entry(entry.getKey().location(), entry.getValue()))
+        );
     }
     
     protected LootProviderBase(ModX mod, DataGenerator generator, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements) {

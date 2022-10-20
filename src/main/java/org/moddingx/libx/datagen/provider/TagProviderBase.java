@@ -4,6 +4,7 @@ import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -14,6 +15,7 @@ import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.Map;
 
 /**
@@ -49,11 +51,13 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
         if (this.forgeRegistry != null) {
             this.forgeRegistry.getEntries().stream()
                     .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                    .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                     .map(Map.Entry::getValue)
                     .forEach(this::defaultTags);
         } else {
             this.registry.entrySet().stream()
                     .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                    .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                     .map(Map.Entry::getValue)
                     .forEach(this::defaultTags);
         }
