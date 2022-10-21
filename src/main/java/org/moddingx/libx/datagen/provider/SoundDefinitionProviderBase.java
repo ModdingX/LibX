@@ -116,7 +116,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     private void registerSounds() {
         this.setup();
 
-        for (ResourceLocation id : ForgeRegistries.SOUND_EVENTS.getKeys()) {
+        for (ResourceLocation id : ForgeRegistries.SOUND_EVENTS.getKeys().stream().sorted().toList()) {
             if (this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(id)) {
                 SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(id);
                 if (sound != null) {

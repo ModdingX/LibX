@@ -120,7 +120,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     protected final void registerStatesAndModels() {
         this.setup();
 
-        for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys()) {
+        for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys().stream().sorted().toList()) {
             Block block = ForgeRegistries.BLOCKS.getValue(id);
             if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.manualState.contains(block)) {
                 if (this.existingModel.contains(block)) {

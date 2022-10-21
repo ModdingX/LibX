@@ -7,6 +7,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
@@ -21,10 +22,7 @@ import org.moddingx.libx.impl.tags.InternalTags;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A provider for {@link BlockTags block}, {@link ItemTags item} and {@link FluidTags fluid} tags.
@@ -71,6 +69,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         this.setup();
         ForgeRegistries.BLOCKS.getEntries().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(Map.Entry::getValue)
                 .forEach(block -> {
                     DecorationTags.addTags(block, this, this::initInternalTags);
@@ -78,10 +77,12 @@ public abstract class CommonTagsProviderBase implements DataProvider {
                 });
         ForgeRegistries.ITEMS.getEntries().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(Map.Entry::getValue)
                 .forEach(this::defaultItemTags);
         ForgeRegistries.FLUIDS.getEntries().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(Map.Entry::getValue)
                 .forEach(this::defaultFluidTags);
     }

@@ -110,15 +110,15 @@ public interface IAdvancedItemHandler extends IItemHandler {
                 if (predicate.test(content)) {
                     extracted = content;
                     if (!simulate) {
-                        this.extractItem(slot, amountToExtract, true);
+                        this.extractItem(slot, amountToExtract, false);
                     }
                 }
             } else {
                 if (ItemStack.isSame(extracted, content) && ItemStack.tagMatches(extracted, content)) {
                     extracted.grow(content.getCount());
-                }
-                if (!simulate) {
-                    this.extractItem(slot, amountToExtract, true);
+                    if (!simulate) {
+                        this.extractItem(slot, amountToExtract, false);
+                    }
                 }
             }
             if (extracted.getCount() >= amount) break;
