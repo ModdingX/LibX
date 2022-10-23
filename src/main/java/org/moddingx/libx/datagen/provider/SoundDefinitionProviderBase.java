@@ -347,13 +347,13 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         }
 
         @Deprecated(forRemoval = true)
-        @RemoveIn(minecraft = "1.20")
+        @RemoveIn(minecraft = "1.19.3")
         public SoundDefinitionBuilder effect(SoundEvent event) {
             return this.event(event);
         }
         
         @Deprecated(forRemoval = true)
-        @RemoveIn(minecraft = "1.20")
+        @RemoveIn(minecraft = "1.19.3")
         public SoundDefinitionBuilder effect(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
             return this.event(event, configure);
         }

@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  * @deprecated Use a {@link PartialNBTIngredient} instead.
  */
 @Deprecated(forRemoval = true)
-@RemoveIn(minecraft = "1.20")
+@RemoveIn(minecraft = "1.19.3")
 @SuppressWarnings("DeprecatedIsStillUsed")
 public class PotionIngredient extends Ingredient {
 

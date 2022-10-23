@@ -56,7 +56,7 @@ public abstract class NetworkX {
      * @see #registerGame(NetworkDirection, PacketSerializer, Supplier)
      */
     @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.20")
+    @RemoveIn(minecraft = "1.19.3")
     protected <T> void register(PacketSerializer<T> serializer, Supplier<BiConsumer<T, Supplier<NetworkEvent.Context>>> handler, NetworkDirection direction) {
         synchronized (LOCK) {
             Objects.requireNonNull(direction);
