@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.data.provider.texture;
+package org.moddingx.libx.datagen.provider.texture;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -13,7 +13,7 @@ import java.util.function.Function;
  * See {@link TextureProviderBase} for the difference between <i>image</i> and <i>texture</i> ids
  * and for information on scaling.
  */
-public class ImageHelper {
+public class TextureHelper {
 
     /**
      * Copies a texture to an image.
@@ -60,8 +60,7 @@ public class ImageHelper {
     }
 
     private static void doCopyImage(BufferedImage image, Textures textures, BufferedImage src, int srcScale, int x, int y, int width, int height, int u, int v) {
-        doCopyImage(image, src, x * textures.scale(), y * textures.scale(), width * textures.scale(), height * textures.scale(),
-                u * srcScale, v * srcScale, width * srcScale, height * srcScale);
+        doCopyImage(image, src, x * textures.scale(), y * textures.scale(), width * textures.scale(), height * textures.scale(), u * srcScale, v * srcScale, width * srcScale, height * srcScale);
     }
     
     private static void doCopyImage(BufferedImage image, BufferedImage src, int x, int y, int width, int height, int u, int v, int uw, int vh) {

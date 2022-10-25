@@ -1,15 +1,17 @@
-package io.github.noeppi_noeppi.libx.data.provider.texture;
+package org.moddingx.libx.datagen.provider.texture;
 
-import io.github.noeppi_noeppi.libx.impl.data.texture.SignTextureFactory;
-import io.github.noeppi_noeppi.libx.impl.data.texture.TextureGenerator;
-import io.github.noeppi_noeppi.libx.mod.ModX;
+import org.moddingx.libx.impl.datagen.texture.SignTextureFactory;
+import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -17,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A provider to generate textures during datagen.
@@ -46,7 +49,7 @@ import java.util.Map;
  * A source image scale is defined as the amount that a source image <b>needs to be</b> scaled up to match the
  * target image.
  * 
- * TO register textures that should be generated, use one of the {@code texture} and {@code image} methods
+ * To register textures that should be generated, use one of the {@code texture} and {@code image} methods
  * during {@link #setup()}.
  */
 public abstract class TextureProviderBase implements DataProvider {
@@ -57,7 +60,7 @@ public abstract class TextureProviderBase implements DataProvider {
 
     protected TextureProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
         this.mod = mod;
-        this.generator = new TextureGenerator(mod.modid, generator, fileHelper);
+        this.generator = new TextureGenerator(generator, fileHelper);
         this.textures = new HashMap<>();
     }
 
@@ -98,6 +101,18 @@ public abstract class TextureProviderBase implements DataProvider {
     }
 
     /**
+     * Generates a sign texture for the given {@link WoodType} with the given two blocks as log and planks.
+     */
+    public void sign(WoodType wood, Block log, Block planks) {
+        ResourceLocation logId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(log));
+        ResourceLocation planksId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(planks));
+        this.sign(wood,
+                new ResourceLocation(logId.getNamespace(), "block/" + logId.getPath()),
+                new ResourceLocation(planksId.getNamespace(), "block/" + planksId.getPath())
+        );
+    }
+    
+    /**
      * Generates a sign texture for the given {@link WoodType} with the given two textures as log and planks.
      */
     public void sign(WoodType wood, ResourceLocation log, ResourceLocation planks) {
@@ -111,9 +126,9 @@ public abstract class TextureProviderBase implements DataProvider {
     public void sign(ResourceLocation signTexture, ResourceLocation log, ResourceLocation planks) {
         this.texture(signTexture, new SignTextureFactory(log, planks));
     }
-    
+
     @Override
-    public void run(@Nonnull HashCache cache) throws IOException {
+    public void run(@Nonnull CachedOutput output) throws IOException {
         this.setup();
         for (Map.Entry<ResourceLocation, TextureFactory> entry : this.textures.entrySet()) {
             ResourceLocation id = entry.getKey();
@@ -126,7 +141,7 @@ public abstract class TextureProviderBase implements DataProvider {
             Dimension dim = factory.getSize();
             BufferedImage image = this.generator.newImage(dim.width, dim.height, textures.scale());
             factory.generate(image, textures);
-            this.generator.save(cache, id, image);
+            this.generator.save(output, id, image);
         }
     }
 }

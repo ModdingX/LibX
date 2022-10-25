@@ -1,8 +1,8 @@
-package io.github.noeppi_noeppi.libx.data.provider.texture;
+package org.moddingx.libx.datagen.provider.texture;
 
-import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
+import org.moddingx.libx.mod.ModX;
 
 import java.awt.image.BufferedImage;
 import java.math.BigInteger;
@@ -114,7 +114,7 @@ public class TextureBuilder {
     }
 
     private static boolean isPowerOfTwo(int number) {
-        return number > 0 && (number & (number -1)) == 0;
+        return number > 0 && (number & (number - 1)) == 0;
     }
 
     private static int gcd(int a, int b) {

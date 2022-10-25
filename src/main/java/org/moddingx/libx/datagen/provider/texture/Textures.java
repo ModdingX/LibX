@@ -1,8 +1,9 @@
-package io.github.noeppi_noeppi.libx.data.provider.texture;
+package org.moddingx.libx.datagen.provider.texture;
 
-import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
+import org.moddingx.libx.LibX;
+import org.moddingx.libx.mod.ModX;
 
 import java.awt.image.BufferedImage;
 import java.util.Map;
@@ -68,7 +69,7 @@ public class Textures {
         if (this.images.containsKey(loc)) {
             return this.scale / this.images.get(loc).getRight();
         } else {
-            this.mod.logger.warn("Requesting texture scale for " + loc + " after scale was built. It should be added to the texture builder.");
+            LibX.logger.warn("Requesting texture scale for " + loc + " after scale was built. It should be added to the texture builder.");
             return 1;
         }
     }
@@ -101,7 +102,7 @@ public class Textures {
         if (this.images.containsKey(loc)) {
             return this.images.get(loc).getLeft();
         } else {
-            this.mod.logger.warn("Loading texture " + loc + " after scale was built. It should be added to the texture builder.");
+            LibX.logger.warn("Loading texture " + loc + " after scale was built. It should be added to the texture builder.");
             return this.textureLoader.apply(loc);
         }
     }

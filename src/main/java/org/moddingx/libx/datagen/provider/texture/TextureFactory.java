@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.libx.data.provider.texture;
+package org.moddingx.libx.datagen.provider.texture;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
