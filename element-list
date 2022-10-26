@@ -32,6 +32,7 @@ org.moddingx.libx.datagen.provider.patchouli.content
 org.moddingx.libx.datagen.provider.patchouli.page
 org.moddingx.libx.datagen.provider.recipe
 org.moddingx.libx.datagen.provider.recipe.crafting
+org.moddingx.libx.datagen.provider.texture
 org.moddingx.libx.datapack
 org.moddingx.libx.event
 org.moddingx.libx.fi
@@ -45,6 +46,7 @@ org.moddingx.libx.registration.tracking
 org.moddingx.libx.registration.util
 org.moddingx.libx.render
 org.moddingx.libx.render.block
+org.moddingx.libx.render.target
 org.moddingx.libx.screen
 org.moddingx.libx.screen.text
 org.moddingx.libx.util
