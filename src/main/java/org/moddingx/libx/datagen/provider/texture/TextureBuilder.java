@@ -35,56 +35,56 @@ public class TextureBuilder {
     }
 
     /**
-     * Adds a required texture with has the given size by default as width and height.
+     * Adds a required texture which has the given size by default as width and height.
      */
     public TextureBuilder addTexture(String loc, int defaultSize) {
         return this.addTexture(loc, defaultSize, defaultSize);
     }
 
     /**
-     * Adds a required image with has the given size by default as width and height.
+     * Adds a required image which has the given size by default as width and height.
      */
     public TextureBuilder addImage(String loc, int defaultSize) {
         return this.addImage(loc, defaultSize, defaultSize);
     }
 
     /**
-     * Adds a required texture with has the given size by default as width and height.
+     * Adds a required texture which has the given size by default as width and height.
      */
     public TextureBuilder addTexture(ResourceLocation loc, int defaultSize) {
         return this.addTexture(loc, defaultSize, defaultSize);
     }
 
     /**
-     * Adds a required image with has the given size by default as width and height.
+     * Adds a required image which has the given size by default as width and height.
      */
     public TextureBuilder addImage(ResourceLocation loc, int defaultSize) {
         return this.addImage(loc, defaultSize, defaultSize);
     }
 
     /**
-     * Adds a required texture with has the given width and height by default.
+     * Adds a required texture which has the given width and height by default.
      */
     public TextureBuilder addTexture(String loc, int defaultWidth, int defaultHeight) {
         return this.addTexture(this.mod.resource(loc), defaultWidth, defaultHeight);
     }
 
     /**
-     * Adds a required image with has the given width and height by default.
+     * Adds a required image which has the given width and height by default.
      */
     public TextureBuilder addImage(String loc, int defaultWidth, int defaultHeight) {
         return this.addImage(this.mod.resource(loc), defaultWidth, defaultHeight);
     }
 
     /**
-     * Adds a required texture with has the given width and height by default.
+     * Adds a required texture which has the given width and height by default.
      */
     public TextureBuilder addTexture(ResourceLocation loc, int defaultWidth, int defaultHeight) {
         return this.addImage(new ResourceLocation(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), defaultWidth, defaultHeight);
     }
 
     /**
-     * Adds a required image with has the given width and height by default.
+     * Adds a required image which has the given width and height by default.
      */
     public TextureBuilder addImage(ResourceLocation loc, int defaultWidth, int defaultHeight) {
         if (!isPowerOfTwo(defaultWidth)) throw new IllegalArgumentException("Invalid default width for texture " + loc + ": " + defaultWidth + " is not a power of two.");

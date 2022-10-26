@@ -45,15 +45,15 @@ public class TextureHelper {
     /**
      * Copies an image to another image.
      * 
-     * @param image The target image.
+     * @param image    The target image.
      * @param textures A {@link Textures} object to resolve the source image and scales.
-     * @param src The source image location.
-     * @param x Unscaled x position on target image.
-     * @param y Unscaled y position on target image.
-     * @param width Unscaled width of area to copy.
-     * @param height Unscaled height of area to copy.
-     * @param u Unscaled x position on source image.
-     * @param v Unscaled y position on source image.
+     * @param src      The source image location.
+     * @param x        Unscaled x position on target image.
+     * @param y        Unscaled y position on target image.
+     * @param width    Unscaled width of area to copy.
+     * @param height   Unscaled height of area to copy.
+     * @param u        Unscaled x position on source image.
+     * @param v        Unscaled y position on source image.
      */
     public static void copyImage(BufferedImage image, Textures textures, ResourceLocation src, int x, int y, int width, int height, int u, int v) {
         doCopyImage(image, textures, textures.image(src), textures.imageScale(src), x, y, width, height, u, v);
@@ -70,12 +70,12 @@ public class TextureHelper {
     /**
      * Clears an area on an image. All pixels will be set transparent.
      *
-     * @param image The image to clear.
+     * @param image    The image to clear.
      * @param textures A {@link Textures} object to resolve scales.
-     * @param x Unscaled x position.
-     * @param y Unscaled y position.
-     * @param width Unscaled width of area to clear.
-     * @param height Unscaled height of area to clear.
+     * @param x        Unscaled x position.
+     * @param y        Unscaled y position.
+     * @param width    Unscaled width of area to clear.
+     * @param height   Unscaled height of area to clear.
      */
     public static void clear(BufferedImage image, Textures textures, int x, int y, int width, int height) {
         // Can't clear with graphics as it does not work with alpha.
