@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[44,)"
 license="APACHE-2.0"
 issueTrackerURL="https://github.com/ModdingX/LibX/issues"
 
@@ -17,13 +17,13 @@ A library mod for minecraft.
 [[dependencies.libx]]
     modId="forge"
     mandatory=true
-    versionRange="[43.0.7,)"
+    versionRange="[44.0.30,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.libx]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,)"
+    versionRange="[1.19.3,)"
     ordering="NONE"
     side="BOTH"

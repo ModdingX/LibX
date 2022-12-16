@@ -7,7 +7,6 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.mod.ModX;
 
@@ -43,31 +42,6 @@ public abstract class NetworkX {
                 remote -> this.protocol.server().predicate.test(this.protocol.version(), remote)
         );
         ModInternal.get(mod).addSetupTask(this::registerPackets, false);
-    }
-
-    /**
-     * Registers a packet handler.
-     *
-     * @param handler The double lambda is required to prevent classloading on the server.
-     * @param direction The network direction the packet should go.
-     *
-     * @deprecated Use {@link #registerLogin(NetworkDirection, LoginPacketSerializer, Supplier)} or {@link #registerGame(NetworkDirection, PacketSerializer, Supplier)} instead.
-     * @see #registerLogin(NetworkDirection, LoginPacketSerializer, Supplier)
-     * @see #registerGame(NetworkDirection, PacketSerializer, Supplier)
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19.3")
-    protected <T> void register(PacketSerializer<T> serializer, Supplier<BiConsumer<T, Supplier<NetworkEvent.Context>>> handler, NetworkDirection direction) {
-        synchronized (LOCK) {
-            Objects.requireNonNull(direction);
-            BiConsumer<T, Supplier<NetworkEvent.Context>> realHandler;
-            if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_CLIENT) {
-                realHandler = DistExecutor.unsafeRunForDist(() -> handler, () -> () -> (msg, ctx) -> {});
-            } else {
-                realHandler = handler.get();
-            }
-            this.channel.registerMessage(this.discriminator++, serializer.messageClass(), serializer::encode, serializer::decode, realHandler, Optional.of(direction));
-        }
     }
 
     /**

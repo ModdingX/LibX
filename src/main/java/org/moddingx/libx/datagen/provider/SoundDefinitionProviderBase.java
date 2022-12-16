@@ -9,7 +9,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
 import net.minecraftforge.common.data.SoundDefinitionsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
@@ -344,18 +343,6 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
                 this.with(new ResourceLocation(soundId.getNamespace(), soundId.getPath() + i), configure);
             }
             return this;
-        }
-
-        @Deprecated(forRemoval = true)
-        @RemoveIn(minecraft = "1.19.3")
-        public SoundDefinitionBuilder effect(SoundEvent event) {
-            return this.event(event);
-        }
-        
-        @Deprecated(forRemoval = true)
-        @RemoveIn(minecraft = "1.19.3")
-        public SoundDefinitionBuilder effect(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
-            return this.event(event, configure);
         }
         
         /**

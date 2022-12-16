@@ -15,7 +15,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
 import org.moddingx.libx.command.EnumArgument2;
 import org.moddingx.libx.crafting.ingredient.EffectIngredient;
-import org.moddingx.libx.crafting.ingredient.PotionIngredient;
 import org.moddingx.libx.impl.BlockEntityUpdateQueue;
 import org.moddingx.libx.impl.InternalDataGen;
 import org.moddingx.libx.impl.commands.client.ClientCommandsImpl;
@@ -62,7 +61,6 @@ public final class LibX extends ModX {
         MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 
         CraftingHelper.register(this.resource("effect"), EffectIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(this.resource("potion"), PotionIngredient.Serializer.INSTANCE);
     }
 
     @Override
