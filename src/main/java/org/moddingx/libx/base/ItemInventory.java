@@ -6,10 +6,10 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.moddingx.libx.mod.ModX;
@@ -62,7 +62,7 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
             @Nonnull
             @Override
             public <C> LazyOptional<C> getCapability(@Nonnull Capability<C> cap, @Nullable Direction side) {
-                if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+                if (cap == ForgeCapabilities.ITEM_HANDLER) {
                     return inventoryCapability.cast();
                 } else {
                     return parent == null ? LazyOptional.empty() : parent.getCapability(cap, side);
@@ -77,7 +77,7 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
      */
     @Nullable
     public static IItemHandlerModifiable getInventory(ItemStack stack) {
-        IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve().orElse(null);
+        IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElse(null);
         if (handler instanceof IItemHandlerModifiable modifiable) {
             return modifiable;
         } else {
@@ -90,7 +90,7 @@ public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<C
      * doesn't have the item handler capability or the item handler is not an instance of {@link IItemHandlerModifiable}.
      */
     public static Optional<IItemHandlerModifiable> getInventoryOption(ItemStack stack) {
-        IItemHandler handler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).resolve().orElse(null);
+        IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElse(null);
         if (handler instanceof IItemHandlerModifiable modifiable) {
             return Optional.of(modifiable);
         } else {
