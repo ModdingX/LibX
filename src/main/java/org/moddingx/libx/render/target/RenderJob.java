@@ -1,10 +1,10 @@
 package org.moddingx.libx.render.target;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec2;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 /**
  * A render job defines the logic on how to render a scene into an image. Can be used with {@link ImageHelper}.
@@ -22,21 +22,21 @@ public interface RenderJob {
     int height();
 
     /**
-     * The projection matrix to use. By default creates an orthographic projection with a scale of 1.
+     * The projection matrix to use. By default, creates an orthographic projection with a scale of 1.
      * (Everything from 0 to image width/height is projected onto the image).
      */
     default Matrix4f setupProjectionMatrix() {
-        return Matrix4f.orthographic(this.width(), this.height(), 500, 6000);
+        return new Matrix4f().ortho(0, this.width(), 0, this.height(), 500, 6000);
     }
 
     /**
-     * The modelView matrix to use. Do not confuse with the transformation matrix. By default this is
+     * The modelView matrix to use. Do not confuse with the transformation matrix. By default, this is
      * a translation matrix by 2000 units in negative z direction.
      * 
      * @see #setupTransformation(PoseStack)
      */
     default Matrix4f setupModelViewMatrix() {
-        return Matrix4f.createTranslateMatrix(0, 0, -2000);
+        return new Matrix4f().translate(0, 0, -2000);
     }
 
     /**
@@ -71,7 +71,7 @@ public interface RenderJob {
      * <b>In order for this to be called, {@link #usesOverlay()} must return {@code true}</b>
      * 
      * @param projector A point projector that can project points in the 3 dimensional space used in
-     *                  {@link #render(PoseStack, MultiBufferSource)} to the two dimensional space after projection.
+     *                  {@link #render(PoseStack, MultiBufferSource)} to the two-dimensional space after projection.
      * 
      * @see #usesOverlay()
      */
@@ -83,7 +83,7 @@ public interface RenderJob {
     interface Projector {
 
         /**
-         * Projects a three dimensional vector onto its 2d coordinates after applying transformation and projection matrix.
+         * Projects a three-dimensional vector onto its 2d coordinates after applying transformation and projection matrix.
          */
         Vec2 projectPoint(Vector3f point);
     }
