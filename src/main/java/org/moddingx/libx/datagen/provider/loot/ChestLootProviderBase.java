@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.loot;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.moddingx.libx.mod.ModX;
@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 
 public abstract class ChestLootProviderBase extends LootProviderBase<String> {
     
-    protected ChestLootProviderBase(ModX mod, DataGenerator generator) {
-        super(mod, generator, "chests", LootContextParamSets.CHEST, mod::resource);
+    protected ChestLootProviderBase(ModX mod, PackOutput packOutput) {
+        super(mod, packOutput, "chests", LootContextParamSets.CHEST, mod::resource);
     }
 
     @Nullable

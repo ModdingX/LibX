@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.UpgradeRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -74,7 +75,7 @@ public interface SmithingExtension extends RecipeExtension {
      * Adds  a smithing recipe with the given inputs and output.
      */
     default void smithing(Ingredient base, Ingredient addition, ItemLike result) {
-        UpgradeRecipeBuilder builder = UpgradeRecipeBuilder.smithing(base, addition, result.asItem());
+        UpgradeRecipeBuilder builder = UpgradeRecipeBuilder.smithing(base, addition, RecipeCategory.MISC, result.asItem()); // todo customizable RecipeCategory
         List<CriterionTriggerInstance> criteria = this.criteria(base);
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlocks("has_item" + i, criteria.get(i));

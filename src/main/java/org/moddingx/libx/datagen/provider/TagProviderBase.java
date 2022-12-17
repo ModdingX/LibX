@@ -1,22 +1,26 @@
 package org.moddingx.libx.datagen.provider;
 
 import com.mojang.serialization.Lifecycle;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.GameData;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A provider for tags of a type. If you want to use {@link BlockTags block}, {@link ItemTags item}
@@ -32,20 +36,14 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
     protected final IForgeRegistry<T> forgeRegistry;
 
     
-    protected TagProviderBase(ModX mod, DataGenerator generator, @Nonnull Registry<T> registry, @Nullable ExistingFileHelper fileHelper) {
-        super(generator, registry, mod.modid, fileHelper);
+    protected TagProviderBase(ModX mod, PackOutput packOutput, @Nonnull ResourceKey<? extends Registry<T>> registryKey, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
+        super(packOutput, registryKey, lookupProvider, mod.modid, fileHelper);
         this.mod = mod;
-        this.forgeRegistry = null;
-    }
-    
-    protected TagProviderBase(ModX mod, DataGenerator generator, @Nonnull IForgeRegistry<T> registry, @Nullable ExistingFileHelper fileHelper) {
-        super(generator, wrapForge(registry), mod.modid, fileHelper);
-        this.mod = mod;
-        this.forgeRegistry = registry;
+        this.forgeRegistry = RegistryManager.ACTIVE.getRegistry(registryKey);
     }
 
     @Override
-    protected final void addTags() {
+    protected final void addTags(@Nonnull HolderLookup.Provider lookupProvider) {
         this.setup();
 
         if (this.forgeRegistry != null) {
@@ -55,7 +53,7 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
                     .map(Map.Entry::getValue)
                     .forEach(this::defaultTags);
         } else {
-            this.registry.entrySet().stream()
+            RegistryManager.VANILLA.getRegistry(this.registryKey).getEntries().stream()
                     .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
                     .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                     .map(Map.Entry::getValue)
@@ -66,7 +64,7 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
     @Nonnull
     @Override
     public final String getName() {
-        return this.mod.modid + " " + (this.forgeRegistry == null ? this.registry.key().location() : this.forgeRegistry.getRegistryName()) + " tags";
+        return this.mod.modid + " " + (this.forgeRegistry == null ? this.registryKey.location() : this.forgeRegistry.getRegistryName()) + " tags";
     }
 
     /**
@@ -82,13 +80,16 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
 
     }
 
-    private static <T> Registry<T> wrapForge(IForgeRegistry<T> forgeRegistry) {
-        if (forgeRegistry.tags() == null) {
-            throw new IllegalArgumentException("Registry has no tag support: " + forgeRegistry.getRegistryName());
-        } else if (forgeRegistry.getDefaultKey() == null) {
-            return GameData.getWrapper(forgeRegistry.getRegistryKey(), Lifecycle.experimental());
+    private static <T> Registry<T> getForge(ResourceKey<? extends Registry<T>> registryKey) {
+        ForgeRegistry<T> reg = RegistryManager.ACTIVE.getRegistry(registryKey);
+        if (reg == null) {
+            throw new IllegalArgumentException("Registry does not exist: " + registryKey);
+        } else if (reg.tags() == null) {
+            throw new IllegalArgumentException("Registry has no tag support: " + registryKey.registry());
+        }else if (reg.getDefaultKey() == null) {
+            return GameData.getWrapper(registryKey, Lifecycle.experimental());
         } else {
-            return GameData.getWrapper(forgeRegistry.getRegistryKey(), Lifecycle.experimental(), "default");
+            return GameData.getWrapper(registryKey, Lifecycle.experimental(), "default");
         }
     }
 }

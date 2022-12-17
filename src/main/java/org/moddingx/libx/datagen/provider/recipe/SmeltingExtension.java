@@ -1,11 +1,11 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 
 /**
@@ -85,7 +85,7 @@ public interface SmeltingExtension extends RecipeExtension {
      * Adds a smelting recipe.
      */
     default void smelting(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), out, exp, time)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), RecipeCategory.MISC, out, exp, time) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
     }
@@ -97,7 +97,7 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void blasting(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), out, exp, time / 2)
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), RecipeCategory.MISC, out, exp, time / 2) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
     }
@@ -109,7 +109,7 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void cooking(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp, time / 2, RecipeSerializer.SMOKING_RECIPE)
+        SimpleCookingRecipeBuilder.smoking(Ingredient.of(in), RecipeCategory.MISC, out, exp, time / 2) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
     }
@@ -121,7 +121,7 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void campfire(ResourceLocation outputId, ItemLike in, ItemLike out, float exp, int time) {
         this.cooking(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp, time * 3, RecipeSerializer.CAMPFIRE_COOKING_RECIPE)
+        SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(in), RecipeCategory.MISC, out, exp, time * 3) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
     }
@@ -130,7 +130,7 @@ public interface SmeltingExtension extends RecipeExtension {
      * Adds a smelting recipe.
      */
     default void smelting(ResourceLocation outputId, TagKey<Item> in, ItemLike out, float exp, int time) {
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), out, exp, time)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), RecipeCategory.MISC, out, exp, time) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
     }
@@ -142,7 +142,7 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void blasting(ResourceLocation outputId, TagKey<Item> in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), out, exp, time / 2)
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), RecipeCategory.MISC, out, exp, time / 2) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
     }
@@ -154,7 +154,7 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void cooking(ResourceLocation outputId, TagKey<Item> in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp, time / 2, RecipeSerializer.SMOKING_RECIPE)
+        SimpleCookingRecipeBuilder.smoking(Ingredient.of(in), RecipeCategory.MISC, out, exp, time / 2) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
     }
@@ -166,7 +166,7 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void campfire(ResourceLocation outputId, TagKey<Item> in, ItemLike out, float exp, int time) {
         this.cooking(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.cooking(Ingredient.of(in), out, exp, time * 3, RecipeSerializer.CAMPFIRE_COOKING_RECIPE)
+        SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(in), RecipeCategory.MISC, out, exp, time * 3) // todo customizable RecipeCategory
                 .unlockedBy("has_item", this.criterion(in))
                 .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
     }

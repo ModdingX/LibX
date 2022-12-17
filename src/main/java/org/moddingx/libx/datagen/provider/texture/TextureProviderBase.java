@@ -1,25 +1,25 @@
 package org.moddingx.libx.datagen.provider.texture;
 
-import org.moddingx.libx.impl.datagen.texture.SignTextureFactory;
-import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.impl.datagen.texture.SignTextureFactory;
+import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A provider to generate textures during datagen.
@@ -58,9 +58,9 @@ public abstract class TextureProviderBase implements DataProvider {
     private final TextureGenerator generator;
     private final Map<ResourceLocation, TextureFactory> textures;
 
-    protected TextureProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
+    protected TextureProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper fileHelper) {
         this.mod = mod;
-        this.generator = new TextureGenerator(generator, fileHelper);
+        this.generator = new TextureGenerator(packOutput, fileHelper);
         this.textures = new HashMap<>();
     }
 
@@ -127,9 +127,12 @@ public abstract class TextureProviderBase implements DataProvider {
         this.texture(signTexture, new SignTextureFactory(log, planks));
     }
 
+    @Nonnull
     @Override
-    public void run(@Nonnull CachedOutput output) throws IOException {
+    public CompletableFuture<?> run(@Nonnull CachedOutput output) {
         this.setup();
+        CompletableFuture<?>[] futures = new CompletableFuture[this.textures.size()];
+        int i = 0;
         for (Map.Entry<ResourceLocation, TextureFactory> entry : this.textures.entrySet()) {
             ResourceLocation id = entry.getKey();
             TextureFactory factory = entry.getValue();
@@ -141,7 +144,8 @@ public abstract class TextureProviderBase implements DataProvider {
             Dimension dim = factory.getSize();
             BufferedImage image = this.generator.newImage(dim.width, dim.height, textures.scale());
             factory.generate(image, textures);
-            this.generator.save(output, id, image);
+            futures[i++] = this.generator.save(output, id, image);
         }
+        return CompletableFuture.allOf(futures);
     }
 }

@@ -7,6 +7,6 @@ import org.moddingx.libx.impl.tags.InternalTagProvider;
 public class InternalDataGen {
     
     public static void gatherData(GatherDataEvent event) {
-        event.getGenerator().addProvider(true, new InternalTagProvider(LibX.getInstance(), event.getGenerator(), event.getExistingFileHelper()));
+        event.getGenerator().addProvider(true, new InternalTagProvider(LibX.getInstance(), event.getGenerator(), event.getLookupProvider(), event.getExistingFileHelper()));
     }
 }

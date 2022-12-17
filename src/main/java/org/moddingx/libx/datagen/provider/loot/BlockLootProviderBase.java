@@ -3,7 +3,7 @@ package org.moddingx.libx.datagen.provider.loot;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -44,8 +44,8 @@ import java.util.List;
 
 public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
-    protected BlockLootProviderBase(ModX mod, DataGenerator generator) {
-        super(mod, generator, "blocks", LootContextParamSets.BLOCK, ForgeRegistries.BLOCKS);
+    protected BlockLootProviderBase(ModX mod, PackOutput packOutput) {
+        super(mod, packOutput, "blocks", LootContextParamSets.BLOCK, ForgeRegistries.BLOCKS);
     }
     
     @Nullable

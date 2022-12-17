@@ -3,8 +3,8 @@ package org.moddingx.libx.datagen.provider;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -21,9 +21,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -36,14 +36,14 @@ import java.util.stream.Collectors;
 public abstract class AdvancementProviderBase implements DataProvider {
     
     protected final ModX mod;
-    protected final DataGenerator generator;
+    protected final PackOutput packOutput;
     private final Map<ResourceLocation, Supplier<Advancement>> advancements = new HashMap<>();
     private String rootId = null;
     private Supplier<Advancement> rootSupplier = null;
 
-    public AdvancementProviderBase(ModX mod, DataGenerator generator) {
+    public AdvancementProviderBase(ModX mod, PackOutput packOutput) {
         this.mod = mod;
-        this.generator = generator;
+        this.packOutput = packOutput;
     }
 
     public abstract void setup();
@@ -54,14 +54,18 @@ public abstract class AdvancementProviderBase implements DataProvider {
         return this.mod.modid + " advancements";
     }
 
+    @Nonnull
     @Override
-    public void run(@Nonnull CachedOutput cache) throws IOException {
+    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         this.setup();
+        CompletableFuture<?>[] futures = new CompletableFuture[this.advancements.size()];
+        int i = 0;
         for (Supplier<Advancement> supplier : this.advancements.values()) {
             Advancement advancement = supplier.get();
-            Path path = this.generator.getOutputFolder().resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
-            DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
+            Path path = this.packOutput.getOutputFolder().resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
+            futures[i++] = DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
         }
+        return CompletableFuture.allOf(futures);
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -69,7 +70,7 @@ public interface StoneCuttingExtension extends RecipeExtension {
      * Adds a stone cutting recipe with the given input, output and output amount.
      */
     default void stoneCutting(Ingredient input, ItemLike output, int amount, String suffix) {
-        SingleItemRecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(input, output, amount);
+        SingleItemRecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(input, RecipeCategory.MISC, output, amount); // todo customizable RecipeCategory
         List<CriterionTriggerInstance> criteria = this.criteria(input);
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));

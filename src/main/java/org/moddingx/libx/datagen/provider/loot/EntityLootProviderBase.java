@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.loot;
 
 import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 
 public abstract class EntityLootProviderBase extends LootProviderBase<EntityType<?>> {
 
-    protected EntityLootProviderBase(ModX mod, DataGenerator generator) {
-        super(mod, generator, "entities", LootContextParamSets.ENTITY, ForgeRegistries.ENTITY_TYPES);
+    protected EntityLootProviderBase(ModX mod, PackOutput packOutput) {
+        super(mod, packOutput, "entities", LootContextParamSets.ENTITY, ForgeRegistries.ENTITY_TYPES);
     }
 
     @Nullable

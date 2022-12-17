@@ -1,8 +1,8 @@
 package org.moddingx.libx.datagen.provider.patchouli;
 
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -12,12 +12,12 @@ import org.moddingx.libx.impl.datagen.patchouli.translate.TranslationManager;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 /**
@@ -27,7 +27,7 @@ import java.util.function.BiFunction;
 public abstract class PatchouliProviderBase implements DataProvider {
     
     protected final ModX mod;
-    protected final DataGenerator generator;
+    protected final PackOutput packOutput;
     protected final ExistingFileHelper fileHelper;
     private final BookProperties properties;
     
@@ -35,9 +35,9 @@ public abstract class PatchouliProviderBase implements DataProvider {
     private final Set<ResourceLocation> categoryIds;
     private final List<EntryBuilder> entries;
     
-    public PatchouliProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper, BookProperties properties) {
+    public PatchouliProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper fileHelper, BookProperties properties) {
         this.mod = mod;
-        this.generator = generator;
+        this.packOutput = packOutput;
         this.fileHelper = fileHelper;
         this.properties = properties;
         FontLoader.getFontWidthProvider(fileHelper);
@@ -101,8 +101,9 @@ public abstract class PatchouliProviderBase implements DataProvider {
         return this.mod.modid + " " + this.properties.bookName() + " patchouli book";
     }
     
+    @Nonnull
     @Override
-    public void run(@Nonnull CachedOutput cache) throws IOException {
+    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         this.setup();
         
         TranslationManager mgr;
@@ -114,20 +115,23 @@ public abstract class PatchouliProviderBase implements DataProvider {
             mgr = null;
             translations = (str, path) -> str;
         }
-        
-        for (int i = 0; i < this.categories.size(); i++) {
-            CategoryBuilder category = this.categories.get(i);
-            Path path = this.generator.getOutputFolder().resolve(this.properties.packTarget().getDirectory() + "/" + category.id.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/categories/" + category.id.getPath() + ".json");
-            DataProvider.saveStable(cache, category.build(translations, i), path);
+
+        CompletableFuture<?>[] futures = new CompletableFuture[this.categories.size() + this.entries.size() + (mgr != null ? 1 : 0)];
+        int i = 0;
+        for (int j = 0; j < this.categories.size(); j++) {
+            CategoryBuilder category = this.categories.get(j);
+            Path path = this.packOutput.getOutputFolder().resolve(this.properties.packTarget().getDirectory() + "/" + category.id.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/categories/" + category.id.getPath() + ".json");
+            futures[i++] = DataProvider.saveStable(cache, category.build(translations, j), path);
         }
         for (EntryBuilder entry : this.entries) {
-            Path path = this.generator.getOutputFolder().resolve(this.properties.packTarget().getDirectory() + "/" + entry.category.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/entries/" + entry.category.getPath() + "/" + entry.id + ".json");
-            DataProvider.saveStable(cache, entry.build(translations, this.fileHelper), path);
+            Path path = this.packOutput.getOutputFolder().resolve(this.properties.packTarget().getDirectory() + "/" + entry.category.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/entries/" + entry.category.getPath() + "/" + entry.id + ".json");
+            futures[i++] = DataProvider.saveStable(cache, entry.build(translations, this.fileHelper), path);
         }
 
         if (mgr != null) {
-            Path langPath = this.generator.getOutputFolder().resolve(PackType.CLIENT_RESOURCES.getDirectory() + "/" + this.mod.modid + "_" + this.properties.bookName() + "/lang/en_us.json");
-            DataProvider.saveStable(cache, mgr.build(), langPath);
+            Path langPath = this.packOutput.getOutputFolder().resolve(PackType.CLIENT_RESOURCES.getDirectory() + "/" + this.mod.modid + "_" + this.properties.bookName() + "/lang/en_us.json");
+            futures[i] = DataProvider.saveStable(cache, mgr.build(), langPath);
         }
+        return CompletableFuture.allOf(futures);
     }
 }
