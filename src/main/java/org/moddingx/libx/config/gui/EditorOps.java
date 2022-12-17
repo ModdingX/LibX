@@ -2,7 +2,7 @@ package org.moddingx.libx.config.gui;
 
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 
 import java.util.Optional;
 
@@ -21,9 +21,9 @@ public interface EditorOps {
     }
 
     /**
-     * Wraps a {@link Widget} into matching editor ops.
+     * Wraps a {@link Renderable} into matching editor ops.
      */
-    static EditorOps wrap(Widget widget) {
+    static EditorOps wrap(Renderable widget) {
         if (widget instanceof EditorOps ops) {
             return ops;
         } else if (widget instanceof EditBox base) {

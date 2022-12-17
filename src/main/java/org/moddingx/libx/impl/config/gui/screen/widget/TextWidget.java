@@ -38,7 +38,7 @@ public class TextWidget extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(@Nonnull NarrationElementOutput output) {
+    public void updateWidgetNarration(@Nonnull NarrationElementOutput output) {
         //
     }
 }

@@ -58,7 +58,7 @@ public class ConfigDisplay {
             // Dummy
             return new AbstractWidget(x, y, width, height, Component.literal("DUMMY")) {
                 @Override
-                public void updateNarration(@Nonnull NarrationElementOutput narration) {
+                public void updateWidgetNarration(@Nonnull NarrationElementOutput narration) {
                     //
                 }
             };
