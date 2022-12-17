@@ -16,6 +16,7 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.gameevent.PositionSource;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -133,8 +134,8 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                 }
 
                 @Override
-                public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull GameEvent.Message message) {
-                    return eventBlock.notifyGameEvent(level, message);
+                public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull GameEvent gameEvent, @Nonnull GameEvent.Context context, @Nonnull Vec3 pos) {
+                    return eventBlock.notifyGameEvent(level, gameEvent, context, pos);
                 }
             };
         } else {
