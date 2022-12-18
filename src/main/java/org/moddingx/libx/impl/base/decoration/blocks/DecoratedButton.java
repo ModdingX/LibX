@@ -14,10 +14,12 @@ import javax.annotation.Nonnull;
 public class DecoratedButton extends ButtonBlock {
 
     public final DecoratedBlock parent;
+    public final Type type;
 
-    public DecoratedButton(DecoratedBlock parent, int ticksToStayPressed, boolean arrowsCanPress, SoundEvent soundOff, SoundEvent soundOn) {
+    public DecoratedButton(DecoratedBlock parent, int ticksToStayPressed, boolean arrowsCanPress, SoundEvent soundOff, SoundEvent soundOn, Type type) {
         super(Properties.copy(parent), ticksToStayPressed, arrowsCanPress, soundOff, soundOn);
         this.parent = parent;
+        this.type = type;
     }
 
     @Override
@@ -40,5 +42,9 @@ public class DecoratedButton extends ButtonBlock {
     @Override
     public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
         return this.parent.getLightEmission(state, world, pos);
+    }
+
+    public enum Type {
+        WOOD, STONE
     }
 }

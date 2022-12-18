@@ -6,6 +6,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
@@ -114,21 +115,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for an {@link Item}
      */
-    public TagsProvider.TagAppender<Item> item(TagKey<Item> tag) {
+    public IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item> item(TagKey<Item> tag) {
         return this.itemTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Block}
      */
-    public TagsProvider.TagAppender<Block> block(TagKey<Block> tag) {
+    public IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block> block(TagKey<Block> tag) {
         return this.blockTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Fluid}
      */
-    public TagsProvider.TagAppender<Fluid> fluid(TagKey<Fluid> tag) {
+    public IntrinsicHolderTagsProvider.IntrinsicTagAppender<Fluid> fluid(TagKey<Fluid> tag) {
         return this.fluidTags.tag(tag);
     }
 
