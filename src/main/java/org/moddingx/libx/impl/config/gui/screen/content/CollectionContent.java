@@ -67,16 +67,14 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
 
         int width = 200 + (23 * 3);
         int padding = Math.max(0, screen.width - width) / 2;
-        Button button = new Button(padding, y, 100, 20, Component.translatable("libx.config.gui.list.new"), b -> {}) {
-
-            @Override
-            public void onPress() {
-                CollectionContent.this.list.add(CollectionContent.this.editor.defaultValue());
-                CollectionContent.this.widgets.add(null);
-                CollectionContent.this.update();
-                manager.rebuild();
-            }
-        };
+        Button button = Button.builder(Component.translatable("libx.config.gui.list.new"), b -> {
+                    CollectionContent.this.list.add(CollectionContent.this.editor.defaultValue());
+                    CollectionContent.this.widgets.add(null);
+                    CollectionContent.this.update();
+                    manager.rebuild();
+                })
+                .bounds(padding, y, 100, 20)
+                .build();
         consumer.accept(button);
     }
     
@@ -119,13 +117,9 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
     }
     
     public static void addControlButton(Consumer<AbstractWidget> consumer, int x, int y, Component text, boolean enable, Runnable action) {
-        Button button = new Button(x, y, 20, 20, text, b -> {}) {
-
-            @Override
-            public void onPress() {
-                action.run();
-            }
-        };
+        Button button = Button.builder(text, b -> action.run())
+                .bounds(x, y, 20, 20)
+                .build();
         button.active = enable;
         consumer.accept(button);
     }

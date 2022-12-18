@@ -29,7 +29,10 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
         int y = 5;
         int buttonWidth = Math.min(200, this.width - 10);
         for (ConfigImpl config : this.configs) {
-            consumer.accept(new Button((this.width - buttonWidth) / 2, y, buttonWidth, 20, Component.literal(config.id.getPath()), button -> this.mc.setScreen(this.factory.apply(config))));
+            Button button = Button.builder(Component.literal(config.id.getPath()), b -> this.mc.setScreen(this.factory.apply(config)))
+                    .bounds((this.width - buttonWidth) / 2, y, buttonWidth, 20)
+                    .build();
+            consumer.accept(button);
             y += 25;
         }
     }

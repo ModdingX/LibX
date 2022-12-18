@@ -140,16 +140,14 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
             y += 23;
         }
 
-        Button button = new Button(padding, y, 100, 20, Component.translatable("libx.config.gui.resource_list.new"), b -> {}) {
-
-            @Override
-            public void onPress() {
-                ResourceListContent.this.list.add(new ResourceList.RuleEntry("", false, null));
-                ResourceListContent.this.entryWidgets.add(EntryWidgets.EMPTY);
-                ResourceListContent.this.update();
-                manager.rebuild();
-            }
-        };
+        Button button = Button.builder(Component.translatable("libx.config.gui.resource_list.new"), b -> {
+                    ResourceListContent.this.list.add(new ResourceList.RuleEntry("", false, null));
+                    ResourceListContent.this.entryWidgets.add(EntryWidgets.EMPTY);
+                    ResourceListContent.this.update();
+                    manager.rebuild();
+                })
+                .bounds(padding, y, 100, 20)
+                .build();
         consumer.accept(button);
     }
 

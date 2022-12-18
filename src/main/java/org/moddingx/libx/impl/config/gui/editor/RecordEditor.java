@@ -105,7 +105,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
         private final LazyValue<List<RecordConfigScreen.Entry>> entries;
 
         public RecordButton(ConfigScreenManager manager, Class<T> clazz, List<Supplier<ConfigEditor<Object>>> editors, Constructor<T> ctor, List<Object> values, WidgetProperties<T> properties) {
-            super(properties.x(), properties.y(), properties.width(), properties.height(), Component.translatable("libx.config.gui.edit"), b -> {});
+            super(properties.x(), properties.y(), properties.width(), properties.height(), Component.translatable("libx.config.gui.edit"), b -> {}, DEFAULT_NARRATION);
             this.manager = manager;
             this.clazz = clazz;
             this.ctor = ctor;

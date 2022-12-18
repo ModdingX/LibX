@@ -72,16 +72,14 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
             y += 23;
         }
         
-        Button button = new Button(3, y, 100, 20, Component.translatable("libx.config.gui.map.new"), b -> {}) {
-
-            @Override
-            public void onPress() {
-                MapContent.this.list.add(Pair.of("", MapContent.this.editor.defaultValue()));
-                MapContent.this.widgets.add(null);
-                MapContent.this.update();
-                manager.rebuild();
-            }
-        };
+        Button button = Button.builder(Component.translatable("libx.config.gui.map.new"), b -> {
+                    MapContent.this.list.add(Pair.of("", MapContent.this.editor.defaultValue()));
+                    MapContent.this.widgets.add(null);
+                    MapContent.this.update();
+                    manager.rebuild();
+                })
+                .bounds(3, y, 100, 20)
+                .build();
         consumer.accept(button);
     }
     
@@ -109,16 +107,14 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
         this.widgets.set(idx, widget);
         consumer.accept(widget);
 
-        Button deleteEntryButton = new Button(screen.width - 28, y, 20, 20, Component.literal("✖").withStyle(ChatFormatting.RED), b -> {}) {
-
-            @Override
-            public void onPress() {
-                MapContent.this.list.remove(idx);
-                MapContent.this.widgets.remove(idx);
-                MapContent.this.update();
-                manager.rebuild();
-            }
-        };
+        Button deleteEntryButton = Button.builder(Component.literal("✖").withStyle(ChatFormatting.RED), b -> {
+                    MapContent.this.list.remove(idx);
+                    MapContent.this.widgets.remove(idx);
+                    MapContent.this.update();
+                    manager.rebuild();
+                })
+                .bounds(screen.width - 28, y, 20, 20)
+                .build();
         consumer.accept(deleteEntryButton);
     }
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface EditorOps {
 
     /**
-     * Marks a widget as enabled or diasabled.
+     * Marks a widget as enabled or disabled.
      */
     default void enabled(boolean enabled) {
         
