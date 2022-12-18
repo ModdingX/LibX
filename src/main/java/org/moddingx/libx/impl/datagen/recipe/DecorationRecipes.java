@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -17,17 +18,17 @@ public class DecorationRecipes {
     
     public static void defaultRecipes(Block block, RecipeExtension ext) {
         if (block instanceof DecoratedSlabBlock decorated) {
-            if (ext instanceof StoneCuttingExtension cut && decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
+            if (ext instanceof StoneCuttingExtension && decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
                 stoneCutting(ext, Ingredient.of(decorated.parent), decorated, 2);
             }
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, 6, "###", '#', decorated.parent });
         } else if (block instanceof DecoratedStairBlock decorated) {
-            if (ext instanceof StoneCuttingExtension cut && decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
+            if (ext instanceof StoneCuttingExtension && decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
                 stoneCutting(ext, Ingredient.of(decorated.parent), decorated, 1);
             }
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, 4, "#  ", "## ", "###", '#', decorated.parent });
         } else if (block instanceof DecoratedWallBlock decorated) {
-            if (ext instanceof StoneCuttingExtension cut && decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
+            if (ext instanceof StoneCuttingExtension && decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
                 stoneCutting(ext, Ingredient.of(decorated.parent), decorated, 1);
             }
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, 6, "###", "###", '#', decorated.parent });
@@ -41,8 +42,6 @@ public class DecorationRecipes {
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, 2, "###", "###", '#', decorated.parent });
         } else if (block instanceof DecoratedButton decorated) {
             ObjectCraftingBuilder.buildShapeless(ext, new Object[]{ decorated, decorated.parent });
-        } else if (block instanceof DecoratedStoneButton decorated) {
-            ObjectCraftingBuilder.buildShapeless(ext, new Object[]{ decorated, decorated.parent });
         } else if (block instanceof DecoratedPressurePlate decorated) {
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, "##", '#', decorated.parent });
         } else if (block instanceof DecoratedSign.Standing decorated) {
@@ -51,7 +50,7 @@ public class DecorationRecipes {
     }
     
     private static void stoneCutting(RecipeExtension ext, Ingredient input, ItemLike output, int amount) {
-        SingleItemRecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(input, output, amount);
+        SingleItemRecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(input, RecipeCategory.BUILDING_BLOCKS, output, amount);
         List<CriterionTriggerInstance> criteria = ext.criteria(input);
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));
