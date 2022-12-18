@@ -85,8 +85,8 @@ public class DecoratedSign implements Registerable, SignAccess {
         }
         if (this.item == null) {
             Item.Properties itemProperties = new Item.Properties().stacksTo(16);
-            if (this.mod.tab != null) itemProperties.tab(this.mod.tab);
             this.item = new SignItem(itemProperties, this.standing, this.wall);
+            this.mod.addItemToTab(this.item);
         }
     }
 

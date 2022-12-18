@@ -91,6 +91,7 @@ public class FluidBase implements Registerable, ItemLike {
                 return Component.translatable("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getFluidType().getDescription(new FluidStack(this.getFluid(), FluidType.BUCKET_VOLUME)));
             }
         };
+        this.mod.addItemToTab(this.bucket);
     }
 
     /**
@@ -203,12 +204,8 @@ public class FluidBase implements Registerable, ItemLike {
         }
     }
 
-    private static Item.Properties defaultItemProperties(ModX mod) {
-        if (mod.tab != null) {
-            return new Item.Properties().tab(mod.tab);
-        } else {
-            return new Item.Properties();
-        }
+    private static Item.Properties defaultItemProperties() {
+        return new Item.Properties();
     }
 
     public static Builder builder(ModX mod) {
@@ -235,11 +232,7 @@ public class FluidBase implements Registerable, ItemLike {
             this.clientExtensions = null;
             this.properties = FluidType.Properties.create();
             this.blockProperties = BlockBehaviour.Properties.copy(Blocks.WATER);
-            if (mod.tab != null) {
-                this.itemProperties = new Item.Properties().tab(mod.tab);
-            } else {
                 this.itemProperties = new Item.Properties();
-            }
         }
 
         public Builder sourceFactory(Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory) {

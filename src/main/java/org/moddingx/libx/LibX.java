@@ -3,6 +3,7 @@ package org.moddingx.libx;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -31,6 +32,8 @@ import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.function.Consumer;
 
 /**
  * LibX instance class.
@@ -61,6 +64,11 @@ public final class LibX extends ModX {
         MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 
         CraftingHelper.register(this.resource("effect"), EffectIngredient.Serializer.INSTANCE);
+    }
+
+    @Override
+    protected Consumer<CreativeModeTab.Builder> createTab() {
+        return null;
     }
 
     @Override

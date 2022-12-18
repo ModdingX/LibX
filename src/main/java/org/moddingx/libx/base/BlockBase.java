@@ -46,10 +46,6 @@ public class BlockBase extends Block implements Registerable {
         if (itemProperties == null) {
             this.item = null;
         } else {
-            if (mod.tab != null) {
-                itemProperties.tab(mod.tab);
-            }
-
             this.item = new BlockItem(this, itemProperties) {
                 
                 @Override
@@ -73,6 +69,7 @@ public class BlockBase extends Block implements Registerable {
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         if (this.item != null) {
             builder.register(Registries.ITEM, this.item);
+            this.mod.addItemToTab(this.item);
         }
     }
 

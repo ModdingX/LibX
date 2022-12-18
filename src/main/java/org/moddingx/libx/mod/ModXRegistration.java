@@ -3,7 +3,6 @@ package org.moddingx.libx.mod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -18,7 +17,7 @@ import org.moddingx.libx.registration.RegistrationBuilder;
 import javax.annotation.Nullable;
 
 /**
- * You need to extends this instead of {@link ModX} if you want to use the LibX registration system.
+ * You need to extend this instead of {@link ModX} if you want to use the LibX registration system.
  *
  * This works like this:
  *
@@ -56,16 +55,6 @@ public abstract class ModXRegistration extends ModX {
      * the values needed.
      */
     protected ModXRegistration() {
-        this(null);
-    }
-
-    /**
-     * Subclasses should provide a public no-arg constructor that calls this with
-     * the values needed.
-     */
-    protected ModXRegistration(@Nullable CreativeModeTab tab) {
-        super(tab);
-
         RegistrationBuilder builder = new RegistrationBuilder();
         this.initRegistration(builder);
         this.dispatcher = new RegistrationDispatcher(this, builder.build());
@@ -102,7 +91,7 @@ public abstract class ModXRegistration extends ModX {
 
     /**
      * Registers the contents of a {@link MultiRegisterable} to a given registry using a given name as the base
-     * path part of the objects id.
+     * path part of the objects' id.
      */
     public final <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
         this.dispatcher.registerMulti(registry, id, value);
