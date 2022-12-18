@@ -109,11 +109,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
             ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(FENCE_PARENT)).texture("texture", texture);
-        } else if (item.getBlock() instanceof DecoratedWoodButton decorated) {
-            ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
-            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
-            this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(BUTTON_PARENT)).texture("texture", texture);
-        } else if (item.getBlock() instanceof DecoratedStoneButton decorated) {
+        } else if (item.getBlock() instanceof DecoratedButton decorated) {
             ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(BUTTON_PARENT)).texture("texture", texture);

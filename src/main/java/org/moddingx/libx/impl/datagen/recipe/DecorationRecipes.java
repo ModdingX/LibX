@@ -39,7 +39,7 @@ public class DecorationRecipes {
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, 3, "##", "##", "##", '#', decorated.parent });
         } else if (block instanceof DecoratedTrapdoorBlock decorated) {
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ decorated, 2, "###", "###", '#', decorated.parent });
-        } else if (block instanceof DecoratedWoodButton decorated) {
+        } else if (block instanceof DecoratedButton decorated) {
             ObjectCraftingBuilder.buildShapeless(ext, new Object[]{ decorated, decorated.parent });
         } else if (block instanceof DecoratedStoneButton decorated) {
             ObjectCraftingBuilder.buildShapeless(ext, new Object[]{ decorated, decorated.parent });

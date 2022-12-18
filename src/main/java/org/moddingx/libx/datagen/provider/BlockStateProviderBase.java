@@ -166,9 +166,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             this.fenceBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedFenceGateBlock decorated) {
             this.fenceGateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
-        } else if (block instanceof DecoratedWoodButton decorated) {
-            this.buttonBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
-        } else if (block instanceof DecoratedStoneButton decorated) {
+        } else if (block instanceof DecoratedButton decorated) {
             this.buttonBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedPressurePlate decorated) {
             this.pressurePlateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));

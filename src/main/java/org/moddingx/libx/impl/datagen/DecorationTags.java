@@ -45,7 +45,7 @@ public class DecorationTags {
             if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
                 provider.block(InternalTags.Blocks.WOODEN_TRAPDOORS).add(decorated);
             }
-        } else if (block instanceof DecoratedWoodButton decorated) {
+        } else if (block instanceof DecoratedButton decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.BUTTONS).add(decorated);
             provider.block(InternalTags.Blocks.WOODEN_BUTTONS).add(decorated);

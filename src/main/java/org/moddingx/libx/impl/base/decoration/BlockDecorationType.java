@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.base.decoration;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -57,6 +58,6 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
     public void registerAdditional(ModX mod, DecorationContext context, DecoratedBlock block, T element, RegistrationContext registrationContext, Registerable.EntryCollector builder) {
         Item.Properties itemProperties = this.properties.get();
         if (mod.tab != null) itemProperties.tab(mod.tab);
-        builder.register(Registry.ITEM_REGISTRY, new BlockItem(element, itemProperties));
+        builder.register(Registries.ITEM, new BlockItem(element, itemProperties));
     }
 }
