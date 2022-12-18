@@ -2,6 +2,7 @@ package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -28,8 +29,9 @@ public class ObjectCraftingBuilder {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
         Pair<ItemLike, Integer> output = getOutput(reader);
+        RecipeCategory recipeCategory = getRecipeCategory(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(output.getLeft(), output.getRight());
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(recipeCategory, output.getLeft(), output.getRight());
         for (String line : reader.consumeWhile(String.class)) {
             builder.pattern(line);
         }
@@ -41,8 +43,9 @@ public class ObjectCraftingBuilder {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
         Pair<ItemLike, Integer> output = getOutput(reader);
+        RecipeCategory recipeCategory = getRecipeCategory(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(output.getLeft(), output.getRight());
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output.getLeft(), output.getRight());
         addShapelessIngredients(ext, builder, reader);
         builder.save(ext.consumer(), id);
     }
@@ -104,6 +107,11 @@ public class ObjectCraftingBuilder {
                 () -> reader.optConsume(ItemLike.class).map(item -> Pair.of(item, reader.optConsume(Integer.class).orElse(1))),
                 () -> reader.optConsume(ItemStack.class).map(stack -> Pair.of(stack.getItem(), stack.getCount()))
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid output at position " + reader.pos()));
+    }
+
+    @Nonnull
+    private static RecipeCategory getRecipeCategory(ObjectReader reader) {
+        return reader.optConsume(RecipeCategory.class).orElse(RecipeCategory.MISC);
     }
 
     private static Ingredient createTagIngredient(TagKey<?> key) {
