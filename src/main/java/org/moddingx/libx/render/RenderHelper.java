@@ -29,7 +29,7 @@ public class RenderHelper {
      * Same as {@link #repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
      */
     public static void repeatBlit(PoseStack poseStack, int x, int y, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
-        repeatBlit(poseStack, x, y, sprite.getWidth(), sprite.getHeight(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
+        repeatBlit(poseStack, x, y, sprite.contents().width(), sprite.contents().height(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
     }
 
     /**
