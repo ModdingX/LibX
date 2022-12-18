@@ -186,6 +186,7 @@ public class ModInit  {
                     String ctorArgs = entry.ctorArgs().stream().map(t -> switch (t) {
                                 case MOD -> this.modClass.getSimpleName() + "$.mod";
                                 case GENERATOR -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataGenerator(event)";
+                                case PACK_OUTPUT -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getPackOutput(event)";
                                 case FILE_HELPER -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataFileHelper(event)";
                             }).collect(Collectors.joining(","));
                     writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addDataProvider(event,new " + entry.classFqn() + "(" + ctorArgs + "));");

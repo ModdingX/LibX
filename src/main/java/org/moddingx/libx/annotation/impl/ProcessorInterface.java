@@ -5,6 +5,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelEvent;
@@ -109,6 +110,10 @@ public class ProcessorInterface {
     
     public static DataGenerator getDataGenerator(GatherDataEvent event) {
         return event.getGenerator();
+    }
+
+    public static PackOutput getPackOutput(GatherDataEvent event) {
+        return event.getGenerator().getPackOutput();
     }
     
     public static ExistingFileHelper getDataFileHelper(GatherDataEvent event) {

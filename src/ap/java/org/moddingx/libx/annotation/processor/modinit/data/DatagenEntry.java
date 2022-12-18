@@ -19,6 +19,6 @@ public record DatagenEntry(String classFqn, List<Arg> ctorArgs) {
     }
 
     public enum Arg {
-        MOD, GENERATOR, FILE_HELPER
+        MOD, GENERATOR, PACK_OUTPUT, FILE_HELPER
     }
 }

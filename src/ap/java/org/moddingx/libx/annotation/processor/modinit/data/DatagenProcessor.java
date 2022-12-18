@@ -57,6 +57,8 @@ public class DatagenProcessor {
             return DatagenEntry.Arg.MOD;
         } else if (env.subTypeErasure(type, env.forClass(Classes.DATA_GENERATOR))) {
             return DatagenEntry.Arg.GENERATOR;
+        } else if (env.subTypeErasure(type, env.forClass(Classes.PACK_OUTPUT))) {
+            return DatagenEntry.Arg.PACK_OUTPUT;
         } else if (env.subTypeErasure(type, env.forClass(Classes.DATA_FILE_HELPER))) {
             return DatagenEntry.Arg.FILE_HELPER;
         } else {
