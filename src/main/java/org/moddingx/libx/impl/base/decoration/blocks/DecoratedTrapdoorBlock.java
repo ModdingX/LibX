@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,7 +17,7 @@ public class DecoratedTrapdoorBlock extends TrapDoorBlock implements Registerabl
     public final DecoratedBlock parent;
 
     public DecoratedTrapdoorBlock(DecoratedBlock parent) {
-        super(Properties.copy(parent));
+        super(Properties.copy(parent), SoundEvents.WOODEN_TRAPDOOR_CLOSE, SoundEvents.WOODEN_TRAPDOOR_OPEN);
         this.parent = parent;
     }
 

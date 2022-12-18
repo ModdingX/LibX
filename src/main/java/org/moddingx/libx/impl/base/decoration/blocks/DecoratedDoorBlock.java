@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,7 +17,7 @@ public class DecoratedDoorBlock extends DoorBlock implements Registerable {
     public final DecoratedBlock parent;
 
     public DecoratedDoorBlock(DecoratedBlock parent) {
-        super(Properties.copy(parent));
+        super(Properties.copy(parent), SoundEvents.WOODEN_DOOR_CLOSE, SoundEvents.WOODEN_DOOR_OPEN);
         this.parent = parent;
     }
 

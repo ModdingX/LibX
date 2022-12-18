@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,7 +17,7 @@ public class DecoratedPressurePlate extends PressurePlateBlock {
     public final PressurePlateBlock.Sensitivity sensitivity;
 
     public DecoratedPressurePlate(PressurePlateBlock.Sensitivity sensitivity, DecoratedBlock parent) {
-        super(sensitivity, Properties.copy(parent));
+        super(sensitivity, Properties.copy(parent), SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_ON);
         this.parent = parent;
         this.sensitivity = sensitivity;
     }
