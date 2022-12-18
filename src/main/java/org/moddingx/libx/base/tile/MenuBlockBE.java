@@ -2,7 +2,7 @@ package org.moddingx.libx.base.tile;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -53,7 +53,7 @@ public class MenuBlockBE<T extends BlockEntity, C extends BlockEntityMenu<T>> ex
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, Registerable.EntryCollector builder) {
         super.registerAdditional(ctx, builder);
-        builder.register(Registry.MENU_REGISTRY, this.menu);
+        builder.register(Registries.MENU, this.menu);
     }
 
     @Override

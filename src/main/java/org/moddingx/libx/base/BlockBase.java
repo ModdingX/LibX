@@ -1,6 +1,6 @@
 package org.moddingx.libx.base;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -72,7 +72,7 @@ public class BlockBase extends Block implements Registerable {
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         if (this.item != null) {
-            builder.register(Registry.ITEM_REGISTRY, this.item);
+            builder.register(Registries.ITEM, this.item);
         }
     }
 

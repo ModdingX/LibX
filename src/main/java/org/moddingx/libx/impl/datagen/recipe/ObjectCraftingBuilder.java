@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -107,7 +107,7 @@ public class ObjectCraftingBuilder {
     }
 
     private static Ingredient createTagIngredient(TagKey<?> key) {
-        if (key.registry() != Registry.ITEM_REGISTRY) throw new IllegalArgumentException("Non-item tag in recipe: " + key);
+        if (key.registry() != Registries.ITEM) throw new IllegalArgumentException("Non-item tag in recipe: " + key);
         //noinspection unchecked
         return Ingredient.of((TagKey<Item>) key);
     }

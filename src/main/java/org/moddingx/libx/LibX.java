@@ -2,7 +2,7 @@ package org.moddingx.libx;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -92,10 +92,10 @@ public final class LibX extends ModX {
     }
 
     private void registerStuff(RegisterEvent event) {
-        event.register(Registry.LOOT_ENTRY_REGISTRY, AllLootEntry.ID, () -> AllLootEntry.TYPE);
-        event.register(Registry.MENU_REGISTRY, this.resource("generic"), () -> GenericMenu.TYPE);
-        event.register(Registry.RECIPE_TYPE_REGISTRY, EmptyRecipe.ID, () -> EmptyRecipe.TYPE);
-        event.register(Registry.RECIPE_SERIALIZER_REGISTRY, EmptyRecipe.ID, () -> EmptyRecipe.Serializer.INSTANCE);
-        event.register(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, this.resource("enum"), () -> EnumArgument2.Info.INSTANCE);
+        event.register(Registries.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, () -> AllLootEntry.TYPE);
+        event.register(Registries.MENU, this.resource("generic"), () -> GenericMenu.TYPE);
+        event.register(Registries.RECIPE_TYPE, EmptyRecipe.ID, () -> EmptyRecipe.TYPE);
+        event.register(Registries.RECIPE_SERIALIZER, EmptyRecipe.ID, () -> EmptyRecipe.Serializer.INSTANCE);
+        event.register(Registries.COMMAND_ARGUMENT_TYPE, this.resource("enum"), () -> EnumArgument2.Info.INSTANCE);
     }
 }

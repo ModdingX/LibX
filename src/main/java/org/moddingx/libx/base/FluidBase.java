@@ -1,6 +1,6 @@
 package org.moddingx.libx.base;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
@@ -168,10 +168,10 @@ public class FluidBase implements Registerable, ItemLike {
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         this.init(ctx.id());
-        builder.register(Registry.FLUID_REGISTRY, this.source);
-        builder.registerNamed(Registry.FLUID_REGISTRY, "flowing", this.flowing);
-        builder.register(Registry.BLOCK_REGISTRY, this.block);
-        builder.registerNamed(Registry.ITEM_REGISTRY, "bucket", this.bucket);
+        builder.register(Registries.FLUID, this.source);
+        builder.registerNamed(Registries.FLUID, "flowing", this.flowing);
+        builder.register(Registries.BLOCK, this.block);
+        builder.registerNamed(Registries.ITEM, "bucket", this.bucket);
         builder.registerNamed(ForgeRegistries.Keys.FLUID_TYPES, "type", this.type);
     }
 

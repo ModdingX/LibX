@@ -1,7 +1,7 @@
 package org.moddingx.libx.base.tile;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -81,7 +81,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         super.registerAdditional(ctx, builder);
-        builder.register(Registry.BLOCK_ENTITY_TYPE_REGISTRY, this.beType);
+        builder.register(Registries.BLOCK_ENTITY_TYPE, this.beType);
     }
 
     @Override
