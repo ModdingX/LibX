@@ -1,6 +1,8 @@
 package org.moddingx.libx.impl.datapack;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
@@ -36,16 +38,16 @@ public class DynamicDatapackLocator implements RepositorySource {
     }
     
     @Override
-    public void loadPacks(@Nonnull Consumer<Pack> packs, @Nonnull Pack.PackConstructor factory) {
+    public void loadPacks(@Nonnull Consumer<Pack> packs) {
         for (ResourceLocation id : enabledPacks) {
-            String name = LibXDatapack.PREFIX + "/" + id.getNamespace() + ":" + id.getPath();
+            String packId = LibXDatapack.PREFIX + "/" + id.getNamespace() + ":" + id.getPath();
             IModFileInfo fileInfo = ModList.get().getModFileById(id.getNamespace());
             if (fileInfo == null || fileInfo.getFile() == null) {
                 LibX.logger.warn("Can't create dynamic datapack " + id + ": Invalid mod file: " + fileInfo);
             } else {
-                Pack pack = Pack.create(name, false,
-                        () -> new LibXDatapack(fileInfo.getFile(), id.getPath()), factory,
-                        Pack.Position.BOTTOM, PackSource.DEFAULT
+                Pack pack = Pack.readMetaAndCreate(packId, Component.literal(packId), false,
+                        anotherId -> new LibXDatapack(fileInfo.getFile(), id.getPath()),
+                        PackType.SERVER_DATA, Pack.Position.BOTTOM, PackSource.DEFAULT
                 );
                 if (pack != null) {
                     packs.accept(pack);

@@ -1,61 +1,33 @@
 package org.moddingx.libx.impl.datapack;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraftforge.forgespi.locating.IModFile;
 import net.minecraftforge.resource.PathPackResources;
 import org.moddingx.libx.datapack.DatapackHelper;
 
 import javax.annotation.Nonnull;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.function.Supplier;
 
 public class LibXDatapack extends PathPackResources {
 
     public static final int PACK_VERSION = 10;
     public static final String PREFIX = "libxdata";
-    
+
     private final String packId;
-    private final Supplier<InputStream> packMcmeta;
+    private final IoSupplier<InputStream> packMcmeta;
 
     public LibXDatapack(IModFile mod, String packId) {
         // Get the base part of the mod in there and the override resolve
-        super(mod.getFileName() + "/" + packId, mod.findResource(PREFIX));
+        super(mod.getFileName() + "/" + packId, true, mod.findResource(PREFIX));
         this.packId = packId;
         this.packMcmeta = DatapackHelper.generatePackMeta(mod, "Dynamic Datapack: " + mod.getFileName() + "/" + packId, PackType.SERVER_DATA);
     }
-    
-    @Override
-    protected boolean hasResource(@Nonnull String name) {
-        return name.equals(PACK_META) || super.hasResource(name);
-    }
-    
-    @Override
-    public boolean hasResource(@Nonnull PackType type, @Nonnull ResourceLocation location) {
-        return this.resourceValid(type, location) && super.hasResource(type, location);
-    }
 
-    @Nonnull
     @Override
-    protected InputStream getResource(@Nonnull String name) throws IOException {
-        return name.equals(PACK_META) ? this.packMcmeta.get() : super.getResource(name);
-    }
-
-    @Nonnull
-    @Override
-    public InputStream getResource(@Nonnull PackType type, @Nonnull ResourceLocation location) throws IOException {
-        if (this.resourceValid(type, location)) {
-            return super.getResource(type, location);
-        } else {
-            throw new FileNotFoundException(type.getDirectory() + "/" + location.getNamespace() + "/" + location.getPath() + "@" + this.getName());
-        }
-    }
-
-    private boolean resourceValid(PackType type, ResourceLocation location) {
-        return type == PackType.SERVER_DATA || location.getPath().startsWith("lang/");
+    public IoSupplier<InputStream> getRootResource(@Nonnull String... names) {
+        return names[0].equals(PACK_META) ? this.packMcmeta : super.getRootResource(names);
     }
 
     @Override

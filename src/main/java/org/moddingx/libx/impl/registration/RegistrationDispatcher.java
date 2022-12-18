@@ -1,9 +1,7 @@
 package org.moddingx.libx.impl.registration;
 
-import com.mojang.serialization.DataResult;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -139,7 +137,7 @@ public class RegistrationDispatcher {
                     }
                 }
                 
-                return () -> this.createHolder(resourceKey);
+                return () -> this.createHolder(resourceKey, value);
             } else {
                 return () -> {
                     throw new IllegalStateException("Can't create holder for " + rl + " without registry.");
@@ -155,15 +153,11 @@ public class RegistrationDispatcher {
         }
     }
     
-    private <T> Holder<T> createHolder(ResourceKey<T> resourceKey) {
+    private <T> Holder<T> createHolder(ResourceKey<T> resourceKey, T value) {
         // Forge registries can't create holders before an item is registered
         // Use the vanilla registry
-        
-        Registry<?> theRegistry = Registry.REGISTRY.get(resourceKey.registry());
-        if (theRegistry == null) theRegistry = BuiltinRegistries.REGISTRY.get(resourceKey.registry());
-        
         //noinspection unchecked
-        Registry<T> registry = (Registry<T>) theRegistry;
+        Registry<T> registry = (Registry<T>) RegistryManager.VANILLA.getRegistry(resourceKey.registry());
         
         if (registry == null) {
             if (RegistryManager.ACTIVE.getRegistry(resourceKey.registry()) != null) {
@@ -172,13 +166,9 @@ public class RegistrationDispatcher {
                 throw new IllegalStateException("Can't create holder for " + resourceKey + ": Registry not found.");
             }
         } else {
-            DataResult<Holder<T>> result = registry.getOrCreateHolder(resourceKey);
-            if (result.result().isPresent()) {
-                return result.result().get();
-            } else {
-                String err = result.error().map(DataResult.PartialResult::message).orElse("Unknown error");
-                throw new IllegalStateException("Failed to create holder for " + resourceKey + ": " + err);
-            }
+            Optional<Holder.Reference<T>> result = registry.getHolder(resourceKey);
+
+            return result.orElseGet(() -> registry.createIntrusiveHolder(value));
         }
     }
     

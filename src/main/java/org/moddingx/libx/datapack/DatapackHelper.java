@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.Util;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraftforge.forgespi.locating.IModFile;
 import org.moddingx.libx.impl.datapack.LibXDatapack;
 
@@ -13,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
-import java.util.function.Supplier;
 
 /**
  * Adds some utilities for creating custom dynamic datapacks.
@@ -30,7 +30,7 @@ public class DatapackHelper {
      * Creates a supplier that can be repeatedly called to create new {@link InputStream}s for
      * a dynamically generated {@code pack.mcmeta} based on the given mod file.
      */
-    public static Supplier<InputStream> generatePackMeta(IModFile file, String description, PackType packType) {
+    public static IoSupplier<InputStream> generatePackMeta(IModFile file, String description, PackType packType) {
         try {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             Writer writer = new OutputStreamWriter(bout, StandardCharsets.UTF_8);
