@@ -61,9 +61,9 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     @Override
     public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         poseStack.pushPose();
-        poseStack.translate(this.x, this.y, 0);
+        poseStack.translate(this.getX(), this.getY(), 0);
         for (Renderable widget : this.renderables) {
-            widget.render(poseStack, mouseX - this.x, mouseY - this.y, partialTicks);
+            widget.render(poseStack, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
         }
         poseStack.popPose();
     }
@@ -72,7 +72,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         boolean success = false;
         for (GuiEventListener child : this.children) {
-            if (child.mouseClicked(mouseX - this.x, mouseY - this.y, button)) {
+            if (child.mouseClicked(mouseX - this.getX(), mouseY - this.getY(), button)) {
                 this.screen.setFocused(this);
                 this.focused = child;
                 if (button == 0) {
@@ -88,8 +88,8 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         this.screen.setDragging(false);
         for (GuiEventListener child : this.children) {
-            if (child.isMouseOver(mouseX - this.x, mouseY - this.y)) {
-                if (child.mouseReleased(mouseX - this.x, mouseY - this.y, button)) {
+            if (child.isMouseOver(mouseX - this.getX(), mouseY - this.getY())) {
+                if (child.mouseReleased(mouseX - this.getX(), mouseY - this.getY(), button)) {
                     return true;
                 }
             }
@@ -99,7 +99,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return this.focused != null && this.screen.isDragging() && this.focused.mouseDragged(mouseX - this.x, mouseY - this.y, button, dragX - this.x, dragY - this.y);
+        return this.focused != null && this.screen.isDragging() && this.focused.mouseDragged(mouseX - this.getX(), mouseY - this.getY(), button, dragX - this.getX(), dragY - this.getY());
     }
 
     @Override

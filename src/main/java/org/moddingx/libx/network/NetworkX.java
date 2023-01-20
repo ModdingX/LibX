@@ -21,8 +21,8 @@ import java.util.function.Supplier;
 
 /**
  * A class implementing network logic. You should subclass it and create an instance in your
- * mods constructor. {@link NetworkX#registerPackets()} will then automatically be called
- * during setup phase. You can register custom packets there. The order in which they are
+ * mods' constructor. {@link NetworkX#registerPackets()} will then automatically be called
+ * during setup. You can register custom packets there. The order in which they are
  * registered is important.
  */
 public abstract class NetworkX {
@@ -33,7 +33,7 @@ public abstract class NetworkX {
     private final Protocol protocol;
     private int discriminator = 0;
 
-    public NetworkX(ModX mod) {
+    protected NetworkX(ModX mod) {
         this.protocol = this.getProtocol();
         this.channel = NetworkRegistry.newSimpleChannel(
                 mod.resource("netchannel"),

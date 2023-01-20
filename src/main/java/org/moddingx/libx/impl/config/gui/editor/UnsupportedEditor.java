@@ -44,7 +44,9 @@ public class UnsupportedEditor<T> implements ConfigEditor<T> {
     private static class UnsupportedButton extends Button implements EditorOps {
 
         public UnsupportedButton(int x, int y, int width, int height, Component title, Tooltip tooltip, OnPress action) {
-            super(x, y, width, height, title, action, DEFAULT_NARRATION);
+            super(Button.builder(title, action)
+                    .pos(x, y)
+                    .size(width, height));
             this.setTooltip(tooltip);
         }
 

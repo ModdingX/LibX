@@ -52,7 +52,9 @@ public class SimpleSelectEditor<T> implements ConfigEditor<T> {
         private int idx;
 
         public ToggleWidget(List<T> list, Function<T, Component> nameFactory, int idx, WidgetProperties<T> properties) {
-            super(properties.x(), properties.y(), properties.width(), properties.height(), Component.empty(), b -> {}, DEFAULT_NARRATION);
+            super(Button.builder(Component.empty(), b -> {})
+                    .pos(properties.x(), properties.y())
+                    .size(properties.width(), properties.height()));
             this.list = list;
             this.nameFactory = nameFactory;
             this.inputChanged = properties.inputChanged();

@@ -1,6 +1,5 @@
 package org.moddingx.libx.datagen.provider;
 
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.PackOutput;
@@ -10,8 +9,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.GameData;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.mod.ModX;
@@ -78,18 +75,5 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
      */
     public void defaultTags(T element) {
 
-    }
-
-    private static <T> Registry<T> getForge(ResourceKey<? extends Registry<T>> registryKey) {
-        ForgeRegistry<T> reg = RegistryManager.ACTIVE.getRegistry(registryKey);
-        if (reg == null) {
-            throw new IllegalArgumentException("Registry does not exist: " + registryKey);
-        } else if (reg.tags() == null) {
-            throw new IllegalArgumentException("Registry has no tag support: " + registryKey.registry());
-        }else if (reg.getDefaultKey() == null) {
-            return GameData.getWrapper(registryKey, Lifecycle.experimental());
-        } else {
-            return GameData.getWrapper(registryKey, Lifecycle.experimental(), "default");
-        }
     }
 }

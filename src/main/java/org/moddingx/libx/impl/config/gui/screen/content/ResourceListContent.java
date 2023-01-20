@@ -146,7 +146,8 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
                     ResourceListContent.this.update();
                     manager.rebuild();
                 })
-                .bounds(padding, y, 100, 20)
+                .pos(padding, y)
+                .size(100, 20)
                 .build();
         consumer.accept(button);
     }

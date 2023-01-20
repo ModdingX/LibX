@@ -162,7 +162,7 @@ public class ColorPicker extends Panel {
         super.render(poseStack, mouseX, mouseY, partialTicks);
         
         poseStack.pushPose();
-        poseStack.translate(this.x, this.y, 0);
+        poseStack.translate(this.getX(), this.getY(), 0);
 
         Matrix4f matrix = poseStack.last().pose();
 
@@ -238,10 +238,10 @@ public class ColorPicker extends Panel {
         if (!this.enabled) return false;
         // boundsX and boundsY contains the last mouse position when dragging
         // required to make it possible to get values from the border of the colour grid.
-        mouseX -= this.x;
-        mouseY -= this.y;
-        boundsX -= this.x;
-        boundsY -= this.y;
+        mouseX -= this.getX();
+        mouseY -= this.getY();
+        boundsX -= this.getX();
+        boundsY -= this.getY();
         if (boundsX >= 0 && boundsX <= 100 && boundsY >= 0 && boundsY <= 100) {
             this.saturation = (float) (Mth.clamp(mouseX, 0, 100) / (float) 100);
             this.brightness = (float) (1 - (Mth.clamp(mouseY, 0, 100) / (float) 100));

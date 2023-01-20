@@ -91,7 +91,6 @@ public class FluidBase implements Registerable, ItemLike {
                 return Component.translatable("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getFluidType().getDescription(new FluidStack(this.getFluid(), FluidType.BUCKET_VOLUME)));
             }
         };
-        this.mod.addItemToTab(this.bucket);
     }
 
     /**
@@ -202,10 +201,6 @@ public class FluidBase implements Registerable, ItemLike {
             this.source = this.sourceFactory.apply(this.fluidProperties);
             this.flowing = this.flowingFactory.apply(this.fluidProperties);
         }
-    }
-
-    private static Item.Properties defaultItemProperties() {
-        return new Item.Properties();
     }
 
     public static Builder builder(ModX mod) {

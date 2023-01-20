@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -14,12 +14,13 @@ import javax.annotation.Nonnull;
 public class DecoratedButton extends ButtonBlock {
 
     public final DecoratedBlock parent;
-    public final Type type;
 
-    public DecoratedButton(DecoratedBlock parent, int ticksToStayPressed, boolean arrowsCanPress, SoundEvent soundOff, SoundEvent soundOn, Type type) {
-        super(Properties.copy(parent), ticksToStayPressed, arrowsCanPress, soundOff, soundOn);
+    public DecoratedButton(DecoratedBlock parent, boolean wooden) {
+        super(Properties.copy(parent), wooden ? 30 : 20, wooden,
+                wooden ? SoundEvents.WOODEN_BUTTON_CLICK_OFF : SoundEvents.STONE_BUTTON_CLICK_OFF,
+                wooden ? SoundEvents.WOODEN_BUTTON_CLICK_ON : SoundEvents.STONE_BUTTON_CLICK_ON
+        );
         this.parent = parent;
-        this.type = type;
     }
 
     @Override
@@ -42,9 +43,5 @@ public class DecoratedButton extends ButtonBlock {
     @Override
     public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
         return this.parent.getLightEmission(state, world, pos);
-    }
-
-    public enum Type {
-        WOOD, STONE
     }
 }

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+// TODO apply tooltip fixes to new tooltip system
 public abstract class ConfigBaseScreen extends Screen {
 
     protected final Minecraft mc;
@@ -60,7 +61,8 @@ public abstract class ConfigBaseScreen extends Screen {
     protected void init() {
         if (this.manager != null) {
             Button back = Button.builder(Component.literal("\u2190 ").append(Component.translatable("libx.config.gui.back")), button -> this.manager.close())
-                    .bounds(5, 5, 42, 20)
+                    .pos(5, 5)
+                    .size(42, 20)
                     .build();
             this.addRenderableWidget(back);
         }
@@ -93,7 +95,7 @@ public abstract class ConfigBaseScreen extends Screen {
         this.buildGui(widgetBuilder::add);
         List<AbstractWidget> widgets = widgetBuilder.build();
 
-        int totalHeight = 10 + widgets.stream().map(w -> w.y + w.getHeight()).max(Comparator.naturalOrder()).orElse(0);
+        int totalHeight = 10 + widgets.stream().map(w -> w.getY() + w.getHeight()).max(Comparator.naturalOrder()).orElse(0);
         int paddingTop = 18 + this.mc.font.lineHeight + (this.hasSearchBar ? 26 : 0);
 
         this.panel = new BasePanel(this.mc, this.width - 2, this.height - paddingTop, paddingTop, 1) {

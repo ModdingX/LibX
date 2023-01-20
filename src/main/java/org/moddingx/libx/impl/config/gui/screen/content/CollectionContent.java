@@ -73,7 +73,8 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
                     CollectionContent.this.update();
                     manager.rebuild();
                 })
-                .bounds(padding, y, 100, 20)
+                .pos(padding, y)
+                .size(100, 20)
                 .build();
         consumer.accept(button);
     }
@@ -118,7 +119,8 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
     
     public static void addControlButton(Consumer<AbstractWidget> consumer, int x, int y, Component text, boolean enable, Runnable action) {
         Button button = Button.builder(text, b -> action.run())
-                .bounds(x, y, 20, 20)
+                .pos(x, y)
+                .size(20, 20)
                 .build();
         button.active = enable;
         consumer.accept(button);

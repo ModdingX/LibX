@@ -55,7 +55,7 @@ public class RegisterClassProcessor {
         if (registryClass.getKind() == TypeKind.VOID) {
             classesToCheck = List.of(
                     env.typeElement(Classes.FORGE_KEYS),
-                    env.typeElement(Classes.REGISTRY)
+                    env.typeElement(Classes.REGISTRIES)
             );
         } else {
             classesToCheck = List.of(env.typeElement(registryClass));

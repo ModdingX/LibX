@@ -1,5 +1,6 @@
 package org.moddingx.libx.datagen.provider.recipe.crafting;
 
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +22,7 @@ public interface CraftingExtension extends RecipeExtension {
      * 
      * <ul>
      *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
+     *     <li>Optional: A {@link RecipeCategory}. Defaults to {@link RecipeCategory#MISC}</li>
      *     <ul>
      *         <li>An {@link ItemLike} for the output optionally followed by an {@link Integer} for the amount.</li>
      *         <li>An {@link ItemStack} that is used to determine the output item and count.</li>

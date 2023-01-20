@@ -78,7 +78,8 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
                     MapContent.this.update();
                     manager.rebuild();
                 })
-                .bounds(3, y, 100, 20)
+                .pos(3, y)
+                .size(100, 20)
                 .build();
         consumer.accept(button);
     }
@@ -113,7 +114,8 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
                     MapContent.this.update();
                     manager.rebuild();
                 })
-                .bounds(screen.width - 28, y, 20, 20)
+                .pos(screen.width - 28, y)
+                .size(20, 20)
                 .build();
         consumer.accept(deleteEntryButton);
     }

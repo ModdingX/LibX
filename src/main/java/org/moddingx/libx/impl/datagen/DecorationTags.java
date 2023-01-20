@@ -48,7 +48,7 @@ public class DecorationTags {
         } else if (block instanceof DecoratedButton decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.BUTTONS).add(decorated);
-            if (decorated.type == DecoratedButton.Type.WOOD) {
+            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
                 provider.block(InternalTags.Blocks.WOODEN_BUTTONS).add(decorated);
             }
         } else if (block instanceof DecoratedPressurePlate decorated) {

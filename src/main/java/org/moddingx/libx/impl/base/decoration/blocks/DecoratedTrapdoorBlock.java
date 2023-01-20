@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
+import org.moddingx.libx.base.decoration.DecorationContext;
 import org.moddingx.libx.registration.Registerable;
 
 import javax.annotation.Nonnull;
@@ -17,7 +18,10 @@ public class DecoratedTrapdoorBlock extends TrapDoorBlock implements Registerabl
     public final DecoratedBlock parent;
 
     public DecoratedTrapdoorBlock(DecoratedBlock parent) {
-        super(Properties.copy(parent), SoundEvents.WOODEN_TRAPDOOR_CLOSE, SoundEvents.WOODEN_TRAPDOOR_OPEN);
+        super(Properties.copy(parent),
+                parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD ? SoundEvents.WOODEN_TRAPDOOR_CLOSE : SoundEvents.IRON_TRAPDOOR_CLOSE,
+                parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD ? SoundEvents.WOODEN_TRAPDOOR_OPEN : SoundEvents.IRON_TRAPDOOR_OPEN
+        );
         this.parent = parent;
     }
 

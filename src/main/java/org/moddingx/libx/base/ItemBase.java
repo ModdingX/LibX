@@ -15,6 +15,5 @@ public class ItemBase extends Item {
     public ItemBase(ModX mod, Properties properties) {
         super(properties);
         this.mod = mod;
-        mod.addItemToTab(this);
     }
 }

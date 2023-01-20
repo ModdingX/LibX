@@ -28,8 +28,8 @@ public class ObjectCraftingBuilder {
     public static void buildShaped(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
-        Pair<ItemLike, Integer> output = getOutput(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
+        Pair<ItemLike, Integer> output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(recipeCategory, output.getLeft(), output.getRight());
         for (String line : reader.consumeWhile(String.class)) {
@@ -42,12 +42,22 @@ public class ObjectCraftingBuilder {
     public static void buildShapeless(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
-        Pair<ItemLike, Integer> output = getOutput(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
+        Pair<ItemLike, Integer> output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output.getLeft(), output.getRight());
         addShapelessIngredients(ext, builder, reader);
         builder.save(ext.consumer(), id);
+    }
+
+    @Nullable
+    private static ResourceLocation getId(ObjectReader reader) {
+        return reader.optConsume(ResourceLocation.class).orElse(null);
+    }
+
+    @Nonnull
+    private static RecipeCategory getRecipeCategory(ObjectReader reader) {
+        return reader.optConsume(RecipeCategory.class).orElse(RecipeCategory.MISC);
     }
 
     private static void addShapedIngredients(RecipeExtension ext, ShapedRecipeBuilder builder, ObjectReader reader) {
@@ -96,22 +106,12 @@ public class ObjectCraftingBuilder {
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid ingredient at position " + reader.pos()));
     }
 
-    @Nullable
-    private static ResourceLocation getId(ObjectReader reader) {
-        return reader.optConsume(ResourceLocation.class).orElse(null);
-    }
-
     @Nonnull
     private static Pair<ItemLike, Integer> getOutput(ObjectReader reader) {
         return ObjectCraftingBuilder.<Pair<ItemLike, Integer>>first(
                 () -> reader.optConsume(ItemLike.class).map(item -> Pair.of(item, reader.optConsume(Integer.class).orElse(1))),
                 () -> reader.optConsume(ItemStack.class).map(stack -> Pair.of(stack.getItem(), stack.getCount()))
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid output at position " + reader.pos()));
-    }
-
-    @Nonnull
-    private static RecipeCategory getRecipeCategory(ObjectReader reader) {
-        return reader.optConsume(RecipeCategory.class).orElse(RecipeCategory.MISC);
     }
 
     private static Ingredient createTagIngredient(TagKey<?> key) {

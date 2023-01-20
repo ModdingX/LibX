@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * The registry is resolved by taking the value from {@link #registryClass()} and looking for a
  * {@code public static final} field with the name from {@link #registry()} that holds a
  * {@code ResourceKey<Registry<T>>} that links to the registry to use. If {@link #registryClass()} is not given,
- * {@code ForgeRegistries.Keys} and {@code Registry} are searched.
+ * {@code ForgeRegistries.Keys} and {@code Registries} are searched.
  * 
  * To ignore a field add {@link Reg.Exclude @Exclude} to it.
  * 

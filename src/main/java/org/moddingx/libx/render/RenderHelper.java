@@ -74,7 +74,6 @@ public class RenderHelper {
                 pixelsRenderedY += pixelsNowY;
             }
             pixelsRenderedX += pixelsNowX;
-
         }
     }
 

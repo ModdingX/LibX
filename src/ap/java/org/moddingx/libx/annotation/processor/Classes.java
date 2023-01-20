@@ -22,6 +22,7 @@ public class Classes {
 
     public static final String MULTI_REGISTERABLE = "org.moddingx.libx.registration.MultiRegisterable";
     public static final String REGISTRY = "net.minecraft.core.Registry";
+    public static final String REGISTRIES = "net.minecraft.core.registries.Registries";
     public static final String RESOURCE_KEY = "net.minecraft.resources.ResourceKey";
     public static final String FORGE_KEYS = "net.minecraftforge.registries.ForgeRegistries$Keys";
     

@@ -69,7 +69,6 @@ public class BlockBase extends Block implements Registerable {
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         if (this.item != null) {
             builder.register(Registries.ITEM, this.item);
-            this.mod.addItemToTab(this.item);
         }
     }
 

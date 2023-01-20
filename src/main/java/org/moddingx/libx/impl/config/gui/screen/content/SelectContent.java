@@ -61,7 +61,8 @@ public class SelectContent<T> implements ConfigScreenContent<T> {
                             SelectContent.this.current = elem;
                             manager.close();
                         })
-                        .bounds(padding, y, 200, 20)
+                        .pos(padding, y)
+                        .size(200, 20)
                         .build();
                 consumer.accept(button);
                 y += 23;

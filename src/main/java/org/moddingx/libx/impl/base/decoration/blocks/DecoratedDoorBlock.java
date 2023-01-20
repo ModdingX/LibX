@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
+import org.moddingx.libx.base.decoration.DecorationContext;
 import org.moddingx.libx.registration.Registerable;
 
 import javax.annotation.Nonnull;
@@ -17,7 +18,10 @@ public class DecoratedDoorBlock extends DoorBlock implements Registerable {
     public final DecoratedBlock parent;
 
     public DecoratedDoorBlock(DecoratedBlock parent) {
-        super(Properties.copy(parent), SoundEvents.WOODEN_DOOR_CLOSE, SoundEvents.WOODEN_DOOR_OPEN);
+        super(Properties.copy(parent),
+                parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD ? SoundEvents.WOODEN_DOOR_CLOSE : SoundEvents.IRON_DOOR_CLOSE,
+                parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD ? SoundEvents.WOODEN_DOOR_OPEN : SoundEvents.IRON_DOOR_OPEN
+        );
         this.parent = parent;
     }
 

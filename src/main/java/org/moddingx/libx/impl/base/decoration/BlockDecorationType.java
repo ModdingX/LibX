@@ -58,7 +58,6 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
     public void registerAdditional(ModX mod, DecorationContext context, DecoratedBlock block, T element, RegistrationContext registrationContext, Registerable.EntryCollector builder) {
         Item.Properties itemProperties = this.properties.get();
         BlockItem item = new BlockItem(element, itemProperties);
-        mod.addItemToTab(item);
         builder.register(Registries.ITEM, item);
     }
 }
