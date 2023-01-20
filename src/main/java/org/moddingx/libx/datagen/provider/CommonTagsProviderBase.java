@@ -6,7 +6,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider.IntrinsicTagAppender;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
@@ -45,7 +45,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     private final FluidTagProviderBase fluidTags;
 
     private boolean isSetup = false;
-    // Copies must happen at last so we store them
+    // Copies must happen last, so we store them
     private final List<Runnable> itemCopies = new ArrayList<>();
     private final List<Pair<TagKey<Fluid>, TagKey<Block>>> fluidCopies = new ArrayList<>();
 
@@ -115,21 +115,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for an {@link Item}
      */
-    public IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item> item(TagKey<Item> tag) {
+    public IntrinsicTagAppender<Item> item(TagKey<Item> tag) {
         return this.itemTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Block}
      */
-    public IntrinsicHolderTagsProvider.IntrinsicTagAppender<Block> block(TagKey<Block> tag) {
+    public IntrinsicTagAppender<Block> block(TagKey<Block> tag) {
         return this.blockTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Fluid}
      */
-    public IntrinsicHolderTagsProvider.IntrinsicTagAppender<Fluid> fluid(TagKey<Fluid> tag) {
+    public IntrinsicTagAppender<Fluid> fluid(TagKey<Fluid> tag) {
         return this.fluidTags.tag(tag);
     }
 

@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * A base class for block state and model providers. An extending class should call the
@@ -137,14 +138,10 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
-        super.run(cache);
-        CompletableFuture<?>[] futures = new CompletableFuture[this.typedModelProviders.size()];
-        int i = 0;
-        // Generate all models from providers for different render types
-        for (TypedBlockModelProvider provider : this.typedModelProviders.values()) {
-            futures[i++] = provider.generateAll(cache);
-        }
-        return CompletableFuture.allOf(futures);
+        CompletableFuture<?> mainFuture = super.run(cache);
+        return CompletableFuture.allOf(Stream.concat(Stream.of(mainFuture), this.typedModelProviders.values().stream()
+                .map(provider -> provider.generateAll(cache))
+        ).toArray(CompletableFuture[]::new));
     }
 
     protected abstract void setup();

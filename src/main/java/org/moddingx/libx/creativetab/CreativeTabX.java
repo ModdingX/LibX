@@ -112,6 +112,7 @@ public abstract class CreativeTabX {
         ForgeRegistries.ITEMS.getEntries().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
                 .map(Map.Entry::getValue)
+                .filter(item -> item.requiredFeatures().isSubsetOf(ctx.features()))
                 .sorted(order)
                 .flatMap(stacks)
                 .forEach(stack -> ctx.output().accept(stack));

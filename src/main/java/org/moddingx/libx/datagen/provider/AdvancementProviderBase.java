@@ -58,14 +58,11 @@ public abstract class AdvancementProviderBase implements DataProvider {
     @Override
     public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         this.setup();
-        CompletableFuture<?>[] futures = new CompletableFuture[this.advancements.size()];
-        int i = 0;
-        for (Supplier<Advancement> supplier : this.advancements.values()) {
+        return CompletableFuture.allOf(this.advancements.values().stream().map(supplier -> {
             Advancement advancement = supplier.get();
             Path path = this.packOutput.getOutputFolder().resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
-            futures[i++] = DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
-        }
-        return CompletableFuture.allOf(futures);
+            return DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
+        }).toArray(CompletableFuture[]::new));
     }
 
     /**

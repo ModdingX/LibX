@@ -2,6 +2,7 @@ package org.moddingx.libx.annotation.impl;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -31,6 +32,7 @@ import org.moddingx.libx.registration.MultiRegisterable;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class ProcessorInterface {
@@ -112,12 +114,15 @@ public class ProcessorInterface {
         return event.getGenerator();
     }
 
-    public static PackOutput getPackOutput(GatherDataEvent event) {
+    public static PackOutput getDataPackOutput(GatherDataEvent event) {
         return event.getGenerator().getPackOutput();
     }
     
     public static ExistingFileHelper getDataFileHelper(GatherDataEvent event) {
         return event.getExistingFileHelper();
+    }
+    public static CompletableFuture<HolderLookup.Provider> getDataLookup(GatherDataEvent event) {
+        return event.getLookupProvider();
     }
     
     public static <K, V> LazyMapBuilder<K, V> lazyMapBuilder() {

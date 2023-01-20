@@ -131,9 +131,7 @@ public abstract class TextureProviderBase implements DataProvider {
     @Override
     public CompletableFuture<?> run(@Nonnull CachedOutput output) {
         this.setup();
-        CompletableFuture<?>[] futures = new CompletableFuture[this.textures.size()];
-        int i = 0;
-        for (Map.Entry<ResourceLocation, TextureFactory> entry : this.textures.entrySet()) {
+        return CompletableFuture.allOf(this.textures.entrySet().stream().map(entry -> {
             ResourceLocation id = entry.getKey();
             TextureFactory factory = entry.getValue();
 
@@ -144,8 +142,7 @@ public abstract class TextureProviderBase implements DataProvider {
             Dimension dim = factory.getSize();
             BufferedImage image = this.generator.newImage(dim.width, dim.height, textures.scale());
             factory.generate(image, textures);
-            futures[i++] = this.generator.save(output, id, image);
-        }
-        return CompletableFuture.allOf(futures);
+            return this.generator.save(output, id, image);
+        }).toArray(CompletableFuture[]::new));
     }
 }

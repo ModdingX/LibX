@@ -6,7 +6,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import org.moddingx.libx.LibX;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -32,16 +31,15 @@ public class TextureGenerator {
     }
     
     public CompletableFuture<?> save(CachedOutput output, BufferedImage image, Path path) {
-        return CompletableFuture.runAsync(() -> {
-            try {
-                ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-                ImageIO.write(image, "PNG", byteOut);
-                byte[] data = byteOut.toByteArray();
-                output.writeIfNeeded(path, data, HashCode.fromBytes(data));
-            } catch (IOException e) {
-                LibX.logger.warn("Failed to save file to {}", path, e);
-            }
-        });
+        try {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ImageIO.write(image, "PNG", byteOut);
+            byte[] data = byteOut.toByteArray();
+            output.writeIfNeeded(path, data, HashCode.fromBytes(data));
+            return CompletableFuture.completedFuture(null);
+        } catch (IOException e) {
+            return CompletableFuture.failedFuture(e);
+        }
     }
     
     public BufferedImage newImage(int width, int height, int scale) {

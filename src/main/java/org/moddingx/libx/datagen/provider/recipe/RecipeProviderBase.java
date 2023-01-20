@@ -40,6 +40,12 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
         super(packOutput);
         this.mod = mod;
     }
+
+    @Nonnull
+    @Override
+    public final String getName() {
+        return this.mod.modid + " recipes";
+    }
     
     protected abstract void setup();
 

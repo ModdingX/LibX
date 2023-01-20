@@ -136,13 +136,10 @@ public abstract class LootProviderBase<T> implements DataProvider {
                 .flatMap(this::resolve)
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        CompletableFuture<?>[] futures = new CompletableFuture[tables.size()];
-        int i = 0;
-        for (Map.Entry<ResourceLocation, LootTable.Builder> e : tables.entrySet()) {
-            Path path = this.getPath(this.packOutput.getOutputFolder(), e.getKey());
-            futures[i++] = DataProvider.saveStable(cache, LootTables.serialize(e.getValue().setParamSet(this.params).build()), path);
-        }
-        return CompletableFuture.allOf(futures);
+        return CompletableFuture.allOf(tables.entrySet().stream().map(entry -> {
+            Path path = this.getPath(this.packOutput.getOutputFolder(), entry.getKey());
+            return DataProvider.saveStable(cache, LootTables.serialize(entry.getValue().setParamSet(this.params).build()), path);
+        }).toArray(CompletableFuture[]::new));
     }
     
     private Stream<Map.Entry<ResourceLocation, LootTable.Builder>> resolve(Map.Entry<ResourceLocation, T> entry) {

@@ -1,5 +1,6 @@
 package org.moddingx.libx.datagen.provider;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.PackOutput;
@@ -50,10 +51,10 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
                     .map(Map.Entry::getValue)
                     .forEach(this::defaultTags);
         } else {
-            RegistryManager.VANILLA.getRegistry(this.registryKey).getEntries().stream()
-                    .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
-                    .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
-                    .map(Map.Entry::getValue)
+            lookupProvider.lookupOrThrow(this.registryKey).listElements()
+                    .filter(entry -> this.mod.modid.equals(entry.key().location().getNamespace()))
+                    .sorted(Comparator.comparing(entry -> entry.key().location()))
+                    .map(Holder::get)
                     .forEach(this::defaultTags);
         }
     }
