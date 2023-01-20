@@ -2,6 +2,7 @@ package org.moddingx.libx.registration.util;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 import org.moddingx.libx.registration.MultiRegisterable;
@@ -60,7 +61,7 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
     /**
      * Gets a random object from the objects in this EnumObjects.
      */
-    public T random(Random random) {
+    public T random(RandomSource random) {
         return this.map.get(this.keys[random.nextInt(this.keys.length)]);
     }
 
