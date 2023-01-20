@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import org.moddingx.libx.command.EnumArgument2;
 import org.moddingx.libx.crafting.ingredient.EffectIngredient;
@@ -23,6 +24,8 @@ import org.moddingx.libx.impl.config.ConfigEvents;
 import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;
 import org.moddingx.libx.impl.datapack.DynamicDatapackLocator;
 import org.moddingx.libx.impl.loot.AllLootEntry;
+import org.moddingx.libx.impl.loot.modifier.AdditionLootModifier;
+import org.moddingx.libx.impl.loot.modifier.RemovalLootModifier;
 import org.moddingx.libx.impl.menu.screen.GenericScreen;
 import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
@@ -97,5 +100,7 @@ public final class LibX extends ModX {
         event.register(Registries.RECIPE_TYPE, EmptyRecipe.ID, () -> EmptyRecipe.TYPE);
         event.register(Registries.RECIPE_SERIALIZER, EmptyRecipe.ID, () -> EmptyRecipe.Serializer.INSTANCE);
         event.register(Registries.COMMAND_ARGUMENT_TYPE, this.resource("enum"), () -> EnumArgument2.Info.INSTANCE);
+        event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("addition"), () -> AdditionLootModifier.CODEC);
+        event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("removal"), () -> RemovalLootModifier.CODEC);
     }
 }

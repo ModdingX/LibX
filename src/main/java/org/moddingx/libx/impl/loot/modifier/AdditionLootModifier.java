@@ -3,7 +3,6 @@ package org.moddingx.libx.impl.loot.modifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -33,9 +32,9 @@ public class AdditionLootModifier extends LootModifier {
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> loot, LootContext context) {
         LootTable table = context.getLootTable(this.table);
-        // EMPTY will keep all parameters but won't throw an exception
-        LootContext copy = new LootContext.Builder(context).create(LootContextParamSets.EMPTY);
-        ObjectArrayList<ItemStack> stacks = table.getRandomItems(LootContextHelper.copyWith(context, this.table));
+        // EMPTY will keep all the parameters but won't throw an exception
+        LootContext copy = new LootContext.Builder(context).withQueriedLootTableId(this.table).create(LootContextParamSets.EMPTY);
+        ObjectArrayList<ItemStack> stacks = table.getRandomItems(copy);
         loot.addAll(stacks);
         return loot;
     }
