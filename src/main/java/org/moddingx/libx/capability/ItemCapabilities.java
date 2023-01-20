@@ -16,7 +16,7 @@ public class ItemCapabilities {
     /**
      * Creates a new {@link LazyOptional} for an {@link IItemHandlerModifiable}.
      */
-    public static LazyOptional<? super IAdvancedItemHandlerModifiable> create(IItemHandlerModifiable handler) {
+    public static LazyOptional<IAdvancedItemHandlerModifiable> create(IItemHandlerModifiable handler) {
         return create(() -> handler);
     }
 
@@ -26,14 +26,14 @@ public class ItemCapabilities {
      * @param extract A predicate on whether an item can be extracted through this {@link LazyOptional}. This gets passed the slot to extract from.
      * @param insert A predicate on whether an item can be inserted through this {@link LazyOptional}. This gets passed the slot to insert to and the stack that should be inserted..
      */
-    public static LazyOptional<? super IAdvancedItemHandlerModifiable> create(IItemHandlerModifiable handler, @Nullable Predicate<Integer> extract, @Nullable BiPredicate<Integer, ItemStack> insert) {
+    public static LazyOptional<IAdvancedItemHandlerModifiable> create(IItemHandlerModifiable handler, @Nullable Predicate<Integer> extract, @Nullable BiPredicate<Integer, ItemStack> insert) {
         return create(() -> handler, extract, insert);
     }
 
     /**
      * Creates a new {@link LazyOptional} for an {@link IItemHandlerModifiable}.
      */
-    public static LazyOptional<? super IAdvancedItemHandlerModifiable> create(Supplier<IItemHandlerModifiable> handler) {
+    public static LazyOptional<IAdvancedItemHandlerModifiable> create(Supplier<IItemHandlerModifiable> handler) {
         return LazyOptional.of(() -> IAdvancedItemHandlerModifiable.wrap(handler.get()));
     }
 
@@ -43,7 +43,7 @@ public class ItemCapabilities {
      * @param extract A predicate on whether an item can be extracted through this {@link LazyOptional}. This gets passed the slot to extract from.
      * @param insert A predicate on whether an item can be inserted through this {@link LazyOptional}. This gets passed the slot to insert to and the stack that should be inserted..
      */
-    public static LazyOptional<? super IAdvancedItemHandlerModifiable> create(Supplier<IItemHandlerModifiable> handler, @Nullable Predicate<Integer> extract, @Nullable BiPredicate<Integer, ItemStack> insert) {
+    public static LazyOptional<IAdvancedItemHandlerModifiable> create(Supplier<IItemHandlerModifiable> handler, @Nullable Predicate<Integer> extract, @Nullable BiPredicate<Integer, ItemStack> insert) {
         return LazyOptional.of(() -> new WrappedHandler(handler.get(), extract == null ? slot -> true : extract, insert == null ? (slot, stack) -> true : insert));
     }
     
