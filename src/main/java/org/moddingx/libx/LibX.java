@@ -12,8 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.*;
 import org.moddingx.libx.command.EnumArgument2;
 import org.moddingx.libx.crafting.ingredient.EffectIngredient;
 import org.moddingx.libx.impl.BlockEntityUpdateQueue;
@@ -33,6 +32,8 @@ import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
 import org.moddingx.libx.menu.GenericMenu;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
+import org.moddingx.libx.sandbox.PoolExtension;
+import org.moddingx.libx.sandbox.SandBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +56,7 @@ public final class LibX extends ModX {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicDatapackLocator::locatePacks);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::createRegistries);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerStuff);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(BlockOverlayQuadCache::resourcesReload));
 
@@ -93,6 +95,10 @@ public final class LibX extends ModX {
      */
     public static CommonNetwork getNetwork() {
         return networkWrapper;
+    }
+
+    private void createRegistries(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(SandBox.TEMPLATE_POOL_EXTENSION, PoolExtension.DIRECT_CODEC);
     }
 
     private void registerStuff(RegisterEvent event) {
