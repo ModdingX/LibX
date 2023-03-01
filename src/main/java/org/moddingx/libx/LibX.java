@@ -29,6 +29,7 @@ import org.moddingx.libx.impl.loot.modifier.RemovalLootModifier;
 import org.moddingx.libx.impl.menu.screen.GenericScreen;
 import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
+import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
 import org.moddingx.libx.menu.GenericMenu;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
@@ -102,5 +103,6 @@ public final class LibX extends ModX {
         event.register(Registries.COMMAND_ARGUMENT_TYPE, this.resource("enum"), () -> EnumArgument2.Info.INSTANCE);
         event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("addition"), () -> AdditionLootModifier.CODEC);
         event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("removal"), () -> RemovalLootModifier.CODEC);
+        event.register(Registries.MATERIAL_RULE, this.resource("empty"), () -> EmptySurfaceRule.CODEC);
     }
 }

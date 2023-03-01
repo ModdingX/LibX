@@ -1,0 +1,8 @@
+modLoader="javafml"
+loaderVersion="[0,)"
+license="APACHE-2.0"
+
+[[mods]]
+modId="libx_sourcegen"
+version="${file.jarVersion}"
+displayName="LibX SourceGen"
