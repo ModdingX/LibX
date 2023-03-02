@@ -1,4 +1,4 @@
-package org.moddingx.libx.sandbox;
+package org.moddingx.libx.sandbox.structure;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -8,6 +8,7 @@ import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import org.moddingx.libx.sandbox.SandBox;
 
 import java.util.List;
 

@@ -32,8 +32,10 @@ import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
 import org.moddingx.libx.menu.GenericMenu;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
-import org.moddingx.libx.sandbox.PoolExtension;
+import org.moddingx.libx.sandbox.structure.PoolExtension;
 import org.moddingx.libx.sandbox.SandBox;
+import org.moddingx.libx.sandbox.surface.BiomeSurface;
+import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +100,9 @@ public final class LibX extends ModX {
     }
 
     private void createRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(SandBox.TEMPLATE_POOL_EXTENSION, PoolExtension.DIRECT_CODEC);
+        event.dataPackRegistry(SandBox.SURFACE_RULE_SET, SurfaceRuleSet.DIRECT_CODEC, SurfaceRuleSet.DIRECT_CODEC);
+        event.dataPackRegistry(SandBox.BIOME_SURFACE, BiomeSurface.DIRECT_CODEC, BiomeSurface.DIRECT_CODEC);
+        event.dataPackRegistry(SandBox.TEMPLATE_POOL_EXTENSION, PoolExtension.DIRECT_CODEC, PoolExtension.DIRECT_CODEC);
     }
 
     private void registerStuff(RegisterEvent event) {
