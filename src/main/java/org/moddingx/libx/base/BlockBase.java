@@ -3,9 +3,11 @@ package org.moddingx.libx.base;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.creativetab.CreativeTabX;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.Registerable;
@@ -15,6 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Base class for {@link Block blocks} for mods using {@link ModXRegistration}. This will automatically set the
@@ -62,6 +65,14 @@ public class BlockBase extends Block implements Registerable {
      */
     public void initializeItemClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
 
+    }
+
+    /**
+     * Returns a {@link Stream} of {@link ItemStack item stacks} to add to a creative tab.
+     * {@link CreativeTabX} respects these by default.
+     */
+    public Stream<ItemStack> makeCreativeTabStacks() {
+        return Stream.of(new ItemStack(this));
     }
 
     @Override

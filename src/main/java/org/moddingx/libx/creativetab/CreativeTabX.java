@@ -3,13 +3,12 @@ package org.moddingx.libx.creativetab;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.GameMasterBlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
+import org.moddingx.libx.base.BlockBase;
+import org.moddingx.libx.base.ItemBase;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.mod.ModX;
 
@@ -93,7 +92,7 @@ public abstract class CreativeTabX {
      * Adds all items from the current mod, that match a predicate into the tab using a custom order.
      */
     protected void addModItems(TabContext ctx, Comparator<Item> order, Predicate<Item> items) {
-        this.addModItemStacks(ctx, order, item -> items.test(item) ? Stream.of(new ItemStack(item)) : Stream.empty());
+        this.addModItemStacks(ctx, order, item -> items.test(item) ? this.itemStream(item) : Stream.empty());
     }
     
     /**
@@ -123,6 +122,16 @@ public abstract class CreativeTabX {
             this.buildTab(builder);
             builder.displayItems((features, output, operator) -> this.addItems(new TabContext(features, operator, output)));
         });
+    }
+    
+    private Stream<ItemStack> itemStream(Item item) {
+        if (item instanceof ItemBase base) {
+            return base.makeCreativeTabStacks();
+        } else if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof BlockBase base) {
+            return base.makeCreativeTabStacks();
+        } else {
+            return Stream.of(new ItemStack(item));
+        }
     }
     
     public record TabContext(FeatureFlagSet features, boolean operator, CreativeModeTab.Output output) {}
