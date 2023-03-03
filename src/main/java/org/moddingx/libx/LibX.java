@@ -33,6 +33,8 @@ import org.moddingx.libx.menu.GenericMenu;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
+import org.moddingx.libx.sandbox.generator.ExtendedNoiseChunkGenerator;
+import org.moddingx.libx.sandbox.generator.LayeredBiomeSource;
 import org.moddingx.libx.sandbox.structure.PoolExtension;
 import org.moddingx.libx.sandbox.SandBox;
 import org.moddingx.libx.sandbox.surface.BiomeSurface;
@@ -116,5 +118,7 @@ public final class LibX extends ModX {
         event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("addition"), () -> AdditionLootModifier.CODEC);
         event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("removal"), () -> RemovalLootModifier.CODEC);
         event.register(Registries.MATERIAL_RULE, this.resource("empty"), () -> EmptySurfaceRule.CODEC);
+        event.register(Registries.CHUNK_GENERATOR, this.resource("noise"), () -> ExtendedNoiseChunkGenerator.CODEC);
+        event.register(Registries.BIOME_SOURCE, this.resource("layered"), () -> LayeredBiomeSource.CODEC);
     }
 }
