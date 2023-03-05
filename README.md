@@ -1,7 +1,7 @@
 # LibX
 
 [![CurseForge](https://cf.way2muchnoise.eu/full_412525_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/libx)
-[![Modrinth](https://modrinth-utils.vercel.app/api/badge/downloads?id=qEH6GYul&logo=true)](https://modrinth.com/mod/libx)
+[![Modrinth](https://img.shields.io/modrinth/dt/qEH6GYul?color=00AF5C&logo=modrinth)](https://modrinth.com/mod/libx)
 [![Issues](https://img.shields.io/github/issues/noeppi-noeppi/LibX)](https://github.com/noeppi-noeppi/LibX/issues)
 
 LibX is the library mod of [ModdingX](https://moddingx.org/).

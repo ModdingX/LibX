@@ -17,7 +17,7 @@ import org.moddingx.libx.capability.LongEnergyStorage;
 public class LongAmountToIntUtil {
 
     /**
-     * Gets a value stored as a long as an int value. For more info see class description.
+     * Gets a value stored as a long as an int value. For more info, see class description.
      */
     public static int getValue(long stored, long max) {
         if (max > Integer.MAX_VALUE && stored > (Integer.MAX_VALUE / 2)) {

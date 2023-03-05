@@ -1,10 +1,11 @@
 package org.moddingx.libx.datagen.provider.loot;
 
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -36,9 +37,9 @@ import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -48,7 +49,7 @@ import java.util.stream.Stream;
 public abstract class LootProviderBase<T> implements DataProvider {
 
     protected final ModX mod;
-    protected final DataGenerator generator;
+    protected final PackOutput packOutput;
     protected final String folder;
     protected final LootContextParamSet params;
     protected final Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements;
@@ -56,24 +57,24 @@ public abstract class LootProviderBase<T> implements DataProvider {
     private final Set<T> ignored = new HashSet<>();
     private final Map<T, Function<T, LootTable.Builder>> functionMap = new HashMap<>();
 
-    protected LootProviderBase(ModX mod, DataGenerator generator, String folder, LootContextParamSet params, IForgeRegistry<T> registry) {
-        this(mod, generator, folder, params, () -> registry.getEntries().stream()
+    protected LootProviderBase(ModX mod, PackOutput packOutput, String folder, LootContextParamSet params, IForgeRegistry<T> registry) {
+        this(mod, packOutput, folder, params, () -> registry.getEntries().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(entry -> Map.entry(entry.getKey().location(), entry.getValue()))
         );
     }
     
-    protected LootProviderBase(ModX mod, DataGenerator generator, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements) {
+    protected LootProviderBase(ModX mod, PackOutput packOutput, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements) {
         this.mod = mod;
-        this.generator = generator;
+        this.packOutput = packOutput;
         this.folder = folder;
         this.params = params;
         this.elements = elements;
     }
     
-    protected LootProviderBase(ModX mod, DataGenerator generator, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
+    protected LootProviderBase(ModX mod, PackOutput packOutput, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
         this.mod = mod;
-        this.generator = generator;
+        this.packOutput = packOutput;
         this.folder = folder;
         this.params = params;
         this.elements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
@@ -125,8 +126,9 @@ public abstract class LootProviderBase<T> implements DataProvider {
         return this.mod.modid + " " + name + " loot tables";
     }
     
+    @Nonnull
     @Override
-    public void run(@Nonnull CachedOutput cache) throws IOException {
+    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         this.setup();
         
         Map<ResourceLocation, LootTable.Builder> tables = this.elements.get()
@@ -135,10 +137,10 @@ public abstract class LootProviderBase<T> implements DataProvider {
                 .flatMap(this::resolve)
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        for (Map.Entry<ResourceLocation, LootTable.Builder> e : tables.entrySet()) {
-            Path path = this.getPath(this.generator.getOutputFolder(), e.getKey());
-            DataProvider.saveStable(cache, LootTables.serialize(e.getValue().setParamSet(this.params).build()), path);
-        }
+        return CompletableFuture.allOf(tables.entrySet().stream().map(entry -> {
+            Path path = this.getPath(this.packOutput.getOutputFolder(), entry.getKey());
+            return DataProvider.saveStable(cache, LootTables.serialize(entry.getValue().setParamSet(this.params).build()), path);
+        }).toArray(CompletableFuture[]::new));
     }
     
     private Stream<Map.Entry<ResourceLocation, LootTable.Builder>> resolve(Map.Entry<ResourceLocation, T> entry) {
@@ -153,7 +155,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
     }
     
     private Path getPath(Path root, ResourceLocation id) {
-        return root.resolve("data/" + id.getNamespace() + "/loot_tables/" + this.folder + "/" + id.getPath() + ".json");
+        return root.resolve(PackType.SERVER_DATA.getDirectory()).resolve(id.getNamespace() + "/loot_tables/" + this.folder + "/" + id.getPath() + ".json");
     }
     
     protected final LootModifier<T> modifier(BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolSingletonContainer.Builder<?>> function) {

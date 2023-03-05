@@ -134,8 +134,8 @@ public class RenderHelperBlock {
                 int uvOff = format.getOffset(uvIdx) / 4;
                 int intSize = format.getIntegerSize();
                 for (int off = 0; off + uvOff + 1 < newData.length; off += intSize) {
-                    newData[off + uvOff] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff]) - oldSprite.getU0()) * newSprite.getWidth() / oldSprite.getWidth()) + newSprite.getU0());
-                    newData[off + uvOff + 1] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff + 1]) - oldSprite.getV0()) * newSprite.getHeight() / oldSprite.getHeight()) + newSprite.getV0());
+                    newData[off + uvOff] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff]) - oldSprite.getU0()) * newSprite.contents().width()) / oldSprite.contents().width() + newSprite.getU0());
+                    newData[off + uvOff + 1] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff + 1]) - oldSprite.getV0()) * newSprite.contents().height() / oldSprite.contents().height()) + newSprite.getV0());
                 }
             }
             result = new BakedQuad(newData, quad.getTintIndex(), quad.getDirection(), newSprite, quad.isShade());

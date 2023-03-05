@@ -7,7 +7,6 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.mod.ModX;
 
@@ -22,8 +21,8 @@ import java.util.function.Supplier;
 
 /**
  * A class implementing network logic. You should subclass it and create an instance in your
- * mods constructor. {@link NetworkX#registerPackets()} will then automatically be called
- * during setup phase. You can register custom packets there. The order in which they are
+ * mods' constructor. {@link NetworkX#registerPackets()} will then automatically be called
+ * during setup. You can register custom packets there. The order in which they are
  * registered is important.
  */
 public abstract class NetworkX {
@@ -34,7 +33,7 @@ public abstract class NetworkX {
     private final Protocol protocol;
     private int discriminator = 0;
 
-    public NetworkX(ModX mod) {
+    protected NetworkX(ModX mod) {
         this.protocol = this.getProtocol();
         this.channel = NetworkRegistry.newSimpleChannel(
                 mod.resource("netchannel"),
@@ -43,31 +42,6 @@ public abstract class NetworkX {
                 remote -> this.protocol.server().predicate.test(this.protocol.version(), remote)
         );
         ModInternal.get(mod).addSetupTask(this::registerPackets, false);
-    }
-
-    /**
-     * Registers a packet handler.
-     *
-     * @param handler The double lambda is required to prevent classloading on the server.
-     * @param direction The network direction the packet should go.
-     *
-     * @deprecated Use {@link #registerLogin(NetworkDirection, LoginPacketSerializer, Supplier)} or {@link #registerGame(NetworkDirection, PacketSerializer, Supplier)} instead.
-     * @see #registerLogin(NetworkDirection, LoginPacketSerializer, Supplier)
-     * @see #registerGame(NetworkDirection, PacketSerializer, Supplier)
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.19.3")
-    protected <T> void register(PacketSerializer<T> serializer, Supplier<BiConsumer<T, Supplier<NetworkEvent.Context>>> handler, NetworkDirection direction) {
-        synchronized (LOCK) {
-            Objects.requireNonNull(direction);
-            BiConsumer<T, Supplier<NetworkEvent.Context>> realHandler;
-            if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_CLIENT) {
-                realHandler = DistExecutor.unsafeRunForDist(() -> handler, () -> () -> (msg, ctx) -> {});
-            } else {
-                realHandler = handler.get();
-            }
-            this.channel.registerMessage(this.discriminator++, serializer.messageClass(), serializer::encode, serializer::decode, realHandler, Optional.of(direction));
-        }
     }
 
     /**

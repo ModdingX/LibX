@@ -24,9 +24,12 @@ public class SetValueMapper<T> implements GenericValueMapper<Set<T>, JsonArray, 
     
     private static final Comparator<Object> COMPARATOR = (o1, o2) -> {
         try {
-            if (o1 instanceof Comparable<?> cmp && (o1.getClass().isAssignableFrom(o2.getClass()) || o2.getClass().isAssignableFrom(o1.getClass()))) {
+            if (o1 instanceof Comparable<?> cmp && o1.getClass().isAssignableFrom(o2.getClass())) {
                 //noinspection unchecked
                 return ((Comparable<Object>) cmp).compareTo(o2);
+            } else if (o2 instanceof Comparable<?> cmp && o2.getClass().isAssignableFrom(o1.getClass())) {
+                //noinspection unchecked
+                return -((Comparable<Object>) cmp).compareTo(o1);
             }
         } catch (Exception | NoClassDefFoundError e) {
             //

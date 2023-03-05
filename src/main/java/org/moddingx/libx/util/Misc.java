@@ -9,8 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 public class Misc {
 
     /**
-     * This resource location should be used as a placeholder / invalid  value
-     * This is {@code minecraft:missigno}
+     * This resource location should be used as a placeholder / invalid value
+     * It's value is {@code minecraft:missigno}.
      * The reason for {@code minecraft:missigno} is that minecraft uses this resource location
      * on it's own. See for example {@link MissingTextureAtlasSprite}.
      */

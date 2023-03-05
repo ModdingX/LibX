@@ -1,7 +1,8 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -27,9 +28,10 @@ public class ObjectCraftingBuilder {
     public static void buildShaped(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
+        RecipeCategory recipeCategory = getRecipeCategory(reader);
         Pair<ItemLike, Integer> output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(output.getLeft(), output.getRight());
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(recipeCategory, output.getLeft(), output.getRight());
         for (String line : reader.consumeWhile(String.class)) {
             builder.pattern(line);
         }
@@ -40,11 +42,22 @@ public class ObjectCraftingBuilder {
     public static void buildShapeless(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
+        RecipeCategory recipeCategory = getRecipeCategory(reader);
         Pair<ItemLike, Integer> output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(output.getLeft(), output.getRight());
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output.getLeft(), output.getRight());
         addShapelessIngredients(ext, builder, reader);
         builder.save(ext.consumer(), id);
+    }
+
+    @Nullable
+    private static ResourceLocation getId(ObjectReader reader) {
+        return reader.optConsume(ResourceLocation.class).orElse(null);
+    }
+
+    @Nonnull
+    private static RecipeCategory getRecipeCategory(ObjectReader reader) {
+        return reader.optConsume(RecipeCategory.class).orElse(RecipeCategory.MISC);
     }
 
     private static void addShapedIngredients(RecipeExtension ext, ShapedRecipeBuilder builder, ObjectReader reader) {
@@ -93,11 +106,6 @@ public class ObjectCraftingBuilder {
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid ingredient at position " + reader.pos()));
     }
 
-    @Nullable
-    private static ResourceLocation getId(ObjectReader reader) {
-        return reader.optConsume(ResourceLocation.class).orElse(null);
-    }
-
     @Nonnull
     private static Pair<ItemLike, Integer> getOutput(ObjectReader reader) {
         return ObjectCraftingBuilder.<Pair<ItemLike, Integer>>first(
@@ -107,7 +115,7 @@ public class ObjectCraftingBuilder {
     }
 
     private static Ingredient createTagIngredient(TagKey<?> key) {
-        if (key.registry() != Registry.ITEM_REGISTRY) throw new IllegalArgumentException("Non-item tag in recipe: " + key);
+        if (key.registry() != Registries.ITEM) throw new IllegalArgumentException("Non-item tag in recipe: " + key);
         //noinspection unchecked
         return Ingredient.of((TagKey<Item>) key);
     }

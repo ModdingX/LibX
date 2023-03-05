@@ -3,7 +3,6 @@ package org.moddingx.libx.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import org.joml.Matrix4f;
 import org.moddingx.libx.LibX;
 
 /**
@@ -29,7 +29,7 @@ public class RenderHelper {
      * Same as {@link #repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
      */
     public static void repeatBlit(PoseStack poseStack, int x, int y, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
-        repeatBlit(poseStack, x, y, sprite.getWidth(), sprite.getHeight(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
+        repeatBlit(poseStack, x, y, sprite.contents().width(), sprite.contents().height(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
     }
 
     /**
@@ -74,7 +74,6 @@ public class RenderHelper {
                 pixelsRenderedY += pixelsNowY;
             }
             pixelsRenderedX += pixelsNowX;
-
         }
     }
 

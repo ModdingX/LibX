@@ -20,11 +20,11 @@ import javax.annotation.Nullable;
  */
 public abstract class MenuBase extends AbstractContainerMenu {
     
-    public final IItemHandler playerinventory;
+    public final IItemHandler playerInventory;
     
     protected MenuBase(@Nullable MenuType<?> type, int id, Inventory inventory) {
         super(type, id);
-        this.playerinventory = new InvWrapper(inventory);
+        this.playerInventory = new InvWrapper(inventory);
     }
 
     /**
@@ -34,9 +34,9 @@ public abstract class MenuBase extends AbstractContainerMenu {
      * @param topRow  The y coordinate of the top left slot
      */
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
-        this.addSlotBox(this.playerinventory, 9, leftCol, topRow, 9, 18, 3, 18);
+        this.addSlotBox(this.playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
         topRow += 58;
-        this.addSlotRange(this.playerinventory, 0, leftCol, topRow, 9, 18);
+        this.addSlotRange(this.playerInventory, 0, leftCol, topRow, 9, 18);
     }
 
     /**
@@ -122,7 +122,7 @@ public abstract class MenuBase extends AbstractContainerMenu {
         return index;
     }
 
-    // As opposed to the super method this checks for Slot#mayPlace(ItemStack)
+    // As opposed to the super method, this checks for Slot#mayPlace(ItemStack)
     @Override
     protected boolean moveItemStackTo(@Nonnull ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
         boolean success = false;

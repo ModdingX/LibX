@@ -6,9 +6,12 @@ import org.moddingx.libx.annotation.processor.modinit.ModEnv;
 import org.moddingx.libx.annotation.processor.modinit.ModInit;
 
 import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class DatagenProcessor {
     
@@ -57,11 +60,24 @@ public class DatagenProcessor {
             return DatagenEntry.Arg.MOD;
         } else if (env.subTypeErasure(type, env.forClass(Classes.DATA_GENERATOR))) {
             return DatagenEntry.Arg.GENERATOR;
+        } else if (env.subTypeErasure(type, env.forClass(Classes.PACK_OUTPUT))) {
+            return DatagenEntry.Arg.PACK_OUTPUT;
         } else if (env.subTypeErasure(type, env.forClass(Classes.DATA_FILE_HELPER))) {
             return DatagenEntry.Arg.FILE_HELPER;
+        } else if (env.sameErasure(type, env.forClass(CompletableFuture.class)) && checkGenericArg(type, env.forClass(Classes.LOOKUP_PROVIDER), env)) {
+            return DatagenEntry.Arg.FILE_HELPER;
         } else {
-            env.messager().printMessage(Diagnostic.Kind.ERROR, "Constructor in datagen class may only have specific parameters..", param);
+            env.messager().printMessage(Diagnostic.Kind.ERROR, "Constructor in datagen class may only have the following parameters: (ModX, DataGenerator, PackOutput, ExistingFileHelper, CompletableFuture<HolderLookup.Provider>)", param);
             throw new FailureException();
+        }
+    }
+    
+    private static boolean checkGenericArg(TypeMirror type, TypeMirror genericSuperType, ModEnv env) {
+        if (type.getKind() == TypeKind.DECLARED && type instanceof DeclaredType declared && declared.getTypeArguments().size() == 1) {
+            TypeMirror genericType = declared.getTypeArguments().get(0);
+            return env.subTypeErasure(genericType, genericSuperType);
+        } else {
+            return false;
         }
     }
 }

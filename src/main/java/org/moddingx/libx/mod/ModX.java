@@ -1,7 +1,6 @@
 package org.moddingx.libx.mod;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -10,46 +9,28 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.config.ModMappers;
 
-import javax.annotation.Nullable;
-
 /**
  * A base class for a mod that uses LibX. Is required for many other features
  * of LibX.
- * 
+ *
  * @see ModXRegistration
  */
 public abstract class ModX {
-
+    
     /**
      * Contains the Mod id of this mod.
      */
     public final String modid;
 
     /**
-     * A creative tab for the mod.
-     */
-    @Nullable
-    public final CreativeModeTab tab;
-
-    /**
      * Subclasses should provide a public no-arg constructor that calls this with
      * the values needed.
      */
     protected ModX() {
-        this(null);
-    }
-    
-    /**
-     * Subclasses should provide a public no-arg constructor that calls this with
-     * the values needed.
-     */
-    protected ModX(@Nullable CreativeModeTab tab) {
         Class<? extends ModX> cls = this.getClass();
         Mod mod = cls.getAnnotation(Mod.class);
         if (mod == null) throw new IllegalStateException("Mod class has no @Mod annotation.");
         this.modid = mod.value();
-
-        this.tab = tab;
 
         ModInternal.init(this, FMLJavaModLoadingContext.get());
 
@@ -57,7 +38,7 @@ public abstract class ModX {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
         // Initialise config system for this mod container
-        // Required so the extension point can be added when required
+        // Required, so the extension point can be added when required
         ModMappers.get(this.modid).initAdapter(ModLoadingContext.get());
 
         // As the generated code registers registration handlers this will produce a null pointer exception
@@ -67,7 +48,7 @@ public abstract class ModX {
             ModInternal.get(this).callGeneratedCode();
         }
     }
-    
+
     /**
      * Automatically registered to the event bus.
      */

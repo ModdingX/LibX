@@ -63,7 +63,9 @@ public class CustomEditor<T> implements ConfigEditor<T> {
         private final ConfigScreenContent<T> content;
         
         public CustomButton(ConfigScreenManager manager, ConfigScreenContent<T> content, WidgetProperties<T> properties) {
-            super(properties.x(), properties.y(), properties.width(), properties.height(), content.message(), b -> {});
+            super(Button.builder(content.message(), b -> {})
+                    .pos(properties.x(), properties.y())
+                    .size(properties.width(), properties.height()));
             this.manager = manager;
             this.content = content;
         }

@@ -1,11 +1,13 @@
 package org.moddingx.libx.base;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.creativetab.CreativeTabX;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.Registerable;
@@ -15,6 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Base class for {@link Block blocks} for mods using {@link ModXRegistration}. This will automatically set the
@@ -46,10 +49,6 @@ public class BlockBase extends Block implements Registerable {
         if (itemProperties == null) {
             this.item = null;
         } else {
-            if (mod.tab != null) {
-                itemProperties.tab(mod.tab);
-            }
-
             this.item = new BlockItem(this, itemProperties) {
                 
                 @Override
@@ -68,11 +67,19 @@ public class BlockBase extends Block implements Registerable {
 
     }
 
+    /**
+     * Returns a {@link Stream} of {@link ItemStack item stacks} to add to a creative tab.
+     * {@link CreativeTabX} respects these by default.
+     */
+    public Stream<ItemStack> makeCreativeTabStacks() {
+        return Stream.of(new ItemStack(this));
+    }
+
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         if (this.item != null) {
-            builder.register(Registry.ITEM_REGISTRY, this.item);
+            builder.register(Registries.ITEM, this.item);
         }
     }
 

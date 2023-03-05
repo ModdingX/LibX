@@ -21,7 +21,7 @@ public class PreviewWidget extends TextWidget {
         int color = this.getFGColor() | Mth.ceil(this.alpha * 255) << 24;
         poseStack.pushPose();
         //noinspection IntegerDivisionInFloatingPointContext
-        poseStack.translate(this.x + (this.width / 2), this.y + ((this.height - 8) / 2), 20);
+        poseStack.translate(this.getX() + (this.width / 2), this.getY() + ((this.height - 8) / 2), 20);
         poseStack.scale(2, 2, 2);
         drawCenteredString(poseStack, Minecraft.getInstance().font, this.getMessage(), 0, 0, color);
         poseStack.popPose();

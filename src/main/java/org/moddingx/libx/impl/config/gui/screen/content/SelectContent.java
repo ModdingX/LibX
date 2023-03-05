@@ -52,19 +52,19 @@ public class SelectContent<T> implements ConfigScreenContent<T> {
     @Override
     public void buildGui(Screen screen, ScreenManager manager, String search, Consumer<AbstractWidget> consumer) {
         int y = 0;
-        int padding = Math.max(0, screen.width - 200) / 2;
+        int padding = Math.max(0, manager.contentWidth() - 200) / 2;
         for (T elem : this.list) {
             Component name = this.nameFactory.apply(elem);
             if (search.isBlank() || name.getString().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {
-                consumer.accept(new Button(padding, y, 200, 20, name, b -> {}) {
-
-                    @Override
-                    public void onPress() {
-                        if (SelectContent.this.inputChanged != null) SelectContent.this.inputChanged.accept(elem);
-                        SelectContent.this.current = elem;
-                        manager.close();
-                    }
-                });
+                Button button = Button.builder(name, b -> {
+                            if (SelectContent.this.inputChanged != null) SelectContent.this.inputChanged.accept(elem);
+                            SelectContent.this.current = elem;
+                            manager.close();
+                        })
+                        .pos(padding, y)
+                        .size(200, 20)
+                        .build();
+                consumer.accept(button);
                 y += 23;
             }
         }

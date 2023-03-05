@@ -1,21 +1,20 @@
 package org.moddingx.libx.datagen.provider;
 
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
 import net.minecraftforge.common.data.SoundDefinitionsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -32,9 +31,9 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     private final Set<ResourceLocation> ignored = new HashSet<>();
     private final Map<ResourceLocation, SoundDefinitionBuilder> sounds = new HashMap<>();
 
-    public SoundDefinitionProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper helper) {
+    public SoundDefinitionProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper helper) {
         this.mod = mod;
-        this.provider = new ParentProvider(generator, mod.modid, helper) {
+        this.provider = new ParentProvider(packOutput, mod.modid, helper) {
             
             @Override
             public void registerSounds() {
@@ -130,9 +129,10 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         }
     }
 
+    @Nonnull
     @Override
-    public void run(@Nonnull CachedOutput cache) throws IOException {
-        this.provider.run(cache);
+    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
+        return this.provider.run(cache);
     }
 
     protected static class SoundSettingsBuilder {
@@ -345,18 +345,6 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
             }
             return this;
         }
-
-        @Deprecated(forRemoval = true)
-        @RemoveIn(minecraft = "1.19.3")
-        public SoundDefinitionBuilder effect(SoundEvent event) {
-            return this.event(event);
-        }
-        
-        @Deprecated(forRemoval = true)
-        @RemoveIn(minecraft = "1.19.3")
-        public SoundDefinitionBuilder effect(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
-            return this.event(event, configure);
-        }
         
         /**
          * Adds another sound event as a sound for this definition.
@@ -380,8 +368,8 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     // Required to make a method public
     private static abstract class ParentProvider extends SoundDefinitionsProvider {
         
-        protected ParentProvider(DataGenerator generator, String modId, ExistingFileHelper helper) {
-            super(generator, modId, helper);
+        protected ParentProvider(PackOutput packOutput, String modId, ExistingFileHelper helper) {
+            super(packOutput, modId, helper);
         }
 
         @Override

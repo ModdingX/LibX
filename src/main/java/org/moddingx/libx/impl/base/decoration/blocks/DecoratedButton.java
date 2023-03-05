@@ -1,21 +1,25 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.WoodButtonBlock;
+import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 
 import javax.annotation.Nonnull;
 
-public class DecoratedWoodButton extends WoodButtonBlock {
+public class DecoratedButton extends ButtonBlock {
 
     public final DecoratedBlock parent;
 
-    public DecoratedWoodButton(DecoratedBlock parent) {
-        super(Properties.copy(parent));
+    public DecoratedButton(DecoratedBlock parent, boolean wooden) {
+        super(Properties.copy(parent), wooden ? 30 : 20, wooden,
+                wooden ? SoundEvents.WOODEN_BUTTON_CLICK_OFF : SoundEvents.STONE_BUTTON_CLICK_OFF,
+                wooden ? SoundEvents.WOODEN_BUTTON_CLICK_ON : SoundEvents.STONE_BUTTON_CLICK_ON
+        );
         this.parent = parent;
     }
 

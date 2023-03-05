@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
@@ -44,8 +44,8 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     private final Set<Item> handheld = new HashSet<>();
     private final Set<Item> ignored = new HashSet<>();
 
-    public ItemModelProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
-        super(generator, mod.modid, fileHelper);
+    public ItemModelProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper fileHelper) {
+        super(packOutput, mod.modid, fileHelper);
         this.mod = mod;
     }
 
@@ -109,11 +109,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
             ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(FENCE_PARENT)).texture("texture", texture);
-        } else if (item.getBlock() instanceof DecoratedWoodButton decorated) {
-            ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
-            ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
-            this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(BUTTON_PARENT)).texture("texture", texture);
-        } else if (item.getBlock() instanceof DecoratedStoneButton decorated) {
+        } else if (item.getBlock() instanceof DecoratedButton decorated) {
             ResourceLocation parentId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent));
             ResourceLocation texture = new ResourceLocation(parentId.getNamespace(), "block/" + parentId.getPath());
             this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(BUTTON_PARENT)).texture("texture", texture);
@@ -136,7 +132,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
             if (ext != IClientItemExtensions.DEFAULT) {
                 ext.getCustomRenderer();
             } else {
-                // Forge no longer calls this during datagen
+                // Forge no longer calls this during datagen,
                 // so we need to do it manually
                 AtomicReference<IClientItemExtensions> ref = new AtomicReference<>(null);
                 item.initializeClient(ref::set);

@@ -17,7 +17,6 @@ public class RecordConfigScreen extends ConfigScreen<RecordConfigScreen.Entry> {
     
     public RecordConfigScreen(ConfigScreenManager manager, Component title, List<Entry> entries) {
         super(manager, title, entries, RecordConfigScreen::createEntry, RecordConfigScreen::search);
-
     }
     
     private static BuiltEntry createEntry(Entry elem, ConfigScreen<Entry> screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height) {

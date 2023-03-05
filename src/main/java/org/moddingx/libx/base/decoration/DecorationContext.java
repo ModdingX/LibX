@@ -139,7 +139,7 @@ public class DecorationContext {
         GENERIC(null),
         WOOD(Material.WOOD),
         STONE(Material.STONE),
-        MINERAL(Material.METAL);
+        METAL(Material.METAL);
 
         /**
          * A {@link Material} field

@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
@@ -49,10 +49,10 @@ public class DecoratedSign implements Registerable, SignAccess {
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         this.init(ctx.id());
-        builder.register(Registry.BLOCK_REGISTRY, this.standing);
-        builder.register(Registry.BLOCK_ENTITY_TYPE_REGISTRY, this.beType);
-        builder.register(Registry.ITEM_REGISTRY, this.item);
-        builder.registerNamed(Registry.BLOCK_REGISTRY, "wall", this.wall);
+        builder.register(Registries.BLOCK, this.standing);
+        builder.register(Registries.BLOCK_ENTITY_TYPE, this.beType);
+        builder.register(Registries.ITEM, this.item);
+        builder.registerNamed(Registries.BLOCK, "wall", this.wall);
     }
 
     @Override
@@ -85,7 +85,6 @@ public class DecoratedSign implements Registerable, SignAccess {
         }
         if (this.item == null) {
             Item.Properties itemProperties = new Item.Properties().stacksTo(16);
-            if (this.mod.tab != null) itemProperties.tab(this.mod.tab);
             this.item = new SignItem(itemProperties, this.standing, this.wall);
         }
     }

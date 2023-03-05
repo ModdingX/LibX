@@ -19,6 +19,7 @@ import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class ModInit  {
@@ -184,10 +185,12 @@ public class ModInit  {
                 writer.write("private static void gatherData(" + Classes.sourceName(Classes.GATHER_DATA_EVENT) + " event){");
                 for (DatagenEntry entry : this.datagen) {
                     String ctorArgs = entry.ctorArgs().stream().map(t -> switch (t) {
-                                case MOD -> this.modClass.getSimpleName() + "$.mod";
-                                case GENERATOR -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataGenerator(event)";
-                                case FILE_HELPER -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataFileHelper(event)";
-                            }).collect(Collectors.joining(","));
+                        case MOD -> this.modClass.getSimpleName() + "$.mod";
+                        case GENERATOR -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataGenerator(event)";
+                        case PACK_OUTPUT -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataPackOutput(event)";
+                        case FILE_HELPER -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataFileHelper(event)";
+                        case LOOKUP_PROVIDER -> "(" + CompletableFuture.class.getCanonicalName() + "<" + Classes.sourceName(Classes.LOOKUP_PROVIDER) + ">)" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataLookup(event)";
+                    }).collect(Collectors.joining(","));
                     writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addDataProvider(event,new " + entry.classFqn() + "(" + ctorArgs + "));");
                 }
                 writer.write("}");

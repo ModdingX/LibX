@@ -1,7 +1,7 @@
 package org.moddingx.libx.render.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -19,7 +19,7 @@ public abstract class RotatedBlockRenderer<T extends BlockEntity> extends Transf
     protected final void transform(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack) {
         float rot = blockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180;
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(-rot));
+        poseStack.mulPose(Axis.YP.rotationDegrees(-rot));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
     }
 }

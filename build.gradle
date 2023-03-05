@@ -20,6 +20,12 @@ sourceSets {
     ap {
         compileClasspath = configurations.apCompileOnlyResolvable
     }
+    sourcegen {
+        compileClasspath = configurations.compileClasspath
+    }
+    main {
+        java.srcDirs += [ file('./src/generated/java') ]
+    }
 }
 
 project.addModSourceSet(sourceSets.ap)
@@ -30,8 +36,8 @@ dependencies {
     
     coremods 'org.moddingx:CoreModTypes:5.0.2-2'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
     testImplementation 'net.minecraftforge:srgutils:0.4.13'
     testImplementation 'com.moandjiezana.toml:toml4j:0.7.2'
 }
@@ -83,3 +89,13 @@ task release {
     }
 }
 
+minecraft {
+    runs { data {
+        mods {
+            "${project.modid}_sourcegen" {
+                source sourceSets.sourcegen
+            }
+        }
+        args '--flat', '--mod', "${project.modid}_sourcegen"
+    }}
+}

@@ -32,8 +32,8 @@ public interface DecorationType<T> {
     DecorationType<? extends WallBlock> WALL = DecorationTypes.WALL;
     DecorationType<? extends FenceBlock> FENCE = DecorationTypes.FENCE;
     DecorationType<? extends FenceGateBlock> FENCE_GATE = DecorationTypes.FENCE_GATE;
-    DecorationType<? extends WoodButtonBlock> WOOD_BUTTON = DecorationTypes.WOOD_BUTTON;
-    DecorationType<? extends StoneButtonBlock> STONE_BUTTON = DecorationTypes.STONE_BUTTON;
+    DecorationType<? extends ButtonBlock> WOOD_BUTTON = DecorationTypes.WOOD_BUTTON;
+    DecorationType<? extends ButtonBlock> STONE_BUTTON = DecorationTypes.STONE_BUTTON;
     DecorationType<? extends PressurePlateBlock> WOOD_PRESSURE_PLATE = DecorationTypes.WOOD_PRESSURE_PLATE;
     DecorationType<? extends PressurePlateBlock> STONE_PRESSURE_PLATE = DecorationTypes.STONE_PRESSURE_PLATE;
     DecorationType<? extends DoorBlock> DOOR = DecorationTypes.DOOR;

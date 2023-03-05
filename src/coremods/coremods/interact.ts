@@ -19,7 +19,7 @@ function initializeCoreMod(): CoreMods {
         'methodName': 'm_7179_',
         'methodDesc': '(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;'
       },
-      'transformer': function(method: MethodNode) {
+      'transformer': (method: MethodNode) => {
         const label = new LabelNode();
         const target = new InsnList();
         target.add(new VarInsnNode(Opcodes.ALOAD, 1));

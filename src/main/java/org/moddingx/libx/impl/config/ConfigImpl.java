@@ -357,6 +357,9 @@ public class ConfigImpl {
         } catch (IOException e) {
             LibX.logger.warn("Failed to save config file from InGame values: " + e.getMessage(), e);
         }
+        if (!this.shadowed) {
+            MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.INGAME_CHANGES, this.clientConfig, this.path, null));
+        }
     }
     
     public void saveState(ConfigState state) {

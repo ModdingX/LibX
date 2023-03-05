@@ -1,6 +1,8 @@
 package org.moddingx.libx.impl;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.moddingx.libx.impl.registration.RegistrationDispatcher;
@@ -63,22 +65,30 @@ public class ModInternal {
 
     @Nullable
     private final Class<?> modInitClass;
+    private final IEventBus modEventBus;
     private final List<Runnable> setupTasks;
     private final List<Runnable> queueSetupTasks;
+    private final Set<ResourceLocation> creativeTabs;
     private RegistrationDispatcher registrationDispatcher;
 
     private ModInternal(ModX mod, FMLJavaModLoadingContext ctx) {
         this.mod = mod;
         this.modInitClass = ClassUtil.forName(mod.getClass().getName() + "$");
+        this.modEventBus = ctx.getModEventBus();
         this.setupTasks = new ArrayList<>();
         this.queueSetupTasks = new ArrayList<>();
+        this.creativeTabs = new HashSet<>();
         this.registrationDispatcher = null;
 
-        ctx.getModEventBus().addListener(this::runSetup);
+        this.modEventBus.addListener(this::runSetup);
     }
     
     public ModX instance() {
         return this.mod;
+    }
+
+    public IEventBus modEventBus() {
+        return this.modEventBus;
     }
 
     public void initRegistration(RegistrationDispatcher dispatcher) {
@@ -90,6 +100,12 @@ public class ModInternal {
             this.queueSetupTasks.add(task);
         } else {
             this.setupTasks.add(task);
+        }
+    }
+    
+    public void ensureCreativeTabAvailability(ResourceLocation id) {
+        if (!this.creativeTabs.add(id)) {
+            throw new IllegalArgumentException("Creative tab already created: " + id);
         }
     }
 

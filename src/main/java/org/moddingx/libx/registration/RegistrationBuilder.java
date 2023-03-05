@@ -13,19 +13,18 @@ public class RegistrationBuilder {
     private final List<RegistryTransformer> transformers;
     
     public RegistrationBuilder() {
-        this.tracking = false;
+        this.tracking = true;
         this.conditions = new ArrayList<>();
         this.transformers = new ArrayList<>();
     }
 
     /**
-     * Enables automatic registry tracking. That means when registering objects, 
+     * Disables automatic registry tracking. That means when registering objects, 
      * {@link Registerable#initTracking(RegistrationContext, Registerable.TrackingCollector)}
-     * is called. In order for registry tracking to properly work, you need to manually track the fields
-     * holding your values. ModInit will do this automatically if this option here is enabled.
+     * won't be called and ModInit won't add fields to the tracker.
      */
-    public void enableRegistryTracking() {
-        this.tracking = true;
+    public void disableRegistryTracking() {
+        this.tracking = false;
     }
 
     /**

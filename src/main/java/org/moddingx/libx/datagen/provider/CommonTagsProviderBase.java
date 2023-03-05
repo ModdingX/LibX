@@ -1,10 +1,12 @@
 package org.moddingx.libx.datagen.provider;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider.IntrinsicTagAppender;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
@@ -13,6 +15,7 @@ import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -23,6 +26,7 @@ import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A provider for {@link BlockTags block}, {@link ItemTags item} and {@link FluidTags fluid} tags.
@@ -41,22 +45,22 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     private final FluidTagProviderBase fluidTags;
 
     private boolean isSetup = false;
-    // Copies must happen at last so we store them
+    // Copies must happen last, so we store them
     private final List<Runnable> itemCopies = new ArrayList<>();
     private final List<Pair<TagKey<Fluid>, TagKey<Block>>> fluidCopies = new ArrayList<>();
-    
+
     private boolean hasLibXInternalTags = false;
 
     /**
      * Creates a new CommonTagsProviderBase
      */
-    public CommonTagsProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
+    public CommonTagsProviderBase(ModX mod, DataGenerator generator, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper) {
         this.mod = mod;
         this.generator = generator;
         this.fileHelper = fileHelper;
-        this.blockTags = new BlockTagProviderBase(generator, mod.modid, fileHelper);
-        this.itemTags = new ItemTagProviderBase(generator, mod.modid, fileHelper, this.blockTags);
-        this.fluidTags = new FluidTagProviderBase(generator, mod.modid, fileHelper);
+        this.blockTags = new BlockTagProviderBase(generator.getPackOutput(), lookupProvider, mod.modid, fileHelper);
+        this.itemTags = new ItemTagProviderBase(generator.getPackOutput(), lookupProvider, mod.modid, fileHelper, this.blockTags);
+        this.fluidTags = new FluidTagProviderBase(generator.getPackOutput(), lookupProvider, mod.modid, fileHelper);
         generator.addProvider(true, this.blockTags);
         generator.addProvider(true, this.itemTags);
         generator.addProvider(true, this.fluidTags);
@@ -111,21 +115,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for an {@link Item}
      */
-    public TagsProvider.TagAppender<Item> item(TagKey<Item> tag) {
+    public IntrinsicTagAppender<Item> item(TagKey<Item> tag) {
         return this.itemTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Block}
      */
-    public TagsProvider.TagAppender<Block> block(TagKey<Block> tag) {
+    public IntrinsicTagAppender<Block> block(TagKey<Block> tag) {
         return this.blockTags.tag(tag);
     }
 
     /**
      * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Fluid}
      */
-    public TagsProvider.TagAppender<Fluid> fluid(TagKey<Fluid> tag) {
+    public IntrinsicTagAppender<Fluid> fluid(TagKey<Fluid> tag) {
         return this.fluidTags.tag(tag);
     }
 
@@ -149,11 +153,13 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         return this.mod.modid + " common tags";
     }
 
+    @Nonnull
     @Override
-    public void run(@Nonnull CachedOutput cache) {
+    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         // We don't do anything here, everything is done by the three child providers
+        return CompletableFuture.completedFuture(null);
     }
-    
+
     private void initInternalTags() {
         if (!this.hasLibXInternalTags) {
             this.hasLibXInternalTags = true;
@@ -173,12 +179,12 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         private Map<ResourceLocation, TagBuilder> tagCache;
 
-        protected BlockTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
-            super(generator, modid, fileHelper);
+        protected BlockTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, ExistingFileHelper fileHelper) {
+            super(packOutput, lookupProvider, modid, fileHelper);
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(@Nonnull HolderLookup.Provider lookupProvider) {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
                 CommonTagsProviderBase.this.doSetup();
@@ -187,7 +193,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             }
             // Add fluid copies
             for (Pair<TagKey<Fluid>, TagKey<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
-                TagsProvider.TagAppender<Block> builder = this.tag(copy.getRight());
+                IntrinsicTagAppender<Block> builder = this.tag(copy.getRight());
                 for (ResourceLocation entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
                     Fluid fluid = ForgeRegistries.FLUIDS.getValue(entry);
                     if (fluid != null) {
@@ -197,15 +203,16 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             }
         }
 
+        @Nonnull
         @Override
-        public void run(@Nonnull CachedOutput cache) {
+        public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
             this.tagCache = new HashMap<>(this.builders);
-            super.run(cache);
+            return super.run(cache);
         }
 
         @Override
         @Nonnull
-        public TagsProvider.TagAppender<Block> tag(@Nonnull TagKey<Block> tag) {
+        public IntrinsicTagAppender<Block> tag(@Nonnull TagKey<Block> tag) {
             return super.tag(tag);
         }
 
@@ -220,12 +227,12 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         private Map<ResourceLocation, TagBuilder> tagCache;
 
-        protected ItemTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
-            super(generator, blockTags, modid, fileHelper);
+        protected ItemTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
+            super(packOutput, lookupProvider, blockTags, modid, fileHelper);
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(@Nonnull HolderLookup.Provider lookupProvider) {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
                 CommonTagsProviderBase.this.doSetup();
@@ -237,15 +244,16 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             }
         }
 
+        @Nonnull
         @Override
-        public void run(@Nonnull CachedOutput cache) {
+        public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
             this.tagCache = new HashMap<>(this.builders);
-            super.run(cache);
+            return super.run(cache);
         }
 
         @Override
         @Nonnull
-        public TagsProvider.TagAppender<Item> tag(@Nonnull TagKey<Item> tag) {
+        public IntrinsicTagAppender<Item> tag(@Nonnull TagKey<Item> tag) {
             return super.tag(tag);
         }
 
@@ -265,12 +273,12 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         private Map<ResourceLocation, TagBuilder> tagCache;
 
-        protected FluidTagProviderBase(DataGenerator generator, String modid, ExistingFileHelper fileHelper) {
-            super(generator, modid, fileHelper);
+        protected FluidTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, ExistingFileHelper fileHelper) {
+            super(packOutput, lookupProvider, modid, fileHelper);
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(@Nonnull HolderLookup.Provider lookupProvider) {
             if (!CommonTagsProviderBase.this.isSetup) {
                 CommonTagsProviderBase.this.isSetup = true;
                 CommonTagsProviderBase.this.doSetup();
@@ -279,20 +287,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             }
         }
 
+        @Nonnull
         @Override
-        public void run(@Nonnull CachedOutput cache) {
+        public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
             this.tagCache = new HashMap<>(this.builders);
-            super.run(cache);
+            return super.run(cache);
         }
 
         @Override
         @Nonnull
-        public TagsProvider.TagAppender<Fluid> tag(@Nonnull TagKey<Fluid> tag) {
+        public IntrinsicTagAppender<Fluid> tag(@Nonnull TagKey<Fluid> tag) {
             return super.tag(tag);
         }
 
         public List<ResourceLocation> getTagInfo(TagKey<Fluid> tag) {
-            TagsProvider.TagAppender<Fluid> builder = this.tag(tag);
+            IntrinsicTagAppender<Fluid> builder = this.tag(tag);
             return builder.getInternalBuilder().entries.stream()
                     .filter(p -> !p.tag)
                     .map(TagEntry::getId)

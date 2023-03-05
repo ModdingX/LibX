@@ -36,7 +36,7 @@ public interface ConfigEditor<T> {
     AbstractWidget createWidget(Screen screen, T initialValue, WidgetProperties<T> properties);
 
     /**
-     * Updates a previously created widget for example after a screen resize.
+     * Updates a previously created widget, for example, after a screen resize.
      * 
      * @param screen The screen used for display. This screen <b>must</b> be used if the widget wants
      *               to draw tooltips, or they won't work correctly.
@@ -48,7 +48,7 @@ public interface ConfigEditor<T> {
     /**
      * Creates a new editor that states, that a value can't be edited through the GUI.
      * 
-     * @param defaultValue The value that should be used as default value.
+     * @param defaultValue The value that should be used as the default value.
      */
     static <T> ConfigEditor<T> unsupported(T defaultValue) {
         return new UnsupportedEditor<>(defaultValue);
@@ -64,7 +64,7 @@ public interface ConfigEditor<T> {
 
     /**
      * Creates a toggle editor for a set of elements. This can be a single button that cycles on click
-     * or a sub screen so select the element, depending on the amount of elements given.
+     * or a sub screen so select the element, depending on the number of elements given.
      */
     static <T> ConfigEditor<T> toggle(List<T> elems) {
         return toggle(elems, e -> Component.literal(e.toString()));
@@ -72,7 +72,7 @@ public interface ConfigEditor<T> {
 
     /**
      * Creates a toggle editor for a set of elements. This can be a single button that cycles on click
-     * or a sub screen so select the element, depending on the amount of elements given.
+     * or a sub screen so select the element, depending on the number of elements given.
      * 
      * @param name A function that defines how to convert elements into a {@link Component} for display.
      */

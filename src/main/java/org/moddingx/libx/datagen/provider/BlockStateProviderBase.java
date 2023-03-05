@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider;
 
 import net.minecraft.core.Direction;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -24,10 +24,11 @@ import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * A base class for block state and model providers. An extending class should call the
@@ -46,7 +47,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     public static final ResourceLocation PRESSED_PRESSURE_PLATE_PARENT = new ResourceLocation("minecraft", "block/pressure_plate_down");
 
     protected final ModX mod;
-    protected final DataGenerator generator;
+    protected final PackOutput packOutput;
     protected final ExistingFileHelper fileHelper;
 
     private final Set<Block> manualState = new HashSet<>();
@@ -57,10 +58,10 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     private ResourceLocation currentRenderTypes = null;
     private final Map<ResourceLocation, TypedBlockModelProvider> typedModelProviders = new HashMap<>();
 
-    public BlockStateProviderBase(ModX mod, DataGenerator generator, ExistingFileHelper fileHelper) {
-        super(generator, mod.modid, fileHelper);
+    public BlockStateProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper fileHelper) {
+        super(packOutput, mod.modid, fileHelper);
         this.mod = mod;
-        this.generator = generator;
+        this.packOutput = packOutput;
         this.fileHelper = fileHelper;
     }
 
@@ -105,7 +106,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         if (renderTypes == null) {
             return super.models();
         } else {
-            return this.typedModelProviders.computeIfAbsent(renderTypes, k -> new TypedBlockModelProvider(this.generator, this.mod.modid, this.fileHelper, renderTypes));
+            return this.typedModelProviders.computeIfAbsent(renderTypes, k -> new TypedBlockModelProvider(this.packOutput, this.mod.modid, this.fileHelper, renderTypes));
         }
     }
 
@@ -136,12 +137,11 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     }
 
     @Override
-    public void run(CachedOutput cache) throws IOException {
-        super.run(cache);
-        // Generate all models from providers for different render types
-        for (TypedBlockModelProvider provider : this.typedModelProviders.values()) {
-            provider.generateAll(cache);
-        }
+    public CompletableFuture<?> run(CachedOutput cache) {
+        CompletableFuture<?> mainFuture = super.run(cache);
+        return CompletableFuture.allOf(Stream.concat(Stream.of(mainFuture), this.typedModelProviders.values().stream()
+                .map(provider -> provider.generateAll(cache))
+        ).toArray(CompletableFuture[]::new));
     }
 
     protected abstract void setup();
@@ -163,9 +163,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             this.fenceBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedFenceGateBlock decorated) {
             this.fenceGateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
-        } else if (block instanceof DecoratedWoodButton decorated) {
-            this.buttonBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
-        } else if (block instanceof DecoratedStoneButton decorated) {
+        } else if (block instanceof DecoratedButton decorated) {
             this.buttonBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedPressurePlate decorated) {
             this.pressurePlateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));

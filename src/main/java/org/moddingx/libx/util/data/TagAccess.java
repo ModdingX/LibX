@@ -10,24 +10,19 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
 /**
  * A class to help accessing {@link TagKey tags} in a more user friendly way.
  * A {@link TagAccess} can contain a {@link RegistryAccess} to allow accessing
- * dynamic registries. If that is not required, the {@link #ROOT} tag access can
- * be used.
+ * dynamic registries.
  */
 public class TagAccess {
     
-    public static TagAccess ROOT = new TagAccess(null);
-    
-    @Nullable
     private final RegistryAccess registries;
     
-    private TagAccess(@Nullable RegistryAccess registries) {
+    private TagAccess(RegistryAccess registries) {
         this.registries = registries;
     }
 
@@ -74,6 +69,7 @@ public class TagAccess {
     public <T> boolean has(TagKey<T> key, T value) {
         Registry<T> registry = this.resolve(key.registry());
         Optional<Holder<T>> holder = registry.getResourceKey(value).flatMap(registry::getHolder);
+        //noinspection OptionalIsPresent
         if (holder.isEmpty()) return false;
         return registry.getTag(key).map(tag -> tag.contains(holder.get())).orElse(false);
     }
@@ -86,13 +82,6 @@ public class TagAccess {
     }
     
     private <T> Registry<T> resolve(ResourceKey<? extends Registry<T>> key) {
-        if (this.registries != null) {
-            return this.registries.registry(key).orElseThrow(() -> new IllegalArgumentException("Registry " + key.location() + " not found in access: " + this.registries));
-        } else {
-            @SuppressWarnings("unchecked")
-            Registry<T> registry = (Registry<T>) Registry.REGISTRY.get(key.location());
-            if (registry == null) throw new IllegalArgumentException("Registry " + key.location() + " not found: No registry access attached.");
-            return registry;
-        }
+        return this.registries.registry(key).orElseThrow(() -> new IllegalArgumentException("Registry " + key.location() + " not found in access: " + this.registries));
     }
 }

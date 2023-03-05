@@ -1,5 +1,6 @@
 package org.moddingx.libx.datagen.provider.recipe.crafting;
 
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
@@ -21,7 +22,7 @@ public interface ToolExtension extends RecipeExtension {
                            @Nullable ItemLike pick, @Nullable ItemLike shovel, @Nullable ItemLike hoe) {
 
         if (sword != null) {
-            ShapedRecipeBuilder.shaped(sword)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, sword)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("m")
@@ -34,7 +35,7 @@ public interface ToolExtension extends RecipeExtension {
         }
 
         if (axe != null) {
-            ShapedRecipeBuilder.shaped(axe)
+            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, axe)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("mm")
@@ -47,7 +48,7 @@ public interface ToolExtension extends RecipeExtension {
         }
 
         if (pick != null) {
-            ShapedRecipeBuilder.shaped(pick)
+            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, pick)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("mmm")
@@ -60,7 +61,7 @@ public interface ToolExtension extends RecipeExtension {
         }
 
         if (shovel != null) {
-            ShapedRecipeBuilder.shaped(shovel)
+            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, shovel)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("m")
@@ -73,7 +74,7 @@ public interface ToolExtension extends RecipeExtension {
         }
 
         if (hoe != null) {
-            ShapedRecipeBuilder.shaped(hoe)
+            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, hoe)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("mm")
@@ -93,7 +94,7 @@ public interface ToolExtension extends RecipeExtension {
                            @Nullable ItemLike leggings, @Nullable ItemLike boots) {
 
         if (helmet != null) {
-            ShapedRecipeBuilder.shaped(helmet)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, helmet)
                     .define('m', material)
                     .pattern("mmm")
                     .pattern("m m")
@@ -103,7 +104,7 @@ public interface ToolExtension extends RecipeExtension {
         }
 
         if (chestplate != null) {
-            ShapedRecipeBuilder.shaped(chestplate)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, chestplate)
                     .define('m', material)
                     .pattern("m m")
                     .pattern("mmm")
@@ -114,7 +115,7 @@ public interface ToolExtension extends RecipeExtension {
         }
 
         if (leggings != null) {
-            ShapedRecipeBuilder.shaped(leggings)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, leggings)
                     .define('m', material)
                     .pattern("mmm")
                     .pattern("m m")
@@ -125,7 +126,7 @@ public interface ToolExtension extends RecipeExtension {
         }
 
         if (boots != null) {
-            ShapedRecipeBuilder.shaped(boots)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, boots)
                     .define('m', material)
                     .pattern("m m")
                     .pattern("m m")

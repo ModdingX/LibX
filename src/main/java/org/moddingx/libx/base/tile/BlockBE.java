@@ -1,7 +1,7 @@
 package org.moddingx.libx.base.tile;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -16,7 +16,8 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.gameevent.PositionSource;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.base.BlockBase;
@@ -80,7 +81,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         super.registerAdditional(ctx, builder);
-        builder.register(Registry.BLOCK_ENTITY_TYPE_REGISTRY, this.beType);
+        builder.register(Registries.BLOCK_ENTITY_TYPE, this.beType);
     }
 
     @Override
@@ -133,8 +134,8 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                 }
 
                 @Override
-                public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull GameEvent.Message message) {
-                    return eventBlock.notifyGameEvent(level, message);
+                public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull GameEvent gameEvent, @Nonnull GameEvent.Context context, @Nonnull Vec3 pos) {
+                    return eventBlock.notifyGameEvent(level, gameEvent, context, pos);
                 }
             };
         } else {
@@ -148,7 +149,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
         if (!level.isClientSide && (!state.is(newState.getBlock()) ||  !newState.hasBlockEntity()) && this.shouldDropInventory(level, pos, state)) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be != null) {
-                be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(handler -> {
+                be.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {
                     if (handler instanceof IItemHandlerModifiable modifiable) {
                         for (int i = 0; i < modifiable.getSlots(); i++) {
                             ItemStack stack = modifiable.getStackInSlot(i);

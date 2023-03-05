@@ -1,7 +1,7 @@
 package org.moddingx.libx.render.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,8 +26,8 @@ public abstract class DirectionalBlockRenderer<T extends BlockEntity> extends Tr
         };
         float yRot = facing.getAxis() == Direction.Axis.Y ? 0 : facing.toYRot();
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Vector3f.XP.rotationDegrees(xRot));
-        poseStack.mulPose(Vector3f.ZP.rotationDegrees(yRot));
+        poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(yRot));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
     }
 }

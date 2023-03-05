@@ -2,7 +2,7 @@ package org.moddingx.libx.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,7 +23,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
 
     protected final Screen screen;
     private final List<GuiEventListener> children = new ArrayList<>();
-    private final List<Widget> renderables = new ArrayList<>();
+    private final List<Renderable> renderables = new ArrayList<>();
 
     @Nullable
     protected GuiEventListener focused = null;
@@ -36,7 +36,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     /**
      * Adds a widget that can be rendered.
      */
-    protected <T extends GuiEventListener & Widget> T addRenderableWidget(T widget) {
+    protected <T extends GuiEventListener & Renderable> T addRenderableWidget(T widget) {
         this.renderables.add(widget);
         this.children.add(widget);
         return widget;
@@ -45,7 +45,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     /**
      * Adds a component that can be rendered.
      */
-    protected <T extends Widget> T addRenderableOnly(T widget) {
+    protected <T extends Renderable> T addRenderableOnly(T widget) {
         this.renderables.add(widget);
         return widget;
     }
@@ -61,9 +61,9 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     @Override
     public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         poseStack.pushPose();
-        poseStack.translate(this.x, this.y, 0);
-        for (Widget widget : this.renderables) {
-            widget.render(poseStack, mouseX - this.x, mouseY - this.y, partialTicks);
+        poseStack.translate(this.getX(), this.getY(), 0);
+        for (Renderable widget : this.renderables) {
+            widget.render(poseStack, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
         }
         poseStack.popPose();
     }
@@ -72,7 +72,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         boolean success = false;
         for (GuiEventListener child : this.children) {
-            if (child.mouseClicked(mouseX - this.x, mouseY - this.y, button)) {
+            if (child.mouseClicked(mouseX - this.getX(), mouseY - this.getY(), button)) {
                 this.screen.setFocused(this);
                 this.focused = child;
                 if (button == 0) {
@@ -88,8 +88,8 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         this.screen.setDragging(false);
         for (GuiEventListener child : this.children) {
-            if (child.isMouseOver(mouseX - this.x, mouseY - this.y)) {
-                if (child.mouseReleased(mouseX - this.x, mouseY - this.y, button)) {
+            if (child.isMouseOver(mouseX - this.getX(), mouseY - this.getY())) {
+                if (child.mouseReleased(mouseX - this.getX(), mouseY - this.getY(), button)) {
                     return true;
                 }
             }
@@ -99,7 +99,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return this.focused != null && this.screen.isDragging() && this.focused.mouseDragged(mouseX - this.x, mouseY - this.y, button, dragX - this.x, dragY - this.y);
+        return this.focused != null && this.screen.isDragging() && this.focused.mouseDragged(mouseX - this.getX(), mouseY - this.getY(), button, dragX - this.getX(), dragY - this.getY());
     }
 
     @Override
@@ -118,13 +118,13 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     }
 
     @Override
-    public void updateNarration(@Nonnull NarrationElementOutput output) {
+    public void updateWidgetNarration(@Nonnull NarrationElementOutput output) {
         //
     }
 
     @Override
     public void enabled(boolean enabled) {
-        for (Widget child : this.renderables) {
+        for (Renderable child : this.renderables) {
             EditorOps.wrap(child).enabled(enabled);
         }
     }

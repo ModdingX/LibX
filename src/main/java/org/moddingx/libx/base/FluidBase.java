@@ -1,6 +1,6 @@
 package org.moddingx.libx.base;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
@@ -168,10 +168,10 @@ public class FluidBase implements Registerable, ItemLike {
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         this.init(ctx.id());
-        builder.register(Registry.FLUID_REGISTRY, this.source);
-        builder.registerNamed(Registry.FLUID_REGISTRY, "flowing", this.flowing);
-        builder.register(Registry.BLOCK_REGISTRY, this.block);
-        builder.registerNamed(Registry.ITEM_REGISTRY, "bucket", this.bucket);
+        builder.register(Registries.FLUID, this.source);
+        builder.registerNamed(Registries.FLUID, "flowing", this.flowing);
+        builder.register(Registries.BLOCK, this.block);
+        builder.registerNamed(Registries.ITEM, "bucket", this.bucket);
         builder.registerNamed(ForgeRegistries.Keys.FLUID_TYPES, "type", this.type);
     }
 
@@ -203,14 +203,6 @@ public class FluidBase implements Registerable, ItemLike {
         }
     }
 
-    private static Item.Properties defaultItemProperties(ModX mod) {
-        if (mod.tab != null) {
-            return new Item.Properties().tab(mod.tab);
-        } else {
-            return new Item.Properties();
-        }
-    }
-
     public static Builder builder(ModX mod) {
         return new Builder(mod);
     }
@@ -235,11 +227,7 @@ public class FluidBase implements Registerable, ItemLike {
             this.clientExtensions = null;
             this.properties = FluidType.Properties.create();
             this.blockProperties = BlockBehaviour.Properties.copy(Blocks.WATER);
-            if (mod.tab != null) {
-                this.itemProperties = new Item.Properties().tab(mod.tab);
-            } else {
                 this.itemProperties = new Item.Properties();
-            }
         }
 
         public Builder sourceFactory(Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory) {

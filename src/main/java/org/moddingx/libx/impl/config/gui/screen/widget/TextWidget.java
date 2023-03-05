@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.sounds.SoundManager;
@@ -26,7 +27,7 @@ public class TextWidget extends AbstractWidget {
     @Override
     public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         //noinspection IntegerDivisionInFloatingPointContext
-        Minecraft.getInstance().font.drawShadow(poseStack, this.getMessage(), this.x, this.y + ((this.height - 8) / 2), 0xFFFFFF);
+        Minecraft.getInstance().font.drawShadow(poseStack, this.getMessage(), this.getX(), this.getY() + ((this.height - 8) / 2), 0xFFFFFF);
         if (this.isHovered && !this.tooltip.isEmpty()) {
             this.screen.renderComponentTooltip(poseStack, this.tooltip, mouseX, mouseY);
         }
@@ -38,7 +39,7 @@ public class TextWidget extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(@Nonnull NarrationElementOutput output) {
-        //
+    public void updateWidgetNarration(@Nonnull NarrationElementOutput output) {
+        output.add(NarratedElementType.HINT, this.tooltip.toArray(Component[]::new));
     }
 }

@@ -3,7 +3,6 @@ package org.moddingx.libx.mod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -18,13 +17,13 @@ import org.moddingx.libx.registration.RegistrationBuilder;
 import javax.annotation.Nullable;
 
 /**
- * You need to extends this instead of {@link ModX} if you want to use the LibX registration system.
+ * You need to extend this instead of {@link ModX} if you want to use the LibX registration system.
  *
  * This works like this:
  *
  * You define your objects for registration in classes like {@code ModItems}. Create some static methods
  * there that register all the items. To register something you need to call
- * {@link #register(ResourceKey, String, Object)} or {@link #createHolder(ResourceKey, String, Object)}.
+ * {@link #register(ResourceKey, String, Object)}.
  * Then in the constructor of your mod class, you call {@link #addRegistrationHandler(Runnable)} for every
  * registration method with a method reference to it. (Example: {@code addRegistrationHandler(ModItems::init)}.
  * The handlers will get called in the order you added them.
@@ -56,16 +55,6 @@ public abstract class ModXRegistration extends ModX {
      * the values needed.
      */
     protected ModXRegistration() {
-        this(null);
-    }
-
-    /**
-     * Subclasses should provide a public no-arg constructor that calls this with
-     * the values needed.
-     */
-    protected ModXRegistration(@Nullable CreativeModeTab tab) {
-        super(tab);
-
         RegistrationBuilder builder = new RegistrationBuilder();
         this.initRegistration(builder);
         this.dispatcher = new RegistrationDispatcher(this, builder.build());
@@ -94,7 +83,7 @@ public abstract class ModXRegistration extends ModX {
     /**
      * Registers an object to a given registry using a given name as the path part of the objects id.
      * The {@code registry} parameter may be {@code null} to allow registering
-     * {@link Registerable registerables} that should not go into any specific registry.
+     * {@link Registerable registerables} that shouldn't go into any specific registry.
      */
     public final <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         this.dispatcher.register(registry, id, value);
@@ -102,17 +91,9 @@ public abstract class ModXRegistration extends ModX {
 
     /**
      * Registers the contents of a {@link MultiRegisterable} to a given registry using a given name as the base
-     * path part of the objects id.
+     * path part of the objects' id.
      */
     public final <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
         this.dispatcher.registerMulti(registry, id, value);
-    }
-
-    /**
-     * Same as {@link #register(ResourceKey, String, Object)} but also creates a {@link Holder} for the
-     * registered object. The holder is not required to hold a value directly after the execution of this method.
-     */
-    public final <T> Holder<T> createHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
-        return this.dispatcher.register(registry, id, value).get();
     }
 }

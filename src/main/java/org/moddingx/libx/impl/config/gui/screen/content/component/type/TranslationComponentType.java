@@ -77,8 +77,8 @@ public class TranslationComponentType implements ComponentType {
 
     @Override
     public void buildGui(Screen screen, ConfigScreenContent.ScreenManager manager, AtomicInteger y, Consumer<AbstractWidget> consumer) {
-        int width = screen.width - 10;
-        WidgetProperties<String> properties = new WidgetProperties<>((screen.width - width) / 2, y.get(), width, 20, value -> {
+        int width = manager.contentWidth();
+        WidgetProperties<String> properties = new WidgetProperties<>((manager.contentWidth() - width) / 2, y.get(), width, 20, value -> {
             this.value = value;
             this.update();
         });

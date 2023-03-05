@@ -1,6 +1,5 @@
 package org.moddingx.libx.impl.registration;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import org.moddingx.libx.registration.MultiRegisterable;
@@ -36,15 +35,5 @@ public class SingleEntryCollector implements Registerable.EntryCollector {
     @Override
     public <T> void registerMultiNamed(@Nullable ResourceKey<? extends Registry<T>> registry, String name, MultiRegisterable<T> value) {
         this.dispatcher.registerMulti(registry, this.baseId + "_" + name, value);
-    }
-
-    @Override
-    public <T> Holder<T> createHolder(@Nullable ResourceKey<? extends Registry<T>> registry, T value) {
-        return this.dispatcher.register(registry, this.baseId, value).get();
-    }
-
-    @Override
-    public <T> Holder<T> createNamedHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value) {
-        return this.dispatcher.register(registry, this.baseId + "_" + name, value).get();
     }
 }

@@ -1,20 +1,20 @@
 package org.moddingx.libx.impl.datagen;
 
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 public class TypedBlockModelProvider extends BlockModelProvider {
 
     private final ResourceLocation renderTypes;
     
-    public TypedBlockModelProvider(DataGenerator generator, String modid, ExistingFileHelper fileHelper, ResourceLocation renderTypes) {
-        super(generator, modid, fileHelper);
+    public TypedBlockModelProvider(PackOutput packOutput, String modid, ExistingFileHelper fileHelper, ResourceLocation renderTypes) {
+        super(packOutput, modid, fileHelper);
         this.renderTypes = renderTypes;
     }
 
@@ -24,13 +24,13 @@ public class TypedBlockModelProvider extends BlockModelProvider {
     }
     
     @Override // Method is protected in superclass
-    public void generateAll(CachedOutput cache) {
-        super.generateAll(cache);
+    public CompletableFuture<?> generateAll(CachedOutput cache) {
+        return super.generateAll(cache);
     }
 
     @Override
-    public void run(CachedOutput cache) throws IOException {
-        //
+    public CompletableFuture<?> run(CachedOutput cache) {
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override

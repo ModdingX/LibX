@@ -16,10 +16,10 @@ public class ConfigScreenManager {
     private final Screen root;
     private final Stack<Screen> history;
 
-    // Can't use current screen as root as the config selection screen
-    // should not appear in the history which means the root screen is
+    // Can't use the current screen as root as the config selection screen
+    // should not appear in the history, which means the root screen is
     // the mod list screen. However, when this object is constructed, the
-    // mod list screen might already have been closed.
+    // mod list screen might have already been closed.
     public ConfigScreenManager(Minecraft minecraft, @Nullable Screen root, ConfigDisplay display) {
         this.minecraft = minecraft;
         this.display = display;

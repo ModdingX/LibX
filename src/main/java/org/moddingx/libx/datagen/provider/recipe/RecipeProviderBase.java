@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -36,8 +36,8 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     protected final ModX mod;
     private Consumer<FinishedRecipe> consumer;
 
-    public RecipeProviderBase(ModX mod, DataGenerator generator) {
-        super(generator);
+    public RecipeProviderBase(ModX mod, PackOutput packOutput) {
+        super(packOutput);
         this.mod = mod;
     }
 
@@ -57,7 +57,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     }
 
     @Override
-    protected final void buildCraftingRecipes(@Nonnull Consumer<FinishedRecipe> base) {
+    protected final void buildRecipes(@Nonnull Consumer<FinishedRecipe> base) {
         List<ICondition> conditions = List.copyOf(this.conditions());
         if (conditions.isEmpty()) {
             this.consumer = base;

@@ -42,10 +42,10 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
     @Override
     protected void buildGui(Consumer<AbstractWidget> consumer) {
         int y = 5;
-        int editorWidth = Math.min(200, (int) Math.round(this.width * (2 / 5d)));
-        int titleWidth = Math.max(0, this.width - 15 - editorWidth - 25);
+        int editorWidth = Math.min(200, (int) Math.round(this.contentWidth() * (2 / 5d)));
+        int titleWidth = Math.max(0, this.contentWidth() - 15 - editorWidth - 25);
         
-        // Create element map based on old elements, so elements currently not showing
+        // Create an element map based on old elements, so elements currently not showing
         // due to search will keep their state
         Map<T, BuiltEntry> entryBuilder = new HashMap<>(this.elements);
         
@@ -55,16 +55,16 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
             if (this.keys.get(category).stream().anyMatch(t -> this.searchPredicate.test(t, this, query))) {
                 if (!category.id().isEmpty()) {
                     if (!first) y+= 10;
-                    consumer.accept(new TextWidget(this, 4, y, this.width - 6, 20, category.title(), category.description()));
+                    consumer.accept(new TextWidget(this, 4, y, this.contentWidth(), 20, category.title(), category.description()));
                     y += 23;
                 }
                 first = false;
                 for (T t : this.keys.get(category)) {
                     if (this.searchPredicate.test(t, this, query)) {
                         BuiltEntry oldEntry = this.elements.getOrDefault(t, null);
-                        BuiltEntry entry = this.factory.create(t, this, oldEntry == null ? null : oldEntry.widget(), this.width - 5 - editorWidth, y, editorWidth, 20);
+                        BuiltEntry entry = this.factory.create(t, this, oldEntry == null ? null : oldEntry.widget(), this.contentWidth() - 5 - editorWidth, y, editorWidth, 20);
                         entryBuilder.put(t, entry);
-                        consumer.accept(new TextWidget(this, 15, entry.widget().y, titleWidth, entry.widget().getHeight(), entry.title(), entry.description()));
+                        consumer.accept(new TextWidget(this, 15, entry.widget().getY(), titleWidth, entry.widget().getHeight(), entry.title(), entry.description()));
                         consumer.accept(entry.widget());
                         y += 23;
                     }

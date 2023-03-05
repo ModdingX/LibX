@@ -72,21 +72,20 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
             y += 23;
         }
         
-        Button button = new Button(3, y, 100, 20, Component.translatable("libx.config.gui.map.new"), b -> {}) {
-
-            @Override
-            public void onPress() {
-                MapContent.this.list.add(Pair.of("", MapContent.this.editor.defaultValue()));
-                MapContent.this.widgets.add(null);
-                MapContent.this.update();
-                manager.rebuild();
-            }
-        };
+        Button button = Button.builder(Component.translatable("libx.config.gui.map.new"), b -> {
+                    MapContent.this.list.add(Pair.of("", MapContent.this.editor.defaultValue()));
+                    MapContent.this.widgets.add(null);
+                    MapContent.this.update();
+                    manager.rebuild();
+                })
+                .pos(3, y)
+                .size(100, 20)
+                .build();
         consumer.accept(button);
     }
     
     private void addEntryWidgets(Screen screen, ScreenManager manager, Consumer<AbstractWidget> consumer, int idx, int y) {
-        int width = Math.min(200, (screen.width - 64) / 2);
+        int width = Math.min(200, (manager.contentWidth() - 64) / 2);
 
         AtomicReference<String> current = new AtomicReference<>(this.list.get(idx).getKey());
         EditBox keyInput = new EditBox(Minecraft.getInstance().font, 3, y, width, 20, Component.empty());
@@ -101,7 +100,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
         });
         consumer.accept(keyInput);
         
-        WidgetProperties<T> properties = new WidgetProperties<>(screen.width - 31 - width, y, width, 20, t -> {
+        WidgetProperties<T> properties = new WidgetProperties<>(manager.contentWidth() - 31 - width, y, width, 20, t -> {
             this.list.set(idx, Pair.of(this.list.get(idx).getKey(), t));
             this.update();
         });
@@ -109,16 +108,15 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
         this.widgets.set(idx, widget);
         consumer.accept(widget);
 
-        Button deleteEntryButton = new Button(screen.width - 28, y, 20, 20, Component.literal("✖").withStyle(ChatFormatting.RED), b -> {}) {
-
-            @Override
-            public void onPress() {
-                MapContent.this.list.remove(idx);
-                MapContent.this.widgets.remove(idx);
-                MapContent.this.update();
-                manager.rebuild();
-            }
-        };
+        Button deleteEntryButton = Button.builder(Component.literal("✖").withStyle(ChatFormatting.RED), b -> {
+                    MapContent.this.list.remove(idx);
+                    MapContent.this.widgets.remove(idx);
+                    MapContent.this.update();
+                    manager.rebuild();
+                })
+                .pos(manager.contentWidth() - 28, y)
+                .size(20, 20)
+                .build();
         consumer.accept(deleteEntryButton);
     }
 }

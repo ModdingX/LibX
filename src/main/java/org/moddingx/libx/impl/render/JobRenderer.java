@@ -6,13 +6,13 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.world.phys.Vec2;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.moddingx.libx.render.RenderHelper;
 import org.moddingx.libx.render.target.RenderJob;
@@ -68,11 +68,11 @@ public class JobRenderer {
         RenderHelper.resetColor();
 
         @Nullable
-        Matrix4f transformationMatrix = overlay ? modelViewStack.last().pose().copy() : null;
+        Matrix4f transformationMatrix = overlay ? new Matrix4f(modelViewStack.last().pose()) : null;
         PoseStack poseStack = new PoseStack();
         job.setupTransformation(poseStack);
         if (overlay) {
-            transformationMatrix.multiply(poseStack.last().pose());
+            transformationMatrix.mul(poseStack.last().pose());
         }
         
         RenderBuffers buffers = new RenderBuffers();
@@ -90,7 +90,7 @@ public class JobRenderer {
             modelViewStack.mulPoseMatrix(job.setupModelViewMatrix());
             RenderSystem.applyModelViewMatrix();
 
-            RenderSystem.setProjectionMatrix(Matrix4f.orthographic(0, width, 0, height, 1000, 3000));
+            RenderSystem.setProjectionMatrix(new Matrix4f().ortho(0, width, 0, height, 1000, 3000));
 
             PoseStack overlayPoseStack = new PoseStack();
             Lighting.setupFor3DItems();
@@ -144,9 +144,9 @@ public class JobRenderer {
         
         @Override
         public Vec2 projectPoint(Vector3f point) {
-            Vector4f vec4 = new Vector4f(point);
-            vec4.transform(this.transformation);
-            vec4.transform(this.projection);
+            Vector4f vec4 = new Vector4f(point, 1);
+            this.transformation.transform(vec4);
+            this.projection.transform(vec4);
             if (!Double.isNaN(vec4.w()) && !Double.isInfinite(vec4.w()) && Math.abs(vec4.w()) >= 1.0E-6F) {
                 vec4.set(vec4.x() / vec4.w(), vec4.y() / vec4.w(), vec4.z() / vec4.w(), 1);
             }

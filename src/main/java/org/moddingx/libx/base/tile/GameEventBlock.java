@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * A {@link BlockEntity} used with {@link BlockBE} can implement this. Then a {@link GameEventListener} to
@@ -23,5 +24,5 @@ public interface GameEventBlock {
      * 
      * @return {@code true} to indicate the event was handled, {@code false} otherwise.
      */
-    boolean notifyGameEvent(ServerLevel level, GameEvent.Message message);
+    boolean notifyGameEvent(ServerLevel level, GameEvent message, GameEvent.Context context, Vec3 pos);
 }

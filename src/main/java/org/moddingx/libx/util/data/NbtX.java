@@ -16,7 +16,7 @@ public class NbtX {
     /**
      * Stores a {@link ResourceLocation} in a {@link CompoundTag} with a given key.
      */
-    public static void putRL(CompoundTag nbt, String key, ResourceLocation rl) {
+    public static void putResource(CompoundTag nbt, String key, ResourceLocation rl) {
         nbt.putString(key, rl.toString());
     }
 
@@ -45,10 +45,10 @@ public class NbtX {
     /**
      * Stores the location of a {@link ResourceKey}. This will <b>not</b> store the registry.
      * 
-     * @see NbtX#putRL(CompoundTag, String, ResourceLocation)
+     * @see NbtX#putResource(CompoundTag, String, ResourceLocation)
      */
     public static void putResourceKey(CompoundTag nbt, String key, ResourceKey<?> rl) {
-        putRL(nbt, key, rl.location());
+        putResource(nbt, key, rl.location());
     }
     
     /**

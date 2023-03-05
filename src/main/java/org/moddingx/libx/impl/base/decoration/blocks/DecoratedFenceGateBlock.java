@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -15,7 +16,7 @@ public class DecoratedFenceGateBlock extends FenceGateBlock {
     public final DecoratedBlock parent;
 
     public DecoratedFenceGateBlock(DecoratedBlock parent) {
-        super(Properties.copy(parent));
+        super(Properties.copy(parent), SoundEvents.FENCE_GATE_CLOSE, SoundEvents.FENCE_GATE_OPEN);
         this.parent = parent;
     }
 
