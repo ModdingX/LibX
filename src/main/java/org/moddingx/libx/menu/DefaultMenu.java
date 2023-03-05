@@ -17,8 +17,8 @@ import javax.annotation.Nullable;
  * There are some things you need to pay attention to if you want to use this:
  * 
  * <ul>
- *     <li>Always register player inventory slots with {@link #layoutPlayerInventorySlots(int, int)}</li>
- *     <li>Register input slots, THEN output slots and THEN player inventory.</li>
+ *     <li>Always add player inventory slots with {@link #layoutPlayerInventorySlots(int, int)}</li>
+ *     <li>Add input slots, THEN output slots and THEN player inventory.</li>
  * </ul>
  * 
  * Call the super constructor with
@@ -33,7 +33,7 @@ public abstract class DefaultMenu extends MenuBase {
     protected final Player player;
     protected final Level level;
 
-    // Used for automatic transferStackInSlot. To further restrict this use Slot#isItemValid.
+    // Used for automatic quickMoveStack. To further restrict this use Slot#isItemValid.
     public final int firstOutputSlot;
     public final int firstInventorySlot;
 
