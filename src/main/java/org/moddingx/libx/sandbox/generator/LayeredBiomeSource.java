@@ -14,6 +14,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A {@link BiomeSource} that can generate multiple {@link BiomeLayer layers} using multiple {@link MultiNoiseBiomeSource noise biome sources}.
+ */
 public class LayeredBiomeSource extends BiomeSource {
 
     public static final Codec<LayeredBiomeSource> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -30,8 +33,13 @@ public class LayeredBiomeSource extends BiomeSource {
     private NoiseLayerSelector sel;
     private MultiNoiseBiomeSource[] sources;
     private Climate.ParameterPoint[] ranges;
-    
 
+    /**
+     * Creates a new {@code LayeredBiomeSource}.
+     * @param horizontalScale The horizontal scale factor for the noise that determines the layer at a position.
+     * @param verticalScale The vertical scale factor for the noise that determines the layer at a position.
+     * @param layers The layers to use.
+     */
     public LayeredBiomeSource(double horizontalScale, double verticalScale, HolderSet<BiomeLayer> layers) {
         super(() -> layers.stream().flatMap(layer -> layer.value().biomes().values().stream()).map(Pair::getSecond).distinct().toList());
         this.horizontalScale = horizontalScale;
