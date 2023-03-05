@@ -111,9 +111,9 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
     @Override
     public void buildGui(Screen screen, ScreenManager manager, String search, Consumer<AbstractWidget> consumer) {
         int width = (2 * (75 + 3)) + 180 + (23 * 3);
-        int padding = Math.max(0, screen.width - width) / 2;
+        int padding = Math.max(0, manager.contentWidth() - width) / 2;
 
-        consumer.accept(new TextWidget(screen, (int) (padding * 0.7), 1, screen.width - (2 * padding) - 120, 18,
+        consumer.accept(new TextWidget(screen, (int) (padding * 0.7), 1, manager.contentWidth() - (2 * padding) - 120, 18,
                 Component.translatable("libx.config.gui.resource_list.info").withStyle(Style.EMPTY.withUnderlined(true).withColor(ChatFormatting.BLUE)), List.of()) {
 
             @Override
@@ -126,7 +126,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
             }
         });
 
-        WidgetProperties<Boolean> typeProperties = new WidgetProperties<>(screen.width - padding - 120, 0, 120, 20, allowList -> {
+        WidgetProperties<Boolean> typeProperties = new WidgetProperties<>(manager.contentWidth() - padding - 120, 0, 120, 20, allowList -> {
             this.allowList = allowList;
             this.update();
         });

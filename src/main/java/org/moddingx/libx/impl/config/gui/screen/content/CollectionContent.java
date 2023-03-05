@@ -66,7 +66,7 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
         }
 
         int width = 200 + (23 * 3);
-        int padding = Math.max(0, screen.width - width) / 2;
+        int padding = Math.max(0, manager.contentWidth() - width) / 2;
         Button button = Button.builder(Component.translatable("libx.config.gui.list.new"), b -> {
                     CollectionContent.this.list.add(CollectionContent.this.editor.defaultValue());
                     CollectionContent.this.widgets.add(null);
@@ -82,7 +82,7 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
     private void addEntryWidgets(Screen screen, ScreenManager manager, Consumer<AbstractWidget> consumer, int idx, int y) {
         int controlButtons = this.canReorder ? 3 : 1;
         int width = 200 + (23 * controlButtons);
-        int padding = Math.max(0, screen.width - width) / 2;
+        int padding = Math.max(0, manager.contentWidth() - width) / 2;
 
         WidgetProperties<T> properties = new WidgetProperties<>(padding, y, 200, 20, t -> {
             this.list.set(idx, t);

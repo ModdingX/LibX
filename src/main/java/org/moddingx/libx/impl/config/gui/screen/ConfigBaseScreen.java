@@ -56,13 +56,17 @@ public abstract class ConfigBaseScreen extends Screen {
         this.manager = manager;
         this.hasSearchBar = hasSearchBar;
     }
+    
+    public int contentWidth() {
+        return this.width - 12;
+    }
 
     @Override
     protected void init() {
         if (this.manager != null) {
             Button back = Button.builder(Component.literal("\u2190 ").append(Component.translatable("libx.config.gui.back")), button -> this.manager.close())
                     .pos(5, 5)
-                    .size(42, 20)
+                    .size(52, 20)
                     .build();
             this.addRenderableWidget(back);
         }
@@ -198,7 +202,7 @@ public abstract class ConfigBaseScreen extends Screen {
         this.renderDirtBackground(0);
         super.render(poseStack, mouseX, mouseY, partialTicks);
         //noinspection IntegerDivisionInFloatingPointContext
-        this.mc.font.drawShadow(poseStack, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 12, 0xFFFFFF);
+        this.mc.font.drawShadow(poseStack, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFF);
     }
 
     @Override

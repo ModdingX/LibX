@@ -22,6 +22,11 @@ public class CustomConfigScreen<T> extends ConfigBaseScreen {
         this.contentManager = new ConfigScreenContent.ScreenManager() {
 
             @Override
+            public int contentWidth() {
+                return CustomConfigScreen.this.contentWidth();
+            }
+
+            @Override
             public void rebuild() {
                 CustomConfigScreen.this.rebuild();
             }

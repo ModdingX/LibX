@@ -188,12 +188,12 @@ public class ComponentContent implements ConfigScreenContent<Component> {
     public void buildGui(Screen screen, ScreenManager manager, String search, Consumer<AbstractWidget> consumer) {
         int y = 0;
 
-        this.previewWidget = new PreviewWidget(screen, 20, y, screen.width - 40, 36, this.result.get());
+        this.previewWidget = new PreviewWidget(screen, 20, y, manager.contentWidth() - 40, 36, this.result.get());
         consumer.accept(this.previewWidget);
         y += 44;
 
         if (this.nonEditable != null) {
-            consumer.accept(new TextWidget(screen, 20, y, screen.width - 40, 18, Component.translatable("libx.config.gui.component.no_edit"), List.of()));
+            consumer.accept(new TextWidget(screen, 20, y, manager.contentWidth() - 40, 18, Component.translatable("libx.config.gui.component.no_edit"), List.of()));
             return;
         }
 
@@ -213,7 +213,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
 
         y += 8;
 
-        int width = Math.min(180, (screen.width - 10 - (2 * 5)) / 3);
+        int width = Math.min(180, (manager.contentWidth() - (2 * 5)) / 3);
         WidgetProperties<StyleSetting> boldProperties = new WidgetProperties<>(5, y, width, 20, bold -> {
             this.bold = bold;
             this.update();

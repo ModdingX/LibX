@@ -85,7 +85,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
     }
     
     private void addEntryWidgets(Screen screen, ScreenManager manager, Consumer<AbstractWidget> consumer, int idx, int y) {
-        int width = Math.min(200, (screen.width - 64) / 2);
+        int width = Math.min(200, (manager.contentWidth() - 64) / 2);
 
         AtomicReference<String> current = new AtomicReference<>(this.list.get(idx).getKey());
         EditBox keyInput = new EditBox(Minecraft.getInstance().font, 3, y, width, 20, Component.empty());
@@ -100,7 +100,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
         });
         consumer.accept(keyInput);
         
-        WidgetProperties<T> properties = new WidgetProperties<>(screen.width - 31 - width, y, width, 20, t -> {
+        WidgetProperties<T> properties = new WidgetProperties<>(manager.contentWidth() - 31 - width, y, width, 20, t -> {
             this.list.set(idx, Pair.of(this.list.get(idx).getKey(), t));
             this.update();
         });
@@ -114,7 +114,7 @@ public class MapContent<T> implements ConfigScreenContent<Map<String, T>> {
                     MapContent.this.update();
                     manager.rebuild();
                 })
-                .pos(screen.width - 28, y)
+                .pos(manager.contentWidth() - 28, y)
                 .size(20, 20)
                 .build();
         consumer.accept(deleteEntryButton);

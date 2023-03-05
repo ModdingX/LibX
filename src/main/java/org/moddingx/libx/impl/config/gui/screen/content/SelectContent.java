@@ -52,7 +52,7 @@ public class SelectContent<T> implements ConfigScreenContent<T> {
     @Override
     public void buildGui(Screen screen, ScreenManager manager, String search, Consumer<AbstractWidget> consumer) {
         int y = 0;
-        int padding = Math.max(0, screen.width - 200) / 2;
+        int padding = Math.max(0, manager.contentWidth() - 200) / 2;
         for (T elem : this.list) {
             Component name = this.nameFactory.apply(elem);
             if (search.isBlank() || name.getString().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT))) {

@@ -55,6 +55,11 @@ public interface ConfigScreenContent<T> {
     interface ScreenManager {
 
         /**
+         * The maximum width, the content can occupy. This should be used instead of {@link Screen#width}.
+         */
+        int contentWidth();
+        
+        /**
          * Rebuilds the current screen content. This causes {@link #buildGui(Screen, ScreenManager, String, Consumer)}
          * to be called again.
          */
