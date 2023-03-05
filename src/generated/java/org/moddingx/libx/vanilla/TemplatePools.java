@@ -1,4 +1,4 @@
-package org.moddingx.vanilla;
+package org.moddingx.libx.vanilla;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;

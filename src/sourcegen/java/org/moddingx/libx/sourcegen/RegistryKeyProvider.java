@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 // Generate java sources with registry keys from vanilla registries
 public class RegistryKeyProvider<T> implements DataProvider {
 
-    public static final String PACKAGE = "org.moddingx.vanilla";
+    public static final String PACKAGE = "org.moddingx.libx.vanilla";
 
     private final Class<T> registryClass;
     private final ResourceKey<? extends Registry<T>> registry;
