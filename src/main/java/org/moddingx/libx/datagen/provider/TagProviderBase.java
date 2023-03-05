@@ -66,14 +66,14 @@ public abstract class TagProviderBase<T> extends IntrinsicHolderTagsProvider<T> 
                     .map(Map.Entry::getValue)
                     .forEach(this::defaultTags);
         } else {
-            throw new IllegalStateException("No registry defined.");
+            throw new IllegalStateException("No registry defined. This should not happen. Registry key is " + this.registryKey);
         }
     }
 
     @Nonnull
     @Override
     public final String getName() {
-        return this.mod.modid + " " + (this.forgeRegistry == null ? this.registryKey.location() : this.forgeRegistry.getRegistryName()) + " tags";
+        return this.mod.modid + " " + this.registryKey.location() + " tags";
     }
 
     /**
