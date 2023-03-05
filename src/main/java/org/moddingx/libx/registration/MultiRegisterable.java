@@ -1,6 +1,5 @@
 package org.moddingx.libx.registration;
 
-import net.minecraft.core.Holder;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.registration.tracking.RegistryTracker;
 
@@ -57,15 +56,5 @@ public interface MultiRegisterable<T> {
          * @param name A name suffix for the object.
          */
         void registerMultiNamed(String name, MultiRegisterable<T> value);
-
-        /**
-         * Same as {@link #register(Object)} but creates a {@link Holder} for the object.
-         */
-        Holder<T> createHolder(T value);
-        
-        /**
-         * Same as {@link #registerNamed(String, Object)} but creates a {@link Holder} for the object.
-         */
-        Holder<T> createNamedHolder(String name, T value);
     }
 }

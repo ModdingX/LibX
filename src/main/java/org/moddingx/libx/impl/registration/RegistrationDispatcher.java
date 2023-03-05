@@ -1,6 +1,5 @@
 package org.moddingx.libx.impl.registration;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +9,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.RegistryManager;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
 import org.moddingx.libx.mod.ModXRegistration;
@@ -21,8 +19,6 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class RegistrationDispatcher {
     
@@ -96,7 +92,7 @@ public class RegistrationDispatcher {
         }
     }
     
-    public <T> Supplier<Holder<T>> register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
+    public <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         synchronized (this.LOCK) {
             if (value instanceof MultiRegisterable<?>) {
                 throw new IllegalArgumentException("Can't register MultiRegistrable. Use #registerMulti instead: " + registry + "/" + this.mod.modid + ":" + id + " @ " + value);
@@ -109,11 +105,7 @@ public class RegistrationDispatcher {
             RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
             
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
-            if (!failedConditions.isEmpty()) {
-                return () -> {
-                    throw new IllegalStateException("Can't create holder, object not registered due to failed conditions: [ " + failedConditions.stream().map(Object::toString).collect(Collectors.joining(", ")) + " ]");
-                };
-            }
+            if (!failedConditions.isEmpty()) return;
             
             SingleEntryCollector collector = new SingleEntryCollector(this, id);
             
@@ -136,12 +128,6 @@ public class RegistrationDispatcher {
                         throw new IllegalStateException("Failed to initialise registry tracking for " + id + " in " + registry + ": " + value, e);
                     }
                 }
-                
-                return () -> this.createHolder(resourceKey, value);
-            } else {
-                return () -> {
-                    throw new IllegalStateException("Can't create holder for " + rl + " without registry.");
-                };
             }
         }
     }
@@ -150,25 +136,6 @@ public class RegistrationDispatcher {
         synchronized (this.LOCK) {
             RegistryData data = this.allEntries.computeIfAbsent(ResourceKey.createRegistryKey(resourceKey.registry()), k -> new RegistryData());
             data.add(resourceKey, element);
-        }
-    }
-    
-    private <T> Holder<T> createHolder(ResourceKey<T> resourceKey, T value) {
-        // Forge registries can't create holders before an item is registered
-        // Use the vanilla registry
-        //noinspection unchecked
-        Registry<T> registry = (Registry<T>) RegistryManager.VANILLA.getRegistry(resourceKey.registry());
-        
-        if (registry == null) {
-            if (RegistryManager.ACTIVE.getRegistry(resourceKey.registry()) != null) {
-                throw new IllegalStateException("Can't create holder for " + resourceKey + ": Registry is a forge registry without a wrapped vanilla registry.");
-            } else {
-                throw new IllegalStateException("Can't create holder for " + resourceKey + ": Registry not found.");
-            }
-        } else {
-            Optional<Holder.Reference<T>> result = registry.getHolder(resourceKey);
-
-            return result.orElseGet(() -> registry.createIntrusiveHolder(value));
         }
     }
     

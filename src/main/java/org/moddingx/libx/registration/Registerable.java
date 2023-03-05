@@ -1,6 +1,5 @@
 package org.moddingx.libx.registration;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.api.distmarker.Dist;
@@ -81,16 +80,6 @@ public interface Registerable {
          * @param name A name suffix for the object.
          */
         <T> void registerMultiNamed(@Nullable ResourceKey<? extends Registry<T>> registry, String name, MultiRegisterable<T> value);
-
-        /**
-         * Same as {@link #register(ResourceKey, Object)} but creates a {@link Holder} for the object.
-         */
-        <T> Holder<T> createHolder(@Nullable ResourceKey<? extends Registry<T>> registry, T value);
-
-        /**
-         * Same as {@link #registerNamed(ResourceKey, String, Object)} but creates a {@link Holder} for the object.
-         */
-        <T> Holder<T> createNamedHolder(@Nullable ResourceKey<? extends Registry<T>> registry, String name, T value);
     }
 
     /**
