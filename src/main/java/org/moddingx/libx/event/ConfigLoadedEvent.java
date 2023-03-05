@@ -114,6 +114,11 @@ public class ConfigLoadedEvent extends Event {
         /**
          * An explicit reload of a config.
          */
-        RELOAD
+        RELOAD,
+
+        /**
+         * Changes made to the config from the ingame config GUI.
+         */
+        INGAME_CHANGES
     }
 }
