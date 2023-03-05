@@ -1,10 +1,10 @@
 package org.moddingx.libx.datagen.provider;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -26,18 +27,26 @@ import java.util.concurrent.CompletableFuture;
  * {@link #setup() setup}. With {@link #defaultTags(Object)}, you can add default tags
  * that can be retrieved from the element.
  */
-public abstract class TagProviderBase<T> extends TagsProvider<T> {
+public abstract class TagProviderBase<T> extends IntrinsicHolderTagsProvider<T> {
 
     protected final ModX mod;
     
-    @Nullable
-    protected final IForgeRegistry<T> forgeRegistry;
-
+    @Nullable private final IForgeRegistry<T> forgeRegistry;
+    @Nullable private final Registry<T> registry;
     
-    protected TagProviderBase(ModX mod, PackOutput packOutput, @Nonnull ResourceKey<? extends Registry<T>> registryKey, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
-        super(packOutput, registryKey, lookupProvider, mod.modid, fileHelper);
+    protected TagProviderBase(ModX mod, PackOutput packOutput, Registry<T> registry, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
+        super(packOutput, registry.key(), lookupProvider, (T value) -> ResourceKey.create(registry.key(), Objects.requireNonNull(registry.getKey(value), () -> "Value not registered: " + value)), mod.modid, fileHelper);
         this.mod = mod;
-        this.forgeRegistry = RegistryManager.ACTIVE.getRegistry(registryKey);
+        this.forgeRegistry = RegistryManager.ACTIVE.getRegistry(registry.key());
+        this.registry = registry;
+    }
+    
+    protected TagProviderBase(ModX mod, PackOutput packOutput, IForgeRegistry<T> registry, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper fileHelper) {
+        super(packOutput, registry.getRegistryKey(), lookupProvider, (T value) -> ResourceKey.create(registry.getRegistryKey(), Objects.requireNonNull(registry.getKey(value), () -> "Value not registered: " + value)), mod.modid, fileHelper);
+        this.mod = mod;
+        this.forgeRegistry = registry;
+        //noinspection unchecked
+        this.registry = (Registry<T>) BuiltInRegistries.REGISTRY.getOptional(registry.getRegistryKey().location()).orElse(null);
     }
 
     @Override
@@ -50,12 +59,14 @@ public abstract class TagProviderBase<T> extends TagsProvider<T> {
                     .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                     .map(Map.Entry::getValue)
                     .forEach(this::defaultTags);
-        } else {
-            lookupProvider.lookupOrThrow(this.registryKey).listElements()
-                    .filter(entry -> this.mod.modid.equals(entry.key().location().getNamespace()))
-                    .sorted(Comparator.comparing(entry -> entry.key().location()))
-                    .map(Holder::get)
+        } else if (this.registry != null) {
+            this.registry.entrySet().stream()
+                    .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                    .sorted(Comparator.comparing(entry -> entry.getKey().location()))
+                    .map(Map.Entry::getValue)
                     .forEach(this::defaultTags);
+        } else {
+            throw new IllegalStateException("No registry defined.");
         }
     }
 
