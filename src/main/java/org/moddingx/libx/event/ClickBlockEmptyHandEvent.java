@@ -16,7 +16,7 @@ import net.minecraftforge.eventbus.api.Event;
  * IMPORTANT: Canceling this with {@link InteractionResult#CONSUME} for the main hand does not mean
  * it won't be posted for the offhand. For this cancel {@link PlayerInteractEvent.RightClickBlock}
  * on the client.
- * Returning {@link InteractionResult#SUCCESS} will swing the arm. However it will first try to
+ * Returning {@link InteractionResult#SUCCESS} will swing the arm. However, it will first try to
  * propagate to the offhand. So in order to swing the main hand, the event for the main hand has to
  * return {@link InteractionResult#SUCCESS} and for the offhand {@link InteractionResult#PASS}.
  */

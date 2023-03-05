@@ -66,11 +66,11 @@ public class ConfigLoadedEvent extends Event {
     }
     
     /**
-     * Gets the path where the config is loaded from for this event. For example
+     * Gets the path where the config is loaded from for this event. For example,
      * configs can be loaded per world. In that case {@code currentPath}
      * will be the path from the world and {@link #getConfigPath() configPath} will be the
      * default path for the config which might still be used for values not present in the
-     * world specific config.
+     * world-specific config.
      * 
      * The value is {@code null} when the current config is loaded from a non-file location
      * (for example on shadowing). It can also be the same as {@link #getConfigPath() configPath}
