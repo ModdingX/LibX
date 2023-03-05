@@ -50,9 +50,15 @@ public record BiomeLayer(double weight, Climate.ParameterPoint range, Climate.Pa
     ).apply(instance, BiomeLayer::new));
     
     public static final Codec<Holder<BiomeLayer>> CODEC = RegistryFileCodec.create(SandBox.BIOME_LAYER, DIRECT_CODEC);
-    
-    // TODO datagen these
+
+    /**
+     * The overworld biome layer. It covers the full noise range and has a weight of 1.
+     */
     public static final ResourceKey<BiomeLayer> OVERWORLD = ResourceKey.create(SandBox.BIOME_LAYER, new ResourceLocation("minecraft", "overworld"));
+    
+    /**
+     * The nether biome layer. It covers the full noise range and has a weight of 1.
+     */
     public static final ResourceKey<BiomeLayer> NETHER = ResourceKey.create(SandBox.BIOME_LAYER, new ResourceLocation("minecraft", "nether"));
 
     @Override

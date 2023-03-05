@@ -26,7 +26,7 @@ public class TextureGenerator {
     }
 
     public CompletableFuture<?> save(CachedOutput output, ResourceLocation id, BufferedImage image) {
-        Path path = this.packOutput.getOutputFolder().resolve("assets").resolve(id.getNamespace()).resolve(id.getPath());
+        Path path = this.packOutput.getOutputFolder().resolve(PackType.CLIENT_RESOURCES.getDirectory()).resolve(id.getNamespace()).resolve(id.getPath());
         return this.save(output, image, path);
     }
     

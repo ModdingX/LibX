@@ -8,6 +8,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -60,7 +61,8 @@ public abstract class AdvancementProviderBase implements DataProvider {
         this.setup();
         return CompletableFuture.allOf(this.advancements.values().stream().map(supplier -> {
             Advancement advancement = supplier.get();
-            Path path = this.packOutput.getOutputFolder().resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
+            Path path = this.packOutput.getOutputFolder().resolve(PackType.SERVER_DATA.getDirectory())
+                    .resolve(advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
             return DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
         }).toArray(CompletableFuture[]::new));
     }

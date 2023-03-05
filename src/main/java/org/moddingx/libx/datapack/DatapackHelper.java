@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.Util;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraftforge.forgespi.locating.IModFile;
@@ -25,7 +26,21 @@ public class DatapackHelper {
         builder.disableHtmlEscaping();
         return builder.create();
     });
-
+    
+    /**
+     * Gets the path for a registry element inside a datapack. For example for the key
+     * {@code minecraft:worldgen/biome libx:some_biome}, this would be {@code libx/worldgen/biome/some_biome.json}
+     */
+    public static String registryPath(ResourceKey<?> key) {
+        String registryPart;
+        if (key.registry().getNamespace().equals("minecraft")) {
+            registryPart = key.registry().getPath();
+        } else {
+            registryPart = key.registry().getNamespace() + "/" + key.registry().getPath();
+        }
+        return key.location().getNamespace() + "/" + registryPart + "/" + key.location().getPath() + ".json";
+    }
+    
     /**
      * Creates a supplier that can be repeatedly called to create new {@link InputStream}s for
      * a dynamically generated {@code pack.mcmeta} based on the given mod file.

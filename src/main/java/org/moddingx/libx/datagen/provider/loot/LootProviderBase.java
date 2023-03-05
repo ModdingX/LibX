@@ -5,6 +5,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -154,7 +155,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
     }
     
     private Path getPath(Path root, ResourceLocation id) {
-        return root.resolve("data/" + id.getNamespace() + "/loot_tables/" + this.folder + "/" + id.getPath() + ".json");
+        return root.resolve(PackType.SERVER_DATA.getDirectory()).resolve(id.getNamespace() + "/loot_tables/" + this.folder + "/" + id.getPath() + ".json");
     }
     
     protected final LootModifier<T> modifier(BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolSingletonContainer.Builder<?>> function) {

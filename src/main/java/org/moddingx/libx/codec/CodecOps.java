@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.RegistryOps;
@@ -44,7 +45,7 @@ public class CodecOps<E> {
      * @param registries The {@link RegistryAccess} to provide for registry
      *                   aware codecs.
      */
-    public <T> E write(Codec<T> codec, T value, RegistryAccess registries) {
+    public <T> E write(Codec<T> codec, T value, HolderLookup.Provider registries) {
         return this.write(codec, value, this.baseClass, registries);
     }
 
@@ -68,7 +69,7 @@ public class CodecOps<E> {
      * @param registries The {@link RegistryAccess} to provide for registry
      *                   aware codecs.
      */
-    public <T, R extends E> R write(Codec<T> codec, T value, Class<R> resultType, RegistryAccess registries) {
+    public <T, R extends E> R write(Codec<T> codec, T value, Class<R> resultType, HolderLookup.Provider registries) {
         return encodeWith(codec, value, RegistryOps.create(this.ops, registries), this.baseClass, resultType);
     }
 
@@ -84,7 +85,7 @@ public class CodecOps<E> {
      * 
      * @param registries The {@link RegistryAccess} to provide for registry aware codecs.
      */
-    public <T> T read(Codec<T> codec, E value, RegistryAccess registries) {
+    public <T> T read(Codec<T> codec, E value, HolderLookup.Provider registries) {
         return decodeWith(codec, value, RegistryOps.create(this.ops, registries));
     }
 
