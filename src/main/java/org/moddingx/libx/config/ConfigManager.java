@@ -115,6 +115,7 @@ import java.util.*;
  *     <li>{@link String String}</li>
  *     <li>{@link Optional Optional&lt;?&gt;}</li>
  *     <li>{@link List List&lt;?&gt;}</li>
+ *     <li>{@link Set Set&lt;?&gt;}</li>
  *     <li>{@link Map Map&lt;String, ?&gt;}</li>
  *     <li>{@link ResourceLocation}</li>
  *     <li>{@link Ingredient}</li>

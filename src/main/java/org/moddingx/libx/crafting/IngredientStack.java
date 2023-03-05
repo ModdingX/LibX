@@ -24,7 +24,7 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     }
     
     /**
-     * Returns whether the count is 0 or {@link Ingredient#isEmpty()} return true.
+     * Returns whether the count is 0 or {@link Ingredient#isEmpty()} returns true.
      */
     public boolean isEmpty() {
         return this.count == 0 || this.ingredient.isEmpty();

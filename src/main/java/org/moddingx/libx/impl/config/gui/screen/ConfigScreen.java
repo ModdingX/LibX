@@ -45,7 +45,7 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
         int editorWidth = Math.min(200, (int) Math.round(this.contentWidth() * (2 / 5d)));
         int titleWidth = Math.max(0, this.contentWidth() - 15 - editorWidth - 25);
         
-        // Create element map based on old elements, so elements currently not showing
+        // Create an element map based on old elements, so elements currently not showing
         // due to search will keep their state
         Map<T, BuiltEntry> entryBuilder = new HashMap<>(this.elements);
         

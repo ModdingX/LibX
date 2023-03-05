@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /**
  * This interface can be implemented by widgets, so other {@link ConfigEditor config editors} can control them.
- * For example an editor for {@link Optional optionals} can disable a widget if the user unsets the checkbox, so
+ * For example, an editor for {@link Optional optionals} can disable a widget if the user unsets the checkbox, so
  * no value should be available.
  */
 public interface EditorOps {

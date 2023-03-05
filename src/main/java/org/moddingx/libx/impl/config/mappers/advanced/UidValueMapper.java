@@ -48,7 +48,7 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     }
 
     @Override
-    public Class<java.util.UUID> type() {
+    public Class<UUID> type() {
         return UUID.class;
     }
 
@@ -58,12 +58,12 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     }
 
     @Override
-    public java.util.UUID fromJson(JsonPrimitive json) {
+    public UUID fromJson(JsonPrimitive json) {
         return UUID.fromString(json.getAsString());
     }
 
     @Override
-    public JsonPrimitive toJson(java.util.UUID value) {
+    public JsonPrimitive toJson(UUID value) {
         return new JsonPrimitive(value.toString());
     }
 
