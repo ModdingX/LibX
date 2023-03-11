@@ -65,7 +65,7 @@ public class DatagenProcessor {
         } else if (env.subTypeErasure(type, env.forClass(Classes.DATA_FILE_HELPER))) {
             return DatagenEntry.Arg.FILE_HELPER;
         } else if (env.sameErasure(type, env.forClass(CompletableFuture.class)) && checkGenericArg(type, env.forClass(Classes.LOOKUP_PROVIDER), env)) {
-            return DatagenEntry.Arg.FILE_HELPER;
+            return DatagenEntry.Arg.LOOKUP_PROVIDER;
         } else {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Constructor in datagen class may only have the following parameters: (ModX, DataGenerator, PackOutput, ExistingFileHelper, CompletableFuture<HolderLookup.Provider>)", param);
             throw new FailureException();
