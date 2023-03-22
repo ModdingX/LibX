@@ -54,7 +54,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     @Nullable
     @Override
     protected LootTable.Builder defaultBehavior(Block block) {
-        if (block.getStateDefinition().getPossibleStates().stream().noneMatch(this::needsLootTable)) {
+        if (block.getStateDefinition().getPossibleStates().stream().anyMatch(this::needsLootTable)) {
             LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(block);
             LootPool.Builder pool = LootPool.lootPool().name("main").setRolls(ConstantValue.exactly(1)).add(entry)
                     .when(ExplosionCondition.survivesExplosion());
