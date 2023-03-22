@@ -22,7 +22,7 @@ function initializeCoreMod(): CoreMods {
           const node = method.instructions.get(i) as AbstractInsnNode;
           if (node.getOpcode() == Opcodes.INVOKEVIRTUAL) {
             const methodNode = node as MethodInsnNode;
-            if (methodNode.owner == 'net/minecraft/world/level/dimension/LevelStem' && methodNode.name == ASMAPI.mapMethod('f_63976_') && methodNode.desc == '()Lnet/minecraft/world/level/chunk/ChunkGenerator;') {
+            if (methodNode.owner == 'net/minecraft/world/level/dimension/LevelStem' && methodNode.name == ASMAPI.mapField('f_63976_') /* record method */ && methodNode.desc == '()Lnet/minecraft/world/level/chunk/ChunkGenerator;') {
               method.instructions.insert(node, target);
               return method;
             }
