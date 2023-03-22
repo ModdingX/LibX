@@ -3,9 +3,11 @@ package org.moddingx.libx.datagen.provider.loot;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -13,20 +15,21 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -51,10 +54,20 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     @Nullable
     @Override
     protected LootTable.Builder defaultBehavior(Block block) {
-        if (block.getStateDefinition().getPossibleStates().stream().anyMatch(this::needsLootTable)) {
+        if (block.getStateDefinition().getPossibleStates().stream().noneMatch(this::needsLootTable)) {
             LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(block);
             LootPool.Builder pool = LootPool.lootPool().name("main").setRolls(ConstantValue.exactly(1)).add(entry)
                     .when(ExplosionCondition.survivesExplosion());
+            if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+                pool = pool.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(
+                        StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER)
+                ));
+            }
+            if (block.defaultBlockState().hasProperty(BlockStateProperties.BED_PART)) {
+                pool = pool.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(
+                        StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.BED_PART, BedPart.HEAD)
+                ));
+            }
             return LootTable.lootTable().withPool(pool);
         } else {
             return null;
@@ -213,6 +226,13 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     }
 
     /**
+     * Gets a loot modifier builder for a match state condition.
+     */
+    public MatchStateBuilder matchState() {
+        return new MatchStateBuilder(StatePropertiesPredicate.Builder.properties());
+    }
+
+    /**
      * Gets a loot condition for silk touch tools.
      */
     public LootItemCondition.Builder silkCondition() {
@@ -321,5 +341,48 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
             this.builder.hasNbt(nbt);
             return this;
         }
+    }
+
+    /**
+     * This serves as a builder for a loot modifier and a builder for a block state predicate
+     * in one.
+     */
+    public class MatchStateBuilder implements GenericLootModifier<Block> {
+        
+        private final StatePropertiesPredicate.Builder builder;
+
+        private MatchStateBuilder(StatePropertiesPredicate.Builder builder) {
+            this.builder = builder;
+        }
+
+        @Override
+        public LootPoolEntryContainer.Builder<?> apply(Block item, LootPoolSingletonContainer.Builder<?> entry) {
+            return entry.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(item).setProperties(this.builder));
+        }
+
+        @Override
+        public SimpleLootFactory<Block> element() {
+            return BlockLootProviderBase.this.element();
+        }
+
+         public MatchStateBuilder hasProperty(Property<?> property, String value) {
+             this.builder.hasProperty(property, value);
+             return this;
+          }
+
+          public MatchStateBuilder hasProperty(Property<Integer> property, int value) {
+              this.builder.hasProperty(property, value);
+              return this;
+          }
+
+          public MatchStateBuilder hasProperty(Property<Boolean> property, boolean value) {
+              this.builder.hasProperty(property, value);
+              return this;
+          }
+
+          public <T extends Comparable<T> & StringRepresentable> MatchStateBuilder hasProperty(Property<T> property, T value) {
+              this.builder.hasProperty(property, value);
+              return this;
+          }
     }
 }
