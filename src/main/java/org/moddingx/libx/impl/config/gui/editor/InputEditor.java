@@ -103,8 +103,8 @@ public class InputEditor<T> implements ConfigEditor<T> {
         }
 
         @Override
-        public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-            super.renderButton(poseStack, mouseX, mouseY, partialTicks);
+        public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+            super.renderWidget(poseStack, mouseX, mouseY, partialTicks);
             if (this.isVisible() && this.getValidInput(this.getValue()).isEmpty()) {
                 poseStack.pushPose();
                 poseStack.translate(0, 0, 10);

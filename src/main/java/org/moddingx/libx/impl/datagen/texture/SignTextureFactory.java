@@ -1,10 +1,10 @@
 package org.moddingx.libx.impl.datagen.texture;
 
-import org.moddingx.libx.datagen.provider.texture.TextureHelper;
+import net.minecraft.resources.ResourceLocation;
 import org.moddingx.libx.datagen.provider.texture.TextureBuilder;
 import org.moddingx.libx.datagen.provider.texture.TextureFactory;
+import org.moddingx.libx.datagen.provider.texture.TextureHelper;
 import org.moddingx.libx.datagen.provider.texture.Textures;
-import net.minecraft.resources.ResourceLocation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

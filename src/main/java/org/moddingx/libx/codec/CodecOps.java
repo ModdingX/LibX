@@ -95,7 +95,7 @@ public class CodecOps<E> {
                 //noinspection unchecked
                 return DataResult.success((R) result);
             } else {
-                return DataResult.error("Invalid type while encoding with value " + value + " with " + codec + ": Expected " + resultType + ", got " + result.getClass());
+                return DataResult.error(() -> "Invalid type while encoding with value " + value + " with " + codec + ": Expected " + resultType + ", got " + result.getClass());
             }
         }).getOrThrow(false, msg -> {});
     }

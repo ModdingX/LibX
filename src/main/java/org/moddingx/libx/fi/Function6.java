@@ -1,7 +1,9 @@
 package org.moddingx.libx.fi;
 
 import java.util.Objects;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A function that takes 6 parameters and returns a value.

@@ -7,8 +7,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import org.moddingx.libx.sandbox.structure.PoolExtension;
 import org.moddingx.libx.sandbox.SandBox;
+import org.moddingx.libx.sandbox.structure.PoolExtension;
 
 import java.util.Map;
 

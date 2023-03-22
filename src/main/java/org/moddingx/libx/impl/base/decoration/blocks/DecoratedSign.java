@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.StandingSignBlock;
@@ -34,21 +33,25 @@ public class DecoratedSign implements Registerable, SignAccess {
     public final ModX mod;
     public final DecoratedBlock parent;
     
-    private WoodType wood;
-    private Standing standing;
-    private Wall wall;
-    private SignItem item;
-    private BlockEntityType<Entity> beType;
+    private final Standing standing;
+    private final Wall wall;
+    private final SignItem item;
+    private final BlockEntityType<Entity> beType;
 
     public DecoratedSign(ModX mod, DecoratedBlock parent) {
         this.mod = mod;
         this.parent = parent;
+        
+        this.standing = new Standing(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
+        this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
+        //noinspection ConstantConditions
+        this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.standing, this.wall), null);
+        this.item = new SignItem(new Item.Properties().stacksTo(16), this.standing, this.wall);
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
-        this.init(ctx.id());
         builder.register(Registries.BLOCK, this.standing);
         builder.register(Registries.BLOCK_ENTITY_TYPE, this.beType);
         builder.register(Registries.ITEM, this.item);
@@ -56,37 +59,11 @@ public class DecoratedSign implements Registerable, SignAccess {
     }
 
     @Override
-    public void registerCommon(SetupContext ctx) {
-        this.init(ctx.id());
-        ctx.enqueue(() -> WoodType.register(this.wood));
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public void registerClient(SetupContext ctx) {
-        this.init(ctx.id());
         BlockEntityRenderers.register(this.beType, SignRenderer::new);
-        ctx.enqueue(() -> Sheets.addWoodType(this.wood));
-    }
-
-    private synchronized void init(ResourceLocation id) {
-        if (this.wood == null) {
-            this.wood = WoodType.create(id.toString());
-        }
-        if (this.standing == null) {
-            this.standing = new Standing(this.parent, this::getBlockEntityType, this.wood);
-        }
-        if (this.wall == null) {
-            this.wall = new Wall(this.parent, this::getBlockEntityType, this.wood);
-        }
-        if (this.beType == null) {
-            //noinspection ConstantConditions
-            this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.standing, this.wall), null);
-        }
-        if (this.item == null) {
-            Item.Properties itemProperties = new Item.Properties().stacksTo(16);
-            this.item = new SignItem(itemProperties, this.standing, this.wall);
-        }
+        // Add sign texture to sheet.
+        ctx.enqueue(() -> Sheets.addWoodType(this.parent.getMaterialProperties().woodType()));
     }
 
     @Nonnull

@@ -25,7 +25,7 @@ public class TextWidget extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         //noinspection IntegerDivisionInFloatingPointContext
         Minecraft.getInstance().font.drawShadow(poseStack, this.getMessage(), this.getX(), this.getY() + ((this.height - 8) / 2), 0xFFFFFF);
         if (this.isHovered && !this.tooltip.isEmpty()) {

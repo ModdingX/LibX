@@ -84,7 +84,7 @@ public class SimpleValidators {
 
         @Override
         public Optional<Long> validate(Long value, LongRange validator) {
-            long clamped = Mth.clamp(value, validator.min(), validator.max());
+            long clamped = Math.max(Math.min(value, validator.max()), validator.min());
             return value == clamped ? Optional.empty() : Optional.of(clamped);
         }
 

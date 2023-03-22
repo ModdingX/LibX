@@ -32,6 +32,15 @@ public class CodecHelper {
      * with the given error message.
      */
     public static <T> DataResult<T> nonNull(@Nullable T value, String error) {
+        return nonNull(value, () -> error);
+    }
+    
+    /**
+     * Wraps a value into a {@link DataResult}. If the value is non-{@code null}, the result will be
+     * successful and contain the value. If the value is {@code null}, the result will be a failure
+     * with the given error message.
+     */
+    public static <T> DataResult<T> nonNull(@Nullable T value, Supplier<String> error) {
         return value == null ? DataResult.error(error) : DataResult.success(value);
     }
 
@@ -44,7 +53,7 @@ public class CodecHelper {
         try {
             return DataResult.success(value.call());
         } catch (Exception e) {
-            return DataResult.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+            return DataResult.error(() -> e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
 
@@ -75,7 +84,7 @@ public class CodecHelper {
      */
     @SafeVarargs
     public static <T> DataResult<T> orPartial(Supplier<DataResult<T>>... results) {
-        DataResult<T> current = DataResult.error("Empty OR-chain.");
+        DataResult<T> current = DataResult.error(() -> "Empty OR-chain.");
         for (Supplier<DataResult<T>> resultSupplier : results) {
             current = resultSupplier.get();
             if (current.resultOrPartial(err -> {}).isPresent()) {

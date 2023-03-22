@@ -17,7 +17,7 @@ import org.moddingx.libx.util.lazy.CachedValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.Color;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;

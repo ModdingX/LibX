@@ -1,7 +1,6 @@
 package org.moddingx.libx.impl.datagen;
 
 import net.minecraft.world.level.block.Block;
-import org.moddingx.libx.base.decoration.DecorationContext;
 import org.moddingx.libx.datagen.provider.CommonTagsProviderBase;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.impl.tags.InternalTags;
@@ -12,13 +11,13 @@ public class DecorationTags {
         if (block instanceof DecoratedSlabBlock decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.SLABS).add(decorated);
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
+            if (decorated.parent.getContext().material().isWood()) {
                 provider.block(InternalTags.Blocks.WOODEN_SLABS).add(decorated);
             }
         } else if (block instanceof DecoratedStairBlock decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.STAIRS).add(decorated);
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
+            if (decorated.parent.getContext().material().isWood()) {
                 provider.block(InternalTags.Blocks.WOODEN_STAIRS).add(decorated);
             }
         } else if (block instanceof DecoratedWallBlock decorated) {
@@ -27,7 +26,7 @@ public class DecorationTags {
         } else if (block instanceof DecoratedFenceBlock decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.FENCES).add(decorated);
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
+            if (decorated.parent.getContext().material().isWood()) {
                 provider.block(InternalTags.Blocks.WOODEN_FENCES).add(decorated);
             }
         } else if (block instanceof DecoratedFenceGateBlock decorated) {
@@ -36,19 +35,19 @@ public class DecorationTags {
         } else if (block instanceof DecoratedDoorBlock decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.DOORS).add(decorated);
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
+            if (decorated.parent.getContext().material().isWood()) {
                 provider.block(InternalTags.Blocks.WOODEN_DOORS).add(decorated);
             }
         } else if (block instanceof DecoratedTrapdoorBlock decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.TRAPDOORS).add(decorated);
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
+            if (decorated.parent.getContext().material().isWood()) {
                 provider.block(InternalTags.Blocks.WOODEN_TRAPDOORS).add(decorated);
             }
         } else if (block instanceof DecoratedButton decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.BUTTONS).add(decorated);
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.WOOD) {
+            if (decorated.parent.getContext().material().isWood()) {
                 provider.block(InternalTags.Blocks.WOODEN_BUTTONS).add(decorated);
             }
         } else if (block instanceof DecoratedPressurePlate decorated) {

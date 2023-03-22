@@ -12,7 +12,7 @@ import java.nio.file.Path;
 
 public class LibXDatapack extends PathPackResources {
 
-    public static final int PACK_VERSION = 10;
+    public static final int PACK_VERSION = 12;
     public static final String PREFIX = "libxdata";
 
     private final String packId;

@@ -228,7 +228,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         private Map<ResourceLocation, TagBuilder> tagCache;
 
         protected ItemTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
-            super(packOutput, lookupProvider, blockTags, modid, fileHelper);
+            super(packOutput, lookupProvider, blockTags.contentsGetter(), modid, fileHelper);
         }
 
         @Override

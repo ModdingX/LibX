@@ -70,7 +70,7 @@ public class DatapackHelper {
             if (!Files.exists(path)) return LibXDatapack.PACK_VERSION;
             try (Reader in = Files.newBufferedReader(path)) {
                 JsonObject packInfo = GSON.fromJson(in, JsonObject.class).get("pack").getAsJsonObject();
-                String specificKey = "forge:" + packType.bridgeType.name().toLowerCase(Locale.ROOT) + "_pack_format";
+                String specificKey = "forge:" + packType.name().toLowerCase(Locale.ROOT) + "_pack_format";
                 if (packInfo.has(specificKey)) return packInfo.get(specificKey).getAsInt();
                 return packInfo.get("pack_format").getAsInt();
             }

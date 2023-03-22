@@ -35,7 +35,7 @@ public class MapDispatchedCodec<A, K, V> implements Codec<A> {
                 )
                 .flatMap(base -> this.keyCodec.keys(ops)
                         .filter(key -> base.get(key) != null).findFirst()
-                        .map(dupKey -> DataResult.<MapLike<T>>error("Key was encoded by base codec: " + dupKey + " (for " + pair.getFirst() + ")"))
+                        .map(dupKey -> DataResult.<MapLike<T>>error(() -> "Key was encoded by base codec: " + dupKey + " (for " + pair.getFirst() + ")"))
                         .orElseGet(() -> DataResult.success(base))
                 )
                 .flatMap(base -> {

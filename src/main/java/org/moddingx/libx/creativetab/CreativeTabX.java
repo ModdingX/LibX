@@ -78,7 +78,7 @@ public abstract class CreativeTabX {
      * Adds all items from the current mod into the tab using a custom order.
      */
     protected void addModItems(TabContext ctx, Comparator<Item> order) {
-        this.addModItems(ctx, order, item -> ctx.operator() || !(item instanceof GameMasterBlockItem));
+        this.addModItems(ctx, order, item -> ctx.context().hasPermissions() || !(item instanceof GameMasterBlockItem));
     }
 
     /**
@@ -120,7 +120,7 @@ public abstract class CreativeTabX {
     private void registerCreativeTab(CreativeModeTabEvent.Register event) {
         this.tab = event.registerCreativeModeTab(this.id, builder -> {
             this.buildTab(builder);
-            builder.displayItems((features, output, operator) -> this.addItems(new TabContext(features, operator, output)));
+            builder.displayItems((context, output) -> this.addItems(new TabContext(context, context.enabledFeatures(), output)));
         });
     }
     
@@ -134,5 +134,5 @@ public abstract class CreativeTabX {
         }
     }
     
-    public record TabContext(FeatureFlagSet features, boolean operator, CreativeModeTab.Output output) {}
+    public record TabContext(CreativeModeTab.ItemDisplayParameters context, FeatureFlagSet features, CreativeModeTab.Output output) {}
 }

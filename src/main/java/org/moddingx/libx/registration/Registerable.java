@@ -44,8 +44,8 @@ public interface Registerable {
     }
 
     /**
-     * Adds fields with additiona lregistry values to the {@link RegistryTracker}. This is only called, if
-     * {@link RegistrationBuilder#enableRegistryTracking()} is set.
+     * Adds fields with additiona lregistry values to the {@link RegistryTracker}. This called, unless
+     * {@link RegistrationBuilder#disableRegistryTracking()} ()} is set.
      */
     @SuperChainRequired
     default void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {

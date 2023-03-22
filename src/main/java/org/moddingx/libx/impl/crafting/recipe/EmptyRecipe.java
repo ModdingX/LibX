@@ -2,6 +2,7 @@ package org.moddingx.libx.impl.crafting.recipe;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +37,7 @@ public class EmptyRecipe implements Recipe<Container> {
 
     @Nonnull
     @Override
-    public ItemStack assemble(@Nonnull Container inv) {
+    public ItemStack assemble(@Nonnull Container inv, @Nonnull RegistryAccess registryAccess) {
         return ItemStack.EMPTY;
     }
 
@@ -47,7 +48,7 @@ public class EmptyRecipe implements Recipe<Container> {
 
     @Nonnull
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(@Nonnull RegistryAccess registryAccess) {
         return ItemStack.EMPTY;
     }
 

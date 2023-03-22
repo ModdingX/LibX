@@ -38,9 +38,9 @@ public class GenericScreen extends AbstractContainerScreen<GenericMenu> {
             int j = (this.height - this.imageHeight) / 2;
             RenderHelper.renderGuiBackground(poseStack, i, j, this.imageWidth, this.imageHeight);
             for (Pair<Integer, Integer> slot : this.menu.slotList) {
-                this.blit(poseStack, i + slot.getLeft() - 1, j + slot.getRight() - 1, 25, 35, 18, 18);
+                blit(poseStack, i + slot.getLeft() - 1, j + slot.getRight() - 1, 25, 35, 18, 18);
             }
-            this.blit(poseStack, i + this.menu.invX - 1, j + this.menu.invY - 1, 7, 139, 162, 76);
+            blit(poseStack, i + this.menu.invX - 1, j + this.menu.invY - 1, 7, 139, 162, 76);
         }
     }
 }

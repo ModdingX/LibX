@@ -14,7 +14,7 @@ import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;

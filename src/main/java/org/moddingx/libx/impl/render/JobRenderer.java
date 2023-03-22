@@ -49,7 +49,6 @@ public class JobRenderer {
         
         FogRenderer.setupNoFog();
         
-        RenderSystem.enableTexture();
         RenderSystem.enableCull();
         
         RenderSystem.viewport(0, 0, width, height);

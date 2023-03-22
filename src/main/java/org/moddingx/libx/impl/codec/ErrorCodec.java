@@ -17,11 +17,11 @@ public class ErrorCodec<A> implements Codec<A> {
 
     @Override
     public <T> DataResult<T> encode(A input, DynamicOps<T> ops, T prefix) {
-        return DataResult.error(this.encodeMsg);
+        return DataResult.error(() -> this.encodeMsg);
     }
 
     @Override
     public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> ops, T input) {
-        return DataResult.error(this.decodeMsg);
+        return DataResult.error(() -> this.decodeMsg);
     }
 }

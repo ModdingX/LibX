@@ -7,7 +7,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
-import org.moddingx.libx.base.decoration.DecorationContext;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 
@@ -17,17 +16,17 @@ public class DecorationRecipes {
     
     public static void defaultRecipes(Block block, RecipeExtension ext) {
         if (block instanceof DecoratedSlabBlock decorated) {
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
+            if (decorated.parent.getContext().material().isStone()) {
                 stoneCutting(ext, Ingredient.of(decorated.parent), decorated, 2);
             }
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ RecipeCategory.BUILDING_BLOCKS, decorated, 6, "###", '#', decorated.parent });
         } else if (block instanceof DecoratedStairBlock decorated) {
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
+            if (decorated.parent.getContext().material().isStone()) {
                 stoneCutting(ext, Ingredient.of(decorated.parent), decorated, 1);
             }
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ RecipeCategory.BUILDING_BLOCKS, decorated, 4, "#  ", "## ", "###", '#', decorated.parent });
         } else if (block instanceof DecoratedWallBlock decorated) {
-            if (decorated.parent.getContext().baseMaterial() == DecorationContext.BaseMaterial.STONE) {
+            if (decorated.parent.getContext().material().isStone()) {
                 stoneCutting(ext, Ingredient.of(decorated.parent), decorated, 1);
             }
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ RecipeCategory.DECORATIONS, decorated, 6, "###", "###", '#', decorated.parent });

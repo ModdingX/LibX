@@ -17,7 +17,7 @@ public class PreviewWidget extends TextWidget {
     }
 
     @Override
-    public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         int color = this.getFGColor() | Mth.ceil(this.alpha * 255) << 24;
         poseStack.pushPose();
         //noinspection IntegerDivisionInFloatingPointContext

@@ -59,7 +59,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     }
 
     @Override
-    public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         poseStack.pushPose();
         poseStack.translate(this.getX(), this.getY(), 0);
         for (Renderable widget : this.renderables) {

@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.config.gui;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -57,6 +58,12 @@ public class ConfigDisplay {
         if (value == null) {
             // Dummy
             return new AbstractWidget(x, y, width, height, Component.literal("DUMMY")) {
+
+                @Override
+                public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+                    
+                }
+
                 @Override
                 public void updateWidgetNarration(@Nonnull NarrationElementOutput narration) {
                     //

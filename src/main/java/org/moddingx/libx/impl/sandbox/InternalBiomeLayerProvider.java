@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
+import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
 import org.moddingx.libx.codec.CodecHelper;
 import org.moddingx.libx.datapack.DatapackHelper;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
@@ -49,14 +49,14 @@ public class InternalBiomeLayerProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         return this.lookupProvider.thenCompose(provider -> CompletableFuture.allOf(
-                this.write(cache, provider, BiomeLayer.OVERWORLD, MultiNoiseBiomeSource.Preset.OVERWORLD),
-                this.write(cache, provider, BiomeLayer.NETHER, MultiNoiseBiomeSource.Preset.NETHER)
+                this.write(cache, provider, BiomeLayer.OVERWORLD, MultiNoiseBiomeSourceParameterList.Preset.OVERWORLD),
+                this.write(cache, provider, BiomeLayer.NETHER, MultiNoiseBiomeSourceParameterList.Preset.NETHER)
         ));
     }
     
-    private CompletableFuture<?> write(CachedOutput cache, HolderLookup.Provider provider, ResourceKey<BiomeLayer> key, MultiNoiseBiomeSource.Preset preset) {
+    private CompletableFuture<?> write(CachedOutput cache, HolderLookup.Provider provider, ResourceKey<BiomeLayer> key, MultiNoiseBiomeSourceParameterList.Preset preset) {
         HolderLookup<Biome> biomes = provider.lookupOrThrow(Registries.BIOME);
-        BiomeLayer layer = new BiomeLayer(preset.parameterSource.apply(biomes));
+        BiomeLayer layer = new BiomeLayer(preset.provider().apply(biomes::getOrThrow));
         return saveMinified(cache,
                 CodecHelper.JSON.write(BiomeLayer.DIRECT_CODEC, layer, provider),
                 this.output.getOutputFolder().resolve(PackType.SERVER_DATA.getDirectory()).resolve(DatapackHelper.registryPath(key))

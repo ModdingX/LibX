@@ -78,7 +78,7 @@ public abstract class ConfigBaseScreen extends Screen {
             boolean isActive = this.searchBar != null && this.getFocused() == this.searchBar;
             this.searchBar = new EditBox(this.mc.font, 20, 18 + this.mc.font.lineHeight, this.width - 40, 20, this.searchBar, Component.translatable("libx.config.gui.search.title"));
             this.searchBar.setMaxLength(32767);
-            this.searchBar.setFocus(shouldFocus);
+            this.searchBar.setFocused(shouldFocus);
             this.addRenderableWidget(this.searchBar);
             if (isActive) {
                 this.setFocused(this.searchBar);
@@ -205,7 +205,7 @@ public abstract class ConfigBaseScreen extends Screen {
 
     @Override
     public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderDirtBackground(0);
+        this.renderDirtBackground(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTicks);
         //noinspection IntegerDivisionInFloatingPointContext
         this.mc.font.drawShadow(poseStack, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFF);

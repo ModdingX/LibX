@@ -164,7 +164,7 @@ public abstract class NetworkX {
          * The connection is accepted if the remote side is running on forge. However, it is not required
          * that the protocol is present on the other side.
          */
-        OPTIONAL(REQUIRED.predicate.or((version, remote) -> NetworkRegistry.ABSENT.equals(remote))),
+        OPTIONAL(REQUIRED.predicate.or((version, remote) -> NetworkRegistry.ABSENT.version().equals(remote))),
 
         /**
          * The connection is accepted if the remote side is running on forge or vanilla. However, it is not

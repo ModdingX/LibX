@@ -12,7 +12,7 @@ import org.moddingx.libx.sandbox.SandBox;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * A {@link BiomeSource} that can generate multiple {@link BiomeLayer layers} using multiple {@link MultiNoiseBiomeSource noise biome sources}.
@@ -41,18 +41,23 @@ public class LayeredBiomeSource extends BiomeSource {
      * @param layers The layers to use.
      */
     public LayeredBiomeSource(double horizontalScale, double verticalScale, HolderSet<BiomeLayer> layers) {
-        super(() -> layers.stream().flatMap(layer -> layer.value().biomes().values().stream()).map(Pair::getSecond).distinct().toList());
         this.horizontalScale = horizontalScale;
         this.verticalScale = verticalScale;
         this.layers = layers;
     }
-    
+
+    @Nonnull
+    @Override
+    protected Stream<Holder<Biome>> collectPossibleBiomes() {
+        return this.layers.stream().flatMap(layer -> layer.value().biomes().values().stream()).map(Pair::getSecond).distinct();
+    }
+
     public void init(long seed) {
         List<BiomeLayer> layersInOrder = this.layers.stream().map(Holder::value).toList();
         this.weights = layersInOrder.stream().mapToDouble(BiomeLayer::weight).toArray();
         this.sel = new NoiseLayerSelector(this.horizontalScale, this.verticalScale, this.weights, RandomSource.create(seed * 0xA574225077B4ECADL));
         this.ranges = layersInOrder.stream().map(BiomeLayer::range).toArray(Climate.ParameterPoint[]::new);
-        this.sources = layersInOrder.stream().map(layer -> new MultiNoiseBiomeSource(layer.biomes(), Optional.empty())).toArray(MultiNoiseBiomeSource[]::new);
+        this.sources = layersInOrder.stream().map(layer -> MultiNoiseBiomeSource.createFromList(layer.biomes())).toArray(MultiNoiseBiomeSource[]::new);
     }
 
     @Nonnull
