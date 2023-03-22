@@ -98,15 +98,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="BlockLootProviderBase.MatchToolBuilder.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchToolBuilder</a></code></div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="BlockLootProviderBase.MatchStateBuilder.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchStateBuilder</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">This serves as a builder for a loot condition and a builder for a match tool predicate
+<div class="block">This serves as a builder for a loot modifier and a builder for a block state predicate
  in one.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="BlockLootProviderBase.SilkModifier.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.SilkModifier</a></code></div>
+<div class="col-second odd-row-color"><code><a href="BlockLootProviderBase.MatchToolBuilder.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchToolBuilder</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">This serves as a builder for a loot condition and a builder for a match tool predicate
+ in one.</div>
+</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="BlockLootProviderBase.SilkModifier.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.SilkModifier</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">A class used in the drops method to reduce ambiguity and make the code more readable.</div>
 </div>
 </div>
@@ -248,47 +254,52 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Generate the base loot table.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.MatchToolBuilder.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchToolBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#matchTool(net.minecraft.tags.TagKey)" class="member-name-link">matchTool</a><wbr>(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;&nbsp;item)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.MatchStateBuilder.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchStateBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#matchState()" class="member-name-link">matchState</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets a loot condition builder for a match tool condition.</div>
+<div class="block">Gets a loot modifier builder for a match state condition.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.MatchToolBuilder.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchToolBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#matchTool(net.minecraft.world.level.ItemLike)" class="member-name-link">matchTool</a><wbr>(net.minecraft.world.level.ItemLike&nbsp;item)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#matchTool(net.minecraft.tags.TagKey)" class="member-name-link">matchTool</a><wbr>(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;&nbsp;item)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets a loot condition builder for a match tool condition.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#needsLootTable(net.minecraft.world.level.block.state.BlockState)" class="member-name-link">needsLootTable</a><wbr>(net.minecraft.world.level.block.state.BlockState&nbsp;state)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.MatchToolBuilder.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchToolBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#matchTool(net.minecraft.world.level.ItemLike)" class="member-name-link">matchTool</a><wbr>(net.minecraft.world.level.ItemLike&nbsp;item)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets a loot condition builder for a match tool condition.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#needsLootTable(net.minecraft.world.level.block.state.BlockState)" class="member-name-link">needsLootTable</a><wbr>(net.minecraft.world.level.block.state.BlockState&nbsp;state)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns whether this block state needs a loot table.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.SilkModifier.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.SilkModifier</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#noSilk()" class="member-name-link">noSilk</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.SilkModifier.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.SilkModifier</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#noSilk()" class="member-name-link">noSilk</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets a new silk modifier that means: No special silk touch behaviour.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#randomFortune(float)" class="member-name-link">randomFortune</a><wbr>(float&nbsp;baseChance)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">A condition that is random with a chance and optionally different chances for
- different fortune levels.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#randomFortune(float,float...)" class="member-name-link">randomFortune</a><wbr>(float&nbsp;baseChance,
- float...&nbsp;levelChances)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#randomFortune(float)" class="member-name-link">randomFortune</a><wbr>(float&nbsp;baseChance)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">A condition that is random with a chance and optionally different chances for
  different fortune levels.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.SilkModifier.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.SilkModifier</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#silk(org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier)" class="member-name-link">silk</a><wbr>(<a href="entry/GenericLootModifier.html" title="interface in org.moddingx.libx.datagen.provider.loot.entry">GenericLootModifier</a>&lt;net.minecraft.world.level.block.Block&gt;&nbsp;modifier)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#randomFortune(float,float...)" class="member-name-link">randomFortune</a><wbr>(float&nbsp;baseChance,
+ float...&nbsp;levelChances)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">A condition that is random with a chance and optionally different chances for
+ different fortune levels.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BlockLootProviderBase.SilkModifier.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.SilkModifier</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#silk(org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier)" class="member-name-link">silk</a><wbr>(<a href="entry/GenericLootModifier.html" title="interface in org.moddingx.libx.datagen.provider.loot.entry">GenericLootModifier</a>&lt;net.minecraft.world.level.block.Block&gt;&nbsp;modifier)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Turns a generic loot modifier into a silk modifier.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#silkCondition()" class="member-name-link">silkCondition</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.world.level.storage.loot.predicates.LootItemCondition.Builder</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#silkCondition()" class="member-name-link">silkCondition</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets a loot condition for silk touch tools.</div>
 </div>
 </div>
@@ -536,6 +547,13 @@ loadScripts(document, 'script');</script>
 <h3>matchTool</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BlockLootProviderBase.MatchToolBuilder.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchToolBuilder</a></span>&nbsp;<span class="element-name">matchTool</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;net.minecraft.world.item.Item&gt;&nbsp;item)</span></div>
 <div class="block">Gets a loot condition builder for a match tool condition.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="matchState()">
+<h3>matchState</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BlockLootProviderBase.MatchStateBuilder.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchStateBuilder</a></span>&nbsp;<span class="element-name">matchState</span>()</div>
+<div class="block">Gets a loot modifier builder for a match state condition.</div>
 </section>
 </li>
 <li>
