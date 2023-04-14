@@ -23,7 +23,7 @@ import org.moddingx.libx.impl.commands.client.ClientCommandsImpl;
 import org.moddingx.libx.impl.commands.common.CommandsImpl;
 import org.moddingx.libx.impl.config.ConfigEvents;
 import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;
-import org.moddingx.libx.impl.datapack.DynamicDatapackLocator;
+import org.moddingx.libx.impl.datapack.DynamicPackLocator;
 import org.moddingx.libx.impl.loot.AllLootEntry;
 import org.moddingx.libx.impl.loot.modifier.AdditionLootModifier;
 import org.moddingx.libx.impl.loot.modifier.RemovalLootModifier;
@@ -62,7 +62,7 @@ public final class LibX extends ModX {
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
         
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicDatapackLocator::locatePacks);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicPackLocator::locatePacks);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::createRegistries);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerStuff);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(BlockOverlayQuadCache::resourcesReload));

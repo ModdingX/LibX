@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraftforge.forgespi.locating.IModFile;
-import org.moddingx.libx.impl.datapack.LibXDatapack;
+import org.moddingx.libx.impl.datapack.LibXPack;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -67,7 +67,7 @@ public class DatapackHelper {
     private static int getPackFormat(IModFile mod, PackType packType) {
         try {
             Path path = mod.findResource("pack.mcmeta");
-            if (!Files.exists(path)) return LibXDatapack.PACK_VERSION;
+            if (!Files.exists(path)) return LibXPack.PACK_CONFIG.get(packType).version();
             try (Reader in = Files.newBufferedReader(path)) {
                 JsonObject packInfo = GSON.fromJson(in, JsonObject.class).get("pack").getAsJsonObject();
                 String specificKey = "forge:" + packType.name().toLowerCase(Locale.ROOT) + "_pack_format";
@@ -75,7 +75,7 @@ public class DatapackHelper {
                 return packInfo.get("pack_format").getAsInt();
             }
         } catch (Exception e) {
-            return LibXDatapack.PACK_VERSION;
+            return LibXPack.PACK_CONFIG.get(packType).version();
         }
     }
 }

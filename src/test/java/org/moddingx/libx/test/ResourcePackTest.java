@@ -3,9 +3,10 @@ package org.moddingx.libx.test;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.SharedConstants;
+import net.minecraft.server.packs.PackType;
 import org.junit.jupiter.api.Test;
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.impl.datapack.LibXDatapack;
+import org.moddingx.libx.impl.datapack.LibXPack;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -27,7 +28,8 @@ public class ResourcePackTest {
             assertEquals(Math.max(SharedConstants.RESOURCE_PACK_FORMAT, SharedConstants.DATA_PACK_FORMAT), mainPackVersion, "pack.mcmeta does not match current resource/data version");
             assertEquals(SharedConstants.RESOURCE_PACK_FORMAT, resourcePackVersion, "pack.mcmeta does not match current resource version");
             assertEquals(SharedConstants.DATA_PACK_FORMAT, dataPackVersion, "pack.mcmeta does not match current data version");
-            assertEquals(SharedConstants.DATA_PACK_FORMAT, LibXDatapack.PACK_VERSION, "Dynamic datapack version does not match current data version");
+            assertEquals(SharedConstants.RESOURCE_PACK_FORMAT, LibXPack.PACK_CONFIG.get(PackType.CLIENT_RESOURCES).version(), "Dynamic resource pack version does not match current resource version");
+            assertEquals(SharedConstants.DATA_PACK_FORMAT, LibXPack.PACK_CONFIG.get(PackType.SERVER_DATA).version(), "Dynamic datapack version does not match current data version");
         }
     }
 }
