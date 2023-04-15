@@ -22,9 +22,11 @@ public class InternalTagProvider extends CommonTagsProviderBase {
     public void setup() {
         for (Map.Entry<TagKey<Item>, TagKey<Item>> entry : InternalTags.Items.getTags().entrySet()) {
             this.item(entry.getKey()).addTag(entry.getValue());
+            this.item(entry.getValue());
         }
         for (Map.Entry<TagKey<Block>, TagKey<Block>> entry : InternalTags.Blocks.getTags().entrySet()) {
             this.block(entry.getKey()).addTag(entry.getValue());
+            this.block(entry.getValue());
         }
     }
 }
