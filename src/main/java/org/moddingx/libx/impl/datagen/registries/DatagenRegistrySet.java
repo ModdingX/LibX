@@ -57,6 +57,10 @@ public class DatagenRegistrySet implements RegistrySet {
         this.localAccess = null;
     }
 
+    public boolean isRoot() {
+        return this.root == this;
+    }
+    
     public List<DatagenRegistrySet> getDirectParents() {
         return this.parents;
     }
@@ -74,6 +78,7 @@ public class DatagenRegistrySet implements RegistrySet {
     
     @Override
     public <T> WritableRegistry<T> writableRegistry(ResourceKey<? extends Registry<T>> registryKey) {
+        if (this.isRoot()) throw new IllegalStateException("The root registry set can't be used to query writeable registries");
         return this.getDatagenRegistry(registryKey, true).orElseThrow(() ->
                 new IllegalStateException("Can't write to registry " + registryKey + " during " + this.stage + " phase")
         );
@@ -86,33 +91,45 @@ public class DatagenRegistrySet implements RegistrySet {
     }
 
     public <T> Optional<DatagenRegistry<T>> getDatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, boolean forWrite) {
-        if (this.stage == DatagenStage.DATAGEN) return Optional.empty();
+        if (forWrite && this.stage == DatagenStage.DATAGEN) return Optional.empty();
         Optional<RegistryDataLoader.RegistryData<?>> data = DatagenRegistryLoader.getDataPackRegistries(null).stream()
                 .filter(rd -> Objects.equals(rd.key(), registryKey)).findFirst();
         if (data.isEmpty()) return Optional.empty();
         if (forWrite && DatagenSystem.extensionRegistries().contains(registryKey) != (this.stage == DatagenStage.EXTENSION_SETUP)) {
             return Optional.empty();
         }
-        if (this == this.root) {
+        if (this.isRoot()) {
             // Root registry set: Inherit from the registry access instead of parents
             //noinspection unchecked
-            return Optional.of((DatagenRegistry<T>) this.registries.computeIfAbsent(registryKey, k -> DatagenRegistry.createRoot(
-                    registryKey, this, (Codec<T>) data.get().elementCodec(),
-                    this.rootAccess.registry(registryKey).orElseThrow(() ->
-                            new IllegalStateException("Could not setup " + registryKey + " registry: Root registry not available")
-                    )
-            )));
+            return Optional.of((DatagenRegistry<T>) this.registries.computeIfAbsent(registryKey, k -> {
+                //noinspection unchecked
+                DatagenRegistry<T> reg = DatagenRegistry.createRoot(
+                        registryKey, this, (Codec<T>) data.get().elementCodec(),
+                        this.rootAccess.registry(registryKey).orElseThrow(() ->
+                                new IllegalStateException("Could not setup " + registryKey + " registry: Root registry not available")
+                        )
+                );
+                reg.freeze(); // Root registries may not be modified, instantly freeze them.
+                return reg;
+            }));
         } else {
             // Inherited registry set: Inherit from parents
             //noinspection unchecked
-            return Optional.of((DatagenRegistry<T>) this.registries.computeIfAbsent(registryKey, k -> DatagenRegistry.create(
-                    registryKey, this, (Codec<T>) data.get().elementCodec(),
-                    this.getDirectParents().stream().map(parent ->
-                            parent.getDatagenRegistry(registryKey, false).orElseThrow(() ->
-                                    new IllegalStateException("Could not setup " + registryKey + " registry: Parent registry not available")
-                            )
-                    ).toList()
-            )));
+            return Optional.of((DatagenRegistry<T>) this.registries.computeIfAbsent(registryKey, k -> {
+                //noinspection unchecked
+                DatagenRegistry<T> reg = DatagenRegistry.create(
+                        registryKey, this, (Codec<T>) data.get().elementCodec(),
+                        this.getDirectParents().stream().map(parent ->
+                                parent.getDatagenRegistry(registryKey, false).orElseThrow(() ->
+                                        new IllegalStateException("Could not setup " + registryKey + " registry: Parent registry not available")
+                                )
+                        ).toList()
+                );
+                if (this.shouldBeFrozen(this.stage, registryKey)) {
+                    reg.freeze();
+                }
+                return reg;
+            }));
         }
     }
     
@@ -133,7 +150,7 @@ public class DatagenRegistrySet implements RegistrySet {
     }
     
     public void transition(DatagenStage stage) {
-        if (this != this.root) throw new IllegalStateException("Stage transitions must happen on the root registry set");
+        if (!this.isRoot()) throw new IllegalStateException("Stage transitions must happen on the root registry set");
         this.doTransition(stage);
     }
     
@@ -143,10 +160,13 @@ public class DatagenRegistrySet implements RegistrySet {
         if (oldStage.ordinal() + 1 != newStage.ordinal()) throw new IllegalArgumentException("Invalid transition: " + oldStage + " -> " + newStage);
         // Freeze all our own registries
         for (DatagenRegistry<?> registry : this.registries.values()) {
-            if (DatagenSystem.extensionRegistries().contains(registry.key()) == (oldStage == DatagenStage.EXTENSION_SETUP)) {
+            if (this.shouldBeFrozen(newStage, registry.key())) {
                 registry.freeze();
             }
         }
+        // Mark transition as complete, so registries created for the local registry access instantly freeze
+        // and we are detected as transitioned by children.
+        this.stage = newStage;
         // If the new stage is DATAGEN, build the registry access
         if (newStage == DatagenStage.DATAGEN) {
             this.localAccess = RegistryAccess.fromRegistryOfRegistries(this.makeRegistryOfRegistries());
@@ -171,6 +191,14 @@ public class DatagenRegistrySet implements RegistrySet {
         }
     }
     
+    private boolean shouldBeFrozen(DatagenStage stage, ResourceKey<? extends Registry<?>> registryKey) {
+        return switch (stage) {
+            case REGISTRY_SETUP -> false;
+            case EXTENSION_SETUP -> !DatagenSystem.extensionRegistries().contains(registryKey);
+            case DATAGEN -> true;
+        };
+    }
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Registry<? extends Registry<?>> makeRegistryOfRegistries() {
         WritableRegistry<? extends Registry<?>> rootRegistry = new MappedRegistry<>(ResourceKey.createRegistryKey(BuiltInRegistries.ROOT_REGISTRY_NAME), Lifecycle.stable());
@@ -181,16 +209,14 @@ public class DatagenRegistrySet implements RegistrySet {
     }
     
     public void writeElements(PackTarget target, CachedOutput output) {
+        if (this.isRoot()) {
+            throw new IllegalStateException("The root registry set can't write elements.");
+        }
         if (this.stage != DatagenStage.DATAGEN) {
             throw new IllegalStateException("Can't serialize registries during " + this.stage + " phase.");
         }
         for (DatagenRegistry<?> registry : this.registries.values()) {
             registry.writeOwnElements(target, output);
         }
-    }
-    
-    public boolean isKnownChild(DatagenRegistrySet other) {
-        if (other == this) return true;
-        return this.getDirectChildren().stream().anyMatch(child -> child.isKnownChild(other));
     }
 }

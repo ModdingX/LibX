@@ -72,7 +72,7 @@ public class DatagenSystem {
         this.generator = event.getGenerator();
         this.fileHelper = event.getExistingFileHelper();
         this.rootRegistries = new DatagenRegistrySet(DatagenRegistryLoader.loadRegistries(this.fileHelper));
-        this.mainTarget = new PackTarget("main", this, this.rootRegistries, Map.of(
+        this.mainTarget = new PackTarget("main", this, new DatagenRegistrySet(List.of(this.rootRegistries)), Map.of(
                 PackType.CLIENT_RESOURCES, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.RESOURCE_PACK),
                 PackType.SERVER_DATA, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.DATA_PACK)
         ));
@@ -154,7 +154,7 @@ public class DatagenSystem {
         List<DatagenRegistrySet> parentRegistries;
         if (parents.length == 0) {
             mainParent = this.mainTarget;
-            parentRegistries = List.of(this.rootRegistries);
+            parentRegistries = List.of((DatagenRegistrySet) this.mainTarget.registries());
         } else {
             mainParent = parents[0];
             parentRegistries = Arrays.stream(parents).map(parent -> (DatagenRegistrySet) parent.registries()).toList();

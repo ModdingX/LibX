@@ -28,6 +28,7 @@ public class PackTarget {
         this.name = name;
         this.system = system;
         if (!(registries instanceof DatagenRegistrySet drs)) throw new IllegalArgumentException("Custom RegistrySet instances are not supported.");
+        if (drs.isRoot()) throw new IllegalArgumentException("Can't create pack target with root registry set");
         this.registries = drs;
         this.outputMap = Map.copyOf(outputMap);
         this.packOutput = new Vanilla();

@@ -123,7 +123,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
     }
 
     public void writeOwnElements(PackTarget target, CachedOutput output) {
-        if (!this.frozen) throw new IllegalStateException("Can't serialize unfrozen registry");
+        if (!this.frozen) throw new IllegalStateException("Can't serialize unfrozen registry: " + this.key());
         
         // Must use a lazy value as pack types which don't support datapack outputs also have registries
         // but can't query the datapack output path
@@ -183,7 +183,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
 
         @Override
         public boolean canSerializeIn(@Nonnull HolderOwner<T> owner) {
-            return owner instanceof DatagenRegistry<?> dr && DatagenRegistry.this.registrySet.isKnownChild(dr.registrySet);
+            return true;
         }
     }
 }

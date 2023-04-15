@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.datagen;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Streams;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import org.moddingx.libx.LibX;
@@ -13,6 +14,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class InternalDataProvider implements DataProvider {
     
@@ -21,10 +23,11 @@ public class InternalDataProvider implements DataProvider {
     private final List<Entry<RegistryProvider>> registryProviders;
     private final List<Entry<RegistryProvider>> extensionProviders;
     private final List<Entry<DataProvider>> dataProviders;
-    
+
     // A null value means the class exists multiple times
     private final Map<Class<? extends RegistryProvider>, RegistryProvider> initialisedRegistryProviders;
     private final Map<Class<? extends DataProvider>, DataProvider> initialisedDataProviders;
+    private final Set<PackTarget> allTargets;
 
     public InternalDataProvider(DatagenSystem system, DatagenRegistrySet rootRegistries, List<Entry<RegistryProvider>> registryProviders, List<Entry<RegistryProvider>> extensionProviders, List<Entry<DataProvider>> dataProviders) {
         this.system = system;
@@ -35,6 +38,11 @@ public class InternalDataProvider implements DataProvider {
         
         this.initialisedRegistryProviders = new HashMap<>();
         this.initialisedDataProviders = new HashMap<>();
+        this.allTargets = Streams.concat(
+                registryProviders.stream().map(Entry::target),
+                extensionProviders.stream().map(Entry::target),
+                dataProviders.stream().map(Entry::target)
+        ).collect(Collectors.toUnmodifiableSet());
     }
 
     @Nonnull
@@ -46,8 +54,8 @@ public class InternalDataProvider implements DataProvider {
     @Nonnull
     @Override
     public CompletableFuture<?> run(@Nonnull CachedOutput output) {
+        LibX.logger.info("Stage {}", DatagenStage.REGISTRY_SETUP);
         this.rootRegistries.transition(DatagenStage.REGISTRY_SETUP);
-        LibX.logger.info("Start of stage {}", DatagenStage.REGISTRY_SETUP);
         
         // Initialise providers
         List<RegistryProvider> theRegistryProviders = new ArrayList<>();
@@ -60,9 +68,8 @@ public class InternalDataProvider implements DataProvider {
             this.<Void>runTimed(provider.getName(), DatagenStage.REGISTRY_SETUP, () -> { provider.run(); return null; });
         }
 
-        LibX.logger.info("End of stage {}", DatagenStage.REGISTRY_SETUP);
+        LibX.logger.info("Stage {}", DatagenStage.EXTENSION_SETUP);
         this.rootRegistries.transition(DatagenStage.EXTENSION_SETUP);
-        LibX.logger.info("Start of stage {}", DatagenStage.EXTENSION_SETUP);
         
         // Initialise providers
         List<RegistryProvider> theExtensionProviders = new ArrayList<>();
@@ -75,9 +82,16 @@ public class InternalDataProvider implements DataProvider {
             this.<Void>runTimed(provider.getName(), DatagenStage.EXTENSION_SETUP, () -> { provider.run(); return null; });
         }
         
-        LibX.logger.info("End of stage {}", DatagenStage.EXTENSION_SETUP);
+        LibX.logger.info("Stage {}", DatagenStage.DATAGEN);
         this.rootRegistries.transition(DatagenStage.DATAGEN);
-        LibX.logger.info("Start of stage {}", DatagenStage.DATAGEN);
+        
+        LibX.logger.info("Start writing registry data");
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        for (PackTarget target : this.allTargets) {
+            ((DatagenRegistrySet) target.registries()).writeElements(target, output);
+        }
+        stopwatch.stop();
+        LibX.logger.info("Writing registry data took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         
         // Initialise providers
         List<DataProvider> theDataProviders = new ArrayList<>();
@@ -93,7 +107,6 @@ public class InternalDataProvider implements DataProvider {
             futures.add(this.runTimed(provider.getName(), DatagenStage.EXTENSION_SETUP, () -> provider.run(output)));
         }
         
-        LibX.logger.info("End of stage {}", DatagenStage.DATAGEN);
         return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
     
