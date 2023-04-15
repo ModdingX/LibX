@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.datagen_old;
 
 import net.minecraft.world.level.block.Block;
-import org.moddingx.libx.datagen_old.provider.CommonTagsProviderBase;
+import org.moddingx.libx.datagen.provider.tags.CommonTagsProviderBase;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.impl.tags.InternalTags;
 

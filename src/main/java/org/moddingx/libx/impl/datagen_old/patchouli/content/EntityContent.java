@@ -3,8 +3,8 @@ package org.moddingx.libx.impl.datagen_old.patchouli.content;
 import com.google.gson.JsonObject;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.datagen_old.provider.patchouli.content.CaptionContent;
-import org.moddingx.libx.datagen_old.provider.patchouli.page.PageBuilder;
+import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
+import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

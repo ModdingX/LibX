@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.datagen_old.patchouli.content;
 
-import org.moddingx.libx.datagen_old.provider.patchouli.page.Content;
-import org.moddingx.libx.datagen_old.provider.patchouli.page.PageBuilder;
+import org.moddingx.libx.datagen.provider.patchouli.page.Content;
+import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 
 import javax.annotation.Nullable;
 

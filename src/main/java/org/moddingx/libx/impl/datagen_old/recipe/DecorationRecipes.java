@@ -7,7 +7,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
-import org.moddingx.libx.datagen_old.provider.recipe.RecipeExtension;
+import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 
 import java.util.List;

@@ -61,7 +61,8 @@ public final class LibX extends ModX {
         NetworkImpl network = new NetworkImpl(this);
         networkWrapper = new CommonNetwork(network);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
+        DatagenSystem.registerExtensionRegistry(SandBox.BIOME_SURFACE);
+        InternalDataGen.init();
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicPackLocator::locatePacks);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::createRegistries);
@@ -75,8 +76,6 @@ public final class LibX extends ModX {
         MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 
         CraftingHelper.register(this.resource("effect"), EffectIngredient.Serializer.INSTANCE);
-
-        DatagenSystem.registerExtensionRegistry(SandBox.BIOME_SURFACE);
     }
 
     @Override

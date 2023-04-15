@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen;
 
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.mod.ModX;
 
@@ -58,6 +59,14 @@ public abstract class DatagenContext {
             throw new UnsupportedOperationException("Can't access the pack target in " + this.stage + " stage");
         }
         return this.target;
+    }
+    
+    /**
+     * Gets the {@link PackOutput} for output. <b>This may only be used during
+     * {@link DatagenStage#DATAGEN datagen stage}.</b>
+     */
+    public PackOutput output() {
+        return this.target().packOutput();
     }
 
     /**

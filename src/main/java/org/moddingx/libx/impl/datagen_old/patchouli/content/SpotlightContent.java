@@ -2,9 +2,9 @@ package org.moddingx.libx.impl.datagen_old.patchouli.content;
 
 import com.google.gson.JsonObject;
 import net.minecraft.world.item.ItemStack;
-import org.moddingx.libx.datagen_old.provider.patchouli.content.CaptionContent;
-import org.moddingx.libx.datagen_old.provider.patchouli.page.PageBuilder;
-import org.moddingx.libx.datagen_old.provider.patchouli.page.PageJson;
+import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
+import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
+import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
 
 import javax.annotation.Nullable;
 

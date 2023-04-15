@@ -1,10 +1,10 @@
 package org.moddingx.libx.impl.datagen_old.texture;
 
 import net.minecraft.resources.ResourceLocation;
-import org.moddingx.libx.datagen_old.provider.texture.TextureBuilder;
-import org.moddingx.libx.datagen_old.provider.texture.TextureFactory;
-import org.moddingx.libx.datagen_old.provider.texture.TextureHelper;
-import org.moddingx.libx.datagen_old.provider.texture.Textures;
+import org.moddingx.libx.datagen.provider.texture.TextureBuilder;
+import org.moddingx.libx.datagen.provider.texture.TextureFactory;
+import org.moddingx.libx.datagen.provider.texture.TextureHelper;
+import org.moddingx.libx.datagen.provider.texture.Textures;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

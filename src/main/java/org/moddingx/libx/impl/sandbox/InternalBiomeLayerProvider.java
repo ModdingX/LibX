@@ -5,7 +5,8 @@ import com.google.common.hash.HashingOutputStream;
 import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonWriter;
 import net.minecraft.Util;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -15,6 +16,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
 import org.moddingx.libx.codec.CodecHelper;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datapack.DatapackHelper;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 
@@ -31,11 +33,11 @@ import java.util.concurrent.CompletableFuture;
 public class InternalBiomeLayerProvider implements DataProvider {
 
     private final PackOutput output;
-    private final CompletableFuture<HolderLookup.Provider> lookupProvider;
+    private final RegistryAccess access;
 
-    public InternalBiomeLayerProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        this.output = output;
-        this.lookupProvider = lookupProvider;
+    public InternalBiomeLayerProvider(DatagenContext ctx) {
+        this.output = ctx.output();
+        this.access = ctx.registries().registryAccess();
     }
 
     @Nonnull
@@ -47,17 +49,17 @@ public class InternalBiomeLayerProvider implements DataProvider {
     @Nonnull
     @Override
     public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
-        return this.lookupProvider.thenCompose(provider -> CompletableFuture.allOf(
-                this.write(cache, provider, BiomeLayer.OVERWORLD, MultiNoiseBiomeSourceParameterList.Preset.OVERWORLD),
-                this.write(cache, provider, BiomeLayer.NETHER, MultiNoiseBiomeSourceParameterList.Preset.NETHER)
-        ));
+        return CompletableFuture.allOf(
+                this.write(cache, BiomeLayer.OVERWORLD, MultiNoiseBiomeSourceParameterList.Preset.OVERWORLD),
+                this.write(cache, BiomeLayer.NETHER, MultiNoiseBiomeSourceParameterList.Preset.NETHER)
+        );
     }
     
-    private CompletableFuture<?> write(CachedOutput cache, HolderLookup.Provider provider, ResourceKey<BiomeLayer> key, MultiNoiseBiomeSourceParameterList.Preset preset) {
-        HolderLookup<Biome> biomes = provider.lookupOrThrow(Registries.BIOME);
-        BiomeLayer layer = new BiomeLayer(preset.provider().apply(biomes::getOrThrow));
+    private CompletableFuture<?> write(CachedOutput cache, ResourceKey<BiomeLayer> key, MultiNoiseBiomeSourceParameterList.Preset preset) {
+        Registry<Biome> biomes = this.access.registryOrThrow(Registries.BIOME);
+        BiomeLayer layer = new BiomeLayer(preset.provider().apply(biomes::getHolderOrThrow));
         return saveMinified(cache,
-                CodecHelper.JSON.write(BiomeLayer.DIRECT_CODEC, layer, provider),
+                CodecHelper.JSON.write(BiomeLayer.DIRECT_CODEC, layer, this.access),
                 this.output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(DatapackHelper.registryPath(key))
         );
     }
