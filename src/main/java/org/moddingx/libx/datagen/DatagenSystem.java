@@ -2,12 +2,16 @@ package org.moddingx.libx.datagen;
 
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import org.moddingx.libx.impl.ModInternal;
+import org.moddingx.libx.impl.datagen.InternalDataProvider;
 import org.moddingx.libx.impl.datagen.registries.DatagenRegistryLoader;
 import org.moddingx.libx.impl.datagen.registries.DatagenRegistrySet;
 import org.moddingx.libx.impl.datapack.LibXPack;
@@ -16,6 +20,8 @@ import org.moddingx.libx.sandbox.SandBox;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class DatagenSystem {
     
@@ -43,8 +49,12 @@ public class DatagenSystem {
         return Collections.unmodifiableSet(EXTENSION_REGISTRIES);
     }
     
-    public static DatagenSystem create(ModX mod, GatherDataEvent event) {
-        return new DatagenSystem(mod, event);
+    public static void create(ModX mod, Consumer<DatagenSystem> configure) {
+        ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.class, event -> {
+            DatagenSystem system = new DatagenSystem(mod, event);
+            configure.accept(system);
+            system.hookIntoGenerator();
+        });
     }
     
     private final ModX mod;
@@ -52,6 +62,10 @@ public class DatagenSystem {
     private final ExistingFileHelper fileHelper;
     private final DatagenRegistrySet rootRegistries;
     private final PackTarget mainTarget;
+
+    private final List<InternalDataProvider.Entry<RegistryProvider>> registryProviders;
+    private final List<InternalDataProvider.Entry<RegistryProvider>> extensionProviders;
+    private final List<InternalDataProvider.Entry<DataProvider>> dataProviders;
     
     private DatagenSystem(ModX mod, GatherDataEvent event) {
         this.mod = mod;
@@ -62,6 +76,10 @@ public class DatagenSystem {
                 PackType.CLIENT_RESOURCES, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.RESOURCE_PACK),
                 PackType.SERVER_DATA, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.DATA_PACK)
         ));
+        
+        this.registryProviders = new ArrayList<>();
+        this.extensionProviders = new ArrayList<>();
+        this.dataProviders = new ArrayList<>();
     }
     
     public ModX mod() {
@@ -143,6 +161,52 @@ public class DatagenSystem {
         }
         DatagenRegistrySet registries = new DatagenRegistrySet(parentRegistries);
         return new PackTargetBuilder(name, registries, mainParent.outputMap());
+    }
+
+    /**
+     * Adds a provider to run in the {@link DatagenStage#REGISTRY_SETUP registry setup stage}.
+     */
+    public void addRegistryProvider(Function<DatagenContext, RegistryProvider> provider) {
+        this.addRegistryProvider(this.mainTarget(), provider);
+    }
+
+    /**
+     * Adds a provider to run in the {@link DatagenStage#REGISTRY_SETUP registry setup stage}.
+     */
+    public void addRegistryProvider(PackTarget target, Function<DatagenContext, RegistryProvider> provider) {
+        this.registryProviders.add(new InternalDataProvider.Entry<>(target, provider));
+    }
+    
+    /**
+     * Adds a provider to run in the {@link DatagenStage#EXTENSION_SETUP extension setup stage}.
+     */
+    public void addExtensionProvider(Function<DatagenContext, RegistryProvider> provider) {
+        this.addExtensionProvider(this.mainTarget(), provider);
+    }
+    
+    /**
+     * Adds a provider to run in the {@link DatagenStage#EXTENSION_SETUP extension setup stage}.
+     */
+    public void addExtensionProvider(PackTarget target, Function<DatagenContext, RegistryProvider> provider) {
+        this.extensionProviders.add(new InternalDataProvider.Entry<>(target, provider));
+    }
+
+    /**
+     * Adds a provider to run in the {@link DatagenStage#DATAGEN datagen stage}.
+     */
+    public void addDataProvider(Function<DatagenContext, DataProvider> provider) {
+        this.addDataProvider(this.mainTarget(), provider);
+    }
+    
+    /**
+     * Adds a provider to run in the {@link DatagenStage#DATAGEN datagen stage}.
+     */
+    public void addDataProvider(PackTarget target, Function<DatagenContext, DataProvider> provider) {
+        this.dataProviders.add(new InternalDataProvider.Entry<>(target, provider));
+    }
+    
+    private void hookIntoGenerator() {
+        this.generator.addProvider(true, new InternalDataProvider(this, this.rootRegistries, this.registryProviders, this.extensionProviders, this.dataProviders));
     }
     
     public class PackTargetBuilder {

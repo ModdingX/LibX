@@ -139,6 +139,7 @@ public class DatagenRegistrySet implements RegistrySet {
     
     private void doTransition(DatagenStage newStage) {
         DatagenStage oldStage = this.stage;
+        if (oldStage.ordinal() == 0 && newStage.ordinal() == 0) return;
         if (oldStage.ordinal() + 1 != newStage.ordinal()) throw new IllegalArgumentException("Invalid transition: " + oldStage + " -> " + newStage);
         // Freeze all our own registries
         for (DatagenRegistry<?> registry : this.registries.values()) {
