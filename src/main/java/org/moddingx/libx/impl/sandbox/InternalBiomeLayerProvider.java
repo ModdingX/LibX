@@ -11,7 +11,6 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
@@ -59,7 +58,7 @@ public class InternalBiomeLayerProvider implements DataProvider {
         BiomeLayer layer = new BiomeLayer(preset.provider().apply(biomes::getOrThrow));
         return saveMinified(cache,
                 CodecHelper.JSON.write(BiomeLayer.DIRECT_CODEC, layer, provider),
-                this.output.getOutputFolder().resolve(PackType.SERVER_DATA.getDirectory()).resolve(DatapackHelper.registryPath(key))
+                this.output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(DatapackHelper.registryPath(key))
         );
     }
 
