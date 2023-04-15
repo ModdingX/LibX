@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
-import org.moddingx.libx.impl.datagen_old.recipe.ObjectCraftingBuilder;
+import org.moddingx.libx.impl.datagen.recipe.ObjectCraftingBuilder;
 
 /**
  * A {@link RecipeExtension} for shaped and shapeless recipes.

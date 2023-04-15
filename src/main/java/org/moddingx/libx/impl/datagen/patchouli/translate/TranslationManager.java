@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.datagen_old.patchouli.translate;
+package org.moddingx.libx.impl.datagen.patchouli.translate;
 
 import com.google.gson.JsonObject;
 

@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
-import org.moddingx.libx.impl.datagen_old.TypedBlockModelProvider;
+import org.moddingx.libx.impl.datagen.model.TypedBlockModelProvider;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.lazy.LazyValue;
 

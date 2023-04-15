@@ -3,7 +3,7 @@ package org.moddingx.libx.datagen.provider.recipe;
 import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.base.decoration.DecorationType;
-import org.moddingx.libx.impl.datagen_old.recipe.DecorationRecipes;
+import org.moddingx.libx.impl.datagen.recipe.DecorationRecipes;
 import org.moddingx.libx.mod.ModX;
 
 import java.util.Map;

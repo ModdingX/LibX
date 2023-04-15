@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.datagen_old.texture;
+package org.moddingx.libx.impl.datagen.texture;
 
 import net.minecraft.resources.ResourceLocation;
 import org.moddingx.libx.datagen.provider.texture.TextureBuilder;

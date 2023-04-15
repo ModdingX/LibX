@@ -19,7 +19,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.datagen.DatagenContext;
-import org.moddingx.libx.impl.datagen_old.DecorationTags;
+import org.moddingx.libx.impl.datagen.tags.DecorationTags;
 import org.moddingx.libx.impl.tags.InternalTagProvider;
 import org.moddingx.libx.impl.tags.InternalTags;
 import org.moddingx.libx.mod.ModX;

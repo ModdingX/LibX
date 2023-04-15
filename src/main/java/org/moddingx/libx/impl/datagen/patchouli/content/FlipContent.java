@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.datagen_old.patchouli.content;
+package org.moddingx.libx.impl.datagen.patchouli.content;
 
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;

@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.datagen.DatagenContext;
-import org.moddingx.libx.impl.datagen_old.texture.SignTextureFactory;
-import org.moddingx.libx.impl.datagen_old.texture.TextureGenerator;
+import org.moddingx.libx.impl.datagen.texture.SignTextureFactory;
+import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.annotation.meta.Experimental;
-import org.moddingx.libx.impl.datagen_old.FontLoader;
+import org.moddingx.libx.impl.datagen.DatagenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class PageJson {
      */
     public static List<String> splitText(String text, int linesHead, int linesTail) {
         Component displayText = displayText(text);
-        StringSplitter.WidthProvider width = FontLoader.getFontWidthProvider(null);
+        StringSplitter.WidthProvider width = DatagenHelper.getFontWidthProvider(null);
         StringSplitter splitter = new StringSplitter((codePoint, style) -> style.isObfuscated() ? 0 : width.getWidth(codePoint, style));
         List<String> lines = splitter.splitLines(displayText, Math.round(116 * 1.65f), Style.EMPTY).stream().map(FormattedText::getString).map(String::strip).filter(s -> !s.isEmpty()).toList();
         List<String> pages = new ArrayList<>();

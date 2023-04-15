@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.patchouli.page;
 
 import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.EntryBuilder;
-import org.moddingx.libx.impl.datagen_old.patchouli.content.CompositeContent;
+import org.moddingx.libx.impl.datagen.patchouli.content.CompositeContent;
 
 import java.util.List;
 

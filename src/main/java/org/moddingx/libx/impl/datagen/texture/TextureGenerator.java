@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.datagen_old.texture;
+package org.moddingx.libx.impl.datagen.texture;
 
 import com.google.common.hash.HashCode;
 import net.minecraft.data.CachedOutput;

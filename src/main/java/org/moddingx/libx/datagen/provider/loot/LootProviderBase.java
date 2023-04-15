@@ -33,7 +33,7 @@ import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.LootFactory;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.SimpleLootFactory;
-import org.moddingx.libx.impl.datagen_old.LootData;
+import org.moddingx.libx.impl.datagen.loot.LootData;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;

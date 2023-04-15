@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.datagen_old;
+package org.moddingx.libx.impl.datagen.tags;
 
 import net.minecraft.world.level.block.Block;
 import org.moddingx.libx.datagen.provider.tags.CommonTagsProviderBase;

@@ -14,7 +14,7 @@ import org.moddingx.libx.datagen.provider.patchouli.content.TextContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
-import org.moddingx.libx.impl.datagen_old.patchouli.content.*;
+import org.moddingx.libx.impl.datagen.patchouli.content.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
