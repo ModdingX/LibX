@@ -4,7 +4,6 @@ import org.moddingx.libx.annotation.processor.Classes;
 import org.moddingx.libx.annotation.processor.modinit.codec.GeneratedCodec;
 import org.moddingx.libx.annotation.processor.modinit.config.RegisteredConfig;
 import org.moddingx.libx.annotation.processor.modinit.config.RegisteredMapper;
-import org.moddingx.libx.annotation.processor.modinit.data.DatagenEntry;
 import org.moddingx.libx.annotation.processor.modinit.model.LoadableModel;
 import org.moddingx.libx.annotation.processor.modinit.register.RegistrationEntry;
 
@@ -19,8 +18,6 @@ import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 public class ModInit  {
 
@@ -33,7 +30,6 @@ public class ModInit  {
     private final List<RegisteredMapper> configMappers = new ArrayList<>();
     private final List<RegisteredConfig> configs = new ArrayList<>();
     private final List<GeneratedCodec> codecs = new ArrayList<>();
-    private final List<DatagenEntry> datagen = new ArrayList<>();
 
     public ModInit(String modid, Element modClass, Messager messager) {
         this.modid = modid;
@@ -65,10 +61,6 @@ public class ModInit  {
 
     public void addCodec(GeneratedCodec codec) {
         this.codecs.add(codec);
-    }
-    
-    public void addDatagen(String classFqn, List<DatagenEntry.Arg> ctorArgs) {
-        this.datagen.add(new DatagenEntry(classFqn, ctorArgs));
     }
     
     public void write(Filer filer, Messager messager) {
@@ -154,9 +146,6 @@ public class ModInit  {
                 writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addLowModListener(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + ".class," + this.modClass.getSimpleName() + "$::bakeModels);");
                 writer.write("});");
             }
-            if (!this.datagen.isEmpty()) {
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(" + Classes.sourceName(Classes.GATHER_DATA_EVENT) + ".class," + this.modClass.getSimpleName() + "$::gatherData);");
-            }
             writer.write("}");
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
@@ -178,20 +167,6 @@ public class ModInit  {
                 writer.write("private static void bakeModels(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
                     writer.write(model.classFqn() + "." + model.fieldName() + "=" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getSpecialModel(event," + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
-                }
-                writer.write("}");
-            }
-            if (!this.datagen.isEmpty()) {
-                writer.write("private static void gatherData(" + Classes.sourceName(Classes.GATHER_DATA_EVENT) + " event){");
-                for (DatagenEntry entry : this.datagen) {
-                    String ctorArgs = entry.ctorArgs().stream().map(t -> switch (t) {
-                        case MOD -> this.modClass.getSimpleName() + "$.mod";
-                        case GENERATOR -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataGenerator(event)";
-                        case PACK_OUTPUT -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataPackOutput(event)";
-                        case FILE_HELPER -> Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataFileHelper(event)";
-                        case LOOKUP_PROVIDER -> "(" + CompletableFuture.class.getCanonicalName() + "<" + Classes.sourceName(Classes.LOOKUP_PROVIDER) + ">)" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getDataLookup(event)";
-                    }).collect(Collectors.joining(","));
-                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addDataProvider(event,new " + entry.classFqn() + "(" + ctorArgs + "));");
                 }
                 writer.write("}");
             }

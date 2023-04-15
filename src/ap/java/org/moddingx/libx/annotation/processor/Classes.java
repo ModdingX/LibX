@@ -32,12 +32,6 @@ public class Classes {
     public static final String CODEC = "com.mojang.serialization.Codec";
     public static final String MAP_CODEC = "com.mojang.serialization.MapCodec";
     public static final String RECORD_CODEC_BUILDER = "com.mojang.serialization.codecs.RecordCodecBuilder";
-    public static final String GATHER_DATA_EVENT = "net.minecraftforge.data.event.GatherDataEvent";
-    public static final String DATA_PROVIDER = "net.minecraft.data.DataProvider";
-    public static final String DATA_GENERATOR = "net.minecraft.data.DataGenerator";
-    public static final String PACK_OUTPUT = "net.minecraft.data.PackOutput";
-    public static final String LOOKUP_PROVIDER = "net.minecraft.core.HolderLookup$Provider";
-    public static final String DATA_FILE_HELPER = "net.minecraftforge.common.data.ExistingFileHelper";
 
     public static final String OVERRIDING_METHODS_SUPER = "javax.annotation.OverridingMethodsMustInvokeSuper";
     public static final String JETBRAINS_NOTNULL = "org.jetbrains.annotations.NotNull";

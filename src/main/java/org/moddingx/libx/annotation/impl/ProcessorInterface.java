@@ -2,17 +2,11 @@ package org.moddingx.libx.annotation.impl;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModList;
@@ -32,7 +26,6 @@ import org.moddingx.libx.registration.MultiRegisterable;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class ProcessorInterface {
@@ -104,25 +97,6 @@ public class ProcessorInterface {
     
     public static <T extends Event> void addForgeListener(Class<T> event, Consumer<T> listener) {
         MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, event, listener);
-    }
-    
-    public static void addDataProvider(GatherDataEvent event, DataProvider provider) {
-        event.getGenerator().addProvider(true, provider);
-    }
-    
-    public static DataGenerator getDataGenerator(GatherDataEvent event) {
-        return event.getGenerator();
-    }
-
-    public static PackOutput getDataPackOutput(GatherDataEvent event) {
-        return event.getGenerator().getPackOutput();
-    }
-    
-    public static ExistingFileHelper getDataFileHelper(GatherDataEvent event) {
-        return event.getExistingFileHelper();
-    }
-    public static CompletableFuture<HolderLookup.Provider> getDataLookup(GatherDataEvent event) {
-        return event.getLookupProvider();
     }
     
     public static <K, V> LazyMapBuilder<K, V> lazyMapBuilder() {
