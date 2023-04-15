@@ -3,12 +3,12 @@ package org.moddingx.libx.datagen.provider.patchouli;
 import com.google.common.collect.Streams;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.impl.datagen_old.FontLoader;
 import org.moddingx.libx.impl.datagen_old.patchouli.translate.TranslationManager;
 import org.moddingx.libx.mod.ModX;
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public abstract class PatchouliProviderBase implements DataProvider {
     
     protected final ModX mod;
-    protected final PackOutput packOutput;
+    protected final PackTarget packTarget;
     protected final ExistingFileHelper fileHelper;
     private final BookProperties properties;
     
@@ -40,7 +40,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
     
     public PatchouliProviderBase(DatagenContext ctx, BookProperties properties) {
         this.mod = ctx.mod();
-        this.packOutput = ctx.output();
+        this.packTarget = ctx.target();
         this.fileHelper = ctx.fileHelper();
         this.properties = properties;
         FontLoader.getFontWidthProvider(this.fileHelper);
@@ -121,15 +121,15 @@ public abstract class PatchouliProviderBase implements DataProvider {
 
         return CompletableFuture.allOf(Streams.concat(
                 Streams.mapWithIndex(this.categories.stream(), (category, idx) -> {
-                    Path path = this.packOutput.getOutputFolder(this.properties.packTarget() == PackType.SERVER_DATA ? PackOutput.Target.DATA_PACK : PackOutput.Target.RESOURCE_PACK).resolve(category.id.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/categories/" + category.id.getPath() + ".json");
+                    Path path = this.packTarget.path(this.properties.packTarget()).resolve(category.id.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/categories/" + category.id.getPath() + ".json");
                     return DataProvider.saveStable(cache, category.build(translations, (int) idx), path);
                 }),
                 this.entries.stream().map(entry -> {
-                    Path path = this.packOutput.getOutputFolder(this.properties.packTarget() == PackType.SERVER_DATA ? PackOutput.Target.DATA_PACK : PackOutput.Target.RESOURCE_PACK).resolve(entry.category.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/entries/" + entry.category.getPath() + "/" + entry.id + ".json");
+                    Path path = this.packTarget.path(this.properties.packTarget()).resolve(entry.category.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/entries/" + entry.category.getPath() + "/" + entry.id + ".json");
                     return DataProvider.saveStable(cache, entry.build(translations, this.fileHelper), path);
                 }),
                 Stream.ofNullable(mgr).map(theMgr -> {
-                    Path langPath = this.packOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(this.mod.modid + "_" + this.properties.bookName() + "/lang/en_us.json");
+                    Path langPath = this.packTarget.path(PackType.CLIENT_RESOURCES).resolve(this.mod.modid + "_" + this.properties.bookName() + "/lang/en_us.json");
                     return DataProvider.saveStable(cache, theMgr.build(), langPath);
                 })
         ).toArray(CompletableFuture[]::new));

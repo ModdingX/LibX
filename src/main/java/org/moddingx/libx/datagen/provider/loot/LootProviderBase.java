@@ -3,9 +3,9 @@ package org.moddingx.libx.datagen.provider.loot;
 import net.minecraft.core.Registry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -27,6 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.BinomialDistribut
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.datagen.loot.LootBuilders;
 import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.LootFactory;
@@ -49,7 +50,7 @@ import java.util.stream.Stream;
 public abstract class LootProviderBase<T> implements DataProvider {
 
     protected final ModX mod;
-    protected final PackOutput packOutput;
+    protected final PackTarget packTarget;
     protected final String folder;
     protected final LootContextParamSet params;
     protected final Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements;
@@ -66,7 +67,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
     
     protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements) {
         this.mod = ctx.mod();
-        this.packOutput = ctx.output();
+        this.packTarget = ctx.target();
         this.folder = folder;
         this.params = params;
         this.elements = elements;
@@ -74,7 +75,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
     
     protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
         this.mod = ctx.mod();
-        this.packOutput = ctx.output();
+        this.packTarget = ctx.target();
         this.folder = folder;
         this.params = params;
         this.elements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
@@ -138,7 +139,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
         return CompletableFuture.allOf(tables.entrySet().stream().map(entry -> {
-            Path path = this.getPath(this.packOutput.getOutputFolder(PackOutput.Target.DATA_PACK), entry.getKey());
+            Path path = this.getPath(this.packTarget.path(PackType.SERVER_DATA), entry.getKey());
             return DataProvider.saveStable(cache, LootTables.serialize(entry.getValue().setParamSet(this.params).build()), path);
         }).toArray(CompletableFuture[]::new));
     }

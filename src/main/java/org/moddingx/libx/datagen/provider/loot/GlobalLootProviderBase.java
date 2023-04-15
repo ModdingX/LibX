@@ -21,11 +21,11 @@ import java.util.function.Function;
 /**
  * Data provider for global loot modifiers.
  */
-public abstract class GlobalLootProvider extends GlobalLootModifierProvider {
+public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider {
     
     protected final ModX mod;
     
-    public GlobalLootProvider(DatagenContext ctx) {
+    public GlobalLootProviderBase(DatagenContext ctx) {
         super(ctx.output(), ctx.mod().modid);
         this.mod = ctx.mod();
     }
@@ -93,7 +93,7 @@ public abstract class GlobalLootProvider extends GlobalLootModifierProvider {
          * Builds the loot modifier and adds it to the provider.
          */
         public void build() {
-            GlobalLootProvider.this.add(this.name, this.factory.apply(this.buildConditions().toArray(LootItemCondition[]::new)));
+            GlobalLootProviderBase.this.add(this.name, this.factory.apply(this.buildConditions().toArray(LootItemCondition[]::new)));
         }
     }
     
