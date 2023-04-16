@@ -61,7 +61,10 @@ public final class LibX extends ModX {
         NetworkImpl network = new NetworkImpl(this);
         networkWrapper = new CommonNetwork(network);
 
+        DatagenSystem.registerExtensionRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS);
         DatagenSystem.registerExtensionRegistry(SandBox.BIOME_SURFACE);
+        DatagenSystem.registerExtensionRegistry(SandBox.SURFACE_RULE_SET);
+        DatagenSystem.registerExtensionRegistry(SandBox.TEMPLATE_POOL_EXTENSION);
         InternalDataGen.init();
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicPackLocator::locatePacks);

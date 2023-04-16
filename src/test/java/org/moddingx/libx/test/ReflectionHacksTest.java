@@ -32,6 +32,7 @@ public class ReflectionHacksTest {
         assertThrows(IllegalArgumentException.class, () -> ReflectionHacks.setFinalField(A.class.getField("field"), b, ""));
         assertThrows(NullPointerException.class, () -> ReflectionHacks.setFinalField(A.class.getField("primitive"), a, null));
         assertThrows(ClassCastException.class, () -> ReflectionHacks.setFinalField(A.class.getField("field"), a, new Date()));
+        assertThrows(IllegalArgumentException.class, () -> ReflectionHacks.setFinalField(C.class.getField("VALUE"), null, null));
     }
     
     private static class A {
@@ -52,6 +53,10 @@ public class ReflectionHacksTest {
         private B(String field) {
             this.field = field;
         }
+    }
+    
+    private enum C {
+        VALUE
     }
     
     // Can't use strings in static final fields as they are inlined by the compiler.

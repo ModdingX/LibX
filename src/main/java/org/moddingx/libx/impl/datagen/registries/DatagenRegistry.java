@@ -38,7 +38,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
     }
     
     private DatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, DatagenRegistrySet registrySet, Codec<T> codec, List<Registry<T>> fillFrom) {
-        super(registryKey, Lifecycle.stable());
+        super(registryKey, Lifecycle.stable(), true);
         this.registrySet = registrySet;
         this.codec = codec;
         this.lookup = new Lookup();
@@ -78,6 +78,11 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
     @Nonnull
     @Override
     public Holder.Reference<T> registerMapping(int id, @Nonnull ResourceKey<T> key, @Nonnull T value, @Nonnull Lifecycle lifecycle) {
+        if (this.unregisteredIntrusiveHolders != null && !this.unregisteredIntrusiveHolders.containsKey(value)) {
+            // We allow intrusive holders, however this implies, ever value must have an intrusive holder
+            // which is not the case. Create one on the fly.
+            this.createIntrusiveHolder(value);
+        }
         Holder.Reference<T> holder = super.registerMapping(id, key, value, Lifecycle.stable());
         if (this.propagateNewElementsToChildren) {
             // Register to all children (can't keep ids consistent)
@@ -91,6 +96,16 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
                 child.registerOnlyThisRegistry(key, value, lifecycle);
             }
         }
+        this.registrySet.trackHolderTarget(holder, this.key());
+        return holder;
+    }
+
+    @Nonnull
+    @Override
+    public Holder.Reference<T> createIntrusiveHolder(@Nonnull T value) {
+        Holder.Reference<T> holder = this.getResourceKey(value).flatMap(this::getHolder).orElse(null);
+        if (holder == null) holder = super.createIntrusiveHolder(value);
+        this.registrySet.trackHolderTarget(holder, this.key());
         return holder;
     }
 
@@ -112,8 +127,9 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
                 throw new IllegalStateException("Can't freeze datagen registry while its parents are still unfrozen.");
             }
         }
+        Registry<T> result = super.freeze();
         this.frozen = true;
-        return super.freeze();
+        return result;
     }
 
     @Override

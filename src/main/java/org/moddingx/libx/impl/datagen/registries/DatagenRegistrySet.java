@@ -2,10 +2,7 @@ package org.moddingx.libx.impl.datagen.registries;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.WritableRegistry;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.resources.RegistryDataLoader;
@@ -15,6 +12,7 @@ import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.datagen.RegistrySet;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class DatagenRegistrySet implements RegistrySet {
@@ -23,7 +21,8 @@ public class DatagenRegistrySet implements RegistrySet {
     private final DatagenRegistrySet root;
     private final List<DatagenRegistrySet> parents;
     private final List<DatagenRegistrySet> children;
-            
+    private final Map<Holder.Reference<?>, ResourceKey<? extends Registry<?>>> holderMap;
+
     private DatagenStage stage;
     private final Map<ResourceKey<? extends Registry<?>>, DatagenRegistry<?>> registries;
     private RegistryAccess localAccess;
@@ -33,6 +32,7 @@ public class DatagenRegistrySet implements RegistrySet {
         this.root = this;
         this.parents = List.of();
         this.children = new ArrayList<>();
+        this.holderMap = new HashMap<>();
         this.stage = DatagenStage.REGISTRY_SETUP;
         this.registries = new HashMap<>();
         this.localAccess = null;
@@ -52,6 +52,7 @@ public class DatagenRegistrySet implements RegistrySet {
             }
             parent.children.add(this);
         }
+        this.holderMap = new HashMap<>();
         this.stage = DatagenStage.REGISTRY_SETUP;
         this.registries = new HashMap<>();
         this.localAccess = null;
@@ -88,6 +89,13 @@ public class DatagenRegistrySet implements RegistrySet {
     public RegistryAccess registryAccess() {
         if (this.localAccess == null) throw new IllegalStateException("Can't query datagen registry access in " + this.stage + " stage.");
         return this.localAccess;
+    }
+
+    @Nullable
+    @Override
+    public <T> ResourceKey<? extends Registry<T>> findRegistryFor(Holder.Reference<T> holder) {
+        //noinspection unchecked
+        return (ResourceKey<? extends Registry<T>>) this.holderMap.getOrDefault(holder, null);
     }
 
     public <T> Optional<DatagenRegistry<T>> getDatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, boolean forWrite) {
@@ -147,6 +155,10 @@ public class DatagenRegistrySet implements RegistrySet {
             }
             child.addActiveChildRegistries(registryKey, registries);
         }
+    }
+    
+    public <T> void trackHolderTarget(Holder.Reference<T> holder, ResourceKey<? extends Registry<T>> registryKey) {
+        this.holderMap.put(holder, registryKey);
     }
     
     public void transition(DatagenStage stage) {
