@@ -79,7 +79,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
     @Override
     public Holder.Reference<T> registerMapping(int id, @Nonnull ResourceKey<T> key, @Nonnull T value, @Nonnull Lifecycle lifecycle) {
         if (this.unregisteredIntrusiveHolders != null && !this.unregisteredIntrusiveHolders.containsKey(value)) {
-            // We allow intrusive holders, however this implies, ever value must have an intrusive holder
+            // We allow intrusive holders, however this implies, every value must have an intrusive holder
             // which is not the case. Create one on the fly.
             this.createIntrusiveHolder(value);
         }

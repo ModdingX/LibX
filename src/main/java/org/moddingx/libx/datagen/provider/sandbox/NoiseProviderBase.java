@@ -22,6 +22,11 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SandBox provider for noise related data.
+ *
+ * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
+ */
 public abstract class NoiseProviderBase extends SandBoxProviderBase {
 
     protected NoiseProviderBase(DatagenContext ctx) {
@@ -32,15 +37,32 @@ public abstract class NoiseProviderBase extends SandBoxProviderBase {
     public final String getName() {
         return this.mod.modid + " noise";
     }
-    
+
+    /**
+     * Returns a new builder for noise generator settings.
+     */
     public GeneratorSettingsBuilder generator() {
         return new GeneratorSettingsBuilder();
     }
     
+    /**
+     * Creates new {@link NormalNoise.NoiseParameters noise parameters}.
+     *
+     * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * {@code public}, non-{@code static} field inside the provider.
+     */
     public Holder<NormalNoise.NoiseParameters> noise(int firstOctave, double... amplitudes) {
         return this.registries.writableRegistry(Registries.NOISE).createIntrusiveHolder(new NormalNoise.NoiseParameters(firstOctave, DoubleList.of(amplitudes)));
     }
-    
+
+    /**
+     * Wraps a new {@link DensityFunction} for registration.
+     *
+     * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * {@code public}, non-{@code static} field inside the provider.
+     */
     public Holder<DensityFunction> density(DensityFunction function) {
         return this.registries.writableRegistry(Registries.DENSITY_FUNCTION).createIntrusiveHolder(function);
     }
@@ -146,7 +168,14 @@ public abstract class NoiseProviderBase extends SandBoxProviderBase {
             this.useLegacyRandomSource = true;
             return this;
         }
-        
+
+        /**
+         * Builds the {@link NoiseGeneratorSettings}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<NoiseGeneratorSettings> build() {
             NoiseGeneratorSettings settings = new NoiseGeneratorSettings(
                     this.noise, this.defaultBlock, this.defaultFluid, this.router.build(), this.surface,

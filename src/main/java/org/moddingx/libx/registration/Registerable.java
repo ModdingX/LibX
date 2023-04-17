@@ -44,7 +44,7 @@ public interface Registerable {
     }
 
     /**
-     * Adds fields with additiona lregistry values to the {@link RegistryTracker}. This called, unless
+     * Adds fields with additional registry values to the {@link RegistryTracker}. This called, unless
      * {@link RegistrationBuilder#disableRegistryTracking()} ()} is set.
      */
     @SuperChainRequired

@@ -76,6 +76,7 @@ public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
     }
     
     private static NoiseGeneratorSettings withSurface(NoiseGeneratorSettings settings, SurfaceRules.RuleSource surfaceRule) {
+        //noinspection deprecation
         return new NoiseGeneratorSettings(
                  settings.noiseSettings(),
                  settings.defaultBlock(),

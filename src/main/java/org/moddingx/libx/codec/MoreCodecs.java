@@ -105,9 +105,9 @@ public class MoreCodecs {
      * After that, the key is encoded and merged into the {@link MapLike} from the value codec.
      * 
      * Decoding works the other way round in that the key is read first. Then the {@code valueCodecs} function
-     * is used to obtain a {@link Codec} to decode the value. In the end, both key and value are used to construct
-     * the resulting element. Both the {@link MapCodec} and the codecs returned from {@code valueCodecs} <b>must</b>
-     * be able to work with additional values, they don't know about.
+     * is used to obtain a {@link Codec} to decode the value. In the end, the codec uses both key and value to
+     * construct the resulting element. Both the {@link MapCodec} and the codecs returned from {@code valueCodecs}
+     * <b>must</b> be able to work with additional values, they don't know about.
      */
     public static <A, K, V> Codec<A> mapDispatch(MapCodec<K> keyCodec, Function<K, DataResult<Codec<? extends V>>> valueCodecs, Function<A, Pair<K, V>> decompose, BiFunction<K, V, DataResult<A>> construct) {
         return new MapDispatchedCodec<>(keyCodec, valueCodecs, decompose, construct);

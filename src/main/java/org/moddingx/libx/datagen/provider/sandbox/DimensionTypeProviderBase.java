@@ -15,6 +15,11 @@ import org.moddingx.libx.datagen.DatagenStage;
 
 import java.util.OptionalLong;
 
+/**
+ * SandBox provider for {@link DimensionType dimension types}.
+ *
+ * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
+ */
 public abstract class DimensionTypeProviderBase extends SandBoxProviderBase {
 
     protected DimensionTypeProviderBase(DatagenContext ctx) {
@@ -160,6 +165,13 @@ public abstract class DimensionTypeProviderBase extends SandBoxProviderBase {
             return this;
         }
 
+        /**
+         * Builds the {@link DimensionType}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<DimensionType> build() {
             DimensionType type = new DimensionType(
                     this.fixedTime, this.hasSkyLight, this.hasCeiling, this.ultraWarm, this.natural, this.coordinateScale, this.bedWorks,

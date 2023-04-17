@@ -13,6 +13,11 @@ import org.moddingx.libx.datagen.DatagenStage;
 import javax.annotation.Nullable;
 import java.util.*;
 
+/**
+ * SandBox provider for {@link StructureProcessorList structure processors}.
+ *
+ * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
+ */
 public abstract class StructureProcessorProviderBase extends SandBoxProviderBase {
 
     protected StructureProcessorProviderBase(DatagenContext ctx) {
@@ -23,23 +28,38 @@ public abstract class StructureProcessorProviderBase extends SandBoxProviderBase
     public final String getName() {
         return this.mod.modid + " structure processors";
     }
-    
+
+    /**
+     * Returns a new builder for a processor list.
+     */
     public ProcessorListBuilder processor() {
         return new ProcessorListBuilder();
     }
-
+    
+    /**
+     * Returns a new builder for a processor rule.
+     */
     public static ProcessorRuleBuilder rule(Block block) {
         return rule(block.defaultBlockState());
     }
 
+    /**
+     * Returns a new builder for a processor rule.
+     */
     public static ProcessorRuleBuilder rule(Block block, CompoundTag nbt) {
         return rule(block.defaultBlockState(), nbt);
     }
 
+    /**
+     * Returns a new builder for a processor rule.
+     */
     public static ProcessorRuleBuilder rule(BlockState state) {
         return new ProcessorRuleBuilder(state, null);
     }
 
+    /**
+     * Returns a new builder for a processor rule.
+     */
     public static ProcessorRuleBuilder rule(BlockState state, CompoundTag nbt) {
         return new ProcessorRuleBuilder(state, nbt);
     }
@@ -98,7 +118,14 @@ public abstract class StructureProcessorProviderBase extends SandBoxProviderBase
                 this.rules.clear();
             }
         }
-        
+
+        /**
+         * Builds the {@link StructureProcessorList}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<StructureProcessorList> build() {
             this.rulesToProcessor();
             if (this.processors.isEmpty()) this.add(NopProcessor.INSTANCE);

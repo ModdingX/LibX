@@ -28,7 +28,7 @@ public class DatagenSystem {
     private static final Set<ResourceKey<? extends Registry<?>>> EXTENSION_REGISTRIES = new HashSet<>();
 
     /**
-     * Marks a registry as an extensio nregistry. An extension registry is a registry, where the id of the elements
+     * Marks a registry as an extension registry. An extension registry is a registry, where the id of the elements
      * reference the id inside another registry (for example LibX {@link SandBox#BIOME_SURFACE biome surface}).
      * 
      * Extension registries are frozen later during datagen to allow them access to frozen non-extension registries

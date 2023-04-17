@@ -7,6 +7,11 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 
+/**
+ * SandBox provider for {@link StructureTemplatePool template pools}.
+ *
+ * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
+ */
 public abstract non-sealed class TemplateProviderBase extends AnyTemplateProviderBase {
 
     protected TemplateProviderBase(DatagenContext ctx) {
@@ -17,11 +22,17 @@ public abstract non-sealed class TemplateProviderBase extends AnyTemplateProvide
     public final String getName() {
         return this.mod.modid + " templates";
     }
-    
+
+    /**
+     * Creates a new {@link PoolBuilder} with an empty fallback.
+     */
     public PoolBuilder template() {
         return this.template(this.holder(Pools.EMPTY));
     }
     
+    /**
+     * Creates a new {@link PoolBuilder} with with the given fallback.
+     */
     public PoolBuilder template(Holder<StructureTemplatePool> fallback) {
         return new PoolBuilder(fallback);
     }
@@ -38,7 +49,14 @@ public abstract non-sealed class TemplateProviderBase extends AnyTemplateProvide
         protected PoolBuilder self() {
             return this;
         }
-        
+
+        /**
+         * Builds the {@link StructureTemplatePool}.
+         * 
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<StructureTemplatePool> build() {
             StructureTemplatePool pool = new StructureTemplatePool(this.fallback, this.elements());
             return TemplateProviderBase.this.registries.writableRegistry(Registries.TEMPLATE_POOL).createIntrusiveHolder(pool);

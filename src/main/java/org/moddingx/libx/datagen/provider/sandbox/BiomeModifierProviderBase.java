@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * SandBox provider for {@link BiomeModifier biome modifiers}.
+ *
+ * This provider must run in the {@link DatagenStage#EXTENSION_SETUP extension setup} stage.
+ */
 public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
 
     protected BiomeModifierProviderBase(DatagenContext ctx) {
@@ -32,35 +37,59 @@ public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
     public Holder<BiomeModifier> modifier(BiomeModifier modifier) {
         return this.registries.writableRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
     }
-    
+
+    /**
+     * Returns a builder for a {@link BiomeModifier} that adds features to a biome.
+     */
     public FeaturesBuilder addFeatures(TagKey<Biome> biomes, GenerationStep.Decoration step) {
         return this.addFeatures(this.set(biomes), step);
     }
     
+    /**
+     * Returns a builder for a {@link BiomeModifier} that adds features to a biome.
+     */
     public FeaturesBuilder addFeatures(HolderSet<Biome> biomes, GenerationStep.Decoration step) {
         return new FeaturesBuilder(biomes, Set.of(step), false);
     }
     
+    /**
+     * Returns a builder for a {@link BiomeModifier} that removes features from a biome.
+     */
     public FeaturesBuilder removeFeatures(TagKey<Biome> biomes, GenerationStep.Decoration... steps) {
         return this.removeFeatures(this.set(biomes), steps);
     }
-    
+
+    /**
+     * Returns a builder for a {@link BiomeModifier} that removes features from a biome.
+     */
     public FeaturesBuilder removeFeatures(HolderSet<Biome> biomes, GenerationStep.Decoration... steps) {
         return new FeaturesBuilder(biomes, Set.of(steps), false);
     }
-    
+
+    /**
+     * Returns a builder for a {@link BiomeModifier} that adds spawns to a biome.
+     */
     public AddMobSpawnsBuilder addSpawns(TagKey<Biome> biomes) {
         return this.addSpawns(this.set(biomes));
     }
-    
+
+    /**
+     * Returns a builder for a {@link BiomeModifier} that adds spawns to a biome.
+     */
     public AddMobSpawnsBuilder addSpawns(HolderSet<Biome> biomes) {
         return new AddMobSpawnsBuilder(biomes);
     }
-    
+
+    /**
+     * Returns a builder for a {@link BiomeModifier} that removes spawns from a biome.
+     */
     public RemoveMobSpawnsBuilder removeSpawns(TagKey<Biome> biomes) {
         return this.removeSpawns(this.set(biomes));
     }
-    
+
+    /**
+     * Returns a builder for a {@link BiomeModifier} that removes spawns from a biome.
+     */
     public RemoveMobSpawnsBuilder removeSpawns(HolderSet<Biome> biomes) {
         return new RemoveMobSpawnsBuilder(biomes);
     }
@@ -83,7 +112,14 @@ public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
             this.features.add(feature);
             return this;
         }
-        
+
+        /**
+         * Builds the {@link BiomeModifier}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<BiomeModifier> build() {
             BiomeModifier modifier;
             if (this.remove) {
@@ -114,6 +150,13 @@ public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
             return this;
         }
 
+        /**
+         * Builds the {@link BiomeModifier}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<BiomeModifier> build() {
             BiomeModifier modifier = new ForgeBiomeModifiers.AddSpawnsBiomeModifier(this.biomes, List.copyOf(this.spawns));
             return BiomeModifierProviderBase.this.registries.writableRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
@@ -135,6 +178,13 @@ public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
             return this;
         }
 
+        /**
+         * Builds the {@link BiomeModifier}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<BiomeModifier> build() {
             BiomeModifier modifier = new ForgeBiomeModifiers.RemoveSpawnsBiomeModifier(this.biomes, HolderSet.direct(List.copyOf(this.entities)));
             return BiomeModifierProviderBase.this.registries.writableRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);

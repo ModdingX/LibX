@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+/**
+ * SandBox provider for {@link StructureSet structure sets}.
+ *
+ * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
+ */
 public abstract class StructureSetProviderBase extends SandBoxProviderBase {
 
     private long nextSeed = 7;
@@ -32,7 +37,10 @@ public abstract class StructureSetProviderBase extends SandBoxProviderBase {
     public final String getName() {
         return this.mod.modid + " structure sets";
     }
-    
+
+    /**
+     * Returns a new builder for a structure set.
+     */
     public StructureEntryBuilder structureSet() {
         return new StructureEntryBuilder();
     }
@@ -44,24 +52,43 @@ public abstract class StructureSetProviderBase extends SandBoxProviderBase {
         private StructureEntryBuilder() {
             this.entries = new ArrayList<>();
         }
-        
+
+        /**
+         * Adds a structure to this structure set.
+         */
         public StructureEntryBuilder entry(Holder<Structure> structure) {
             return this.entry(1, structure);
         }
         
+        /**
+         * Adds a structure to this structure set.
+         */
         public StructureEntryBuilder entry(int weight, Holder<Structure> structure) {
             this.entries.add(new StructureSet.StructureSelectionEntry(structure, weight));
             return this;
         }
         
+        /**
+         * Selects a random placement strategy for this structure set.
+         */
         public RandomPlacementBuilder placeRandom(int spacing, int separation) {
             return new RandomPlacementBuilder(List.copyOf(this.entries), spacing, separation);
         }
         
+        /**
+         * Selects a ruing based placement strategy for this structure set.
+         */
         public RingPlacementBuilder placeRings(int distance, int spread, int count) {
             return new RingPlacementBuilder(List.copyOf(this.entries), distance, spread, count);
         }
-        
+
+        /**
+         * Builds the {@link StructureSet}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<StructureSet> place(StructurePlacement placement) {
             return StructureSetProviderBase.this.registries.writableRegistry(Registries.STRUCTURE_SET).createIntrusiveHolder(new StructureSet(List.copyOf(this.entries), placement));
         }
@@ -86,11 +113,17 @@ public abstract class StructureSetProviderBase extends SandBoxProviderBase {
         }
         
         protected abstract T self();
-        
+
+        /**
+         * Sets the frequency for the placement of this structure.
+         */
         public T frequency(float frequency) {
             return this.frequency(frequency, StructurePlacement.FrequencyReductionMethod.DEFAULT);
         }
         
+        /**
+         * Sets the frequency for the placement of this structure.
+         */
         public T frequency(float frequency, StructurePlacement.FrequencyReductionMethod frequencyReduction) {
             this.frequency = frequency;
             this.frequencyReduction = frequencyReduction;
@@ -107,6 +140,9 @@ public abstract class StructureSetProviderBase extends SandBoxProviderBase {
             return this.self();
         }
         
+        /**
+         * Sets the salt used for this structures placement.
+         */
         public T salt(int salt) {
             this.salt = salt;
             return this.self();
@@ -136,12 +172,22 @@ public abstract class StructureSetProviderBase extends SandBoxProviderBase {
         protected RandomPlacementBuilder self() {
             return this;
         }
-        
+
+        /**
+         * Sets the spread type for the random placement.
+         */
         public RandomPlacementBuilder spreadType(RandomSpreadType type) {
             this.spreadType = type;
             return this;
         }
-        
+
+        /**
+         * Builds the {@link StructureSet}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<StructureSet> build() {
             this.ensureFrequency();
             return StructureSetProviderBase.this.registries.writableRegistry(Registries.STRUCTURE_SET).createIntrusiveHolder(new StructureSet(this.entries, new RandomSpreadStructurePlacement(this.locateOffset, this.frequencyReduction, this.frequency, this.salt, Optional.empty(), this.spacing, this.separation, this.spreadType)));
@@ -168,15 +214,28 @@ public abstract class StructureSetProviderBase extends SandBoxProviderBase {
             return this;
         }
         
+        /**
+         * Sets the preferred biomes for the placement of this structure.
+         */
         public RingPlacementBuilder preferredBiomes(TagKey<Biome> biomes) {
             return this.preferredBiomes(StructureSetProviderBase.this.set(biomes));
         }
         
+        /**
+         * Sets the preferred biomes for the placement of this structure.
+         */
         public RingPlacementBuilder preferredBiomes(HolderSet<Biome> biomes) {
             this.preferredBiomes = biomes;
             return this;
         }
-        
+
+        /**
+         * Builds the {@link StructureSet}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         public Holder<StructureSet> build() {
             this.ensureFrequency();
             if (this.preferredBiomes == null) {

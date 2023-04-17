@@ -31,6 +31,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * SandBox provider for {@link ConfiguredFeature configured} and {@link PlacedFeature placed features}.
+ *
+ * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
+ */
 public abstract class FeatureProviderBase extends SandBoxProviderBase {
 
     protected FeatureProviderBase(DatagenContext ctx) {
@@ -42,22 +47,49 @@ public abstract class FeatureProviderBase extends SandBoxProviderBase {
         return this.mod.modid + " features";
     }
     
+    /**
+     * Makes a new {@link ConfiguredWorldCarver configured feature} without configuration.
+     *
+     * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * {@code public}, non-{@code static} field inside the provider.
+     */
     public Holder<ConfiguredFeature<?, ?>> feature(Feature<NoneFeatureConfiguration> feature) {
         return this.feature(feature, NoneFeatureConfiguration.INSTANCE);
     }
-    
+
+    /**
+     * Makes a new {@link ConfiguredWorldCarver configured feature}.
+     *
+     * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * {@code public}, non-{@code static} field inside the provider.
+     */
     public <C extends FeatureConfiguration> Holder<ConfiguredFeature<?, ?>> feature(Feature<C> feature, C config) {
         return this.registries.writableRegistry(Registries.CONFIGURED_FEATURE).createIntrusiveHolder(new ConfiguredFeature<>(feature, config));
     }
 
+    /**
+     * Makes a new {@link ConfiguredWorldCarver configured carver}.
+     *
+     * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * {@code public}, non-{@code static} field inside the provider.
+     */
     public <C extends CarverConfiguration> Holder<ConfiguredWorldCarver<?>> carver(WorldCarver<C> carver, C config) {
         return this.registries.writableRegistry(Registries.CONFIGURED_CARVER).createIntrusiveHolder(new ConfiguredWorldCarver<>(carver, config));
     }
-    
+
+    /**
+     * Returns a new builder for a {@link PlacedFeature}.
+     */
     public PlacementBuilder placement(Holder<ConfiguredFeature<?, ?>> feature) {
         return new PlacementBuilder(feature);
     }
     
+    /**
+     * Returns a new builder for placement modifiers.
+     */
     public ModifierBuilder modifiers() {
         return new ModifierBuilder();
     }
@@ -169,6 +201,13 @@ public abstract class FeatureProviderBase extends SandBoxProviderBase {
             this.feature = feature;
         }
 
+        /**
+         * Builds the {@link PlacedFeature}.
+         *
+         * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
+         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * {@code public}, non-{@code static} field inside the provider.
+         */
         @Override
         public Holder<PlacedFeature> build() {
             return FeatureProviderBase.this.registries.writableRegistry(Registries.PLACED_FEATURE).createIntrusiveHolder(new PlacedFeature(this.feature, List.copyOf(this.modifiers)));
