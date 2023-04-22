@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var coremods_1 = require("coremods");
 function initializeCoreMod() {
     return {
-        'interact': {
+        'holder_serialize': {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.core.Holder$Reference',

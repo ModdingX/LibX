@@ -12,7 +12,7 @@ import {
 
 function initializeCoreMod(): CoreMods {
   return {
-    'interact': {
+    'holder_serialize': {
       'target': {
         'type': 'METHOD',
         'class': 'net.minecraft.core.Holder$Reference',
