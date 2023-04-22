@@ -1,6 +1,5 @@
 package org.moddingx.libx.datagen.provider.loot;
 
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
@@ -9,6 +8,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.common.loot.LootTableIdCondition;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.loot.modifier.AdditionLootModifier;
 import org.moddingx.libx.impl.loot.modifier.RemovalLootModifier;
 import org.moddingx.libx.mod.ModX;
@@ -21,13 +21,13 @@ import java.util.function.Function;
 /**
  * Data provider for global loot modifiers.
  */
-public abstract class GlobalLootProvider extends GlobalLootModifierProvider {
+public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider {
     
     protected final ModX mod;
     
-    public GlobalLootProvider(ModX mod, PackOutput output) {
-        super(output, mod.modid);
-        this.mod = mod;
+    public GlobalLootProviderBase(DatagenContext ctx) {
+        super(ctx.output(), ctx.mod().modid);
+        this.mod = ctx.mod();
     }
 
     protected abstract void setup();
@@ -93,7 +93,7 @@ public abstract class GlobalLootProvider extends GlobalLootModifierProvider {
          * Builds the loot modifier and adds it to the provider.
          */
         public void build() {
-            GlobalLootProvider.this.add(this.name, this.factory.apply(this.buildConditions().toArray(LootItemCondition[]::new)));
+            GlobalLootProviderBase.this.add(this.name, this.factory.apply(this.buildConditions().toArray(LootItemCondition[]::new)));
         }
     }
     

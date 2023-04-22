@@ -20,8 +20,8 @@ public interface MultiRegisterable<T> {
     }
 
     /**
-     * Adds fields with additional registry values to the {@link RegistryTracker}. This is only called, if
-     * {@link RegistrationBuilder#enableRegistryTracking()} is set.
+     * Adds fields with additional registry values to the {@link RegistryTracker}. This called, unless
+     * {@link RegistrationBuilder#disableRegistryTracking()} ()} is set.
      */
     @SuperChainRequired
     default void initTracking(RegistrationContext ctx, Registerable.TrackingCollector builder) throws ReflectiveOperationException {

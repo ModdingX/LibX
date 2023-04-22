@@ -1,8 +1,7 @@
-package org.moddingx.libx.datagen.provider;
+package org.moddingx.libx.datagen.provider.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
@@ -19,7 +18,8 @@ import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.impl.datagen.DecorationTags;
+import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.impl.datagen.tags.DecorationTags;
 import org.moddingx.libx.impl.tags.InternalTagProvider;
 import org.moddingx.libx.impl.tags.InternalTags;
 import org.moddingx.libx.mod.ModX;
@@ -37,8 +37,6 @@ import java.util.concurrent.CompletableFuture;
 public abstract class CommonTagsProviderBase implements DataProvider {
 
     protected final ModX mod;
-    protected final DataGenerator generator;
-    protected final ExistingFileHelper fileHelper;
 
     private final BlockTagProviderBase blockTags;
     private final ItemTagProviderBase itemTags;
@@ -54,16 +52,15 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     /**
      * Creates a new CommonTagsProviderBase
      */
-    public CommonTagsProviderBase(ModX mod, DataGenerator generator, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper) {
-        this.mod = mod;
-        this.generator = generator;
-        this.fileHelper = fileHelper;
-        this.blockTags = new BlockTagProviderBase(generator.getPackOutput(), lookupProvider, mod.modid, fileHelper);
-        this.itemTags = new ItemTagProviderBase(generator.getPackOutput(), lookupProvider, mod.modid, fileHelper, this.blockTags);
-        this.fluidTags = new FluidTagProviderBase(generator.getPackOutput(), lookupProvider, mod.modid, fileHelper);
-        generator.addProvider(true, this.blockTags);
-        generator.addProvider(true, this.itemTags);
-        generator.addProvider(true, this.fluidTags);
+    public CommonTagsProviderBase(DatagenContext ctx) {
+        this.mod = ctx.mod();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = CompletableFuture.completedFuture(ctx.registries().registryAccess());
+        this.blockTags = new BlockTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid, ctx.fileHelper());
+        this.itemTags = new ItemTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid, ctx.fileHelper(), this.blockTags);
+        this.fluidTags = new FluidTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid, ctx.fileHelper());
+        ctx.addAdditionalProvider(c -> this.blockTags);
+        ctx.addAdditionalProvider(c -> this.itemTags);
+        ctx.addAdditionalProvider(c -> this.fluidTags);
     }
 
     public abstract void setup();

@@ -17,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import org.moddingx.libx.command.EnumArgument2;
 import org.moddingx.libx.crafting.ingredient.EffectIngredient;
+import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.impl.BlockEntityUpdateQueue;
 import org.moddingx.libx.impl.InternalDataGen;
 import org.moddingx.libx.impl.commands.client.ClientCommandsImpl;
@@ -60,7 +61,11 @@ public final class LibX extends ModX {
         NetworkImpl network = new NetworkImpl(this);
         networkWrapper = new CommonNetwork(network);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(InternalDataGen::gatherData);
+        DatagenSystem.registerExtensionRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS);
+        DatagenSystem.registerExtensionRegistry(SandBox.BIOME_SURFACE);
+        DatagenSystem.registerExtensionRegistry(SandBox.SURFACE_RULE_SET);
+        DatagenSystem.registerExtensionRegistry(SandBox.TEMPLATE_POOL_EXTENSION);
+        InternalDataGen.init();
         
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, DynamicPackLocator::locatePacks);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::createRegistries);

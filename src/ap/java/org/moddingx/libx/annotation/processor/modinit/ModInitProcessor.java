@@ -4,14 +4,12 @@ import org.moddingx.libx.annotation.codec.Param;
 import org.moddingx.libx.annotation.codec.PrimaryConstructor;
 import org.moddingx.libx.annotation.config.RegisterConfig;
 import org.moddingx.libx.annotation.config.RegisterMapper;
-import org.moddingx.libx.annotation.data.Datagen;
 import org.moddingx.libx.annotation.model.Model;
 import org.moddingx.libx.annotation.processor.Classes;
 import org.moddingx.libx.annotation.processor.Processor;
 import org.moddingx.libx.annotation.processor.modinit.codec.CodecProcessor;
 import org.moddingx.libx.annotation.processor.modinit.config.RegisterConfigProcessor;
 import org.moddingx.libx.annotation.processor.modinit.config.RegisterMapperProcessor;
-import org.moddingx.libx.annotation.processor.modinit.data.DatagenProcessor;
 import org.moddingx.libx.annotation.processor.modinit.model.ModelProcessor;
 import org.moddingx.libx.annotation.processor.modinit.register.RegisterClassProcessor;
 import org.moddingx.libx.annotation.registration.RegisterClass;
@@ -36,8 +34,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
                 RegisterConfig.class,
                 RegisterMapper.class,
                 PrimaryConstructor.class,
-                Param.class,
-                Datagen.class
+                Param.class
         };
     }
 
@@ -111,14 +108,6 @@ public class ModInitProcessor extends Processor implements ModEnv {
         for (Element element : roundEnv.getElementsAnnotatedWith(PrimaryConstructor.class)) {
             try {
                 CodecProcessor.processPrimaryConstructor(element, this);
-            } catch (FailureException e) {
-                //
-            }
-        }
-        
-        for (Element element : roundEnv.getElementsAnnotatedWith(Datagen.class)) {
-            try {
-                DatagenProcessor.processDatagen(element, this);
             } catch (FailureException e) {
                 //
             }

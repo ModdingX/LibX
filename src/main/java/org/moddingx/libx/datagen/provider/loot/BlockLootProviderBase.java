@@ -4,7 +4,7 @@ import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.PackOutput;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
@@ -32,13 +32,12 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.datagen.LootBuilders;
+import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.loot.LootBuilders;
 import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.LootFactory;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.SimpleLootFactory;
-import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,8 +46,8 @@ import java.util.List;
 
 public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
-    protected BlockLootProviderBase(ModX mod, PackOutput packOutput) {
-        super(mod, packOutput, "blocks", LootContextParamSets.BLOCK, ForgeRegistries.BLOCKS);
+    protected BlockLootProviderBase(DatagenContext ctx) {
+        super(ctx, "blocks", LootContextParamSets.BLOCK, Registries.BLOCK);
     }
     
     @Nullable

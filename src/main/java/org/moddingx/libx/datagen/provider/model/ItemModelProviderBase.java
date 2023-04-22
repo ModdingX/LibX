@@ -1,6 +1,5 @@
-package org.moddingx.libx.datagen.provider;
+package org.moddingx.libx.datagen.provider.model;
 
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
@@ -10,9 +9,9 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.loaders.DynamicFluidContainerModelBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.RendererOnDataGenException;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.mod.ModX;
@@ -44,9 +43,9 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
     private final Set<Item> handheld = new HashSet<>();
     private final Set<Item> ignored = new HashSet<>();
 
-    public ItemModelProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper fileHelper) {
-        super(packOutput, mod.modid, fileHelper);
-        this.mod = mod;
+    public ItemModelProviderBase(DatagenContext ctx) {
+        super(ctx.output(), ctx.mod().modid, ctx.fileHelper());
+        this.mod = ctx.mod();
     }
 
     @Nonnull

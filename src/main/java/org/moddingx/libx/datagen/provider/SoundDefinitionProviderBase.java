@@ -9,6 +9,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
 import net.minecraftforge.common.data.SoundDefinitionsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
@@ -31,9 +32,9 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     private final Set<ResourceLocation> ignored = new HashSet<>();
     private final Map<ResourceLocation, SoundDefinitionBuilder> sounds = new HashMap<>();
 
-    public SoundDefinitionProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper helper) {
-        this.mod = mod;
-        this.provider = new ParentProvider(packOutput, mod.modid, helper) {
+    public SoundDefinitionProviderBase(DatagenContext ctx) {
+        this.mod = ctx.mod();
+        this.provider = new ParentProvider(ctx.output(), ctx.mod().modid, ctx.fileHelper()) {
             
             @Override
             public void registerSounds() {

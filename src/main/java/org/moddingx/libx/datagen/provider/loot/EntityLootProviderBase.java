@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.loot;
 
 import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.data.PackOutput;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -12,16 +12,15 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
-import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nullable;
 
 public abstract class EntityLootProviderBase extends LootProviderBase<EntityType<?>> {
 
-    protected EntityLootProviderBase(ModX mod, PackOutput packOutput) {
-        super(mod, packOutput, "entities", LootContextParamSets.ENTITY, ForgeRegistries.ENTITY_TYPES);
+    protected EntityLootProviderBase(DatagenContext ctx) {
+        super(ctx, "entities", LootContextParamSets.ENTITY, Registries.ENTITY_TYPE);
     }
 
     @Nullable

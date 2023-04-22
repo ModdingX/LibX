@@ -4,7 +4,9 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFileCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -18,7 +20,7 @@ import java.util.List;
 public class PoolExtension {
     
     public static final Codec<PoolExtension> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("pool").forGetter(p -> p.poolId),
+            ResourceLocation.CODEC.fieldOf("pool").forGetter(p -> p.pool.location()),
             Codec.BOOL.fieldOf("required").orElse(false).forGetter(p -> p.required),
             Codec.mapPair(
                     StructurePoolElement.CODEC.fieldOf("element"),
@@ -28,12 +30,16 @@ public class PoolExtension {
 
     public static final Codec<Holder<PoolExtension>> CODEC = RegistryFileCodec.create(SandBox.TEMPLATE_POOL_EXTENSION, DIRECT_CODEC);
     
-    private final ResourceLocation poolId;
+    private final ResourceKey<StructureTemplatePool> pool;
     private final boolean required;
     private final List<Pair<StructurePoolElement, Integer>> elements;
 
-    public PoolExtension(ResourceLocation poolId, boolean required, List<Pair<StructurePoolElement, Integer>> elements) {
-        this.poolId = poolId;
+    private PoolExtension(ResourceLocation poolId, boolean required, List<Pair<StructurePoolElement, Integer>> elements) {
+        this(ResourceKey.create(Registries.TEMPLATE_POOL, poolId), required, elements);
+    }
+    
+    public PoolExtension(ResourceKey<StructureTemplatePool> pool, boolean required, List<Pair<StructurePoolElement, Integer>> elements) {
+        this.pool = pool;
         this.required = required;
         this.elements = List.copyOf(elements);
     }
@@ -41,8 +47,8 @@ public class PoolExtension {
     /**
      * Gets the pool id to extend.
      */
-    public ResourceLocation poolId() {
-        return this.poolId;
+    public ResourceKey<StructureTemplatePool> pool() {
+        return this.pool;
     }
 
     /**

@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.datagen;
+package org.moddingx.libx.impl.datagen.model;
 
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;

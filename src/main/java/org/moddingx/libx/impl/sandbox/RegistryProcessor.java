@@ -19,7 +19,7 @@ public class RegistryProcessor {
         Registry<PoolExtension> extRegistry = access.getLayer(RegistryLayer.WORLDGEN).registry(SandBox.TEMPLATE_POOL_EXTENSION).orElse(null);
         if (poolRegistry != null && extRegistry != null) {
             for (PoolExtension ext : extRegistry.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).toList()) {
-                StructureTemplatePool pool = poolRegistry.getOptional(ext.poolId()).orElse(null);
+                StructureTemplatePool pool = poolRegistry.getOptional(ext.pool()).orElse(null);
                 if (pool != null) {
                     for (Pair<StructurePoolElement, Integer> entry : ext.elements()) {
                         for (int i = 0; i < entry.getSecond(); i++) {

@@ -3,12 +3,11 @@ package org.moddingx.libx.datagen.provider.texture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.datagen.texture.SignTextureFactory;
 import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import org.moddingx.libx.mod.ModX;
@@ -58,9 +57,9 @@ public abstract class TextureProviderBase implements DataProvider {
     private final TextureGenerator generator;
     private final Map<ResourceLocation, TextureFactory> textures;
 
-    protected TextureProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper fileHelper) {
-        this.mod = mod;
-        this.generator = new TextureGenerator(packOutput, fileHelper);
+    protected TextureProviderBase(DatagenContext ctx) {
+        this.mod = ctx.mod();
+        this.generator = new TextureGenerator(ctx.target(), ctx.fileHelper());
         this.textures = new HashMap<>();
     }
 

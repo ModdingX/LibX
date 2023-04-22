@@ -1,4 +1,4 @@
-package org.moddingx.libx.datagen.provider;
+package org.moddingx.libx.datagen.provider.model;
 
 import net.minecraft.core.Direction;
 import net.minecraft.data.CachedOutput;
@@ -17,8 +17,9 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.LibX;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
-import org.moddingx.libx.impl.datagen.TypedBlockModelProvider;
+import org.moddingx.libx.impl.datagen.model.TypedBlockModelProvider;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.lazy.LazyValue;
 
@@ -58,11 +59,11 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     private ResourceLocation currentRenderTypes = null;
     private final Map<ResourceLocation, TypedBlockModelProvider> typedModelProviders = new HashMap<>();
 
-    public BlockStateProviderBase(ModX mod, PackOutput packOutput, ExistingFileHelper fileHelper) {
-        super(packOutput, mod.modid, fileHelper);
-        this.mod = mod;
-        this.packOutput = packOutput;
-        this.fileHelper = fileHelper;
+    public BlockStateProviderBase(DatagenContext ctx) {
+        super(ctx.output(), ctx.mod().modid, ctx.fileHelper());
+        this.mod = ctx.mod();
+        this.packOutput = ctx.output();
+        this.fileHelper = ctx.fileHelper();
     }
 
     @Nonnull

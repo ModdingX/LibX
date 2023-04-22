@@ -36,7 +36,7 @@ public class CodecProcessor {
         List<? extends Element> elems;
         BiFunction<Element, String, String> getterFunc;
         List<GeneratedCodec.CodecElement> params = new ArrayList<>();
-        int maxMatchingCtors;
+        int maxMatchingConstructors;
         if (rawElement.getKind() == ElementKind.CONSTRUCTOR && rawElement.getEnclosingElement().getKind() != ElementKind.RECORD && rawElement instanceof ExecutableElement element) {
             if (!(element.getEnclosingElement() instanceof TypeElement)) {
                 env.messager().printMessage(Diagnostic.Kind.ERROR, "Element annotated with @PrimaryConstructor is not a TypeElement.", element);
@@ -49,12 +49,12 @@ public class CodecProcessor {
             }
             elems = element.getParameters();
             getterFunc = (param, name) -> getGetter((TypeElement) element.getEnclosingElement(), param.asType(), name, env);
-            maxMatchingCtors = 1;
+            maxMatchingConstructors = 1;
         } else if (rawElement.getKind() == ElementKind.RECORD && rawElement instanceof TypeElement element) {
             typeElem = element;
             elems = element.getRecordComponents();
             getterFunc = (param, name) -> GeneratedCodec.methodGetter(typeElem.getQualifiedName().toString(), name);
-            maxMatchingCtors = 0;
+            maxMatchingConstructors = 0;
         } else {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "@PrimaryConstructor can only be used on constructors or records.", rawElement);
             return;
@@ -63,7 +63,7 @@ public class CodecProcessor {
         if (typeElem.getEnclosedElements().stream()
                 .filter(e -> e.getKind() == ElementKind.CONSTRUCTOR)
                 .filter(e -> e.getAnnotation(PrimaryConstructor.class) != null)
-                .count() > maxMatchingCtors) {
+                .count() > maxMatchingConstructors) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "A class can only have one primary constructor.", typeElem);
             return;
         }

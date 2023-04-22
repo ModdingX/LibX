@@ -1,14 +1,16 @@
 package org.moddingx.libx.impl;
 
-import net.minecraftforge.data.event.GatherDataEvent;
 import org.moddingx.libx.LibX;
+import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.impl.sandbox.InternalBiomeLayerProvider;
 import org.moddingx.libx.impl.tags.InternalTagProvider;
 
 public class InternalDataGen {
     
-    public static void gatherData(GatherDataEvent event) {
-        event.getGenerator().addProvider(true, new InternalTagProvider(LibX.getInstance(), event.getGenerator(), event.getLookupProvider(), event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true, new InternalBiomeLayerProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+    public static void init() {
+        DatagenSystem.create(LibX.getInstance(), system -> {
+            system.addDataProvider(InternalTagProvider::new);
+            system.addDataProvider(InternalBiomeLayerProvider::new);
+        });
     }
 }

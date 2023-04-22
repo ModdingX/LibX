@@ -2,10 +2,10 @@ package org.moddingx.libx.impl.datagen.texture;
 
 import com.google.common.hash.HashCode;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.moddingx.libx.datagen.PackTarget;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -17,16 +17,16 @@ import java.util.concurrent.CompletableFuture;
 
 public class TextureGenerator {
 
-    private final PackOutput packOutput;
+    private final PackTarget packTarget;
     private final ExistingFileHelper fileHelper;
 
-    public TextureGenerator(PackOutput packOutput, ExistingFileHelper fileHelper) {
-        this.packOutput = packOutput;
+    public TextureGenerator(PackTarget packTarget, ExistingFileHelper fileHelper) {
+        this.packTarget = packTarget;
         this.fileHelper = fileHelper;
     }
 
     public CompletableFuture<?> save(CachedOutput output, ResourceLocation id, BufferedImage image) {
-        Path path = this.packOutput.getOutputFolder().resolve(PackType.CLIENT_RESOURCES.getDirectory()).resolve(id.getNamespace()).resolve(id.getPath());
+        Path path = this.packTarget.path(PackType.CLIENT_RESOURCES).resolve(id.getNamespace()).resolve(id.getPath());
         return this.save(output, image, path);
     }
     

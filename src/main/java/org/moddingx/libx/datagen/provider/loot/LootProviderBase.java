@@ -1,8 +1,8 @@
 package org.moddingx.libx.datagen.provider.loot;
 
+import net.minecraft.core.Registry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -26,13 +26,14 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.IForgeRegistry;
-import org.moddingx.libx.datagen.LootBuilders;
+import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.PackTarget;
+import org.moddingx.libx.datagen.loot.LootBuilders;
 import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.LootFactory;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.SimpleLootFactory;
-import org.moddingx.libx.impl.datagen.LootData;
+import org.moddingx.libx.impl.datagen.loot.LootData;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
@@ -49,7 +50,7 @@ import java.util.stream.Stream;
 public abstract class LootProviderBase<T> implements DataProvider {
 
     protected final ModX mod;
-    protected final PackOutput packOutput;
+    protected final PackTarget packTarget;
     protected final String folder;
     protected final LootContextParamSet params;
     protected final Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements;
@@ -57,24 +58,24 @@ public abstract class LootProviderBase<T> implements DataProvider {
     private final Set<T> ignored = new HashSet<>();
     private final Map<T, Function<T, LootTable.Builder>> functionMap = new HashMap<>();
 
-    protected LootProviderBase(ModX mod, PackOutput packOutput, String folder, LootContextParamSet params, IForgeRegistry<T> registry) {
-        this(mod, packOutput, folder, params, () -> registry.getEntries().stream()
+    protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, ResourceKey<? extends Registry<T>> registryKey) {
+        this(ctx, folder, params, () -> ctx.registries().registry(registryKey).entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(entry -> Map.entry(entry.getKey().location(), entry.getValue()))
         );
     }
     
-    protected LootProviderBase(ModX mod, PackOutput packOutput, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements) {
-        this.mod = mod;
-        this.packOutput = packOutput;
+    protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements) {
+        this.mod = ctx.mod();
+        this.packTarget = ctx.target();
         this.folder = folder;
         this.params = params;
         this.elements = elements;
     }
     
-    protected LootProviderBase(ModX mod, PackOutput packOutput, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
-        this.mod = mod;
-        this.packOutput = packOutput;
+    protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
+        this.mod = ctx.mod();
+        this.packTarget = ctx.target();
         this.folder = folder;
         this.params = params;
         this.elements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
@@ -138,7 +139,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
         return CompletableFuture.allOf(tables.entrySet().stream().map(entry -> {
-            Path path = this.getPath(this.packOutput.getOutputFolder(), entry.getKey());
+            Path path = this.getPath(this.packTarget.path(PackType.SERVER_DATA), entry.getKey());
             return DataProvider.saveStable(cache, LootTables.serialize(entry.getValue().setParamSet(this.params).build()), path);
         }).toArray(CompletableFuture[]::new));
     }
@@ -155,7 +156,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
     }
     
     private Path getPath(Path root, ResourceLocation id) {
-        return root.resolve(PackType.SERVER_DATA.getDirectory()).resolve(id.getNamespace() + "/loot_tables/" + this.folder + "/" + id.getPath() + ".json");
+        return root.resolve(id.getNamespace() + "/loot_tables/" + this.folder + "/" + id.getPath() + ".json");
     }
     
     protected final LootModifier<T> modifier(BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolSingletonContainer.Builder<?>> function) {

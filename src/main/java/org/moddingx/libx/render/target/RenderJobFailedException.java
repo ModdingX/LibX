@@ -6,7 +6,7 @@ package org.moddingx.libx.render.target;
 public class RenderJobFailedException extends RuntimeException {
 
     /**
-     * The reason for the faile.
+     * The reason for the failure.
      */
     public final Reason reason;
     

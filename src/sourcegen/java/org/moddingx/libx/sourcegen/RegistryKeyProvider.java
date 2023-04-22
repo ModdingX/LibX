@@ -65,8 +65,8 @@ public class RegistryKeyProvider<T> implements DataProvider {
             StringBuilder sourceFile = new StringBuilder();
             sourceFile.append("package ").append(PACKAGE).append(";\n\n");
             sourceFile.append("import net.minecraft.core.Registry;\n");
-            sourceFile.append("import net.minecraft.resources.ResourceLocation;\n");
             sourceFile.append("import net.minecraft.resources.ResourceKey;\n");
+            sourceFile.append("import net.minecraft.resources.ResourceLocation;\n");
             sourceFile.append("import ").append(this.registryClass.getName().replace('$', '.')).append(";\n\n");
             sourceFile.append("public class ").append(this.className).append(" {\n\n");
             sourceFile.append("    private ").append(this.className).append("() {}\n\n");

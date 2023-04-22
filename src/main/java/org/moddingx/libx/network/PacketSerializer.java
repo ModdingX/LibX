@@ -8,7 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 public interface PacketSerializer<T> {
 
     /**
-     * The class of the message serialised by this serialiser.
+     * The class of the message serialised by this serializer.
      */
     Class<T> messageClass();
 

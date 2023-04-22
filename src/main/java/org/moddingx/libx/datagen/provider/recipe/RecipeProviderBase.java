@@ -2,7 +2,6 @@ package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +12,7 @@ import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.TrueCondition;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;
 import org.moddingx.libx.mod.ModX;
 
@@ -36,9 +36,9 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     protected final ModX mod;
     private Consumer<FinishedRecipe> consumer;
 
-    public RecipeProviderBase(ModX mod, PackOutput packOutput) {
-        super(packOutput);
-        this.mod = mod;
+    public RecipeProviderBase(DatagenContext ctx) {
+        super(ctx.output());
+        this.mod = ctx.mod();
     }
 
     @Nonnull

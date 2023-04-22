@@ -4,7 +4,6 @@ import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +18,8 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
@@ -37,14 +38,14 @@ import java.util.stream.Collectors;
 public abstract class AdvancementProviderBase implements DataProvider {
     
     protected final ModX mod;
-    protected final PackOutput packOutput;
+    protected final PackTarget packTarget;
     private final Map<ResourceLocation, Supplier<Advancement>> advancements = new HashMap<>();
     private String rootId = null;
     private Supplier<Advancement> rootSupplier = null;
 
-    public AdvancementProviderBase(ModX mod, PackOutput packOutput) {
-        this.mod = mod;
-        this.packOutput = packOutput;
+    public AdvancementProviderBase(DatagenContext ctx) {
+        this.mod = ctx.mod();
+        this.packTarget = ctx.target();
     }
 
     public abstract void setup();
@@ -61,7 +62,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         this.setup();
         return CompletableFuture.allOf(this.advancements.values().stream().map(supplier -> {
             Advancement advancement = supplier.get();
-            Path path = this.packOutput.getOutputFolder().resolve(PackType.SERVER_DATA.getDirectory())
+            Path path = this.packTarget.path(PackType.SERVER_DATA)
                     .resolve(advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
             return DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
         }).toArray(CompletableFuture[]::new));

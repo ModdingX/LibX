@@ -42,7 +42,7 @@ public class ReflectionHacks {
         if (field.getType() == void.class) {
             throw new IllegalStateException("Field with void type");
         } else if (field.isEnumConstant()) {
-            throw new IllegalStateException("Can't change enum field");
+            throw new IllegalArgumentException("Can't change enum constant");
         } else if (field.getType() == boolean.class) {
             if (value == null) throw new NullPointerException("Null primitive for field: " + field);
             unsafe.get().putBooleanVolatile(base, offset, (Boolean) value);

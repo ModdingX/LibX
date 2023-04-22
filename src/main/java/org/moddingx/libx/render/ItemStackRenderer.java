@@ -23,7 +23,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.base.BlockBase;
-import org.moddingx.libx.datagen.provider.ItemModelProviderBase;
+import org.moddingx.libx.datagen.provider.model.ItemModelProviderBase;
 import org.moddingx.libx.impl.RendererOnDataGenException;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.SetupContext;

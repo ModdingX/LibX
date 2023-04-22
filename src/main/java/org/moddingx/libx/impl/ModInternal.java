@@ -55,7 +55,7 @@ public class ModInternal {
         synchronized (LOCK) {
             if (ID_MAP.containsKey(modid)) {
                 return Optional.of(ID_MAP.get(modid));
-            }else {
+            } else {
                 return Optional.empty();
             }
         }
