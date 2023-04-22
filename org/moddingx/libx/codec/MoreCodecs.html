@@ -325,9 +325,9 @@ V&gt;</span>
  After that, the key is encoded and merged into the <code>MapLike</code> from the value codec.
  
  Decoding works the other way round in that the key is read first. Then the <code>valueCodecs</code> function
- is used to obtain a <code>Codec</code> to decode the value. In the end, both key and value are used to construct
- the resulting element. Both the <code>MapCodec</code> and the codecs returned from <code>valueCodecs</code> <b>must</b>
- be able to work with additional values, they don't know about.</div>
+ is used to obtain a <code>Codec</code> to decode the value. In the end, the codec uses both key and value to
+ construct the resulting element. Both the <code>MapCodec</code> and the codecs returned from <code>valueCodecs</code>
+ <b>must</b> be able to work with additional values, they don't know about.</div>
 </section>
 </li>
 <li>

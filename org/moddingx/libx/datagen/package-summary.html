@@ -16,7 +16,11 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="package-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -75,8 +79,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="../package-summary.html">org.moddingx.libx</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="provider/package-summary.html">org.moddingx.libx.datagen.provider</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first odd-row-color"><a href="loot/package-summary.html">org.moddingx.libx.datagen.loot</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="provider/package-summary.html">org.moddingx.libx.datagen.provider</a></div>
+<div class="col-last even-row-color">
 <div class="block">Contains base classes for various <code>data providers</code>.</div>
 </div>
 </div>
@@ -84,13 +90,31 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="caption"><span>Classes</span></div>
-<div class="summary-table two-column-summary">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
+<div id="class-summary.tabpanel" role="tabpanel">
+<div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LootBuilders.html" title="class in org.moddingx.libx.datagen">LootBuilders</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DatagenContext.html" title="class in org.moddingx.libx.datagen">DatagenContext</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Contains builders vor various loot table entry containers.</div>
+<div class="block">Context for creation of data and registry providers.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="DatagenStage.html" title="enum class in org.moddingx.libx.datagen">DatagenStage</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">A stage in the LibX datagen system.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DatagenSystem.html" title="class in org.moddingx.libx.datagen">DatagenSystem</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PackTarget.html" title="class in org.moddingx.libx.datagen">PackTarget</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">A pack target contains output paths for the different <code>pack types</code>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RegistryProvider.html" title="interface in org.moddingx.libx.datagen">RegistryProvider</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RegistrySet.html" title="interface in org.moddingx.libx.datagen">RegistrySet</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Provides access to datagen registries.</div>
+</div>
 </div>
 </div>
 </div>
