@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * SandBox provider for {@link LevelStem dimensions}.
@@ -155,6 +156,13 @@ public abstract class DimensionProviderBase extends SandBoxProviderBase {
          */
         public NoiseGeneratorBuilder noiseGenerator(Holder<NoiseGeneratorSettings> settings) {
             return new NoiseGeneratorBuilder(this.dimensionType, this.biomes, settings);
+        }
+        
+        /**
+         * Use a given chunk generator.
+         */
+        public Holder<LevelStem> generator(Function<BiomeSource, ChunkGenerator> generator) {
+            return DimensionProviderBase.this.dimension(this.dimensionType, generator.apply(this.biomes));
         }
     }
     

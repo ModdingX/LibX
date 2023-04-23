@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.moddingx.libx.impl.config.gui.screen.widget.TextWidget;
+import org.moddingx.libx.render.RenderHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -23,6 +24,7 @@ public class PreviewWidget extends TextWidget {
         //noinspection IntegerDivisionInFloatingPointContext
         poseStack.translate(this.getX() + (this.width / 2), this.getY() + ((this.height - 8) / 2), 20);
         poseStack.scale(2, 2, 2);
+        RenderHelper.resetColor();
         drawCenteredString(poseStack, Minecraft.getInstance().font, this.getMessage(), 0, 0, color);
         poseStack.popPose();
     }

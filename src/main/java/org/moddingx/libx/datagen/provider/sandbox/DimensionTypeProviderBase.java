@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
@@ -156,7 +157,7 @@ public abstract class DimensionTypeProviderBase extends SandBoxProviderBase {
         }
 
         public DimensionTypeBuilder monsterSpawnRule(int maxSkyLight, int maxBlockLight) {
-            return this.monsterSpawnRule(UniformInt.of(0, maxSkyLight), maxBlockLight);
+            return this.monsterSpawnRule(maxSkyLight == 0 ? ConstantInt.of(0) : UniformInt.of(0, maxSkyLight), maxBlockLight);
         }
         
         public DimensionTypeBuilder monsterSpawnRule(IntProvider skyLight, int maxBlockLight) {

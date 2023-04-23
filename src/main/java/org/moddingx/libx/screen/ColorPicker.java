@@ -210,6 +210,7 @@ public class ColorPicker extends Panel {
         GuiComponent.blit(poseStack, 116, 70, 40, 0, 0, 83, 29, 256, 256);
         
         String colorText = String.format("#%06X", colorValue);
+        RenderHelper.resetColor();
         //noinspection IntegerDivisionInFloatingPointContext
         Minecraft.getInstance().font.draw(poseStack, colorText, 157 - (Minecraft.getInstance().font.width(colorText) / 2), 80, highlightColor);
         

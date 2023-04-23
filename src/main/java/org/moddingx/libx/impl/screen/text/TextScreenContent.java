@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
+import org.moddingx.libx.render.RenderHelper;
 import org.moddingx.libx.screen.text.AlignedComponent;
 
 import javax.annotation.Nullable;
@@ -57,6 +58,7 @@ public class TextScreenContent {
     
     public void render(PoseStack poseStack, int left, int top) {
         for (PlacedText line : this.lines) {
+            RenderHelper.resetColor();
             if (line.shadow()) {
                 this.font.drawShadow(poseStack, line.text(), left + line.x(), top + line.y(), line.color());
             } else {

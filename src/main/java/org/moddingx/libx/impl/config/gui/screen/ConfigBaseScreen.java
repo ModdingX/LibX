@@ -21,6 +21,7 @@ import net.minecraftforge.client.gui.widget.ScrollPanel;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
+import org.moddingx.libx.render.RenderHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -207,6 +208,7 @@ public abstract class ConfigBaseScreen extends Screen {
     public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         this.renderDirtBackground(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTicks);
+        RenderHelper.resetColor();
         //noinspection IntegerDivisionInFloatingPointContext
         this.mc.font.drawShadow(poseStack, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFF);
     }

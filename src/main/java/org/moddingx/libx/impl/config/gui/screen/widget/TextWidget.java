@@ -9,6 +9,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
+import org.moddingx.libx.render.RenderHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -26,6 +27,7 @@ public class TextWidget extends AbstractWidget {
 
     @Override
     public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        RenderHelper.resetColor();
         //noinspection IntegerDivisionInFloatingPointContext
         Minecraft.getInstance().font.drawShadow(poseStack, this.getMessage(), this.getX(), this.getY() + ((this.height - 8) / 2), 0xFFFFFF);
         if (this.isHovered && !this.tooltip.isEmpty()) {

@@ -59,6 +59,7 @@ public class TextScreen extends Screen {
         Style tooltip = this.content.hoveredStyle(mouseX - left, mouseY - top);
         if (tooltip != null) {
             poseStack.translate(0, 0, 20);
+            RenderHelper.resetColor();
             this.renderComponentHoverEffect(poseStack, tooltip, mouseX, mouseY);
         }
         poseStack.popPose();

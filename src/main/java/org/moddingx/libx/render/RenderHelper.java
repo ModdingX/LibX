@@ -153,10 +153,10 @@ public class RenderHelper {
         RenderSystem.setShaderTexture(0, TEXTURE_WHITE);
         RenderSystem.setShaderColor(0.2f, 0.2f, 0.2f, 0.8f);
         GuiComponent.blit(poseStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
-        resetColor();
         RenderSystem.disableBlend();
         poseStack.translate(widthHalf + 2, heightHalf + 2, 10);
 
+        resetColor();
         Minecraft.getInstance().font.draw(poseStack, text, -widthHalf, -heightHalf, 0xFFFFFF);
         poseStack.popPose();
     }
