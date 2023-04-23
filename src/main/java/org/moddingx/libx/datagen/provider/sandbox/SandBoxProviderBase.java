@@ -31,10 +31,12 @@ public abstract class SandBoxProviderBase implements RegistryProvider {
 
     protected final ModX mod;
     protected final RegistrySet registries;
+    protected final DatagenContext context;
     
     protected SandBoxProviderBase(DatagenContext ctx, DatagenStage requiredStage) {
         this.mod = ctx.mod();
         this.registries = ctx.registries();
+        this.context = ctx;
         if (ctx.stage() != requiredStage) {
             throw new IllegalStateException("Invalid stage: Provider '" + this.getName() + "' must run on " + requiredStage + " stage.");
         }
