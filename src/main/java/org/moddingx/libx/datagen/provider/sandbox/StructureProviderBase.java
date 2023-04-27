@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.function.Function;
  *
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
-public abstract class StructureProviderBase extends SandBoxProviderBase {
+public abstract class StructureProviderBase extends RegistryProviderBase {
 
     protected StructureProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
@@ -208,7 +209,7 @@ public abstract class StructureProviderBase extends SandBoxProviderBase {
          * Builds the {@link Structure}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<Structure> build() {

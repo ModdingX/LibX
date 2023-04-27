@@ -8,6 +8,7 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import org.moddingx.libx.sandbox.SandBox;
 import org.moddingx.libx.sandbox.surface.BiomeSurface;
 import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
@@ -17,7 +18,7 @@ import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
  *
  * This provider must run in the {@link DatagenStage#EXTENSION_SETUP extension setup} stage.
  */
-public abstract class SurfaceProviderBase extends SandBoxProviderBase {
+public abstract class SurfaceProviderBase extends RegistryProviderBase {
 
     protected SurfaceProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.EXTENSION_SETUP);
@@ -48,7 +49,7 @@ public abstract class SurfaceProviderBase extends SandBoxProviderBase {
      * Creates a {@link BiomeSurface} for the given {@link Biome}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<BiomeSurface> biome(Holder<Biome> biome, SurfaceRules.RuleSource... rules) {
@@ -60,7 +61,7 @@ public abstract class SurfaceProviderBase extends SandBoxProviderBase {
      * Creates a {@link BiomeSurface} for the given {@link Biome}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<BiomeSurface> biome(ResourceKey<Biome> biome, SurfaceRules.RuleSource... rules) {
@@ -111,7 +112,7 @@ public abstract class SurfaceProviderBase extends SandBoxProviderBase {
          * Builds the {@link SurfaceRuleSet}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<SurfaceRuleSet> build() {

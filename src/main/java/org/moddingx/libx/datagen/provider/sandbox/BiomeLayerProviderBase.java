@@ -7,6 +7,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import org.moddingx.libx.sandbox.SandBox;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 
@@ -21,7 +22,7 @@ import java.util.function.Function;
  * 
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
-public abstract class BiomeLayerProviderBase extends SandBoxProviderBase {
+public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
 
     protected BiomeLayerProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
@@ -95,7 +96,7 @@ public abstract class BiomeLayerProviderBase extends SandBoxProviderBase {
          * Builds the {@link BiomeLayer}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeLayer> build() {

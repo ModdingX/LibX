@@ -10,6 +10,7 @@ import net.minecraft.world.level.levelgen.structure.pools.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ import java.util.List;
  * Base class for {@link TemplateProviderBase} and {@link TemplateExtensionProviderBase}. These have been split up as
  * they need to run in different stages.
  */
-public sealed abstract class AnyTemplateProviderBase extends SandBoxProviderBase permits TemplateProviderBase, TemplateExtensionProviderBase {
+public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBase permits TemplateProviderBase, TemplateExtensionProviderBase {
 
     protected AnyTemplateProviderBase(DatagenContext ctx, DatagenStage requiredStage) {
         super(ctx, requiredStage);

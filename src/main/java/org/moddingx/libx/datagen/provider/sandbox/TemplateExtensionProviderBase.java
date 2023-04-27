@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import org.moddingx.libx.sandbox.SandBox;
 import org.moddingx.libx.sandbox.structure.PoolExtension;
 
@@ -65,7 +66,7 @@ public abstract non-sealed class TemplateExtensionProviderBase extends AnyTempla
          * Builds the {@link PoolExtension}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<PoolExtension> build() {

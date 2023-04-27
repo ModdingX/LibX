@@ -1,4 +1,4 @@
-package org.moddingx.libx.datagen.provider.sandbox;
+package org.moddingx.libx.datagen.provider;
 
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.Holder;
@@ -27,13 +27,13 @@ import java.util.List;
  * inside the provider to the registries. These fields should contain intrusive holders created through the
  * current {@link RegistrySet}.
  */
-public abstract class SandBoxProviderBase implements RegistryProvider {
+public abstract class RegistryProviderBase implements RegistryProvider {
 
     protected final ModX mod;
     protected final RegistrySet registries;
     protected final DatagenContext context;
     
-    protected SandBoxProviderBase(DatagenContext ctx, DatagenStage requiredStage) {
+    protected RegistryProviderBase(DatagenContext ctx, DatagenStage requiredStage) {
         this.mod = ctx.mod();
         this.registries = ctx.registries();
         this.context = ctx;
