@@ -6,6 +6,7 @@ import net.minecraft.data.worldgen.Pools;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 /**
  * SandBox provider for {@link StructureTemplatePool template pools}.
@@ -54,7 +55,7 @@ public abstract non-sealed class TemplateProviderBase extends AnyTemplateProvide
          * Builds the {@link StructureTemplatePool}.
          * 
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<StructureTemplatePool> build() {

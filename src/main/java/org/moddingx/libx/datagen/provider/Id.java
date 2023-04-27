@@ -1,9 +1,9 @@
-package org.moddingx.libx.datagen.provider.sandbox;
+package org.moddingx.libx.datagen.provider;
 
 import java.lang.annotation.*;
 
 /**
- * Can be applied to fields in subclasses of {@link SandBoxProviderBase} to register an element by a different id.
+ * Can be applied to fields in subclasses of {@link RegistryProviderBase} to register an element by a different id.
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

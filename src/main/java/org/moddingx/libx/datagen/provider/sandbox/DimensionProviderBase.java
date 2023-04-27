@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.generator.ExtendedNoiseChunkGenerator;
 import org.moddingx.libx.sandbox.generator.LayeredBiomeSource;
@@ -38,7 +39,7 @@ import java.util.function.Function;
  *
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
-public abstract class DimensionProviderBase extends SandBoxProviderBase {
+public abstract class DimensionProviderBase extends RegistryProviderBase {
 
     protected DimensionProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
@@ -67,7 +68,7 @@ public abstract class DimensionProviderBase extends SandBoxProviderBase {
      * Makes a new {@link LevelStem dimension}
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<LevelStem> dimension(ResourceKey<DimensionType> dimensionType, ChunkGenerator generator) {
@@ -78,7 +79,7 @@ public abstract class DimensionProviderBase extends SandBoxProviderBase {
      * Makes a new {@link LevelStem dimension}
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<LevelStem> dimension(Holder<DimensionType> dimensionType, ChunkGenerator generator) {
@@ -234,7 +235,7 @@ public abstract class DimensionProviderBase extends SandBoxProviderBase {
          * Builds the {@link LevelStem dimension}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<LevelStem> build() {
@@ -279,7 +280,7 @@ public abstract class DimensionProviderBase extends SandBoxProviderBase {
          * Builds the {@link LevelStem dimension}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<LevelStem> build() {

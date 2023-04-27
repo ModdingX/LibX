@@ -13,6 +13,7 @@ import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 import java.util.OptionalLong;
 
@@ -21,7 +22,7 @@ import java.util.OptionalLong;
  *
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
-public abstract class DimensionTypeProviderBase extends SandBoxProviderBase {
+public abstract class DimensionTypeProviderBase extends RegistryProviderBase {
 
     protected DimensionTypeProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
@@ -170,7 +171,7 @@ public abstract class DimensionTypeProviderBase extends SandBoxProviderBase {
          * Builds the {@link DimensionType}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<DimensionType> build() {
