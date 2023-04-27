@@ -1,4 +1,4 @@
-package org.moddingx.libx.datagen.provider.sandbox;
+package org.moddingx.libx.datagen.provider;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -8,12 +8,11 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DeathMessageType;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
-import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 import javax.annotation.Nonnull;
 
 /**
- * SandBox provider for {@link DamageType damage type}.
+ * Registry provider for {@link DamageType damage type}.
  * <p>
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
