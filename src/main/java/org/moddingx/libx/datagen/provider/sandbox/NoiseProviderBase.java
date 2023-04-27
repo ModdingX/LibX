@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import org.moddingx.libx.sandbox.SandBox;
 
 import javax.annotation.Nonnull;
@@ -27,7 +28,7 @@ import java.util.List;
  *
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
-public abstract class NoiseProviderBase extends SandBoxProviderBase {
+public abstract class NoiseProviderBase extends RegistryProviderBase {
 
     protected NoiseProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
@@ -49,7 +50,7 @@ public abstract class NoiseProviderBase extends SandBoxProviderBase {
      * Creates new {@link NormalNoise.NoiseParameters noise parameters}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<NormalNoise.NoiseParameters> noise(int firstOctave, double... amplitudes) {
@@ -60,7 +61,7 @@ public abstract class NoiseProviderBase extends SandBoxProviderBase {
      * Wraps a new {@link DensityFunction} for registration.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<DensityFunction> density(DensityFunction function) {
@@ -173,7 +174,7 @@ public abstract class NoiseProviderBase extends SandBoxProviderBase {
          * Builds the {@link NoiseGeneratorSettings}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<NoiseGeneratorSettings> build() {

@@ -25,6 +25,7 @@ import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.material.Fluids;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +37,7 @@ import java.util.List;
  *
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
-public abstract class FeatureProviderBase extends SandBoxProviderBase {
+public abstract class FeatureProviderBase extends RegistryProviderBase {
 
     protected FeatureProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
@@ -51,7 +52,7 @@ public abstract class FeatureProviderBase extends SandBoxProviderBase {
      * Makes a new {@link ConfiguredWorldCarver configured feature} without configuration.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<ConfiguredFeature<?, ?>> feature(Feature<NoneFeatureConfiguration> feature) {
@@ -62,7 +63,7 @@ public abstract class FeatureProviderBase extends SandBoxProviderBase {
      * Makes a new {@link ConfiguredWorldCarver configured feature}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public <C extends FeatureConfiguration> Holder<ConfiguredFeature<?, ?>> feature(Feature<C> feature, C config) {
@@ -73,7 +74,7 @@ public abstract class FeatureProviderBase extends SandBoxProviderBase {
      * Makes a new {@link ConfiguredWorldCarver configured carver}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public <C extends CarverConfiguration> Holder<ConfiguredWorldCarver<?>> carver(WorldCarver<C> carver, C config) {
@@ -205,7 +206,7 @@ public abstract class FeatureProviderBase extends SandBoxProviderBase {
          * Builds the {@link PlacedFeature}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         @Override

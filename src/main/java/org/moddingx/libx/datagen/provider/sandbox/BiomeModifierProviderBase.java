@@ -13,6 +13,7 @@ import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.Set;
  *
  * This provider must run in the {@link DatagenStage#EXTENSION_SETUP extension setup} stage.
  */
-public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
+public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
 
     protected BiomeModifierProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.EXTENSION_SETUP);
@@ -117,7 +118,7 @@ public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
          * Builds the {@link BiomeModifier}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeModifier> build() {
@@ -154,7 +155,7 @@ public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
          * Builds the {@link BiomeModifier}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeModifier> build() {
@@ -182,7 +183,7 @@ public abstract class BiomeModifierProviderBase extends SandBoxProviderBase {
          * Builds the {@link BiomeModifier}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeModifier> build() {

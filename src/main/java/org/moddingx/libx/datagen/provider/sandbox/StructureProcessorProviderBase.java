@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -18,7 +19,7 @@ import java.util.*;
  *
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
-public abstract class StructureProcessorProviderBase extends SandBoxProviderBase {
+public abstract class StructureProcessorProviderBase extends RegistryProviderBase {
 
     protected StructureProcessorProviderBase(DatagenContext ctx) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
@@ -123,7 +124,7 @@ public abstract class StructureProcessorProviderBase extends SandBoxProviderBase
          * Builds the {@link StructureProcessorList}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link SandBoxProviderBase} does this automatically if the result is stored in a
+         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<StructureProcessorList> build() {
