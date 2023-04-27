@@ -1,6 +1,5 @@
 package org.moddingx.libx.datagen.provider.patchouli.content;
 
-import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
@@ -12,7 +11,6 @@ import java.util.List;
  * Base class for pages with some special content that can be followed by some text. This class will handle
  * merging with other caption content and splitting the text up on multiple pages if required.
  */
-@Experimental
 public abstract class CaptionContent implements Content {
     
     @Nullable

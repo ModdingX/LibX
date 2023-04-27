@@ -1,6 +1,5 @@
 package org.moddingx.libx.datagen.provider.patchouli.page;
 
-import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.EntryBuilder;
 import org.moddingx.libx.impl.datagen.patchouli.content.CompositeContent;
 
@@ -15,7 +14,6 @@ import java.util.List;
  * content is merged with some caption content, both of them will result in a single content that adds a
  * recipe page with text.
  */
-@Experimental
 public interface Content {
 
     /**

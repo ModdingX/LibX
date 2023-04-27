@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.function.Consumer;
 /**
  * Builder for a patchouli book category.
  */
-@Experimental
 public class CategoryBuilder {
 
     public final ResourceLocation id;

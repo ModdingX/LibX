@@ -3,7 +3,6 @@ package org.moddingx.libx.datagen.provider.patchouli.content;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
-import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 
 import javax.annotation.Nullable;
@@ -12,7 +11,6 @@ import java.util.List;
 /**
  * Content for pages with a single recipe followed by some text.
  */
-@Experimental
 public abstract class RecipePage extends CaptionContent {
 
     protected final String pageType;

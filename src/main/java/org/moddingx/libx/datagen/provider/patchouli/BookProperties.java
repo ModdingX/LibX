@@ -1,7 +1,6 @@
 package org.moddingx.libx.datagen.provider.patchouli;
 
 import net.minecraft.server.packs.PackType;
-import org.moddingx.libx.annotation.meta.Experimental;
 
 /**
  * Basic properties for a patchouli book.
@@ -13,7 +12,6 @@ import org.moddingx.libx.annotation.meta.Experimental;
  *                  in a different namespace ({@code modid_bookname}), so it does not clash with the main language file when the
  *                  jar is built.
  */
-@Experimental
 public record BookProperties(String bookName, PackType packTarget, boolean translate) {
 
     public BookProperties(String name) {

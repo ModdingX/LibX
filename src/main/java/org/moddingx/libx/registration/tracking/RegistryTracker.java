@@ -3,7 +3,6 @@ package org.moddingx.libx.registration.tracking;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolderRegistry;
-import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.impl.registration.tracking.TrackingData;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
@@ -17,7 +16,6 @@ import java.util.function.Predicate;
  * Provides a way to track the values of fields with a registry object. That means if the registry object is
  * replaced, the field is updated.
  */
-@Experimental
 public class RegistryTracker {
 
     private static final Object LOCK = new Object();

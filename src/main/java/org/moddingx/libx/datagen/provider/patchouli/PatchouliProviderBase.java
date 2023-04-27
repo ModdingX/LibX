@@ -6,7 +6,6 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import org.moddingx.libx.annotation.meta.Experimental;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.impl.datagen.DatagenHelper;
@@ -26,7 +25,6 @@ import java.util.stream.Stream;
 /**
  * A provider for patchouli categories and entries. This will not generate the {@code book.json} file.
  */
-@Experimental
 public abstract class PatchouliProviderBase implements DataProvider {
     
     protected final ModX mod;
