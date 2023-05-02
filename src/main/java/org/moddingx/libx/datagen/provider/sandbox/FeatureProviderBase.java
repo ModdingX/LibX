@@ -104,11 +104,19 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
         }
         
         public AnyPlacementBuilder<T> count(int count) {
-            return this.count(ConstantInt.of(count));
+            if (count > 1) {
+                return this.count(ConstantInt.of(count));
+            } else {
+                return this;
+            }
         }
         
         public AnyPlacementBuilder<T> count(int min, int max) {
-            return this.count(UniformInt.of(min, max));
+            if (min == max) {
+                return this.count(min);
+            } else {
+                return this.count(UniformInt.of(min, max));
+            }
         }
         
         public AnyPlacementBuilder<T> count(IntProvider count) {
