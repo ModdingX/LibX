@@ -36,9 +36,9 @@ public abstract class DamageTypeProviderBase extends RegistryProviderBase {
 
         private final String msgId;
         private final float exhaustion;
-        private DamageScaling scaling;
-        private DamageEffects effects;
-        private DeathMessageType deathMessageType;
+        private DamageScaling scaling = DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER;
+        private DamageEffects effects = DamageEffects.HURT;
+        private DeathMessageType deathMessageType = DeathMessageType.DEFAULT;
 
         public DamageTypeBuilder(String msgId, float exhaustion) {
             this.msgId = msgId;
