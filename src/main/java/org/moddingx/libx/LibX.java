@@ -39,6 +39,8 @@ import org.moddingx.libx.sandbox.SandBox;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.generator.ExtendedNoiseChunkGenerator;
 import org.moddingx.libx.sandbox.generator.LayeredBiomeSource;
+import org.moddingx.libx.sandbox.placement.HeightPlacementFilter;
+import org.moddingx.libx.sandbox.placement.InvertPlacementFilter;
 import org.moddingx.libx.sandbox.structure.PoolExtension;
 import org.moddingx.libx.sandbox.surface.BiomeSurface;
 import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
@@ -127,5 +129,7 @@ public final class LibX extends ModX {
         event.register(Registries.MATERIAL_RULE, this.resource("empty"), () -> EmptySurfaceRule.CODEC);
         event.register(Registries.CHUNK_GENERATOR, this.resource("noise"), () -> ExtendedNoiseChunkGenerator.CODEC);
         event.register(Registries.BIOME_SOURCE, this.resource("layered"), () -> LayeredBiomeSource.CODEC);
+        event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.resource("inverted"), () -> InvertPlacementFilter.TYPE);
+        event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.resource("height_filter"), () -> HeightPlacementFilter.TYPE);
     }
 }
