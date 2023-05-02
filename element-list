@@ -53,6 +53,7 @@ org.moddingx.libx.render.block
 org.moddingx.libx.render.target
 org.moddingx.libx.sandbox
 org.moddingx.libx.sandbox.generator
+org.moddingx.libx.sandbox.placement
 org.moddingx.libx.sandbox.structure
 org.moddingx.libx.sandbox.surface
 org.moddingx.libx.screen
