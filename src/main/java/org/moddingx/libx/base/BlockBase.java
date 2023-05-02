@@ -27,8 +27,8 @@ public class BlockBase extends Block implements Registerable {
 
     protected final ModX mod;
     
-    @Nullable
-    private final Item item;
+    private final boolean hasItem;
+    @Nullable private final Item item;
     
     /**
      * Creates a new instance of BlockBase.
@@ -47,8 +47,10 @@ public class BlockBase extends Block implements Registerable {
         super(properties);
         this.mod = mod;
         if (itemProperties == null) {
+            this.hasItem = false;
             this.item = null;
         } else {
+            this.hasItem = true;
             this.item = new BlockItem(this, itemProperties) {
                 
                 @Override
@@ -78,7 +80,7 @@ public class BlockBase extends Block implements Registerable {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
-        if (this.item != null) {
+        if (this.hasItem) {
             builder.register(Registries.ITEM, this.item);
         }
     }
@@ -86,6 +88,8 @@ public class BlockBase extends Block implements Registerable {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
-        builder.track(ForgeRegistries.ITEMS, BlockBase.class.getDeclaredField("item"));
+        if (this.hasItem) {
+            builder.track(ForgeRegistries.ITEMS, BlockBase.class.getDeclaredField("item"));
+        }
     }
 }
