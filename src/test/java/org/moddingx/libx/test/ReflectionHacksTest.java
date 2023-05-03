@@ -3,6 +3,7 @@ package org.moddingx.libx.test;
 import org.junit.jupiter.api.Test;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 
+import java.io.IOException;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +34,8 @@ public class ReflectionHacksTest {
         assertThrows(NullPointerException.class, () -> ReflectionHacks.setFinalField(A.class.getField("primitive"), a, null));
         assertThrows(ClassCastException.class, () -> ReflectionHacks.setFinalField(A.class.getField("field"), a, new Date()));
         assertThrows(IllegalArgumentException.class, () -> ReflectionHacks.setFinalField(C.class.getField("VALUE"), null, null));
+        
+        assertThrows(IOException.class, () -> ReflectionHacks.throwUnchecked(new IOException()), "ReflectionHacks.throwUnchecked did not throw an IOException");
     }
     
     private static class A {
