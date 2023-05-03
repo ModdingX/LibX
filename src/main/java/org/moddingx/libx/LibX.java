@@ -64,6 +64,7 @@ public final class LibX extends ModX {
         networkWrapper = new CommonNetwork(network);
 
         DatagenSystem.registerExtensionRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS);
+        DatagenSystem.registerExtensionRegistry(ForgeRegistries.Keys.STRUCTURE_MODIFIERS);
         DatagenSystem.registerExtensionRegistry(SandBox.BIOME_SURFACE);
         DatagenSystem.registerExtensionRegistry(SandBox.SURFACE_RULE_SET);
         DatagenSystem.registerExtensionRegistry(SandBox.TEMPLATE_POOL_EXTENSION);
