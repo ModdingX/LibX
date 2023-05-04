@@ -7,6 +7,7 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
+import org.moddingx.libx.impl.sandbox.density.DensityInfluence;
 import org.moddingx.libx.impl.sandbox.density.DensitySmash;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.structure.PoolExtension;
@@ -85,6 +86,23 @@ public class SandBox {
          */
         public static DensityFunction smash(DensityFunction density, IntPolynomial smashX, IntPolynomial smashY, IntPolynomial smashZ) {
             return new DensitySmash(density, smashX, smashY, smashZ);
+        }
+
+        /**
+         * Creates a new influence density function with automatically filled out values for {@code min_influence}
+         * and {@code max_influence}.
+         * 
+         * @see #influence(DensityFunction, DensityFunction, DensityFunction, double, double)
+         */
+        public static DensityFunction influence(DensityFunction base, DensityFunction modifier, DensityFunction influence) {
+            return new DensityInfluence(base, modifier, influence, influence.minValue(), influence.maxValue());
+        }
+        
+        /**
+         * Creates a new density function using the formula {@code base + (min_influence + influence/(max_influence - min_influence))*modifier}
+         */
+        public static DensityFunction influence(DensityFunction base, DensityFunction modifier, DensityFunction influence, double minInfluence, double maxInfluence) {
+            return new DensityInfluence(base, modifier, influence, minInfluence, maxInfluence);
         }
     }
 }

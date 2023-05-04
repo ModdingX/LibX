@@ -32,6 +32,7 @@ import org.moddingx.libx.impl.menu.screen.GenericScreen;
 import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
+import org.moddingx.libx.impl.sandbox.density.DensityInfluence;
 import org.moddingx.libx.impl.sandbox.density.DensitySmash;
 import org.moddingx.libx.menu.GenericMenu;
 import org.moddingx.libx.mod.ModX;
@@ -134,5 +135,6 @@ public final class LibX extends ModX {
         event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.resource("inverted"), () -> InvertPlacementFilter.TYPE);
         event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.resource("height_filter"), () -> HeightPlacementFilter.TYPE);
         event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("smash"), DensitySmash.CODEC::codec);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("influence"), DensityInfluence.CODEC::codec);
     }
 }
