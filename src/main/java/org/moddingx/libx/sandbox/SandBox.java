@@ -2,13 +2,17 @@ package org.moddingx.libx.sandbox;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
+import org.moddingx.libx.impl.sandbox.density.DensitySmash;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.structure.PoolExtension;
 import org.moddingx.libx.sandbox.surface.BiomeSurface;
 import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
+import org.moddingx.libx.util.math.IntPolynomial;
 
 /**
  * SandBox is the LibX worldgen library.
@@ -40,5 +44,47 @@ public class SandBox {
      */
     public static SurfaceRules.RuleSource emptySurface() {
         return EmptySurfaceRule.INSTANCE;
+    }
+
+    /**
+     * Provides some more useful {@link DensityFunctions} density functions.
+     */
+    public static class Density {
+
+        private Density() {
+            
+        }
+        
+        /**
+         * Creates a new density function that uses the given density function to calculate density values, but
+         * first transforms the {@code x} input coordinate according to the given polynomial.
+         */
+        public static DensityFunction smashX(DensityFunction density, IntPolynomial smashX) {
+            return smash(density, smashX, IntPolynomial.IDENTITY, IntPolynomial.IDENTITY);
+        }
+
+        /**
+         * Creates a new density function that uses the given density function to calculate density values, but
+         * first transforms the {@code y} input coordinate according to the given polynomial.
+         */
+        public static DensityFunction smashY(DensityFunction density, IntPolynomial smashY) {
+            return smash(density, IntPolynomial.IDENTITY, smashY, IntPolynomial.IDENTITY);
+        }
+
+        /**
+         * Creates a new density function that uses the given density function to calculate density values, but
+         * first transforms the {@code z} input coordinate according to the given polynomial.
+         */
+        public static DensityFunction smashZ(DensityFunction density, IntPolynomial smashZ) {
+            return smash(density, IntPolynomial.IDENTITY, IntPolynomial.IDENTITY, smashZ);
+        }
+
+        /**
+         * Creates a new density function that uses the given density function to calculate density values, but
+         * first transforms the input coordinates according to the given polynomials.
+         */
+        public static DensityFunction smash(DensityFunction density, IntPolynomial smashX, IntPolynomial smashY, IntPolynomial smashZ) {
+            return new DensitySmash(density, smashX, smashY, smashZ);
+        }
     }
 }
