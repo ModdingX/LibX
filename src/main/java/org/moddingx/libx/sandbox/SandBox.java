@@ -102,6 +102,8 @@ public class SandBox {
          * Creates a new density function using the formula {@code base + (min_influence + influence/(max_influence - min_influence))*modifier}
          */
         public static DensityFunction influence(DensityFunction base, DensityFunction modifier, DensityFunction influence, double minInfluence, double maxInfluence) {
+            if (!Double.isFinite(minInfluence)) throw new IllegalArgumentException("Invalid minimum influence: " + minInfluence);
+            if (!Double.isFinite(maxInfluence)) throw new IllegalArgumentException("Invalid maximum influence: " + maxInfluence);
             return new DensityInfluence(base, modifier, influence, minInfluence, maxInfluence);
         }
     }
