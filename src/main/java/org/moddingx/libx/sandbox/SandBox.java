@@ -8,6 +8,7 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
+import org.moddingx.libx.impl.sandbox.density.DensityDebug;
 import org.moddingx.libx.impl.sandbox.density.DensityInfluence;
 import org.moddingx.libx.impl.sandbox.density.DensitySmash;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
@@ -105,6 +106,14 @@ public class SandBox {
             if (!Double.isFinite(minInfluence)) throw new IllegalArgumentException("Invalid minimum influence: " + minInfluence);
             if (!Double.isFinite(maxInfluence)) throw new IllegalArgumentException("Invalid maximum influence: " + maxInfluence);
             return new DensityInfluence(base, modifier, influence, minInfluence, maxInfluence);
+        }
+        
+        /**
+         * Creates a new density function that constantly increases along one coordinate axis. This is mainly useful for debugging purposes.
+         * The density value is given by {@code coordinate * scale}.
+         */
+        public static DensityFunction debug(Direction.Axis axis, double scale) {
+            return new DensityDebug(axis, scale);
         }
     }
 }
