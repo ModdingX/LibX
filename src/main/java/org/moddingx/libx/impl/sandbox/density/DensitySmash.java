@@ -1,10 +1,10 @@
 package org.moddingx.libx.impl.sandbox.density;
 
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Direction;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.blending.Blender;
-import org.moddingx.libx.util.math.IntPolynomial;
 
 import javax.annotation.Nonnull;
 
@@ -13,25 +13,19 @@ public class DensitySmash implements DensityFunction {
     public static final KeyDispatchDataCodec<DensitySmash> CODEC = KeyDispatchDataCodec.of(
             RecordCodecBuilder.mapCodec(instance -> instance.group(
                     DensityFunction.HOLDER_HELPER_CODEC.fieldOf("density").forGetter(d -> d.wrapped),
-                    IntPolynomial.CODEC.optionalFieldOf("x_smash", IntPolynomial.IDENTITY).forGetter(d -> d.smashX),
-                    IntPolynomial.CODEC.optionalFieldOf("y_smash", IntPolynomial.IDENTITY).forGetter(d -> d.smashY),
-                    IntPolynomial.CODEC.optionalFieldOf("z_smash", IntPolynomial.IDENTITY).forGetter(d -> d.smashZ)
+                    Direction.Axis.CODEC.fieldOf("axis").forGetter(d -> d.axis)
             ).apply(instance, DensitySmash::new))
     );
     
     private final DensityFunction wrapped;
-    private final IntPolynomial smashX;
-    private final IntPolynomial smashY;
-    private final IntPolynomial smashZ;
+    private final Direction.Axis axis;
     
     private final SmashedContext context;
     private final SmashedProvider provider;
 
-    public DensitySmash(DensityFunction wrapped, IntPolynomial smashX, IntPolynomial smashY, IntPolynomial smashZ) {
+    public DensitySmash(DensityFunction wrapped, Direction.Axis axis) {
         this.wrapped = wrapped;
-        this.smashX = smashX;
-        this.smashY = smashY;
-        this.smashZ = smashZ;
+        this.axis = axis;
         
         this.context = new SmashedContext();
         this.provider = new SmashedProvider();
@@ -58,7 +52,7 @@ public class DensitySmash implements DensityFunction {
     @Nonnull
     @Override
     public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return new DensitySmash(this.wrapped.mapAll(visitor), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.mapAll(visitor), this.axis);
     }
 
     @Override
@@ -74,43 +68,43 @@ public class DensitySmash implements DensityFunction {
     @Nonnull
     @Override
     public DensityFunction clamp(double minValue, double maxValue) {
-        return new DensitySmash(this.wrapped.clamp(minValue, maxValue), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.clamp(minValue, maxValue), this.axis);
     }
 
     @Nonnull
     @Override
     public DensityFunction abs() {
-        return new DensitySmash(this.wrapped.abs(), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.abs(), this.axis);
     }
 
     @Nonnull
     @Override
     public DensityFunction square() {
-        return new DensitySmash(this.wrapped.square(), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.square(), this.axis);
     }
 
     @Nonnull
     @Override
     public DensityFunction cube() {
-        return new DensitySmash(this.wrapped.cube(), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.cube(), this.axis);
     }
 
     @Nonnull
     @Override
     public DensityFunction halfNegative() {
-        return new DensitySmash(this.wrapped.halfNegative(), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.halfNegative(), this.axis);
     }
 
     @Nonnull
     @Override
     public DensityFunction quarterNegative() {
-        return new DensitySmash(this.wrapped.quarterNegative(), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.quarterNegative(), this.axis);
     }
 
     @Nonnull
     @Override
     public DensityFunction squeeze() {
-        return new DensitySmash(this.wrapped.squeeze(), this.smashX, this.smashY, this.smashZ);
+        return new DensitySmash(this.wrapped.squeeze(), this.axis);
     }
     
     private class SmashedContext implements FunctionContext {
@@ -119,17 +113,17 @@ public class DensitySmash implements DensityFunction {
 
         @Override
         public int blockX() {
-            return DensitySmash.this.smashX.apply(this.parent.blockX());
+            return DensitySmash.this.axis == Direction.Axis.X ? 0 : this.parent.blockX();
         }
 
         @Override
         public int blockY() {
-            return DensitySmash.this.smashY.apply(this.parent.blockY());
+            return DensitySmash.this.axis == Direction.Axis.Y ? 0 : this.parent.blockY();
         }
 
         @Override
         public int blockZ() {
-            return DensitySmash.this.smashZ.apply(this.parent.blockZ());
+            return DensitySmash.this.axis == Direction.Axis.Z ? 0 : this.parent.blockZ();
         }
 
         @Nonnull

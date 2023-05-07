@@ -1,5 +1,6 @@
 package org.moddingx.libx.sandbox;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -13,7 +14,6 @@ import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.structure.PoolExtension;
 import org.moddingx.libx.sandbox.surface.BiomeSurface;
 import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
-import org.moddingx.libx.util.math.IntPolynomial;
 
 /**
  * SandBox is the LibX worldgen library.
@@ -58,34 +58,34 @@ public class SandBox {
         
         /**
          * Creates a new density function that uses the given density function to calculate density values, but
-         * first transforms the {@code x} input coordinate according to the given polynomial.
+         * always uses x block position {@code 0} to calculate the density.
          */
-        public static DensityFunction smashX(DensityFunction density, IntPolynomial smashX) {
-            return smash(density, smashX, IntPolynomial.IDENTITY, IntPolynomial.IDENTITY);
+        public static DensityFunction smashX(DensityFunction density) {
+            return smash(density, Direction.Axis.X);
         }
 
         /**
          * Creates a new density function that uses the given density function to calculate density values, but
-         * first transforms the {@code y} input coordinate according to the given polynomial.
+         * always uses y block position {@code 0} to calculate the density.
          */
-        public static DensityFunction smashY(DensityFunction density, IntPolynomial smashY) {
-            return smash(density, IntPolynomial.IDENTITY, smashY, IntPolynomial.IDENTITY);
+        public static DensityFunction smashY(DensityFunction density) {
+            return smash(density, Direction.Axis.Y);
         }
 
         /**
          * Creates a new density function that uses the given density function to calculate density values, but
-         * first transforms the {@code z} input coordinate according to the given polynomial.
+         * always uses z block position {@code 0} to calculate the density.
          */
-        public static DensityFunction smashZ(DensityFunction density, IntPolynomial smashZ) {
-            return smash(density, IntPolynomial.IDENTITY, IntPolynomial.IDENTITY, smashZ);
+        public static DensityFunction smashZ(DensityFunction density) {
+            return smash(density, Direction.Axis.Z);
         }
 
         /**
          * Creates a new density function that uses the given density function to calculate density values, but
-         * first transforms the input coordinates according to the given polynomials.
+         * always uses a block position of {@code 0} on the given {@link Direction.Axis axis} to calculate the density.
          */
-        public static DensityFunction smash(DensityFunction density, IntPolynomial smashX, IntPolynomial smashY, IntPolynomial smashZ) {
-            return new DensitySmash(density, smashX, smashY, smashZ);
+        public static DensityFunction smash(DensityFunction density, Direction.Axis axis) {
+            return new DensitySmash(density, axis);
         }
 
         /**
