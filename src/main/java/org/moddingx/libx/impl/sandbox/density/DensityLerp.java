@@ -66,7 +66,7 @@ public class DensityLerp implements DensityFunction {
     @Nonnull
     @Override
     public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return new DensityLerp(this.argument1.mapAll(visitor), this.argument2.mapAll(visitor), this.niveau.mapAll(visitor), this.mean, this.deviation);
+        return visitor.apply(new DensityLerp(this.argument1.mapAll(visitor), this.argument2.mapAll(visitor), this.niveau.mapAll(visitor), this.mean, this.deviation));
     }
 
     @Override

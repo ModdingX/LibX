@@ -50,7 +50,7 @@ public class DensityClamp implements DensityFunction {
     @Nonnull
     @Override
     public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return new DensityClamp(this.density.mapAll(visitor), this.min, this.max);
+        return visitor.apply(new DensityClamp(this.density.mapAll(visitor), this.min, this.max));
     }
 
     @Override

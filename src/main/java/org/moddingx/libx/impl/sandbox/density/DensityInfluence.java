@@ -61,7 +61,7 @@ public class DensityInfluence implements DensityFunction {
     @Nonnull
     @Override
     public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return new DensityInfluence(this.base.mapAll(visitor), this.modifier.mapAll(visitor), this.influence.mapAll(visitor), this.minInfluence, this.maxInfluence);
+        return visitor.apply(new DensityInfluence(this.base.mapAll(visitor), this.modifier.mapAll(visitor), this.influence.mapAll(visitor), this.minInfluence, this.maxInfluence));
     }
 
     @Override

@@ -52,7 +52,7 @@ public class DensitySmash implements DensityFunction {
     @Nonnull
     @Override
     public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return new DensitySmash(this.wrapped.mapAll(visitor), this.axis);
+        return visitor.apply(new DensitySmash(this.wrapped.mapAll(visitor), this.axis));
     }
 
     @Override
