@@ -8,9 +8,7 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
-import org.moddingx.libx.impl.sandbox.density.DensityDebug;
-import org.moddingx.libx.impl.sandbox.density.DensityInfluence;
-import org.moddingx.libx.impl.sandbox.density.DensitySmash;
+import org.moddingx.libx.impl.sandbox.density.*;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.structure.PoolExtension;
 import org.moddingx.libx.sandbox.surface.BiomeSurface;
@@ -114,6 +112,32 @@ public class SandBox {
          */
         public static DensityFunction debug(Direction.Axis axis, double scale) {
             return new DensityDebug(axis, scale);
+        }
+
+        /**
+         * Creates a new density function that lerps between {@code a} and {@code b} with mean {@code 0} and deviation {@code 1}.
+         * 
+         * @see #lerp(DensityFunction, DensityFunction, DensityFunction, double, double)
+         */
+        public static DensityFunction lerp(DensityFunction a, DensityFunction b, DensityFunction niveau) {
+            return lerp(a, b, niveau, 0, 1);
+        }
+        
+        /**
+         * Creates a new density function that lerps between {@code a} and {@code b} depending on the value of {@code niveau}.
+         * For {@code niveau = mean}, the influence of {@code a} and {@code b} is equal, at {@code niveau = mean - deviation} and lower,
+         * the result will be the value of {@code a}, at {@code niveau = mean + deviation} and higher the result will be the value
+         * of {@code b}.
+         */
+        public static DensityFunction lerp(DensityFunction a, DensityFunction b, DensityFunction niveau, double mean, double deviation) {
+            return new DensityLerp(a, b, niveau, mean, deviation);
+        }
+        
+        /**
+         * Clamps the given density function between the given values.
+         */
+        public static DensityFunction clamp(DensityFunction density, double min, double max) {
+            return new DensityClamp(density, min, max);
         }
     }
 }

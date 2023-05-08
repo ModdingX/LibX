@@ -32,9 +32,7 @@ import org.moddingx.libx.impl.menu.screen.GenericScreen;
 import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
-import org.moddingx.libx.impl.sandbox.density.DensityDebug;
-import org.moddingx.libx.impl.sandbox.density.DensityInfluence;
-import org.moddingx.libx.impl.sandbox.density.DensitySmash;
+import org.moddingx.libx.impl.sandbox.density.*;
 import org.moddingx.libx.menu.GenericMenu;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
@@ -138,5 +136,7 @@ public final class LibX extends ModX {
         event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("smash"), DensitySmash.CODEC::codec);
         event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("influence"), DensityInfluence.CODEC::codec);
         event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("debug"), DensityDebug.CODEC::codec);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("lerp"), DensityLerp.CODEC::codec);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("clamp"), DensityClamp.CODEC::codec);
     }
 }
