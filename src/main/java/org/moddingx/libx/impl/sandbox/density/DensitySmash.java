@@ -7,6 +7,7 @@ import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.blending.Blender;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class DensitySmash implements DensityFunction {
 
@@ -106,7 +107,24 @@ public class DensitySmash implements DensityFunction {
     public DensityFunction squeeze() {
         return new DensitySmash(this.wrapped.squeeze(), this.axis);
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof DensitySmash other)) return false;
+        return Objects.equals(this.wrapped, other.wrapped) && this.axis == other.axis;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.wrapped, this.axis);
+    }
+
+    @Override
+    public String toString() {
+        return "DensitySmash[wrapped=" + this.wrapped + ", axis=" + this.axis + "]";
+    }
+
     private class SmashedContext implements FunctionContext {
         
         private FunctionContext parent;

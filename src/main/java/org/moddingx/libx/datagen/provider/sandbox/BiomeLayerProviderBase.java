@@ -5,6 +5,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
+import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.DensityFunctions;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
@@ -15,6 +17,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -32,24 +35,20 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
     public final String getName() {
         return this.mod.modid + " biome layers";
     }
-    
-    public BiomeLayerBuilder layer() {
-        return this.layer(1);
-    }
 
-    public BiomeLayerBuilder layer(int weight) {
-        return new BiomeLayerBuilder(weight);
+    public BiomeLayerBuilder layer() {
+        return new BiomeLayerBuilder();
     }
     
     public class BiomeLayerBuilder {
         
-        private final int weight;
         private ClimateRangeTarget range;
+        @Nullable private DensityFunction density;
         private final List<Pair<Climate.ParameterPoint, Holder<Biome>>> biomes;
         
-        private BiomeLayerBuilder(int weight) {
-            this.weight = weight;
+        private BiomeLayerBuilder() {
             this.range = ClimateRangeTarget.Special.FULL_RANGE;
+            this.density = null;
             this.biomes = new ArrayList<>();
         }
 
@@ -79,6 +78,24 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
         }
 
         /**
+         * Gets this layer a zero density everywhere. Useful for the base layer of a dimension that others can
+         * then generate on top of.
+         */
+        public BiomeLayerBuilder baseLayer() {
+            this.density = DensityFunctions.zero();
+            return this;
+        }
+
+        public BiomeLayerBuilder density(Holder<DensityFunction> density) {
+            if (density.kind() == Holder.Kind.DIRECT) {
+                this.density = density.value();
+            } else {
+                this.density = new DensityFunctions.HolderHolder(density);
+            }
+            return this;
+        }
+        
+        /**
          * Adds a {@link Biome} to this {@link BiomeLayer} and returns a builder for this biomes climate settings.
          */
         public ClimateBuilder biome(ResourceKey<Biome> biome) {
@@ -102,7 +119,7 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
         public Holder<BiomeLayer> build() {
             if (this.biomes.isEmpty()) throw new IllegalStateException("Empty biome layer");
             Climate.ParameterList<Holder<Biome>> climateData = new Climate.ParameterList<>(List.copyOf(this.biomes));
-            BiomeLayer layer = new BiomeLayer(this.weight, this.range.build(climateData), climateData);
+            BiomeLayer layer = new BiomeLayer(this.range.build(climateData), Optional.ofNullable(this.density), climateData);
             return BiomeLayerProviderBase.this.registries.writableRegistry(SandBox.BIOME_LAYER).createIntrusiveHolder(layer);
         }
     }

@@ -7,7 +7,7 @@ import net.minecraft.core.*;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.NoiseRouterData;
-import org.moddingx.libx.impl.sandbox.NoiseLayerSelector;
+import org.moddingx.libx.impl.sandbox.layer.NoiseLayerSelector;
 import org.moddingx.libx.sandbox.SandBox;
 
 import javax.annotation.Nonnull;
@@ -20,29 +20,21 @@ import java.util.stream.Stream;
 public class LayeredBiomeSource extends BiomeSource {
 
     public static final Codec<LayeredBiomeSource> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.DOUBLE.fieldOf("horizontal_scale").forGetter(biomes -> biomes.horizontalScale),
-            Codec.DOUBLE.fieldOf("vertical_scale").forGetter(biomes -> biomes.verticalScale),
             RegistryCodecs.homogeneousList(SandBox.BIOME_LAYER, BiomeLayer.DIRECT_CODEC).fieldOf("layers").forGetter((LayeredBiomeSource biomes) -> biomes.layers)
     ).apply(instance, LayeredBiomeSource::new));
     
-    private final double horizontalScale;
-    private final double verticalScale;
     private final HolderSet<BiomeLayer> layers;
     
-    private double[] weights;
     private NoiseLayerSelector sel;
     private MultiNoiseBiomeSource[] sources;
     private Climate.ParameterPoint[] ranges;
 
     /**
      * Creates a new {@code LayeredBiomeSource}.
-     * @param horizontalScale The horizontal scale factor for the noise that determines the layer at a position.
-     * @param verticalScale The vertical scale factor for the noise that determines the layer at a position.
+     * 
      * @param layers The layers to use.
      */
-    public LayeredBiomeSource(double horizontalScale, double verticalScale, HolderSet<BiomeLayer> layers) {
-        this.horizontalScale = horizontalScale;
-        this.verticalScale = verticalScale;
+    public LayeredBiomeSource(HolderSet<BiomeLayer> layers) {
         this.layers = layers;
     }
 
@@ -54,8 +46,7 @@ public class LayeredBiomeSource extends BiomeSource {
 
     public void init(long seed) {
         List<BiomeLayer> layersInOrder = this.layers.stream().map(Holder::value).toList();
-        this.weights = layersInOrder.stream().mapToDouble(BiomeLayer::weight).toArray();
-        this.sel = new NoiseLayerSelector(this.horizontalScale, this.verticalScale, this.weights, RandomSource.create(seed * 0xA574225077B4ECADL));
+        this.sel = new NoiseLayerSelector(layersInOrder.stream().map(BiomeLayer::density).toList(), RandomSource.create(seed * 0xA574225077B4ECADL));
         this.ranges = layersInOrder.stream().map(BiomeLayer::range).toArray(Climate.ParameterPoint[]::new);
         this.sources = layersInOrder.stream().map(layer -> MultiNoiseBiomeSource.createFromList(layer.biomes())).toArray(MultiNoiseBiomeSource[]::new);
     }
@@ -66,16 +57,13 @@ public class LayeredBiomeSource extends BiomeSource {
         return CODEC;
     }
 
-    @Nonnull
-    @Override
-    public Holder<Biome> getNoiseBiome(int x, int y, int z, @Nonnull Climate.Sampler sampler) {
+    private int getNoiseLayer(int x, int y, int z, @Nonnull Climate.TargetPoint target) {
         if (this.sel == null) throw new IllegalStateException("Random layer selector not initialised.");
-        if (this.weights.length == 1) return this.sources[0].getNoiseBiome(x, y, z, sampler);
-        Climate.TargetPoint target = sampler.sample(x, y, z);
+        if (this.sources.length == 1) return 0;
         int matchAmount = 0;
         int lastMatch = 0;
-        boolean[] matches = new boolean[this.weights.length];
-        for (int i = 0; i < this.weights.length; i++) {
+        boolean[] matches = new boolean[this.sources.length];
+        for (int i = 0; i < this.sources.length; i++) {
             if (isInRange(this.ranges[i], target)) {
                 matchAmount += 1;
                 matches[i] = true;
@@ -83,16 +71,22 @@ public class LayeredBiomeSource extends BiomeSource {
             }
         }
         if (matchAmount == 1) {
-            return this.sources[lastMatch].getNoiseBiome(target);
+            return lastMatch;
         }
         if (matchAmount == 0) {
             // Nothing matches, one layer has to provide a biome, match against all of them.
-            for (int i = 0; i < this.weights.length; i++) {
+            for (int i = 0; i < this.sources.length; i++) {
                 matches[i] = true;
             }
         }
-        int targetIdx = this.sel.sample(x, y, z, matches);
-        return this.sources[targetIdx].getNoiseBiome(target);
+        return this.sel.sample(x, y, z, matches);
+    }
+
+    @Nonnull
+    @Override
+    public Holder<Biome> getNoiseBiome(int x, int y, int z, @Nonnull Climate.Sampler sampler) {
+        Climate.TargetPoint target = sampler.sample(x, y, z);
+        return this.sources[this.getNoiseLayer(x, y, z, target)].getNoiseBiome(target);
     }
     
     @SuppressWarnings("RedundantIfStatement")
@@ -116,7 +110,6 @@ public class LayeredBiomeSource extends BiomeSource {
         float weirdness = Climate.unquantizeCoord(target.weirdness());
         double peaks = NoiseRouterData.peaksAndValleys(weirdness);
         OverworldBiomeBuilder builder = new OverworldBiomeBuilder();
-        //noinspection StringBufferReplaceableByString
         StringBuilder sb = new StringBuilder("Biome builder");
         sb.append(" PV: ").append(OverworldBiomeBuilder.getDebugStringForPeaksAndValleys(peaks));
         sb.append(" C: ").append(builder.getDebugStringForContinentalness(continentalness));
@@ -124,5 +117,11 @@ public class LayeredBiomeSource extends BiomeSource {
         sb.append(" T: ").append(builder.getDebugStringForTemperature(temperature));
         sb.append(" H: ").append(builder.getDebugStringForHumidity(humidity));
         lines.add(sb.toString());
+        if (this.sel != null) {
+            sb = new StringBuilder("Layer selector");
+            sb.append(" L: ").append(this.getNoiseLayer(pos.getX(), pos.getY(), pos.getZ(), target));
+            sb.append(" M: ").append(this.sources.length);
+            lines.add(sb.toString());
+        }
     }
 }
