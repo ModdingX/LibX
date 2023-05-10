@@ -62,4 +62,5 @@ org.moddingx.libx.util
 org.moddingx.libx.util.data
 org.moddingx.libx.util.game
 org.moddingx.libx.util.lazy
+org.moddingx.libx.util.math
 org.moddingx.libx.vanilla
