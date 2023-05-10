@@ -123,15 +123,15 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
         /**
          * Use a {@link LayeredBiomeSource} for this dimension.
          */
-        public ChunkGeneratorBuilder layeredBiome(double horizontalScale, double verticalScale, TagKey<BiomeLayer> layers) {
-            return this.layeredBiome(horizontalScale, verticalScale, DimensionProviderBase.this.set(layers));
+        public ChunkGeneratorBuilder layeredBiome(TagKey<BiomeLayer> layers) {
+            return this.layeredBiome(DimensionProviderBase.this.set(layers));
         }
         
         /**
          * Use a {@link LayeredBiomeSource} for this dimension.
          */
-        public ChunkGeneratorBuilder layeredBiome(double horizontalScale, double verticalScale, HolderSet<BiomeLayer> layers) {
-            return new ChunkGeneratorBuilder(this.dimensionType, new LayeredBiomeSource(horizontalScale, verticalScale, layers));
+        public ChunkGeneratorBuilder layeredBiome(HolderSet<BiomeLayer> layers) {
+            return new ChunkGeneratorBuilder(this.dimensionType, new LayeredBiomeSource(layers));
         }
     }
     
