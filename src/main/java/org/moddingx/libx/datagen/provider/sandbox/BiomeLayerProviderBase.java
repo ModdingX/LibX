@@ -132,6 +132,19 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
         }
 
         /**
+         * Sets all {@link Climate.ParameterPoint parameters} to cover the full noise range.
+         */
+        public ClimateBuilder fullRange() {
+            this.temperature = Climate.Parameter.span(-1, 1);
+            this.humidity = Climate.Parameter.span(-1, 1);
+            this.continentalness = Climate.Parameter.span(-1, 1);
+            this.erosion = Climate.Parameter.span(-1, 1);
+            this.depth = Climate.Parameter.span(-1, 1);
+            this.weirdness = Climate.Parameter.span(-1, 1);
+            return this;
+        }
+
+        /**
          * Sets the {@link Climate.ParameterPoint#temperature() temperature} range for this {@link Biome} to a
          * single value.
          */

@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.registration.tracking;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.moddingx.libx.LibX;
@@ -141,7 +142,7 @@ public final class TrackingData<T> {
                 enqueue.accept(() -> {
                     Optional<ModInternal> modInternal = ModInternal.get(id.getNamespace());
                     if (modInternal.isPresent() && modInternal.get().instance() instanceof ModXRegistration mod) {
-                        RegistrationContext ctx = new RegistrationContext(mod, id, this.registry.getRegistryKey());
+                        RegistrationContext ctx = new RegistrationContext(mod, id, ResourceKey.create(this.registry.getRegistryKey(), id));
                         try {
                             if (value instanceof Registerable registerable) {
                                 registerable.initTracking(ctx, new TrackingInstance(id, value));

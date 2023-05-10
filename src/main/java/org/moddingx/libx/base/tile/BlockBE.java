@@ -153,9 +153,11 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                     if (handler instanceof IItemHandlerModifiable modifiable) {
                         for (int i = 0; i < modifiable.getSlots(); i++) {
                             ItemStack stack = modifiable.getStackInSlot(i);
-                            ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, stack.copy());
-                            level.addFreshEntity(entity);
-                            modifiable.setStackInSlot(i, ItemStack.EMPTY);
+                            if (!stack.isEmpty()) {
+                                ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, stack.copy());
+                                level.addFreshEntity(entity);
+                                modifiable.setStackInSlot(i, ItemStack.EMPTY);
+                            }
                         }
                     }
                 });

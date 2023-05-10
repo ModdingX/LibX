@@ -97,7 +97,7 @@ public class RegistryTracker {
             this.enqueuedTasks.clear();
             this.objectsToUpdate.clear();
             do {
-                // enqueued tasks must run without lock as it allows objects to register new registry tracing fields
+                // enqueued tasks must run without lock as it allows objects to register new registry tracking fields
                 this.enqueuedTasks.forEach(Runnable::run);
                 this.enqueuedTasks.clear();
                 this.objectsToUpdate.clear();

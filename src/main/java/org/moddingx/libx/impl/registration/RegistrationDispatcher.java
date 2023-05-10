@@ -72,9 +72,8 @@ public class RegistrationDispatcher {
     public <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
         synchronized (this.LOCK) {
             ResourceLocation rl = this.mod.resource(id);
-            @Nullable
-            ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
-            RegistrationContext ctx = new RegistrationContext(this.mod, this.mod.resource(id), resourceKey);
+            @Nullable ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
+            RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
 
             if (this.conditions.stream().allMatch(condition -> condition.shouldRegisterMulti(ctx, registry, value))) {
                 MultiEntryCollector<T> collector = new MultiEntryCollector<>(this, registry, id);
@@ -99,9 +98,7 @@ public class RegistrationDispatcher {
             }
             
             ResourceLocation rl = this.mod.resource(id);
-            
-            @Nullable
-            ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
+            @Nullable ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
             RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
             
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();

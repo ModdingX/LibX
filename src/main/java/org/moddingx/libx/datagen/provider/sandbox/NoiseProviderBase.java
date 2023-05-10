@@ -67,6 +67,14 @@ public abstract class NoiseProviderBase extends RegistryProviderBase {
     public Holder<DensityFunction> density(DensityFunction function) {
         return this.registries.writableRegistry(Registries.DENSITY_FUNCTION).createIntrusiveHolder(function);
     }
+
+    /**
+     * Wrap the given density function holder into a density function that references the registry entry
+     * represented by the holder.
+     */
+    public DensityFunction wrap(Holder<DensityFunction> holder) {
+        return new DensityFunctions.HolderHolder(holder);
+    }
     
     public class GeneratorSettingsBuilder {
         
