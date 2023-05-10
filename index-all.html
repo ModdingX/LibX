@@ -517,6 +517,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Builder for a <a href="org/moddingx/libx/inventory/BaseItemStackHandler.html" title="class in org.moddingx.libx.inventory"><code>BaseItemStackHandler</code></a></div>
 </dd>
+<dt><a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.BiomeLayerBuilder.html#baseLayer()" class="member-name-link">baseLayer()</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.BiomeLayerBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">BiomeLayerProviderBase.BiomeLayerBuilder</a></dt>
+<dd>
+<div class="block">Gets this layer a zero density everywhere.</div>
+</dd>
 <dt><a href="org/moddingx/libx/menu/slot/BaseSlot.html" class="type-name-link" title="class in org.moddingx.libx.menu.slot">BaseSlot</a> - Class in <a href="org/moddingx/libx/menu/slot/package-summary.html">org.moddingx.libx.menu.slot</a></dt>
 <dd>
 <div class="block">A slot that is meant to be used together with <a href="org/moddingx/libx/inventory/BaseItemStackHandler.html" title="class in org.moddingx.libx.inventory"><code>BaseItemStackHandler</code></a>.</div>
@@ -689,13 +693,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A biome layer is a set of biomes and climate parameters that can generate in a noise range.</div>
 </dd>
-<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(double,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(double, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
+<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(double,net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(double, Climate.ParameterPoint, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
+<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,java.util.Optional,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(Climate.ParameterPoint, Optional&lt;DensityFunction&gt;, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
 <dd>
 <div class="block">Creates an instance of a <code>BiomeLayer</code> record class.</div>
 </dd>
-<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
+<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(Climate.ParameterPoint, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.levelgen.DensityFunction,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(Climate.ParameterPoint, DensityFunction, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.levelgen.DensityFunction,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer(DensityFunction, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a> - Constructor for record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.html" class="type-name-link" title="class in org.moddingx.libx.datagen.provider.sandbox">BiomeLayerProviderBase</a> - Class in <a href="org/moddingx/libx/datagen/provider/sandbox/package-summary.html">org.moddingx.libx.datagen.provider.sandbox</a></dt>
 <dd>
@@ -1972,6 +1980,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">gets the default value for newly created inputs that have no other default value available.</div>
 </dd>
+<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#density()" class="member-name-link">density()</a> - Method in record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
+<dd>
+<div class="block">Returns the value of the <a href="./org/moddingx/libx/sandbox/generator/BiomeLayer.html#param-density"><code>density</code></a> record component.</div>
+</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.BiomeLayerBuilder.html#density(net.minecraft.core.Holder)" class="member-name-link">density(Holder&lt;DensityFunction&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.BiomeLayerBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">BiomeLayerProviderBase.BiomeLayerBuilder</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/NoiseProviderBase.html#density(net.minecraft.world.level.levelgen.DensityFunction)" class="member-name-link">density(DensityFunction)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/NoiseProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">NoiseProviderBase</a></dt>
 <dd>
 <div class="block">Wraps a new <code>DensityFunction</code> for registration.</div>
@@ -3990,17 +4004,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.html#layer()" class="member-name-link">layer()</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">BiomeLayerProviderBase</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.html#layer(int)" class="member-name-link">layer(int)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/BiomeLayerProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">BiomeLayerProviderBase</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.FlatGeneratorBuilder.html#layer(net.minecraft.world.level.block.Block,int)" class="member-name-link">layer(Block, int)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.FlatGeneratorBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">DimensionProviderBase.FlatGeneratorBuilder</a></dt>
 <dd>
 <div class="block">Add a flat layer to this generator.</div>
 </dd>
-<dt><a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html#layeredBiome(double,double,net.minecraft.core.HolderSet)" class="member-name-link">layeredBiome(double, double, HolderSet&lt;BiomeLayer&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">DimensionProviderBase.BiomeSourceBuilder</a></dt>
+<dt><a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html#layeredBiome(net.minecraft.core.HolderSet)" class="member-name-link">layeredBiome(HolderSet&lt;BiomeLayer&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">DimensionProviderBase.BiomeSourceBuilder</a></dt>
 <dd>
 <div class="block">Use a <a href="org/moddingx/libx/sandbox/generator/LayeredBiomeSource.html" title="class in org.moddingx.libx.sandbox.generator"><code>LayeredBiomeSource</code></a> for this dimension.</div>
 </dd>
-<dt><a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html#layeredBiome(double,double,net.minecraft.tags.TagKey)" class="member-name-link">layeredBiome(double, double, TagKey&lt;BiomeLayer&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">DimensionProviderBase.BiomeSourceBuilder</a></dt>
+<dt><a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html#layeredBiome(net.minecraft.tags.TagKey)" class="member-name-link">layeredBiome(TagKey&lt;BiomeLayer&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">DimensionProviderBase.BiomeSourceBuilder</a></dt>
 <dd>
 <div class="block">Use a <a href="org/moddingx/libx/sandbox/generator/LayeredBiomeSource.html" title="class in org.moddingx.libx.sandbox.generator"><code>LayeredBiomeSource</code></a> for this dimension.</div>
 </dd>
@@ -4008,7 +4020,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A <code>BiomeSource</code> that can generate multiple <a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator"><code>layers</code></a> using multiple <code>noise biome sources</code>.</div>
 </dd>
-<dt><a href="org/moddingx/libx/sandbox/generator/LayeredBiomeSource.html#%3Cinit%3E(double,double,net.minecraft.core.HolderSet)" class="member-name-link">LayeredBiomeSource(double, double, HolderSet&lt;BiomeLayer&gt;)</a> - Constructor for class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/LayeredBiomeSource.html" title="class in org.moddingx.libx.sandbox.generator">LayeredBiomeSource</a></dt>
+<dt><a href="org/moddingx/libx/sandbox/generator/LayeredBiomeSource.html#%3Cinit%3E(net.minecraft.core.HolderSet)" class="member-name-link">LayeredBiomeSource(HolderSet&lt;BiomeLayer&gt;)</a> - Constructor for class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/LayeredBiomeSource.html" title="class in org.moddingx.libx.sandbox.generator">LayeredBiomeSource</a></dt>
 <dd>
 <div class="block">Creates a new <code>LayeredBiomeSource</code>.</div>
 </dd>
@@ -8035,10 +8047,6 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/FeatureProviderBase.AnyPlacementBuilder.html#waterDepth(int)" class="member-name-link">waterDepth(int)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/FeatureProviderBase.AnyPlacementBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">FeatureProviderBase.AnyPlacementBuilder</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#weight()" class="member-name-link">weight()</a> - Method in record class org.moddingx.libx.sandbox.generator.<a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a></dt>
-<dd>
-<div class="block">Returns the value of the <a href="./org/moddingx/libx/sandbox/generator/BiomeLayer.html#param-weight"><code>weight</code></a> record component.</div>
-</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.SoundSettingsBuilder.html#weight(int)" class="member-name-link">weight(int)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.SoundSettingsBuilder.html" title="class in org.moddingx.libx.datagen.provider">SoundDefinitionProviderBase.SoundSettingsBuilder</a></dt>
 <dd>
 <div class="block">Sets the weight for the sound settings.</div>

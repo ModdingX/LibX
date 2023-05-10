@@ -81,12 +81,14 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>Record Components:</dt>
-<dd><code><span id="param-weight">weight</span></code> - The weight for this layer to generate.</dd>
 <dd><code><span id="param-range">range</span></code> - A climate range that the layer can generate in.</dd>
+<dd><code><span id="param-density">density</span></code> - A custom density function that is sampled on every block position. Out of all biome layers the one
+                with the highest density will be used to sample the biome at that position. These density functions
+                don't support caching optimisations or interpolation, so they should be kept simple.</dd>
 <dd><code><span id="param-biomes">biomes</span></code> - A climate parameter list mapping climate points to biomes.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BiomeLayer</span>(double&nbsp;weight, net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range, net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BiomeLayer</span>(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.world.level.levelgen.DensityFunction&gt;&nbsp;density, net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">A biome layer is a set of biomes and climate parameters that can generate in a noise range.</div>
 </section>
@@ -131,16 +133,23 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(double,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(double&nbsp;weight,
- net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(double,net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(double&nbsp;weight,
- net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,java.util.Optional,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.world.level.levelgen.DensityFunction&gt;&nbsp;density,
  net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates an instance of a <code>BiomeLayer</code> record class.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+ net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.levelgen.DensityFunction,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+ net.minecraft.world.level.levelgen.DensityFunction&nbsp;density,
+ net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.levelgen.DensityFunction,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.levelgen.DensityFunction&nbsp;density,
+ net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -161,30 +170,30 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <a href="#param-biomes"><code>biomes</code></a> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.world.level.levelgen.DensityFunction&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#density()" class="member-name-link">density</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <a href="#param-density"><code>density</code></a> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.world.level.biome.Climate.ParameterPoint</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#range()" class="member-name-link">range</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.world.level.biome.Climate.ParameterPoint</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#range()" class="member-name-link">range</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <a href="#param-range"><code>range</code></a> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a string representation of this record class.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#weight()" class="member-name-link">weight</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <a href="#param-weight"><code>weight</code></a> record component.</div>
+<div class="block">Returns a string representation of this record class.</div>
 </div>
 </div>
 </div>
@@ -244,29 +253,44 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(double,net.minecraft.world.level.biome.Climate.ParameterList)">
-<h3>BiomeLayer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(double&nbsp;weight,
- net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="&lt;init&gt;(net.minecraft.world.level.biome.Climate.ParameterList)">
 <h3>BiomeLayer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(double,net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)">
+<section class="detail" id="&lt;init&gt;(net.minecraft.world.level.levelgen.DensityFunction,net.minecraft.world.level.biome.Climate.ParameterList)">
 <h3>BiomeLayer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(double&nbsp;weight,
- net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.levelgen.DensityFunction&nbsp;density,
+ net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)">
+<h3>BiomeLayer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+ net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.levelgen.DensityFunction,net.minecraft.world.level.biome.Climate.ParameterList)">
+<h3>BiomeLayer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+ net.minecraft.world.level.levelgen.DensityFunction&nbsp;density,
+ net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minecraft.world.level.biome.Climate.ParameterPoint,java.util.Optional,net.minecraft.world.level.biome.Climate.ParameterList)">
+<h3>BiomeLayer</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.world.level.levelgen.DensityFunction&gt;&nbsp;density,
  net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
 <div class="block">Creates an instance of a <code>BiomeLayer</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>weight</code> - the value for the <a href="#param-weight"><code>weight</code></a> record component</dd>
 <dd><code>range</code> - the value for the <a href="#param-range"><code>range</code></a> record component</dd>
+<dd><code>density</code> - the value for the <a href="#param-density"><code>density</code></a> record component</dd>
 <dd><code>biomes</code> - the value for the <a href="#param-biomes"><code>biomes</code></a> record component</dd>
 </dl>
 </section>
@@ -283,7 +307,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -321,17 +345,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="weight()">
-<h3>weight</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">weight</span>()</div>
-<div class="block">Returns the value of the <a href="#param-weight"><code>weight</code></a> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <a href="#param-weight"><code>weight</code></a> record component</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="range()">
 <h3>range</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.minecraft.world.level.biome.Climate.ParameterPoint</span>&nbsp;<span class="element-name">range</span>()</div>
@@ -339,6 +352,17 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <a href="#param-range"><code>range</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="density()">
+<h3>density</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.world.level.levelgen.DensityFunction&gt;</span>&nbsp;<span class="element-name">density</span>()</div>
+<div class="block">Returns the value of the <a href="#param-density"><code>density</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-density"><code>density</code></a> record component</dd>
 </dl>
 </section>
 </li>
