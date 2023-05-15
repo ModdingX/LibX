@@ -20,9 +20,7 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -80,12 +78,13 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     }
     
     private void setupExtensions() {
+        Set<Class<?>> collectedClasses = new HashSet<>();
         List<Method> extensionMethods = new ArrayList<>();
         // Collect all extensions, this class implements up to RecipeProviderBase
         Class<?> currentClass = this.getClass();
         while(currentClass != null && currentClass != RecipeProviderBase.class && currentClass != Object.class) {
             for (Class<?> iface : currentClass.getInterfaces()) {
-                if (RecipeExtension.class.isAssignableFrom(iface)) {
+                if (RecipeExtension.class.isAssignableFrom(iface) && collectedClasses.add(iface)) {
                     try {
                         Method method = iface.getMethod("setup", ModX.class, iface);
                         if (!Modifier.isStatic(method.getModifiers())) {
