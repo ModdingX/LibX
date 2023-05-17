@@ -64,7 +64,7 @@ public class TextScreen extends Screen {
         int top = this.top();
         poseStack.pushPose();
         poseStack.translate(0, 0, 20);
-        RenderHelper.renderGuiBackground(poseStack, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20);
+        this.drawBackground(poseStack, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20, partialTick);
         poseStack.translate(0, 0, 20);
         this.content.render(poseStack, left, top);
         Style tooltip = this.content.hoveredStyle(mouseX - left, mouseY - top);
@@ -75,6 +75,10 @@ public class TextScreen extends Screen {
         }
         poseStack.popPose();
         super.render(poseStack, mouseX, mouseY, partialTick);
+    }
+    
+    protected void drawBackground(PoseStack poseStack, int x, int y, int width, int height, float partialTick) {
+        RenderHelper.renderGuiBackground(poseStack, x, y, width, height);
     }
 
     @Override
