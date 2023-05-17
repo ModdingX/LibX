@@ -5,6 +5,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.screen.text.AlignedComponent;
 import org.moddingx.libx.screen.text.ComponentLayout;
+import org.moddingx.libx.screen.text.TextScreenEntry;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -27,8 +28,8 @@ public class SimpleLayout implements ComponentLayout {
     }
 
     @Override
-    public List<AlignedComponent> alignComponents(Font font, int width) {
-        ImmutableList.Builder<AlignedComponent> list = ImmutableList.builder();
+    public List<TextScreenEntry> alignComponents(Font font, int width) {
+        ImmutableList.Builder<TextScreenEntry> list = ImmutableList.builder();
         if (this.title != null) {
             list.add(new AlignedComponent(this.title, (width - font.width(this.title)) / 2, 0, false));
         }
