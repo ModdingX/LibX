@@ -1,6 +1,8 @@
 package org.moddingx.libx.annotation.processor.modinit.register;
 
+import org.moddingx.libx.annotation.processor.Classes;
 import org.moddingx.libx.annotation.processor.Processor;
+import org.moddingx.libx.annotation.registration.PlainRegisterable;
 import org.moddingx.libx.annotation.registration.Reg;
 import org.moddingx.libx.annotation.registration.RegisterClass;
 
@@ -20,7 +22,7 @@ public class RegisterClassModifyProcessor extends Processor {
     
     @Override
     public Class<?>[] getTypes() {
-        return Stream.concat(Stream.of(Reg.class), MODIFY_ANNOTATIONS.stream()).toArray(Class[]::new);
+        return Stream.concat(Stream.of(Reg.class, PlainRegisterable.class), MODIFY_ANNOTATIONS.stream()).toArray(Class[]::new);
     }
 
     @Override
@@ -38,6 +40,15 @@ public class RegisterClassModifyProcessor extends Processor {
                 } else if (modifyClass != Reg.Exclude.class && element.getAnnotation(Reg.Exclude.class) != null) {
                     this.messager().printMessage(Diagnostic.Kind.ERROR, "@" + modifyClass.getSimpleName() + " can't be used on fields excluded from registration.", element);
                 }
+            }
+        }
+        for (Element element : roundEnv.getElementsAnnotatedWith(PlainRegisterable.class)) {
+            if (element.getKind() == ElementKind.INTERFACE || element.getKind() == ElementKind.ANNOTATION_TYPE) {
+                this.messager().printMessage(Diagnostic.Kind.ERROR, "@PlainRegisterable is disallowed on interfaces.", element);
+            } else if (element.getKind() != ElementKind.CLASS && element.getKind() != ElementKind.RECORD) {
+                this.messager().printMessage(Diagnostic.Kind.ERROR, "@PlainRegisterable can only be added to classes.", element);
+            } else if (element instanceof TypeElement typeElement && !this.subTypeErasure(typeElement.asType(), this.forClass(Classes.REGISTERABLE))) {
+                this.messager().printMessage(Diagnostic.Kind.WARNING, "Class annotated with @PlainRegisterable does not implement Registerable.", element);
             }
         }
     }

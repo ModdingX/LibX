@@ -4,6 +4,7 @@ import org.moddingx.libx.annotation.processor.Classes;
 import org.moddingx.libx.annotation.processor.modinit.FailureException;
 import org.moddingx.libx.annotation.processor.modinit.ModEnv;
 import org.moddingx.libx.annotation.processor.modinit.ModInit;
+import org.moddingx.libx.annotation.registration.PlainRegisterable;
 import org.moddingx.libx.annotation.registration.Reg;
 import org.moddingx.libx.annotation.registration.RegisterClass;
 
@@ -46,7 +47,7 @@ public class RegisterClassProcessor {
     
     private static TargetRegistry resolveRegistry(Element classElem, RegisterClass classAnnotation, ModEnv env) {
         if (classAnnotation.registry().isEmpty()) {
-            return new TargetRegistry(null, null);
+            return TargetRegistry.NONE;
         }
         
         List<TypeElement> classesToCheck;
@@ -115,6 +116,10 @@ public class RegisterClassProcessor {
                 return Stream.empty();
             }
 
+            if (env.elements().getAllAnnotationMirrors(env.typeElement(element.asType())).stream().anyMatch(mirror -> env.sameErasure(mirror.getAnnotationType(), env.forClass(PlainRegisterable.class)))) {
+                target = TargetRegistry.NONE;
+            }
+            
             boolean multi = element.getAnnotation(Reg.Multi.class) != null;
             boolean hasMultiType = env.subTypeErasure(element.asType(), env.forClass(Classes.MULTI_REGISTERABLE));
 
@@ -154,5 +159,8 @@ public class RegisterClassProcessor {
         }
     }
     
-    record TargetRegistry(@Nullable TypeMirror baseType, @Nullable String fqn) {}
+    private record TargetRegistry(@Nullable TypeMirror baseType, @Nullable String fqn) {
+        
+        public static final TargetRegistry NONE = new TargetRegistry(null, null);
+    }
 }
