@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.tracking.RegistryTracker;
@@ -71,14 +72,22 @@ public interface Registerable {
         
         /**
          * Registers a new {@link MultiRegisterable} together with the current object.
+         *
+         * @deprecated {@link MultiRegisterable} is deprecated. See there for more information
          */
+        @Deprecated(forRemoval = true)
+        @RemoveIn(minecraft = "1.20")
         <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, MultiRegisterable<T> value);
         
         /**
          * Registers a new {@link MultiRegisterable} together with the current object.
          * 
          * @param name A name suffix for the object.
+         *
+         * @deprecated {@link MultiRegisterable} is deprecated. See there for more information
          */
+        @Deprecated(forRemoval = true)
+        @RemoveIn(minecraft = "1.20")
         <T> void registerMultiNamed(@Nullable ResourceKey<? extends Registry<T>> registry, String name, MultiRegisterable<T> value);
     }
 
