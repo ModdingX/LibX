@@ -21,6 +21,7 @@ import java.util.Set;
 
 /**
  * Defines logic to override the {@link NoiseGeneratorSettings} for an {@link ExtendedNoiseChunkGenerator}.
+ * 
  * @param useDefaultNoiseSurface Whether the default surface rules from the {@link NoiseGeneratorSettings} should be included.
  * @param beforeBiomes {@link SurfaceRules.RuleSource Surface rules} that are applied before biome-specific rules.
  * @param afterBiomes {@link SurfaceRules.RuleSource Surface rules} that are applied after biome-specific rules.

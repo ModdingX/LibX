@@ -55,13 +55,20 @@ public class DatagenSystem {
     public static Set<ResourceKey<? extends Registry<?>>> extensionRegistries() {
         return Collections.unmodifiableSet(EXTENSION_REGISTRIES);
     }
-    
+
+    /**
+     * Registers a datagen system for the given mod and executes the provided configuration action when running
+     * datagen. Calling this method multiple times for the same mod will only create a single datagen system but
+     * invoke all configuration in order.
+     */
     public static void create(ModX mod, Consumer<DatagenSystem> configure) {
-        ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.class, event -> {
-            DatagenSystem system = new DatagenSystem(mod, event);
-            configure.accept(system);
-            system.hookIntoGenerator();
-        });
+        if (ModInternal.get(mod).addDatagenConfiguration(configure)) {
+            ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.class, event -> {
+                DatagenSystem system = new DatagenSystem(mod, event);
+                ModInternal.get(mod).configureDatagenSystem(system);
+                system.hookIntoGenerator();
+            });
+        }
     }
     
     private final ModX mod;

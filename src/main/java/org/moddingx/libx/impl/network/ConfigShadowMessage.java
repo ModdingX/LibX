@@ -26,7 +26,7 @@ public record ConfigShadowMessage(@Nullable ConfigImpl config, @Nullable ConfigS
         @Override
         public void encode(ConfigShadowMessage msg, FriendlyByteBuf buffer) {
             if (msg.config() == null || msg.state() == null) {
-                buffer.writeResourceLocation(Misc.MISSIGNO);
+                buffer.writeResourceLocation(Misc.MISSINGNO);
             } else {
                 buffer.writeResourceLocation(msg.config().id);
                 FriendlyByteBuf b = new FriendlyByteBuf(Unpooled.buffer());
@@ -39,7 +39,7 @@ public record ConfigShadowMessage(@Nullable ConfigImpl config, @Nullable ConfigS
         @Override
         public ConfigShadowMessage decode(FriendlyByteBuf buffer) {
             ResourceLocation configId = buffer.readResourceLocation();
-            if (Misc.MISSIGNO.equals(configId)) {
+            if (Misc.MISSINGNO.equals(configId)) {
                 return new ConfigShadowMessage(null, null);
             }
             ConfigImpl config = ConfigImpl.getConfigNullable(configId);

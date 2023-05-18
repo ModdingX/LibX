@@ -11,6 +11,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.DensityFunction;
+import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.sandbox.SandBox;
 
 import java.util.Optional;
@@ -34,7 +35,12 @@ public record BiomeLayer(Climate.ParameterPoint range, Optional<DensityFunction>
             Climate.Parameter.span(-1, 1),
             0
     );
-    
+
+    /**
+     * @deprecated Biome layers will require density functions as of 1.20.
+     */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.20")
     public BiomeLayer(Climate.ParameterList<Holder<Biome>> biomes) {
         this(FULL_RANGE, Optional.empty(), biomes);
     }
@@ -43,6 +49,11 @@ public record BiomeLayer(Climate.ParameterPoint range, Optional<DensityFunction>
         this(FULL_RANGE, Optional.of(density), biomes);
     }
 
+    /**
+     * @deprecated Biome layers will require density functions as of 1.20.
+     */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.20")
     public BiomeLayer(Climate.ParameterPoint range, Climate.ParameterList<Holder<Biome>> biomes) {
         this(range, Optional.empty(), biomes);
     }
@@ -66,12 +77,22 @@ public record BiomeLayer(Climate.ParameterPoint range, Optional<DensityFunction>
 
     /**
      * The overworld biome layer. It covers the full noise range and has a weight of 1.
+     * 
+     * @deprecated If you need it, generate it yourself. A biome layer has too many options besides the climate
+     * settings that it is unreasonable to just assume defaults.
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.20")
     public static final ResourceKey<BiomeLayer> OVERWORLD = ResourceKey.create(SandBox.BIOME_LAYER, new ResourceLocation("minecraft", "overworld"));
     
     /**
      * The nether biome layer. It covers the full noise range and has a weight of 1.
+     * 
+     * @deprecated If you need it, generate it yourself. A biome layer has too many options besides the climate
+     * settings that it is unreasonable to just assume defaults.
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.20")
     public static final ResourceKey<BiomeLayer> NETHER = ResourceKey.create(SandBox.BIOME_LAYER, new ResourceLocation("minecraft", "nether"));
 
     @Override

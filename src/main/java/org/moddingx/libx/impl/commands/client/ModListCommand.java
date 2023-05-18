@@ -39,7 +39,6 @@ public class ModListCommand implements Command<CommandSourceStack> {
                     + (this.detailed && !mod.getDescription().trim().isEmpty() ?
                         ": " + mod.getDescription().split("\n")[0].trim() : ""))
                 .map(Component::literal);
-        //noinspection UnstableApiUsage
         List<MutableComponent> lines = Streams.mapWithIndex(lineStream, (line, idx) -> Objects.requireNonNull(line).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(idx % 2 == 0 ? 0xBDBD28 : 0x8C4489)))).toList();
         String copyToClipboard = lines.stream()
                 .map(Component::getString)

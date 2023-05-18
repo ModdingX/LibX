@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Allows text in the lang file to define style information. This is done by dollar commands.
  * A dollar command looks like this: {@code $(...)} where the parts in the parens are multiple
- * commands separated by {@code ;}.
+ * commands separated by {@code ;}. Using {@code $()} resets to the default style.
  * A command can be one of these:
  *
  * <ul>

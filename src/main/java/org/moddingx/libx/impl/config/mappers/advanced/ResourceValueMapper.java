@@ -18,7 +18,7 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
 
         @Override
         public ResourceLocation defaultValue() {
-            return Misc.MISSIGNO;
+            return Misc.MISSINGNO;
         }
 
         @Override

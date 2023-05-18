@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.impl.registration.RegistrationDispatcher;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.ClassUtil;
@@ -14,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class ModInternal {
 
@@ -69,6 +71,7 @@ public class ModInternal {
     private final List<Runnable> setupTasks;
     private final List<Runnable> queueSetupTasks;
     private final Set<ResourceLocation> creativeTabs;
+    private final List<Consumer<DatagenSystem>> datagenConfiguration;
     private RegistrationDispatcher registrationDispatcher;
 
     private ModInternal(ModX mod, FMLJavaModLoadingContext ctx) {
@@ -78,6 +81,7 @@ public class ModInternal {
         this.setupTasks = new ArrayList<>();
         this.queueSetupTasks = new ArrayList<>();
         this.creativeTabs = new HashSet<>();
+        this.datagenConfiguration = new ArrayList<>();
         this.registrationDispatcher = null;
 
         this.modEventBus.addListener(this::runSetup);
@@ -143,6 +147,18 @@ public class ModInternal {
             throw new NoSuchElementException(this.mod.modid + " has no registration dispatcher. This is an error in LibX.");
         } else {
             return this.registrationDispatcher;
+        }
+    }
+    
+    public boolean addDatagenConfiguration(Consumer<DatagenSystem> configure) {
+        boolean isFirst = this.datagenConfiguration.isEmpty();
+        this.datagenConfiguration.add(configure);
+        return isFirst;
+    }
+    
+    public void configureDatagenSystem(DatagenSystem system) {
+        for (Consumer<DatagenSystem> configure : this.datagenConfiguration) {
+            configure.accept(system);
         }
     }
 
