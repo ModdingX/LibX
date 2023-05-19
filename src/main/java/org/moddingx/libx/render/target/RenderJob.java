@@ -26,7 +26,7 @@ public interface RenderJob {
      * (Everything from 0 to image width/height is projected onto the image).
      */
     default Matrix4f setupProjectionMatrix() {
-        return new Matrix4f().ortho(0, this.width(), 0, this.height(), 500, 6000);
+        return new Matrix4f().ortho(0, this.width(), this.height(), 0, 500, 6000);
     }
 
     /**

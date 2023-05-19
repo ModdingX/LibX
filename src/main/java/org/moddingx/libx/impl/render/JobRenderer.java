@@ -89,7 +89,7 @@ public class JobRenderer {
             modelViewStack.mulPoseMatrix(job.setupModelViewMatrix());
             RenderSystem.applyModelViewMatrix();
 
-            RenderSystem.setProjectionMatrix(new Matrix4f().ortho(0, width, 0, height, 1000, 3000));
+            RenderSystem.setProjectionMatrix(new Matrix4f().ortho(0, width, height, 0, 1000, 3000));
 
             PoseStack overlayPoseStack = new PoseStack();
             Lighting.setupFor3DItems();
