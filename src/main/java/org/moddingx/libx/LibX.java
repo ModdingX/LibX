@@ -114,10 +114,10 @@ public final class LibX extends ModX {
     }
 
     private void createRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(SandBox.SURFACE_RULE_SET, SurfaceRuleSet.DIRECT_CODEC, SurfaceRuleSet.DIRECT_CODEC);
-        event.dataPackRegistry(SandBox.BIOME_SURFACE, BiomeSurface.DIRECT_CODEC, BiomeSurface.DIRECT_CODEC);
-        event.dataPackRegistry(SandBox.BIOME_LAYER, BiomeLayer.DIRECT_CODEC, BiomeLayer.DIRECT_CODEC);
-        event.dataPackRegistry(SandBox.TEMPLATE_POOL_EXTENSION, PoolExtension.DIRECT_CODEC, PoolExtension.DIRECT_CODEC);
+        event.dataPackRegistry(SandBox.SURFACE_RULE_SET, SurfaceRuleSet.DIRECT_CODEC, null);
+        event.dataPackRegistry(SandBox.BIOME_SURFACE, BiomeSurface.DIRECT_CODEC, null);
+        event.dataPackRegistry(SandBox.BIOME_LAYER, BiomeLayer.DIRECT_CODEC, null);
+        event.dataPackRegistry(SandBox.TEMPLATE_POOL_EXTENSION, PoolExtension.DIRECT_CODEC, null);
     }
 
     private void registerStuff(RegisterEvent event) {

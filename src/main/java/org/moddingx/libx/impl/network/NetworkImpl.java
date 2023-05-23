@@ -36,7 +36,7 @@ public final class NetworkImpl extends NetworkX {
     @Override
     protected Protocol getProtocol() {
         // Not required on the client, so LibX can be used by client only mods
-        return new Protocol("9", ProtocolSide.VANILLA, ProtocolSide.REQUIRED);
+        return new Protocol("10", ProtocolSide.VANILLA, ProtocolSide.REQUIRED);
     }
     
     // Gets whether a packet can be currently sent.
