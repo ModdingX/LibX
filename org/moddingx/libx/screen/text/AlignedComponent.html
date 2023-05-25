@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -84,17 +84,43 @@ loadScripts(document, 'script');</script>
 <dd><code><span id="param-text">text</span></code> - The component to display.</dd>
 <dd><code><span id="param-left">left</span></code> - The horizontal padding to the left edge of the screen.</dd>
 <dd><code><span id="param-top">top</span></code> - The vertical padding to the bottom of the previous component.</dd>
-<dd><code><span id="param-wrap">wrap</span></code> - Whether this component should be wrapped.</dd>
+<dd><code><span id="param-wrapping">wrapping</span></code> - A <a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text"><code>AlignedComponent.TextWrapping</code></a> describing the wrapping properties of this component or <code>null</code> if
+                 this component should not be wrapped.</dd>
 <dd><code><span id="param-color">color</span></code> - The default display colour for the component. This can be altered by the style.</dd>
 <dd><code><span id="param-shadow">shadow</span></code> - Whether the component should be drawn with a shadow.</dd>
 </dl>
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="TextScreenEntry.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry</a></code>, <code><a href="TextScreenEntry.Direct.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry.Direct</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">AlignedComponent</span>(net.minecraft.network.chat.Component&nbsp;text, int&nbsp;left, int&nbsp;top, boolean&nbsp;wrap, int&nbsp;color, boolean&nbsp;shadow)
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">AlignedComponent</span>(net.minecraft.network.chat.Component&nbsp;text, int&nbsp;left, int&nbsp;top, <a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a> <a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a>&nbsp;wrapping, int&nbsp;color, boolean&nbsp;shadow)
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
+implements <a href="TextScreenEntry.Direct.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry.Direct</a></span></div>
 <div class="block">A <code>Component</code> that has been aligned for display on a <a href="TextScreen.html" title="class in org.moddingx.libx.screen.text"><code>TextScreen</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="AlignedComponent.TextWrapping.html" class="type-name-link" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Specifies text-wrapping properties.</div>
+</div>
+</div>
+<div class="inherited-list">
+<h2 id="nested-classes-inherited-from-class-org.moddingx.libx.screen.text.TextScreenEntry">Nested classes/interfaces inherited from interface&nbsp;org.moddingx.libx.screen.text.<a href="TextScreenEntry.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry</a></h2>
+<code><a href="TextScreenEntry.Direct.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry.Direct</a></code></div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -112,13 +138,18 @@ loadScripts(document, 'script');</script>
  int&nbsp;top,
  boolean&nbsp;wrap)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.network.chat.Component,int,int,boolean,int,boolean)" class="member-name-link">AlignedComponent</a><wbr>(net.minecraft.network.chat.Component&nbsp;text,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.network.chat.Component,int,int,org.moddingx.libx.screen.text.AlignedComponent.TextWrapping)" class="member-name-link">AlignedComponent</a><wbr>(net.minecraft.network.chat.Component&nbsp;text,
  int&nbsp;left,
  int&nbsp;top,
- boolean&nbsp;wrap,
+ <a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a>&nbsp;wrap)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minecraft.network.chat.Component,int,int,org.moddingx.libx.screen.text.AlignedComponent.TextWrapping,int,boolean)" class="member-name-link">AlignedComponent</a><wbr>(net.minecraft.network.chat.Component&nbsp;text,
+ int&nbsp;left,
+ int&nbsp;top,
+ <a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a>&nbsp;wrapping,
  int&nbsp;color,
  boolean&nbsp;shadow)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Creates an instance of a <code>AlignedComponent</code> record class.</div>
 </div>
 </div>
@@ -129,7 +160,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -175,10 +206,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#wrap()" class="member-name-link">wrap</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <a href="#param-wrap"><code>wrap</code></a> record component.</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#wrap()" class="member-name-link">wrap</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#wrapping()" class="member-name-link">wrapping</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <a href="#param-wrapping"><code>wrapping</code></a> record component.</div>
 </div>
 </div>
 </div>
@@ -198,6 +234,15 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="&lt;init&gt;(net.minecraft.network.chat.Component,int,int,org.moddingx.libx.screen.text.AlignedComponent.TextWrapping)">
+<h3>AlignedComponent</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AlignedComponent</span><wbr><span class="parameters">(net.minecraft.network.chat.Component&nbsp;text,
+ int&nbsp;left,
+ int&nbsp;top,
+ <a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a>&nbsp;wrap)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="&lt;init&gt;(net.minecraft.network.chat.Component,int,int,boolean)">
 <h3>AlignedComponent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AlignedComponent</span><wbr><span class="parameters">(net.minecraft.network.chat.Component&nbsp;text,
@@ -215,12 +260,13 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minecraft.network.chat.Component,int,int,boolean,int,boolean)">
+<section class="detail" id="&lt;init&gt;(net.minecraft.network.chat.Component,int,int,org.moddingx.libx.screen.text.AlignedComponent.TextWrapping,int,boolean)">
 <h3>AlignedComponent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AlignedComponent</span><wbr><span class="parameters">(net.minecraft.network.chat.Component&nbsp;text,
  int&nbsp;left,
  int&nbsp;top,
- boolean&nbsp;wrap,
+ <a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+ <a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a>&nbsp;wrapping,
  int&nbsp;color,
  boolean&nbsp;shadow)</span></div>
 <div class="block">Creates an instance of a <code>AlignedComponent</code> record class.</div>
@@ -229,7 +275,7 @@ loadScripts(document, 'script');</script>
 <dd><code>text</code> - the value for the <a href="#param-text"><code>text</code></a> record component</dd>
 <dd><code>left</code> - the value for the <a href="#param-left"><code>left</code></a> record component</dd>
 <dd><code>top</code> - the value for the <a href="#param-top"><code>top</code></a> record component</dd>
-<dd><code>wrap</code> - the value for the <a href="#param-wrap"><code>wrap</code></a> record component</dd>
+<dd><code>wrapping</code> - the value for the <a href="#param-wrapping"><code>wrapping</code></a> record component</dd>
 <dd><code>color</code> - the value for the <a href="#param-color"><code>color</code></a> record component</dd>
 <dd><code>shadow</code> - the value for the <a href="#param-shadow"><code>shadow</code></a> record component</dd>
 </dl>
@@ -243,6 +289,16 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="wrap()">
+<h3>wrap</h3>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">wrap</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
+<div class="block">Provided for compatibility</div>
+</section>
+</li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
@@ -301,6 +357,8 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">left</span>()</div>
 <div class="block">Returns the value of the <a href="#param-left"><code>left</code></a> record component.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TextScreenEntry.html#left()">left</a></code>&nbsp;in interface&nbsp;<code><a href="TextScreenEntry.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry</a></code></dd>
 <dt>Returns:</dt>
 <dd>the value of the <a href="#param-left"><code>left</code></a> record component</dd>
 </dl>
@@ -312,19 +370,22 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">top</span>()</div>
 <div class="block">Returns the value of the <a href="#param-top"><code>top</code></a> record component.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TextScreenEntry.html#top()">top</a></code>&nbsp;in interface&nbsp;<code><a href="TextScreenEntry.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry</a></code></dd>
 <dt>Returns:</dt>
 <dd>the value of the <a href="#param-top"><code>top</code></a> record component</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="wrap()">
-<h3>wrap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">wrap</span>()</div>
-<div class="block">Returns the value of the <a href="#param-wrap"><code>wrap</code></a> record component.</div>
+<section class="detail" id="wrapping()">
+<h3>wrapping</h3>
+<div class="member-signature"><span class="annotations"><a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AlignedComponent.TextWrapping.html" title="class in org.moddingx.libx.screen.text">AlignedComponent.TextWrapping</a></span>&nbsp;<span class="element-name">wrapping</span>()</div>
+<div class="block">Returns the value of the <a href="#param-wrapping"><code>wrapping</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <a href="#param-wrap"><code>wrap</code></a> record component</dd>
+<dd>the value of the <a href="#param-wrapping"><code>wrapping</code></a> record component</dd>
 </dl>
 </section>
 </li>
