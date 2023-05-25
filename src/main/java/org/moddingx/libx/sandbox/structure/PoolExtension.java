@@ -21,7 +21,7 @@ public class PoolExtension {
     
     public static final Codec<PoolExtension> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("pool").forGetter(p -> p.pool.location()),
-            Codec.BOOL.fieldOf("required").orElse(false).forGetter(p -> p.required),
+            Codec.BOOL.optionalFieldOf("required", false).forGetter(p -> p.required),
             Codec.mapPair(
                     StructurePoolElement.CODEC.fieldOf("element"),
                     Codec.intRange(1, 150).fieldOf("weight")
@@ -36,6 +36,10 @@ public class PoolExtension {
 
     private PoolExtension(ResourceLocation poolId, boolean required, List<Pair<StructurePoolElement, Integer>> elements) {
         this(ResourceKey.create(Registries.TEMPLATE_POOL, poolId), required, elements);
+    }
+    
+    public PoolExtension(ResourceKey<StructureTemplatePool> pool, List<Pair<StructurePoolElement, Integer>> elements) {
+        this(pool, false, elements);
     }
     
     public PoolExtension(ResourceKey<StructureTemplatePool> pool, boolean required, List<Pair<StructurePoolElement, Integer>> elements) {

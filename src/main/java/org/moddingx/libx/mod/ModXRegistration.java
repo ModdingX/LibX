@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.base.tile.BlockBE;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.registration.RegistrationDispatcher;
@@ -41,10 +42,6 @@ import javax.annotation.Nullable;
  * 
  * The system allows to create {@link Holder holders}. However, this will only work for vanilla registries
  * that support holder creation prior to registering the item.
- * 
- * Another special class is {@link MultiRegisterable}. Instances of this class can be registered with
- * {@link #registerMulti(ResourceKey, String, MultiRegisterable)}. Instances of this class can't be registered
- * into a registry directly, however its children will inherit the registry specified for the parent.
  */
 public abstract class ModXRegistration extends ModX {
 
@@ -92,7 +89,11 @@ public abstract class ModXRegistration extends ModX {
     /**
      * Registers the contents of a {@link MultiRegisterable} to a given registry using a given name as the base
      * path part of the objects' id.
+     *
+     * @deprecated {@link MultiRegisterable} is deprecated. See there for more information
      */
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "1.20")
     public final <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
         this.dispatcher.registerMulti(registry, id, value);
     }

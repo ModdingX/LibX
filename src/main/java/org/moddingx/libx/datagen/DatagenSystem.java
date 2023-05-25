@@ -10,6 +10,8 @@ import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.ModLoadingContext;
+import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.datagen.InternalDataProvider;
 import org.moddingx.libx.impl.datagen.registries.DatagenRegistryLoader;
@@ -37,6 +39,11 @@ public class DatagenSystem {
      * @see DatagenStage
      */
     public static void registerExtensionRegistry(ResourceKey<? extends Registry<?>> registryKey) {
+        String activeMod = ModLoadingContext.get().getActiveNamespace();
+        if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.location().getNamespace(), activeMod)) {
+            // LibX is the exception: It has to make vanilla and forge registries extension registries
+            LibX.logger.warn("Registry " + registryKey.location() + " marked as extension registry by foreign mod: " + activeMod);
+        }
         EXTENSION_REGISTRIES.add(registryKey);
     }
 
@@ -48,13 +55,20 @@ public class DatagenSystem {
     public static Set<ResourceKey<? extends Registry<?>>> extensionRegistries() {
         return Collections.unmodifiableSet(EXTENSION_REGISTRIES);
     }
-    
+
+    /**
+     * Registers a datagen system for the given mod and executes the provided configuration action when running
+     * datagen. Calling this method multiple times for the same mod will only create a single datagen system but
+     * invoke all configuration in order.
+     */
     public static void create(ModX mod, Consumer<DatagenSystem> configure) {
-        ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.class, event -> {
-            DatagenSystem system = new DatagenSystem(mod, event);
-            configure.accept(system);
-            system.hookIntoGenerator();
-        });
+        if (ModInternal.get(mod).addDatagenConfiguration(configure)) {
+            ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.class, event -> {
+                DatagenSystem system = new DatagenSystem(mod, event);
+                ModInternal.get(mod).configureDatagenSystem(system);
+                system.hookIntoGenerator();
+            });
+        }
     }
     
     private final ModX mod;

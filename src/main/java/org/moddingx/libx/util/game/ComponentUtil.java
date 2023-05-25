@@ -132,8 +132,7 @@ public class ComponentUtil {
     public static Component withCopyAction(Component component, String copyText) {
         return component.copy().withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copyText)).withHoverEvent(HOVER_COPY));
     }
-
-
+    
     /**
      * Gets a sub-sequence from the given {@link FormattedCharSequence}. The sub sequence will include
      * all characters from {@code start} (inclusive) to the end of the sequence.

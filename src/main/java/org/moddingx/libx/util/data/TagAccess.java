@@ -9,6 +9,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.tags.ITagManager;
+import org.moddingx.libx.annotation.meta.RemoveIn;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -17,7 +19,12 @@ import java.util.Optional;
  * A class to help accessing {@link TagKey tags} in a more user friendly way.
  * A {@link TagAccess} can contain a {@link RegistryAccess} to allow accessing
  * dynamic registries.
+ * 
+ * @deprecated Use {@link HolderSet}s where possible in datapack registries and {@link ITagManager} for
+ *             forge non-datapack registries.
  */
+@Deprecated(forRemoval = true)
+@RemoveIn(minecraft = "1.20")
 public class TagAccess {
     
     private final RegistryAccess registries;
