@@ -79,7 +79,15 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="util/EnumObjects.html" title="class in org.moddingx.libx.registration.util">EnumObjects</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">MultiRegisterable&lt;T&gt;</span></div>
+<div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public interface </span><span class="element-name type-name-label">MultiRegisterable&lt;T&gt;</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">To register multiple elements at the same time, use a regular <a href="Registerable.html" title="interface in org.moddingx.libx.registration"><code>Registerable</code></a>
+ add register the additional elements in <a href="Registerable.html#registerAdditional(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.Registerable.EntryCollector)"><code>Registerable.registerAdditional(RegistrationContext, Registerable.EntryCollector)</code></a>.
+ For the use in ModInit, use <a href="../annotation/registration/PlainRegisterable.html" title="annotation interface in org.moddingx.libx.annotation.registration"><code>PlainRegisterable</code></a>. This way, it's possible to for example put <code>Item</code>s and
+ containers registering 16 items, one for each color in the same class annotated ith <a href="../annotation/registration/RegisterClass.html" title="annotation interface in org.moddingx.libx.annotation.registration"><code>RegisterClass</code></a>.</div>
+</div>
 <div class="block">Base interface for classes that act as a container for other objects. A <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a>
  can't be directly registered into a registry, however the registry specified with it is used as
  default in <a href="#registerAdditional(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.MultiRegisterable.EntryCollector)"><code>registerAdditional(RegistrationContext, EntryCollector)</code></a>.</div>
@@ -98,7 +106,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="MultiRegisterable.EntryCollector.html" class="type-name-link" title="interface in org.moddingx.libx.registration">MultiRegisterable.EntryCollector</a>&lt;<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&gt;</code></div>
 <div class="col-last even-row-color">
-<div class="block">Interface to collect additional objects that are registered together with a <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a>.</div>
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment"><a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated.</div>
+</div>
 </div>
 </div>
 </section>
@@ -108,22 +118,24 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#initTracking(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.Registerable.TrackingCollector)" class="member-name-link">initTracking</a><wbr>(<a href="RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a>&nbsp;ctx,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code><a href="#initTracking(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.Registerable.TrackingCollector)" class="member-name-link">initTracking</a><wbr>(<a href="RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a>&nbsp;ctx,
  <a href="Registerable.TrackingCollector.html" title="interface in org.moddingx.libx.registration">Registerable.TrackingCollector</a>&nbsp;builder)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Adds fields with additional registry values to the <a href="tracking/RegistryTracker.html" title="class in org.moddingx.libx.registration.tracking"><code>RegistryTracker</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#registerAdditional(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.MultiRegisterable.EntryCollector)" class="member-name-link">registerAdditional</a><wbr>(<a href="RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a>&nbsp;ctx,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6"><code><a href="#registerAdditional(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.MultiRegisterable.EntryCollector)" class="member-name-link">registerAdditional</a><wbr>(<a href="RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a>&nbsp;ctx,
  <a href="MultiRegisterable.EntryCollector.html" title="interface in org.moddingx.libx.registration">MultiRegisterable.EntryCollector</a>&lt;<a href="MultiRegisterable.html" title="type parameter in MultiRegisterable">T</a>&gt;&nbsp;builder)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers additional objects.</div>
 </div>
 </div>
@@ -146,6 +158,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations"><a href="../annotation/meta/SuperChainRequired.html" title="annotation interface in org.moddingx.libx.annotation.meta">@SuperChainRequired</a>
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerAdditional</span><wbr><span class="parameters">(<a href="RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a>&nbsp;ctx,
  <a href="MultiRegisterable.EntryCollector.html" title="interface in org.moddingx.libx.registration">MultiRegisterable.EntryCollector</a>&lt;<a href="MultiRegisterable.html" title="type parameter in MultiRegisterable">T</a>&gt;&nbsp;builder)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers additional objects. These objects will be registered with the id and registry of
  this object and optionally a name suffix.</div>
 </section>
@@ -157,6 +170,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initTracking</span><wbr><span class="parameters">(<a href="RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a>&nbsp;ctx,
  <a href="Registerable.TrackingCollector.html" title="interface in org.moddingx.libx.registration">Registerable.TrackingCollector</a>&nbsp;builder)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ReflectiveOperationException.html" title="class or interface in java.lang" class="external-link">ReflectiveOperationException</a></span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Adds fields with additional registry values to the <a href="tracking/RegistryTracker.html" title="class in org.moddingx.libx.registration.tracking"><code>RegistryTracker</code></a>. This called, unless
  <a href="RegistrationBuilder.html#disableRegistryTracking()"><code>RegistrationBuilder.disableRegistryTracking()</code></a> ()} is set.</div>
 <dl class="notes">

@@ -145,7 +145,10 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(org.moddingx.libx.mod.ModX,java.util.function.Consumer)" class="member-name-link">create</a><wbr>(<a href="../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="DatagenSystem.html" title="class in org.moddingx.libx.datagen">DatagenSystem</a>&gt;&nbsp;configure)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Registers a datagen system for the given mod and executes the provided configuration action when running
+ datagen.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PackTarget.html" title="class in org.moddingx.libx.datagen">PackTarget</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dynamic(java.lang.String,net.minecraft.server.packs.PackType,org.moddingx.libx.datagen.PackTarget...)" class="member-name-link">dynamic</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  net.minecraft.server.packs.PackType&nbsp;type,
@@ -253,6 +256,9 @@ loadScripts(document, 'script');</script>
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(<a href="../mod/ModX.html" title="class in org.moddingx.libx.mod">ModX</a>&nbsp;mod,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="DatagenSystem.html" title="class in org.moddingx.libx.datagen">DatagenSystem</a>&gt;&nbsp;configure)</span></div>
+<div class="block">Registers a datagen system for the given mod and executes the provided configuration action when running
+ datagen. Calling this method multiple times for the same mod will only create a single datagen system but
+ invoke all configuration in order.</div>
 </section>
 </li>
 <li>

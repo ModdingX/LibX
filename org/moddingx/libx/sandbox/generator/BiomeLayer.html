@@ -115,12 +115,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>static final net.minecraft.resources.ResourceKey&lt;<a href="BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#NETHER" class="member-name-link">NETHER</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">The nether biome layer.</div>
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">If you need it, generate it yourself.</div>
+</div>
 </div>
 <div class="col-first even-row-color"><code>static final net.minecraft.resources.ResourceKey&lt;<a href="BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#OVERWORLD" class="member-name-link">OVERWORLD</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">The overworld biome layer.</div>
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">If you need it, generate it yourself.</div>
+</div>
 </div>
 </div>
 </section>
@@ -134,7 +138,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
+</div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,java.util.Optional,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.world.level.levelgen.DensityFunction&gt;&nbsp;density,
  net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
@@ -143,7 +151,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
  net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
+</div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.levelgen.DensityFunction,net.minecraft.world.level.biome.Climate.ParameterList)" class="member-name-link">BiomeLayer</a><wbr>(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
  net.minecraft.world.level.levelgen.DensityFunction&nbsp;density,
  net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</code></div>
@@ -233,14 +245,26 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="OVERWORLD">
 <h3>OVERWORLD</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">net.minecraft.resources.ResourceKey&lt;<a href="BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a>&gt;</span>&nbsp;<span class="element-name">OVERWORLD</span></div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">net.minecraft.resources.ResourceKey&lt;<a href="BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a>&gt;</span>&nbsp;<span class="element-name">OVERWORLD</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">If you need it, generate it yourself. A biome layer has too many options besides the climate
+ settings that it is unreasonable to just assume defaults.</div>
+</div>
 <div class="block">The overworld biome layer. It covers the full noise range and has a weight of 1.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="NETHER">
 <h3>NETHER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">net.minecraft.resources.ResourceKey&lt;<a href="BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a>&gt;</span>&nbsp;<span class="element-name">NETHER</span></div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">net.minecraft.resources.ResourceKey&lt;<a href="BiomeLayer.html" title="class in org.moddingx.libx.sandbox.generator">BiomeLayer</a>&gt;</span>&nbsp;<span class="element-name">NETHER</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">If you need it, generate it yourself. A biome layer has too many options besides the climate
+ settings that it is unreasonable to just assume defaults.</div>
+</div>
 <div class="block">The nether biome layer. It covers the full noise range and has a weight of 1.</div>
 </section>
 </li>
@@ -255,7 +279,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(net.minecraft.world.level.biome.Climate.ParameterList)">
 <h3>BiomeLayer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
 </section>
 </li>
 <li>
@@ -268,8 +297,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)">
 <h3>BiomeLayer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeLayer</span><wbr><span class="parameters">(net.minecraft.world.level.biome.Climate.ParameterPoint&nbsp;range,
  net.minecraft.world.level.biome.Climate.ParameterList&lt;net.minecraft.core.Holder&lt;net.minecraft.world.level.biome.Biome&gt;&gt;&nbsp;biomes)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
 </section>
 </li>
 <li>

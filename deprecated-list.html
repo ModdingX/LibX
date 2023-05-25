@@ -54,7 +54,11 @@ loadScripts(document, 'script');</script>
 <h2 title="Contents">Contents</h2>
 <ul>
 <li><a href="#for-removal">Terminally Deprecated</a></li>
+<li><a href="#interface">Interfaces</a></li>
+<li><a href="#class">Classes</a></li>
+<li><a href="#field">Fields</a></li>
 <li><a href="#method">Methods</a></li>
+<li><a href="#constructor">Constructors</a></li>
 </ul>
 </div>
 <ul class="block-list">
@@ -64,8 +68,133 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Element</div>
 <div class="table-header col-last">Description</div>
-<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/screen/text/AlignedComponent.html#wrap()">org.moddingx.libx.screen.text.AlignedComponent.wrap()</a></div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/mod/ModXRegistration.html#registerMulti(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.mod.ModXRegistration.registerMulti<wbr>(ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, String, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration">org.moddingx.libx.registration.MultiRegisterable</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">To register multiple elements at the same time, use a regular <a href="org/moddingx/libx/registration/Registerable.html" title="interface in org.moddingx.libx.registration"><code>Registerable</code></a>
+ add register the additional elements in <a href="org/moddingx/libx/registration/Registerable.html#registerAdditional(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.Registerable.EntryCollector)"><code>Registerable.registerAdditional(RegistrationContext, Registerable.EntryCollector)</code></a>.
+ For the use in ModInit, use <a href="org/moddingx/libx/annotation/registration/PlainRegisterable.html" title="annotation interface in org.moddingx.libx.annotation.registration"><code>PlainRegisterable</code></a>. This way, it's possible to for example put <code>Item</code>s and
+ containers registering 16 items, one for each color in the same class annotated ith <a href="org/moddingx/libx/annotation/registration/RegisterClass.html" title="annotation interface in org.moddingx.libx.annotation.registration"><code>RegisterClass</code></a>.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/registration/MultiRegisterable.EntryCollector.html" title="interface in org.moddingx.libx.registration">org.moddingx.libx.registration.MultiRegisterable.EntryCollector</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/registration/Registerable.EntryCollector.html#registerMulti(net.minecraft.resources.ResourceKey,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.registration.Registerable.EntryCollector.registerMulti<wbr>(ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/registration/Registerable.EntryCollector.html#registerMultiNamed(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.registration.Registerable.EntryCollector.registerMultiNamed<wbr>(ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, String, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/registration/RegistryCondition.html#shouldRegisterMulti(org.moddingx.libx.registration.RegistrationContext,net.minecraft.resources.ResourceKey,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.registration.RegistryCondition.shouldRegisterMulti<wbr>(RegistrationContext, ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/registration/RegistryTransformer.html#transformMulti(org.moddingx.libx.registration.RegistrationContext,net.minecraft.resources.ResourceKey,java.lang.Object,org.moddingx.libx.registration.MultiRegisterable.EntryCollector)">org.moddingx.libx.registration.RegistryTransformer.transformMulti<wbr>(RegistrationContext, ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, Object, MultiRegisterable.EntryCollector&lt;T&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterList)">org.moddingx.libx.sandbox.generator.BiomeLayer<wbr>(Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)">org.moddingx.libx.sandbox.generator.BiomeLayer<wbr>(Climate.ParameterPoint, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#NETHER">org.moddingx.libx.sandbox.generator.BiomeLayer.NETHER</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">If you need it, generate it yourself. A biome layer has too many options besides the climate
+ settings that it is unreasonable to just assume defaults.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#OVERWORLD">org.moddingx.libx.sandbox.generator.BiomeLayer.OVERWORLD</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">If you need it, generate it yourself. A biome layer has too many options besides the climate
+ settings that it is unreasonable to just assume defaults.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/screen/text/AlignedComponent.html#wrap()">org.moddingx.libx.screen.text.AlignedComponent.wrap()</a></div>
+<div class="col-last odd-row-color"></div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/util/ClassUtil.html#calledBy(java.lang.Class)">org.moddingx.libx.util.ClassUtil.calledBy<wbr>(Class&lt;?&gt;)</a></div>
 <div class="col-last even-row-color"></div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/util/ClassUtil.html#calledBy(java.lang.Class,java.lang.String,java.lang.Class...)">org.moddingx.libx.util.ClassUtil.calledBy<wbr>(Class&lt;?&gt;, String, Class&lt;?&gt;...)</a></div>
+<div class="col-last odd-row-color"></div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/util/data/TagAccess.html" title="class in org.moddingx.libx.util.data">org.moddingx.libx.util.data.TagAccess</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Use <code>HolderSet</code>s where possible in datapack registries and <code>ITagManager</code> for
+             forge non-datapack registries.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/util/Misc.html#MISSIGNO">org.moddingx.libx.util.Misc.MISSIGNO</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">Provided for compatibility. Use <a href="org/moddingx/libx/util/Misc.html#MISSINGNO"><code>Misc.MISSINGNO</code></a>.</div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+<ul class="block-list">
+<li>
+<div id="interface">
+<div class="caption"><span>Deprecated Interfaces</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Interface</div>
+<div class="table-header col-last">Description</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration">org.moddingx.libx.registration.MultiRegisterable</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">To register multiple elements at the same time, use a regular <a href="org/moddingx/libx/registration/Registerable.html" title="interface in org.moddingx.libx.registration"><code>Registerable</code></a>
+ add register the additional elements in <a href="org/moddingx/libx/registration/Registerable.html#registerAdditional(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.Registerable.EntryCollector)"><code>Registerable.registerAdditional(RegistrationContext, Registerable.EntryCollector)</code></a>.
+ For the use in ModInit, use <a href="org/moddingx/libx/annotation/registration/PlainRegisterable.html" title="annotation interface in org.moddingx.libx.annotation.registration"><code>PlainRegisterable</code></a>. This way, it's possible to for example put <code>Item</code>s and
+ containers registering 16 items, one for each color in the same class annotated ith <a href="org/moddingx/libx/annotation/registration/RegisterClass.html" title="annotation interface in org.moddingx.libx.annotation.registration"><code>RegisterClass</code></a>.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/registration/MultiRegisterable.EntryCollector.html" title="interface in org.moddingx.libx.registration">org.moddingx.libx.registration.MultiRegisterable.EntryCollector</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+<ul class="block-list">
+<li>
+<div id="class">
+<div class="caption"><span>Deprecated Classes</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/util/data/TagAccess.html" title="class in org.moddingx.libx.util.data">org.moddingx.libx.util.data.TagAccess</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Use <code>HolderSet</code>s where possible in datapack registries and <code>ITagManager</code> for
+             forge non-datapack registries.</div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+<ul class="block-list">
+<li>
+<div id="field">
+<div class="caption"><span>Deprecated Fields</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#NETHER">org.moddingx.libx.sandbox.generator.BiomeLayer.NETHER</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">If you need it, generate it yourself. A biome layer has too many options besides the climate
+ settings that it is unreasonable to just assume defaults.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#OVERWORLD">org.moddingx.libx.sandbox.generator.BiomeLayer.OVERWORLD</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">If you need it, generate it yourself. A biome layer has too many options besides the climate
+ settings that it is unreasonable to just assume defaults.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/util/Misc.html#MISSIGNO">org.moddingx.libx.util.Misc.MISSIGNO</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Provided for compatibility. Use <a href="org/moddingx/libx/util/Misc.html#MISSINGNO"><code>Misc.MISSINGNO</code></a>.</div>
+</div>
 </div>
 </div>
 </li>
@@ -77,10 +206,53 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/screen/text/AlignedComponent.html#wrap()">org.moddingx.libx.screen.text.AlignedComponent.wrap()</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/util/lazy/LazyImmutableMap.html#containsValue(java.lang.Object)">org.moddingx.libx.util.lazy.LazyImmutableMap.containsValue<wbr>(Object)</a></div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/mod/ModXRegistration.html#registerMulti(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.mod.ModXRegistration.registerMulti<wbr>(ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, String, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/registration/Registerable.EntryCollector.html#registerMulti(net.minecraft.resources.ResourceKey,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.registration.Registerable.EntryCollector.registerMulti<wbr>(ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/registration/Registerable.EntryCollector.html#registerMultiNamed(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.registration.Registerable.EntryCollector.registerMultiNamed<wbr>(ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, String, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/registration/RegistryCondition.html#shouldRegisterMulti(org.moddingx.libx.registration.RegistrationContext,net.minecraft.resources.ResourceKey,org.moddingx.libx.registration.MultiRegisterable)">org.moddingx.libx.registration.RegistryCondition.shouldRegisterMulti<wbr>(RegistrationContext, ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, MultiRegisterable&lt;T&gt;)</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/registration/RegistryTransformer.html#transformMulti(org.moddingx.libx.registration.RegistrationContext,net.minecraft.resources.ResourceKey,java.lang.Object,org.moddingx.libx.registration.MultiRegisterable.EntryCollector)">org.moddingx.libx.registration.RegistryTransformer.transformMulti<wbr>(RegistrationContext, ResourceKey&lt;? extends Registry&lt;T&gt;&gt;, Object, MultiRegisterable.EntryCollector&lt;T&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/screen/text/AlignedComponent.html#wrap()">org.moddingx.libx.screen.text.AlignedComponent.wrap()</a></div>
 <div class="col-last odd-row-color"></div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/util/ClassUtil.html#calledBy(java.lang.Class)">org.moddingx.libx.util.ClassUtil.calledBy<wbr>(Class&lt;?&gt;)</a></div>
+<div class="col-last even-row-color"></div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/util/ClassUtil.html#calledBy(java.lang.Class,java.lang.String,java.lang.Class...)">org.moddingx.libx.util.ClassUtil.calledBy<wbr>(Class&lt;?&gt;, String, Class&lt;?&gt;...)</a></div>
+<div class="col-last odd-row-color"></div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/util/lazy/LazyImmutableMap.html#containsValue(java.lang.Object)">org.moddingx.libx.util.lazy.LazyImmutableMap.containsValue<wbr>(Object)</a></div>
+<div class="col-last even-row-color"></div>
+</div>
+</div>
+</li>
+</ul>
+<ul class="block-list">
+<li>
+<div id="constructor">
+<div class="caption"><span>Deprecated Constructors</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-summary-item-name even-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterList)">org.moddingx.libx.sandbox.generator.BiomeLayer<wbr>(Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
+<div class="col-summary-item-name odd-row-color"><a href="org/moddingx/libx/sandbox/generator/BiomeLayer.html#%3Cinit%3E(net.minecraft.world.level.biome.Climate.ParameterPoint,net.minecraft.world.level.biome.Climate.ParameterList)">org.moddingx.libx.sandbox.generator.BiomeLayer<wbr>(Climate.ParameterPoint, Climate.ParameterList&lt;Holder&lt;Biome&gt;&gt;)</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">Biome layers will require density functions as of 1.20.</div>
+</div>
 </div>
 </div>
 </li>

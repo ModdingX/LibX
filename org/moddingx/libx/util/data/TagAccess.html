@@ -78,8 +78,14 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TagAccess</span>
+<div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">TagAccess</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <code>HolderSet</code>s where possible in datapack registries and <code>ITagManager</code> for
+             forge non-datapack registries.</div>
+</div>
 <div class="block">A class to help accessing <code>tags</code> in a more user friendly way.
  A <a href="TagAccess.html" title="class in org.moddingx.libx.util.data"><code>TagAccess</code></a> can contain a <code>RegistryAccess</code> to allow accessing
  dynamic registries.</div>
@@ -91,47 +97,54 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(net.minecraft.core.RegistryAccess)" class="member-name-link">create</a><wbr>(net.minecraft.core.RegistryAccess&nbsp;registries)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static <a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#create(net.minecraft.core.RegistryAccess)" class="member-name-link">create</a><wbr>(net.minecraft.core.RegistryAccess&nbsp;registries)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Creates a new <a href="TagAccess.html" title="class in org.moddingx.libx.util.data"><code>TagAccess</code></a> from a given <code>RegistryAccess</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(net.minecraft.server.MinecraftServer)" class="member-name-link">create</a><wbr>(net.minecraft.server.MinecraftServer&nbsp;server)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static <a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#create(net.minecraft.server.MinecraftServer)" class="member-name-link">create</a><wbr>(net.minecraft.server.MinecraftServer&nbsp;server)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Creates a new <a href="TagAccess.html" title="class in org.moddingx.libx.util.data"><code>TagAccess</code></a> for a given <code>MinecraftServer</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(net.minecraft.world.level.Level)" class="member-name-link">create</a><wbr>(net.minecraft.world.level.Level&nbsp;level)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code>static <a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#create(net.minecraft.world.level.Level)" class="member-name-link">create</a><wbr>(net.minecraft.world.level.Level&nbsp;level)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Creates a new <a href="TagAccess.html" title="class in org.moddingx.libx.util.data"><code>TagAccess</code></a> for a given <code>Level</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;net.minecraft.core.HolderSet.Named&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get(net.minecraft.tags.TagKey)" class="member-name-link">get</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>&lt;T&gt;&nbsp;net.minecraft.core.HolderSet.Named&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#get(net.minecraft.tags.TagKey)" class="member-name-link">get</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Gets the <code>HolderSet</code> associated with a tag.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#has(net.minecraft.tags.TagKey,T)" class="member-name-link">has</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>&lt;T&gt;&nbsp;boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#has(net.minecraft.tags.TagKey,T)" class="member-name-link">has</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key,
  T&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Checks whether a tag has a certain element.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#random(net.minecraft.tags.TagKey,net.minecraft.util.RandomSource)" class="member-name-link">random</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#random(net.minecraft.tags.TagKey,net.minecraft.util.RandomSource)" class="member-name-link">random</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key,
  net.minecraft.util.RandomSource&nbsp;random)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Gets a random element from a tag.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.core.HolderSet.Named&lt;T&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tryGet(net.minecraft.tags.TagKey)" class="member-name-link">tryGet</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.core.HolderSet.Named&lt;T&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#tryGet(net.minecraft.tags.TagKey)" class="member-name-link">tryGet</a><wbr>(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Gets the <code>HolderSet</code> associated with a tag.</div>
 </div>
 </div>
@@ -155,6 +168,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(net.minecraft.core.RegistryAccess)">
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(net.minecraft.core.RegistryAccess&nbsp;registries)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Creates a new <a href="TagAccess.html" title="class in org.moddingx.libx.util.data"><code>TagAccess</code></a> from a given <code>RegistryAccess</code>.</div>
 </section>
 </li>
@@ -162,6 +176,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(net.minecraft.server.MinecraftServer)">
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(net.minecraft.server.MinecraftServer&nbsp;server)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Creates a new <a href="TagAccess.html" title="class in org.moddingx.libx.util.data"><code>TagAccess</code></a> for a given <code>MinecraftServer</code>.</div>
 </section>
 </li>
@@ -169,6 +184,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(net.minecraft.world.level.Level)">
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(net.minecraft.world.level.Level&nbsp;level)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Creates a new <a href="TagAccess.html" title="class in org.moddingx.libx.util.data"><code>TagAccess</code></a> for a given <code>Level</code>.</div>
 </section>
 </li>
@@ -176,6 +192,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="get(net.minecraft.tags.TagKey)">
 <h3>get</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">net.minecraft.core.HolderSet.Named&lt;T&gt;</span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Gets the <code>HolderSet</code> associated with a tag.
  If the tag does not yet exist, it is created.</div>
 </section>
@@ -185,6 +202,7 @@ loadScripts(document, 'script');</script>
 <h3>tryGet</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
 <span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;net.minecraft.core.HolderSet.Named&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">tryGet</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Gets the <code>HolderSet</code> associated with a tag.
  If the tag does not yet exist, the returned <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> will be empty.</div>
 </section>
@@ -194,6 +212,7 @@ loadScripts(document, 'script');</script>
 <h3 id="has(net.minecraft.tags.TagKey,java.lang.Object)">has</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">has</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key,
  T&nbsp;value)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Checks whether a tag has a certain element.</div>
 </section>
 </li>
@@ -202,6 +221,7 @@ loadScripts(document, 'script');</script>
 <h3>random</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name">random</span><wbr><span class="parameters">(net.minecraft.tags.TagKey&lt;T&gt;&nbsp;key,
  net.minecraft.util.RandomSource&nbsp;random)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Gets a random element from a tag.</div>
 </section>
 </li>

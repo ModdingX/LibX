@@ -105,11 +105,7 @@ loadScripts(document, 'script');</script>
  </ul>
  
  The system allows to create <code>holders</code>. However, this will only work for vanilla registries
- that support holder creation prior to registering the item.
- 
- Another special class is <a href="../registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a>. Instances of this class can be registered with
- <a href="#registerMulti(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)"><code>registerMulti(ResourceKey, String, MultiRegisterable)</code></a>. Instances of this class can't be registered
- into a registry directly, however its children will inherit the registry specified for the parent.</div>
+ that support holder creation prior to registering the item.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -145,7 +141,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -168,13 +164,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Registers an object to a given registry using a given name as the path part of the objects id.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final &lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerMulti(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)" class="member-name-link">registerMulti</a><wbr>(net.minecraft.resources.ResourceKey&lt;? extends net.minecraft.core.Registry&lt;T&gt;&gt;&nbsp;registry,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>final &lt;T&gt;&nbsp;void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#registerMulti(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)" class="member-name-link">registerMulti</a><wbr>(net.minecraft.resources.ResourceKey&lt;? extends net.minecraft.core.Registry&lt;T&gt;&gt;&nbsp;registry,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;T&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Registers the contents of a <a href="../registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> to a given registry using a given name as the base
- path part of the objects' id.</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment"><a href="../registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated.</div>
+</div>
 </div>
 </div>
 </div>
@@ -241,10 +238,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="registerMulti(net.minecraft.resources.ResourceKey,java.lang.String,org.moddingx.libx.registration.MultiRegisterable)">
 <h3>registerMulti</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerMulti</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerMulti</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
  net.minecraft.resources.ResourceKey&lt;? extends net.minecraft.core.Registry&lt;T&gt;&gt;&nbsp;registry,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;T&gt;&nbsp;value)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment"><a href="../registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
 <div class="block">Registers the contents of a <a href="../registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> to a given registry using a given name as the base
  path part of the objects' id.</div>
 </section>

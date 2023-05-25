@@ -690,12 +690,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Provides additional <code>codecs</code>.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;<a href="org/moddingx/libx/registration/MultiRegisterable.html" title="type parameter in MultiRegisterable">T</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
-<div class="block">Base interface for classes that act as a container for other objects.</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">Deprecated, for removal: This API element is subject to removal in a future version.
+<div class="deprecation-comment">To register multiple elements at the same time, use a regular <a href="org/moddingx/libx/registration/Registerable.html" title="interface in org.moddingx.libx.registration"><code>Registerable</code></a>
+ add register the additional elements in <a href="org/moddingx/libx/registration/Registerable.html#registerAdditional(org.moddingx.libx.registration.RegistrationContext,org.moddingx.libx.registration.Registerable.EntryCollector)"><code>Registerable.registerAdditional(RegistrationContext, Registerable.EntryCollector)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/MultiRegisterable.EntryCollector.html" title="interface in org.moddingx.libx.registration">MultiRegisterable.EntryCollector</a>&lt;<a href="org/moddingx/libx/registration/MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">Interface to collect additional objects that are registered together with a <a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a>.</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">Deprecated, for removal: This API element is subject to removal in a future version.
+<div class="deprecation-comment"><a href="org/moddingx/libx/registration/MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/data/NbtX.html" title="class in org.moddingx.libx.util.data">NbtX</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -758,368 +759,374 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A provider for patchouli categories and entries.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/math/Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="org/moddingx/libx/util/math/Polynomial.html" title="type parameter in Polynomial">T</a> extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/PlainRegisterable.html" title="annotation interface in org.moddingx.libx.annotation.registration">PlainRegisterable</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
+<div class="block">This annotation can be added to a class to instruct ModInit to always register instances of that class without
+ a registry and don't check the element type.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/math/Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="org/moddingx/libx/util/math/Polynomial.html" title="type parameter in Polynomial">T</a> extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Represents a polynomial with coefficients of type <code>T</code>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/sandbox/structure/PoolExtension.html" title="class in org.moddingx.libx.sandbox.structure">PoolExtension</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/sandbox/structure/PoolExtension.html" title="class in org.moddingx.libx.sandbox.structure">PoolExtension</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Specifies an extension to a <code>template pool</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate3.html" title="interface in org.moddingx.libx.fi">Predicate3</a>&lt;<a href="org/moddingx/libx/fi/Predicate3.html" title="type parameter in Predicate3">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate3.html" title="type parameter in Predicate3">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate3.html" title="type parameter in Predicate3">C</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate3.html" title="interface in org.moddingx.libx.fi">Predicate3</a>&lt;<a href="org/moddingx/libx/fi/Predicate3.html" title="type parameter in Predicate3">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate3.html" title="type parameter in Predicate3">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate3.html" title="type parameter in Predicate3">C</a>&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A predicate that takes 3 parameters.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate4.html" title="interface in org.moddingx.libx.fi">Predicate4</a>&lt;<a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">D</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate4.html" title="interface in org.moddingx.libx.fi">Predicate4</a>&lt;<a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate4.html" title="type parameter in Predicate4">D</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A predicate that takes 4 parameters.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate5.html" title="interface in org.moddingx.libx.fi">Predicate5</a>&lt;<a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">E</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate5.html" title="interface in org.moddingx.libx.fi">Predicate5</a>&lt;<a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate5.html" title="type parameter in Predicate5">E</a>&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A predicate that takes 5 parameters.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate6.html" title="interface in org.moddingx.libx.fi">Predicate6</a>&lt;<a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">E</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">F</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate6.html" title="interface in org.moddingx.libx.fi">Predicate6</a>&lt;<a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">E</a>,<wbr><a href="org/moddingx/libx/fi/Predicate6.html" title="type parameter in Predicate6">F</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A predicate that takes 6 parameters.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate7.html" title="interface in org.moddingx.libx.fi">Predicate7</a>&lt;<a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">E</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">F</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">G</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate7.html" title="interface in org.moddingx.libx.fi">Predicate7</a>&lt;<a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">E</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">F</a>,<wbr><a href="org/moddingx/libx/fi/Predicate7.html" title="type parameter in Predicate7">G</a>&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A predicate that takes 7 parameters.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate8.html" title="interface in org.moddingx.libx.fi">Predicate8</a>&lt;<a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">E</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">F</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">G</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">H</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/fi/Predicate8.html" title="interface in org.moddingx.libx.fi">Predicate8</a>&lt;<a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">A</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">B</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">C</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">D</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">E</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">F</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">G</a>,<wbr><a href="org/moddingx/libx/fi/Predicate8.html" title="type parameter in Predicate8">H</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A predicate that takes 8 parameters.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/codec/PrimaryConstructor.html" title="annotation interface in org.moddingx.libx.annotation.codec">PrimaryConstructor</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/codec/PrimaryConstructor.html" title="annotation interface in org.moddingx.libx.annotation.codec">PrimaryConstructor</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
 <div class="block">This is used to create very simple Codecs for classes.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/RecipeExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">RecipeExtension</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/RecipeExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">RecipeExtension</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A recipe extension is an interface that provides logic for a <a href="org/moddingx/libx/datagen/provider/recipe/RecipeProviderBase.html" title="class in org.moddingx.libx.datagen.provider.recipe"><code>RecipeProviderBase</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/crafting/recipe/RecipeHelper.html" title="class in org.moddingx.libx.crafting.recipe">RecipeHelper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/patchouli/content/RecipePage.html" title="class in org.moddingx.libx.datagen.provider.patchouli.content">RecipePage</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/crafting/recipe/RecipeHelper.html" title="class in org.moddingx.libx.crafting.recipe">RecipeHelper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/patchouli/content/RecipePage.html" title="class in org.moddingx.libx.datagen.provider.patchouli.content">RecipePage</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Content for pages with a single recipe followed by some text.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/recipe/RecipeProviderBase.html" title="class in org.moddingx.libx.datagen.provider.recipe">RecipeProviderBase</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/recipe/RecipeProviderBase.html" title="class in org.moddingx.libx.datagen.provider.recipe">RecipeProviderBase</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Provider for all kinds of recipes.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/util/Ref.html" title="class in org.moddingx.libx.util">Ref</a>&lt;<a href="org/moddingx/libx/util/Ref.html" title="type parameter in Ref">T</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab4">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/util/Ref.html" title="class in org.moddingx.libx.util">Ref</a>&lt;<a href="org/moddingx/libx/util/Ref.html" title="type parameter in Ref">T</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">
 <div class="block">A wrapper for an element that implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link"><code>equals</code></a> and
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link"><code>hashCode</code></a> for reference equality, no matter what the actual
  implementation of these methods does for the value of the <code>Ref</code> object.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Container annotation.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.Exclude.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg.Exclude</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.Exclude.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg.Exclude</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Marks a field as excluded from registration.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.Multi.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg.Multi</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.Multi.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg.Multi</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Marks a field as multi-registerable.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.Name.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg.Name</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/Reg.Name.html" title="annotation interface in org.moddingx.libx.annotation.registration">Reg.Name</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Explicitly sets a name for a field that is registered.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/Registerable.html" title="interface in org.moddingx.libx.registration">Registerable</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/Registerable.html" title="interface in org.moddingx.libx.registration">Registerable</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Everything that is registered to <a href="org/moddingx/libx/mod/ModXRegistration.html" title="class in org.moddingx.libx.mod"><code>ModXRegistration</code></a> that implements this can specify dependencies
  and things to be done during setup phase.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/Registerable.EntryCollector.html" title="interface in org.moddingx.libx.registration">Registerable.EntryCollector</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/Registerable.EntryCollector.html" title="interface in org.moddingx.libx.registration">Registerable.EntryCollector</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Interface to collect additional objects that are registered together with a <a href="org/moddingx/libx/registration/Registerable.html" title="interface in org.moddingx.libx.registration"><code>Registerable</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/Registerable.TrackingCollector.html" title="interface in org.moddingx.libx.registration">Registerable.TrackingCollector</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/Registerable.TrackingCollector.html" title="interface in org.moddingx.libx.registration">Registerable.TrackingCollector</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Some helpful methods to track elements with names depending on this elements registry name.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/RegisterClass.html" title="annotation interface in org.moddingx.libx.annotation.registration">RegisterClass</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/registration/RegisterClass.html" title="annotation interface in org.moddingx.libx.annotation.registration">RegisterClass</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Can be applied to a class to register all <code>public static final</code> fields to a <code>ModXRegistration</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/config/RegisterConfig.html" title="annotation interface in org.moddingx.libx.annotation.config">RegisterConfig</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/config/RegisterConfig.html" title="annotation interface in org.moddingx.libx.annotation.config">RegisterConfig</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Automatically registers a class as a LibX config.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/config/RegisterMapper.html" title="annotation interface in org.moddingx.libx.annotation.config">RegisterMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/config/RegisterMapper.html" title="annotation interface in org.moddingx.libx.annotation.config">RegisterMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Automatically registers a value mapper or mapper factory for the LibX config system.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/RegistrationBuilder.html" title="class in org.moddingx.libx.registration">RegistrationBuilder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/RegistrationBuilder.html" title="class in org.moddingx.libx.registration">RegistrationBuilder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A registration builder is used to configure the LibX registration system and adjust the behaviour of it.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/registration/RegistrationBuilder.Result.html" title="class in org.moddingx.libx.registration">RegistrationBuilder.Result</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/registration/RegistrationBuilder.Result.html" title="class in org.moddingx.libx.registration">RegistrationBuilder.Result</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/RegistrationContext.html" title="class in org.moddingx.libx.registration">RegistrationContext</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Provides some data that is present during registration like the id and registry key of the object
  being registered.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/RegistryCondition.html" title="interface in org.moddingx.libx.registration">RegistryCondition</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/RegistryCondition.html" title="interface in org.moddingx.libx.registration">RegistryCondition</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A registry condition is used by the LibX registration system to prevent things passed to the
  register methods from being registered.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/RegistryProvider.html" title="interface in org.moddingx.libx.datagen">RegistryProvider</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/RegistryProviderBase.html" title="class in org.moddingx.libx.datagen.provider">RegistryProviderBase</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/RegistryProvider.html" title="interface in org.moddingx.libx.datagen">RegistryProvider</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/RegistryProviderBase.html" title="class in org.moddingx.libx.datagen.provider">RegistryProviderBase</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Base provider for all SandBox data providers.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/RegistrySet.html" title="interface in org.moddingx.libx.datagen">RegistrySet</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/RegistrySet.html" title="interface in org.moddingx.libx.datagen">RegistrySet</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Provides access to datagen registries.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/tracking/RegistryTracker.html" title="class in org.moddingx.libx.registration.tracking">RegistryTracker</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/tracking/RegistryTracker.html" title="class in org.moddingx.libx.registration.tracking">RegistryTracker</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Provides a way to track the values of fields with a registry object.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/RegistryTransformer.html" title="interface in org.moddingx.libx.registration">RegistryTransformer</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/registration/RegistryTransformer.html" title="interface in org.moddingx.libx.registration">RegistryTransformer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A registry transformer is used by the LibX registration system to register additional
  things dynamically based on other objects, that have been passed to the system.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/network/RemoteModList.html" title="class in org.moddingx.libx.network">RemoteModList</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/network/RemoteModList.html" title="class in org.moddingx.libx.network">RemoteModList</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Allows to query information about mods, players have installed on the server side.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/RemovalExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">RemovalExtension</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">RemoveIn</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/RemovalExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">RemovalExtension</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">RemoveIn</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Marks the version in which a feature will be removed.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Some utilities for rendering in general.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelperBlock.html" title="class in org.moddingx.libx.render">RenderHelperBlock</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Helper to deal with <code>Block</code> rendering</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelperFluid.html" title="class in org.moddingx.libx.render">RenderHelperFluid</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelperFluid.html" title="class in org.moddingx.libx.render">RenderHelperFluid</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Helper class to render fluids into a GUI.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/RenderHelperLevel.html" title="class in org.moddingx.libx.render">RenderHelperLevel</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Utilities for rendering in the level.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/render/target/RenderJob.html" title="interface in org.moddingx.libx.render.target">RenderJob</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/render/target/RenderJob.html" title="interface in org.moddingx.libx.render.target">RenderJob</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A render job defines the logic on how to render a scene into an image.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/render/target/RenderJob.Projector.html" title="interface in org.moddingx.libx.render.target">RenderJob.Projector</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="org/moddingx/libx/render/target/RenderJobFailedException.html" title="class in org.moddingx.libx.render.target">RenderJobFailedException</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/render/target/RenderJob.Projector.html" title="interface in org.moddingx.libx.render.target">RenderJob.Projector</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="org/moddingx/libx/render/target/RenderJobFailedException.html" title="class in org.moddingx.libx.render.target">RenderJobFailedException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
 <div class="block">Thrown when a <a href="org/moddingx/libx/render/target/RenderJob.html" title="interface in org.moddingx.libx.render.target"><code>RenderJob</code></a> fails to render correctly.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="org/moddingx/libx/render/target/RenderJobFailedException.Reason.html" title="enum class in org.moddingx.libx.render.target">RenderJobFailedException.Reason</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="org/moddingx/libx/render/target/RenderJobFailedException.Reason.html" title="enum class in org.moddingx.libx.render.target">RenderJobFailedException.Reason</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">A reason for the <a href="org/moddingx/libx/render/target/RenderJob.html" title="interface in org.moddingx.libx.render.target"><code>RenderJob</code></a> to fail.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datapack/ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datapack/ResourceEntry.html" title="class in org.moddingx.libx.datapack">ResourceEntry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Represents a resource entry defined by its <code>ResourceLocation</code> used as id
  and a <code>Resource</code> used to access the resource entry.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/data/ResourceList.html" title="class in org.moddingx.libx.util.data">ResourceList</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/data/ResourceList.html" title="class in org.moddingx.libx.util.data">ResourceList</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link"><code>Predicate</code></a> for <code>resource locations</code> implemented as
  a list of rules that will be applied one after another.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/util/data/ResourceList.RuleEntry.html" title="class in org.moddingx.libx.util.data">ResourceList.RuleEntry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/util/data/ResourceList.RuleEntry.html" title="class in org.moddingx.libx.util.data">ResourceList.RuleEntry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab4">
 <div class="block">And entry that represents a rule in this <a href="org/moddingx/libx/util/data/ResourceList.html" title="class in org.moddingx.libx.util.data"><code>ResourceList</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/block/RotatedBlockRenderer.html" title="class in org.moddingx.libx.render.block">RotatedBlockRenderer</a>&lt;<a href="org/moddingx/libx/render/block/RotatedBlockRenderer.html" title="type parameter in RotatedBlockRenderer">T</a> extends net.minecraft.world.level.block.entity.BlockEntity&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/block/RotatedBlockRenderer.html" title="class in org.moddingx.libx.render.block">RotatedBlockRenderer</a>&lt;<a href="org/moddingx/libx/render/block/RotatedBlockRenderer.html" title="type parameter in RotatedBlockRenderer">T</a> extends net.minecraft.world.level.block.entity.BlockEntity&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A <code>BlockEntityRenderer</code> that before calling the actual render code rotates the <code>PoseStack</code> depending
  on the horizontal facing.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/block/RotationShape.html" title="class in org.moddingx.libx.block">RotationShape</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/block/RotationShape.html" title="class in org.moddingx.libx.block">RotationShape</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Holds 4 different <code>VoxelShapes</code>, one for each horizontal facing.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/sandbox/SandBox.html" title="class in org.moddingx.libx.sandbox">SandBox</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/sandbox/SandBox.html" title="class in org.moddingx.libx.sandbox">SandBox</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SandBox is the LibX worldgen library.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/sandbox/SandBox.Density.html" title="class in org.moddingx.libx.sandbox">SandBox.Density</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/sandbox/SandBox.Density.html" title="class in org.moddingx.libx.sandbox">SandBox.Density</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Provides some more useful <code>DensityFunctions</code> density functions.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/game/ServerMessages.html" title="class in org.moddingx.libx.util.game">ServerMessages</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/game/ServerMessages.html" title="class in org.moddingx.libx.util.game">ServerMessages</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Utilities to send messages to a set of <code>players</code> on the <code>server</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/SetupContext.html" title="class in org.moddingx.libx.registration">SetupContext</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/registration/SetupContext.html" title="class in org.moddingx.libx.registration">SetupContext</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">An extension of <a href="org/moddingx/libx/registration/RegistrationContext.html" title="class in org.moddingx.libx.registration"><code>RegistrationContext</code></a> that is used during setup phase.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/config/validate/ShortRange.html" title="annotation interface in org.moddingx.libx.config.validate">ShortRange</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/config/validate/ShortRange.html" title="annotation interface in org.moddingx.libx.config.validate">ShortRange</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Config validator annotation that checks whether a short is in a range of allowed values.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/base/decoration/SignAccess.html" title="interface in org.moddingx.libx.base.decoration">SignAccess</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/base/decoration/SignAccess.html" title="interface in org.moddingx.libx.base.decoration">SignAccess</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Interface to access different registered parts of a sign.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/loot/entry/SimpleLootFactory.html" title="interface in org.moddingx.libx.datagen.provider.loot.entry">SimpleLootFactory</a>&lt;<a href="org/moddingx/libx/datagen/provider/loot/entry/SimpleLootFactory.html" title="type parameter in SimpleLootFactory">T</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/loot/entry/SimpleLootFactory.html" title="interface in org.moddingx.libx.datagen.provider.loot.entry">SimpleLootFactory</a>&lt;<a href="org/moddingx/libx/datagen/provider/loot/entry/SimpleLootFactory.html" title="type parameter in SimpleLootFactory">T</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Interface to get a singleton loot entry from an item.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/capability/SimpleProvider.html" title="class in org.moddingx.libx.capability">SimpleProvider</a>&lt;<a href="org/moddingx/libx/capability/SimpleProvider.html" title="type parameter in SimpleProvider">A</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/capability/SimpleProvider.html" title="class in org.moddingx.libx.capability">SimpleProvider</a>&lt;<a href="org/moddingx/libx/capability/SimpleProvider.html" title="type parameter in SimpleProvider">A</a>&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A simple <code>capability provider</code> for a single capability that is
  lazily initialised.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/SmeltingExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">SmeltingExtension</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/SmeltingExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">SmeltingExtension</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A <a href="org/moddingx/libx/datagen/provider/recipe/RecipeExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe"><code>RecipeExtension</code></a> for smelting, blast furnace, smoker and campfire recipes.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/SmithingExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">SmithingExtension</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/SmithingExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">SmithingExtension</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A <a href="org/moddingx/libx/datagen/provider/recipe/RecipeExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe"><code>RecipeExtension</code></a> for recipes in the smithing table..</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.html" title="class in org.moddingx.libx.datagen.provider">SoundDefinitionProviderBase</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.html" title="class in org.moddingx.libx.datagen.provider">SoundDefinitionProviderBase</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A base class for sound definition providers.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.SoundSettingsBuilder.html" title="class in org.moddingx.libx.datagen.provider">SoundDefinitionProviderBase.SoundSettingsBuilder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/StoneCuttingExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">StoneCuttingExtension</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.SoundSettingsBuilder.html" title="class in org.moddingx.libx.datagen.provider">SoundDefinitionProviderBase.SoundSettingsBuilder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/StoneCuttingExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe">StoneCuttingExtension</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A <a href="org/moddingx/libx/datagen/provider/recipe/RecipeExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe"><code>RecipeExtension</code></a> for stone cutting recipes.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureProcessorProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureProcessorProviderBase</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureProcessorProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureProcessorProviderBase</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SandBox provider for <code>structure processors</code>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureProcessorProviderBase.ProcessorRuleBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureProcessorProviderBase.ProcessorRuleBuilder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureProviderBase</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureProcessorProviderBase.ProcessorRuleBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureProcessorProviderBase.ProcessorRuleBuilder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureProviderBase</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SandBox provider for <code>structures</code>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureSetProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureSetProviderBase</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/StructureSetProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureSetProviderBase</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SandBox provider for <code>structure sets</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/meta/SuperChainRequired.html" title="annotation interface in org.moddingx.libx.annotation.meta">SuperChainRequired</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="org/moddingx/libx/annotation/meta/SuperChainRequired.html" title="annotation interface in org.moddingx.libx.annotation.meta">SuperChainRequired</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
 <div class="block">Marker annotation for abstract methods.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/SurfaceProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">SurfaceProviderBase</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/SurfaceProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">SurfaceProviderBase</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SandBox provider for <a href="org/moddingx/libx/sandbox/surface/SurfaceRuleSet.html" title="class in org.moddingx.libx.sandbox.surface"><code>surface rule sets</code></a> and <a href="org/moddingx/libx/sandbox/surface/BiomeSurface.html" title="class in org.moddingx.libx.sandbox.surface"><code>biome surface</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/sandbox/surface/SurfaceRuleSet.html" title="class in org.moddingx.libx.sandbox.surface">SurfaceRuleSet</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/sandbox/surface/SurfaceRuleSet.html" title="class in org.moddingx.libx.sandbox.surface">SurfaceRuleSet</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab4">
 <div class="block">Defines logic to override the <code>NoiseGeneratorSettings</code> for an <a href="org/moddingx/libx/sandbox/generator/ExtendedNoiseChunkGenerator.html" title="class in org.moddingx.libx.sandbox.generator"><code>ExtendedNoiseChunkGenerator</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/data/TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">A class to help accessing <code>tags</code> in a more user friendly way.</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/data/TagAccess.html" title="class in org.moddingx.libx.util.data">TagAccess</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">Deprecated, for removal: This API element is subject to removal in a future version.
+<div class="deprecation-comment">Use <code>HolderSet</code>s where possible in datapack registries and <code>ITagManager</code> for
+             forge non-datapack registries.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/tags/TagProviderBase.html" title="class in org.moddingx.libx.datagen.provider.tags">TagProviderBase</a>&lt;<a href="org/moddingx/libx/datagen/provider/tags/TagProviderBase.html" title="type parameter in TagProviderBase">T</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/tags/TagProviderBase.html" title="class in org.moddingx.libx.datagen.provider.tags">TagProviderBase</a>&lt;<a href="org/moddingx/libx/datagen/provider/tags/TagProviderBase.html" title="type parameter in TagProviderBase">T</a>&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A provider for tags of a type.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/TemplateExtensionProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">TemplateExtensionProviderBase</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/TemplateExtensionProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">TemplateExtensionProviderBase</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SandBox provider for <a href="org/moddingx/libx/sandbox/structure/PoolExtension.html" title="class in org.moddingx.libx.sandbox.structure"><code>template pool extensions</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/vanilla/TemplatePools.html" title="class in org.moddingx.libx.vanilla">TemplatePools</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/TemplateProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">TemplateProviderBase</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/vanilla/TemplatePools.html" title="class in org.moddingx.libx.vanilla">TemplatePools</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/sandbox/TemplateProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">TemplateProviderBase</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">SandBox provider for <code>template pools</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/datagen/provider/patchouli/content/TextContent.html" title="class in org.moddingx.libx.datagen.provider.patchouli.content">TextContent</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/datagen/provider/patchouli/content/TextContent.html" title="class in org.moddingx.libx.datagen.provider.patchouli.content">TextContent</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab4">
 <div class="block">Content that generates one or multiple text pages and automatically wraps the text.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/game/TextProcessor.html" title="class in org.moddingx.libx.util.game">TextProcessor</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/util/game/TextProcessor.html" title="class in org.moddingx.libx.util.game">TextProcessor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Allows text in the lang file to define style information.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/screen/text/TextScreen.html" title="class in org.moddingx.libx.screen.text">TextScreen</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/screen/text/TextScreen.html" title="class in org.moddingx.libx.screen.text">TextScreen</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A screen to display mostly text and optionally some widgets defined by a <a href="org/moddingx/libx/screen/text/ComponentLayout.html" title="interface in org.moddingx.libx.screen.text"><code>ComponentLayout</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/screen/text/TextScreenEntry.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/screen/text/TextScreenEntry.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">An object that has been aligned for display on a <a href="org/moddingx/libx/screen/text/TextScreen.html" title="class in org.moddingx.libx.screen.text"><code>TextScreen</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/screen/text/TextScreenEntry.Direct.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry.Direct</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/screen/text/TextScreenEntry.Direct.html" title="interface in org.moddingx.libx.screen.text">TextScreenEntry.Direct</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">An object that has been aligned for display on a <a href="org/moddingx/libx/screen/text/TextScreen.html" title="class in org.moddingx.libx.screen.text"><code>TextScreen</code></a> or a <a href="org/moddingx/libx/screen/text/FlowBox.html" title="class in org.moddingx.libx.screen.text"><code>FlowBox</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/TextureBuilder.html" title="class in org.moddingx.libx.datagen.provider.texture">TextureBuilder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/TextureBuilder.html" title="class in org.moddingx.libx.datagen.provider.texture">TextureBuilder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A texture builder is used to preload required textures to build another texture and compute
  scales for the source textures and the target texture.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/texture/TextureFactory.html" title="interface in org.moddingx.libx.datagen.provider.texture">TextureFactory</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/texture/TextureFactory.html" title="interface in org.moddingx.libx.datagen.provider.texture">TextureFactory</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A factory to generate a texture.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/TextureHelper.html" title="class in org.moddingx.libx.datagen.provider.texture">TextureHelper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/TextureHelper.html" title="class in org.moddingx.libx.datagen.provider.texture">TextureHelper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Helper functions for custom <a href="org/moddingx/libx/datagen/provider/texture/TextureFactory.html" title="interface in org.moddingx.libx.datagen.provider.texture"><code>texture factories</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/TextureProviderBase.html" title="class in org.moddingx.libx.datagen.provider.texture">TextureProviderBase</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/TextureProviderBase.html" title="class in org.moddingx.libx.datagen.provider.texture">TextureProviderBase</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A provider to generate textures during datagen.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/Textures.html" title="class in org.moddingx.libx.datagen.provider.texture">Textures</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/datagen/provider/texture/Textures.html" title="class in org.moddingx.libx.datagen.provider.texture">Textures</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Provides preloaded textures, a computed target texture scale and source texture scales.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/base/tile/TickingBlock.html" title="interface in org.moddingx.libx.base.tile">TickingBlock</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/base/tile/TickingBlock.html" title="interface in org.moddingx.libx.base.tile">TickingBlock</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A <code>BlockEntity</code> used with <a href="org/moddingx/libx/base/tile/BlockBE.html" title="class in org.moddingx.libx.base.tile"><code>BlockBE</code></a> can implement this.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/crafting/ToolExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe.crafting">ToolExtension</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/datagen/provider/recipe/crafting/ToolExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe.crafting">ToolExtension</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A <a href="org/moddingx/libx/datagen/provider/recipe/RecipeExtension.html" title="interface in org.moddingx.libx.datagen.provider.recipe"><code>RecipeExtension</code></a> that adds the ability to add common tool recipes easily.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/block/TransformingBlockRenderer.html" title="class in org.moddingx.libx.render.block">TransformingBlockRenderer</a>&lt;<a href="org/moddingx/libx/render/block/TransformingBlockRenderer.html" title="type parameter in TransformingBlockRenderer">T</a> extends net.minecraft.world.level.block.entity.BlockEntity&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/render/block/TransformingBlockRenderer.html" title="class in org.moddingx.libx.render.block">TransformingBlockRenderer</a>&lt;<a href="org/moddingx/libx/render/block/TransformingBlockRenderer.html" title="type parameter in TransformingBlockRenderer">T</a> extends net.minecraft.world.level.block.entity.BlockEntity&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A <code>BlockEntityRenderer</code> that transforms the <code>pose stack</code> in some way before
  the actual render code.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/codec/TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;<a href="org/moddingx/libx/codec/TypedEncoder.html" title="type parameter in TypedEncoder">T</a>,<wbr><a href="org/moddingx/libx/codec/TypedEncoder.html" title="type parameter in TypedEncoder">R</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/codec/TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;<a href="org/moddingx/libx/codec/TypedEncoder.html" title="type parameter in TypedEncoder">T</a>,<wbr><a href="org/moddingx/libx/codec/TypedEncoder.html" title="type parameter in TypedEncoder">R</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">An encoder that can encode and decode elements of a specific type.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/config/validator/ValidatorInfo.html" title="interface in org.moddingx.libx.config.validator">ValidatorInfo</a>&lt;<a href="org/moddingx/libx/config/validator/ValidatorInfo.html" title="type parameter in ValidatorInfo">T</a>&gt;</div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/config/validator/ValidatorInfo.html" title="interface in org.moddingx.libx.config.validator">ValidatorInfo</a>&lt;<a href="org/moddingx/libx/config/validator/ValidatorInfo.html" title="type parameter in ValidatorInfo">T</a>&gt;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Interface to retrieve information about a validator used on a config element</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="interface in org.moddingx.libx.config.mapper">ValueMapper</a>&lt;<a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="type parameter in ValueMapper">T</a>,<wbr><a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="type parameter in ValueMapper">E</a> extends <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.10/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="interface in org.moddingx.libx.config.mapper">ValueMapper</a>&lt;<a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="type parameter in ValueMapper">T</a>,<wbr><a href="org/moddingx/libx/config/mapper/ValueMapper.html" title="type parameter in ValueMapper">E</a> extends <a href="https://javadoc.io/doc/com.google.code.gson/gson/2.10/com.google.gson/com/google/gson/JsonElement.html" title="class or interface in com.google.gson" class="external-link">JsonElement</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">A way to serialise values of a specific type for a config file.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/inventory/VanillaWrapper.html" title="class in org.moddingx.libx.inventory">VanillaWrapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/moddingx/libx/inventory/VanillaWrapper.html" title="class in org.moddingx.libx.inventory">VanillaWrapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Wraps an <code>IItemHandlerModifiable</code> to a vanilla <code>Container</code>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/config/gui/WidgetProperties.html" title="class in org.moddingx.libx.config.gui">WidgetProperties</a>&lt;<a href="org/moddingx/libx/config/gui/WidgetProperties.html" title="type parameter in WidgetProperties">T</a>&gt;</div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab4">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="org/moddingx/libx/config/gui/WidgetProperties.html" title="class in org.moddingx.libx.config.gui">WidgetProperties</a>&lt;<a href="org/moddingx/libx/config/gui/WidgetProperties.html" title="type parameter in WidgetProperties">T</a>&gt;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">
 <div class="block">Properties for a widget created by a <a href="org/moddingx/libx/config/gui/ConfigEditor.html" title="interface in org.moddingx.libx.config.gui"><code>ConfigEditor</code></a>.</div>
 </div>
 </div>

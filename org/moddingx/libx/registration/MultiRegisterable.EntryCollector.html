@@ -79,7 +79,12 @@ loadScripts(document, 'script');</script>
 <dd><a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;<a href="MultiRegisterable.html" title="type parameter in MultiRegisterable">T</a>&gt;</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static interface </span><span class="element-name type-name-label">MultiRegisterable.EntryCollector&lt;T&gt;</span></div>
+<div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
+<a href="../annotation/meta/RemoveIn.html" title="annotation interface in org.moddingx.libx.annotation.meta">@RemoveIn</a>(<a href="../annotation/meta/RemoveIn.html#minecraft()">minecraft</a>="1.20")
+</span><span class="modifiers">public static interface </span><span class="element-name type-name-label">MultiRegisterable.EntryCollector&lt;T&gt;</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment"><a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> is deprecated. See there for more information</div>
+</div>
 <div class="block">Interface to collect additional objects that are registered together with a <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a>.</div>
 </section>
 <section class="summary">
@@ -89,32 +94,36 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(T)" class="member-name-link">register</a><wbr>(<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code><a href="#register(T)" class="member-name-link">register</a><wbr>(<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new object together with the current object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registerMulti(org.moddingx.libx.registration.MultiRegisterable)" class="member-name-link">registerMulti</a><wbr>(<a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code><a href="#registerMulti(org.moddingx.libx.registration.MultiRegisterable)" class="member-name-link">registerMulti</a><wbr>(<a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> together with the current one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registerMultiNamed(java.lang.String,org.moddingx.libx.registration.MultiRegisterable)" class="member-name-link">registerMultiNamed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code><a href="#registerMultiNamed(java.lang.String,org.moddingx.libx.registration.MultiRegisterable)" class="member-name-link">registerMultiNamed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> together with the current one.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registerNamed(java.lang.String,T)" class="member-name-link">registerNamed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6"><code><a href="#registerNamed(java.lang.String,T)" class="member-name-link">registerNamed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new object together with the current object.</div>
 </div>
 </div>
@@ -135,6 +144,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="register(T)">
 <h3 id="register(java.lang.Object)">register</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&nbsp;value)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new object together with the current object.</div>
 </section>
 </li>
@@ -143,6 +153,7 @@ loadScripts(document, 'script');</script>
 <h3 id="registerNamed(java.lang.String,java.lang.Object)">registerNamed</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">registerNamed</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&nbsp;value)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new object together with the current object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -154,6 +165,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="registerMulti(org.moddingx.libx.registration.MultiRegisterable)">
 <h3>registerMulti</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">registerMulti</span><wbr><span class="parameters">(<a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&gt;&nbsp;value)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> together with the current one.</div>
 </section>
 </li>
@@ -162,6 +174,7 @@ loadScripts(document, 'script');</script>
 <h3>registerMultiNamed</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">registerMultiNamed</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration">MultiRegisterable</a>&lt;<a href="MultiRegisterable.EntryCollector.html" title="type parameter in MultiRegisterable.EntryCollector">T</a>&gt;&nbsp;value)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Registers a new <a href="MultiRegisterable.html" title="interface in org.moddingx.libx.registration"><code>MultiRegisterable</code></a> together with the current one.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
