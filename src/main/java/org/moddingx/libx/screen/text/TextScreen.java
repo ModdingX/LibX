@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
- * A screen to display some text defined by a {@link ComponentLayout}.
+ * A screen to display mostly text and optionally some widgets defined by a {@link ComponentLayout}.
  */
 public class TextScreen extends Screen {
     
@@ -35,9 +35,20 @@ public class TextScreen extends Screen {
         this.content = null;
     }
 
+    private int left() {
+        if (this.content == null) return 0;
+        return (this.width - this.content.width()) / 2;
+    }
+
+    private int top() {
+        if (this.content == null) return 0;
+        return (this.height - this.content.height()) / 2;
+    }
+    
     @Override
     protected void init() {
         this.content = new TextScreenContent(this.font, this.displayWidth, this.layout.alignComponents(this.font, this.displayWidth));
+        this.content.addWidgets(this.left(), this.top(), this::addRenderableWidget);
     }
 
     @Override
@@ -49,11 +60,11 @@ public class TextScreen extends Screen {
     public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(poseStack);
         if (this.content == null) return;
-        int left = (this.width - this.content.width()) / 2;
-        int top = (this.height - this.content.height()) / 2;
+        int left = this.left();
+        int top = this.top();
         poseStack.pushPose();
         poseStack.translate(0, 0, 20);
-        RenderHelper.renderGuiBackground(poseStack, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20);
+        this.drawBackground(poseStack, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20, partialTick);
         poseStack.translate(0, 0, 20);
         this.content.render(poseStack, left, top);
         Style tooltip = this.content.hoveredStyle(mouseX - left, mouseY - top);
@@ -63,19 +74,25 @@ public class TextScreen extends Screen {
             this.renderComponentHoverEffect(poseStack, tooltip, mouseX, mouseY);
         }
         poseStack.popPose();
+        super.render(poseStack, mouseX, mouseY, partialTick);
+    }
+    
+    protected void drawBackground(PoseStack poseStack, int x, int y, int width, int height, float partialTick) {
+        RenderHelper.renderGuiBackground(poseStack, x, y, width, height);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (super.mouseClicked(mouseX, mouseY, button)) {
+            return true;
+        }
         if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && this.content != null) {
-            int left = (this.width - this.content.width()) / 2;
-            int top = (this.height - this.content.height()) / 2;
-            Style click = this.content.hoveredStyle(((int) mouseX) - left, ((int) mouseY) - top);
+            Style click = this.content.hoveredStyle(((int) mouseX) - this.left(), ((int) mouseY) - this.top());
             if (click != null) {
                 return this.handleComponentClicked(click);
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return false;
     }
 
     @Override

@@ -27,7 +27,7 @@ public interface ComponentLayout {
      * @param font The font that is used to display the content.
      * @param width The available screen width
      */
-    List<AlignedComponent> alignComponents(Font font, int width);
+    List<TextScreenEntry> alignComponents(Font font, int width);
 
     /**
      * Creates a simple {@link ComponentLayout} that aligns the given components below each other.
