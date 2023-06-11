@@ -61,8 +61,7 @@ public class KeybindComponentType implements ComponentType {
 
     @Override
     public void buildGui(Screen screen, ConfigScreenContent.ScreenManager manager, AtomicInteger y, Consumer<AbstractWidget> consumer) {
-        int width = Math.min(200, manager.contentWidth());
-        WidgetProperties<String> properties = new WidgetProperties<>((manager.contentWidth() - width) / 2, y.get(), width, 20, key -> {
+        WidgetProperties<String> properties = new WidgetProperties<>(5, y.get(), manager.contentWidth() - 10, 20, key -> {
             this.key = key;
             if (this.inputChanged != null) {
                 this.inputChanged.accept(Component.keybind(key));

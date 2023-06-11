@@ -109,7 +109,7 @@ public class ConfigImpl {
             for (ConfigKey key : this.keys.values()) {
                 Object value = key.field.get(null);
                 if (value == null) {
-                    throw new IllegalStateException("Null value in applied config. This is usually an error in the mod.");
+                    throw new IllegalStateException("Null value in applied config " + this.id + ". This seems to be an error in the mod " + this.id.getNamespace());
                 }
                 values.put(key, value);
             }
