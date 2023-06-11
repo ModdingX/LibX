@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.menu.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,22 +25,22 @@ public class GenericScreen extends AbstractContainerScreen<GenericMenu> {
     }
 
     @Override
-    public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(poseStack, mouseX, mouseY);
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
     
     @Override
-    protected void renderBg(@Nonnull PoseStack poseStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         if (this.minecraft != null) {
             int i = (this.width - this.imageWidth) / 2;
             int j = (this.height - this.imageHeight) / 2;
-            RenderHelper.renderGuiBackground(poseStack, i, j, this.imageWidth, this.imageHeight);
+            RenderHelper.renderGuiBackground(graphics, i, j, this.imageWidth, this.imageHeight);
             for (Pair<Integer, Integer> slot : this.menu.slotList) {
-                blit(poseStack, i + slot.getLeft() - 1, j + slot.getRight() - 1, 25, 35, 18, 18);
+                graphics.blit(RenderHelper.TEXTURE_CHEST_GUI, i + slot.getLeft() - 1, j + slot.getRight() - 1, 25, 35, 18, 18);
             }
-            blit(poseStack, i + this.menu.invX - 1, j + this.menu.invY - 1, 7, 139, 162, 76);
+            graphics.blit(RenderHelper.TEXTURE_CHEST_GUI, i + this.menu.invX - 1, j + this.menu.invY - 1, 7, 139, 162, 76);
         }
     }
 }

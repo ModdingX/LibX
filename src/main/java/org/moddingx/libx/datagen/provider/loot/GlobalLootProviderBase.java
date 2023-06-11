@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.loot;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
@@ -126,7 +126,7 @@ public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider 
          * Adds a loot condition that matches if any of the given conditions matches.
          */
         public T or(LootConditionsBuilder conditions) {
-            return this.condition(AlternativeLootItemCondition.alternative(((AnyLootConditionsBuilder<?>) conditions).buildConditionBuilders()).build());
+            return this.condition(AnyOfCondition.anyOf(((AnyLootConditionsBuilder<?>) conditions).buildConditionBuilders()).build());
         }
 
         /**

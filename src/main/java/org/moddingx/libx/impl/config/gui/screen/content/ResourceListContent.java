@@ -113,7 +113,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
         int width = (2 * (75 + 3)) + 180 + (23 * 3);
         int padding = Math.max(0, manager.contentWidth() - width) / 2;
 
-        consumer.accept(new TextWidget(screen, (int) (padding * 0.7), 1, manager.contentWidth() - (2 * padding) - 120, 18,
+        consumer.accept(new TextWidget((int) (padding * 0.7), 1, manager.contentWidth() - (2 * padding) - 120, 18,
                 Component.translatable("libx.config.gui.resource_list.info").withStyle(Style.EMPTY.withUnderlined(true).withColor(ChatFormatting.BLUE)), List.of()) {
 
             @Override

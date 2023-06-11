@@ -45,7 +45,7 @@ public class ModListCommand implements Command<CommandSourceStack> {
                 .collect(Collectors.joining("\n"));
         lines.stream()
                 .map(line -> ComponentUtil.withCopyAction(line, copyToClipboard))
-                .forEach(line -> context.getSource().sendSuccess(line, false));
+                .forEach(line -> context.getSource().sendSuccess(() -> line, false));
         
         return 0;
     }

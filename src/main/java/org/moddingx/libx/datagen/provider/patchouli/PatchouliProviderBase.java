@@ -8,7 +8,7 @@ import net.minecraft.server.packs.PackType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.PackTarget;
-import org.moddingx.libx.impl.datagen.DatagenHelper;
+import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
 import org.moddingx.libx.impl.datagen.patchouli.translate.TranslationManager;
 import org.moddingx.libx.mod.ModX;
 
@@ -44,7 +44,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
         
         // Preload font information now as we won't have an ExistingFileHelper available later
         // See PageJson#splitText
-        DatagenHelper.getFontWidthProvider(this.fileHelper);
+        DatagenFontLoader.getFontWidthProvider(this.fileHelper);
         
         this.categories = new ArrayList<>();
         this.categoryIds = new HashSet<>();

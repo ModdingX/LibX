@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -158,13 +158,13 @@ public class ColorPicker extends Panel {
     }
     
     @Override
-    public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-        
-        poseStack.pushPose();
-        poseStack.translate(this.getX(), this.getY(), 0);
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        Matrix4f matrix = poseStack.last().pose();
+        graphics.pose().pushPose();
+        graphics.pose().translate(this.getX(), this.getY(), 0);
+
+        Matrix4f matrix = graphics.pose().last().pose();
 
         {
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
@@ -200,21 +200,18 @@ public class ColorPicker extends Panel {
         }
         
         int highlightColor = this.brightness > 0.5 ? 0x000000 : 0xFFFFFF;
-        
-        RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
-        
+
         RenderHelper.rgb(highlightColor);
-        GuiComponent.blit(poseStack, 115, 69, 20, 0, 0, 85, 31, 256, 256);
+        graphics.blit(RenderHelper.TEXTURE_WHITE, 115, 69, 20, 0, 0, 85, 31, 256, 256);
         
         RenderHelper.rgb(displayColor);
-        GuiComponent.blit(poseStack, 116, 70, 40, 0, 0, 83, 29, 256, 256);
+        graphics.blit(RenderHelper.TEXTURE_WHITE, 116, 70, 40, 0, 0, 83, 29, 256, 256);
         
         String colorText = String.format("#%06X", colorValue);
         RenderHelper.resetColor();
-        //noinspection IntegerDivisionInFloatingPointContext
-        Minecraft.getInstance().font.draw(poseStack, colorText, 157 - (Minecraft.getInstance().font.width(colorText) / 2), 80, highlightColor);
+        graphics.drawString(Minecraft.getInstance().font, colorText, 157 - (Minecraft.getInstance().font.width(colorText) / 2), 80, highlightColor, false);
         
-        poseStack.popPose();
+        graphics.pose().popPose();
     }
 
     @Override

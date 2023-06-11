@@ -1,8 +1,29 @@
 buildscript {
-    apply from: 'https://moddingx.github.io/ModUtils/v4/buildscript.gradle', to: buildscript
+    apply from: 'https://moddingx.github.io/ModUtils/v5/buildscript.gradle', to: buildscript
 }
 
-apply from: 'https://moddingx.github.io/ModUtils/v4/mod.gradle'
+// Load mappings from temp-mappings.zip (built from https://github.com/PiTheGuy/Parchment/tree/1.20-update)
+class ChannelProvider extends org.parchmentmc.librarian.forgegradle.ParchmentChannelProvider {
+
+    public Project project
+
+    Set<String> getChannels() {
+        return [ 'custom' ]
+    }
+
+    protected File getParchmentZip(Project project, org.parchmentmc.librarian.forgegradle.ParchmentMappingVersion version) {
+        return project.file('temp-mappings.zip')
+    }
+}
+
+ChannelProvider provider = new ChannelProvider()
+provider.project = project
+apply plugin: 'net.minecraftforge.gradle'
+channelProviders {
+    addProvider provider
+}
+
+apply from: 'https://moddingx.github.io/ModUtils/v5/mod.gradle'
 
 apply plugin: 'org.moddingx.modgradle.javadoc'
 apply plugin: 'org.moddingx.modgradle.coremods'
@@ -28,7 +49,7 @@ sourceSets {
     }
 }
 
-project.addModSourceSet(sourceSets.ap)
+mod.run.sourceSet(sourceSets.ap)
 
 dependencies {
     annotationProcessor sourceSets.ap.output
@@ -70,8 +91,8 @@ javadocConfigure {
 javadoc {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.destinationDirectory(file("build/docs/javadoc"))
-    title("LibX ${base_version} JavaDoc")
-    options.windowTitle("LibX ${base_version} JavaDoc")
+    title("LibX ${mod.base_version} JavaDoc")
+    options.windowTitle("LibX ${mod.base_version} JavaDoc")
     options.header('<h3><a href="https://moddingx.github.io/WikiX" target="_blank">Wiki</a>' \
             + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
             + '<a href="https://github.com/ModdingX/LibX" target="_blank">GitHub</a></h2>')
@@ -92,10 +113,10 @@ task release {
 minecraft {
     runs { data {
         mods {
-            "${project.modid}_sourcegen" {
+            "${mod.modid}_sourcegen" {
                 source sourceSets.sourcegen
             }
         }
-        args '--flat', '--mod', "${project.modid}_sourcegen"
+        args '--flat', '--mod', "${mod.modid}_sourcegen"
     }}
 }

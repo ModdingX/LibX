@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.commands.common;
 
+import com.google.common.base.Suppliers;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -44,7 +45,7 @@ public class EntityDataCommand implements Command<CommandSourceStack> {
             entity.load(entityNBT);
             entity.setUUID(uid);
         }
-        context.getSource().sendSuccess(Component.translatable(players ? "libx.command.entitydata.modified_player" : "libx.command.entitydata.modified", entities.size()), true);
+        context.getSource().sendSuccess(Suppliers.ofInstance(Component.translatable(players ? "libx.command.entitydata.modified_player" : "libx.command.entitydata.modified", entities.size())), true);
         
         return 0;
     }

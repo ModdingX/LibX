@@ -188,12 +188,12 @@ public class ComponentContent implements ConfigScreenContent<Component> {
     public void buildGui(Screen screen, ScreenManager manager, String search, Consumer<AbstractWidget> consumer) {
         int y = 0;
 
-        this.previewWidget = new PreviewWidget(screen, 20, y, manager.contentWidth() - 40, 36, this.result.get());
+        this.previewWidget = new PreviewWidget(20, y, manager.contentWidth() - 40, 36, this.result.get());
         consumer.accept(this.previewWidget);
         y += 44;
 
         if (this.nonEditable != null) {
-            consumer.accept(new TextWidget(screen, 20, y, manager.contentWidth() - 40, 18, Component.translatable("libx.config.gui.component.no_edit"), List.of()));
+            consumer.accept(new TextWidget(20, y, manager.contentWidth() - 40, 18, Component.translatable("libx.config.gui.component.no_edit"), List.of()));
             return;
         }
 

@@ -55,7 +55,7 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
             if (this.keys.get(category).stream().anyMatch(t -> this.searchPredicate.test(t, this, query))) {
                 if (!category.id().isEmpty()) {
                     if (!first) y+= 10;
-                    consumer.accept(new TextWidget(this, 4, y, this.contentWidth(), 20, category.title(), category.description()));
+                    consumer.accept(new TextWidget(4, y, this.contentWidth(), 20, category.title(), category.description()));
                     y += 23;
                 }
                 first = false;
@@ -64,7 +64,7 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
                         BuiltEntry oldEntry = this.elements.getOrDefault(t, null);
                         BuiltEntry entry = this.factory.create(t, this, oldEntry == null ? null : oldEntry.widget(), this.contentWidth() - 5 - editorWidth, y, editorWidth, 20);
                         entryBuilder.put(t, entry);
-                        consumer.accept(new TextWidget(this, 15, entry.widget().getY(), titleWidth, entry.widget().getHeight(), entry.title(), entry.description()));
+                        consumer.accept(new TextWidget(15, entry.widget().getY(), titleWidth, entry.widget().getHeight(), entry.title(), entry.description()));
                         consumer.accept(entry.widget());
                         y += 23;
                     }

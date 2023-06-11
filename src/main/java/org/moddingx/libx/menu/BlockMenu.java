@@ -48,7 +48,7 @@ public class BlockMenu extends DefaultMenu {
      * @param constructor A method reference to the menus' constructor.
      */
     public static <T extends BlockMenu> MenuType<T> createMenuType(Function5<Integer, Level, BlockPos, Inventory, Player, T> constructor) {
-        return IForgeMenuType.create((windowId, inv, data) -> constructor.apply(windowId, inv.player.level, data.readBlockPos(), inv, inv.player));
+        return IForgeMenuType.create((windowId, inv, data) -> constructor.apply(windowId, inv.player.level(), data.readBlockPos(), inv, inv.player));
     }
 
     /**
@@ -58,7 +58,7 @@ public class BlockMenu extends DefaultMenu {
      */
     public static <T extends BlockMenu> MenuType<T> createMenuType(Function6<MenuType<T>, Integer, Level, BlockPos, Inventory, Player, T> constructor) {
         AtomicReference<MenuType<T>> typeRef = new AtomicReference<>(null);
-        MenuType<T> type = IForgeMenuType.create((windowId, inv, data) -> constructor.apply(typeRef.get(), windowId, inv.player.level, data.readBlockPos(), inv, inv.player));
+        MenuType<T> type = IForgeMenuType.create((windowId, inv, data) -> constructor.apply(typeRef.get(), windowId, inv.player.level(), data.readBlockPos(), inv, inv.player));
         typeRef.set(type);
         return type;
     }

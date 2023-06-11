@@ -3,13 +3,9 @@ package org.moddingx.libx.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
 import org.joml.Matrix4f;
 import org.moddingx.libx.LibX;
 
@@ -23,13 +19,13 @@ public class RenderHelper {
      * {@link RenderSystem#setShaderColor(float, float, float, float)}.
      */
     public static final ResourceLocation TEXTURE_WHITE = LibX.getInstance().resource("textures/white.png");
-    private static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
+    public static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
 
     /**
-     * Same as {@link #repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
+     * Same as {@link #repeatBlit(GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
      */
-    public static void repeatBlit(PoseStack poseStack, int x, int y, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
-        repeatBlit(poseStack, x, y, sprite.contents().width(), sprite.contents().height(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
+    public static void repeatBlit(GuiGraphics graphics, int x, int y, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
+        repeatBlit(graphics, sprite.atlasLocation(), x, y, sprite.contents().width(), sprite.contents().height(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
     }
 
     /**
@@ -43,14 +39,14 @@ public class RenderHelper {
      * @param displayHeight the height of the blit
      * @param sprite        A texture sprite
      */
-    public static void repeatBlit(PoseStack ms, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
-        repeatBlit(ms, x, y, texWidth, texHeight, displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
+    public static void repeatBlit(GuiGraphics graphics, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
+        repeatBlit(graphics, sprite.atlasLocation(), x, y, texWidth, texHeight, displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
     }
 
     /**
-     * Same as {@link #repeatBlit(PoseStack, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
+     * Same as {@link #repeatBlit(GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
      */
-    public static void repeatBlit(PoseStack ms, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
+    public static void repeatBlit(GuiGraphics graphics, ResourceLocation texture, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
         int pixelsRenderedX = 0;
         while (pixelsRenderedX < displayWidth) {
             int pixelsNowX = Math.min(texWidth, displayWidth - pixelsRenderedX);
@@ -67,7 +63,7 @@ public class RenderHelper {
                     maxVThisTime = minV + ((maxV - minV) * (pixelsNowY / (float) texHeight));
                 }
 
-                GuiComponent.innerBlit(ms.last().pose(), x + pixelsRenderedX, x + pixelsRenderedX + pixelsNowX,
+                graphics.innerBlit(texture, x + pixelsRenderedX, x + pixelsRenderedX + pixelsNowX,
                         y + pixelsRenderedY, y + pixelsRenderedY + pixelsNowY,
                         0, minU, maxUThisTime, minV, maxVThisTime);
 
@@ -124,56 +120,18 @@ public class RenderHelper {
     }
 
     /**
-     * Renders a text with a gray semi-transparent background.
+     * Same as {@link #renderGuiBackground(GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground} but with pre-set texture.
      */
-    public static void renderText(String text, PoseStack poseStack) {
-        if (text.isEmpty()) return;
-        renderText(FormattedCharSequence.forward(text, Style.EMPTY), poseStack);
-    }
-    
-    /**
-     * Renders a text with a gray semi-transparent background.
-     */
-    public static void renderText(Component text, PoseStack poseStack) {
-        renderText(text.getVisualOrderText(), poseStack);
-    }
-    
-    /**
-     * Renders a text with a gray semi-transparent background.
-     */
-    public static void renderText(FormattedCharSequence text, PoseStack poseStack) {
-        if (Minecraft.getInstance().font.width(text) == 0) return;
-        float widthHalf = Minecraft.getInstance().font.width(text) / 2f;
-        float heightHalf = Minecraft.getInstance().font.lineHeight / 2f;
-
-        poseStack.pushPose();
-        poseStack.translate(-(widthHalf + 2), -(heightHalf + 2), 0);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderTexture(0, TEXTURE_WHITE);
-        RenderSystem.setShaderColor(0.2f, 0.2f, 0.2f, 0.8f);
-        GuiComponent.blit(poseStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
-        RenderSystem.disableBlend();
-        poseStack.translate(widthHalf + 2, heightHalf + 2, 10);
-
-        resetColor();
-        Minecraft.getInstance().font.draw(poseStack, text, -widthHalf, -heightHalf, 0xFFFFFF);
-        poseStack.popPose();
+    public static void renderGuiBackground(GuiGraphics graphics, int x, int y, int width, int height) {
+        renderGuiBackground(graphics, x, y, width, height, TEXTURE_CHEST_GUI);
     }
 
     /**
-     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground} but with pre-set texture.
-     */
-    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height) {
-        renderGuiBackground(poseStack, x, y, width, height, TEXTURE_CHEST_GUI);
-    }
-
-    /**
-     * Same as {@link #renderGuiBackground(PoseStack, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground}
+     * Same as {@link #renderGuiBackground(GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground}
      * with the default GUI texture.
      */
-    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture) {
-        renderGuiBackground(poseStack, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);
+    public static void renderGuiBackground(GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture) {
+        renderGuiBackground(graphics, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);
     }
 
     /**
@@ -192,31 +150,30 @@ public class RenderHelper {
      * @param minV     The minimum v position for the filling part of the texture
      * @param maxV     The maximum v position for the filling part of the texture
      */
-    public static void renderGuiBackground(PoseStack poseStack, int x, int y, int width, int height, ResourceLocation texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
-        RenderSystem.setShaderTexture(0, texture);
+    public static void renderGuiBackground(GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
         // Background
-        repeatBlit(poseStack, x + 2, y + 2,
+        repeatBlit(graphics, texture, x + 2, y + 2,
                 maxU - minU, maxV - minV, width - 4, height - 4,
                 minU / 256f, maxU / 256f, minV / 256f, maxV / 256f);
         // Corners
-        GuiComponent.blit(poseStack, x, y, 0, 0, 0, 4, 4, 256, 256);
-        GuiComponent.blit(poseStack, x + width - 5, y, 0, textureX - 4, 0, 4, 4, 256, 256);
-        GuiComponent.blit(poseStack, x, y + height - 5, 0, 0, textureY - 4, 4, 4, 256, 256);
-        GuiComponent.blit(poseStack, x + width - 5, y + height - 5, 0, textureX - 4, textureY - 4, 4, 4, 256, 256);
+        graphics.blit(texture, x, y, 0, 0, 0, 4, 4, 256, 256);
+        graphics.blit(texture, x + width - 5, y, 0, textureX - 4, 0, 4, 4, 256, 256);
+        graphics.blit(texture, x, y + height - 5, 0, 0, textureY - 4, 4, 4, 256, 256);
+        graphics.blit(texture, x + width - 5, y + height - 5, 0, textureX - 4, textureY - 4, 4, 4, 256, 256);
         // Top edge
-        repeatBlit(poseStack, x + 4, y,
+        repeatBlit(graphics, texture, x + 4, y,
                 169, 3, width - 8, 3,
                 4 / 256f, (textureX - 3) / 256f, 0 / 256f, 3 / 256f);
         // Bottom edge
-        repeatBlit(poseStack, x + 4, y + height - 4,
+        repeatBlit(graphics, texture, x + 4, y + height - 4,
                 169, 3, width - 8, 3,
                 4 / 256f, (textureX - 3) / 256f, (textureY - 3) / 256f, textureY / 256f);
         // Left edge
-        repeatBlit(poseStack, x, y + 4,
+        repeatBlit(graphics, texture, x, y + 4,
                 3, 214, 3, height - 8,
                 0 / 256f, 3 / 256f, 4 / 256f, (textureY - 4) / 256f);
         // Right edge
-        repeatBlit(poseStack, x + width - 4, y + 4,
+        repeatBlit(graphics, texture, x + width - 4, y + 4,
                 3, 214, 3, height - 8,
                 (textureX - 3) / 256f, textureX / 256f, 4 / 256f, (textureY - 4) / 256f);
     }

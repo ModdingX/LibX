@@ -1,8 +1,8 @@
 package org.moddingx.libx.impl.screen.text;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.locale.Language;
@@ -155,16 +155,11 @@ public class TextScreenContent {
         }
     }
     
-    public void render(PoseStack poseStack, int left, int top) {
+    public void render(GuiGraphics graphics, int left, int top) {
         for (PlacedText line : this.lines) {
             RenderHelper.resetColor();
-            if (line.shadow()) {
-                this.font.drawShadow(poseStack, line.text(), left + line.x(), top + line.y(), line.color());
-            } else {
-                this.font.draw(poseStack, line.text(), left + line.x(), top + line.y(), line.color());
-            }
+            graphics.drawString(this.font, line.text(), left + line.x(), top + line.y(), line.color(), line.shadow());
         }
-        
     }
     
     @Nullable

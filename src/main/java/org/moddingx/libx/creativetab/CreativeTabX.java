@@ -1,12 +1,13 @@
 package org.moddingx.libx.creativetab;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.*;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.RegisterEvent;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.base.ItemBase;
 import org.moddingx.libx.impl.ModInternal;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
 public abstract class CreativeTabX {
     
     // Use numeric ids for ordering as they should represent the order in which items were registered. 
+    @SuppressWarnings("UnstableApiUsage")
     private static final Comparator<Item> REGISTRY_ORDER = Comparator.comparing(item -> ForgeRegistries.ITEMS instanceof ForgeRegistry<Item> reg ? reg.getID(item) : Integer.MAX_VALUE - 1);
     
     private final ModX mod;
@@ -38,7 +40,6 @@ public abstract class CreativeTabX {
     protected CreativeTabX(ModX mod, String name) {
         this.mod = mod;
         this.id = mod.resource(name);
-        ModInternal.get(mod).ensureCreativeTabAvailability(this.id);
         ModInternal.get(mod).modEventBus().addListener(this::registerCreativeTab);
     }
 
@@ -117,10 +118,13 @@ public abstract class CreativeTabX {
                 .forEach(stack -> ctx.output().accept(stack));
     }
     
-    private void registerCreativeTab(CreativeModeTabEvent.Register event) {
-        this.tab = event.registerCreativeModeTab(this.id, builder -> {
+    private void registerCreativeTab(RegisterEvent event) {
+        event.register(Registries.CREATIVE_MODE_TAB, reg -> {
+            CreativeModeTab.Builder builder = CreativeModeTab.builder();
             this.buildTab(builder);
             builder.displayItems((context, output) -> this.addItems(new TabContext(context, context.enabledFeatures(), output)));
+            this.tab = builder.build();
+            reg.register(this.id, this.tab);
         });
     }
     

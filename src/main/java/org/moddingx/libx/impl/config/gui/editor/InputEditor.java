@@ -1,9 +1,7 @@
 package org.moddingx.libx.impl.config.gui.editor;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -103,19 +101,18 @@ public class InputEditor<T> implements ConfigEditor<T> {
         }
 
         @Override
-        public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-            super.renderWidget(poseStack, mouseX, mouseY, partialTicks);
+        public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+            super.renderWidget(graphics, mouseX, mouseY, partialTicks);
             if (this.isVisible() && this.getValidInput(this.getValue()).isEmpty()) {
-                poseStack.pushPose();
-                poseStack.translate(0, 0, 10);
-                RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
+                graphics.pose().pushPose();
+                graphics.pose().translate(0, 0, 10);
                 RenderHelper.rgb(0xFF2222);
-                GuiComponent.blit(poseStack, this.getX() - 1, this.getY() - 1, 0, 0, this.width + 2, 1, 256, 256);
-                GuiComponent.blit(poseStack, this.getX() - 1, this.getY() + this.height, 0, 0, this.width + 2, 1, 256, 256);
-                GuiComponent.blit(poseStack, this.getX() - 1, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
-                GuiComponent.blit(poseStack, this.getX() + this.width, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
+                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, this.width + 2, 1, 256, 256);
+                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() + this.height, 0, 0, this.width + 2, 1, 256, 256);
+                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
+                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() + this.width, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
                 RenderHelper.resetColor();
-                poseStack.popPose();
+                graphics.pose().popPose();
             }
         }
     }

@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.datagen.registries;
+package org.moddingx.libx.impl.datagen.load;
 
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
@@ -9,7 +9,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.DataPackRegistriesHooks;
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.impl.datagen.DatagenHelper;
 import org.moddingx.libx.impl.libxcore.CoreRegistryLoad;
 
 import javax.annotation.Nullable;
@@ -22,7 +21,7 @@ public class DatagenRegistryLoader {
     // See WorldLoader#load
     public static RegistryAccess.Frozen loadRegistries(ExistingFileHelper fileHelper) {
         LibX.logger.info("Start loading registries for datagen");
-        ResourceManager mgr = DatagenHelper.resources(fileHelper, PackType.SERVER_DATA);
+        ResourceManager mgr = DatagenLoader.resources(fileHelper, PackType.SERVER_DATA);
         LayeredRegistryAccess<RegistryLayer> access = RegistryLayer.createRegistryAccess();
         access = loadLayer(mgr, access, RegistryLayer.WORLDGEN, getDataPackRegistries(RegistryLayer.WORLDGEN));
         // Invoke our coremod patch here

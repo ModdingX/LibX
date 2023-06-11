@@ -72,7 +72,7 @@ public interface IAdvancedItemHandler extends IItemHandler {
                                 modifiableStack.setCount(amountLeft);
                                 copies.put(slot, modifiableStack);
                                 break;
-                            } else if (ItemStack.isSame(stack, content) && ItemStack.tagMatches(stack, content)) {
+                            } else if (ItemStack.isSameItemSameTags(stack, content)) {
                                 int reduce = Math.max(0, Math.min(content.getMaxStackSize() - content.getCount(), amountLeft));
                                 amountLeft -= reduce;
                                 ItemStack modifiableStack = copies.getOrDefault(slot, this.getStackInSlot(slot).copy());
@@ -114,7 +114,7 @@ public interface IAdvancedItemHandler extends IItemHandler {
                     }
                 }
             } else {
-                if (ItemStack.isSame(extracted, content) && ItemStack.tagMatches(extracted, content)) {
+                if (ItemStack.isSameItemSameTags(extracted, content)) {
                     extracted.grow(content.getCount());
                     if (!simulate) {
                         this.extractItem(slot, amountToExtract, false);

@@ -18,8 +18,8 @@ import java.util.Map;
 public class LibXPack extends PathPackResources {
 
     public static final Map<PackType, PackTypeConfig> PACK_CONFIG = Map.of(
-            PackType.CLIENT_RESOURCES, new PackTypeConfig(PackSource.BUILT_IN, "libxassets", 13),
-            PackType.SERVER_DATA, new PackTypeConfig(PackSource.DEFAULT, "libxdata", 12)
+            PackType.CLIENT_RESOURCES, new PackTypeConfig(PackSource.BUILT_IN, "libxassets", 15),
+            PackType.SERVER_DATA, new PackTypeConfig(PackSource.DEFAULT, "libxdata", 15)
     );
     
     private final String packId;

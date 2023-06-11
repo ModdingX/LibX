@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[45,)"
+loaderVersion="[${fml},)"
 license="APACHE-2.0"
 issueTrackerURL="https://github.com/ModdingX/LibX/issues"
 
 [[mods]]
 modId="libx"
-version="${file.jarVersion}"
+version="${version}"
 displayName="LibX"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/libx"
 updateJSONURL="https://assets.melanx.de/updates/libx.json"
@@ -17,13 +17,13 @@ A library mod for minecraft.
 [[dependencies.libx]]
     modId="forge"
     mandatory=true
-    versionRange="[45.0.22,)"
+    versionRange="[${forge},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.libx]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.4,)"
+    versionRange="[${minecraft},)"
     ordering="NONE"
     side="BOTH"

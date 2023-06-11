@@ -16,7 +16,7 @@ public class ReloadCommonCommand implements Command<CommandSourceStack> {
         if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             ConfigManager.forceResync(null);
         }
-        context.getSource().sendSuccess(Component.translatable("libx.command.reload.common"), true);
+        context.getSource().sendSuccess(() -> Component.translatable("libx.command.reload.common"), true);
         return 0;
     }
 }

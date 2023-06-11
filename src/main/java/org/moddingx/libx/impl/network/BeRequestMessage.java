@@ -41,7 +41,7 @@ public record BeRequestMessage(BlockPos pos) {
         public boolean handle(BeRequestMessage msg, Supplier<NetworkEvent.Context> ctx) {
             ServerPlayer sender = ctx.get().getSender();
             if (sender != null) {
-                ServerLevel level = sender.getLevel();
+                ServerLevel level = sender.serverLevel();
                 //noinspection deprecation
                 if (level.hasChunkAt(msg.pos())) {
                     NetworkImpl.getImpl().updateBE(ctx.get(), level, msg.pos());

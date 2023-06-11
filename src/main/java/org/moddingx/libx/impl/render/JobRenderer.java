@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexSorting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
@@ -60,7 +61,7 @@ public class JobRenderer {
         RenderSystem.applyModelViewMatrix();
 
         Matrix4f projectionMatrix = job.setupProjectionMatrix();
-        RenderSystem.setProjectionMatrix(projectionMatrix);
+        RenderSystem.setProjectionMatrix(projectionMatrix, job.getVertexSorting());
         
         Lighting.setupFor3DItems();
         RenderSystem.defaultBlendFunc();
@@ -89,7 +90,7 @@ public class JobRenderer {
             modelViewStack.mulPoseMatrix(job.setupModelViewMatrix());
             RenderSystem.applyModelViewMatrix();
 
-            RenderSystem.setProjectionMatrix(new Matrix4f().ortho(0, width, height, 0, 1000, 3000));
+            RenderSystem.setProjectionMatrix(new Matrix4f().ortho(0, width, height, 0, 1000, 3000), VertexSorting.ORTHOGRAPHIC_Z);
 
             PoseStack overlayPoseStack = new PoseStack();
             Lighting.setupFor3DItems();

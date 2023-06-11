@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.commands.common;
 
+import com.google.common.base.Suppliers;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -48,20 +49,20 @@ public class HandCommand implements Command<CommandSourceStack> {
         NbtPathArgument.NbtPath path = CommandUtil.getArgumentOrDefault(ctx, "nbt_path", NbtPathArgument.NbtPath.class, null);
 
         ResourceLocation id = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
-        MutableComponent tc = ComponentUtil.withCopyAction(Component.literal(id.toString()), id.toString()).copy();
+        MutableComponent message = ComponentUtil.withCopyAction(Component.literal(id.toString()), id.toString()).copy();
 
         if (count != 1) {
-            tc = tc.append(Component.literal(" ")).append(Component.literal(Integer.toString(count)));
+            message = message.append(Component.literal(" ")).append(Component.literal(Integer.toString(count)));
         }
 
         if (nbt != null && !nbt.isEmpty()) {
             List<Tag> printNBT = path == null ? List.of(nbt) : path.get(nbt);
             for (Tag element : printNBT) {
-                tc = tc.append(Component.literal(" ")).append(ComponentUtil.withCopyAction(NbtUtils.toPrettyComponent(element), element.toString()));
+                message = message.append(Component.literal(" ")).append(ComponentUtil.withCopyAction(NbtUtils.toPrettyComponent(element), element.toString()));
             }
         }
 
-        ctx.getSource().sendSuccess(tc, true);
+        ctx.getSource().sendSuccess(Suppliers.ofInstance(message), true);
 
         return 0;
     }

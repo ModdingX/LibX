@@ -49,7 +49,7 @@ public abstract class EntityMenu<T extends Entity> extends DefaultMenu {
      * @param constructor A method reference to the menus' constructor.
      */
     public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function5<Integer, Level, Integer, Inventory, Player, T> constructor) {
-        return IForgeMenuType.create((windowId1, inv, data) -> constructor.apply(windowId1, inv.player.level, data.readInt(), inv, inv.player));
+        return IForgeMenuType.create((windowId1, inv, data) -> constructor.apply(windowId1, inv.player.level(), data.readInt(), inv, inv.player));
     }
 
     /**
@@ -59,7 +59,7 @@ public abstract class EntityMenu<T extends Entity> extends DefaultMenu {
      */
     public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(Function6<MenuType<T>, Integer, Level, Integer, Inventory, Player, T> constructor) {
         AtomicReference<MenuType<T>> typeRef = new AtomicReference<>(null);
-        MenuType<T> type = IForgeMenuType.create((windowId, inv, data) -> constructor.apply(typeRef.get(), windowId, inv.player.level, data.readInt(), inv, inv.player));
+        MenuType<T> type = IForgeMenuType.create((windowId, inv, data) -> constructor.apply(typeRef.get(), windowId, inv.player.level(), data.readInt(), inv, inv.player));
         typeRef.set(type);
         return type;
     }

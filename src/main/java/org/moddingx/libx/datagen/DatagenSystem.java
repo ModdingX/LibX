@@ -14,7 +14,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.datagen.InternalDataProvider;
-import org.moddingx.libx.impl.datagen.registries.DatagenRegistryLoader;
+import org.moddingx.libx.impl.datagen.load.DatagenRegistryLoader;
 import org.moddingx.libx.impl.datagen.registries.DatagenRegistrySet;
 import org.moddingx.libx.impl.datapack.LibXPack;
 import org.moddingx.libx.mod.ModX;

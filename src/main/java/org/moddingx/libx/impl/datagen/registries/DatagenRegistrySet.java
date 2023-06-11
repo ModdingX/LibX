@@ -11,6 +11,7 @@ import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.datagen.RegistrySet;
+import org.moddingx.libx.impl.datagen.load.DatagenRegistryLoader;
 
 import javax.annotation.Nullable;
 import java.util.*;

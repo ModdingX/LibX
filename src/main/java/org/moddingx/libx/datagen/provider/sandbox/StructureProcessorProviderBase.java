@@ -2,17 +2,20 @@ package org.moddingx.libx.datagen.provider.sandbox;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.Passthrough;
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * SandBox provider for {@link StructureProcessorList structure processors}.
@@ -47,22 +50,22 @@ public abstract class StructureProcessorProviderBase extends RegistryProviderBas
     /**
      * Returns a new builder for a processor rule.
      */
-    public static ProcessorRuleBuilder rule(Block block, CompoundTag nbt) {
-        return rule(block.defaultBlockState(), nbt);
+    public static ProcessorRuleBuilder rule(Block block, RuleBlockEntityModifier modifier) {
+        return rule(block.defaultBlockState(), modifier);
     }
 
     /**
      * Returns a new builder for a processor rule.
      */
     public static ProcessorRuleBuilder rule(BlockState state) {
-        return new ProcessorRuleBuilder(state, null);
+        return rule(state, Passthrough.INSTANCE);
     }
 
     /**
      * Returns a new builder for a processor rule.
      */
-    public static ProcessorRuleBuilder rule(BlockState state, CompoundTag nbt) {
-        return new ProcessorRuleBuilder(state, nbt);
+    public static ProcessorRuleBuilder rule(BlockState state, RuleBlockEntityModifier modifier) {
+        return new ProcessorRuleBuilder(state, modifier);
     }
     
     public class ProcessorListBuilder {
@@ -137,14 +140,14 @@ public abstract class StructureProcessorProviderBase extends RegistryProviderBas
     public static class ProcessorRuleBuilder {
 
         private final BlockState output;
-        private final CompoundTag outputNbt;
+        private final RuleBlockEntityModifier modifier;
         private RuleTest templateState;
         private RuleTest worldState;
         private PosRuleTest location;
 
-        private ProcessorRuleBuilder(BlockState output, @Nullable CompoundTag outputNbt) {
+        private ProcessorRuleBuilder(BlockState output, RuleBlockEntityModifier modifier) {
             this.output = output;
-            this.outputNbt = outputNbt == null ? null : outputNbt.copy();
+            this.modifier = modifier;
             this.templateState = AlwaysTrueTest.INSTANCE;
             this.worldState = AlwaysTrueTest.INSTANCE;
             this.location = PosAlwaysTrueTest.INSTANCE;
@@ -166,7 +169,7 @@ public abstract class StructureProcessorProviderBase extends RegistryProviderBas
         }
 
         public ProcessorRule build() {
-            return new ProcessorRule(this.templateState, this.worldState, this.location, this.output, Optional.ofNullable(this.outputNbt));
+            return new ProcessorRule(this.templateState, this.worldState, this.location, this.output, this.modifier);
         }
     }
 }

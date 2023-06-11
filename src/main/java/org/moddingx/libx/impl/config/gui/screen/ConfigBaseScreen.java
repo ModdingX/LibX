@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -12,6 +13,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
@@ -21,6 +23,7 @@ import net.minecraftforge.client.gui.widget.ScrollPanel;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
+import org.moddingx.libx.render.FilterGuiGraphics;
 import org.moddingx.libx.render.RenderHelper;
 
 import javax.annotation.Nonnull;
@@ -49,7 +52,7 @@ public abstract class ConfigBaseScreen extends Screen {
     // While rendering the scrollable view, tooltips must be delayed
     // Because clipping is enabled, and they need to be rendered with
     // absolute coordinates as they should not be cut by the screen border.
-    private final List<Pair<Matrix4f, Consumer<PoseStack>>> capturedTooltips = new LinkedList<>();
+    private final List<Pair<Matrix4f, Consumer<GuiGraphics>>> capturedTooltips = new LinkedList<>();
     private boolean isCapturingTooltips = false;
     private int currentScrollOffset = 0;
 
@@ -113,31 +116,31 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+            public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
                 ConfigBaseScreen.this.isCapturingTooltips = true;
-                poseStack.pushPose();
-                super.render(poseStack, mouseX, mouseY, partialTicks);
-                poseStack.popPose();
+                graphics.pose().pushPose();
+                super.render(new TooltipCapturingGuiGraphics(graphics), mouseX, mouseY, partialTicks);
+                graphics.pose().popPose();
                 ConfigBaseScreen.this.isCapturingTooltips = false;
                 ConfigBaseScreen.this.capturedTooltips.forEach(pair -> {
-                    poseStack.pushPose();
-                    poseStack.setIdentity();
-                    poseStack.mulPoseMatrix(pair.getLeft());
-                    pair.getRight().accept(poseStack);
-                    poseStack.popPose();
+                    graphics.pose().pushPose();
+                    graphics.pose().setIdentity();
+                    graphics.pose().mulPoseMatrix(pair.getLeft());
+                    pair.getRight().accept(graphics);
+                    graphics.pose().popPose();
                 });
                 ConfigBaseScreen.this.capturedTooltips.clear();
             }
 
             @Override
-            protected void drawPanel(PoseStack poseStack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
+            protected void drawPanel(GuiGraphics graphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
                 ConfigBaseScreen.this.currentScrollOffset = relativeY;
-                poseStack.pushPose();
-                poseStack.translate(0, relativeY, 0);
+                graphics.pose().pushPose();
+                graphics.pose().translate(0, relativeY, 0);
                 for (AbstractWidget widget : widgets) {
-                    widget.render(poseStack, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaFrameTime());
+                    widget.render(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaFrameTime());
                 }
-                poseStack.popPose();
+                graphics.pose().popPose();
                 ConfigBaseScreen.this.currentScrollOffset = 0;
             }
 
@@ -205,12 +208,11 @@ public abstract class ConfigBaseScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderDirtBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, partialTicks);
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderDirtBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
         RenderHelper.resetColor();
-        //noinspection IntegerDivisionInFloatingPointContext
-        this.mc.font.drawShadow(poseStack, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFF);
+        graphics.drawString(this.font, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFF, true);
     }
 
     @Override
@@ -249,118 +251,89 @@ public abstract class ConfigBaseScreen extends Screen {
         }
     }
 
-    private void captureTooltip(PoseStack.Pose pose, BiConsumer<PoseStack, Integer> action) {
+    private void captureTooltip(PoseStack.Pose pose, BiConsumer<GuiGraphics, Integer> action) {
         final int theOffset = this.currentScrollOffset;
         Matrix4f matrix = new Matrix4f(pose.pose());
         matrix.translate(0, -theOffset, 0);
         this.capturedTooltips.add(Pair.of(matrix, poseStack -> action.accept(poseStack, theOffset)));
     }
-
-    @Override
-    protected void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull ItemStack stack, int mouseX, int mouseY) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, stack, mouseX, mouseY + scrollOff));
-        } else {
-            super.renderTooltip(poseStack, stack, mouseX, mouseY);
+    
+    private class TooltipCapturingGuiGraphics extends FilterGuiGraphics {
+        
+        public TooltipCapturingGuiGraphics(GuiGraphics parent) {
+            super(parent);
         }
-    }
 
-    @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int x, int y, @Nonnull ItemStack stack) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, components, special, x, y + scrollOff, stack));
-        } else {
-            super.renderTooltip(poseStack, components, special, x, y, stack);
+        @Override
+        public void renderTooltip(@Nonnull Font font, @Nonnull ItemStack stack, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, stack, x, y + scrollOffset));
+            } else {
+                super.renderTooltip(font, stack, x, y);
+            }
         }
-    }
 
-    @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int x, int y, @Nullable Font font) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, components, special, x, y + scrollOff, font));
-        } else {
-            super.renderTooltip(poseStack, components, special, x, y, font);
+        @Override
+        public void renderTooltip(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, @Nonnull ItemStack stack, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, component, stack, x, y + scrollOffset));
+            } else {
+                super.renderTooltip(font, text, component, stack, x, y);
+            }
         }
-    }
 
-    @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int x, int y, @Nullable Font font, @Nonnull ItemStack stack) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, components, special, x, y + scrollOff, font, stack));
-        } else {
-            super.renderTooltip(poseStack, components, special, x, y, font, stack);
+        @Override
+        public void renderTooltip(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, component, x, y + scrollOffset));
+            } else {
+                super.renderTooltip(font, text, component, x, y);
+            }
         }
-    }
 
-    @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, @Nonnull Optional<TooltipComponent> special, int mouseX, int mouseY) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, components, special, mouseX, mouseY + scrollOff));
-        } else {
-            super.renderTooltip(poseStack, components, special, mouseX, mouseY);
+        @Override
+        public void renderTooltip(@Nonnull Font font, @Nonnull Component text, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, x, y + scrollOffset));
+            } else {
+                super.renderTooltip(font, text, x, y);
+            }
         }
-    }
 
-    @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull Component component, int mouseX, int mouseY) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, component, mouseX, mouseY + scrollOff));
-        } else {
-            super.renderTooltip(poseStack, component, mouseX, mouseY);
+        @Override
+        public void renderComponentTooltip(@Nonnull Font font, @Nonnull List<Component> text, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderComponentTooltip(font, text, x, y + scrollOffset));
+            } else {
+                super.renderComponentTooltip(font, text, x, y);
+            }
         }
-    }
 
-    @Override
-    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<Component> components, int mouseX, int mouseY) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderComponentTooltip(poseStack0, components, mouseX, mouseY + scrollOff));
-        } else {
-            super.renderComponentTooltip(poseStack, components, mouseX, mouseY);
+        @Override
+        public void renderComponentTooltip(@Nonnull Font font, @Nonnull List<? extends FormattedText> text, int x, int y, @Nonnull ItemStack stack) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderComponentTooltip(font, text, x, y + scrollOffset, stack));
+            } else {
+                super.renderComponentTooltip(font, text, x, y, stack);
+            }
         }
-    }
 
-    @Override
-    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> components, int mouseX, int mouseY, @Nonnull ItemStack stack) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderComponentTooltip(poseStack0, components, mouseX, mouseY + scrollOff, stack));
-        } else {
-            super.renderComponentTooltip(poseStack, components, mouseX, mouseY, stack);
+        @Override
+        public void renderTooltip(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> text, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, x, y + scrollOffset));
+            } else {
+                super.renderTooltip(font, text, x, y);
+            }
         }
-    }
 
-    @Override
-    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> components, int mouseX, int mouseY, @Nullable Font font) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderComponentTooltip(poseStack0, components, mouseX, mouseY + scrollOff, font));
-        } else {
-            super.renderComponentTooltip(poseStack, components, mouseX, mouseY, font);
-        }
-    }
-
-    @Override
-    public void renderComponentTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedText> components, int mouseX, int mouseY, @Nullable Font font, @Nonnull ItemStack stack) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderComponentTooltip(poseStack0, components, mouseX, mouseY + scrollOff, font, stack));
-        } else {
-            super.renderComponentTooltip(poseStack, components, mouseX, mouseY, font, stack);
-        }
-    }
-
-    @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> components, int mouseX, int mouseY) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, components, mouseX, mouseY + scrollOff));
-        } else {
-            super.renderTooltip(poseStack, components, mouseX, mouseY);
-        }
-    }
-
-    @Override
-    public void renderTooltip(@Nonnull PoseStack poseStack, @Nonnull List<? extends FormattedCharSequence> components, int x, int y, @Nonnull Font font) {
-        if (this.isCapturingTooltips) {
-            this.captureTooltip(poseStack.last(), (poseStack0, scrollOff) -> this.renderTooltip(poseStack0, components, x, y + scrollOff, font));
-        } else {
-            super.renderTooltip(poseStack, components, x, y, font);
+        @Override
+        public void renderTooltip(@Nonnull Font font, @Nonnull List<FormattedCharSequence> text, @Nonnull ClientTooltipPositioner positioner, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, positioner, x, y + scrollOffset));
+            } else {
+                super.renderTooltip(font, text, positioner, x, y);
+            }
         }
     }
 }

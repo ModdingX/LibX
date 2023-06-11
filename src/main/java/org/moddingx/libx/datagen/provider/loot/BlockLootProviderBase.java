@@ -55,7 +55,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     protected LootTable.Builder defaultBehavior(Block block) {
         if (block.getStateDefinition().getPossibleStates().stream().anyMatch(this::needsLootTable)) {
             LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(block);
-            LootPool.Builder pool = LootPool.lootPool().name("main").setRolls(ConstantValue.exactly(1)).add(entry)
+            LootPool.Builder pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(entry)
                     .when(ExplosionCondition.survivesExplosion());
             if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
                 pool = pool.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(
@@ -85,7 +85,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
     @Override
     public void generateBaseTable(Block block, LootPoolEntryContainer.Builder<?> entry) {
-        LootPool.Builder pool = LootPool.lootPool().name("main")
+        LootPool.Builder pool = LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1)).add(entry)
                 .when(ExplosionCondition.survivesExplosion());
         this.customLootTable(block, LootTable.lootTable().withPool(pool));

@@ -1,7 +1,7 @@
 package org.moddingx.libx.screen.text;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -57,28 +57,28 @@ public class TextScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(poseStack);
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics);
         if (this.content == null) return;
         int left = this.left();
         int top = this.top();
-        poseStack.pushPose();
-        poseStack.translate(0, 0, 20);
-        this.drawBackground(poseStack, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20, partialTick);
-        poseStack.translate(0, 0, 20);
-        this.content.render(poseStack, left, top);
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 20);
+        this.drawBackground(graphics, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20, partialTick);
+        graphics.pose().translate(0, 0, 20);
+        this.content.render(graphics, left, top);
         Style tooltip = this.content.hoveredStyle(mouseX - left, mouseY - top);
         if (tooltip != null) {
-            poseStack.translate(0, 0, 20);
+            graphics.pose().translate(0, 0, 20);
             RenderHelper.resetColor();
-            this.renderComponentHoverEffect(poseStack, tooltip, mouseX, mouseY);
+            graphics.renderComponentHoverEffect(this.font, tooltip, mouseX, mouseY);
         }
-        poseStack.popPose();
-        super.render(poseStack, mouseX, mouseY, partialTick);
+        graphics.pose().popPose();
+        super.render(graphics, mouseX, mouseY, partialTick);
     }
     
-    protected void drawBackground(PoseStack poseStack, int x, int y, int width, int height, float partialTick) {
-        RenderHelper.renderGuiBackground(poseStack, x, y, width, height);
+    protected void drawBackground(GuiGraphics graphics, int x, int y, int width, int height, float partialTick) {
+        RenderHelper.renderGuiBackground(graphics, x, y, width, height);
     }
 
     @Override

@@ -32,6 +32,7 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
         this.factory = factory;
         this.list = new ArrayList<>(value);
         this.canReorder = canReorder;
+        //noinspection ConstantConditions
         this.widgets = new ArrayList<>(IntStream.range(0, this.list.size()).mapToObj(i -> (AbstractWidget) null).toList());
     }
 

@@ -1,6 +1,6 @@
 package org.moddingx.libx.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -59,13 +59,13 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     }
 
     @Override
-    public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        poseStack.pushPose();
-        poseStack.translate(this.getX(), this.getY(), 0);
+    public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(this.getX(), this.getY(), 0);
         for (Renderable widget : this.renderables) {
-            widget.render(poseStack, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
+            widget.render(graphics, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
         }
-        poseStack.popPose();
+        graphics.pose().popPose();
     }
 
     @Override

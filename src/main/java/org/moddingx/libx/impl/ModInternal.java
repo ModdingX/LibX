@@ -1,7 +1,6 @@
 package org.moddingx.libx.impl;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -70,7 +69,6 @@ public class ModInternal {
     private final IEventBus modEventBus;
     private final List<Runnable> setupTasks;
     private final List<Runnable> queueSetupTasks;
-    private final Set<ResourceLocation> creativeTabs;
     private final List<Consumer<DatagenSystem>> datagenConfiguration;
     private RegistrationDispatcher registrationDispatcher;
 
@@ -80,7 +78,6 @@ public class ModInternal {
         this.modEventBus = ctx.getModEventBus();
         this.setupTasks = new ArrayList<>();
         this.queueSetupTasks = new ArrayList<>();
-        this.creativeTabs = new HashSet<>();
         this.datagenConfiguration = new ArrayList<>();
         this.registrationDispatcher = null;
 
@@ -104,12 +101,6 @@ public class ModInternal {
             this.queueSetupTasks.add(task);
         } else {
             this.setupTasks.add(task);
-        }
-    }
-    
-    public void ensureCreativeTabAvailability(ResourceLocation id) {
-        if (!this.creativeTabs.add(id)) {
-            throw new IllegalArgumentException("Creative tab already created: " + id);
         }
     }
 

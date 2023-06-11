@@ -1,5 +1,6 @@
 package org.moddingx.libx.datagen.provider.loot;
 
+import com.google.common.collect.Multimap;
 import net.minecraft.core.Registry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -8,9 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -19,13 +18,15 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.datagen.loot.LootBuilders;
@@ -33,6 +34,7 @@ import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.LootFactory;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.SimpleLootFactory;
+import org.moddingx.libx.impl.datagen.load.DatagenLootLoader;
 import org.moddingx.libx.impl.datagen.loot.LootData;
 import org.moddingx.libx.mod.ModX;
 
@@ -47,10 +49,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// TODO test validation and loot loading
 public abstract class LootProviderBase<T> implements DataProvider {
 
     protected final ModX mod;
     protected final PackTarget packTarget;
+    protected final ExistingFileHelper fileHelper;
     protected final String folder;
     protected final LootContextParamSet params;
     protected final Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements;
@@ -68,6 +72,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
     protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> elements) {
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
+        this.fileHelper = ctx.fileHelper();
         this.folder = folder;
         this.params = params;
         this.elements = elements;
@@ -76,6 +81,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
     protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
+        this.fileHelper = ctx.fileHelper();
         this.folder = folder;
         this.params = params;
         this.elements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
@@ -132,19 +138,44 @@ public abstract class LootProviderBase<T> implements DataProvider {
     public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         this.setup();
         
-        Map<ResourceLocation, LootTable.Builder> tables = this.elements.get()
+        Map<ResourceLocation, LootTable> tables = this.elements.get()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().getNamespace()))
                 .filter(entry -> !this.ignored.contains(entry.getValue()))
                 .flatMap(this::resolve)
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
+        Map<ResourceLocation, LootTable> existingTables = DatagenLootLoader.loadLootTables(this.fileHelper);
+        
+        ValidationContext validationContext = new ValidationContext(this.params, new LootDataResolver() {
+            
+            @Nullable
+            @Override
+            @SuppressWarnings("unchecked")
+            public <A> A getElement(@Nonnull LootDataId<A> id) {
+                if (id.type() != LootDataType.TABLE) return null;
+                if (tables.containsKey(id.location())) return (A) tables.get(id.location());
+                if (existingTables.containsKey(id.location())) return (A) existingTables.get(id.location());
+                return null;
+            }
+        });
+        
+        for (Map.Entry<ResourceLocation, LootTable> entry : tables.entrySet()) {
+            entry.getValue().validate(validationContext.enterElement("{" + entry.getKey() + "}", new LootDataId<>(LootDataType.TABLE, entry.getKey())));
+        }
+        
+        Multimap<String, String> multimap = validationContext.getProblems();
+        if (!multimap.isEmpty()) {
+            multimap.forEach((where, what) -> LibX.logger.warn("LootTable validation problem in " + where + ": " + what)); 
+            throw new IllegalStateException("There were problems validating the loot tables.");
+        }
+        
         return CompletableFuture.allOf(tables.entrySet().stream().map(entry -> {
             Path path = this.getPath(this.packTarget.path(PackType.SERVER_DATA), entry.getKey());
-            return DataProvider.saveStable(cache, LootTables.serialize(entry.getValue().setParamSet(this.params).build()), path);
+            return DataProvider.saveStable(cache, LootDataType.TABLE.parser().toJsonTree(entry.getValue()), path);
         }).toArray(CompletableFuture[]::new));
     }
     
-    private Stream<Map.Entry<ResourceLocation, LootTable.Builder>> resolve(Map.Entry<ResourceLocation, T> entry) {
+    private Stream<Map.Entry<ResourceLocation, LootTable>> resolve(Map.Entry<ResourceLocation, T> entry) {
         Function<T, LootTable.Builder> loot;
         if (this.functionMap.containsKey(entry.getValue())) {
             loot = this.functionMap.get(entry.getValue());
@@ -152,7 +183,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
             LootTable.Builder builder = this.defaultBehavior(entry.getValue());
             loot = builder == null ? null : b -> builder;
         }
-        return loot == null ? Stream.empty() : Stream.of(Map.entry(entry.getKey(), loot.apply(entry.getValue())));
+        return loot == null ? Stream.empty() : Stream.of(Map.entry(entry.getKey(), loot.apply(entry.getValue()).setParamSet(this.params).build()));
     }
     
     private Path getPath(Path root, ResourceLocation id) {
@@ -197,7 +228,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
      * Generate the base loot table.
      */
     public void generateBaseTable(T item, LootPoolEntryContainer.Builder<?> entry) {
-        LootPool.Builder pool = LootPool.lootPool().name("main")
+        LootPool.Builder pool = LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1)).add(entry);
         this.customLootTable(item, LootTable.lootTable().withPool(pool));
     }
@@ -266,7 +297,7 @@ public abstract class LootProviderBase<T> implements DataProvider {
      * Joins conditions with OR.
      */
     public LootItemCondition.Builder or(LootItemCondition.Builder... conditions) {
-        return AlternativeLootItemCondition.alternative(conditions);
+        return AnyOfCondition.anyOf(conditions);
     }
 
     /**

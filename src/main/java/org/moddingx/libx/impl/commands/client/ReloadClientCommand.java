@@ -11,7 +11,7 @@ public class ReloadClientCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) {
         ConfigManager.reloadClient();
-        context.getSource().sendSuccess(Component.translatable("libx.command.reload.client"), true);
+        context.getSource().sendSuccess(() -> Component.translatable("libx.command.reload.client"), true);
         return 0;
     }
 }

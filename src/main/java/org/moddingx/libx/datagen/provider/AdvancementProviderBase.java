@@ -161,7 +161,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * @param hidden Whether the advancement is hidden.
      */
     public Advancement dummy(ResourceLocation id, boolean hidden) {
-        return new Advancement(id, null, new DisplayInfo(new ItemStack(Items.BARRIER), Component.empty(), Component.empty(), null, FrameType.TASK, true, true, hidden), AdvancementRewards.EMPTY, new HashMap<>(), new String[][]{});
+        return new Advancement(id, null, new DisplayInfo(new ItemStack(Items.BARRIER), Component.empty(), Component.empty(), null, FrameType.TASK, true, true, hidden), AdvancementRewards.EMPTY, new HashMap<>(), new String[][]{}, false);
     }
 
     private ResourceLocation idFor(String id) {
@@ -236,14 +236,14 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
      */
     public CriterionTriggerInstance eat(ItemPredicate food) {
-        return new ConsumeItemTrigger.TriggerInstance(EntityPredicate.Composite.ANY, food);
+        return new ConsumeItemTrigger.TriggerInstance(ContextAwarePredicate.ANY, food);
     }
 
     /**
      * Gets a {@link CriterionTriggerInstance criterion} that requires a player to leave a dimension.
      */
     public CriterionTriggerInstance leave(ResourceKey<Level> dimension) {
-        return new ChangeDimensionTrigger.TriggerInstance(EntityPredicate.Composite.ANY, dimension, null);
+        return new ChangeDimensionTrigger.TriggerInstance(ContextAwarePredicate.ANY, dimension, null);
     }
 
     /**
@@ -257,20 +257,20 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link CriterionTriggerInstance criterion} that requires a player to perform a specific dimension change.
      */
     public CriterionTriggerInstance changeDim(ResourceKey<Level> from, ResourceKey<Level> to) {
-        return new ChangeDimensionTrigger.TriggerInstance(EntityPredicate.Composite.ANY, from, to);
+        return new ChangeDimensionTrigger.TriggerInstance(ContextAwarePredicate.ANY, from, to);
     }
 
     /**
-     * Gets the given {@link EntityPredicate} as an {@link EntityPredicate.Composite}.
+     * Gets the given {@link EntityPredicate} as an {@link ContextAwarePredicate}.
      */
-    public EntityPredicate.Composite entity(EntityPredicate entity) {
-        return EntityPredicate.Composite.create(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, entity).build());
+    public ContextAwarePredicate entity(EntityPredicate entity) {
+        return ContextAwarePredicate.create(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, entity).build());
     }
 
     /**
-     * Gets an {@link EntityPredicate.Composite} that matches for a specific entity type.
+     * Gets an {@link ContextAwarePredicate} that matches for a specific entity type.
      */
-    public EntityPredicate.Composite entity(EntityType<?> type) {
+    public ContextAwarePredicate entity(EntityType<?> type) {
         return this.entity(EntityPredicate.Builder.entity().of(type).build());
     }
 
@@ -332,11 +332,13 @@ public abstract class AdvancementProviderBase implements DataProvider {
         private ResourceLocation background;
         private final List<List<Criterion>> criteria = new ArrayList<>();
         private AdvancementRewards reward = AdvancementRewards.EMPTY;
+        private boolean telmetryEvent;
 
         private AdvancementFactory(String namespace, String rootId) {
             this.id = new ResourceLocation(namespace, rootId + "/root");
             this.root = true;
             this.parent = () -> null;
+            this.telmetryEvent = false;
         }
         
         private AdvancementFactory(ResourceLocation id) {
@@ -533,6 +535,11 @@ public abstract class AdvancementProviderBase implements DataProvider {
             return this;
         }
         
+        public AdvancementFactory sendsTelmetryEvent() {
+            this.telmetryEvent = true;
+            return this;
+        }
+        
         private Advancement build() {
             if (this.criteria.isEmpty()) {
                 throw new IllegalStateException("Can not add advancement without tasks.");
@@ -584,7 +591,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
             if (parentAdv != null && parentAdv.getDisplay() != null && displayInfo != null && parentAdv.getDisplay().isHidden() && !displayInfo.isHidden()) {
                 throw new IllegalStateException("Can't build visible advancement with hidden parent.");
             }
-            return new Advancement(this.id, parentAdv, displayInfo, this.reward, criteriaMap, criteriaIds);
+            return new Advancement(this.id, parentAdv, displayInfo, this.reward, criteriaMap, criteriaIds, this.telmetryEvent);
         }
     }
 
