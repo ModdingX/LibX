@@ -21,8 +21,15 @@ public interface GameEventBlock {
 
     /**
      * Notifies the block entity of game event.
-     * 
+     *
      * @return {@code true} to indicate the event was handled, {@code false} otherwise.
      */
     boolean notifyGameEvent(ServerLevel level, GameEvent message, GameEvent.Context context, Vec3 pos);
+    
+    /**
+     * Gets the delivery mode for this game event listener.
+     */
+    default GameEventListener.DeliveryMode gameEventDelivery() {
+        return GameEventListener.DeliveryMode.UNSPECIFIED;
+    }
 }

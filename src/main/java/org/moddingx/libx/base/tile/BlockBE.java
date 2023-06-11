@@ -137,6 +137,12 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                 public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull GameEvent gameEvent, @Nonnull GameEvent.Context context, @Nonnull Vec3 pos) {
                     return eventBlock.notifyGameEvent(level, gameEvent, context, pos);
                 }
+
+                @Nonnull
+                @Override
+                public DeliveryMode getDeliveryMode() {
+                    return eventBlock.gameEventDelivery();
+                }
             };
         } else {
             return null;
