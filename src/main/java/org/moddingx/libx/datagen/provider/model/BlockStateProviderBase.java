@@ -4,10 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
@@ -154,7 +151,22 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * If you don't use the model, don't call the supplier, so the default model is not generated.
      */
     protected void defaultState(ResourceLocation id, Block block, Supplier<ModelFile> model) {
-        if (block instanceof DecoratedSlabBlock decorated) {
+        if (block instanceof DecoratedWoodBlock decorated) {
+            ResourceLocation textureSide;
+            ResourceLocation textureTop;
+            if (decorated.log == null) {
+                textureSide = textureId(id);
+                textureTop = textureId(id, "top");
+            } else if (decorated.parent.has(decorated.log)) {
+                ResourceLocation logId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent.get(decorated.log)));
+                textureSide = textureId(logId);
+                textureTop = textureId(logId);
+            } else {
+                textureSide = textureId(id);
+                textureTop = textureId(id);
+            }
+            this.axisBlock(decorated, textureSide, textureTop);
+        } else if (block instanceof DecoratedSlabBlock decorated) {
             this.slabBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))), textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
         } else if (block instanceof DecoratedStairBlock decorated) {
             this.stairsBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));

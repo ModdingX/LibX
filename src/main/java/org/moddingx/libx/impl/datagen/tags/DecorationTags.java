@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.datagen.tags;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.moddingx.libx.datagen.provider.tags.CommonTagsProviderBase;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
@@ -8,7 +9,13 @@ import org.moddingx.libx.impl.tags.InternalTags;
 public class DecorationTags {
 
     public static void addTags(Block block, CommonTagsProviderBase provider, Runnable initInternal) {
-        if (block instanceof DecoratedSlabBlock decorated) {
+        if (block instanceof DecoratedWoodBlock decorated) {
+            initInternal.run();
+            provider.block(InternalTags.Blocks.LOGS).add(decorated);
+            if (new ItemStack(decorated).getBurnTime(null) > 0) {
+                provider.block(InternalTags.Blocks.LOGS_THAT_BURN).add(decorated);
+            }
+        } else if (block instanceof DecoratedSlabBlock decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.SLABS).add(decorated);
             if (decorated.parent.getContext().material().isWood()) {

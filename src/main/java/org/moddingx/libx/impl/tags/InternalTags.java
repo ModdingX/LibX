@@ -19,24 +19,26 @@ public class InternalTags {
         private static final Map<TagKey<Item>, TagKey<Item>> TAGS = new HashMap<>();
         private static final Map<TagKey<Block>, TagKey<Item>> COPIES = new HashMap<>();
 
-        public static TagKey<Item> WOODEN_BUTTONS = wrap(ItemTags.WOODEN_BUTTONS, Blocks.WOODEN_BUTTONS);
-        public static TagKey<Item> STONE_BUTTONS = wrap(ItemTags.STONE_BUTTONS, Blocks.STONE_BUTTONS);
-        public static TagKey<Item> BUTTONS = wrap(ItemTags.BUTTONS, Blocks.BUTTONS);
-        public static TagKey<Item> WOODEN_DOORS = wrap(ItemTags.WOODEN_DOORS, Blocks.WOODEN_DOORS);
-        public static TagKey<Item> WOODEN_STAIRS = wrap(ItemTags.WOODEN_STAIRS, Blocks.WOODEN_STAIRS);
-        public static TagKey<Item> WOODEN_SLABS = wrap(ItemTags.WOODEN_SLABS, Blocks.WOODEN_SLABS);
-        public static TagKey<Item> WOODEN_FENCES = wrap(ItemTags.WOODEN_FENCES, Blocks.WOODEN_FENCES);
-        public static TagKey<Item> WOODEN_PRESSURE_PLATES = wrap(ItemTags.WOODEN_PRESSURE_PLATES, Blocks.WOODEN_PRESSURE_PLATES);
-        public static TagKey<Item> WOODEN_TRAPDOORS = wrap(ItemTags.WOODEN_TRAPDOORS, Blocks.WOODEN_TRAPDOORS);
-        public static TagKey<Item> DOORS = wrap(ItemTags.DOORS, Blocks.DOORS);
-        public static TagKey<Item> STAIRS = wrap(ItemTags.STAIRS, Blocks.STAIRS);
-        public static TagKey<Item> SLABS = wrap(ItemTags.SLABS, Blocks.SLABS);
-        public static TagKey<Item> WALLS = wrap(ItemTags.WALLS, Blocks.WALLS);
-        public static TagKey<Item> TRAPDOORS = wrap(ItemTags.TRAPDOORS, Blocks.TRAPDOORS);
-        public static TagKey<Item> FENCES = wrap(ItemTags.FENCES, Blocks.FENCES);
-        public static TagKey<Item> FENCE_GATES = wrap(ItemTags.FENCE_GATES, Blocks.FENCE_GATES);
-        public static TagKey<Item> SIGNS = wrap(ItemTags.SIGNS, Blocks.STANDING_SIGNS);
-        public static TagKey<Item> HANGING_SIGNS = wrap(ItemTags.HANGING_SIGNS, Blocks.CEILING_HANGING_SIGNS);
+        public static final TagKey<Item> LOGS = wrap(ItemTags.LOGS, Blocks.LOGS);
+        public static final TagKey<Item> LOGS_THAT_BURN = wrap(ItemTags.LOGS_THAT_BURN, Blocks.LOGS_THAT_BURN);
+        public static final TagKey<Item> WOODEN_BUTTONS = wrap(ItemTags.WOODEN_BUTTONS, Blocks.WOODEN_BUTTONS);
+        public static final TagKey<Item> STONE_BUTTONS = wrap(ItemTags.STONE_BUTTONS, Blocks.STONE_BUTTONS);
+        public static final TagKey<Item> BUTTONS = wrap(ItemTags.BUTTONS, Blocks.BUTTONS);
+        public static final TagKey<Item> WOODEN_DOORS = wrap(ItemTags.WOODEN_DOORS, Blocks.WOODEN_DOORS);
+        public static final TagKey<Item> WOODEN_STAIRS = wrap(ItemTags.WOODEN_STAIRS, Blocks.WOODEN_STAIRS);
+        public static final TagKey<Item> WOODEN_SLABS = wrap(ItemTags.WOODEN_SLABS, Blocks.WOODEN_SLABS);
+        public static final TagKey<Item> WOODEN_FENCES = wrap(ItemTags.WOODEN_FENCES, Blocks.WOODEN_FENCES);
+        public static final TagKey<Item> WOODEN_PRESSURE_PLATES = wrap(ItemTags.WOODEN_PRESSURE_PLATES, Blocks.WOODEN_PRESSURE_PLATES);
+        public static final TagKey<Item> WOODEN_TRAPDOORS = wrap(ItemTags.WOODEN_TRAPDOORS, Blocks.WOODEN_TRAPDOORS);
+        public static final TagKey<Item> DOORS = wrap(ItemTags.DOORS, Blocks.DOORS);
+        public static final TagKey<Item> STAIRS = wrap(ItemTags.STAIRS, Blocks.STAIRS);
+        public static final TagKey<Item> SLABS = wrap(ItemTags.SLABS, Blocks.SLABS);
+        public static final TagKey<Item> WALLS = wrap(ItemTags.WALLS, Blocks.WALLS);
+        public static final TagKey<Item> TRAPDOORS = wrap(ItemTags.TRAPDOORS, Blocks.TRAPDOORS);
+        public static final TagKey<Item> FENCES = wrap(ItemTags.FENCES, Blocks.FENCES);
+        public static final TagKey<Item> FENCE_GATES = wrap(ItemTags.FENCE_GATES, Blocks.FENCE_GATES);
+        public static final TagKey<Item> SIGNS = wrap(ItemTags.SIGNS, Blocks.STANDING_SIGNS);
+        public static final TagKey<Item> HANGING_SIGNS = wrap(ItemTags.HANGING_SIGNS, Blocks.CEILING_HANGING_SIGNS);
         
         private static TagKey<Item> wrap(TagKey<Item> tag, TagKey<Block> blockTag) {
             TagKey<Item> newTag = ItemTags.create(LibX.getInstance().resource("impl_" + tag.location().getPath()));
@@ -58,6 +60,8 @@ public class InternalTags {
 
         private static final Map<TagKey<Block>, TagKey<Block>> TAGS = new HashMap<>();
 
+        public static final TagKey<Block> LOGS = wrap(BlockTags.LOGS);
+        public static final TagKey<Block> LOGS_THAT_BURN = wrap(BlockTags.LOGS_THAT_BURN);
         public static final TagKey<Block> WOODEN_BUTTONS = wrap(BlockTags.WOODEN_BUTTONS);
         public static final TagKey<Block> STONE_BUTTONS = wrap(BlockTags.STONE_BUTTONS);
         public static final TagKey<Block> BUTTONS = wrap(BlockTags.BUTTONS);

@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -57,6 +58,11 @@ public class BlockBase extends Block implements Registerable {
                 public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
                     BlockBase.this.initializeItemClient(consumer);
                 }
+
+                @Override
+                public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+                    return BlockBase.this.getBurnTime(stack, recipeType);
+                }
             };
         }
     }
@@ -67,6 +73,10 @@ public class BlockBase extends Block implements Registerable {
      */
     public void initializeItemClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
 
+    }
+    
+    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        return -1;
     }
 
     /**

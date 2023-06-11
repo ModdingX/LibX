@@ -27,6 +27,11 @@ public interface DecorationType<T> {
      */
     DecorationType<DecoratedBlock> BASE = DecorationTypes.BASE;
     
+    DecorationType<? extends Block> LOG = DecorationTypes.LOG;
+    DecorationType<? extends Block> STRIPPED_LOG = DecorationTypes.STRIPPED_LOG;
+    DecorationType<? extends Block> WOOD = DecorationTypes.WOOD;
+    DecorationType<? extends Block> STRIPPED_WOOD = DecorationTypes.STRIPPED_WOOD;
+    
     DecorationType<? extends SlabBlock> SLAB = DecorationTypes.SLAB;
     DecorationType<? extends StairBlock> STAIRS = DecorationTypes.STAIRS;
     DecorationType<? extends WallBlock> WALL = DecorationTypes.WALL;
@@ -52,7 +57,7 @@ public interface DecorationType<T> {
     DecorationElement<? super T, T> element(ModX mod, DecorationContext context, DecoratedBlock block);
 
     @SuperChainRequired
-    default void registerAdditional(ModX mod, DecorationContext context, DecoratedBlock block, T element, RegistrationContext registrationContext, Registerable.EntryCollector builder) {
+    default void registerAdditional(ModX mod, DecorationContext context, DecoratedBlock block, T element, RegistrationContext ctx, Registerable.EntryCollector builder) {
         //
     }
     

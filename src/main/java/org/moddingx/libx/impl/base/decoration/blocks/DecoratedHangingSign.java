@@ -5,8 +5,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.CeilingHangingSignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -35,7 +35,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
     
     private final Ceiling ceiling;
     private final Wall wall;
-    private final SignItem item;
+    private final HangingSignItem item;
     private final BlockEntityType<Entity> beType;
 
     public DecoratedHangingSign(ModX mod, DecoratedBlock parent) {
@@ -46,7 +46,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.ceiling, this.wall), null);
-        this.item = new SignItem(new Item.Properties().stacksTo(16), this.ceiling, this.wall);
+        this.item = new HangingSignItem(this.ceiling, this.wall, new Item.Properties().stacksTo(16));
     }
 
     @Override

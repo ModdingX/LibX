@@ -25,14 +25,32 @@ public class DecorationContext {
     );
 
     /**
-     * Decoration context for wooden planks. Registers {@link DecorationType#SLAB slabs},
+     * Decoration context for wood. Registers {@link DecorationType#SLAB slabs},
      * {@link DecorationType#STAIRS stairs}, {@link DecorationType#FENCE fences},
      * {@link DecorationType#FENCE_GATE fence gates}, {@link DecorationType#WOOD_BUTTON buttons},
      * {@link DecorationType#WOOD_PRESSURE_PLATE pressure plates}, {@link DecorationType#DOOR doors},
-     * {@link DecorationType#TRAPDOOR trapdoors} and {@link DecorationType#SIGN signs}.
+     * {@link DecorationType#TRAPDOOR trapdoors}, {@link DecorationType#SIGN signs} and
+     * {@link DecorationType#HANGING_SIGN hanging signs}.
+     */
+    public static final DecorationContext WOOD = new DecorationContext("wood", DecorationMaterial.WOOD,
+            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.FENCE,
+            DecorationType.FENCE_GATE, DecorationType.WOOD_BUTTON, DecorationType.WOOD_PRESSURE_PLATE,
+            DecorationType.DOOR, DecorationType.TRAPDOOR, DecorationType.SIGN, DecorationType.HANGING_SIGN
+    );
+    
+    /**
+     * Decoration context for wooden planks. Registers {@link DecorationType#LOG logs},
+     * {@link DecorationType#LOG stripped logs}, {@link DecorationType#WOOD wood blocks},
+     * {@link DecorationType#STRIPPED_WOOD stripped wood blocks}, {@link DecorationType#SLAB slabs},
+     * {@link DecorationType#STAIRS stairs}, {@link DecorationType#FENCE fences},
+     * {@link DecorationType#FENCE_GATE fence gates}, {@link DecorationType#WOOD_BUTTON buttons},
+     * {@link DecorationType#WOOD_PRESSURE_PLATE pressure plates}, {@link DecorationType#DOOR doors},
+     * {@link DecorationType#TRAPDOOR trapdoors}, {@link DecorationType#SIGN signs} and
+     * {@link DecorationType#HANGING_SIGN hanging signs}.
      */
     public static final DecorationContext PLANKS = new DecorationContext("planks", DecorationMaterial.WOOD,
-            DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.FENCE,
+            DecorationType.BASE, DecorationType.LOG, DecorationType.STRIPPED_LOG, DecorationType.WOOD,
+            DecorationType.STRIPPED_WOOD, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.FENCE,
             DecorationType.FENCE_GATE, DecorationType.WOOD_BUTTON, DecorationType.WOOD_PRESSURE_PLATE,
             DecorationType.DOOR, DecorationType.TRAPDOOR, DecorationType.SIGN, DecorationType.HANGING_SIGN
     );
