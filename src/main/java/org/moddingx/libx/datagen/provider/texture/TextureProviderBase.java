@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.impl.datagen.texture.HangingSignTextureFactory;
 import org.moddingx.libx.impl.datagen.texture.SignTextureFactory;
 import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import org.moddingx.libx.mod.ModX;
@@ -124,6 +125,29 @@ public abstract class TextureProviderBase implements DataProvider {
      */
     public void sign(ResourceLocation signTexture, ResourceLocation log, ResourceLocation planks) {
         this.texture(signTexture, new SignTextureFactory(log, planks));
+    }
+
+    /**
+     * Generates a hanging sign texture for the given {@link WoodType} with the given block as stripped log.
+     */
+    public void hangingSign(WoodType wood, Block strippedLog) {
+        ResourceLocation logId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(strippedLog));
+        this.hangingSign(wood, new ResourceLocation(logId.getNamespace(), "block/" + logId.getPath()));
+    }
+
+    /**
+     * Generates a hanging sign texture for the given {@link WoodType} with the given texture as stripped log.
+     */
+    public void hangingSign(WoodType wood, ResourceLocation strippedLog) {
+        ResourceLocation woodId = new ResourceLocation(wood.name());
+        this.hangingSign(new ResourceLocation(woodId.getNamespace(), "entity/signs/hanging/" + woodId.getPath()), strippedLog);
+    }
+
+    /**
+     * Generates a hanging sign texture with the given id and the given texture as stripped log.
+     */
+    public void hangingSign(ResourceLocation signTexture, ResourceLocation strippedLog) {
+        this.texture(signTexture, new HangingSignTextureFactory(strippedLog));
     }
 
     @Nonnull

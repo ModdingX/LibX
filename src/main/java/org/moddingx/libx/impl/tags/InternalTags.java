@@ -20,6 +20,7 @@ public class InternalTags {
         private static final Map<TagKey<Block>, TagKey<Item>> COPIES = new HashMap<>();
 
         public static TagKey<Item> WOODEN_BUTTONS = wrap(ItemTags.WOODEN_BUTTONS, Blocks.WOODEN_BUTTONS);
+        public static TagKey<Item> STONE_BUTTONS = wrap(ItemTags.STONE_BUTTONS, Blocks.STONE_BUTTONS);
         public static TagKey<Item> BUTTONS = wrap(ItemTags.BUTTONS, Blocks.BUTTONS);
         public static TagKey<Item> WOODEN_DOORS = wrap(ItemTags.WOODEN_DOORS, Blocks.WOODEN_DOORS);
         public static TagKey<Item> WOODEN_STAIRS = wrap(ItemTags.WOODEN_STAIRS, Blocks.WOODEN_STAIRS);
@@ -56,6 +57,7 @@ public class InternalTags {
         private static final Map<TagKey<Block>, TagKey<Block>> TAGS = new HashMap<>();
 
         public static final TagKey<Block> WOODEN_BUTTONS = wrap(BlockTags.WOODEN_BUTTONS);
+        public static final TagKey<Block> STONE_BUTTONS = wrap(BlockTags.STONE_BUTTONS);
         public static final TagKey<Block> BUTTONS = wrap(BlockTags.BUTTONS);
         public static final TagKey<Block> WOODEN_DOORS = wrap(BlockTags.WOODEN_DOORS);
         public static final TagKey<Block> WOODEN_STAIRS = wrap(BlockTags.WOODEN_STAIRS);

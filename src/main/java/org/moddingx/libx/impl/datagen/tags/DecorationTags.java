@@ -50,6 +50,9 @@ public class DecorationTags {
             if (decorated.parent.getContext().material().isWood()) {
                 provider.block(InternalTags.Blocks.WOODEN_BUTTONS).add(decorated);
             }
+            if (decorated.parent.getContext().material().isStone()) {
+                provider.block(InternalTags.Blocks.STONE_BUTTONS).add(decorated);
+            }
         } else if (block instanceof DecoratedPressurePlate decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.PRESSURE_PLATES).add(decorated);

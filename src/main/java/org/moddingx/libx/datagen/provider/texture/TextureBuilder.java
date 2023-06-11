@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * A texture builder is used to preload required textures to build another texture and compute
@@ -25,6 +26,7 @@ public class TextureBuilder {
     
     private int scale;
     private final Map<ResourceLocation, Pair<BufferedImage, Integer>> images;
+    private final Map<ResourceLocation, Pair<BufferedImage, Integer>> fakes;
 
     public TextureBuilder(ModX mod, Function<ResourceLocation, BufferedImage> textureLoader) {
         this.mod = mod;
@@ -32,6 +34,7 @@ public class TextureBuilder {
         
         this.scale = 1;
         this.images = new HashMap<>();
+        this.fakes = new HashMap<>();
     }
 
     /**
@@ -84,6 +87,50 @@ public class TextureBuilder {
     }
 
     /**
+     * Assigns the given id to a fake image.
+     *
+     * @param loc A fake <i>image</i> id.
+     */
+    public TextureBuilder addFake(ResourceLocation loc, BufferedImage image) {
+        return this.addFake(loc, image, 1);
+    }
+
+    /**
+     * Assigns the given id to a fake image and scale.
+     *
+     * @param loc A fake <i>image</i> id.
+     */
+    public TextureBuilder addFake(ResourceLocation loc, BufferedImage image, int scale) {
+        if (this.fakes.containsKey(loc)) throw new IllegalStateException("Duplicate fake texture: " + loc);
+        this.fakes.put(loc, Pair.of(image, scale));
+        return this;
+    }
+
+    /**
+     * Assigns the given id to a fake image that is obtained by transforming another image.
+     * This requires that the texture {@code texLoc} has already been added.
+     * 
+     * @param loc A fake <i>image</i> id.
+     */
+    public TextureBuilder addFakeTexture(ResourceLocation loc, ResourceLocation texLoc, UnaryOperator<BufferedImage> image) {
+        return this.addFakeImage(loc, new ResourceLocation(texLoc.getNamespace(), "textures/" + texLoc.getPath() + ".png"), image);
+    }
+
+    /**
+     * Assigns the given id to a fake image that is obtained by transforming another image.
+     * This requires that the image {@code imgLoc} has already been added.
+     *
+     * @param loc A fake <i>image</i> id.
+     */
+    public TextureBuilder addFakeImage(ResourceLocation loc, ResourceLocation imgLoc, UnaryOperator<BufferedImage> image) {
+        if (!this.images.containsKey(imgLoc)) throw new IllegalStateException("Can't add fake transform of non-loaded image: " + imgLoc);
+        if (this.fakes.containsKey(loc)) throw new IllegalStateException("Duplicate fake texture: " + loc);
+        Pair<BufferedImage, Integer> original = this.images.get(imgLoc);
+        this.fakes.put(loc, Pair.of(image.apply(original.getLeft()), original.getRight()));
+        return this;
+    }
+
+    /**
      * Adds a required image which has the given width and height by default.
      */
     public TextureBuilder addImage(ResourceLocation loc, int defaultWidth, int defaultHeight) {
@@ -110,7 +157,9 @@ public class TextureBuilder {
      * Creates the resulting {@link Textures} object.
      */
     public Textures build() {
-        return new Textures(this.mod, this.textureLoader, this.scale, this.images);
+        Map<ResourceLocation, Pair<BufferedImage, Integer>> allImages = new HashMap<>(this.images);
+        allImages.putAll(this.fakes);
+        return new Textures(this.mod, this.textureLoader, this.scale, allImages);
     }
 
     private static boolean isPowerOfTwo(int number) {
