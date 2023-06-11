@@ -34,7 +34,7 @@ public class DecorationContext {
     public static final DecorationContext PLANKS = new DecorationContext("planks", DecorationMaterial.WOOD,
             DecorationType.BASE, DecorationType.SLAB, DecorationType.STAIRS, DecorationType.FENCE,
             DecorationType.FENCE_GATE, DecorationType.WOOD_BUTTON, DecorationType.WOOD_PRESSURE_PLATE,
-            DecorationType.DOOR, DecorationType.TRAPDOOR, DecorationType.SIGN
+            DecorationType.DOOR, DecorationType.TRAPDOOR, DecorationType.SIGN, DecorationType.HANGING_SIGN
     );
 
     /**

@@ -26,4 +26,5 @@ public class DecorationTypes {
     public static final DecorationType<DecoratedDoorBlock> DOOR = new BlockDecorationType<>("door", Registries.BLOCK, DecoratedDoorBlock::new);
     public static final DecorationType<DecoratedTrapdoorBlock> TRAPDOOR = new BlockDecorationType<>("trapdoor", Registries.BLOCK, DecoratedTrapdoorBlock::new);
     public static final DecorationType<DecoratedSign> SIGN = new BaseDecorationType<>("sign", null, (mod, context, block) -> new DecoratedSign(mod, block));
+    public static final DecorationType<DecoratedHangingSign> HANGING_SIGN = new BaseDecorationType<>("hanging_sign", null, (mod, context, block) -> new DecoratedHangingSign(mod, block));
 }

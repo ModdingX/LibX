@@ -1,10 +1,13 @@
 package org.moddingx.libx.base.decoration;
 
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
+import org.moddingx.libx.registration.SetupContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +45,17 @@ public class DecoratedBlock extends BlockBase {
             builder.registerNamed(null, entry.getKey(), entry.getValue());
         }
     }
-    
+
+    @Override
+    public void registerCommon(SetupContext ctx) {
+        this.init(ctx);
+        ctx.enqueue(() -> {
+            //noinspection DataFlowIssue
+            if (this.materialProperties.blockSetType() != null) BlockSetType.register(this.materialProperties.blockSetType());
+            if (this.materialProperties.woodType() != null) WoodType.register(this.materialProperties.woodType());
+        });
+    }
+
     private void init(RegistrationContext ctx) {
         if (this.materialProperties == null) {
             this.materialProperties = this.context.material().init(ctx.id());

@@ -69,6 +69,14 @@ public class DecorationTags {
             initInternal.run();
             provider.block(InternalTags.Blocks.SIGNS).add(decorated);
             provider.block(InternalTags.Blocks.WALL_SIGNS).add(decorated);
+        } else if (block instanceof DecoratedHangingSign.Ceiling decorated) {
+            initInternal.run();
+            provider.block(InternalTags.Blocks.HANGING_SIGNS).add(decorated);
+            provider.block(InternalTags.Blocks.CEILING_HANGING_SIGNS).add(decorated);
+        } else if (block instanceof DecoratedHangingSign.Wall decorated) {
+            initInternal.run();
+            provider.block(InternalTags.Blocks.HANGING_SIGNS).add(decorated);
+            provider.block(InternalTags.Blocks.WALL_HANGING_SIGNS).add(decorated);
         }
     }
 }

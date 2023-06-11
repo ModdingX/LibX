@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.WallSignBlock;
 import javax.annotation.Nonnull;
 
 /**
- * Interface to access different registered parts of a sign.
+ * Interface to access different registered parts of a standing sign.
  */
 public interface SignAccess extends ItemLike {
 

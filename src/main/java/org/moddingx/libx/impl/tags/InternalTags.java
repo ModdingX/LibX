@@ -34,7 +34,9 @@ public class InternalTags {
         public static TagKey<Item> WALLS = wrap(ItemTags.WALLS, Blocks.WALLS);
         public static TagKey<Item> TRAPDOORS = wrap(ItemTags.TRAPDOORS, Blocks.TRAPDOORS);
         public static TagKey<Item> FENCES = wrap(ItemTags.FENCES, Blocks.FENCES);
+        public static TagKey<Item> FENCE_GATES = wrap(ItemTags.FENCE_GATES, Blocks.FENCE_GATES);
         public static TagKey<Item> SIGNS = wrap(ItemTags.SIGNS, Blocks.STANDING_SIGNS);
+        public static TagKey<Item> HANGING_SIGNS = wrap(ItemTags.HANGING_SIGNS, Blocks.CEILING_HANGING_SIGNS);
         
         private static TagKey<Item> wrap(TagKey<Item> tag, TagKey<Block> blockTag) {
             TagKey<Item> newTag = ItemTags.create(LibX.getInstance().resource("impl_" + tag.location().getPath()));
@@ -73,10 +75,13 @@ public class InternalTags {
         public static final TagKey<Block> WALLS = wrap(BlockTags.WALLS);
         public static final TagKey<Block> TRAPDOORS = wrap(BlockTags.TRAPDOORS);
         public static final TagKey<Block> FENCES = wrap(BlockTags.FENCES);
+        public static final TagKey<Block> FENCE_GATES = wrap(BlockTags.FENCE_GATES);
         public static final TagKey<Block> STANDING_SIGNS = wrap(BlockTags.STANDING_SIGNS);
         public static final TagKey<Block> WALL_SIGNS = wrap(BlockTags.WALL_SIGNS);
         public static final TagKey<Block> SIGNS = wrap(BlockTags.SIGNS);
-        public static final TagKey<Block> FENCE_GATES = wrap(BlockTags.FENCE_GATES);
+        public static final TagKey<Block> CEILING_HANGING_SIGNS = wrap(BlockTags.CEILING_HANGING_SIGNS);
+        public static final TagKey<Block> WALL_HANGING_SIGNS = wrap(BlockTags.WALL_HANGING_SIGNS);
+        public static final TagKey<Block> HANGING_SIGNS = wrap(BlockTags.ALL_HANGING_SIGNS);
 
         private static TagKey<Block> wrap(TagKey<Block> tag) {
             TagKey<Block> newTag = BlockTags.create(LibX.getInstance().resource("impl_" + tag.location().getPath()));

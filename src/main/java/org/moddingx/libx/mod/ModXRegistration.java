@@ -64,9 +64,11 @@ public abstract class ModXRegistration extends ModX {
     }
 
     /**
-     * Initialised the registration system. See {@link RegistrationBuilder} for more information.
+     * Initialises the registration system. See {@link RegistrationBuilder} for more information.
      */
-    protected abstract void initRegistration(RegistrationBuilder builder);
+    protected void initRegistration(RegistrationBuilder builder) {
+        //
+    }
 
     /**
      * Adds a registration handler that runs during the registry phase.

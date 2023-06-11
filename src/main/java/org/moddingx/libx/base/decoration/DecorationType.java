@@ -39,6 +39,7 @@ public interface DecorationType<T> {
     DecorationType<? extends DoorBlock> DOOR = DecorationTypes.DOOR;
     DecorationType<? extends TrapDoorBlock> TRAPDOOR = DecorationTypes.TRAPDOOR;
     DecorationType<? extends SignAccess> SIGN = DecorationTypes.SIGN;
+    DecorationType<? extends HangingSignAccess> HANGING_SIGN = DecorationTypes.HANGING_SIGN;
 
     /**
      * Gets the name for this decoration type. Must be unique within a {@link DecorationContext}.
