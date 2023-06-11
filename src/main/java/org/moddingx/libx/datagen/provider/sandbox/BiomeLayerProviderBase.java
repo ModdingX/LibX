@@ -17,7 +17,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -43,7 +42,7 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
     public class BiomeLayerBuilder {
         
         private ClimateRangeTarget range;
-        @Nullable private DensityFunction density;
+        private DensityFunction density;
         private final List<Pair<Climate.ParameterPoint, Holder<Biome>>> biomes;
         
         private BiomeLayerBuilder() {
@@ -86,6 +85,17 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
             return this;
         }
 
+        /**
+         * Sets the density function that determines, where this layer generates.
+         */
+        public BiomeLayerBuilder density(DensityFunction density) {
+            this.density = density;
+            return this;
+        }
+
+        /**
+         * Sets the density function that determines, where this layer generates.
+         */
         public BiomeLayerBuilder density(Holder<DensityFunction> density) {
             if (density.kind() == Holder.Kind.DIRECT) {
                 this.density = density.value();
@@ -117,9 +127,10 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeLayer> build() {
-            if (this.biomes.isEmpty()) throw new IllegalStateException("Empty biome layer");
+            if (this.biomes.isEmpty()) throw new IllegalStateException("Empty biome layer.");
+            if (this.density == null) throw new IllegalStateException("No density function set.");
             Climate.ParameterList<Holder<Biome>> climateData = new Climate.ParameterList<>(List.copyOf(this.biomes));
-            BiomeLayer layer = new BiomeLayer(this.range.build(climateData), Optional.ofNullable(this.density), climateData);
+            BiomeLayer layer = new BiomeLayer(this.range.build(climateData), this.density, climateData);
             return BiomeLayerProviderBase.this.registries.writableRegistry(SandBox.BIOME_LAYER).createIntrusiveHolder(layer);
         }
     }

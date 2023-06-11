@@ -6,24 +6,21 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class NoiseLayerSelector {
     
     private final DensityFunction[] densities;
 
-    public NoiseLayerSelector(List<Optional<DensityFunction>> densities, RandomSource random) {
+    public NoiseLayerSelector(List<DensityFunction> densities, RandomSource random) {
         if (densities.isEmpty()) {
             throw new IllegalArgumentException("No elements");
         }
         this.densities = new DensityFunction[densities.size()];
         for (int i = 0; i < this.densities.length; i++) {
-            DensityFunction density = densities.get(i).orElse(null);
-            this.densities[i] = this.createDensity(density, random);
+            this.densities[i] = this.createDensity(densities.get(i), random);
         }
     }
 
@@ -43,10 +40,8 @@ public class NoiseLayerSelector {
         return maxIdx;
     }
     
-    private DensityFunction createDensity(@Nullable DensityFunction density, RandomSource random) {
+    private DensityFunction createDensity(DensityFunction density, RandomSource random) {
         long seed = random.nextLong() ^ 0x1E6AC71A7E85E1ECL;
-        if (density == null) return new DefaultLayerDensity(seed);
-        
         Map<DensityFunction, DensityFunction> wrappedDensities = new HashMap<>();
         return density.mapAll(new DensityFunction.Visitor() {
             

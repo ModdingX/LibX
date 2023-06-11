@@ -21,7 +21,6 @@ public class Classes {
     public static final String VALUE_MAPPER_FACTORY = "org.moddingx.libx.config.mapper.MapperFactory";
 
     public static final String REGISTERABLE = "org.moddingx.libx.registration.Registerable";
-    public static final String MULTI_REGISTERABLE = "org.moddingx.libx.registration.MultiRegisterable";
     public static final String REGISTRY = "net.minecraft.core.Registry";
     public static final String REGISTRIES = "net.minecraft.core.registries.Registries";
     public static final String RESOURCE_KEY = "net.minecraft.resources.ResourceKey";

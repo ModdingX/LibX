@@ -69,34 +69,8 @@ public class RegistrationDispatcher {
         }
     }
     
-    public <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
-        synchronized (this.LOCK) {
-            ResourceLocation rl = this.mod.resource(id);
-            @Nullable ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
-            RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
-
-            if (this.conditions.stream().allMatch(condition -> condition.shouldRegisterMulti(ctx, registry, value))) {
-                MultiEntryCollector<T> collector = new MultiEntryCollector<>(this, registry, id);
-                this.transformers.forEach(transformer -> transformer.transformMulti(ctx, registry, value, collector));
-                value.registerAdditional(ctx, collector);
-
-                if (this.trackingEnabled) {
-                    try {
-                        value.initTracking(ctx, new TrackingInstance(rl, value));
-                    } catch (ReflectiveOperationException e) {
-                        throw new IllegalStateException("Failed to initialise multi registry tracking for " + id + " in " + registry + ": " + value, e);
-                    }
-                }
-            }
-        }
-    }
-    
     public <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         synchronized (this.LOCK) {
-            if (value instanceof MultiRegisterable<?>) {
-                throw new IllegalArgumentException("Can't register MultiRegistrable. Use #registerMulti instead: " + registry + "/" + this.mod.modid + ":" + id + " @ " + value);
-            }
-            
             ResourceLocation rl = this.mod.resource(id);
             @Nullable ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
             RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
@@ -104,7 +78,7 @@ public class RegistrationDispatcher {
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
             if (!failedConditions.isEmpty()) return;
             
-            SingleEntryCollector collector = new SingleEntryCollector(this, id);
+            EntryCollectorImpl collector = new EntryCollectorImpl(this, id);
             
             this.transformers.forEach(transformer -> transformer.transform(ctx, value, collector));
             

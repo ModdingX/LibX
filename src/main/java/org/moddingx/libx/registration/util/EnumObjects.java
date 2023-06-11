@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
-import org.moddingx.libx.registration.MultiRegisterable;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
@@ -17,15 +16,16 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * A {@link MultiRegisterable} that registers multiple objects, one for each value of an enum. This is
- * done via {@link MultiRegisterable#registerAdditional(RegistrationContext, EntryCollector)} so
+ * A {@link Registerable} that registers multiple objects, one for each value of an enum. This is
+ * done via {@link Registerable#registerAdditional(RegistrationContext, EntryCollector)} so
  * the enum names will be applied automatically.
  *
  * @param <E> The type of the enum to use.
  * @param <T> The type of the thing to register.
  */
-public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
+public class EnumObjects<E extends Enum<E>, T> implements Registerable {
 
+    private final ResourceKey<? extends Registry<T>> registryKey;
     private final T defaultValue;
     private final E[] keys;
     private final Map<E, T> map;
@@ -33,10 +33,12 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
     /**
      * Creates a new instance of EnumObjects.
      *
-     * @param cls The class of the enum that is used. The enum must have at least one value.
-     * @param factory A factory function that creates the objects to be registered.
+     * @param registryKey The registry to register to.
+     * @param cls         The class of the enum that is used. The enum must have at least one value.
+     * @param factory     A factory function that creates the objects to be registered.
      */
-    public EnumObjects(Class<E> cls, Function<E, T> factory) {
+    public EnumObjects(ResourceKey<? extends Registry<T>> registryKey, Class<E> cls, Function<E, T> factory) {
+        this.registryKey = registryKey;
         if (!cls.isEnum()) {
             throw new IllegalStateException("Non-enum class in EnumObjects: " + cls.getName());
         }
@@ -70,9 +72,9 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    public void registerAdditional(RegistrationContext ctx, EntryCollector<T> builder) {
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         for (Map.Entry<E, T> entry : this.map.entrySet()) {
-            builder.registerNamed(entry.getKey().name().toLowerCase(Locale.ROOT), entry.getValue());
+            builder.registerNamed(this.registryKey, entry.getKey().name().toLowerCase(Locale.ROOT), entry.getValue());
         }
     }
 
@@ -80,6 +82,7 @@ public class EnumObjects<E extends Enum<E>, T> implements MultiRegisterable<T> {
     @OverridingMethodsMustInvokeSuper
     public void initTracking(RegistrationContext ctx, Registerable.TrackingCollector builder) throws ReflectiveOperationException {
         ResourceKey<? extends Registry<?>> registryKey = ctx.registry().orElse(null);
+        //noinspection UnstableApiUsage
         IForgeRegistry<?> registry = registryKey == null ? null : RegistryManager.ACTIVE.getRegistry(registryKey.location());
         if (registry != null) {
             for (E key : this.keys) {

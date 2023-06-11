@@ -10,16 +10,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.SOURCE)
 @Target({})
 public @interface Reg {
-
-    /**
-     * Marks a field as multi-registerable. It will be registered with {@code registerMulti}.
-     */
-    @Retention(RetentionPolicy.SOURCE)
-    @Target(ElementType.FIELD)
-    @Documented
-    @interface Multi {
-
-    }
     
     /**
      * Marks a field as excluded from registration.

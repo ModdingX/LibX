@@ -7,7 +7,6 @@ import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 import org.moddingx.libx.mod.ModXRegistration;
-import org.moddingx.libx.registration.MultiRegisterable;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
@@ -145,8 +144,6 @@ public final class TrackingData<T> {
                         RegistrationContext ctx = new RegistrationContext(mod, id, ResourceKey.create(this.registry.getRegistryKey(), id));
                         try {
                             if (value instanceof Registerable registerable) {
-                                registerable.initTracking(ctx, new TrackingInstance(id, value));
-                            } else if (value instanceof MultiRegisterable<?> registerable) {
                                 registerable.initTracking(ctx, new TrackingInstance(id, value));
                             }
                         } catch (ReflectiveOperationException e) {

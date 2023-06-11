@@ -22,7 +22,6 @@ import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
-import org.moddingx.libx.registration.MultiRegisterable;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -54,22 +53,17 @@ public class ProcessorInterface {
         ConfigManager.registerValueMapperFactory(mod.modid, mapper);
     }
         
-    public static void register(ModX mod, @Nullable ResourceKey<? extends Registry<?>> registryKey, String name, Object value, @Nullable FieldGetter field, boolean multi) throws ReflectiveOperationException {
+    public static void register(ModX mod, @Nullable ResourceKey<? extends Registry<?>> registryKey, String name, Object value, @Nullable FieldGetter field) throws ReflectiveOperationException {
         if (!(mod instanceof ModXRegistration reg)) throw new IllegalStateException("Can't register to a non-ModXRegistration mod.");
-        if (multi) {
-            if (!(value instanceof MultiRegisterable<?> multiReg)) throw new IllegalStateException("Can't multi-register a non-MultiRegisterable.");
-            //noinspection unchecked
-            reg.registerMulti((ResourceKey<? extends Registry<Object>>) registryKey, name, (MultiRegisterable<Object>) multiReg);
-        } else {
-            //noinspection unchecked
-            reg.register((ResourceKey<? extends Registry<Object>>) registryKey, name, value);
-            
-            // Only directly add registry tracking for actually registered stuff, MultiRegisterable has no real registry
-            if (registryKey != null && field != null) {
-                IForgeRegistry<?> forgeRegistry = RegistryManager.ACTIVE.getRegistry(registryKey.location());
-                if (forgeRegistry != null) {
-                    ModInternal.get(mod).getRegistrationDispatcher().notifyRegisterField(forgeRegistry, name, field.get());
-                }
+        //noinspection unchecked
+        reg.register((ResourceKey<? extends Registry<Object>>) registryKey, name, value);
+        
+        // Only directly add registry tracking for actually registered stuff, MultiRegisterable has no real registry
+        if (registryKey != null && field != null) {
+            @SuppressWarnings("UnstableApiUsage")
+            IForgeRegistry<?> forgeRegistry = RegistryManager.ACTIVE.getRegistry(registryKey.location());
+            if (forgeRegistry != null) {
+                ModInternal.get(mod).getRegistrationDispatcher().notifyRegisterField(forgeRegistry, name, field.get());
             }
         }
     }

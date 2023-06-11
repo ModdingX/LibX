@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public class RegisterClassModifyProcessor extends Processor {
 
-    private static final Set<Class<? extends Annotation>> MODIFY_ANNOTATIONS = Set.of(Reg.Multi.class, Reg.Exclude.class, Reg.Name.class);
+    private static final Set<Class<? extends Annotation>> MODIFY_ANNOTATIONS = Set.of(Reg.Exclude.class, Reg.Name.class);
     
     @Override
     public Class<?>[] getTypes() {

@@ -7,11 +7,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.base.tile.BlockBE;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.registration.RegistrationDispatcher;
-import org.moddingx.libx.registration.MultiRegisterable;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationBuilder;
 
@@ -84,17 +82,5 @@ public abstract class ModXRegistration extends ModX {
      */
     public final <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         this.dispatcher.register(registry, id, value);
-    }
-
-    /**
-     * Registers the contents of a {@link MultiRegisterable} to a given registry using a given name as the base
-     * path part of the objects' id.
-     *
-     * @deprecated {@link MultiRegisterable} is deprecated. See there for more information
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.20")
-    public final <T> void registerMulti(@Nullable ResourceKey<? extends Registry<T>> registry, String id, MultiRegisterable<T> value) {
-        this.dispatcher.registerMulti(registry, id, value);
     }
 }

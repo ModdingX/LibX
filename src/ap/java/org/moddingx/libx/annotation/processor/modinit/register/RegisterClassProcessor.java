@@ -120,21 +120,9 @@ public class RegisterClassProcessor {
                 target = TargetRegistry.NONE;
             }
             
-            boolean multi = element.getAnnotation(Reg.Multi.class) != null;
-            boolean hasMultiType = env.subTypeErasure(element.asType(), env.forClass(Classes.MULTI_REGISTERABLE));
-
-            if (multi) {
-                if (!hasMultiType || !env.types().isSubtype(generic(element, element.asType(), "Invalid generic type for MultiRegisterable", env), target.baseType)) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Field has invalid type for target registry: expected MultiRegisterable<" + target.baseType + ">", element);
-                    return Stream.empty();
-                }
-            } else {
-                if (target.baseType != null && !env.types().isSubtype(element.asType(), target.baseType)) {
-                    env.messager().printMessage(Diagnostic.Kind.ERROR, "Field has invalid type for target registry" + (hasMultiType ? " (Missing @Reg.Multi ?)" : "") + ": expected " + target.baseType, element);
-                    return Stream.empty();
-                } else if (hasMultiType && !env.isSuppressed(element, "registration")) {
-                    env.messager().printMessage(Diagnostic.Kind.WARNING, "Field has is an instance of MultiRegisterable. Missing @Reg.Multi ?", element);
-                }
+            if (target.baseType != null && !env.types().isSubtype(element.asType(), target.baseType)) {
+                env.messager().printMessage(Diagnostic.Kind.ERROR, "Field has invalid type for target registry: expected " + target.baseType, element);
+                return Stream.empty();
             }
             
             String name;
@@ -155,7 +143,7 @@ public class RegisterClassProcessor {
                 name = classAnnotation.prefix() + "_" + name;
             }
             
-            return Stream.of(new RegistrationEntry(target.fqn(), name, qualified.getQualifiedName().toString(), element.getSimpleName().toString(), multi));
+            return Stream.of(new RegistrationEntry(target.fqn(), name, qualified.getQualifiedName().toString(), element.getSimpleName().toString()));
         }
     }
     

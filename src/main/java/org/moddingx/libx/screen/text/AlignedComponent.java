@@ -1,7 +1,6 @@
 package org.moddingx.libx.screen.text;
 
 import net.minecraft.network.chat.Component;
-import org.moddingx.libx.annotation.meta.RemoveIn;
 
 import javax.annotation.Nullable;
 
@@ -29,15 +28,6 @@ public record AlignedComponent(Component text, int left, int top, @Nullable Text
     
     public AlignedComponent(Component text, int left, int top) {
         this(text, left, top, true);
-    }
-
-    /**
-     * Provided for compatibility
-     */
-    @Deprecated(forRemoval = true)
-    @RemoveIn(minecraft = "1.20")
-    public boolean wrap() {
-        return this.wrapping() != null;
     }
     
     /**
