@@ -83,6 +83,13 @@ public class TemplatePools {
     public static final ResourceKey<StructureTemplatePool> PILLAGER_OUTPOST_FEATURE_PLATES = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","pillager_outpost/feature_plates"));
     public static final ResourceKey<StructureTemplatePool> PILLAGER_OUTPOST_FEATURES = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","pillager_outpost/features"));
     public static final ResourceKey<StructureTemplatePool> PILLAGER_OUTPOST_TOWERS = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","pillager_outpost/towers"));
+    public static final ResourceKey<StructureTemplatePool> TRAIL_RUINS_BUILDINGS = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","trail_ruins/buildings"));
+    public static final ResourceKey<StructureTemplatePool> TRAIL_RUINS_BUILDINGS_GROUPED = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","trail_ruins/buildings/grouped"));
+    public static final ResourceKey<StructureTemplatePool> TRAIL_RUINS_DECOR = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","trail_ruins/decor"));
+    public static final ResourceKey<StructureTemplatePool> TRAIL_RUINS_ROADS = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","trail_ruins/roads"));
+    public static final ResourceKey<StructureTemplatePool> TRAIL_RUINS_TOWER = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","trail_ruins/tower"));
+    public static final ResourceKey<StructureTemplatePool> TRAIL_RUINS_TOWER_ADDITIONS = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","trail_ruins/tower/additions"));
+    public static final ResourceKey<StructureTemplatePool> TRAIL_RUINS_TOWER_TOWER_TOP = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","trail_ruins/tower/tower_top"));
     public static final ResourceKey<StructureTemplatePool> VILLAGE_COMMON_ANIMALS = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","village/common/animals"));
     public static final ResourceKey<StructureTemplatePool> VILLAGE_COMMON_BUTCHER_ANIMALS = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","village/common/butcher_animals"));
     public static final ResourceKey<StructureTemplatePool> VILLAGE_COMMON_CATS = ResourceKey.create(REGISTRY, new ResourceLocation("minecraft","village/common/cats"));
