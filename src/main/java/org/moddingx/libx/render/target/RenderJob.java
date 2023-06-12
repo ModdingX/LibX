@@ -87,7 +87,6 @@ public interface RenderJob {
         
     }
     
-    
     interface Projector {
 
         /**

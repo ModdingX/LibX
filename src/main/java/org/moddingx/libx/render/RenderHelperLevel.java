@@ -14,7 +14,7 @@ public class RenderHelperLevel {
     /**
      * This is meant to be called in {@link RenderLevelStageEvent}. This will move the pose stack to the
      * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
-     * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
+     * position you need afterward as it will be buggy millions of blocks away because of rounding errors.
      */
     public static void loadCameraPosition(Camera camera, PoseStack poseStack, BlockPos pos) {
         loadCameraPosition(camera, poseStack, pos.getX(), pos.getY(), pos.getZ());
@@ -23,7 +23,7 @@ public class RenderHelperLevel {
     /**
      * This is meant to be called in {@link RenderLevelStageEvent}. This will move the pose stack to the
      * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
-     * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
+     * position you need afterward as it will be buggy millions of blocks away because of rounding errors.
      */
     public static void loadCameraPosition(Camera camera, PoseStack poseStack, Vec3 pos) {
         loadCameraPosition(camera, poseStack, pos.x, pos.y, pos.z);
@@ -32,7 +32,7 @@ public class RenderHelperLevel {
     /**
      * This is meant to be called in {@link RenderLevelStageEvent}. This will move the pose stack to the
      * given position in the world. Do not always use this with {@code (0, 0, 0)} and translate to the
-     * position you need afterwards as it will be buggy millions of blocks away because of rounding errors.
+     * position you need afterward as it will be buggy millions of blocks away because of rounding errors.
      */
     public static void loadCameraPosition(Camera camera, PoseStack poseStack, double x, double y, double z) {
         Vec3 cameraPos = camera.getPosition();
