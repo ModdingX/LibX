@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.MinecraftForge;
-import org.moddingx.libx.event.ClickBlockEmptyHandEvent;
+import org.moddingx.libx.event.InteractBlockEmptyHandEvent;
 
 import javax.annotation.Nullable;
 
@@ -22,7 +22,7 @@ public class CoreInteract {
     @Nullable
     public static InteractionResult useItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hit) {
         if (stack.isEmpty()) {
-            ClickBlockEmptyHandEvent event = new ClickBlockEmptyHandEvent(player, level, hand, hit);
+            InteractBlockEmptyHandEvent event = new InteractBlockEmptyHandEvent(player, level, hand, hit);
             if (MinecraftForge.EVENT_BUS.post(event)) {
                 return event.getCancellationResult() == null ? InteractionResult.PASS : event.getCancellationResult();
             }

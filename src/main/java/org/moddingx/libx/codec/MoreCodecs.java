@@ -9,7 +9,7 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import org.moddingx.libx.crafting.CraftingHelper2;
+import org.moddingx.libx.crafting.RecipeHelper;
 import org.moddingx.libx.impl.codec.*;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class MoreCodecs {
                     stack -> CodecHelper.doesNotThrow(() -> stack.save(new CompoundTag()).toString())
             ),
             TypedEncoder.of(Tag.class, stack -> stack.save(new CompoundTag()), tag -> ItemStack.of((CompoundTag) tag)),
-            TypedEncoder.of(JsonElement.class, stack -> CraftingHelper2.serializeItemStack(stack, true), json -> CraftingHelper.getItemStack(json.getAsJsonObject(), true))
+            TypedEncoder.of(JsonElement.class, stack -> RecipeHelper.serializeItemStack(stack, true), json -> CraftingHelper.getItemStack(json.getAsJsonObject(), true))
     );
 
     /**

@@ -15,10 +15,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -316,9 +313,16 @@ public abstract class LootProviderBase<T> implements DataProvider {
     public LootItemCondition.Builder not(LootItemCondition.Builder condition) {
         return InvertedLootItemCondition.invert(condition);
     }
+    
+    /**
+     * Creates a condition that is met when all of the given conditions are met.
+     */
+    public LootItemCondition.Builder and(LootItemCondition.Builder... conditions) {
+        return AllOfCondition.allOf(conditions);
+    }
 
     /**
-     * Joins conditions with OR.
+     * Creates a condition that is met when at least one of the given conditions is met.
      */
     public LootItemCondition.Builder or(LootItemCondition.Builder... conditions) {
         return AnyOfCondition.anyOf(conditions);

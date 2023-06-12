@@ -12,7 +12,17 @@ import java.util.function.Predicate;
  */
 public record IngredientStack(Ingredient ingredient, int count) implements Predicate<ItemStack> {
 
-    public static final IngredientStack EMPTY = new IngredientStack(Ingredient.EMPTY, 1);
+    public static final IngredientStack EMPTY = new IngredientStack(Ingredient.EMPTY, 0);
+    
+    public IngredientStack(Ingredient ingredient, int count) {
+        if (count <= 0 || ingredient.isEmpty()) {
+            this.ingredient = Ingredient.EMPTY;
+            this.count = 0;
+        } else {
+            this.ingredient = ingredient;
+            this.count = count;
+        }
+    }
     
     /**
      * Returns whether the ingredient matches the stack and the count of the stack is greater or equal
@@ -53,7 +63,8 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
      */
     public static IngredientStack fromJson(JsonObject json) {
         Ingredient ingredient = json.has("Ingredient") ? Ingredient.fromJson(json.get("Ingredient")) : Ingredient.EMPTY;
-        int count = json.has("Count") && json.get("Count").isJsonPrimitive() ? json.get("Count").getAsInt() : 0;
+        int count = json.has("Count") && json.get("Count").isJsonPrimitive() ? json.get("Count").getAsInt() : 1;
+        
         return new IngredientStack(ingredient, count);
     }
 
