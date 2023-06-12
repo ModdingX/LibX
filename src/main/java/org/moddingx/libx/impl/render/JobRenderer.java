@@ -8,6 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.world.phys.Vec2;
@@ -87,10 +88,10 @@ public class JobRenderer {
 
             RenderSystem.viewport(0, 0, width, height);
             modelViewStack.setIdentity();
-            modelViewStack.mulPoseMatrix(job.setupModelViewMatrix());
+            modelViewStack.mulPoseMatrix(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
             RenderSystem.applyModelViewMatrix();
 
-            RenderSystem.setProjectionMatrix(new Matrix4f().ortho(0, width, height, 0, 1000, 3000), VertexSorting.ORTHOGRAPHIC_Z);
+            RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z), VertexSorting.ORTHOGRAPHIC_Z);
 
             PoseStack overlayPoseStack = new PoseStack();
             Lighting.setupFor3DItems();

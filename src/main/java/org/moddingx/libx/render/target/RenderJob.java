@@ -2,6 +2,7 @@ package org.moddingx.libx.render.target;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexSorting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
@@ -27,21 +28,23 @@ public interface RenderJob {
      * (Everything from 0 to image width/height is projected onto the image).
      */
     default Matrix4f setupProjectionMatrix() {
-        return new Matrix4f().ortho(0, this.width(), 0, this.height(), 500, 6000);
+        return new Matrix4f().setOrtho(0, this.width(), this.height(), 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z);
     }
-    
+
+    /**
+     * Gets the vertex sorting to use. Defaults to {@link VertexSorting#ORTHOGRAPHIC_Z}.
+     */
     default VertexSorting getVertexSorting() {
         return VertexSorting.ORTHOGRAPHIC_Z;
     }
 
     /**
-     * The modelView matrix to use. Do not confuse with the transformation matrix. By default, this is
-     * a translation matrix by 2000 units in negative z direction.
+     * The modelView matrix to use. Do not confuse with the transformation matrix.
      * 
      * @see #setupTransformation(PoseStack)
      */
     default Matrix4f setupModelViewMatrix() {
-        return new Matrix4f().translate(0, 0, -2000);
+        return new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z);
     }
 
     /**
