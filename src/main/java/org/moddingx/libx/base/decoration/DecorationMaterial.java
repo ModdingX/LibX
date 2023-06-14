@@ -73,5 +73,10 @@ public interface DecorationMaterial {
             if (this.woodType == null) throw new IllegalStateException("Decoration material has no WoodType available.");
             return this.woodType;
         }
+        
+        void register() {
+            if (this.blockSetType != null) BlockSetType.register(this.blockSetType);
+            if (this.woodType != null) WoodType.register(this.woodType);
+        }
     }
 }

@@ -1,8 +1,6 @@
 package org.moddingx.libx.base.decoration;
 
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.WoodType;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
@@ -49,11 +47,8 @@ public class DecoratedBlock extends BlockBase {
     @Override
     public void registerCommon(SetupContext ctx) {
         this.init(ctx);
-        ctx.enqueue(() -> {
-            //noinspection DataFlowIssue
-            if (this.materialProperties.blockSetType() != null) BlockSetType.register(this.materialProperties.blockSetType());
-            if (this.materialProperties.woodType() != null) WoodType.register(this.materialProperties.woodType());
-        });
+        //noinspection DataFlowIssue
+        ctx.enqueue(this.materialProperties::register);
     }
 
     private void init(RegistrationContext ctx) {
