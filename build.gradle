@@ -2,27 +2,6 @@ buildscript {
     apply from: 'https://moddingx.github.io/ModUtils/v5/buildscript.gradle', to: buildscript
 }
 
-// Load mappings from temp-mappings.zip (built from https://github.com/PiTheGuy/Parchment/tree/1.20-update)
-class ChannelProvider extends org.parchmentmc.librarian.forgegradle.ParchmentChannelProvider {
-
-    public Project project
-
-    Set<String> getChannels() {
-        return [ 'custom' ]
-    }
-
-    protected File getParchmentZip(Project project, org.parchmentmc.librarian.forgegradle.ParchmentMappingVersion version) {
-        return project.file('temp-mappings.zip')
-    }
-}
-
-ChannelProvider provider = new ChannelProvider()
-provider.project = project
-apply plugin: 'net.minecraftforge.gradle'
-channelProviders {
-    addProvider provider
-}
-
 apply from: 'https://moddingx.github.io/ModUtils/v5/mod.gradle'
 
 apply plugin: 'org.moddingx.modgradle.javadoc'
