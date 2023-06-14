@@ -21,7 +21,6 @@ org.moddingx.libx.config.validate
 org.moddingx.libx.config.validator
 org.moddingx.libx.crafting
 org.moddingx.libx.crafting.ingredient
-org.moddingx.libx.crafting.recipe
 org.moddingx.libx.creativetab
 org.moddingx.libx.datagen
 org.moddingx.libx.datagen.loot
@@ -58,6 +57,7 @@ org.moddingx.libx.sandbox.structure
 org.moddingx.libx.sandbox.surface
 org.moddingx.libx.screen
 org.moddingx.libx.screen.text
+org.moddingx.libx.screen.text.entry
 org.moddingx.libx.util
 org.moddingx.libx.util.data
 org.moddingx.libx.util.game
