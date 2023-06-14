@@ -18,8 +18,7 @@ public class ConfigLoadedEvent extends Event {
     private final LoadReason reason;
     private final boolean clientConfig;
     private final Path configPath;
-    @Nullable
-    private final Path currentPath;
+    @Nullable private final Path currentPath;
     
     public ConfigLoadedEvent(ResourceLocation configId, Class<?> configClass, LoadReason reason, boolean clientConfig, Path configPath, @Nullable Path currentPath) {
         this.configId = configId;
