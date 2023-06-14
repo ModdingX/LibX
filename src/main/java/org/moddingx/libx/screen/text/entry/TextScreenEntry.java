@@ -1,4 +1,6 @@
-package org.moddingx.libx.screen.text;
+package org.moddingx.libx.screen.text.entry;
+
+import org.moddingx.libx.screen.text.TextScreen;
 
 /**
  * An object that has been aligned for display on a {@link TextScreen}.

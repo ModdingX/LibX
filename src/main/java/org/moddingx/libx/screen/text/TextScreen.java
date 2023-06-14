@@ -65,8 +65,17 @@ public class TextScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, 20);
         this.drawBackground(graphics, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20, partialTick);
-        graphics.pose().translate(0, 0, 20);
+        graphics.pose().translate(0, 0, 100);
         this.content.render(graphics, left, top);
+        graphics.pose().popPose();
+        
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 200);
+        super.render(graphics, mouseX, mouseY, partialTick);
+        graphics.pose().popPose();
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 500);
         Style tooltip = this.content.hoveredStyle(mouseX - left, mouseY - top);
         if (tooltip != null) {
             graphics.pose().translate(0, 0, 20);
@@ -74,7 +83,6 @@ public class TextScreen extends Screen {
             graphics.renderComponentHoverEffect(this.font, tooltip, mouseX, mouseY);
         }
         graphics.pose().popPose();
-        super.render(graphics, mouseX, mouseY, partialTick);
     }
     
     protected void drawBackground(GuiGraphics graphics, int x, int y, int width, int height, float partialTick) {

@@ -9,10 +9,10 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import org.moddingx.libx.render.RenderHelper;
-import org.moddingx.libx.screen.text.AlignedComponent;
-import org.moddingx.libx.screen.text.AlignedWidget;
-import org.moddingx.libx.screen.text.FlowBox;
-import org.moddingx.libx.screen.text.TextScreenEntry;
+import org.moddingx.libx.screen.text.entry.AlignedComponent;
+import org.moddingx.libx.screen.text.entry.AlignedWidget;
+import org.moddingx.libx.screen.text.entry.FlowBox;
+import org.moddingx.libx.screen.text.entry.TextScreenEntry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -114,6 +114,7 @@ public class TextScreenContent {
     // Returns total height of the row
     private static int placeRow(FlowBox.HorizontalAlignment hor, FlowBox.VerticalAlignment ver, List<DirectElementBox> boxes, int globalXOff, int currentHeight, int totalWidth, ImmutableList.Builder<PlacedText> list, ImmutableList.Builder<PlacedWidget> widgets) {
         if (boxes.isEmpty()) return 0;
+        if (boxes.size() == 1 && hor == FlowBox.HorizontalAlignment.FILL) hor = FlowBox.HorizontalAlignment.CENTER;
         int combinedWidth = 0;
         int maximumTopPadding = 0;
         int maximumContentHeight = 0;
@@ -123,11 +124,22 @@ public class TextScreenContent {
             maximumContentHeight = Math.max(maximumContentHeight, box.contentHeight());
         }
         int xOff = globalXOff + switch (hor) {
-            case LEFT -> 0;
+            case LEFT, FILL -> 0;
             case RIGHT -> totalWidth - combinedWidth;
             case CENTER -> (totalWidth - combinedWidth) / 2;
         };
-        for (DirectElementBox box : boxes) {
+        int distributedWidth = switch (hor) {
+            case LEFT, RIGHT, CENTER -> 0;
+            case FILL -> (totalWidth - combinedWidth) / (boxes.size() - 1);
+        };
+        // Space that is missing because of rounding is added before the last element in FILL mode
+        int remainingDistributedWidth = switch (hor) {
+            case LEFT, RIGHT, CENTER -> 0;
+            case FILL -> totalWidth - combinedWidth - ((boxes.size() - 1) * distributedWidth);
+        };
+        for (int i = 0; i < boxes.size(); i++) {
+            DirectElementBox box = boxes.get(i);
+            if (i == boxes.size() - 1) xOff += remainingDistributedWidth;
             int yOff = switch (ver) {
                 case TOP -> maximumTopPadding - box.topPadding();
                 case CENTER -> maximumTopPadding - box.topPadding() + ((maximumContentHeight - box.contentHeight()) / 2);
@@ -135,6 +147,7 @@ public class TextScreenContent {
             };
             box.placeAt(xOff, currentHeight + yOff, list, widgets);
             xOff += box.width();
+            xOff += distributedWidth;
         }
         return maximumTopPadding + maximumContentHeight;
     }

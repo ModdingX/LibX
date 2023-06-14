@@ -1,4 +1,6 @@
-package org.moddingx.libx.screen.text;
+package org.moddingx.libx.screen.text.entry;
+
+import org.moddingx.libx.screen.text.TextScreen;
 
 import java.util.List;
 
@@ -65,7 +67,12 @@ public record FlowBox(HorizontalAlignment horizontalAlignment, VerticalAlignment
         /**
          * Elements in a row are aligned in the center, empty space is evently distributed left and right.
          */
-        CENTER
+        CENTER,
+        
+        /**
+         * Space is evenly distributed between elements in a row.
+         */
+        FILL
     }
 
     /**

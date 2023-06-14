@@ -3,6 +3,7 @@ package org.moddingx.libx.screen.text;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.impl.screen.text.SimpleLayout;
+import org.moddingx.libx.screen.text.entry.TextScreenEntry;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

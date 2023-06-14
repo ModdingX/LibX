@@ -3,9 +3,9 @@ package org.moddingx.libx.impl.screen.text;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import org.moddingx.libx.screen.text.AlignedComponent;
+import org.moddingx.libx.screen.text.entry.AlignedComponent;
 import org.moddingx.libx.screen.text.ComponentLayout;
-import org.moddingx.libx.screen.text.TextScreenEntry;
+import org.moddingx.libx.screen.text.entry.TextScreenEntry;
 
 import javax.annotation.Nullable;
 import java.util.List;

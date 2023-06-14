@@ -1,6 +1,7 @@
-package org.moddingx.libx.screen.text;
+package org.moddingx.libx.screen.text.entry;
 
 import net.minecraft.network.chat.Component;
+import org.moddingx.libx.screen.text.TextScreen;
 
 import javax.annotation.Nullable;
 
