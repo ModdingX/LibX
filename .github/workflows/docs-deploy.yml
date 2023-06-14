@@ -2,7 +2,7 @@ name: 'Deploy Javadoc 📖'
 on:
   push:
     branches:
-      - '1.19'
+      - '1.20'
 
 jobs:
   deploy:

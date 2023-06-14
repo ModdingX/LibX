@@ -2,8 +2,7 @@ name: 'Test pull request 📋'
 on:
   pull_request:
     branches:
-      - '1.18'
-      - '1.19'
+      - '1.20'
 
 jobs:
   test:
