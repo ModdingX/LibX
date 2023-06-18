@@ -29,8 +29,8 @@ public abstract class CreativeTabX {
     @SuppressWarnings("UnstableApiUsage")
     private static final Comparator<Item> REGISTRY_ORDER = Comparator.comparing(item -> ForgeRegistries.ITEMS instanceof ForgeRegistry<Item> reg ? reg.getID(item) : Integer.MAX_VALUE - 1);
     
-    private final ModX mod;
-    private final ResourceLocation id;
+    protected final ModX mod;
+    protected final ResourceLocation id;
     private CreativeModeTab tab;
     
     protected CreativeTabX(ModX mod) {
