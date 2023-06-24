@@ -200,6 +200,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Marks a registry as an extension registry.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResourceRoot(java.lang.String)" class="member-name-link">setResourceRoot</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;root)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the resource root relative to the <code>game dir</code>.</div>
+</div>
 </div>
 </div>
 </div>
@@ -285,6 +290,14 @@ loadScripts(document, 'script');</script>
 <h3>mainOutput</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name">mainOutput</span>()</div>
 <div class="block">The main output path. Use <a href="PackTarget.html#path(net.minecraft.server.packs.PackType)"><code>PackTarget.path(PackType)</code></a> instead of this whenever possible.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setResourceRoot(java.lang.String)">
+<h3>setResourceRoot</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setResourceRoot</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;root)</span></div>
+<div class="block">Sets the resource root relative to the <code>game dir</code>. This is used to allow resource lookup
+ in <a href="#dynamic(java.lang.String,net.minecraft.server.packs.PackType,org.moddingx.libx.datagen.PackTarget...)"><code>dynamic</code></a> pack targets.</div>
 </section>
 </li>
 <li>

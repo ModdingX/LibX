@@ -111,14 +111,20 @@ loadScripts(document, 'script');</script>
  sub-path to the current output path.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DatagenSystem.PackTargetBuilder.html" title="class in org.moddingx.libx.datagen">DatagenSystem.PackTargetBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setOutput(net.minecraft.server.packs.PackType,java.nio.file.Path)" class="member-name-link">setOutput</a><wbr>(net.minecraft.server.packs.PackType&nbsp;type,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resources(net.minecraft.server.packs.PackType,java.nio.file.Path)" class="member-name-link">resources</a><wbr>(net.minecraft.server.packs.PackType&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the output path for the given <code>PackType</code>.</div>
+<div class="block">Adds a path for resource lookup through <a href="PackTarget.html#find(net.minecraft.server.packs.PackType,net.minecraft.resources.ResourceLocation)"><code>PackTarget.find(PackType, ResourceLocation)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DatagenSystem.PackTargetBuilder.html" title="class in org.moddingx.libx.datagen">DatagenSystem.PackTargetBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unsupported(net.minecraft.server.packs.PackType)" class="member-name-link">unsupported</a><wbr>(net.minecraft.server.packs.PackType&nbsp;type)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setOutput(net.minecraft.server.packs.PackType,java.nio.file.Path)" class="member-name-link">setOutput</a><wbr>(net.minecraft.server.packs.PackType&nbsp;type,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the output path for the given <code>PackType</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DatagenSystem.PackTargetBuilder.html" title="class in org.moddingx.libx.datagen">DatagenSystem.PackTargetBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unsupported(net.minecraft.server.packs.PackType)" class="member-name-link">unsupported</a><wbr>(net.minecraft.server.packs.PackType&nbsp;type)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates, that the <a href="PackTarget.html" title="class in org.moddingx.libx.datagen"><code>PackTarget</code></a> can't output the given <code>PackType</code>.</div>
 </div>
 </div>
@@ -152,7 +158,8 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DatagenSystem.PackTargetBuilder.html" title="class in org.moddingx.libx.datagen">DatagenSystem.PackTargetBuilder</a></span>&nbsp;<span class="element-name">resolveOutput</span><wbr><span class="parameters">(net.minecraft.server.packs.PackType&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;subPath)</span></div>
 <div class="block">Changes the output path for the given <code>PackType</code> by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html#resolve(java.lang.String)" title="class or interface in java.nio.file" class="external-link"><code>resolving</code></a> the given
- sub-path to the current output path.</div>
+ sub-path to the current output path. This also adds a resource prefix for resource lookup through the
+ <a href="PackTarget.html#find(net.minecraft.server.packs.PackType,net.minecraft.resources.ResourceLocation)"><code>PackTarget.find(PackType, ResourceLocation)</code></a> method.</div>
 </section>
 </li>
 <li>
@@ -160,6 +167,14 @@ loadScripts(document, 'script');</script>
 <h3>unsupported</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DatagenSystem.PackTargetBuilder.html" title="class in org.moddingx.libx.datagen">DatagenSystem.PackTargetBuilder</a></span>&nbsp;<span class="element-name">unsupported</span><wbr><span class="parameters">(net.minecraft.server.packs.PackType&nbsp;type)</span></div>
 <div class="block">Indicates, that the <a href="PackTarget.html" title="class in org.moddingx.libx.datagen"><code>PackTarget</code></a> can't output the given <code>PackType</code>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="resources(net.minecraft.server.packs.PackType,java.nio.file.Path)">
+<h3>resources</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DatagenSystem.PackTargetBuilder.html" title="class in org.moddingx.libx.datagen">DatagenSystem.PackTargetBuilder</a></span>&nbsp;<span class="element-name">resources</span><wbr><span class="parameters">(net.minecraft.server.packs.PackType&nbsp;type,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span></div>
+<div class="block">Adds a path for resource lookup through <a href="PackTarget.html#find(net.minecraft.server.packs.PackType,net.minecraft.resources.ResourceLocation)"><code>PackTarget.find(PackType, ResourceLocation)</code></a>.</div>
 </section>
 </li>
 <li>
