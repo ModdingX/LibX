@@ -12,7 +12,6 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import org.jetbrains.annotations.Nullable;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.datagen.InternalDataProvider;
@@ -22,6 +21,7 @@ import org.moddingx.libx.impl.datapack.LibXPack;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.sandbox.SandBox;
 
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
