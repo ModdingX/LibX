@@ -60,7 +60,7 @@ public abstract class TextureProviderBase implements DataProvider {
 
     protected TextureProviderBase(DatagenContext ctx) {
         this.mod = ctx.mod();
-        this.generator = new TextureGenerator(ctx.target(), ctx.fileHelper());
+        this.generator = new TextureGenerator(ctx.target());
         this.textures = new HashMap<>();
     }
 

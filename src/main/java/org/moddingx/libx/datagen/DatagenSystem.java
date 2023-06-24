@@ -11,6 +11,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
+import org.jetbrains.annotations.Nullable;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.datagen.InternalDataProvider;
@@ -76,6 +78,10 @@ public class DatagenSystem {
     private final ExistingFileHelper fileHelper;
     private final DatagenRegistrySet rootRegistries;
     private final PackTarget mainTarget;
+    
+    @Nullable
+    private Path resourceRoot;
+    private boolean locked;
 
     private final List<InternalDataProvider.Entry<RegistryProvider>> registryProviders;
     private final List<InternalDataProvider.Entry<RegistryProvider>> extensionProviders;
@@ -89,11 +95,20 @@ public class DatagenSystem {
         this.mainTarget = new PackTarget("main", this, new DatagenRegistrySet(List.of(this.rootRegistries)), Map.of(
                 PackType.CLIENT_RESOURCES, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.RESOURCE_PACK),
                 PackType.SERVER_DATA, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.DATA_PACK)
-        ));
+        ), null, null, null);
+        
+        this.resourceRoot = null;
+        this.locked = false;
         
         this.registryProviders = new ArrayList<>();
         this.extensionProviders = new ArrayList<>();
         this.dataProviders = new ArrayList<>();
+    }
+    
+    private void checkNotLocked() {
+        if (this.locked) {
+            throw new IllegalStateException("Datagen system has already been configured.");
+        }
     }
     
     public ModX mod() {
@@ -119,6 +134,15 @@ public class DatagenSystem {
     }
 
     /**
+     * Sets the resource root relative to the {@link FMLPaths#GAMEDIR game dir}. This is used to allow resource lookup
+     * in {@link #dynamic(String, PackType, PackTarget...) dynamic} pack targets.
+     */
+    public void setResourceRoot(String root) {
+        this.checkNotLocked();
+        this.resourceRoot = FMLPaths.GAMEDIR.get().resolve(root);
+    }
+    
+    /**
      * Creates a pack target for a vanilla-style nested datapack inside the first given parent.
      * Client resources can't be output on this target.
      */
@@ -135,9 +159,12 @@ public class DatagenSystem {
      */
     public PackTarget dynamic(String id, PackType type, PackTarget... parents) {
         String prefix = LibXPack.PACK_CONFIG.get(type).prefix();
-        return this.makePackTarget(prefix + "[" + id + "]", parents)
-                .setOutput(type, this.mainTarget.path(type).resolve(prefix).resolve(id))
-                .build();
+        PackTargetBuilder builder =  this.makePackTarget(prefix + "[" + id + "]", parents)
+                .setOutput(type, this.mainTarget.path(type).resolve(prefix).resolve(id));
+        if (this.resourceRoot != null) {
+            builder.resources(type, this.resourceRoot.resolve(prefix).resolve(id));
+        }
+        return builder.build();
     }
 
     /**
@@ -164,17 +191,21 @@ public class DatagenSystem {
      * If no parents are given, {@link #mainTarget()} is assumed.
      */
     public PackTargetBuilder makePackTarget(String name, PackTarget... parents) {
+        this.checkNotLocked();
         PackTarget mainParent;
+        List<PackTarget> allParents;
         List<DatagenRegistrySet> parentRegistries;
         if (parents.length == 0) {
             mainParent = this.mainTarget;
+            allParents = List.of(this.mainTarget);
             parentRegistries = List.of((DatagenRegistrySet) this.mainTarget.registries());
         } else {
             mainParent = parents[0];
+            allParents = List.of(parents);
             parentRegistries = Arrays.stream(parents).map(parent -> (DatagenRegistrySet) parent.registries()).toList();
         }
         DatagenRegistrySet registries = new DatagenRegistrySet(parentRegistries);
-        return new PackTargetBuilder(name, registries, mainParent.outputMap());
+        return new PackTargetBuilder(name, registries, mainParent.outputMap(), allParents);
     }
 
     /**
@@ -188,6 +219,7 @@ public class DatagenSystem {
      * Adds a provider to run in the {@link DatagenStage#REGISTRY_SETUP registry setup stage}.
      */
     public void addRegistryProvider(PackTarget target, Function<DatagenContext, RegistryProvider> provider) {
+        this.checkNotLocked();
         this.registryProviders.add(new InternalDataProvider.Entry<>(target, provider));
     }
     
@@ -202,6 +234,7 @@ public class DatagenSystem {
      * Adds a provider to run in the {@link DatagenStage#EXTENSION_SETUP extension setup stage}.
      */
     public void addExtensionProvider(PackTarget target, Function<DatagenContext, RegistryProvider> provider) {
+        this.checkNotLocked();
         this.extensionProviders.add(new InternalDataProvider.Entry<>(target, provider));
     }
 
@@ -216,10 +249,12 @@ public class DatagenSystem {
      * Adds a provider to run in the {@link DatagenStage#DATAGEN datagen stage}.
      */
     public void addDataProvider(PackTarget target, Function<DatagenContext, DataProvider> provider) {
+        this.checkNotLocked();
         this.dataProviders.add(new InternalDataProvider.Entry<>(target, provider));
     }
     
     private void hookIntoGenerator() {
+        this.locked = true;
         this.generator.addProvider(true, new InternalDataProvider(this, this.rootRegistries, this.registryProviders, this.extensionProviders, this.dataProviders));
     }
     
@@ -228,11 +263,17 @@ public class DatagenSystem {
         private final String name;
         private final DatagenRegistrySet registries;
         private final Map<PackType, Path> outputMap;
+        private final List<PackTarget> parents;
+        private final Map<PackType, String> prefixMap;
+        private final Map<PackType, List<Path>> resourcePathMap;
 
-        private PackTargetBuilder(String name, DatagenRegistrySet registries, Map<PackType, Path> outputMap) {
+        private PackTargetBuilder(String name, DatagenRegistrySet registries, Map<PackType, Path> outputMap, List<PackTarget> parents) {
             this.name = name;
             this.registries = registries;
             this.outputMap = new HashMap<>(outputMap);
+            this.parents = parents;
+            this.prefixMap = new HashMap<>();
+            this.resourcePathMap = new HashMap<>();
         }
 
         /**
@@ -240,12 +281,14 @@ public class DatagenSystem {
          */
         public PackTargetBuilder setOutput(PackType type, Path path) {
             this.outputMap.put(type, path);
+            this.prefixMap.remove(type);
             return this;
         }
         
         /**
          * Changes the output path for the given {@link PackType} by {@link Path#resolve(String) resolving} the given
-         * sub-path to the current output path.
+         * sub-path to the current output path. This also adds a resource prefix for resource lookup through the
+         * {@link PackTarget#find(PackType, ResourceLocation)} method.
          */
         public PackTargetBuilder resolveOutput(PackType type, String... subPath) {
             if (!this.outputMap.containsKey(type)) {
@@ -254,6 +297,7 @@ public class DatagenSystem {
             Path path = this.outputMap.get(type);
             for (String pathPart : subPath) path = path.resolve(pathPart);
             this.outputMap.put(type, path);
+            this.prefixMap.put(type, String.join("/", subPath));
             return this;
         }
 
@@ -266,10 +310,18 @@ public class DatagenSystem {
         }
 
         /**
+         * Adds a path for resource lookup through {@link PackTarget#find(PackType, ResourceLocation)}.
+         */
+        public PackTargetBuilder resources(PackType type, Path path) {
+            this.resourcePathMap.computeIfAbsent(type, k -> new ArrayList<>()).add(path);
+            return this;
+        }
+        
+        /**
          * Builds the resulting {@link PackTarget}.
          */
         public PackTarget build() {
-            return new PackTarget(this.name, DatagenSystem.this, this.registries, this.outputMap);
+            return new PackTarget(this.name, DatagenSystem.this, this.registries, this.outputMap, this.prefixMap, this.resourcePathMap, this.parents);
         }
     }
 }

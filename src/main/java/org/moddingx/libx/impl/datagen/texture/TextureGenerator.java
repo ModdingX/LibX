@@ -4,12 +4,12 @@ import com.google.common.hash.HashCode;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.datagen.PackTarget;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -18,11 +18,9 @@ import java.util.concurrent.CompletableFuture;
 public class TextureGenerator {
 
     private final PackTarget packTarget;
-    private final ExistingFileHelper fileHelper;
 
-    public TextureGenerator(PackTarget packTarget, ExistingFileHelper fileHelper) {
+    public TextureGenerator(PackTarget packTarget) {
         this.packTarget = packTarget;
-        this.fileHelper = fileHelper;
     }
 
     public CompletableFuture<?> save(CachedOutput output, ResourceLocation id, BufferedImage image) {
@@ -47,11 +45,10 @@ public class TextureGenerator {
     }
     
     public BufferedImage loadImage(ResourceLocation image) {
-        if (!this.fileHelper.exists(image, PackType.CLIENT_RESOURCES)) {
-            throw new RuntimeException("Texture does not exists: " + image);
-        }
-        try (InputStream in = this.fileHelper.getResource(image, PackType.CLIENT_RESOURCES).open()) {
+        try (InputStream in = this.packTarget.find(PackType.CLIENT_RESOURCES, image).open()) {
             return ImageIO.read(in);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Texture does not exists: " + image);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load texture: " + image, e);
         }
