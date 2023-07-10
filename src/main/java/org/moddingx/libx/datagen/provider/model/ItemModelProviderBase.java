@@ -118,7 +118,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
             this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(WALL_PARENT)).texture("wall", texture);
         } else if (item.getBlock() instanceof DecoratedTrapdoorBlock) {
             this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath() + "_bottom")));
-        } else if (item.getBlock() instanceof DecoratedDoorBlock || item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall) {
+        } else if (item.getBlock() instanceof DecoratedDoorBlock || item.getBlock() instanceof DecoratedSign.Standing || item.getBlock() instanceof DecoratedSign.Wall || item.getBlock() instanceof DecoratedHangingSign.Ceiling || item.getBlock() instanceof DecoratedHangingSign.Wall) {
             this.withExistingParent(id.getPath(), GENERATED).texture("layer0", new ResourceLocation(id.getNamespace(), "item/" + id.getPath()));
         } else {
             this.getBuilder(id.getPath()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
