@@ -37,12 +37,12 @@ import java.util.function.Function;
 /**
  * SandBox provider for {@link LevelStem dimensions}.
  *
- * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
+ * This provider must run in the {@link DatagenStage#EXTENSION_SETUP registry setup} stage.
  */
 public abstract class DimensionProviderBase extends RegistryProviderBase {
 
     protected DimensionProviderBase(DatagenContext ctx) {
-        super(ctx, DatagenStage.REGISTRY_SETUP);
+        super(ctx, DatagenStage.EXTENSION_SETUP);
     }
 
     @Override

@@ -64,6 +64,8 @@ public final class LibX extends ModX {
         NetworkImpl network = new NetworkImpl(this);
         networkWrapper = new CommonNetwork(network);
 
+        // level stem needs to be in extension phase, so it can reference surface data.
+        DatagenSystem.registerExtensionRegistry(Registries.LEVEL_STEM);
         DatagenSystem.registerExtensionRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS);
         DatagenSystem.registerExtensionRegistry(ForgeRegistries.Keys.STRUCTURE_MODIFIERS);
         DatagenSystem.registerExtensionRegistry(SandBox.BIOME_SURFACE);
