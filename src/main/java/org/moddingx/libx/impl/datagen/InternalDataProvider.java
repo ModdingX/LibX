@@ -99,7 +99,7 @@ public class InternalDataProvider implements DataProvider {
         // Run providers
         List<CompletableFuture<?>> futures = new ArrayList<>();
         for (DataProvider provider : theDataProviders) {
-            futures.add(this.runTimed(provider.getName(), DatagenStage.EXTENSION_SETUP, () -> provider.run(output)));
+            futures.add(this.runTimed(provider.getName(), DatagenStage.DATAGEN, () -> provider.run(output)));
         }
         
         return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
