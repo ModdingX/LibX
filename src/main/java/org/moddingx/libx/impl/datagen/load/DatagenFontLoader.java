@@ -23,7 +23,9 @@ import java.util.stream.Collectors;
 
 public class DatagenFontLoader {
     
-    public static final StringSplitter MISSING = new StringSplitter((cp, style) -> SpecialGlyphs.MISSING.getAdvance(style.isBold()));
+    // Makes everything zero-width. Useful when splitting strings that have formatting codes.
+    public static final ResourceLocation ZERO_WIDTH_FONT = LibX.getInstance().resource("zero_width");
+    public static final StringSplitter MISSING = new StringSplitter((cp, style) -> ZERO_WIDTH_FONT.equals(style.getFont()) ? 0 : SpecialGlyphs.MISSING.getAdvance(style.isBold()));
     
     private static StringSplitter fontMetrics;
     
@@ -48,6 +50,7 @@ public class DatagenFontLoader {
                 }).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
                 List<GlyphProvider> defaultGlyphProviders = providerMap.getOrDefault(Style.DEFAULT_FONT, List.of());
                 fontMetrics = new StringSplitter((cp, style) -> {
+                    if (ZERO_WIDTH_FONT.equals(style.getFont())) return 0;
                     for (GlyphProvider provider : providerMap.getOrDefault(style.getFont(), defaultGlyphProviders)) {
                         GlyphInfo glyph = provider.getGlyph(cp);
                         if (glyph != null) return glyph.getAdvance(style.isBold());

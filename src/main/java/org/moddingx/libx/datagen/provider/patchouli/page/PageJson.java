@@ -87,10 +87,9 @@ public class PageJson {
         return List.copyOf(pages);
     }
     
-    // Make a component, where formatting codes have an obfuscated style, so they can be 0 width in
-    // our custom width provider.
+    // Make a component, where formatting codes use a marker for a zero width font recognised by the splitter.
     private static Component displayText(String text) {
-        Style obfuscated = Style.EMPTY.withObfuscated(true);
+        Style zeroWidth = Style.EMPTY.withFont(DatagenFontLoader.ZERO_WIDTH_FONT);
         MutableComponent display = Component.empty();
         
         StringBuilder current = new StringBuilder();
@@ -121,7 +120,7 @@ public class PageJson {
                 }
             } else {
                 if (!currentFmt.isEmpty()) {
-                    display.append(Component.literal(currentFmt.toString()).setStyle(obfuscated));
+                    display.append(Component.literal(currentFmt.toString()).setStyle(zeroWidth));
                     currentFmt = new StringBuilder();
                 }
                 current.append(text.charAt(idx));
@@ -132,7 +131,7 @@ public class PageJson {
             display.append(Component.literal(current.toString()).setStyle(Style.EMPTY));
         }
         if (!currentFmt.isEmpty()) {
-            display.append(Component.literal(currentFmt.toString()).setStyle(obfuscated));
+            display.append(Component.literal(currentFmt.toString()).setStyle(zeroWidth));
         }
         return display;
     }
