@@ -36,6 +36,10 @@ public class ReflectionHacksTest {
         assertThrows(IllegalArgumentException.class, () -> ReflectionHacks.setFinalField(C.class.getField("VALUE"), null, null));
         
         assertThrows(IOException.class, () -> ReflectionHacks.throwUnchecked(new IOException()), "ReflectionHacks.throwUnchecked did not throw an IOException");
+
+        ClassWithThrowingConstructor emptyInstance = assertDoesNotThrow(() -> ReflectionHacks.newInstance(ClassWithThrowingConstructor.class), "ReflectionHacks.newInstance threw an exception");
+        //noinspection DataFlowIssue
+        assertNull(emptyInstance.value, "ReflectionHacks.newInstance did not produce an empty object");
     }
     
     private static class A {
@@ -64,4 +68,13 @@ public class ReflectionHacksTest {
     
     // Can't use strings in static final fields as they are inlined by the compiler.
     private record WrappedString(String value) {}
+    
+    private static class ClassWithThrowingConstructor {
+        
+        public final WrappedString value = new WrappedString("");
+        
+        public ClassWithThrowingConstructor() {
+            throw new IllegalStateException("ReflectionHacks.newInstance called the constructor.");
+        }
+    }
 }

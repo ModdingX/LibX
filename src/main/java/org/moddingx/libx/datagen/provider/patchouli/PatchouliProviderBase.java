@@ -44,7 +44,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
         
         // Preload font information now as we won't have an ExistingFileHelper available later
         // See PageJson#splitText
-        DatagenFontLoader.getFontWidthProvider(this.fileHelper);
+        DatagenFontLoader.getFontMetrics(this.fileHelper);
         
         this.categories = new ArrayList<>();
         this.categoryIds = new HashSet<>();

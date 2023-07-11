@@ -23,6 +23,11 @@ public class ReflectionHacks {
         unsafe.get().throwException(t);
     }
     
+    public static <T> T newInstance(Class<T> cls) throws InstantiationException {
+        //noinspection unchecked
+        return (T) unsafe.get().allocateInstance(cls);
+    }
+    
     public static void setFinalField(Field field, Object instance, @Nullable Object value) {
         Object base;
         long offset;

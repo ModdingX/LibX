@@ -75,8 +75,7 @@ public class PageJson {
      */
     public static List<String> splitText(String text, int linesHead, int linesTail) {
         Component displayText = displayText(text);
-        StringSplitter.WidthProvider width = DatagenFontLoader.getFontWidthProvider(null);
-        StringSplitter splitter = new StringSplitter((codePoint, style) -> style.isObfuscated() ? 0 : width.getWidth(codePoint, style));
+        StringSplitter splitter = DatagenFontLoader.getFontMetrics(null);
         List<String> lines = splitter.splitLines(displayText, Math.round(116 * 1.65f), Style.EMPTY).stream().map(FormattedText::getString).map(String::strip).filter(s -> !s.isEmpty()).toList();
         List<String> pages = new ArrayList<>();
         boolean first = true;
