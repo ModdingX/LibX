@@ -55,7 +55,7 @@ public class TripleEditor<A, B, C> implements ConfigEditor<Triple<A, B, C>> {
         public TripleWidget(Screen screen, ConfigEditor<A> editor1, ConfigEditor<B> editor2, ConfigEditor<C> editor3,
                             A left, B middle, C right, @Nullable AbstractWidget leftWidget, @Nullable AbstractWidget middleWidget,
                             @Nullable AbstractWidget rightWidget, WidgetProperties<Triple<A, B, C>> properties) {
-            super(screen, properties.x(), properties.y(), properties.width(), properties.height());
+            super(properties.x(), properties.y(), properties.width(), properties.height());
             
             this.left = left;
             this.middle = middle;

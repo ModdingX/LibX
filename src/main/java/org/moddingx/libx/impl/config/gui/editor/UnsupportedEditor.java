@@ -35,9 +35,7 @@ public class UnsupportedEditor<T> implements ConfigEditor<T> {
     }
     
     private AbstractWidget create(WidgetProperties<T> properties) {
-        Button button = new UnsupportedButton(properties.x(), properties.y(), properties.width(), properties.height(), Component.translatable("libx.config.editor.unsupported.title").withStyle(ChatFormatting.RED), Tooltip.create(Component.translatable("libx.config.editor.unsupported.description")), b -> {});
-        button.active = false;
-        return button;
+        return new UnsupportedButton(properties.x(), properties.y(), properties.width(), properties.height(), Component.translatable("libx.config.editor.unsupported.title").withStyle(ChatFormatting.RED), Tooltip.create(Component.translatable("libx.config.editor.unsupported.description")), b -> {});
     }
     
     // Required so it's not possible to enable the button via EditorOps
@@ -48,6 +46,7 @@ public class UnsupportedEditor<T> implements ConfigEditor<T> {
                     .pos(x, y)
                     .size(width, height));
             this.setTooltip(tooltip);
+            this.active = false;
         }
 
         @Override

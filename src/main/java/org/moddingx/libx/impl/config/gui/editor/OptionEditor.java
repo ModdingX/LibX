@@ -51,7 +51,7 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
         private T value;
         
         private OptionWidget(Screen screen, ConfigEditor<T> editor, WidgetProperties<Optional<T>> properties, T value, boolean selected, @Nullable AbstractWidget old) {
-            super(screen, properties.x() - 22, properties.y(), properties.width() + 22, properties.height());
+            super(properties.x() - 22, properties.y(), properties.width() + 22, properties.height());
 
             this.inputChanged = properties.inputChanged();
             this.value = value;
@@ -91,6 +91,7 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
         @Override
         public void enabled(boolean enabled) {
             EditorOps.wrap(this.box).enabled(enabled);
+            EditorOps.wrap(this.widget).enabled(enabled && this.box.selected());
         }
     }
 }

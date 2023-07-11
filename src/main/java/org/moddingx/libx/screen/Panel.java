@@ -1,36 +1,39 @@
 package org.moddingx.libx.screen;
 
+import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.EditorOps;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * An {@link AbstractWidget} that is composed of multiple other widgets. These
  * widgets are positioned relative to this widget. You can add these widgets in
  * the constructor.
  */
-public abstract class Panel extends AbstractWidget implements EditorOps {
+public abstract class Panel extends AbstractWidget implements ContainerEventHandler, EditorOps {
 
-    protected final Screen screen;
     private final List<GuiEventListener> children = new ArrayList<>();
     private final List<Renderable> renderables = new ArrayList<>();
 
     @Nullable
-    protected GuiEventListener focused = null;
+    private GuiEventListener focused = null;
+    private boolean dragging = false;
 
-    public Panel(Screen screen, int x, int y, int width, int height) {
+    public Panel(int x, int y, int width, int height) {
         super(x, y, width, height, Component.empty());
-        this.screen = screen;
     }
 
     /**
@@ -41,7 +44,7 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
         this.children.add(widget);
         return widget;
     }
-    
+
     /**
      * Adds a component that can be rendered.
      */
@@ -49,13 +52,19 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
         this.renderables.add(widget);
         return widget;
     }
-    
+
     /**
      * Adds a widget to listen to events.
      */
     protected <T extends GuiEventListener> T addWidget(T widget) {
         this.children.add(widget);
         return widget;
+    }
+
+    @Nonnull
+    @Override
+    public List<? extends GuiEventListener> children() {
+        return Collections.unmodifiableList(this.children);
     }
 
     @Override
@@ -68,53 +77,53 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
         graphics.pose().popPose();
     }
 
+    @Nonnull
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        boolean success = false;
-        for (GuiEventListener child : this.children) {
-            if (child.mouseClicked(mouseX - this.getX(), mouseY - this.getY(), button)) {
-                this.screen.setFocused(this);
-                this.focused = child;
-                if (button == 0) {
-                    this.screen.setDragging(true);
-                }
-                success = true;
-            }
-        }
-        return success;
+    public Optional<GuiEventListener> getChildAt(double mouseX, double mouseY) {
+        return ContainerEventHandler.super.getChildAt(mouseX - this.getX(), mouseY - this.getY());
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        this.screen.setDragging(false);
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (GuiEventListener child : this.children) {
-            if (child.isMouseOver(mouseX - this.getX(), mouseY - this.getY())) {
-                if (child.mouseReleased(mouseX - this.getX(), mouseY - this.getY(), button)) {
-                    return true;
-                }
+            if (child.mouseClicked(mouseX - this.getX(), mouseY - this.getY(), button)) {
+                this.setFocused(child);
+                if (button == 0) this.setDragging(true);
+                return true;
             }
         }
         return false;
     }
 
     @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        this.setDragging(false);
+        return this.getChildAt(mouseX, mouseY).filter(child -> child.mouseReleased(mouseX - this.getX(), mouseY - this.getY(), button)).isPresent();
+    }
+
+    @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return this.focused != null && this.screen.isDragging() && this.focused.mouseDragged(mouseX - this.getX(), mouseY - this.getY(), button, dragX - this.getX(), dragY - this.getY());
+        return this.focused != null && this.dragging && button == 0 && this.focused.mouseDragged(mouseX - this.getX(), mouseY - this.getY(), button, dragX - this.getX(), dragY - this.getY());
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        return this.getChildAt(mouseX, mouseY).filter(child -> child.mouseScrolled(mouseX - this.getX(), mouseY - this.getY(), delta)).isPresent();
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return this.focused != null && this.focused.keyPressed(keyCode, scanCode, modifiers);
+        return ContainerEventHandler.super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        return this.focused != null && this.focused.keyReleased(keyCode, scanCode, modifiers);
+        return ContainerEventHandler.super.keyReleased(keyCode, scanCode, modifiers);
     }
 
     @Override
     public boolean charTyped(char value, int modifiers) {
-        return this.focused != null && this.focused.charTyped(value, modifiers);
+        return ContainerEventHandler.super.charTyped(value, modifiers);
     }
 
     @Override
@@ -123,8 +132,57 @@ public abstract class Panel extends AbstractWidget implements EditorOps {
     }
 
     @Override
+    public void setFocused(boolean focused) {
+        super.setFocused(focused);
+        this.updateChildFocus();
+    }
+
+    @Nullable
+    @Override
+    public GuiEventListener getFocused() {
+        return this.focused;
+    }
+
+    @Override
+    public void setFocused(@Nullable GuiEventListener focused) {
+        this.focused = this.children.contains(focused) ? focused : null;
+        this.setFocused(focused != null);
+    }
+
+    private void updateChildFocus() {
+        for (GuiEventListener child : this.children) {
+            boolean shouldBeFocused = this.isFocused() && child == this.focused;
+            if (child.isFocused() != shouldBeFocused) {
+                child.setFocused(shouldBeFocused);
+            }
+        }
+    }
+
+    @Nullable
+    @Override
+    public ComponentPath getCurrentFocusPath() {
+        return ContainerEventHandler.super.getCurrentFocusPath();
+    }
+
+    @Nullable
+    @Override
+    public ComponentPath nextFocusPath(@Nonnull FocusNavigationEvent event) {
+        return ContainerEventHandler.super.nextFocusPath(event);
+    }
+
+    @Override
+    public boolean isDragging() {
+        return this.dragging;
+    }
+
+    @Override
+    public void setDragging(boolean dragging) {
+        this.dragging = dragging;
+    }
+
+    @Override
     public void enabled(boolean enabled) {
-        for (Renderable child : this.renderables) {
+        for (GuiEventListener child : this.children) {
             EditorOps.wrap(child).enabled(enabled);
         }
     }

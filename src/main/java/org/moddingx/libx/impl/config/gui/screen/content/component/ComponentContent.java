@@ -264,7 +264,7 @@ public class ComponentContent implements ConfigScreenContent<Component> {
         };
         consumer.accept(hasColorWidget);
 
-        this.colorWidget = new ColorPicker(screen, 37, y, this.colorWidget);
+        this.colorWidget = new ColorPicker(37, y, this.colorWidget);
         this.colorWidget.setColor(this.color);
         this.colorWidget.setResponder(color -> {
             this.color = color;

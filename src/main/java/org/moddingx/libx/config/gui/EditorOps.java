@@ -2,7 +2,7 @@ package org.moddingx.libx.config.gui;
 
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 
 import java.util.Optional;
 
@@ -21,9 +21,9 @@ public interface EditorOps {
     }
 
     /**
-     * Wraps a {@link Renderable} into matching editor ops.
+     * Wraps a {@link GuiEventListener} into matching editor ops.
      */
-    static EditorOps wrap(Renderable widget) {
+    static EditorOps wrap(GuiEventListener widget) {
         if (widget instanceof EditorOps ops) {
             return ops;
         } else if (widget instanceof EditBox base) {
@@ -31,6 +31,7 @@ public interface EditorOps {
                 @Override
                 public void enabled(boolean enabled) {
                     base.setEditable(enabled);
+                    base.active = enabled;
                 }
             };
         } else if (widget instanceof AbstractWidget base) {

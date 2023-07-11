@@ -51,7 +51,7 @@ public class PairEditor<A, B> implements ConfigEditor<Pair<A, B>> {
         public PairWidget(Screen screen, ConfigEditor<A> editor1, ConfigEditor<B> editor2,
                           A left, B right, @Nullable AbstractWidget leftWidget, @Nullable AbstractWidget rightWidget,
                           WidgetProperties<Pair<A, B>> properties) {
-            super(screen, properties.x(), properties.y(), properties.width(), properties.height());
+            super(properties.x(), properties.y(), properties.width(), properties.height());
             
             this.left = left;
             this.right = right;

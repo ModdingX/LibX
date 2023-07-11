@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -67,12 +66,12 @@ public class ColorPicker extends Panel {
     
     private boolean enabled;
     
-    public ColorPicker(Screen screen, int x, int y) {
-        this(screen, x, y, null);
+    public ColorPicker(int x, int y) {
+        this(x, y, null);
     }
     
-    public ColorPicker(Screen screen, int x, int y, @Nullable ColorPicker old) {
-        super(screen, x, y, WIDTH, HEIGHT);
+    public ColorPicker(int x, int y, @Nullable ColorPicker old) {
+        super(x, y, WIDTH, HEIGHT);
         
         this.colorValue = new CachedValue<>(() -> TextColor.fromRgb(((this.red & 0xFF) << 16) | ((this.green & 0xFF) << 8) | (this.blue & 0xFF)));
         
@@ -244,12 +243,12 @@ public class ColorPicker extends Panel {
             this.saturation = (float) (Mth.clamp(mouseX, 0, 100) / (float) 100);
             this.brightness = (float) (1 - (Mth.clamp(mouseY, 0, 100) / (float) 100));
             this.updateRGB();
-            this.focused = null;
+            this.setFocused(null);
             return true;
         } else if (boundsX >= 105 && boundsX <= 110 && boundsY >= 0 && boundsY <= 100) {
             this.hue = (float) (Mth.clamp(mouseY, 0, 100) / (float) 100);
             this.updateRGB();
-            this.focused = null;
+            this.setFocused(null);
             return true;
         } else {
             return false;
