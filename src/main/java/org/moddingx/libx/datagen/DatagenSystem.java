@@ -160,7 +160,7 @@ public class DatagenSystem {
     public PackTarget dynamic(String id, PackType type, PackTarget... parents) {
         String prefix = LibXPack.PACK_CONFIG.get(type).prefix();
         PackTargetBuilder builder =  this.makePackTarget(prefix + "[" + id + "]", parents)
-                .setOutput(type, this.mainTarget.path(type).resolve(prefix).resolve(id));
+                .setOutput(type, this.mainOutput().resolve(prefix).resolve(id));
         if (this.resourceRoot != null) {
             builder.resources(type, this.resourceRoot.resolve(prefix).resolve(id));
         }
