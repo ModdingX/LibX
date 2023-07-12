@@ -20,7 +20,7 @@ public class LibXPack extends PathPackResources {
 
     @SuppressWarnings("deprecation")
     public static final Map<PackType, PackTypeConfig> PACK_CONFIG = Map.of(
-            PackType.CLIENT_RESOURCES, new PackTypeConfig(PackSource.BUILT_IN, "libxassets", SharedConstants.RESOURCE_PACK_FORMAT),
+            PackType.CLIENT_RESOURCES, new PackTypeConfig(PackSource.FEATURE, "libxassets", SharedConstants.RESOURCE_PACK_FORMAT),
             PackType.SERVER_DATA, new PackTypeConfig(PackSource.DEFAULT, "libxdata", SharedConstants.DATA_PACK_FORMAT)
     );
     
