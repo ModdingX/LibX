@@ -191,6 +191,10 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
         } else if (block instanceof DecoratedSign.Wall decorated) {
             this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
+        } else if (block instanceof DecoratedHangingSign.Ceiling decorated) {
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
+        } else if (block instanceof DecoratedHangingSign.Wall decorated) {
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
