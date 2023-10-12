@@ -841,7 +841,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/FilterGuiGraphics.html#blitNineSliced(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitNineSliced(ResourceLocation, int, int, int, int, int, int, int, int, int, int, int, int)</a> - Method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/FilterGuiGraphics.html" title="class in org.moddingx.libx.render">FilterGuiGraphics</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/FilterGuiGraphics.html#blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitNineSlicedSized(ResourceLocation, int, int, int, int, int, int, int, int, int, int, int)</a> - Method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/FilterGuiGraphics.html" title="class in org.moddingx.libx.render">FilterGuiGraphics</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/FilterGuiGraphics.html#blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitNineSlicedSized(ResourceLocation, int, int, int, int, int, int, int, int, int, int, int, int)</a> - Method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/FilterGuiGraphics.html" title="class in org.moddingx.libx.render">FilterGuiGraphics</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/FilterGuiGraphics.html#blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitNineSlicedSized(ResourceLocation, int, int, int, int, int, int, int, int, int, int, int, int, int, int)</a> - Method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/FilterGuiGraphics.html" title="class in org.moddingx.libx.render">FilterGuiGraphics</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/FilterGuiGraphics.html#blitRepeating(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int)" class="member-name-link">blitRepeating(ResourceLocation, int, int, int, int, int, int, int, int)</a> - Method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/FilterGuiGraphics.html" title="class in org.moddingx.libx.render">FilterGuiGraphics</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/FilterGuiGraphics.html#blitRepeating(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitRepeating(ResourceLocation, int, int, int, int, int, int, int, int, int, int)</a> - Method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/FilterGuiGraphics.html" title="class in org.moddingx.libx.render">FilterGuiGraphics</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/FilterGuiGraphics.html#blitWithBorder(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitWithBorder(ResourceLocation, int, int, int, int, int, int, int, int, int)</a> - Method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/FilterGuiGraphics.html" title="class in org.moddingx.libx.render">FilterGuiGraphics</a></dt>
 <dd>&nbsp;</dd>
@@ -5043,6 +5051,16 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/network/NetworkX.ProtocolSide.html#OPTIONAL" class="member-name-link">OPTIONAL</a> - Enum constant in enum class org.moddingx.libx.network.<a href="org/moddingx/libx/network/NetworkX.ProtocolSide.html" title="enum class in org.moddingx.libx.network">NetworkX.ProtocolSide</a></dt>
 <dd>
 <div class="block">The connection is accepted if the remote side is running on forge.</div>
+</dd>
+<dt><a href="org/moddingx/libx/codec/MoreCodecs.html#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String)" class="member-name-link">optionalFieldOf(Codec&lt;T&gt;, String)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
+<dd>
+<div class="block">Behaves the same as <code>Codec.optionalFieldOf(String)</code> but instead of silently using the default value
+ if decoding the element prodices an error, propagates the error through.</div>
+</dd>
+<dt><a href="org/moddingx/libx/codec/MoreCodecs.html#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,T)" class="member-name-link">optionalFieldOf(Codec&lt;T&gt;, String, T)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
+<dd>
+<div class="block">Behaves the same as <code>Codec.optionalFieldOf(String, Object)</code> but instead of silently using the default
+ value if decoding the element prodices an error, propagates the error through.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/CodecHelper.html#or(java.util.function.Supplier...)" class="member-name-link">or(Supplier&lt;DataResult&lt;T&gt;&gt;...)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/CodecHelper.html" title="class in org.moddingx.libx.codec">CodecHelper</a></dt>
 <dd>

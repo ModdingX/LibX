@@ -262,7 +262,53 @@ loadScripts(document, 'script');</script>
  int&nbsp;sourceY)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blitRepeating(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int)" class="member-name-link">blitRepeating</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitNineSlicedSized</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;sliceSize,
+ int&nbsp;uWidth,
+ int&nbsp;vHeight,
+ int&nbsp;uOffset,
+ int&nbsp;vOffset,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitNineSlicedSized</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;sliceWidth,
+ int&nbsp;sliceHeight,
+ int&nbsp;uWidth,
+ int&nbsp;vHeight,
+ int&nbsp;uOffset,
+ int&nbsp;vOffset,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitNineSlicedSized</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;cornerWidth,
+ int&nbsp;cornerHeight,
+ int&nbsp;edgeWidth,
+ int&nbsp;edgeHeight,
+ int&nbsp;uWidth,
+ int&nbsp;vHeight,
+ int&nbsp;uOffset,
+ int&nbsp;vOffset,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blitRepeating(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int)" class="member-name-link">blitRepeating</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
  int&nbsp;targetX,
  int&nbsp;targetY,
  int&nbsp;targetWidth,
@@ -271,6 +317,19 @@ loadScripts(document, 'script');</script>
  int&nbsp;sourceY,
  int&nbsp;sourceWidth,
  int&nbsp;sourceHeight)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blitRepeating(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitRepeating</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;sourceX,
+ int&nbsp;sourceY,
+ int&nbsp;sourceWidth,
+ int&nbsp;sourceHeight,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blitWithBorder(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int)" class="member-name-link">blitWithBorder</a><wbr>(net.minecraft.resources.ResourceLocation&nbsp;texture,
@@ -1353,6 +1412,64 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int)">
+<h3>blitNineSlicedSized</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">blitNineSlicedSized</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
+ net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;sliceSize,
+ int&nbsp;uWidth,
+ int&nbsp;vHeight,
+ int&nbsp;uOffset,
+ int&nbsp;vOffset,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int,int)">
+<h3>blitNineSlicedSized</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">blitNineSlicedSized</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
+ net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;sliceWidth,
+ int&nbsp;sliceHeight,
+ int&nbsp;uWidth,
+ int&nbsp;vHeight,
+ int&nbsp;uOffset,
+ int&nbsp;vOffset,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="blitNineSlicedSized(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int,int,int,int,int)">
+<h3>blitNineSlicedSized</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">blitNineSlicedSized</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
+ net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;cornerWidth,
+ int&nbsp;cornerHeight,
+ int&nbsp;edgeWidth,
+ int&nbsp;edgeHeight,
+ int&nbsp;uWidth,
+ int&nbsp;vHeight,
+ int&nbsp;uOffset,
+ int&nbsp;vOffset,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="blitRepeating(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int)">
 <h3>blitRepeating</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">blitRepeating</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
@@ -1365,6 +1482,27 @@ loadScripts(document, 'script');</script>
  int&nbsp;sourceY,
  int&nbsp;sourceWidth,
  int&nbsp;sourceHeight)</span></div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code>blitRepeating</code>&nbsp;in class&nbsp;<code>net.minecraft.client.gui.GuiGraphics</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="blitRepeating(net.minecraft.resources.ResourceLocation,int,int,int,int,int,int,int,int,int,int)">
+<h3>blitRepeating</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">blitRepeating</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
+ net.minecraft.resources.ResourceLocation&nbsp;atlasLocation,
+ int&nbsp;targetX,
+ int&nbsp;targetY,
+ int&nbsp;targetWidth,
+ int&nbsp;targetHeight,
+ int&nbsp;sourceX,
+ int&nbsp;sourceY,
+ int&nbsp;sourceWidth,
+ int&nbsp;sourceHeight,
+ int&nbsp;textureWidth,
+ int&nbsp;textureHeight)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code>blitRepeating</code>&nbsp;in class&nbsp;<code>net.minecraft.client.gui.GuiGraphics</code></dd>

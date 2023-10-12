@@ -185,6 +185,21 @@ V&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child codec.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Behaves the same as <code>Codec.optionalFieldOf(String)</code> but instead of silently using the default value
+ if decoding the element prodices an error, propagates the error through.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,T)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ T&nbsp;defaultValue)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Behaves the same as <code>Codec.optionalFieldOf(String, Object)</code> but instead of silently using the default
+ value if decoding the element prodices an error, propagates the error through.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(com.mojang.serialization.Codec,org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
  <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
@@ -335,6 +350,29 @@ V&gt;</span>
 <h3>lazy</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">lazy</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.Codec&lt;T&gt;&gt;&nbsp;codec)</span></div>
 <div class="block">Lazily wraps the given <code>Codec</code>. Useful when codecs need to reference each other to recurse.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="optionalFieldOf(com.mojang.serialization.Codec,java.lang.String)">
+<h3>optionalFieldOf</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
+<span class="return-type">com.mojang.serialization.MapCodec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">optionalFieldOf</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="block">Behaves the same as <code>Codec.optionalFieldOf(String)</code> but instead of silently using the default value
+ if decoding the element prodices an error, propagates the error through. The only way this yields an empty
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> is if the key is completely missing.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,T)">
+<h3 id="optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,java.lang.Object)">optionalFieldOf</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
+<span class="return-type">com.mojang.serialization.MapCodec&lt;T&gt;</span>&nbsp;<span class="element-name">optionalFieldOf</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ T&nbsp;defaultValue)</span></div>
+<div class="block">Behaves the same as <code>Codec.optionalFieldOf(String, Object)</code> but instead of silently using the default
+ value if decoding the element prodices an error, propagates the error through. The only way this yields an
+ empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> is if the key is completely missing.</div>
 </section>
 </li>
 <li>
