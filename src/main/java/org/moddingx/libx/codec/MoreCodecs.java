@@ -14,6 +14,7 @@ import org.moddingx.libx.impl.codec.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -118,6 +119,27 @@ public class MoreCodecs {
      */
     public static <T> Codec<T> lazy(Supplier<Codec<T>> codec) {
         return new LazyCodec<>(codec);
+    }
+
+    /**
+     * Behaves the same as {@link Codec#optionalFieldOf(String)} but instead of silently using the default value
+     * if decoding the element prodices an error, propagates the error through. The only way this yields an empty
+     * {@link Optional} is if the key is completely missing.
+     */
+    public static <T> MapCodec<Optional<T>> optionalFieldOf(Codec<T> codec, String name) {
+        return new TrueOptionalMapCodec<>(codec, name);
+    }
+
+    /**
+     * Behaves the same as {@link Codec#optionalFieldOf(String, Object)} but instead of silently using the default
+     * value if decoding the element prodices an error, propagates the error through. The only way this yields an
+     * empty {@link Optional} is if the key is completely missing.
+     */
+    public static <T> MapCodec<T> optionalFieldOf(Codec<T> codec, String name, T defaultValue) {
+        return optionalFieldOf(codec, name).xmap(
+                (Optional<T> value) -> value.orElse(defaultValue),
+                (T value) -> Objects.equals(value, defaultValue) ? Optional.empty() : Optional.of(value)
+        );
     }
     
     /**

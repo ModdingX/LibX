@@ -254,8 +254,28 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
+    public void blitNineSlicedSized(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sliceSize, int uWidth, int vHeight, int uOffset, int vOffset, int textureWidth, int textureHeight) {
+        super.blitNineSlicedSized(atlasLocation, targetX, targetY, targetWidth, targetHeight, sliceSize, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
+    }
+
+    @Override
+    public void blitNineSlicedSized(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sliceWidth, int sliceHeight, int uWidth, int vHeight, int uOffset, int vOffset, int textureWidth, int textureHeight) {
+        super.blitNineSlicedSized(atlasLocation, targetX, targetY, targetWidth, targetHeight, sliceWidth, sliceHeight, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
+    }
+
+    @Override
+    public void blitNineSlicedSized(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int cornerWidth, int cornerHeight, int edgeWidth, int edgeHeight, int uWidth, int vHeight, int uOffset, int vOffset, int textureWidth, int textureHeight) {
+        super.blitNineSlicedSized(atlasLocation, targetX, targetY, targetWidth, targetHeight, cornerWidth, cornerHeight, edgeWidth, edgeHeight, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
+    }
+
+    @Override
     public void blitRepeating(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sourceX, int sourceY, int sourceWidth, int sourceHeight) {
         super.blitRepeating(atlasLocation, targetX, targetY, targetWidth, targetHeight, sourceX, sourceY, sourceWidth, sourceHeight);
+    }
+
+    @Override
+    public void blitRepeating(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sourceX, int sourceY, int sourceWidth, int sourceHeight, int textureWidth, int textureHeight) {
+        super.blitRepeating(atlasLocation, targetX, targetY, targetWidth, targetHeight, sourceX, sourceY, sourceWidth, sourceHeight, textureWidth, textureHeight);
     }
 
     @Override

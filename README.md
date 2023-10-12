@@ -24,6 +24,6 @@ dependencies {
 
 **Javadoc can be found at https://moddingx.org/libx**
 
-**The wiki can be found at https://moddingx.org/wiki**
+**The wiki can be found at https://moddingx.org/wiki/libx**
 
 **Join the dev discord: https://moddingx.org/discord**
