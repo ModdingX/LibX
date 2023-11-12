@@ -164,10 +164,20 @@ public class DatagenRegistrySet implements RegistrySet {
     
     public void transition(DatagenStage stage) {
         if (!this.isRoot()) throw new IllegalStateException("Stage transitions must happen on the root registry set");
-        this.doTransition(stage);
+        this.doTransitionSelf(stage);
+        this.doTransitionChildrenAfterSelf();
+        // Just to be sure: Check that all children have transitioned
+        this.checkTransition(stage);
     }
     
-    private void doTransition(DatagenStage newStage) {
+    private void checkTransition(DatagenStage newStage) {
+        if (this.stage != newStage) throw new IllegalStateException("Datagen registry stage transition failed on " + this + " (root=" + this.root + ").");
+        for (DatagenRegistrySet set : this.getDirectChildren()) {
+            set.checkTransition(newStage);
+        }
+    }
+    
+    private void doTransitionSelf(DatagenStage newStage) {
         DatagenStage oldStage = this.stage;
         if (oldStage.ordinal() == 0 && newStage.ordinal() == 0) return;
         if (oldStage.ordinal() + 1 != newStage.ordinal()) throw new IllegalArgumentException("Invalid transition: " + oldStage + " -> " + newStage);
@@ -184,23 +194,31 @@ public class DatagenRegistrySet implements RegistrySet {
         if (newStage == DatagenStage.DATAGEN) {
             this.localAccess = RegistryAccess.fromRegistryOfRegistries(this.makeRegistryOfRegistries());
         }
-        // Mark transition as complete (required for the next step)
-        this.stage = newStage;
+    }
+
+    private void doTransitionChildrenAfterSelf() {
         // Transition all children while making sure, a registry set is always transitioned after all its parents
-        List<DatagenRegistrySet> childrenLeft = new ArrayList<>(this.getDirectChildren());
+        List<DatagenRegistrySet> allChildrenToTransition = this.getDirectChildren().stream().filter(child -> child.stage != this.stage).toList();
+        List<DatagenRegistrySet> childrenLeft = new ArrayList<>(allChildrenToTransition);
         while (!childrenLeft.isEmpty()) {
             boolean deadCycle = true;
             Iterator<DatagenRegistrySet> itr = childrenLeft.iterator();
             while (itr.hasNext()) {
                 DatagenRegistrySet set = itr.next();
-                if (set.getDirectParents().stream().allMatch(parent -> parent.stage == newStage)) {
+                if (set.getDirectParents().stream().allMatch(parent -> parent.stage == this.stage)) {
                     // All parents have transitioned
-                    set.doTransition(newStage);
+                    // First only transition the direct children themselves
+                    // Transitive children must come afterward to not make dead cycles on multi-parent registry sets.
+                    set.doTransitionSelf(this.stage);
                     deadCycle = false;
                     itr.remove();
                 }
             }
-            if (deadCycle) throw new IllegalStateException("Dead cycle in state transition detected. This should not happen.");
+            if (deadCycle) throw new IllegalStateException("Dead cycle in datagen registry state transition detected.");
+        }
+        // Now transition the transitive children
+        for (DatagenRegistrySet set : allChildrenToTransition) {
+            set.doTransitionChildrenAfterSelf();
         }
     }
     
