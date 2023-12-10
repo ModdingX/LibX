@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>net.minecraft.world.flag.FeatureElement</code>, <code>net.minecraft.world.level.ItemLike</code>, <code>net.minecraftforge.common.extensions.IForgeBlock</code>, <code><a href="../registration/Registerable.html" title="interface in org.moddingx.libx.registration">Registerable</a></code></dd>
+<dd><code>net.minecraft.world.flag.FeatureElement</code>, <code>net.minecraft.world.level.ItemLike</code>, <code>net.minecraftforge.common.extensions.IForgeBlock</code>, <code><a href="../creativetab/CreativeTabItemProvider.html" title="interface in org.moddingx.libx.creativetab">CreativeTabItemProvider</a></code>, <code><a href="../registration/Registerable.html" title="interface in org.moddingx.libx.registration">Registerable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">BlockBase</span>
 <span class="extends-implements">extends net.minecraft.world.level.block.Block
-implements <a href="../registration/Registerable.html" title="interface in org.moddingx.libx.registration">Registerable</a></span></div>
+implements <a href="../registration/Registerable.html" title="interface in org.moddingx.libx.registration">Registerable</a>, <a href="../creativetab/CreativeTabItemProvider.html" title="interface in org.moddingx.libx.creativetab">CreativeTabItemProvider</a></span></div>
 <div class="block">Base class for <code>blocks</code> for mods using <a href="../mod/ModXRegistration.html" title="class in org.moddingx.libx.mod"><code>ModXRegistration</code></a>. This will automatically set the
  creative tab if it's defined in the mod and register a <code>block item</code>.</div>
 </section>
@@ -294,8 +294,12 @@ implements <a href="../registration/Registerable.html" title="interface in org.m
 <section class="detail" id="makeCreativeTabStacks()">
 <h3>makeCreativeTabStacks</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;net.minecraft.world.item.ItemStack&gt;</span>&nbsp;<span class="element-name">makeCreativeTabStacks</span>()</div>
-<div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link"><code>Stream</code></a> of <code>item stacks</code> to add to a creative tab.
- <a href="../creativetab/CreativeTabX.html" title="class in org.moddingx.libx.creativetab"><code>CreativeTabX</code></a> respects these by default.</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../creativetab/CreativeTabItemProvider.html#makeCreativeTabStacks()">CreativeTabItemProvider</a></code></span></div>
+<div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link"><code>Stream</code></a> of <code>item stacks</code> to add to a creative tab.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../creativetab/CreativeTabItemProvider.html#makeCreativeTabStacks()">makeCreativeTabStacks</a></code>&nbsp;in interface&nbsp;<code><a href="../creativetab/CreativeTabItemProvider.html" title="interface in org.moddingx.libx.creativetab">CreativeTabItemProvider</a></code></dd>
+</dl>
 </section>
 </li>
 <li>

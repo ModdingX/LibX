@@ -1795,6 +1795,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates a widget for a given initial value.</div>
 </dd>
+<dt><a href="org/moddingx/libx/creativetab/CreativeTabItemProvider.html" class="type-name-link" title="interface in org.moddingx.libx.creativetab">CreativeTabItemProvider</a> - Interface in <a href="org/moddingx/libx/creativetab/package-summary.html">org.moddingx.libx.creativetab</a></dt>
+<dd>
+<div class="block">Can be implemented on items to provide custom logic on how <a href="org/moddingx/libx/creativetab/CreativeTabX.html" title="class in org.moddingx.libx.creativetab"><code>CreativeTabX</code></a> should fill them by default.</div>
+</dd>
 <dt><a href="org/moddingx/libx/creativetab/CreativeTabX.html" class="type-name-link" title="class in org.moddingx.libx.creativetab">CreativeTabX</a> - Class in <a href="org/moddingx/libx/creativetab/package-summary.html">org.moddingx.libx.creativetab</a></dt>
 <dd>
 <div class="block">Class to register and populate a creative tab.</div>
@@ -4530,10 +4534,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates armor recipes for a material.</div>
 </dd>
 <dt><a href="org/moddingx/libx/base/BlockBase.html#makeCreativeTabStacks()" class="member-name-link">makeCreativeTabStacks()</a> - Method in class org.moddingx.libx.base.<a href="org/moddingx/libx/base/BlockBase.html" title="class in org.moddingx.libx.base">BlockBase</a></dt>
-<dd>
-<div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link"><code>Stream</code></a> of <code>item stacks</code> to add to a creative tab.</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/base/ItemBase.html#makeCreativeTabStacks()" class="member-name-link">makeCreativeTabStacks()</a> - Method in class org.moddingx.libx.base.<a href="org/moddingx/libx/base/ItemBase.html" title="class in org.moddingx.libx.base">ItemBase</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/creativetab/CreativeTabItemProvider.html#makeCreativeTabStacks()" class="member-name-link">makeCreativeTabStacks()</a> - Method in interface org.moddingx.libx.creativetab.<a href="org/moddingx/libx/creativetab/CreativeTabItemProvider.html" title="interface in org.moddingx.libx.creativetab">CreativeTabItemProvider</a></dt>
 <dd>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link"><code>Stream</code></a> of <code>item stacks</code> to add to a creative tab.</div>
 </dd>
@@ -5055,12 +5059,12 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String)" class="member-name-link">optionalFieldOf(Codec&lt;T&gt;, String)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String)</code> but instead of silently using the default value
- if decoding the element prodices an error, propagates the error through.</div>
+ if decoding the element produces an error, propagates the error through.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,T)" class="member-name-link">optionalFieldOf(Codec&lt;T&gt;, String, T)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String, Object)</code> but instead of silently using the default
- value if decoding the element prodices an error, propagates the error through.</div>
+ value if decoding the element produces an error, propagates the error through.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/CodecHelper.html#or(java.util.function.Supplier...)" class="member-name-link">or(Supplier&lt;DataResult&lt;T&gt;&gt;...)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/CodecHelper.html" title="class in org.moddingx.libx.codec">CodecHelper</a></dt>
 <dd>

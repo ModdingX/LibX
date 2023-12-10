@@ -190,7 +190,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String)</code> but instead of silently using the default value
- if decoding the element prodices an error, propagates the error through.</div>
+ if decoding the element produces an error, propagates the error through.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,T)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
@@ -198,7 +198,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
  T&nbsp;defaultValue)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String, Object)</code> but instead of silently using the default
- value if decoding the element prodices an error, propagates the error through.</div>
+ value if decoding the element produces an error, propagates the error through.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(com.mojang.serialization.Codec,org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
@@ -359,7 +359,7 @@ V&gt;</span>
 <span class="return-type">com.mojang.serialization.MapCodec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">optionalFieldOf</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String)</code> but instead of silently using the default value
- if decoding the element prodices an error, propagates the error through. The only way this yields an empty
+ if decoding the element produces an error, propagates the error through. The only way this yields an empty
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> is if the key is completely missing.</div>
 </section>
 </li>
@@ -371,7 +371,7 @@ V&gt;</span>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  T&nbsp;defaultValue)</span></div>
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String, Object)</code> but instead of silently using the default
- value if decoding the element prodices an error, propagates the error through. The only way this yields an
+ value if decoding the element produces an error, propagates the error through. The only way this yields an
  empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> is if the key is completely missing.</div>
 </section>
 </li>
