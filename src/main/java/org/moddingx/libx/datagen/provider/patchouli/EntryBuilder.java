@@ -14,6 +14,7 @@ import org.moddingx.libx.datagen.provider.patchouli.page.Content;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
 import org.moddingx.libx.impl.datagen.patchouli.content.*;
+import org.moddingx.libx.mod.ModX;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import java.util.function.Consumer;
  */
 public class EntryBuilder {
     
+    public final ModX mod;
     public final String id;
     public final ResourceLocation category;
     private String name;
@@ -34,7 +36,8 @@ public class EntryBuilder {
     private Content content;
     private final List<Consumer<JsonObject>> postProcessors;
 
-    public EntryBuilder(String id, ResourceLocation category) {
+    public EntryBuilder(ModX mod, String id, ResourceLocation category) {
+        this.mod = mod;
         this.id = id;
         this.category = category;
         this.name = null;
@@ -72,7 +75,7 @@ public class EntryBuilder {
      * entry belongs to.
      */
     public EntryBuilder advancement(String path) {
-        return this.advancement(this.category.getNamespace(), path);
+        return this.advancement(this.mod.modid, path);
     }
 
     /**
@@ -124,7 +127,7 @@ public class EntryBuilder {
      * Adds some images to the entry. The image namespaces are set to the namespace of the category, this entry belongs to.
      */
     public EntryBuilder image(String title, String... images) {
-        return this.image(title, Arrays.stream(images).map(s -> new ResourceLocation(this.category.getNamespace(), s)).toArray(ResourceLocation[]::new));
+        return this.image(title, Arrays.stream(images).map(s -> new ResourceLocation(this.mod.modid, s)).toArray(ResourceLocation[]::new));
     }
     
     /**
@@ -139,7 +142,7 @@ public class EntryBuilder {
      * and form a double recipe page.
      */
     public EntryBuilder crafting(String path) {
-        return this.crafting(this.category.getNamespace(), path);
+        return this.crafting(this.mod.modid, path);
     }
     
     /**
@@ -163,7 +166,7 @@ public class EntryBuilder {
      * and form a double recipe page.
      */
     public EntryBuilder smelting(String path) {
-        return this.smelting(this.category.getNamespace(), path);
+        return this.smelting(this.mod.modid, path);
     }
 
     /**
@@ -246,7 +249,7 @@ public class EntryBuilder {
         if (this.name == null) throw new IllegalStateException("Entry name not set: " + this.category + "/" + this.id);
         if (this.icon == null) throw new IllegalStateException("Entry icon not set: " + this.category + "/" + this.id);
         JsonObject json = new JsonObject();
-        json.addProperty("name", translations.apply(this.name, List.of("entry", this.category.getNamespace(), this.category.getPath(), this.id)));
+        json.addProperty("name", translations.apply(this.name, List.of("entry", this.mod.modid, this.category.getNamespace(), this.category.getPath(), this.id)));
         json.addProperty("category", this.category.toString());
         json.add("icon", PageJson.stack(this.icon));
         if (this.advancement != null) {
@@ -291,7 +294,7 @@ public class EntryBuilder {
 
             @Override
             public String translate(String localized) {
-                return translations.apply(localized, List.of("entry", EntryBuilder.this.category.getNamespace(), EntryBuilder.this.category.getPath(), EntryBuilder.this.id, "page" + this.page, "text" + (this.key++)));
+                return translations.apply(localized, List.of("entry", EntryBuilder.this.mod.modid, EntryBuilder.this.category.getNamespace(), EntryBuilder.this.category.getPath(), EntryBuilder.this.id, "page" + this.page, "text" + (this.key++)));
             }
 
             @Override

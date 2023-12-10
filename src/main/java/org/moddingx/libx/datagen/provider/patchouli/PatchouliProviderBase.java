@@ -64,7 +64,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
      * @see CategoryBuilder
      */
     public CategoryBuilder category(String id) {
-        CategoryBuilder builder = new CategoryBuilder(new ResourceLocation(this.bookNamespace, id));
+        CategoryBuilder builder = new CategoryBuilder(this.mod, new ResourceLocation(this.bookNamespace, id));
         this.categories.add(builder);
         this.categoryIds.add(id);
         return builder;
@@ -105,7 +105,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
         } else {
             if (!this.categoryIds.contains(category)) throw new IllegalArgumentException("Unknown category: " + category);
         }
-        EntryBuilder builder = new EntryBuilder(id, new ResourceLocation(this.bookNamespace, category));
+        EntryBuilder builder = new EntryBuilder(this.mod, id, new ResourceLocation(this.bookNamespace, category));
         this.entries.add(builder);
         return builder;
     }

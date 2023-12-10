@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
+import org.moddingx.libx.mod.ModX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.function.Consumer;
  */
 public class CategoryBuilder {
 
+    public final ModX mod;
     public final ResourceLocation id;
     private String name;
     private String description;
@@ -24,7 +26,8 @@ public class CategoryBuilder {
     private int sort;
     private final List<Consumer<JsonObject>> postProcessors;
 
-    public CategoryBuilder(ResourceLocation id) {
+    public CategoryBuilder(ModX mod, ResourceLocation id) {
+        this.mod = mod;
         this.id = id;
         this.sort = -1;
         this.postProcessors = new ArrayList<>();
@@ -82,8 +85,8 @@ public class CategoryBuilder {
         if (this.description == null) throw new IllegalStateException("Category description not set: " + this.id);
         if (this.icon == null) throw new IllegalStateException("Category icon not set: " + this.id);
         JsonObject json = new JsonObject();
-        json.addProperty("name", translations.apply(this.name, List.of("category", this.id.getNamespace(), this.id.getPath(), "name")));
-        json.addProperty("description", translations.apply(this.description, List.of("category", this.id.getNamespace(), this.id.getPath(), "description")));
+        json.addProperty("name", translations.apply(this.name, List.of("category", this.mod.modid, this.id.getNamespace(), this.id.getPath(), "name")));
+        json.addProperty("description", translations.apply(this.description, List.of("category", this.mod.modid, this.id.getNamespace(), this.id.getPath(), "description")));
         json.add("icon", PageJson.stack(this.icon));
         json.addProperty("sortnum", this.sort < 0 ? num : this.sort);
         
