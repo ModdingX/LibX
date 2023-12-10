@@ -31,9 +31,10 @@ public abstract class PatchouliProviderBase implements DataProvider {
     protected final PackTarget packTarget;
     protected final ExistingFileHelper fileHelper;
     private final BookProperties properties;
+    private final String bookNamespace;
     
     private final List<CategoryBuilder> categories;
-    private final Set<ResourceLocation> categoryIds;
+    private final Set<String> categoryIds;
     private final List<EntryBuilder> entries;
     
     public PatchouliProviderBase(DatagenContext ctx, BookProperties properties) {
@@ -41,6 +42,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
         this.packTarget = ctx.target();
         this.fileHelper = ctx.fileHelper();
         this.properties = properties;
+        this.bookNamespace = properties.namespace() != null ? properties.namespace() : this.mod.modid;
         
         // Preload font information now as we won't have an ExistingFileHelper available later
         // See PageJson#splitText
@@ -62,9 +64,9 @@ public abstract class PatchouliProviderBase implements DataProvider {
      * @see CategoryBuilder
      */
     public CategoryBuilder category(String id) {
-        CategoryBuilder builder = new CategoryBuilder(this.mod.resource(id));
+        CategoryBuilder builder = new CategoryBuilder(new ResourceLocation(this.bookNamespace, id));
         this.categories.add(builder);
-        this.categoryIds.add(builder.id);
+        this.categoryIds.add(id);
         return builder;
     }
 
@@ -75,7 +77,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
      */
     public EntryBuilder entry(String id) {
         if (this.categories.isEmpty()) throw new IllegalStateException("No categories defined");
-        return this.entry(id, this.categories.get(this.categories.size() - 1).id);
+        return this.entry(id, this.categories.get(this.categories.size() - 1).id.getPath());
     }
 
     /**
@@ -84,17 +86,26 @@ public abstract class PatchouliProviderBase implements DataProvider {
      * @see EntryBuilder
      */
     public EntryBuilder entry(String id, String category) {
-        return this.entry(id, this.mod.resource(category));
+        return this.entry(id, category, false);
     }
 
     /**
-     * Adds a new entry to this book.
+     * Adds a new foreign entry to this book. A foreign entry is an entry for a category not added by this provider.
+     * Useful when extending books.
      *
      * @see EntryBuilder
      */
-    public EntryBuilder entry(String id, ResourceLocation category) {
-        if (this.mod.modid.equals(category.getNamespace()) && !this.categoryIds.contains(category)) throw new IllegalArgumentException("Unknown category: " + category);
-        EntryBuilder builder = new EntryBuilder(id, category);
+    public EntryBuilder foreignEntry(String id, String category) {
+        return this.entry(id, category, true);
+    }
+    
+    private EntryBuilder entry(String id, String category, boolean foreignEntry) {
+        if (foreignEntry) {
+            if (this.categoryIds.contains(category)) throw new IllegalArgumentException("Foreign entry in known category: " + category);
+        } else {
+            if (!this.categoryIds.contains(category)) throw new IllegalArgumentException("Unknown category: " + category);
+        }
+        EntryBuilder builder = new EntryBuilder(id, new ResourceLocation(this.bookNamespace, category));
         this.entries.add(builder);
         return builder;
     }
@@ -102,7 +113,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
     @Nonnull
     @Override
     public String getName() {
-        return this.mod.modid + " " + this.properties.bookName() + " patchouli book";
+        return this.mod.modid + " " + (this.properties.namespace() == null ? "" : this.properties.namespace() + ":") + this.properties.bookName() + " patchouli book";
     }
     
     @Nonnull
@@ -122,11 +133,11 @@ public abstract class PatchouliProviderBase implements DataProvider {
 
         return CompletableFuture.allOf(Streams.concat(
                 Streams.mapWithIndex(this.categories.stream(), (category, idx) -> {
-                    Path path = this.packTarget.path(this.properties.packTarget()).resolve(category.id.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/categories/" + category.id.getPath() + ".json");
+                    Path path = this.packTarget.path(PackType.CLIENT_RESOURCES).resolve(category.id.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/categories/" + category.id.getPath() + ".json");
                     return DataProvider.saveStable(cache, category.build(translations, (int) idx), path);
                 }),
                 this.entries.stream().map(entry -> {
-                    Path path = this.packTarget.path(this.properties.packTarget()).resolve(entry.category.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/entries/" + entry.category.getPath() + "/" + entry.id + ".json");
+                    Path path = this.packTarget.path(PackType.CLIENT_RESOURCES).resolve(entry.category.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/entries/" + entry.category.getPath() + "/" + entry.id + ".json");
                     return DataProvider.saveStable(cache, entry.build(translations, this.fileHelper), path);
                 }),
                 Stream.ofNullable(mgr).map(theMgr -> {
