@@ -110,7 +110,7 @@ public abstract class BiomeProviderBase extends RegistryProviderBase {
          * Sets the feature generation for this biome. {@link BiomeProviderBase#generation()} must be used to create
          * the {@link BiomeGenerationSettings.Builder}.
          */
-        public BiomeBuilder generation(BiomeGenerationSettings.Builder builder) {
+        public BiomeBuilder generation(BiomeGenerationSettings.PlainBuilder builder) {
             if (!(builder instanceof BiomeGenerationBuilder)) {
                 throw new IllegalArgumentException("Use BiomeData#generation to create a BiomeGenerationSettings.Builder instance.");
             }
