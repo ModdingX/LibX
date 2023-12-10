@@ -164,10 +164,10 @@ implements net.minecraft.data.DataProvider</span></div>
 <div class="block">Adds a new entry to this book.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EntryBuilder.html" title="class in org.moddingx.libx.datagen.provider.patchouli">EntryBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entry(java.lang.String,net.minecraft.resources.ResourceLocation)" class="member-name-link">entry</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
- net.minecraft.resources.ResourceLocation&nbsp;category)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#foreignEntry(java.lang.String,java.lang.String)" class="member-name-link">foreignEntry</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;category)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds a new entry to this book.</div>
+<div class="block">Adds a new foreign entry to this book.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
@@ -292,11 +292,12 @@ implements net.minecraft.data.DataProvider</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="entry(java.lang.String,net.minecraft.resources.ResourceLocation)">
-<h3>entry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.moddingx.libx.datagen.provider.patchouli">EntryBuilder</a></span>&nbsp;<span class="element-name">entry</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
- net.minecraft.resources.ResourceLocation&nbsp;category)</span></div>
-<div class="block">Adds a new entry to this book.</div>
+<section class="detail" id="foreignEntry(java.lang.String,java.lang.String)">
+<h3>foreignEntry</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntryBuilder.html" title="class in org.moddingx.libx.datagen.provider.patchouli">EntryBuilder</a></span>&nbsp;<span class="element-name">foreignEntry</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;category)</span></div>
+<div class="block">Adds a new foreign entry to this book. A foreign entry is an entry for a category not added by this provider.
+ Useful when extending books.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>

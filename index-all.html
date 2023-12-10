@@ -949,9 +949,9 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#%3Cinit%3E(java.lang.String,boolean)" class="member-name-link">BookProperties(String, boolean)</a> - Constructor for record class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html" title="class in org.moddingx.libx.datagen.provider.patchouli">BookProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#%3Cinit%3E(java.lang.String,net.minecraft.server.packs.PackType)" class="member-name-link">BookProperties(String, PackType)</a> - Constructor for record class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html" title="class in org.moddingx.libx.datagen.provider.patchouli">BookProperties</a></dt>
+<dt><a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#%3Cinit%3E(java.lang.String,java.lang.String)" class="member-name-link">BookProperties(String, String)</a> - Constructor for record class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html" title="class in org.moddingx.libx.datagen.provider.patchouli">BookProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#%3Cinit%3E(java.lang.String,net.minecraft.server.packs.PackType,boolean)" class="member-name-link">BookProperties(String, PackType, boolean)</a> - Constructor for record class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html" title="class in org.moddingx.libx.datagen.provider.patchouli">BookProperties</a></dt>
+<dt><a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#%3Cinit%3E(java.lang.String,java.lang.String,boolean)" class="member-name-link">BookProperties(String, String, boolean)</a> - Constructor for record class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html" title="class in org.moddingx.libx.datagen.provider.patchouli">BookProperties</a></dt>
 <dd>
 <div class="block">Creates an instance of a <code>BookProperties</code> record class.</div>
 </dd>
@@ -2545,10 +2545,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Adds a new entry to this book.</div>
 </dd>
-<dt><a href="org/moddingx/libx/datagen/provider/patchouli/PatchouliProviderBase.html#entry(java.lang.String,net.minecraft.resources.ResourceLocation)" class="member-name-link">entry(String, ResourceLocation)</a> - Method in class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/PatchouliProviderBase.html" title="class in org.moddingx.libx.datagen.provider.patchouli">PatchouliProviderBase</a></dt>
-<dd>
-<div class="block">Adds a new entry to this book.</div>
-</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/StructureSetProviderBase.StructureEntryBuilder.html#entry(net.minecraft.core.Holder)" class="member-name-link">entry(Holder&lt;Structure&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/StructureSetProviderBase.StructureEntryBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureSetProviderBase.StructureEntryBuilder</a></dt>
 <dd>
 <div class="block">Adds a structure to this structure set.</div>
@@ -2978,6 +2974,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/moddingx/libx/config/ConfigManager.html#forceResync(net.minecraft.server.level.ServerPlayer,java.lang.Class)" class="member-name-link">forceResync(ServerPlayer, Class&lt;?&gt;)</a> - Static method in class org.moddingx.libx.config.<a href="org/moddingx/libx/config/ConfigManager.html" title="class in org.moddingx.libx.config">ConfigManager</a></dt>
 <dd>
 <div class="block">Forces a resync of one config to one player.</div>
+</dd>
+<dt><a href="org/moddingx/libx/datagen/provider/patchouli/PatchouliProviderBase.html#foreignEntry(java.lang.String,java.lang.String)" class="member-name-link">foreignEntry(String, String)</a> - Method in class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/PatchouliProviderBase.html" title="class in org.moddingx.libx.datagen.provider.patchouli">PatchouliProviderBase</a></dt>
+<dd>
+<div class="block">Adds a new foreign entry to this book.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/StructureProviderBase.html#forFactory(java.util.function.Function)" class="member-name-link">forFactory(Function&lt;Structure.StructureSettings, Structure&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/StructureProviderBase.html" title="class in org.moddingx.libx.datagen.provider.sandbox">StructureProviderBase</a></dt>
 <dd>
@@ -4869,6 +4869,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The namespace used to register the element.</div>
 </dd>
+<dt><a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#namespace()" class="member-name-link">namespace()</a> - Method in record class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html" title="class in org.moddingx.libx.datagen.provider.patchouli">BookProperties</a></dt>
+<dd>
+<div class="block">Returns the value of the <a href="./org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#param-namespace"><code>namespace</code></a> record component.</div>
+</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/loot/BlockLootProviderBase.MatchToolBuilder.html#nbt(net.minecraft.nbt.CompoundTag)" class="member-name-link">nbt(CompoundTag)</a> - Method in class org.moddingx.libx.datagen.provider.loot.<a href="org/moddingx/libx/datagen/provider/loot/BlockLootProviderBase.MatchToolBuilder.html" title="class in org.moddingx.libx.datagen.provider.loot">BlockLootProviderBase.MatchToolBuilder</a></dt>
 <dd>
 <div class="block">Adds required NBT data to this builder.</div>
@@ -5319,10 +5323,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/datagen/provider/patchouli/PatchouliProviderBase.html#packTarget" class="member-name-link">packTarget</a> - Variable in class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/PatchouliProviderBase.html" title="class in org.moddingx.libx.datagen.provider.patchouli">PatchouliProviderBase</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#packTarget()" class="member-name-link">packTarget()</a> - Method in record class org.moddingx.libx.datagen.provider.patchouli.<a href="org/moddingx/libx/datagen/provider/patchouli/BookProperties.html" title="class in org.moddingx.libx.datagen.provider.patchouli">BookProperties</a></dt>
-<dd>
-<div class="block">Returns the value of the <a href="./org/moddingx/libx/datagen/provider/patchouli/BookProperties.html#param-packTarget"><code>packTarget</code></a> record component.</div>
-</dd>
 <dt><a href="org/moddingx/libx/datagen/PackTarget.html" class="type-name-link" title="class in org.moddingx.libx.datagen">PackTarget</a> - Class in <a href="org/moddingx/libx/datagen/package-summary.html">org.moddingx.libx.datagen</a></dt>
 <dd>
 <div class="block">A pack target contains output paths for the different <code>pack types</code>.</div>

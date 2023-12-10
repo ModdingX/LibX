@@ -81,15 +81,14 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>Record Components:</dt>
-<dd><code><span id="param-bookName">bookName</span></code> - The name of the book.</dd>
-<dd><code><span id="param-packTarget">packTarget</span></code> - The target, where the book should be generated. If <code>use_resource_pack</code> is set in <code>book.json</code>,
-                   this should be <code>PackType.CLIENT_RESOURCES</code>, if not <code>PackType.SERVER_DATA</code>.</dd>
+<dd><code><span id="param-namespace">namespace</span></code> - The namespace of the book if it differs from the mods namespace.</dd>
+<dd><code><span id="param-bookName">bookName</span></code> - The book name.</dd>
 <dd><code><span id="param-translate">translate</span></code> - Whether the book is translatable. If this is <code>true</code>, a language ile for <code>en_us</code> is generated
                   in a different namespace (<code>modid_bookname</code>), so it does not clash with the main language file when the
                   jar is built.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BookProperties</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName, net.minecraft.server.packs.PackType&nbsp;packTarget, boolean&nbsp;translate)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BookProperties</span>(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName, boolean&nbsp;translate)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">Basic properties for a patchouli book.</div>
 </section>
@@ -103,16 +102,16 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,boolean)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,boolean)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName,
  boolean&nbsp;translate)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,net.minecraft.server.packs.PackType)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- net.minecraft.server.packs.PackType&nbsp;packTarget)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,net.minecraft.server.packs.PackType,boolean)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName,
- net.minecraft.server.packs.PackType&nbsp;packTarget,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,boolean)" class="member-name-link">BookProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName,
  boolean&nbsp;translate)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates an instance of a <code>BookProperties</code> record class.</div>
@@ -146,10 +145,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.server.packs.PackType</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#packTarget()" class="member-name-link">packTarget</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <a href="#param-packTarget"><code>packTarget</code></a> record component.</div>
+<div class="block">Returns the value of the <a href="#param-namespace"><code>namespace</code></a> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -181,34 +180,36 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>BookProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,net.minecraft.server.packs.PackType)">
-<h3>BookProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- net.minecraft.server.packs.PackType&nbsp;packTarget)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,boolean)">
 <h3>BookProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName,
  boolean&nbsp;translate)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,net.minecraft.server.packs.PackType,boolean)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>BookProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName,
- net.minecraft.server.packs.PackType&nbsp;packTarget,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,boolean)">
+<h3>BookProperties</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BookProperties</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bookName,
  boolean&nbsp;translate)</span></div>
 <div class="block">Creates an instance of a <code>BookProperties</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
+<dd><code>namespace</code> - the value for the <a href="#param-namespace"><code>namespace</code></a> record component</dd>
 <dd><code>bookName</code> - the value for the <a href="#param-bookName"><code>bookName</code></a> record component</dd>
-<dd><code>packTarget</code> - the value for the <a href="#param-packTarget"><code>packTarget</code></a> record component</dd>
 <dd><code>translate</code> - the value for the <a href="#param-translate"><code>translate</code></a> record component</dd>
 </dl>
 </section>
@@ -263,6 +264,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="namespace()">
+<h3>namespace</h3>
+<div class="member-signature"><span class="annotations"><a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nullable.html" title="class or interface in javax.annotation" class="external-link">@Nullable</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
+<div class="block">Returns the value of the <a href="#param-namespace"><code>namespace</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-namespace"><code>namespace</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="bookName()">
 <h3>bookName</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">bookName</span>()</div>
@@ -270,17 +283,6 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <a href="#param-bookName"><code>bookName</code></a> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="packTarget()">
-<h3>packTarget</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.minecraft.server.packs.PackType</span>&nbsp;<span class="element-name">packTarget</span>()</div>
-<div class="block">Returns the value of the <a href="#param-packTarget"><code>packTarget</code></a> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <a href="#param-packTarget"><code>packTarget</code></a> record component</dd>
 </dl>
 </section>
 </li>
