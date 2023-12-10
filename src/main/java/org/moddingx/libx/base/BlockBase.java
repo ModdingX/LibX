@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.creativetab.CreativeTabX;
+import org.moddingx.libx.creativetab.CreativeTabItemProvider;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.Registerable;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * Base class for {@link Block blocks} for mods using {@link ModXRegistration}. This will automatically set the
  * creative tab if it's defined in the mod and register a {@link BlockItem block item}.
  */
-public class BlockBase extends Block implements Registerable {
+public class BlockBase extends Block implements Registerable, CreativeTabItemProvider {
 
     protected final ModX mod;
     
@@ -52,18 +52,7 @@ public class BlockBase extends Block implements Registerable {
             this.item = null;
         } else {
             this.hasItem = true;
-            this.item = new BlockItem(this, itemProperties) {
-                
-                @Override
-                public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
-                    BlockBase.this.initializeItemClient(consumer);
-                }
-
-                @Override
-                public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
-                    return BlockBase.this.getBurnTime(stack, recipeType);
-                }
-            };
+            this.item = new BaseBlockItem(this, itemProperties);
         }
     }
 
@@ -78,11 +67,8 @@ public class BlockBase extends Block implements Registerable {
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
         return -1;
     }
-
-    /**
-     * Returns a {@link Stream} of {@link ItemStack item stacks} to add to a creative tab.
-     * {@link CreativeTabX} respects these by default.
-     */
+    
+    @Override
     public Stream<ItemStack> makeCreativeTabStacks() {
         return Stream.of(new ItemStack(this));
     }
@@ -100,6 +86,28 @@ public class BlockBase extends Block implements Registerable {
     public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
         if (this.hasItem) {
             builder.track(ForgeRegistries.ITEMS, BlockBase.class.getDeclaredField("item"));
+        }
+    }
+    
+    private class BaseBlockItem extends BlockItem implements CreativeTabItemProvider {
+
+        public BaseBlockItem(Block block, Properties itemProperties) {
+            super(block, itemProperties);
+        }
+
+        @Override
+        public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
+            BlockBase.this.initializeItemClient(consumer);
+        }
+        
+        @Override
+        public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+            return BlockBase.this.getBurnTime(stack, recipeType);
+        }
+
+        @Override
+        public Stream<ItemStack> makeCreativeTabStacks() {
+            return BlockBase.this.makeCreativeTabStacks();
         }
     }
 }

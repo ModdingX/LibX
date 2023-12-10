@@ -123,7 +123,7 @@ public class MoreCodecs {
 
     /**
      * Behaves the same as {@link Codec#optionalFieldOf(String)} but instead of silently using the default value
-     * if decoding the element prodices an error, propagates the error through. The only way this yields an empty
+     * if decoding the element produces an error, propagates the error through. The only way this yields an empty
      * {@link Optional} is if the key is completely missing.
      */
     public static <T> MapCodec<Optional<T>> optionalFieldOf(Codec<T> codec, String name) {
@@ -132,7 +132,7 @@ public class MoreCodecs {
 
     /**
      * Behaves the same as {@link Codec#optionalFieldOf(String, Object)} but instead of silently using the default
-     * value if decoding the element prodices an error, propagates the error through. The only way this yields an
+     * value if decoding the element produces an error, propagates the error through. The only way this yields an
      * empty {@link Optional} is if the key is completely missing.
      */
     public static <T> MapCodec<T> optionalFieldOf(Codec<T> codec, String name, T defaultValue) {

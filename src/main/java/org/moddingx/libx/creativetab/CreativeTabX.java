@@ -8,8 +8,6 @@ import net.minecraft.world.item.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegisterEvent;
-import org.moddingx.libx.base.BlockBase;
-import org.moddingx.libx.base.ItemBase;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.mod.ModX;
 
@@ -129,10 +127,8 @@ public abstract class CreativeTabX {
     }
     
     private Stream<ItemStack> itemStream(Item item) {
-        if (item instanceof ItemBase base) {
-            return base.makeCreativeTabStacks();
-        } else if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof BlockBase base) {
-            return base.makeCreativeTabStacks();
+        if (item instanceof CreativeTabItemProvider provider) {
+            return provider.makeCreativeTabStacks();
         } else {
             return Stream.of(new ItemStack(item));
         }
