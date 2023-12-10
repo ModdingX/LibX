@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.patchouli;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 /**
  * Basic properties for a patchouli book.
