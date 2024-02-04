@@ -165,51 +165,66 @@ E&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#lazy(java.util.function.Supplier)" class="member-name-link">lazy</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.Codec&lt;T&gt;&gt;&nbsp;codec)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixed(com.mojang.serialization.Dynamic)" class="member-name-link">fixed</a><wbr>(com.mojang.serialization.Dynamic&lt;?&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixed(java.lang.Number)" class="member-name-link">fixed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixed(java.lang.String)" class="member-name-link">fixed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#lazy(java.util.function.Supplier)" class="member-name-link">lazy</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.Codec&lt;T&gt;&gt;&nbsp;codec)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Lazily wraps the given <code>Codec</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;A,<wbr>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;A,<wbr>
 K,<wbr>
 V&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#mapDispatch(com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.Function,java.util.function.BiFunction)" class="member-name-link">mapDispatch</a><wbr>(com.mojang.serialization.MapCodec&lt;K&gt;&nbsp;keyCodec,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#mapDispatch(com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.Function,java.util.function.BiFunction)" class="member-name-link">mapDispatch</a><wbr>(com.mojang.serialization.MapCodec&lt;K&gt;&nbsp;keyCodec,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;K,<wbr>com.mojang.serialization.DataResult&lt;com.mojang.serialization.Codec&lt;? extends V&gt;&gt;&gt;&nbsp;valueCodecs,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;K,<wbr>V&gt;&gt;&nbsp;decompose,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;K,<wbr>V,<wbr>com.mojang.serialization.DataResult&lt;A&gt;&gt;&nbsp;construct)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a map dispatched codec.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#option(com.mojang.serialization.Codec)" class="member-name-link">option</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#option(com.mojang.serialization.Codec)" class="member-name-link">option</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child codec.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String)</code> but instead of silently using the default value
  if decoding the element produces an error, propagates the error through.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,T)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String,T)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  T&nbsp;defaultValue)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Behaves the same as <code>Codec.optionalFieldOf(String, Object)</code> but instead of silently using the default
  value if decoding the element produces an error, propagates the error through.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(com.mojang.serialization.Codec,org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(com.mojang.serialization.Codec,org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
  <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(<a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(<a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.</div>
 </div>
@@ -289,6 +304,33 @@ V&gt;&nbsp;com.mojang.serialization.Codec&lt;A&gt;</code></div>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
 <span class="return-type">com.mojang.serialization.Codec&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">option</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</span></div>
 <div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child codec.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fixed(java.lang.Number)">
+<h3>fixed</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</span>&nbsp;<span class="element-name">fixed</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;value)</span></div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.
+ Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+ useful in <code>either</code>-codecs.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fixed(java.lang.String)">
+<h3>fixed</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</span>&nbsp;<span class="element-name">fixed</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.
+ Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+ useful in <code>either</code>-codecs.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fixed(com.mojang.serialization.Dynamic)">
+<h3>fixed</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</span>&nbsp;<span class="element-name">fixed</span><wbr><span class="parameters">(com.mojang.serialization.Dynamic&lt;?&gt;&nbsp;value)</span></div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.
+ Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+ useful in <code>either</code>-codecs.</div>
 </section>
 </li>
 <li>

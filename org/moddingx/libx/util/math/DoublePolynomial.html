@@ -109,8 +109,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">The identity polynomial.</div>
 </div>
 <div class="col-first even-row-color"><code>static final <a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
-<div class="col-second even-row-color"><code><a href="#ZERO" class="member-name-link">ZERO</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ONE" class="member-name-link">ONE</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">The polynomial that is always one.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ZERO" class="member-name-link">ZERO</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">The polynomial that is always zero.</div>
 </div>
 </div>
@@ -142,25 +147,35 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#apply(double)" class="member-name-link">apply</a><wbr>(double&nbsp;x)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.moddingx.libx.util.math.Polynomial)" class="member-name-link">add</a><wbr>(<a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;other)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Computes the value of the polynomial at the given input.</div>
+<div class="block">Adds two polynomials together.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#apply(java.lang.Double)" class="member-name-link">apply</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&nbsp;x)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#apply(double)" class="member-name-link">apply</a><wbr>(double&nbsp;x)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the value of the polynomial at the given input.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#applyAsDouble(double)" class="member-name-link">applyAsDouble</a><wbr>(double&nbsp;x)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#apply(java.lang.Double)" class="member-name-link">apply</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&nbsp;x)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the value of the polynomial at the given input.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#coefficients()" class="member-name-link">coefficients</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#applyAsDouble(double)" class="member-name-link">applyAsDouble</a><wbr>(double&nbsp;x)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Computes the value of the polynomial at the given input.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#coefficients()" class="member-name-link">coefficients</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the coefficients of this polynomial.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#derivative()" class="member-name-link">derivative</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Computes the derivative of this polynomial.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</code></div>
@@ -168,12 +183,32 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#integrate()" class="member-name-link">integrate</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Integrates this polynomial with constant part 0.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#integrate(double)" class="member-name-link">integrate</a><wbr>(double&nbsp;constant)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Integrates this polynomial with the given constant part.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#multiply(org.moddingx.libx.util.math.Polynomial)" class="member-name-link">multiply</a><wbr>(<a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;other)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Multiplies two polynomials.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#negate()" class="member-name-link">negate</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Negates this polynomial.</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.moddingx.libx.util.math.Polynomial">Methods inherited from class&nbsp;org.moddingx.libx.util.math.<a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a></h3>
-<code><a href="Polynomial.html#toString()">toString</a></code></div>
+<code><a href="Polynomial.html#subtract(org.moddingx.libx.util.math.Polynomial)">subtract</a>, <a href="Polynomial.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -205,6 +240,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <h3>ZERO</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">ZERO</span></div>
 <div class="block">The polynomial that is always zero.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="ONE">
+<h3>ONE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">ONE</span></div>
+<div class="block">The polynomial that is always one.</div>
 </section>
 </li>
 <li>
@@ -281,6 +323,68 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html#apply(T)" title="class or interface in java.util.function" class="external-link">apply</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="derivative()">
+<h3>derivative</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">derivative</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Polynomial.html#derivative()">Polynomial</a></code></span></div>
+<div class="block">Computes the derivative of this polynomial.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Polynomial.html#derivative()">derivative</a></code>&nbsp;in class&nbsp;<code><a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="integrate()">
+<h3>integrate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">integrate</span>()</div>
+<div class="block">Integrates this polynomial with constant part 0.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="integrate(double)">
+<h3>integrate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">integrate</span><wbr><span class="parameters">(double&nbsp;constant)</span></div>
+<div class="block">Integrates this polynomial with the given constant part.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="negate()">
+<h3>negate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">negate</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Polynomial.html#negate()">Polynomial</a></code></span></div>
+<div class="block">Negates this polynomial.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Polynomial.html#negate()">negate</a></code>&nbsp;in class&nbsp;<code><a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="add(org.moddingx.libx.util.math.Polynomial)">
+<h3>add</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;other)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Polynomial.html#add(org.moddingx.libx.util.math.Polynomial)">Polynomial</a></code></span></div>
+<div class="block">Adds two polynomials together.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Polynomial.html#add(org.moddingx.libx.util.math.Polynomial)">add</a></code>&nbsp;in class&nbsp;<code><a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="multiply(org.moddingx.libx.util.math.Polynomial)">
+<h3>multiply</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DoublePolynomial.html" title="class in org.moddingx.libx.util.math">DoublePolynomial</a></span>&nbsp;<span class="element-name">multiply</span><wbr><span class="parameters">(<a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;&nbsp;other)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Polynomial.html#multiply(org.moddingx.libx.util.math.Polynomial)">Polynomial</a></code></span></div>
+<div class="block">Multiplies two polynomials.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Polynomial.html#multiply(org.moddingx.libx.util.math.Polynomial)">multiply</a></code>&nbsp;in class&nbsp;<code><a href="Polynomial.html" title="class in org.moddingx.libx.util.math">Polynomial</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
