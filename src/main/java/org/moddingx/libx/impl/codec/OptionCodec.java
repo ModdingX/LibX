@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.Lifecycle;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -46,5 +47,10 @@ public class OptionCodec<A> implements Codec<Optional<A>> {
                 return DataResult.error(() -> "Can't decode option: Expected a stream with exactly 0 or 1 elements, got " + list.size());
             }
         });
+    }
+
+    @Override
+    public String toString() {
+        return "OptionCodec[" + this.codec + "]";
     }
 }

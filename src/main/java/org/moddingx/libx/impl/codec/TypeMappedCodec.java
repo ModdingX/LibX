@@ -8,6 +8,7 @@ import org.moddingx.libx.codec.TypedEncoder;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TypeMappedCodec<A> implements Codec<A> {
     
@@ -49,5 +50,10 @@ public class TypeMappedCodec<A> implements Codec<A> {
         } else {
             return this.fallback.decode(ops, input);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TypeMappedCodec[known=" + this.encoders.stream().map(TypedEncoder::resultClass).map(Class::getName).collect(Collectors.joining(", ", "(", ")")) + ", fallback=" + this.fallback + "]";
     }
 }

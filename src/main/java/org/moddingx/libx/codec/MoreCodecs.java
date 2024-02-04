@@ -1,6 +1,7 @@
 package org.moddingx.libx.codec;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
 import net.minecraft.nbt.CompoundTag;
@@ -74,6 +75,33 @@ public class MoreCodecs {
      */
     public static <T> Codec<Optional<T>> option(Codec<T> codec) {
         return new OptionCodec<>(codec);
+    }
+
+    /**
+     * Creates a fixed codec that always encodes the {@link Unit#INSTANCE unit value} to the given serialized value.
+     * Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+     * useful in {@link Codec#either(Codec, Codec) either}-codecs.
+     */
+    public static Codec<Unit> fixed(Number value) {
+        return fixed(new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(value)));
+    }
+
+    /**
+     * Creates a fixed codec that always encodes the {@link Unit#INSTANCE unit value} to the given serialized value.
+     * Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+     * useful in {@link Codec#either(Codec, Codec) either}-codecs.
+     */
+    public static Codec<Unit> fixed(String value) {
+        return fixed(new Dynamic<>(JsonOps.INSTANCE, new JsonPrimitive(value)));
+    }
+
+    /**
+     * Creates a fixed codec that always encodes the {@link Unit#INSTANCE unit value} to the given serialized value.
+     * Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+     * useful in {@link Codec#either(Codec, Codec) either}-codecs.
+     */
+    public static Codec<Unit> fixed(Dynamic<?> value) {
+        return new FixedCodec<>(value);
     }
     
     /**

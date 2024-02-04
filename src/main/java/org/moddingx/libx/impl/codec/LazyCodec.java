@@ -25,4 +25,9 @@ public class LazyCodec<A> implements Codec<A> {
     public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> ops, T input) {
         return this.codec.get().decode(ops, input);
     }
+
+    @Override
+    public String toString() {
+        return "LazyCodec[...]";
+    }
 }

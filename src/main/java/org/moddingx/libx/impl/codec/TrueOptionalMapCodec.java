@@ -38,4 +38,9 @@ public class TrueOptionalMapCodec<A> extends MapCodec<Optional<A>> {
             return prefix;
         }
     }
+
+    @Override
+    public String toString() {
+        return "TrueOptionalMapCodec[" + this.name + ": " + this.codec + "]";
+    }
 }

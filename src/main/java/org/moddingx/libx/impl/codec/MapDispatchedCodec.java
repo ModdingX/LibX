@@ -68,4 +68,9 @@ public class MapDispatchedCodec<A, K, V> implements Codec<A> {
                         )
                 );
     }
+
+    @Override
+    public String toString() {
+        return "MapDispatchedCodec[key=" + this.keyCodec + "]";
+    }
 }

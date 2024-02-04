@@ -24,4 +24,9 @@ public class ErrorCodec<A> implements Codec<A> {
     public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> ops, T input) {
         return DataResult.error(() -> this.decodeMsg);
     }
+
+    @Override
+    public String toString() {
+        return "ErrorCodec[enc=" + this.encodeMsg + ", dec=" + this.decodeMsg + "]";
+    }
 }

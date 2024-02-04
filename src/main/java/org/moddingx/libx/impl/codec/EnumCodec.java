@@ -69,4 +69,9 @@ public class EnumCodec<A extends Enum<A>> implements Codec<A> {
                     .flatMap(str -> CodecHelper.doesNotThrow(() -> Enum.valueOf(this.clazz, str)))
                     .map(r -> Pair.of(r, ops.empty()));
     }
+
+    @Override
+    public String toString() {
+        return "EnumCodec[" + this.clazz.getName() + "]";
+    }
 }
