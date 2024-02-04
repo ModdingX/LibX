@@ -22,7 +22,12 @@ public final class IntPolynomial extends Polynomial<Integer> implements IntUnary
      * The polynomial that is always zero.
      */
     public static final IntPolynomial ZERO = new IntPolynomial(0);
-    
+
+    /**
+     * The polynomial that is always one.
+     */
+    public static final IntPolynomial ONE = new IntPolynomial(1);
+
     /**
      * The identity polynomial.
      */
@@ -92,6 +97,75 @@ public final class IntPolynomial extends Polynomial<Integer> implements IntUnary
     @Override
     public Integer apply(Integer x) {
         return this.applyAsInt(x);
+    }
+
+    @Override
+    public IntPolynomial derivative() {
+        if (this.coefficients.length == 0) return this;
+        int[] coefficients = new int[this.coefficients.length - 1];
+        for (int i = 0; i < coefficients.length; i++) {
+            coefficients[i] = this.coefficients[i] * (this.coefficients.length - i - 1);
+        }
+        // Direct constructor, there will never be leading zeros.
+        return new IntPolynomial(coefficients, true);
+    }
+
+    @Override
+    public IntPolynomial negate() {
+        if (this.coefficients.length == 0) return this;
+        int[] coefficients = new int[this.coefficients.length];
+        for (int i = 0; i < coefficients.length; i++) {
+            coefficients[i] = -this.coefficients[i];
+        }
+        // Direct constructor, there will never be leading zeros.
+        return new IntPolynomial(coefficients, true);
+    }
+
+    @Override
+    public IntPolynomial add(Polynomial<Integer> other) {
+        int[] otherCoefficients = trustedCoefficients(other);
+        int[] coefficients = new int[Math.max(this.coefficients.length, otherCoefficients.length)];
+        int thisOffset = coefficients.length - this.coefficients.length;
+        int otherOffset = coefficients.length - otherCoefficients.length;
+        for (int i = 0; i < coefficients.length; i++) {
+            int thisPart = (i - thisOffset) >= 0 ? this.coefficients[i - thisOffset] : 0;
+            int otherPart = (i - otherOffset) >= 0 ? otherCoefficients[i - otherOffset] : 0;
+            coefficients[i] = thisPart + otherPart;
+        }
+        return new IntPolynomial(coefficients, false);
+    }
+
+    @Override
+    public IntPolynomial multiply(Polynomial<Integer> other) {
+        int[] otherCoefficients = trustedCoefficients(other);
+        int[] coefficients = new int[this.coefficients.length + otherCoefficients.length];
+        for (int i = 0; i < this.coefficients.length; i++) {
+            for (int j = 0; j < otherCoefficients.length; j++) {
+                int idx = coefficients.length - ((this.coefficients.length - i - 1) + (otherCoefficients.length - j - 1)) - 1;
+                coefficients[idx] += (this.coefficients[i] * otherCoefficients[j]);
+            }
+        }
+        return new IntPolynomial(coefficients, false);
+    }
+
+    /**
+     * Converts this polynomial to a {@link DoublePolynomial}.
+     */
+    public DoublePolynomial toDouble() {
+        double[] coefficients = new double[this.coefficients.length];
+        for (int i = 0; i < coefficients.length; i++) {
+            coefficients[i] = this.coefficients[i];
+        }
+        return new DoublePolynomial(coefficients);
+    }
+    
+    // Returns trusted arrays. Don't modify.
+    private static int[] trustedCoefficients(Polynomial<Integer> other) {
+        if (other instanceof IntPolynomial polynomial) {
+            return polynomial.coefficients;
+        } else {
+            return other.coefficients().stream().mapToInt(Integer::valueOf).toArray();
+        }
     }
 
     @Override

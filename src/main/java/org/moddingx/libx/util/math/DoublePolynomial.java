@@ -21,6 +21,11 @@ public final class DoublePolynomial extends Polynomial<Double> implements Double
      * The polynomial that is always zero.
      */
     public static final DoublePolynomial ZERO = new DoublePolynomial(0);
+
+    /**
+     * The polynomial that is always one.
+     */
+    public static final DoublePolynomial ONE = new DoublePolynomial(1);
     
     /**
      * The identity polynomial.
@@ -91,6 +96,83 @@ public final class DoublePolynomial extends Polynomial<Double> implements Double
     @Override
     public Double apply(Double x) {
         return this.applyAsDouble(x);
+    }
+
+    @Override
+    public DoublePolynomial derivative() {
+        if (this.coefficients.length == 0) return this;
+        double[] coefficients = new double[this.coefficients.length - 1];
+        for (int i = 0; i < coefficients.length; i++) {
+            coefficients[i] = this.coefficients[i] * (this.coefficients.length - i - 1);
+        }
+        // Direct constructor, there will never be leading zeros.
+        return new DoublePolynomial(coefficients, true);
+    }
+
+    /**
+     * Integrates this polynomial with constant part {@literal 0}.
+     */
+    public DoublePolynomial integrate() {
+        return this.integrate(0);
+    }
+
+    /**
+     * Integrates this polynomial with the given constant part.
+     */
+    public DoublePolynomial integrate(double constant) {
+        double[] coefficients = new double[this.coefficients.length + 1];
+        for (int i = 0; i < coefficients.length - 1; i++) {
+            coefficients[i] = this.coefficients[i] / (this.coefficients.length - i);
+        }
+        coefficients[coefficients.length - 1] = constant;
+        return new DoublePolynomial(coefficients, false);
+    }
+
+    @Override
+    public DoublePolynomial negate() {
+        if (this.coefficients.length == 0) return this;
+        double[] coefficients = new double[this.coefficients.length];
+        for (int i = 0; i < coefficients.length; i++) {
+            coefficients[i] = -this.coefficients[i];
+        }
+        // Direct constructor, there will never be leading zeros.
+        return new DoublePolynomial(coefficients, true);
+    }
+
+    @Override
+    public DoublePolynomial add(Polynomial<Double> other) {
+        double[] otherCoefficients = trustedCoefficients(other);
+        double[] coefficients = new double[Math.max(this.coefficients.length, otherCoefficients.length)];
+        int thisOffset = coefficients.length - this.coefficients.length;
+        int otherOffset = coefficients.length - otherCoefficients.length;
+        for (int i = 0; i < coefficients.length; i++) {
+            double thisPart = (i - thisOffset) >= 0 ? this.coefficients[i - thisOffset] : 0;
+            double otherPart = (i - otherOffset) >= 0 ? otherCoefficients[i - otherOffset] : 0;
+            coefficients[i] = thisPart + otherPart;
+        }
+        return new DoublePolynomial(coefficients, false);
+    }
+
+    @Override
+    public DoublePolynomial multiply(Polynomial<Double> other) {
+        double[] otherCoefficients = trustedCoefficients(other);
+        double[] coefficients = new double[this.coefficients.length + otherCoefficients.length];
+        for (int i = 0; i < this.coefficients.length; i++) {
+            for (int j = 0; j < otherCoefficients.length; j++) {
+                int idx = coefficients.length - ((this.coefficients.length - i - 1) + (otherCoefficients.length - j - 1)) - 1;
+                coefficients[idx] += (this.coefficients[i] * otherCoefficients[j]);
+            }
+        }
+        return new DoublePolynomial(coefficients, false);
+    }
+    
+    // Returns trusted arrays. Don't modify.
+    private static double[] trustedCoefficients(Polynomial<Double> other) {
+        if (other instanceof DoublePolynomial polynomial) {
+            return polynomial.coefficients;
+        } else {
+            return other.coefficients().stream().mapToDouble(Double::valueOf).toArray();
+        }
     }
 
     @Override

@@ -19,6 +19,33 @@ public abstract class Polynomial<T extends Number> implements UnaryOperator<T> {
      * polynomial {@code 2x²+1}.
      */
     public abstract List<T> coefficients();
+    
+    /**
+     * Computes the derivative of this polynomial.
+     */
+    public abstract Polynomial<T> derivative();
+
+    /**
+     * Negates this polynomial.
+     */
+    public abstract Polynomial<T> negate();
+
+    /**
+     * Adds two polynomials together.
+     */
+    public abstract Polynomial<T> add(Polynomial<T> other);
+    
+    /**
+     * Subtracts two polynomials from each other.
+     */
+    public Polynomial<T> subtract(Polynomial<T> other) {
+        return this.add(other.negate());
+    }
+
+    /**
+     * Multiplies two polynomials.
+     */
+    public abstract Polynomial<T> multiply(Polynomial<T> other);
 
     @Override
     public String toString() {
