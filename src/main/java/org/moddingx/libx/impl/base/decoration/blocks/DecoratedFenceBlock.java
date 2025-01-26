@@ -15,7 +15,7 @@ public class DecoratedFenceBlock extends FenceBlock {
     public final DecoratedBlock parent;
 
     public DecoratedFenceBlock(DecoratedBlock parent) {
-        super(Properties.copy(parent));
+        super(Properties.ofFullCopy(parent));
         this.parent = parent;
     }
 
@@ -31,13 +31,12 @@ public class DecoratedFenceBlock extends FenceBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public int getLightBlock(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
         return this.parent.getLightBlock(state, level, pos);
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
+    public int getLightEmission(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos) {
         return this.parent.getLightEmission(state, world, pos);
     }
 }

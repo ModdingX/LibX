@@ -7,6 +7,7 @@ import net.minecraft.data.worldgen.ProcessorLists;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.pools.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
@@ -15,6 +16,7 @@ import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Base class for {@link TemplateProviderBase} and {@link TemplateExtensionProviderBase}. These have been split up as
@@ -30,10 +32,12 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
         
         private final List<PoolEntry> elements;
         private StructureTemplatePool.Projection currentProjection;
+        private Optional<LiquidSettings> liquidOverride;
 
         protected TemplateBuilder() {
             this.elements = new ArrayList<>();
             this.currentProjection = StructureTemplatePool.Projection.RIGID;
+            this.liquidOverride = Optional.empty();
         }
         
         protected abstract T self();
@@ -47,6 +51,22 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          */
         public T projection(StructureTemplatePool.Projection projection) {
             this.currentProjection = projection;
+            return this.self();
+        }
+
+        /**
+         * Resets the {@link LiquidSettings liquid settings} override back to default.
+         */
+        public T defaultLiquid() {
+            this.liquidOverride = Optional.empty();
+            return this.self();
+        }
+
+        /**
+         * Overrides the {@link LiquidSettings liquid settings} used to place templates.
+         */
+        public T overrideLiquid(LiquidSettings liquidSettings) {
+            this.liquidOverride = Optional.of(liquidSettings);
             return this.self();
         }
 
@@ -145,7 +165,7 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a single pool element to this pool.
          */
         public T single(int weight, String namespace, String path, Holder<StructureProcessorList> processor) {
-            return this.single(weight, new ResourceLocation(namespace, path), processor);
+            return this.single(weight, ResourceLocation.fromNamespaceAndPath(namespace, path), processor);
         }
 
         /**
@@ -159,7 +179,7 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a single pool element to this pool.
          */
         public T single(int weight, ResourceLocation templateId, Holder<StructureProcessorList> processor) {
-            return this.element(weight, new SinglePoolElement(Either.left(templateId), processor, this.currentProjection));
+            return this.element(weight, new SinglePoolElement(Either.left(templateId), processor, this.currentProjection, this.liquidOverride));
         }
 
         /**
@@ -226,7 +246,7 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a legacy pool element to this pool.
          */
         public T legacy(int weight, String namespace, String path, Holder<StructureProcessorList> processor) {
-            return this.legacy(weight, new ResourceLocation(namespace, path), processor);
+            return this.legacy(weight, ResourceLocation.fromNamespaceAndPath(namespace, path), processor);
         }
 
         /**
@@ -240,7 +260,7 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a legacy pool element to this pool.
          */
         public T legacy(int weight, ResourceLocation templateId, Holder<StructureProcessorList> processor) {
-            return this.element(weight, new LegacySinglePoolElement(Either.left(templateId), processor, this.currentProjection));
+            return this.element(weight, new LegacySinglePoolElement(Either.left(templateId), processor, this.currentProjection, this.liquidOverride));
         }
 
         /**

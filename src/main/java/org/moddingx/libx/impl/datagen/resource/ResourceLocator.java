@@ -2,7 +2,7 @@ package org.moddingx.libx.impl.datagen.resource;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.util.lazy.LazyValue;
 
@@ -44,7 +44,7 @@ public class ResourceLocator {
             }
         }
         if (this.prefix != null) {
-            ResourceLocation resolved = new ResourceLocation(res.getNamespace(), this.prefix + "/" + res.getPath());
+            ResourceLocation resolved = ResourceLocation.fromNamespaceAndPath(res.getNamespace(), this.prefix + "/" + res.getPath());
             for (ResourceLocator parent : this.parents) {
                 PackTarget.Resource resource = parent.getResource(fileHelper, resolved);
                 if (resource != null) return resource;

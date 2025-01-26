@@ -1,13 +1,13 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
-import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Objects;
@@ -84,7 +84,7 @@ public interface StoneCuttingExtension extends RecipeExtension {
      * Adds a stone cutting recipe with the given input, output and output amount.
      */
     default void stoneCutting(RecipeCategory category, ItemLike input, ItemLike output, int amount) {
-        this.stoneCutting(category, Ingredient.of(input), output, amount, "stonecutting_from_" + Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(input.asItem())).getPath());
+        this.stoneCutting(category, Ingredient.of(input), output, amount, "stonecutting_from_" + Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(input.asItem())).getPath());
     }
 
     /**
@@ -127,10 +127,10 @@ public interface StoneCuttingExtension extends RecipeExtension {
      */
     default void stoneCutting(RecipeCategory category, Ingredient input, ItemLike output, int amount, String suffix) {
         SingleItemRecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(input, category, output, amount);
-        List<CriterionTriggerInstance> criteria = this.criteria(input);
+        List<Criterion<?>> criteria = this.criteria(input);
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));
         }
-        builder.save(this.consumer(), this.provider().loc(output, suffix));
+        builder.save(this.output(), this.provider().loc(output, suffix));
     }
 }

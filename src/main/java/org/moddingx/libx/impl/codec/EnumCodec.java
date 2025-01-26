@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import net.minecraftforge.common.IExtensibleEnum;
+import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
 import org.moddingx.libx.codec.CodecHelper;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class EnumCodec<A extends Enum<A>> implements Codec<A> {
     private final boolean extensible;
 
     private EnumCodec(Class<A> clazz) {
-        if (!clazz.isEnum()) throw new IllegalArgumentException("Can't create enum codec for non-enum class: " + clazz);
+        if (!clazz.isEnum()) throw new IllegalArgumentException("Can't create enum streamCodec for non-enum class: " + clazz);
         this.clazz = clazz;
         this.extensible = IExtensibleEnum.class.isAssignableFrom(this.clazz);
     }

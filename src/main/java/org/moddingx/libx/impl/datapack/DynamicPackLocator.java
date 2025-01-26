@@ -1,14 +1,17 @@
 package org.moddingx.libx.impl.datapack;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.RepositorySource;
-import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.forgespi.language.IModFileInfo;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforgespi.language.IModFileInfo;
+import net.neoforged.neoforgespi.language.IModInfo;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.util.lazy.LazyValue;
 
@@ -49,20 +52,33 @@ public class DynamicPackLocator implements RepositorySource {
     @Override
     public void loadPacks(@Nonnull Consumer<Pack> packs) {
         for (ResourceLocation id : this.enabledPacks) {
-            String packId = LibXPack.PACK_CONFIG.get(this.type).prefix() + "/" + id.getNamespace() + ":" + id.getPath();
-            IModFileInfo fileInfo = ModList.get().getModFileById(id.getNamespace());
-            if (fileInfo == null || fileInfo.getFile() == null) {
-                LibX.logger.warn("Can't create dynamic pack " + id + ": Invalid mod file: " + fileInfo);
+            IModInfo modInfo = ModList.get().getModContainerById(id.getNamespace()).map(ModContainer::getModInfo).orElse(null);
+            IModFileInfo modFileInfo = modInfo == null ? null : modInfo.getOwningFile();
+            if (modInfo == null || modFileInfo == null || modFileInfo.getFile() == null) {
+                LibX.logger.error("Can't create dynamic pack " + id + ": Invalid mod file: " + id.getNamespace() + " (" + modFileInfo + ")");
             } else {
-                LazyValue<LibXPack> resources = new LazyValue<>(() -> new LibXPack(fileInfo.getFile(), this.type, id.getPath()));
-                Pack pack = Pack.readMetaAndCreate(packId, Component.literal(packId), false,
-                        anotherId -> resources.get(), this.type, Pack.Position.BOTTOM,
-                        LibXPack.PACK_CONFIG.get(this.type).source()
-                );
+                PackLocationInfo location = LibXPack.generateLocationInfo(modInfo, this.type, id.getPath());
+                LazyValue<LibXPack> resources = new LazyValue<>(() -> new LibXPack(location, this.type, modInfo, modFileInfo.getFile(), id.getPath()));
+                Pack pack = Pack.readMetaAndCreate(location, new SimpleResourceSupplier(resources), this.type, LibXPack.PACK_CONFIG.get(this.type).selection());
                 if (pack != null) {
                     packs.accept(pack);
                 }
             }
+        }
+    }
+    
+    private record SimpleResourceSupplier(LazyValue<? extends PackResources> resources) implements Pack.ResourcesSupplier {
+        
+        @Nonnull
+        @Override
+        public PackResources openPrimary(@Nonnull PackLocationInfo location) {
+            return this.resources().get();
+        }
+
+        @Nonnull
+        @Override
+        public PackResources openFull(@Nonnull PackLocationInfo location, @Nonnull Pack.Metadata metadata) {
+            return this.resources().get();
         }
     }
 }

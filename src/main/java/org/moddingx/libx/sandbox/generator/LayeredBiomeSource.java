@@ -1,7 +1,7 @@
 package org.moddingx.libx.sandbox.generator;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.*;
 import net.minecraft.util.RandomSource;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  */
 public class LayeredBiomeSource extends BiomeSource {
 
-    public static final Codec<LayeredBiomeSource> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<LayeredBiomeSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             RegistryCodecs.homogeneousList(SandBox.BIOME_LAYER, BiomeLayer.DIRECT_CODEC).fieldOf("layers").forGetter((LayeredBiomeSource biomes) -> biomes.layers)
     ).apply(instance, LayeredBiomeSource::new));
     
@@ -53,7 +53,7 @@ public class LayeredBiomeSource extends BiomeSource {
 
     @Nonnull
     @Override
-    protected Codec<? extends BiomeSource> codec() {
+    protected MapCodec<? extends BiomeSource> codec() {
         return CODEC;
     }
 

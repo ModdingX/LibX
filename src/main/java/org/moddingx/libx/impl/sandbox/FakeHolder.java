@@ -25,7 +25,7 @@ public class FakeHolder<T> implements Holder<T> {
 
     public void set(Holder<T> value) {
         try {
-            value.get();
+            value.value();
         } catch (IllegalStateException e) {
             throw new IllegalArgumentException("Unbound holder: " + value, e);
         }
@@ -60,6 +60,12 @@ public class FakeHolder<T> implements Holder<T> {
 
     @Override
     public boolean is(@Nonnull TagKey<T> key) {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean is(@Nonnull Holder<T> holder) {
         return false;
     }
 

@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
-import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -11,7 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
@@ -36,7 +36,7 @@ public class ObjectCraftingBuilder {
             builder.pattern(line);
         }
         addShapedIngredients(ext, builder, reader);
-        builder.save(ext.consumer(), id);
+        builder.save(ext.output(), id);
     }
 
     public static void buildShapeless(RecipeExtension ext, Object[] objects) {
@@ -47,7 +47,7 @@ public class ObjectCraftingBuilder {
         if (id == null) id = ext.provider().loc(output.getLeft());
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output.getLeft(), output.getRight());
         addShapelessIngredients(ext, builder, reader);
-        builder.save(ext.consumer(), id);
+        builder.save(ext.output(), id);
     }
 
     @Nullable
@@ -84,8 +84,8 @@ public class ObjectCraftingBuilder {
         }
     }
 
-    private static int addCriteriaToBuilder(BiConsumer<String, CriterionTriggerInstance> triggers, List<CriterionTriggerInstance> criteria, int nextId) {
-        for (CriterionTriggerInstance criterion : criteria) {
+    private static int addCriteriaToBuilder(BiConsumer<String, Criterion<?>> triggers, List<Criterion<?>> criteria, int nextId) {
+        for (Criterion<?> criterion : criteria) {
             triggers.accept("criterion" + (nextId++), criterion);
         }
         return nextId;

@@ -1,7 +1,7 @@
 package org.moddingx.libx.datagen.provider.sandbox;
 
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistrationInfo;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
@@ -66,7 +66,7 @@ public abstract class SurfaceProviderBase extends RegistryProviderBase {
      */
     public Holder<BiomeSurface> biome(ResourceKey<Biome> biome, SurfaceRules.RuleSource... rules) {
         BiomeSurface surface = new BiomeSurface(of(rules));
-        return this.registries.writableRegistry(SandBox.BIOME_SURFACE).register(ResourceKey.create(SandBox.BIOME_SURFACE, biome.location()), surface, Lifecycle.stable());
+        return this.registries.writableRegistry(SandBox.BIOME_SURFACE).register(ResourceKey.create(SandBox.BIOME_SURFACE, biome.location()), surface, RegistrationInfo.BUILT_IN);
     }
     
     private static SurfaceRules.RuleSource of(SurfaceRules.RuleSource[] rules) {

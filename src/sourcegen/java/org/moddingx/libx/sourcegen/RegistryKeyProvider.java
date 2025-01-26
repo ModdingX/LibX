@@ -8,7 +8,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -70,7 +70,7 @@ public class RegistryKeyProvider<T> implements DataProvider {
             sourceFile.append("import ").append(this.registryClass.getName().replace('$', '.')).append(";\n\n");
             sourceFile.append("public class ").append(this.className).append(" {\n\n");
             sourceFile.append("    private ").append(this.className).append("() {}\n\n");
-            sourceFile.append("    private static final ResourceKey<Registry<").append(type).append(">> REGISTRY = ResourceKey.createRegistryKey(new ResourceLocation(")
+            sourceFile.append("    private static final ResourceKey<Registry<").append(type).append(">> REGISTRY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(")
                     .append(quote(this.registry.location().getNamespace())).append(",").append(quote(this.registry.location().getPath()))
                     .append("));\n\n");
             for (ResourceLocation key : lookup.listElementIds().map(ResourceKey::location).sorted(ResourceLocation::compareNamespaced).toList()) {
@@ -88,7 +88,7 @@ public class RegistryKeyProvider<T> implements DataProvider {
                     }
                 }
                 String fn = fnb.toString();
-                sourceFile.append("    public static final ResourceKey<").append(type).append("> ").append(fn).append(" = ResourceKey.create(REGISTRY, new ResourceLocation(")
+                sourceFile.append("    public static final ResourceKey<").append(type).append("> ").append(fn).append(" = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath(")
                         .append(quote(key.getNamespace())).append(",").append(quote(key.getPath()))
                         .append("));\n");
             }

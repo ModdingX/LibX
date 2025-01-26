@@ -63,7 +63,7 @@ public class DecorationTags {
         } else if (block instanceof DecoratedPressurePlate decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.PRESSURE_PLATES).add(decorated);
-            switch (decorated.sensitivity) {
+            switch (decorated.parent.getMaterialProperties().blockSetType().pressurePlateSensitivity()) {
                 case EVERYTHING -> provider.block(InternalTags.Blocks.WOODEN_PRESSURE_PLATES).add(decorated);
                 case MOBS -> provider.block(InternalTags.Blocks.STONE_PRESSURE_PLATES).add(decorated);
                 default -> {}

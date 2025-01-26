@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.HangingSignAccess;
 import org.moddingx.libx.mod.ModX;
@@ -24,6 +24,7 @@ import org.moddingx.libx.registration.RegistrationContext;
 import org.moddingx.libx.registration.SetupContext;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -60,7 +61,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void registerClient(SetupContext ctx) {
+    public void setupClient(SetupContext ctx) {
         BlockEntityRenderers.register(this.beType, HangingSignRenderer::new);
         // Add sign texture to sheet.
         ctx.enqueue(() -> Sheets.addWoodType(this.parent.getMaterialProperties().woodType()));
@@ -96,12 +97,14 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         private final Supplier<BlockEntityType<Entity>> beType;
         
         public Ceiling(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
-            super(Properties.copy(parent), wood);
+            super(wood, Properties.ofFullCopy(parent));
             this.parent = parent;
             this.beType = beType;
         }
 
+        @Nullable
         @Override
+        @SuppressWarnings("NullableProblems")
         public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
             return this.beType.get().create(pos, state);
         }
@@ -113,12 +116,14 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         private final Supplier<BlockEntityType<Entity>> beType;
 
         public Wall(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
-            super(Properties.copy(parent), wood);
+            super(wood, Properties.ofFullCopy(parent));
             this.parent = parent;
             this.beType = beType;
         }
-
+        
+        @Nullable
         @Override
+        @SuppressWarnings("NullableProblems")
         public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
             return this.beType.get().create(pos, state);
         }

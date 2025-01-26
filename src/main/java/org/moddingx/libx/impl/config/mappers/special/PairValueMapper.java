@@ -4,8 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -55,14 +56,12 @@ public class PairValueMapper<A, B> implements ValueMapper<Pair<A, B>, JsonArray>
     }
 
     @Override
-    public Pair<A, B> fromNetwork(FriendlyByteBuf buffer) {
-        return Pair.of(this.mapper1.fromNetwork(buffer), this.mapper2.fromNetwork(buffer));
-    }
-
-    @Override
-    public void toNetwork(Pair<A, B> value, FriendlyByteBuf buffer) {
-        this.mapper1.toNetwork(value.getLeft(), buffer);
-        this.mapper2.toNetwork(value.getRight(), buffer);
+    public StreamCodec<? super FriendlyByteBuf, Pair<A, B>> streamCodec() {
+        return StreamCodec.composite(
+                this.mapper1.streamCodec(), Pair::getLeft,
+                this.mapper2.streamCodec(), Pair::getRight,
+                Pair::of
+        );
     }
 
     @Override

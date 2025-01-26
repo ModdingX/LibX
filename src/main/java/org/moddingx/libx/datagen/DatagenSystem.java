@@ -1,17 +1,20 @@
 package org.moddingx.libx.datagen;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.PackType;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.datagen.InternalDataProvider;
@@ -26,10 +29,12 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class DatagenSystem {
     
     private static final Set<ResourceKey<? extends Registry<?>>> EXTENSION_REGISTRIES = new HashSet<>();
+    private static final Map<ResourceKey<? extends Registry<?>>, Codec<?>> EXTRA_REGISTRIES = new HashMap<>();
 
     /**
      * Marks a registry as an extension registry. An extension registry is a registry, where the id of the elements
@@ -38,15 +43,37 @@ public class DatagenSystem {
      * Extension registries are frozen later during datagen to allow them access to frozen non-extension registries
      * while being populated.
      * 
+     * This method sets acts globally for all mods, therefore a mod should only use it their own registries. 
+     * 
      * @see DatagenStage
      */
-    public static void registerExtensionRegistry(ResourceKey<? extends Registry<?>> registryKey) {
+    public static synchronized void registerExtensionRegistry(ResourceKey<? extends Registry<?>> registryKey) {
         String activeMod = ModLoadingContext.get().getActiveNamespace();
         if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.location().getNamespace(), activeMod)) {
-            // LibX is the exception: It has to make vanilla and forge registries extension registries
+            // LibX is the exception: It has to make vanilla and neoforge registries extension registries
             LibX.logger.warn("Registry " + registryKey.location() + " marked as extension registry by foreign mod: " + activeMod);
         }
         EXTENSION_REGISTRIES.add(registryKey);
+    }
+
+    /**
+     * Defines a registry for datagen. This adds a registry with the given key and codec to the root {@link RegistrySet}
+     * from where it is inherited into all other {@link RegistrySet registry sets}. This is useful when there is no such
+     * registry at runtime and the registry is only required during datagen.
+     * 
+     * This method sets acts globally for all mods, therefore a mod should only use it their own registries. 
+     */
+    public static synchronized  <T> void defineDatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec) {
+        String activeMod = ModLoadingContext.get().getActiveNamespace();
+        if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.location().getNamespace(), activeMod)) {
+            // LibX is the exception: It has to make vanilla and neoforge registries extension registries
+            LibX.logger.warn("Registry " + registryKey.location() + " defined for datagen by foreign mod: " + activeMod);
+        }
+        if (EXTRA_REGISTRIES.containsKey(registryKey)) {
+            LibX.logger.error("Registry " + registryKey.location() + " defined for datagen twice.");
+            throw new IllegalStateException("Registry " + registryKey.location() + " defined for datagen twice.");
+        }
+        EXTRA_REGISTRIES.put(registryKey, codec);
     }
 
     /**
@@ -91,7 +118,26 @@ public class DatagenSystem {
         this.mod = mod;
         this.generator = event.getGenerator();
         this.fileHelper = event.getExistingFileHelper();
-        this.rootRegistries = new DatagenRegistrySet(DatagenRegistryLoader.loadRegistries(this.fileHelper));
+        DatagenRegistryLoader.RegistrySelector selector = (layer, registries) -> {
+            if (layer != RegistryLayer.WORLDGEN) return registries;
+            List<RegistryDataLoader.RegistryData<?>> extraRegistries = new ArrayList<>();
+            for (Map.Entry<ResourceKey<? extends Registry<?>>, Codec<?>> extraEntry : EXTRA_REGISTRIES.entrySet()) {
+                if (registries.stream().anyMatch(registryData -> Objects.equals(extraEntry.getKey(), registryData.key()))) {
+                    throw new IllegalStateException("Registry " + extraEntry.getKey() + " is a regular registry and was defined as datagen-only registry.");
+                }
+                //noinspection unchecked
+                extraRegistries.add(new RegistryDataLoader.RegistryData<>(
+                        (ResourceKey<? extends Registry<Object>>) extraEntry.getKey(),
+                        (Codec<Object>) extraEntry.getValue(),
+                        false
+                ));
+            }
+            return Stream.concat(registries.stream(), extraRegistries.stream()).toList();
+        };
+        this.rootRegistries = new DatagenRegistrySet(
+                DatagenRegistryLoader.loadRegistries(this.fileHelper, selector),
+                new DatagenRegistrySet.KnownRegistries(DatagenRegistryLoader.getDataPackRegistries(null, selector))
+        );
         this.mainTarget = new PackTarget("main", this, new DatagenRegistrySet(List.of(this.rootRegistries)), Map.of(
                 PackType.CLIENT_RESOURCES, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.RESOURCE_PACK),
                 PackType.SERVER_DATA, this.generator.getPackOutput().getOutputFolder(PackOutput.Target.DATA_PACK)

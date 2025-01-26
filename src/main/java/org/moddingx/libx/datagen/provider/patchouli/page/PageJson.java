@@ -2,18 +2,22 @@ package org.moddingx.libx.datagen.provider.patchouli.page;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import com.mojang.serialization.Codec;
 import net.minecraft.client.StringSplitter;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,19 +30,40 @@ public class PageJson {
      */
     public static JsonElement stack(ItemStack stack) {
         StringBuilder sb = new StringBuilder();
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
-        if (id == null) throw new IllegalStateException("Item not registered: " + stack);
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         sb.append(id.getNamespace());
         sb.append(":");
         sb.append(id.getPath());
+        sb.append(componentPatch(stack.getComponentsPatch()));
         if (stack.getCount() != 1) {
             sb.append("#");
             sb.append(stack.getCount());
         }
-        if (stack.hasTag() && !stack.getOrCreateTag().isEmpty()) {
-            sb.append(stack.getOrCreateTag());
-        }
         return new JsonPrimitive(sb.toString());
+    }
+    
+    private static String componentPatch(DataComponentPatch patch) {
+        boolean empty = true;
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : patch.entrySet()) {
+            Codec<?> codec = entry.getKey().codec();
+            if (codec != null) {
+                if (empty) {
+                    empty = false;
+                    sb.append(",");
+                }
+                if (entry.getValue().isPresent()) {
+                    @SuppressWarnings("unchecked")
+                    Tag tag = ((Codec<Object>) codec).encodeStart(NbtOps.INSTANCE, entry.getValue().get()).getOrThrow();
+                    sb.append(Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(entry.getKey()))).append("=").append(tag);
+                } else {
+                    sb.append("!").append(Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(entry.getKey())));
+                }
+            }
+        }
+        sb.append("]");
+        return empty ? "" : sb.toString();
     }
 
     /**

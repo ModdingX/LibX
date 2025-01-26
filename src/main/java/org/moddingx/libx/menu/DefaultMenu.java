@@ -37,7 +37,7 @@ public abstract class DefaultMenu extends MenuBase {
     public final int firstOutputSlot;
     public final int firstInventorySlot;
 
-    protected DefaultMenu(@Nullable MenuType<?> type, int windowId, Level level, Inventory inventory, Player player, int firstOutputSlot, int firstInventorySlot) {
+    protected DefaultMenu(@Nullable MenuType<?> type, int windowId, Level level, Player player, Inventory inventory, int firstOutputSlot, int firstInventorySlot) {
         super(type, windowId, inventory);
         this.player = player;
         this.level = level;

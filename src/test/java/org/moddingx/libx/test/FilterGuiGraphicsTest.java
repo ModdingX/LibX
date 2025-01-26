@@ -1,7 +1,7 @@
 package org.moddingx.libx.test;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraftforge.client.extensions.IForgeGuiGraphics;
+import net.neoforged.neoforge.client.extensions.IGuiGraphicsExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.moddingx.libx.render.FilterGuiGraphics;
@@ -16,7 +16,7 @@ public class FilterGuiGraphicsTest {
     
     @Test
     public void testThatAllMethodsAreOverridden() {
-        List<Method> methodsToOverride = Stream.of(GuiGraphics.class, IForgeGuiGraphics.class)
+        List<Method> methodsToOverride = Stream.of(GuiGraphics.class, IGuiGraphicsExtension.class)
                 .flatMap(cls -> Arrays.stream(cls.getDeclaredMethods()))
                 .filter(m -> Modifier.isPublic(m.getModifiers()) || Modifier.isProtected(m.getModifiers()))
                 .filter(m -> !Modifier.isStatic(m.getModifiers())) // Do not filter final methods, these need to be ATed

@@ -24,25 +24,22 @@ public interface EditorOps {
      * Wraps a {@link GuiEventListener} into matching editor ops.
      */
     static EditorOps wrap(GuiEventListener widget) {
-        if (widget instanceof EditorOps ops) {
-            return ops;
-        } else if (widget instanceof EditBox base) {
-            return new EditorOps() {
+        return switch (widget) {
+            case EditorOps ops -> ops;
+            case EditBox base -> new EditorOps() {
                 @Override
                 public void enabled(boolean enabled) {
                     base.setEditable(enabled);
                     base.active = enabled;
                 }
             };
-        } else if (widget instanceof AbstractWidget base) {
-            return new EditorOps() {
+            case AbstractWidget base -> new EditorOps() {
                 @Override
                 public void enabled(boolean enabled) {
                     base.active = enabled;
                 }
             };
-        } else {
-            return new EditorOps() {};
-        }
+            case null, default -> new EditorOps() {};
+        };
     }
 }

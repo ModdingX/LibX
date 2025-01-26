@@ -8,42 +8,37 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.datagen.provider.model.ItemModelProviderBase;
-import org.moddingx.libx.impl.RendererOnDataGenException;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.SetupContext;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * This class is meant to apply a {@link BlockEntityRenderer} to items. Using it is really straightforward:
  * 
  * <ul>
- *     <li>Add custom {@link IClientItemExtensions client extensions} to your item through
- *     {@link Item#initializeClient(Consumer)} or {@link BlockBase#initializeItemClient(Consumer)}</li>
- *     <li>In {@link Registerable#registerClient(SetupContext)} call
+ *     <li>Add custom {@link IClientItemExtensions client extensions} to your item.</li>
+ *     <li>In {@link Registerable#setupClient(SetupContext)} call
  *     {@link ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)}</li>
  * </ul>
  * 
- * The required models will generate automatically if you're using {@link ItemModelProviderBase}.
+ * You item also needs a special item model. {@link ItemModelProviderBase} provides a method to generate that for you.
  */
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -66,7 +61,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
      */
     public static <T extends BlockEntity> void addRenderBlock(BlockEntityType<T> beType, boolean readBlockEntityTag) {
         types.add(beType);
-        for (Block block : beType.validBlocks) {
+        for (Block block : beType.getValidBlocks()) {
             blocks.put(block, Pair.of(new LazyValue<>(() -> beType.create(BlockPos.ZERO, block.defaultBlockState())), readBlockEntityTag));
         }
     }
@@ -83,25 +78,22 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
 
                 BlockEntityRenderer<BlockEntity> renderer = this.blockEntityRenderDispatcher.getRenderer(blockEntity);
                 if (renderer != null) {
+                    setLevelAndState(blockEntity, state);
                     if (pair.getRight()) {
-                        if (!defaultTags.containsKey(teType)) {
+                        if (Minecraft.getInstance().level != null) {
+                            if (!defaultTags.containsKey(teType)) {
+                                defaultTags.put(teType, blockEntity.saveCustomOnly(Minecraft.getInstance().level.registryAccess()));
+                            } else {
+                                blockEntity.loadCustomOnly(defaultTags.get(teType), Minecraft.getInstance().level.registryAccess());
+                            }
                             setLevelAndState(blockEntity, state);
-                            defaultTags.put(teType, blockEntity.saveWithFullMetadata());
-                        }
-
-                        CompoundTag nbt = stack.getTag();
-                        setLevelAndState(blockEntity, state);
-                        blockEntity.load(defaultTags.get(teType));
-                        if (nbt != null && nbt.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
-                            CompoundTag blockTag = nbt.getCompound("BlockEntityTag");
-                            blockEntity.load(blockTag);
+                            
+                            CustomData customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+                            if (customData != null) {
+                                customData.loadInto(blockEntity, Minecraft.getInstance().level.registryAccess());
+                            }
                         }
                     }
-
-                    if (Minecraft.getInstance().level != null) {
-                        blockEntity.setLevel(Minecraft.getInstance().level);
-                    }
-                    blockEntity.blockState = state;
 
                     poseStack.pushPose();
 
@@ -109,7 +101,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
                         //noinspection deprecation
                         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay);
                     }
-                    renderer.render(blockEntity, Minecraft.getInstance().getFrameTime(), poseStack, buffer, light, overlay);
+                    renderer.render(blockEntity, Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay);
 
                     poseStack.popPose();
                 }
@@ -128,11 +120,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
      * Gets the instance of the ItemStackRenderer.
      */
     public static ItemStackRenderer get() {
-        if (FMLLoader.getLaunchHandler().isData()) {
-            throw new RendererOnDataGenException();
-        } else {
-            return INSTANCE.get();
-        }
+        return INSTANCE.get();
     }
     
     /**
@@ -141,6 +129,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     public static IClientItemExtensions createProperties() {
         return new IClientItemExtensions() {
 
+            @Nonnull
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return ItemStackRenderer.get();

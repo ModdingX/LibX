@@ -16,8 +16,8 @@ public class BlockEntityMenu<T extends BlockEntity> extends BlockMenu {
 
     protected final T blockEntity;
     
-    public BlockEntityMenu(@Nullable MenuType<? extends BlockEntityMenu<?>> type, int windowId, Level level, BlockPos pos, Inventory playerContainer, Player player, int firstOutputSlot, int firstInventorySlot) {
-        super(type, windowId, level, pos, playerContainer, player, firstOutputSlot, firstInventorySlot);
+    public BlockEntityMenu(@Nullable MenuType<? extends BlockEntityMenu<?>> type, int windowId, Level level, BlockPos pos, Player player, Inventory inventory, int firstOutputSlot, int firstInventorySlot) {
+        super(type, windowId, level, pos, player, inventory, firstOutputSlot, firstInventorySlot);
         //noinspection unchecked
         this.blockEntity = (T) level.getBlockEntity(pos);
     }

@@ -1,7 +1,7 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.base.decoration.DecorationType;
 import org.moddingx.libx.impl.datagen.recipe.DecorationRecipes;
 import org.moddingx.libx.mod.ModX;
@@ -15,7 +15,7 @@ import java.util.Map;
 public interface DefaultExtension extends RecipeExtension {
     
     static void setup(ModX mod, DefaultExtension ext) {
-        ForgeRegistries.ITEMS.getEntries().stream()
+        BuiltInRegistries.ITEM.entrySet().stream()
                 .filter(e -> mod.modid.equals(e.getKey().location().getNamespace()))
                 .map(Map.Entry::getValue)
                 .filter(item -> item instanceof BlockItem)

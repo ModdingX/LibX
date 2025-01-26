@@ -1,19 +1,18 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
-import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import org.moddingx.libx.mod.ModX;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * A recipe extension is an interface that provides logic for a {@link RecipeProviderBase}. Custom recipe
@@ -30,44 +29,44 @@ public interface RecipeExtension {
      * Gets the {@link RecipeProviderBase} for this extension.
      */
     RecipeProviderBase provider();
-    
-    /**
-     * Gets the {@link Consumer} for {@link FinishedRecipe finished recipes} to add recipes to.
-     */
-    Consumer<FinishedRecipe> consumer();
 
     /**
-     * Builds an {@link CriterionTriggerInstance advancement criterion} for the given {@link ItemLike item}.
+     * Gets the {@link RecipeOutput} to add recipes to.
      */
-    CriterionTriggerInstance criterion(ItemLike item);
+    RecipeOutput output();
+
+    /**
+     * Builds an {@link Criterion advancement criterion} for the given {@link ItemLike item}.
+     */
+    Criterion<?> criterion(ItemLike item);
     
     /**
-     * Builds an {@link CriterionTriggerInstance advancement criterion} for the given {@link TagKey tag}.
+     * Builds an {@link Criterion advancement criterion} for the given {@link TagKey tag}.
      */
-    CriterionTriggerInstance criterion(TagKey<Item> item);
+    Criterion<?> criterion(TagKey<Item> item);
     
     /**
-     * Builds an {@link CriterionTriggerInstance advancement criterion} that requires all of the given
+     * Builds an {@link Criterion advancement criterion} that requires all of the given
      * {@link ItemPredicate items}.
      */
-    CriterionTriggerInstance criterion(ItemPredicate... items);
+    Criterion<?> criterion(ItemPredicate... items);
 
     /**
      * Gets a list of criteria that should be ORed, meaning that the recipe should unlock when one of
      * them is completed instead of all of them.
      */
-    default List<CriterionTriggerInstance> criteria(Ingredient item) {
-        List<CriterionTriggerInstance> instances = new ArrayList<>();
-        if (item.isVanilla()) {
-            for (Ingredient.Value entry : item.values) {
+    default List<Criterion<?>> criteria(Ingredient item) {
+        List<Criterion<?>> instances = new ArrayList<>();
+        if (item.isSimple()) {
+            for (Ingredient.Value entry : item.getValues()) {
                 if (entry instanceof Ingredient.ItemValue value) {
-                    instances.add(this.criterion(ItemPredicate.Builder.item().of(value.item.getItem()).build()));
+                    instances.add(this.criterion(ItemPredicate.Builder.item().of(value.item().getItem()).build()));
                 } else if (entry instanceof Ingredient.TagValue value) {
-                    instances.add(this.criterion(ItemPredicate.Builder.item().of(value.tag).build()));
+                    instances.add(this.criterion(ItemPredicate.Builder.item().of(value.tag()).build()));
                 }
             }
-        } else if (item instanceof CompoundIngredient cmp) {
-            for (Ingredient i : cmp.getChildren()) {
+        } else if (item.getCustomIngredient() instanceof CompoundIngredient cmp) {
+            for (Ingredient i : cmp.children()) {
                 instances.addAll(this.criteria(i));
             }
         } else {

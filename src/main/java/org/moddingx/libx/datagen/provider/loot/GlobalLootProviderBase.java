@@ -5,9 +5,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.data.GlobalLootModifierProvider;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.loot.modifier.AdditionLootModifier;
 import org.moddingx.libx.impl.loot.modifier.RemovalLootModifier;
@@ -16,6 +16,7 @@ import org.moddingx.libx.mod.ModX;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
@@ -26,7 +27,7 @@ public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider 
     protected final ModX mod;
     
     public GlobalLootProviderBase(DatagenContext ctx) {
-        super(ctx.output(), ctx.mod().modid);
+        super(ctx.output(), CompletableFuture.completedFuture(ctx.registries().registryAccess()), ctx.mod().modid);
         this.mod = ctx.mod();
     }
 
@@ -133,7 +134,7 @@ public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider 
          * Adds a condition for the queried loot table.
          */
         public T forLootTable(String lootTableNamespace, String lootTablePath) {
-             return this.forLootTable(new ResourceLocation(lootTableNamespace, lootTablePath));
+             return this.forLootTable(ResourceLocation.fromNamespaceAndPath(lootTableNamespace, lootTablePath));
         }
 
         /**

@@ -3,8 +3,10 @@ package org.moddingx.libx.impl.config.mappers.generic;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
@@ -57,22 +59,8 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
     }
 
     @Override
-    public Optional<T> fromNetwork(FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
-        if (!buffer.readBoolean()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(mapper.fromNetwork(buffer));
-        }
-    }
-
-    @Override
-    public void toNetwork(Optional<T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
-        if (value.isEmpty()) {
-            buffer.writeBoolean(false);
-        } else {
-            buffer.writeBoolean(true);
-            mapper.toNetwork(value.get(), buffer);
-        }
+    public StreamCodec<? super FriendlyByteBuf, Optional<T>> streamCodec(ValueMapper<T, JsonElement> mapper) {
+        return MoreStreamCodecs.maybe(mapper.streamCodec());
     }
 
     @Override

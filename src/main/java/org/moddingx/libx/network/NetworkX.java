@@ -1,186 +1,141 @@
 package org.moddingx.libx.network;
 
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.mod.ModX;
 
-import java.lang.reflect.Modifier;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
 /**
- * A class implementing network logic. You should subclass it and create an instance in your
- * mods' constructor. {@link NetworkX#registerPackets()} will then automatically be called
- * during setup. You can register custom packets there. The order in which they are
- * registered is important.
+ * A class implementing network logic. You can use the {@link #register(PacketHandler) register} methods
+ * in you constructor to register network packets.
  */
 public abstract class NetworkX {
 
-    private static final Object LOCK = new Object();
+    private final Object lock;
+    private final ModX mod;
+    private final String version;
+    @Nullable private HashSet<String> usedIds;
+    private final List<PacketType<?>> packetTypes;
     
-    public final SimpleChannel channel;
-    private final Protocol protocol;
-    private int discriminator = 0;
-
     protected NetworkX(ModX mod) {
-        this.protocol = this.getProtocol();
-        this.channel = NetworkRegistry.newSimpleChannel(
-                mod.resource("netchannel"),
-                this.protocol::version,
-                remote -> this.protocol.client().predicate.test(this.protocol.version(), remote),
-                remote -> this.protocol.server().predicate.test(this.protocol.version(), remote)
-        );
-        ModInternal.get(mod).addSetupTask(this::registerPackets, false);
+        this.lock = new Object();
+        this.mod = mod;
+        this.version = this.getVersion();
+        this.usedIds = new HashSet<>();
+        this.packetTypes = new ArrayList<>();
+
+        ModInternal.get(this.mod).modEventBus().addListener(this::runRegistration);
     }
 
     /**
-     * Gets the {@link Protocol protocol} for this network.
+     * Gets the network version for this network.
      */
-    protected abstract Protocol getProtocol();
+    protected abstract String getVersion();
 
     /**
-     * You can register your own packets here. The order is important.
+     * Registers a new packet handler to the system. This should be called in the constructor.
      */
-    protected abstract void registerPackets();
+    protected final <T extends CustomPacketPayload> void register(PacketHandler<T> handler) {
+        this.doRegister(handler, false);
+    }
 
-    protected final <T> void registerGame(NetworkDirection direction, PacketSerializer<T> serializer, Supplier<Supplier<PacketHandler<T>>> handler) {
-        validateMessage(direction, serializer, false);
-        BiConsumer<T, Supplier<NetworkEvent.Context>> action = resolveHandler(direction, serializer, handler);
-        synchronized (LOCK) {
-            this.channel.registerMessage(this.discriminator++, serializer.messageClass(), serializer::encode, serializer::decode, action, Optional.of(direction));
-            this.channel.messageBuilder(serializer.messageClass(), this.discriminator++, direction)
-                    .encoder(serializer::encode)
-                    .decoder(serializer::decode)
-                    .consumerNetworkThread(action)
-                    .noResponse()
-                    .add();
+    /**
+     * Registers a new optional packet handler to the system. An optional packet handler is not required to be present
+     * on the remote side for the connection negotiation to be successful. This should be called in the constructor.
+     */
+    protected final <T extends CustomPacketPayload> void registerOptional(PacketHandler<T> handler) {
+        this.doRegister(handler, true);
+    }
+
+    private <T extends CustomPacketPayload> void doRegister(PacketHandler<T> handler, boolean optional) {
+        synchronized (this.lock) {
+            CustomPacketPayload.Type<T> type = handler.type();
+            if (!Objects.equals(this.mod.modid, type.id().getNamespace())) {
+                throw new IllegalArgumentException("Invalid packet namespace " + type.id().getNamespace() + ", expected " + this.mod.modid);
+            } else if (this.usedIds == null) {
+                throw new IllegalStateException("Network packet handler registered too late.");
+            } else if (this.usedIds.add(type.id().getPath())) {
+                this.packetTypes.add(new PacketType<>(type, handler, optional));
+            } else {
+                throw new IllegalStateException("Duplicate packet id: " + type.id());
+            }
         }
     }
 
-    protected final <T extends IntSupplier> void registerLogin(NetworkDirection direction, LoginPacketSerializer<T> serializer, Supplier<Supplier<PacketHandler<T>>> handler) {
-        validateMessage(direction, serializer, true);
-        BiConsumer<T, Supplier<NetworkEvent.Context>> action = resolveHandler(direction, serializer, handler);
-        synchronized (LOCK) {
-            SimpleChannel.MessageBuilder<T> builder = this.channel.messageBuilder(serializer.messageClass(), this.discriminator++, direction)
-                    .encoder(serializer::encode)
-                    .decoder(serializer::decode)
-                    .consumerNetworkThread(action)
-                    .markAsLoginPacket()
-                    .loginIndex(serializer::getLoginIndex, serializer::setLoginIndex)
-                    .buildLoginPacketList((isLocal) -> {
-                        List<LoginPacketSerializer.LoginPacket<T>> packets = serializer.buildLoginPackets(isLocal);
-                        return packets.stream().map(p -> Pair.of(p.context(), p.message())).toList();
-                    });
-            if (!serializer.needsResponse()) {
-                builder.noResponse();
+    private void runRegistration(RegisterPayloadHandlersEvent event) {
+        synchronized (this.lock) {
+            for (PacketType<?> packetType : this.packetTypes) {
+                this.registerHandler(event, packetType);
             }
-            builder.add();
+            this.usedIds = null;
         }
     }
-
-    private static <T> void validateMessage(NetworkDirection direction, PacketSerializer<T> serializer, boolean login) {
-        Objects.requireNonNull(direction, "No network direction");
-
-        if (login) {
-            if (direction == NetworkDirection.PLAY_TO_CLIENT || direction == NetworkDirection.PLAY_TO_SERVER) {
-                throw new IllegalArgumentException("Use registerGame to register game packets.");
-            }
-        } else {
-            if (direction == NetworkDirection.LOGIN_TO_CLIENT || direction == NetworkDirection.LOGIN_TO_SERVER) {
-                throw new IllegalArgumentException("Use registerLogin to register login packets.");
-            }
-        }
-
-        if (!Modifier.isFinal(serializer.messageClass().getModifiers())) {
-            throw new IllegalArgumentException("Non-final message class");
-        }
-    }
-
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
-    private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> resolveHandler(NetworkDirection direction, PacketSerializer<T> serializer, Supplier<Supplier<PacketHandler<T>>> supplier) {
-        PacketHandler<T> handler;
-        if (direction.getReceptionSide() == LogicalSide.CLIENT) {
-            handler = DistExecutor.unsafeRunForDist(supplier, () -> () -> null);
-        } else {
-            handler = supplier.get().get();
-        }
-        if (handler == null) {
-            return (msg, ctx) -> {};
-        } else if (handler.getClass() == serializer.getClass()) {
-            throw new IllegalStateException("The packet handler must be a different class than the packet serializer.");
-        } else {
-            return switch (handler.target()) {
-                case MAIN_THREAD -> (msg, ctx) -> {
-                    ctx.get().enqueueWork(() -> handler.handle(msg, ctx));
-                    ctx.get().setPacketHandled(true);
-                };
-                case NETWORK_THREAD -> (msg, ctx) -> {
-                    boolean handled = handler.handle(msg, ctx);
-                    ctx.get().setPacketHandled(handled);
-                };
+    
+    private <T extends CustomPacketPayload> void registerHandler(RegisterPayloadHandlersEvent event, PacketType<T> packetType) {
+        synchronized (this.lock) {
+            PayloadRegistrar registrar = event.registrar(this.version).executesOn(packetType.handler().target());
+            if (packetType.optional()) registrar = registrar.optional();
+            Void ignored = switch (packetType.handler().direction()) {
+                case CLIENTBOUND -> {
+                    registrar.playToClient(packetType.type(), packetType.handler().codec(), new WrappedHandler<>(packetType.handler()));
+                    yield null;
+                }
+                case SERVERBOUND -> {
+                    registrar.playToServer(packetType.type(), packetType.handler().codec(), new WrappedHandler<>(packetType.handler()));
+                    yield null;
+                }
             };
         }
     }
+
+    /**
+     * Checks whether a packet of a given type can currently be sent. On the physical client this checks that the
+     * current connection supports the given packet type. On a dedicated server, this always returns {@code true}.
+     */
+    public boolean canSend(CustomPacketPayload.Type<?> type) {
+        return switch (FMLLoader.getDist()) {
+            case CLIENT -> ClientCanSendCheck.canSendOnClient(type);
+            case DEDICATED_SERVER -> true;
+        };
+    }
     
     /**
-     * A protocol defines when a connection is accepted or rejected.
-     * 
-     * @param version The protocol version. This must be equal on client and server
-     * @param client The behaviour for the client
-     * @param server The behaviour for the dedicated server
+     * Checks whether a packet of a given type can currently be sent to the given player. This check that the given
+     * players connection supports the given packet type.
      */
-    public record Protocol(String version, ProtocolSide client, ProtocolSide server) {
-
-        /**
-         * Creates a new protocol with the given version, that is required on both sides.
-         */
-        public static Protocol of(String version) {
-            return new Protocol(version, ProtocolSide.REQUIRED, ProtocolSide.REQUIRED);
-        }
+    public boolean canSend(ServerPlayer player, CustomPacketPayload.Type<?> type) {
+        return player.connection.hasChannel(type);
     }
 
-    /**
-     * Defines when a connection should be accepted.
-     */
-    public enum ProtocolSide {
+    private record PacketType<T extends CustomPacketPayload>(CustomPacketPayload.Type<T> type, PacketHandler<T> handler, boolean optional) {}
+    
+    private record WrappedHandler<T extends CustomPacketPayload>(PacketHandler<T> handler) implements IPayloadHandler<T> {
 
-        /**
-         * The connection is only accepted if the protocol is present on the local and remote side
-         */
-        REQUIRED(String::equals),
-
-        /**
-         * The connection is accepted if the remote side is running on forge. However, it is not required
-         * that the protocol is present on the other side.
-         */
-        OPTIONAL(REQUIRED.predicate.or((version, remote) -> NetworkRegistry.ABSENT.version().equals(remote))),
-
-        /**
-         * The connection is accepted if the remote side is running on forge or vanilla. However, it is not
-         * required that the protocol is present on the other side.
-         */
-        VANILLA(OPTIONAL.predicate.or((version, remote) -> NetworkRegistry.ACCEPTVANILLA.equals(remote))),
-
-        /**
-         * The connection is always rejected.
-         */
-        REJECTED((version, remote) -> false);
+        @Override
+        public void handle(@Nonnull T payload, @Nonnull IPayloadContext context) {
+            this.handler().handle(payload, context);
+        }
+    }
+    
+    private static class ClientCanSendCheck {
         
-        private final BiPredicate<String, String> predicate;
-
-        ProtocolSide(BiPredicate<String, String> predicate) {
-            this.predicate = predicate;
+        public static boolean canSendOnClient(CustomPacketPayload.Type<?> type) {
+            ClientPacketListener connection = Minecraft.getInstance().getConnection();
+            return connection != null && connection.hasChannel(type);
         }
     }
 }

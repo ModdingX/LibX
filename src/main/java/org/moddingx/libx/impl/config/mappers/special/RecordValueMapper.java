@@ -4,8 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -16,6 +17,7 @@ import org.moddingx.libx.impl.config.validators.ConfiguredValidator;
 import org.moddingx.libx.impl.config.wrapper.TypesafeMapper;
 import org.moddingx.libx.util.ClassUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.*;
 import java.util.List;
@@ -26,16 +28,16 @@ import java.util.stream.Stream;
 
 public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonObject> {
     
-    private final Class<T> clazz;
+    private final Class<T> cls;
     private final List<EntryData> entries;
     private final Constructor<T> ctor;
 
-    public RecordValueMapper(String modid, Class<T> clazz, Function<Type, ValueMapper<?, ?>> mapperFunc) {
-        this.clazz = clazz;
-        if (!clazz.isRecord()) {
+    public RecordValueMapper(String modid, Class<T> cls, Function<Type, ValueMapper<?, ?>> mapperFunc) {
+        this.cls = cls;
+        if (!cls.isRecord()) {
             throw new IllegalArgumentException("Can't create record config value mapper for non-record class.");
         }
-        RecordComponent[] parts = this.clazz.getRecordComponents();
+        RecordComponent[] parts = this.cls.getRecordComponents();
         Class<?>[] types = new Class<?>[parts.length];
         ImmutableList.Builder<EntryData> entries = ImmutableList.builder();
         for (int i = 0; i < parts.length; i++) {
@@ -51,16 +53,16 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
         try {
             // Must be explicitly set accessible
             // While the constructor itself is always public, the record class may be private
-            this.ctor = this.clazz.getDeclaredConstructor(types);
+            this.ctor = this.cls.getDeclaredConstructor(types);
             this.ctor.setAccessible(true);
         } catch (NoSuchMethodException e) {
-            throw new IllegalStateException("Can't create record config value mapper for class: " + clazz, e);
+            throw new IllegalStateException("Can't create record config value mapper for class: " + cls, e);
         }
     }
 
     @Override
     public Class<T> type() {
-        return this.clazz;
+        return this.cls;
     }
 
     @Override
@@ -70,7 +72,7 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
 
     @Override
     public T fromJson(JsonObject json) {
-        RecordComponent[] parts = this.clazz.getRecordComponents();
+        RecordComponent[] parts = this.cls.getRecordComponents();
         Object[] values = new Object[parts.length];
         for (int i = 0; i < parts.length; i++) {
             values[i] = this.entries.get(i).mapper().fromJson(json.get(parts[i].getName()));
@@ -85,7 +87,7 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
     @Override
     public JsonObject toJson(T value) {
         JsonObject json = new JsonObject();
-        RecordComponent[] parts = this.clazz.getRecordComponents();
+        RecordComponent[] parts = this.cls.getRecordComponents();
         for (int i = 0; i < parts.length; i++) {
             try {
                 json.add(parts[i].getName(), this.entries.get(i).mapper().toJson(accessComponent(parts[i], value)));
@@ -97,7 +99,7 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
     }
     
     public T validate(T value, String action, List<String> path, @Nullable AtomicBoolean needsCorrection) {
-        RecordComponent[] parts = this.clazz.getRecordComponents();
+        RecordComponent[] parts = this.cls.getRecordComponents();
         Object[] values = new Object[parts.length];
         for (int i = 0; i < parts.length; i++) {
             try {
@@ -135,34 +137,13 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
     }
 
     @Override
-    public T fromNetwork(FriendlyByteBuf buffer) {
-        RecordComponent[] parts = this.clazz.getRecordComponents();
-        Object[] values = new Object[parts.length];
-        for (int i = 0; i < parts.length; i++) {
-            values[i] = this.entries.get(i).mapper().fromNetwork(buffer);
-        }
-        try {
-            return this.ctor.newInstance(values);
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("Failed to create record for config.", e);
-        }
-    }
-
-    @Override
-    public void toNetwork(T value, FriendlyByteBuf buffer) {
-        RecordComponent[] parts = this.clazz.getRecordComponents();
-        for (int i = 0; i < parts.length; i++) {
-            try {
-                this.entries.get(i).mapper().toNetwork(accessComponent(parts[i], value), buffer);
-            } catch (ReflectiveOperationException e) {
-                throw new IllegalStateException("Failed to get record value for config.", e);
-            }
-        }
+    public StreamCodec<? super FriendlyByteBuf, T> streamCodec() {
+        return new RecordStreamCodec(this.entries.stream().<StreamCodec<? super FriendlyByteBuf, Object>>map(entry -> entry.mapper.streamCodec()).toList());
     }
 
     @Override
     public Optional<T> correct(JsonElement json, ConfigCorrection<T> correction) {
-        RecordComponent[] parts = this.clazz.getRecordComponents();
+        RecordComponent[] parts = this.cls.getRecordComponents();
         if (json.isJsonObject()) {
             // We have a json object. Just correct every key from it.
             Object[] args = new Object[parts.length];
@@ -211,7 +192,7 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
     @Override
     @OnlyIn(Dist.CLIENT)
     public ConfigEditor<T> createEditor(ValidatorInfo<?> validator) {
-        return new RecordEditor<>(this.clazz, this.entries, this.ctor);
+        return new RecordEditor<>(this.cls, this.entries, this.ctor);
     }
     
     public static Object accessComponent(RecordComponent component, Object instance) throws InvocationTargetException, IllegalAccessException {
@@ -221,4 +202,48 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
     }
     
     public record EntryData(TypesafeMapper mapper, @Nullable ConfiguredValidator<?, ?> validator) {}
+    
+    private class RecordStreamCodec implements StreamCodec<FriendlyByteBuf, T> {
+
+        private final List<StreamCodec<? super FriendlyByteBuf, Object>> streamCodecs;
+
+        public RecordStreamCodec(List<StreamCodec<? super FriendlyByteBuf, Object>> streamCodecs) {
+            this.streamCodecs = List.copyOf(streamCodecs);
+            if (RecordValueMapper.this.entries.size() != this.streamCodecs.size()) {
+                throw new IllegalArgumentException("Stream codec count does not match entry count in RecordValueMapper. This is a bug in LibX.");
+            }
+        }
+
+        @Nonnull
+        @Override
+        public T decode(@Nonnull FriendlyByteBuf buffer) {
+            RecordComponent[] parts = RecordValueMapper.this.cls.getRecordComponents();
+            Object[] values = new Object[parts.length];
+            for (int i = 0; i < parts.length; i++) {
+                values[i] = this.streamCodecs.get(i).decode(buffer);
+            }
+            try {
+                return RecordValueMapper.this.ctor.newInstance(values);
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException("Failed to create record for config.", e);
+            }
+        }
+
+        @Override
+        public void encode(@Nonnull FriendlyByteBuf buffer, @Nonnull T value) {
+            RecordComponent[] parts = RecordValueMapper.this.cls.getRecordComponents();
+            for (int i = 0; i < parts.length; i++) {
+                try {
+                    this.streamCodecs.get(i).encode(buffer, accessComponent(parts[i], value));
+                } catch (ReflectiveOperationException e) {
+                    throw new IllegalStateException("Failed to get record value for config.", e);
+                }
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "RecordStreamCodec[" + RecordValueMapper.this.cls.getName() + "]";
+        }
+    }
 }

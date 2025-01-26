@@ -1,19 +1,16 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.TrueCondition;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import org.moddingx.libx.datagen.DatagenContext;
-import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
@@ -21,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Provider for all kinds of recipes. By itself does not add support for any recipes. However you can
@@ -32,10 +29,10 @@ import java.util.function.Consumer;
 public abstract class RecipeProviderBase extends RecipeProvider implements RecipeExtension {
 
     protected final ModX mod;
-    private Consumer<FinishedRecipe> consumer;
+    private RecipeOutput output;
 
     public RecipeProviderBase(DatagenContext ctx) {
-        super(ctx.output());
+        super(ctx.output(), CompletableFuture.completedFuture(ctx.registries().registryAccess()));
         this.mod = ctx.mod();
     }
 
@@ -55,24 +52,8 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     }
 
     @Override
-    protected final void buildRecipes(@Nonnull Consumer<FinishedRecipe> base) {
-        List<ICondition> conditions = List.copyOf(this.conditions());
-        if (conditions.isEmpty()) {
-            this.consumer = base;
-        } else {
-            this.consumer = recipe -> {
-                if (recipe.getType() == EmptyRecipe.Serializer.INSTANCE) {
-                    base.accept(recipe);
-                } else {
-                    ConditionalRecipe.Builder builder = ConditionalRecipe.builder();
-                    conditions.forEach(builder::addCondition);
-                    builder.addRecipe(recipe);
-                    builder.addCondition(TrueCondition.INSTANCE);
-                    builder.addRecipe(EmptyRecipe.empty(recipe.getId()));
-                    builder.build(base, recipe.getId());
-                }
-            };
-        }
+    protected final void buildRecipes(@Nonnull RecipeOutput output) {
+        this.output = output.withConditions(this.conditions().toArray(ICondition[]::new));
         this.setupExtensions();
         this.setup();
     }
@@ -114,7 +95,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
      * and the path being the registry path of the given item.
      */
     public ResourceLocation loc(ItemLike item) {
-        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
+        return ResourceLocation.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath());
     }
 
     /**
@@ -123,7 +104,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
      * given suffix.
      */
     public ResourceLocation loc(ItemLike item, String suffix) {
-        return new ResourceLocation(this.mod.modid, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath() + "_" + suffix);
+        return ResourceLocation.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath() + "_" + suffix);
     }
 
     @Override
@@ -132,22 +113,22 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     }
 
     @Override
-    public Consumer<FinishedRecipe> consumer() {
-        return this.consumer;
+    public RecipeOutput output() {
+        return Objects.requireNonNull(this.output, "Recipe output not yet available.");
     }
 
     @Override
-    public AbstractCriterionTriggerInstance criterion(ItemLike item) {
+    public Criterion<?> criterion(ItemLike item) {
         return has(item);
     }
 
     @Override
-    public AbstractCriterionTriggerInstance criterion(TagKey<Item> item) {
+    public Criterion<?> criterion(TagKey<Item> item) {
         return has(item);
     }
 
     @Override
-    public AbstractCriterionTriggerInstance criterion(ItemPredicate... items) {
+    public Criterion<?> criterion(ItemPredicate... items) {
         return inventoryTrigger(items);
     }
 }

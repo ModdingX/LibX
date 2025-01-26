@@ -2,15 +2,16 @@ package org.moddingx.libx.datagen.provider.sandbox;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.ForgeBiomeModifiers;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.common.world.BiomeModifiers;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
@@ -36,7 +37,7 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
     }
     
     public Holder<BiomeModifier> modifier(BiomeModifier modifier) {
-        return this.registries.writableRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
+        return this.registries.writableRegistry(NeoForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
     }
 
     /**
@@ -124,11 +125,11 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
         public Holder<BiomeModifier> build() {
             BiomeModifier modifier;
             if (this.remove) {
-                modifier = new ForgeBiomeModifiers.RemoveFeaturesBiomeModifier(this.biomes, HolderSet.direct(List.copyOf(this.features)), Set.copyOf(this.steps));
+                modifier = new BiomeModifiers.RemoveFeaturesBiomeModifier(this.biomes, HolderSet.direct(List.copyOf(this.features)), Set.copyOf(this.steps));
             } else {
-                modifier = new ForgeBiomeModifiers.AddFeaturesBiomeModifier(this.biomes, HolderSet.direct(List.copyOf(this.features)), this.steps.iterator().next());
+                modifier = new BiomeModifiers.AddFeaturesBiomeModifier(this.biomes, HolderSet.direct(List.copyOf(this.features)), this.steps.iterator().next());
             }
-            return BiomeModifierProviderBase.this.registries.writableRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
+            return BiomeModifierProviderBase.this.registries.writableRegistry(NeoForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
         }
     }
 
@@ -159,8 +160,8 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeModifier> build() {
-            BiomeModifier modifier = new ForgeBiomeModifiers.AddSpawnsBiomeModifier(this.biomes, List.copyOf(this.spawns));
-            return BiomeModifierProviderBase.this.registries.writableRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
+            BiomeModifier modifier = new BiomeModifiers.AddSpawnsBiomeModifier(this.biomes, List.copyOf(this.spawns));
+            return BiomeModifierProviderBase.this.registries.writableRegistry(NeoForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
         }
     }
 
@@ -175,7 +176,7 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
         }
 
         public RemoveMobSpawnsBuilder entity(EntityType<?> type) {
-            this.entities.add(BiomeModifierProviderBase.this.holder(ForgeRegistries.ENTITY_TYPES.getResourceKey(type).orElseThrow()));
+            this.entities.add(BiomeModifierProviderBase.this.holder(BuiltInRegistries.ENTITY_TYPE.getResourceKey(type).orElseThrow()));
             return this;
         }
 
@@ -187,8 +188,8 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeModifier> build() {
-            BiomeModifier modifier = new ForgeBiomeModifiers.RemoveSpawnsBiomeModifier(this.biomes, HolderSet.direct(List.copyOf(this.entities)));
-            return BiomeModifierProviderBase.this.registries.writableRegistry(ForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
+            BiomeModifier modifier = new BiomeModifiers.RemoveSpawnsBiomeModifier(this.biomes, HolderSet.direct(List.copyOf(this.entities)));
+            return BiomeModifierProviderBase.this.registries.writableRegistry(NeoForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
         }
     }
 }

@@ -5,6 +5,7 @@ import com.google.common.collect.Streams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import org.moddingx.libx.config.mapper.ValueMapper;
 
 import javax.annotation.Nonnull;
@@ -58,7 +59,7 @@ public class ConfigState {
             buffer.writeUtf(key.field.getDeclaringClass().getName(), 0x7fff);
             buffer.writeUtf(key.field.getName(), 0x7fff);
             //noinspection unchecked
-            ((ValueMapper<Object, ?>) key.mapper).toNetwork(value, buffer);
+            ((StreamCodec<? super FriendlyByteBuf, Object>) key.streamCodec).encode(buffer, value);
         }
     }
 

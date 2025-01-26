@@ -6,18 +6,11 @@ import com.google.common.collect.Range;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import org.moddingx.libx.capability.ItemCapabilities;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import org.moddingx.libx.impl.inventory.AdvancedItemHandlerHelper;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BiPredicate;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
@@ -92,6 +85,11 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         }
     }
 
+    @Override
+    public boolean hasSpaceFor(List<ItemStack> stacks, int startInclusive, int endExclusive) {
+        return AdvancedItemHandlerHelper.hasSpaceFor(this, stacks, startInclusive, endExclusive, (slot, stack) -> !this.outputSlots.contains(slot) && this.isItemValid(slot, stack));
+    }
+
     /**
      * Gets a vanilla container that wraps around this item handler.
      */
@@ -107,32 +105,6 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     public IAdvancedItemHandlerModifiable getUnrestricted() {
         if (this.unrestricted == null) this.unrestricted = new Unrestricted();
         return this.unrestricted;
-    }
-
-    /**
-     * Creates a new {@link LazyOptional} for this inventory.
-     */
-    public LazyOptional<IAdvancedItemHandlerModifiable> createCapability() {
-        return ItemCapabilities.create(this);
-    }
-    
-    /**
-     * Creates a new {@link LazyOptional} for this inventory but without slot validation.
-     * 
-     * @see #getUnrestricted() 
-     */
-    public LazyOptional<IAdvancedItemHandlerModifiable> createUnrestrictedCapability() {
-        return ItemCapabilities.create(this::getUnrestricted);
-    }
-
-    /**
-     * Creates a new {@link LazyOptional} for this inventory.
-     * 
-     * @param extract A predicate on whether an item can be extracted through this {@link LazyOptional}. This gets passed the slot to extract from.
-     * @param insert A predicate on whether an item can be inserted through this {@link LazyOptional}. This gets passed the slot to insert to and the stack that should be inserted.
-     */
-    public LazyOptional<IAdvancedItemHandlerModifiable> createCapability(@Nullable Predicate<Integer> extract, @Nullable BiPredicate<Integer, ItemStack> insert) {
-        return ItemCapabilities.create(this, extract, insert);
     }
 
     /**
@@ -168,20 +140,20 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             ItemStack current = BaseItemStackHandler.this.stacks.get(slot);
             int amount = BaseItemStackHandler.this.getStackLimit(slot, stack);
             if (!current.isEmpty()) {
-                if (!ItemHandlerHelper.canItemStacksStack(stack, current)) return stack;
+                if (!ItemStack.isSameItemSameComponents(stack, current)) return stack;
                 amount -= current.getCount();
             }
             if (amount <= 0) return stack;
 
             if (!simulate) {
                 if (current.isEmpty()) {
-                    BaseItemStackHandler.this.stacks.set(slot, ItemHandlerHelper.copyStackWithSize(stack, Math.min(stack.getCount(), amount)));
+                    BaseItemStackHandler.this.stacks.set(slot, stack.copyWithCount(Math.min(stack.getCount(), amount)));
                 } else {
                     current.grow(Math.min(stack.getCount(), amount));
                 }
                 BaseItemStackHandler.this.onContentsChanged(slot);
             }
-            return ItemHandlerHelper.copyStackWithSize(stack, Math.max(0, stack.getCount() - amount));
+            return stack.copyWithCount(Math.max(0, stack.getCount() - amount));
         }
 
         @Nonnull
@@ -193,10 +165,10 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             if (current.isEmpty()) return ItemStack.EMPTY;
             int count = Math.min(current.getCount(), Math.min(amount, current.getMaxStackSize()));
             if (!simulate) {
-                BaseItemStackHandler.this.stacks.set(slot, ItemHandlerHelper.copyStackWithSize(current, Math.max(0, current.getCount() - count)));
+                BaseItemStackHandler.this.stacks.set(slot, current.copyWithCount(Math.max(0, current.getCount() - count)));
                 BaseItemStackHandler.this.onContentsChanged(slot);
             }
-            return ItemHandlerHelper.copyStackWithSize(current, count);
+            return current.copyWithCount(count);
         }
 
         @Override

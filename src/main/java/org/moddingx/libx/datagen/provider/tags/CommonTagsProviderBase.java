@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider.tags;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -14,9 +15,8 @@ import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.datagen.tags.DecorationTags;
@@ -68,7 +68,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     private void doSetup() {
         if (this.getClass() == InternalTagProvider.class) this.initInternalTags();
         this.setup();
-        ForgeRegistries.BLOCKS.getEntries().stream()
+        BuiltInRegistries.BLOCK.entrySet().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(Map.Entry::getValue)
@@ -76,12 +76,12 @@ public abstract class CommonTagsProviderBase implements DataProvider {
                     DecorationTags.addTags(block, this, this::initInternalTags);
                     this.defaultBlockTags(block);
                 });
-        ForgeRegistries.ITEMS.getEntries().stream()
+        BuiltInRegistries.ITEM.entrySet().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(Map.Entry::getValue)
                 .forEach(this::defaultItemTags);
-        ForgeRegistries.FLUIDS.getEntries().stream()
+        BuiltInRegistries.FLUID.entrySet().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                 .map(Map.Entry::getValue)
@@ -192,10 +192,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             for (Pair<TagKey<Fluid>, TagKey<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
                 IntrinsicTagAppender<Block> builder = this.tag(copy.getRight());
                 for (ResourceLocation entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
-                    Fluid fluid = ForgeRegistries.FLUIDS.getValue(entry);
-                    if (fluid != null) {
-                        builder.add(fluid.defaultFluidState().createLegacyBlock().getBlock());
-                    }
+                    BuiltInRegistries.FLUID.getOptional(entry).ifPresent(fluid -> builder.add(fluid.defaultFluidState().createLegacyBlock().getBlock()));
                 }
             }
         }

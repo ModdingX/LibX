@@ -12,10 +12,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.NeoForge;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.event.ConfigLoadedEvent;
@@ -136,7 +135,7 @@ public class ConfigImpl {
                 if (key == null) {
                     throw new IllegalStateException("Config between client and server mismatch. Server sent unknown or non-config field. Ignoring");
                 }
-                Object value = key.mapper.fromNetwork(buffer);
+                Object value = key.streamCodec.decode(buffer);
                 values.put(key, value);
                 keysLeft.remove(key);
             }
@@ -286,7 +285,7 @@ public class ConfigImpl {
     }
     
     private void shadowBy(ConfigState state, boolean local, @Nullable Path loadPath) {
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
+        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) {
             LibX.logger.error("Config shadow was called on a dedicated server. This should not happen!");
         }
         if (!this.shadowed && this.savedState == null) {
@@ -297,7 +296,7 @@ public class ConfigImpl {
         this.shadowedLocal = local;
         state.apply();
         ConfigLoadedEvent.LoadReason reason = local ? ConfigLoadedEvent.LoadReason.LOCAL_SHADOW : ConfigLoadedEvent.LoadReason.SHADOW;
-        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, reason, this.clientConfig, this.path, loadPath));
+        NeoForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, reason, this.clientConfig, this.path, loadPath));
     }
     
     public void restore() {
@@ -308,14 +307,14 @@ public class ConfigImpl {
         }
         this.shadowed = false;
         this.shadowedLocal = false;
-        MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.RESTORE, this.clientConfig, this.path, this.path));
+        NeoForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.RESTORE, this.clientConfig, this.path, this.path));
     }
     
     public void reloadClientWorldState() {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLLoader.getDist() == Dist.CLIENT) {
             if (!this.shadowed || this.shadowedLocal) {
-                Level clientLevel = DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().level, () -> () -> null);
-                MinecraftServer server = DistExecutor.unsafeRunForDist(() -> Minecraft.getInstance()::getSingleplayerServer, () -> () -> null);
+                Level clientLevel = ClientCallbacks.getClientLevel();
+                MinecraftServer server = ClientCallbacks.getSinglePlayerServer();
                 if (clientLevel != null && server != null) {
                     Path configDir = server.storageSource.getWorldDir().resolve("config");
                     Path configPath = resolveConfigPath(configDir, this.id);
@@ -358,7 +357,7 @@ public class ConfigImpl {
             LibX.logger.warn("Failed to save config file from InGame values: " + e.getMessage(), e);
         }
         if (!this.shadowed) {
-            MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.INGAME_CHANGES, this.clientConfig, this.path, null));
+            NeoForge.EVENT_BUS.post(new ConfigLoadedEvent(this.id, this.baseClass, ConfigLoadedEvent.LoadReason.INGAME_CHANGES, this.clientConfig, this.path, null));
         }
     }
     
@@ -374,7 +373,7 @@ public class ConfigImpl {
     }
 
     public ConfigState cachedOrCurrent() {
-        if (FMLEnvironment.dist != Dist.DEDICATED_SERVER) {
+        if (FMLLoader.getDist() != Dist.DEDICATED_SERVER) {
             LibX.logger.error("Config cached or current method was called on a physical client. This should not happen!");
         }
         if (this.savedState == null) {
@@ -390,5 +389,18 @@ public class ConfigImpl {
     
     public static Path resolveConfigPath(Path configDir, ResourceLocation id) {
         return id.getPath().equals("config") ? configDir.resolve(id.getNamespace() + ".json5") : configDir.resolve(id.getNamespace()).resolve(id.getPath() + ".json5");
+    }
+
+    private static class ClientCallbacks {
+
+        @Nullable
+        public static Level getClientLevel() {
+            return Minecraft.getInstance().level;
+        }
+
+        @Nullable
+        public static MinecraftServer getSinglePlayerServer() {
+            return Minecraft.getInstance().getSingleplayerServer();
+        }
     }
 }

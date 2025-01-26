@@ -59,7 +59,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
             }
         }
         for (Map.Entry<ResourceKey<T>, T> entry : parentElements.entrySet()) {
-            this.register(entry.getKey(), entry.getValue(), Lifecycle.stable());
+            this.register(entry.getKey(), entry.getValue(), RegistrationInfo.BUILT_IN);
         }
     }
     
@@ -77,13 +77,13 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
 
     @Nonnull
     @Override
-    public Holder.Reference<T> registerMapping(int id, @Nonnull ResourceKey<T> key, @Nonnull T value, @Nonnull Lifecycle lifecycle) {
+    public Holder.Reference<T> register(int id, @Nonnull ResourceKey<T> key, @Nonnull T value, @Nonnull RegistrationInfo info) {
         if (this.unregisteredIntrusiveHolders != null && !this.unregisteredIntrusiveHolders.containsKey(value)) {
             // We allow intrusive holders, however this implies, every value must have an intrusive holder
             // which is not the case. Create one on the fly.
             this.createIntrusiveHolder(value);
         }
-        Holder.Reference<T> holder = super.registerMapping(id, key, value, Lifecycle.stable());
+        Holder.Reference<T> holder = super.register(id, key, value, RegistrationInfo.BUILT_IN);
         if (this.propagateNewElementsToChildren) {
             // Register to all children (can't keep ids consistent)
             Set<DatagenRegistry<T>> activeChildren = this.registrySet.collectActiveChildRegistries(this.key());
@@ -93,7 +93,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
                 }
             }
             for (DatagenRegistry<T> child : activeChildren) {
-                child.registerOnlyThisRegistry(key, value, lifecycle);
+                child.registerOnlyThisRegistry(key, value, info);
             }
         }
         this.registrySet.trackHolderTarget(holder, this.key());
@@ -110,10 +110,10 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    private Holder.Reference<T> registerOnlyThisRegistry(ResourceKey<T> key, T value, Lifecycle lifecycle) {
+    private Holder.Reference<T> registerOnlyThisRegistry(ResourceKey<T> key, T value, RegistrationInfo info) {
         try {
             this.propagateNewElementsToChildren = false;
-            return this.register(key, value, lifecycle);
+            return this.register(key, value, info);
         } finally {
             this.propagateNewElementsToChildren = true;
         }
@@ -150,7 +150,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
         for (Map.Entry<ResourceKey<T>, T> entry : this.entrySet()) {
             if (parents.stream().noneMatch(reg -> reg.containsKey(entry.getKey()))) {
                 try {
-                    JsonElement json = this.codec.encodeStart(ops, entry.getValue()).getOrThrow(false, msg -> {});
+                    JsonElement json = this.codec.encodeStart(ops, entry.getValue()).getOrThrow(RuntimeException::new);
                     DataProvider.saveStable(output, json, outputPath.get().resolve(DatapackHelper.registryPath(entry.getKey())));
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to serialise element " + entry.getKey() + " in datagen registry", e);

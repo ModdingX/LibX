@@ -23,6 +23,11 @@ public interface DecorationMaterial {
     DecorationMaterial WOOD = BaseMaterial.WOOD;
     
     /**
+     * A material for nether wood blocks that adds a {@link BlockSetType} and a {@link WoodType}.
+     */
+    DecorationMaterial NETHER_WOOD = BaseMaterial.NETHER_WOOD;
+    
+    /**
      * A material for stone blocks that adds a {@link BlockSetType}.
      */
     DecorationMaterial STONE = BaseMaterial.STONE;
@@ -30,7 +35,12 @@ public interface DecorationMaterial {
     /**
      * A material for metal blocks that adds a {@link BlockSetType}.
      */
-    DecorationMaterial METAL = BaseMaterial.METAL;
+    DecorationMaterial IRON = BaseMaterial.IRON;
+    
+    /**
+     * A material for copper blocks that adds a {@link BlockSetType}.
+     */
+    DecorationMaterial COPPER = BaseMaterial.COPPER;
 
     /**
      * Gets whether the block is a wood block.

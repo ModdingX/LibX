@@ -2,8 +2,8 @@ package org.moddingx.libx.impl.config.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.fml.ModContainer;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.gui.screen.ConfigScreenManager;
 import org.moddingx.libx.impl.config.gui.screen.ConfigSelectScreen;
@@ -29,11 +29,11 @@ public class ModConfigGuiAdapter {
     public synchronized void checkRegister() {
         if (!this.hasRegisteredExt && ConfigImpl.getAllConfigs().stream().anyMatch(config -> this.modid.equals(config.id.getNamespace()))) {
             this.hasRegisteredExt = true;
-            this.context.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(this::createScreen));
+            this.context.registerExtensionPoint(IConfigScreenFactory.class, this::createScreen);
         }
     }
     
-    public Screen createScreen(Minecraft minecraft, Screen modListScreen) {
+    public Screen createScreen(ModContainer modContainer, Screen modListScreen) {
         List<ConfigImpl> configs = ConfigImpl.getAllConfigs().stream()
                 .filter(config -> this.modid.equals(config.id.getNamespace()))
                 .sorted(Comparator.comparing(config -> "config".equals(config.id.getPath()) ? "" : config.id.getPath()))
@@ -41,9 +41,9 @@ public class ModConfigGuiAdapter {
         if (configs.isEmpty()) {
             return modListScreen;
         } else if (configs.size() == 1) {
-            return this.factory(minecraft, modListScreen).apply(configs.get(0));
+            return this.factory(modListScreen.getMinecraft(), modListScreen).apply(configs.get(0));
         } else {
-            return new ConfigSelectScreen(this.factory(minecraft, modListScreen), configs, modListScreen);
+            return new ConfigSelectScreen(this.factory(modListScreen.getMinecraft(), modListScreen), configs, modListScreen);
         }
     }
     

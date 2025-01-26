@@ -1,6 +1,6 @@
 package org.moddingx.libx.sandbox.generator;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -27,7 +27,7 @@ import java.util.Set;
  */
 public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
 
-    public static final Codec<ExtendedNoiseChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ExtendedNoiseChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(gen -> gen.biomeSource),
             NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter(gen -> gen.actualSettings),
             SurfaceRuleSet.CODEC.optionalFieldOf("surface_override").forGetter(gen -> gen.surfaceOverride)
@@ -50,17 +50,17 @@ public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
 
     public void init(RegistryAccess access) {
         if (this.surfaceOverride.isPresent()) {
-            NoiseGeneratorSettings settings = this.actualSettings.get();
-            SurfaceRuleSet set = this.surfaceOverride.get().get();
+            NoiseGeneratorSettings settings = this.actualSettings.value();
+            SurfaceRuleSet set = this.surfaceOverride.get().value();
             Set<Holder<Biome>> biomes = this.biomeSource.possibleBiomes();
-            SurfaceRules.RuleSource surfaceRule = set.build(access.registryOrThrow(Registries.BIOME), access.registryOrThrow(SandBox.BIOME_SURFACE), biomes, this.actualSettings.get());
+            SurfaceRules.RuleSource surfaceRule = set.build(access.registryOrThrow(Registries.BIOME), access.registryOrThrow(SandBox.BIOME_SURFACE), biomes, this.actualSettings.value());
             this.fakeSettings.set(Holder.direct(withSurface(settings, surfaceRule)));
         }
     }
 
     @Nonnull
     @Override
-    protected Codec<? extends ChunkGenerator> codec() {
+    protected MapCodec<? extends ChunkGenerator> codec() {
         return CODEC;
     }
 
@@ -75,6 +75,7 @@ public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
         return this.actualSettings.is(settings);
     }
     
+    @SuppressWarnings("deprecation")
     private static NoiseGeneratorSettings withSurface(NoiseGeneratorSettings settings, SurfaceRules.RuleSource surfaceRule) {
         return new NoiseGeneratorSettings(
                  settings.noiseSettings(),

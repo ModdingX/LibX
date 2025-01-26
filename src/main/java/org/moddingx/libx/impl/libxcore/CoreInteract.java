@@ -7,7 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import org.moddingx.libx.event.InteractBlockEmptyHandEvent;
 
 import javax.annotation.Nullable;
@@ -23,7 +23,7 @@ public class CoreInteract {
     public static InteractionResult useItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hit) {
         if (stack.isEmpty()) {
             InteractBlockEmptyHandEvent event = new InteractBlockEmptyHandEvent(player, level, hand, hit);
-            if (MinecraftForge.EVENT_BUS.post(event)) {
+            if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
                 return event.getCancellationResult() == null ? InteractionResult.PASS : event.getCancellationResult();
             }
         }

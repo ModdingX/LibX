@@ -15,7 +15,7 @@ public class DecoratedButton extends ButtonBlock {
     public final DecoratedBlock parent;
 
     public DecoratedButton(DecoratedBlock parent, boolean wooden) {
-        super(Properties.copy(parent), parent.getMaterialProperties().blockSetType(), wooden ? 30 : 20, wooden);
+        super(parent.getMaterialProperties().blockSetType(), wooden ? 30 : 20, Properties.ofFullCopy(parent));
         this.parent = parent;
     }
 
@@ -31,13 +31,12 @@ public class DecoratedButton extends ButtonBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public int getLightBlock(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
         return this.parent.getLightBlock(state, level, pos);
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
+    public int getLightEmission(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos) {
         return this.parent.getLightEmission(state, world, pos);
     }
 }

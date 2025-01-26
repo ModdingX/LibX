@@ -5,7 +5,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
@@ -64,7 +64,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
      * @see CategoryBuilder
      */
     public CategoryBuilder category(String id) {
-        CategoryBuilder builder = new CategoryBuilder(this.mod, new ResourceLocation(this.bookNamespace, id));
+        CategoryBuilder builder = new CategoryBuilder(this.mod, ResourceLocation.fromNamespaceAndPath(this.bookNamespace, id));
         this.categories.add(builder);
         this.categoryIds.add(id);
         return builder;
@@ -105,7 +105,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
         } else {
             if (!this.categoryIds.contains(category)) throw new IllegalArgumentException("Unknown category: " + category);
         }
-        EntryBuilder builder = new EntryBuilder(this.mod, id, new ResourceLocation(this.bookNamespace, category));
+        EntryBuilder builder = new EntryBuilder(this.mod, id, ResourceLocation.fromNamespaceAndPath(this.bookNamespace, category));
         this.entries.add(builder);
         return builder;
     }

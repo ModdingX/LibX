@@ -1,11 +1,12 @@
 package org.moddingx.libx.impl;
 
 import com.mojang.serialization.Codec;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLModContainer;
 import org.moddingx.libx.datagen.DatagenSystem;
-import org.moddingx.libx.impl.registration.RegistrationDispatcher;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.util.ClassUtil;
 
@@ -22,20 +23,25 @@ public class ModInternal {
     private static final Map<Class<? extends ModX>, ModInternal> MAP = new HashMap<>();
     private static final Map<String, ModInternal> ID_MAP = new HashMap<>();
 
-    public static void init(ModX mod, FMLJavaModLoadingContext ctx) {
+    public static ModInternal init(ModX mod) {
+        ModContainer modContainer = ModLoadingContext.get().getActiveContainer();
+        if (!Objects.equals(modContainer.getModId(), mod.modid)) {
+            throw new IllegalStateException("Mod entrypoint " + mod.modid + " (" + mod.getClass() + ") constructed while namespace " + modContainer.getModId() + " was active.");
+        }
         synchronized (LOCK) {
             if (!Modifier.isFinal(mod.getClass().getModifiers())) {
                 throw new IllegalStateException("Mod class must be final. Report to the author of the " + mod.modid + " mod.");
             }
             if (MAP.containsKey(mod.getClass())) {
-                throw new IllegalStateException("ModInternal initialised twice for mod " + mod.getClass());
+                throw new IllegalStateException("The same ModX class can't be an entrypoint twice.");
             }
             if (ID_MAP.containsKey(mod.modid)) {
-                throw new IllegalStateException("ModInternal initialised twice for modid " + mod.modid + " (Duplicate modid?)");
+                throw new IllegalStateException("A mod can have multiple entry points but only one of them may be of instance ModX.");
             }
-            ModInternal modInternal = new ModInternal(mod, ctx);
+            ModInternal modInternal = new ModInternal(mod, modContainer);
             MAP.put(mod.getClass(), modInternal);
             ID_MAP.put(mod.modid, modInternal);
+            return modInternal;
         }
     }
 
@@ -66,20 +72,23 @@ public class ModInternal {
 
     @Nullable
     private final Class<?> modInitClass;
+    private final FMLModContainer modContainer;
     private final IEventBus modEventBus;
     private final List<Runnable> setupTasks;
     private final List<Runnable> queueSetupTasks;
     private final List<Consumer<DatagenSystem>> datagenConfiguration;
-    private RegistrationDispatcher registrationDispatcher;
 
-    private ModInternal(ModX mod, FMLJavaModLoadingContext ctx) {
+    private ModInternal(ModX mod, ModContainer modContainer) {
+        if (!(modContainer instanceof FMLModContainer fmlContainer)) {
+            throw new IllegalStateException("ModX needs the fmljava language loader, got " + modContainer.getModInfo().getLoader().name());
+        }
         this.mod = mod;
         this.modInitClass = ClassUtil.forName(mod.getClass().getName() + "$");
-        this.modEventBus = ctx.getModEventBus();
+        this.modContainer = fmlContainer;
+        this.modEventBus = Objects.requireNonNull(fmlContainer.getEventBus(), "FML mod container has no event bus: " + this.mod.modid);
         this.setupTasks = new ArrayList<>();
         this.queueSetupTasks = new ArrayList<>();
         this.datagenConfiguration = new ArrayList<>();
-        this.registrationDispatcher = null;
 
         this.modEventBus.addListener(this::runSetup);
     }
@@ -88,14 +97,14 @@ public class ModInternal {
         return this.mod;
     }
 
+    public FMLModContainer modContainer() {
+        return this.modContainer;
+    }
+
     public IEventBus modEventBus() {
         return this.modEventBus;
     }
 
-    public void initRegistration(RegistrationDispatcher dispatcher) {
-        this.registrationDispatcher = dispatcher;
-    }
-    
     public void addSetupTask(Runnable task, boolean enqueue) {
         if (enqueue) {
             this.queueSetupTasks.add(task);
@@ -130,14 +139,6 @@ public class ModInternal {
             }
         } else {
             return null;
-        }
-    }
-    
-    public RegistrationDispatcher getRegistrationDispatcher() {
-        if (this.registrationDispatcher == null) {
-            throw new NoSuchElementException(this.mod.modid + " has no registration dispatcher. This is an error in LibX.");
-        } else {
-            return this.registrationDispatcher;
         }
     }
     

@@ -1,285 +1,286 @@
 package org.moddingx.libx.base;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.moddingx.libx.annotation.registration.PlainRegisterable;
+import org.moddingx.libx.impl.base.fluid.DefaultBucketItem;
 import org.moddingx.libx.impl.base.fluid.DefaultClientExtensions;
-import org.moddingx.libx.impl.base.fluid.FluidTypeBase;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
+import org.moddingx.libx.registration.util.ClientExtensionInfo;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
- * A {@link Registerable} that registers a {@link Fluid fluid}, a flowing fluid,
+ * A {@link Registerable} that registers a {@link FluidType fluid type}, source and flowing {@link Fluid fluid},
  * a {@link LiquidBlock liquid block} and a {@link BucketItem bucket item}.
  */
-public class FluidBase implements Registerable, ItemLike {
-
+@PlainRegisterable
+public class FluidBase implements ItemLike, Registerable {
+    
     protected final ModX mod;
 
-    private final Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory;
-    private final Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory;
-    private final FluidType.Properties properties;
-
-    @Nullable
-    private final Supplier<Supplier<IClientFluidTypeExtensions>> clientExtensions;
-
-    private boolean initialised;
-
-    private ForgeFlowingFluid.Source source;
-    private ForgeFlowingFluid.Flowing flowing;
-    private FluidType type;
-    private ForgeFlowingFluid.Properties fluidProperties;
-    private final LiquidBlock block;
-    private final BucketItem bucket;
-
-    private FluidBase(ModX mod, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory, Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory, FluidType.Properties properties, @Nullable Supplier<Supplier<IClientFluidTypeExtensions>> clientExtensions, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
+    private final FluidType fluidType;
+    private final FlowingFluid sourceFluid;
+    private final FlowingFluid flowingFluid;
+    private final LiquidBlock liquidBlock;
+    private final BucketItem bucketItem;
+    
+    public FluidBase(ModX mod, Builder fluidBuilder) {
         this.mod = mod;
-        this.sourceFactory = sourceFactory;
-        this.flowingFactory = flowingFactory;
-        this.properties = properties;
-        this.clientExtensions = clientExtensions;
-
-        this.initialised = false;
-
-        this.block = new LiquidBlock(this::getSource, blockProperties);
-        this.bucket = new BucketItem(this::getSource, itemProperties.stacksTo(1)) {
-
-            @Override
-            public ItemStack getCraftingRemainingItem(ItemStack stack) {
-                return new ItemStack(Items.BUCKET);
-            }
-
-            @Nonnull
-            @Override
-            protected String getOrCreateDescriptionId() {
-                return "libx.tooltip.fluidbase.bucket";
-            }
-
-            @Nonnull
-            @Override
-            public Component getName(@Nonnull ItemStack stack) {
-                return Component.translatable("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getFluidType().getDescription(new FluidStack(this.getFluid(), FluidType.BUCKET_VOLUME)));
-            }
-
-            @Nonnull
-            @Override
-            public Component getDescription() {
-                return Component.translatable("libx.tooltip.fluidbase.bucket", FluidBase.this.getFluid().getFluidType().getDescription(new FluidStack(this.getFluid(), FluidType.BUCKET_VOLUME)));
-            }
-        };
+        BaseFlowingFluid.Properties fluidProperties = fluidBuilder.fluidProperties.apply(new BaseFlowingFluid.Properties(this::getFluidType, this::getSourceFluid, this::getFlowingFluid));
+        fluidProperties = fluidProperties.block(this::getLiquidBlock).bucket(this::getBucketItem);
+        this.fluidType = fluidBuilder.fluidTypeFactory.apply(fluidBuilder.fluidTypeProperties);
+        this.sourceFluid = fluidBuilder.sourceFluidFactory.apply(fluidProperties);
+        this.flowingFluid = fluidBuilder.flowingFluidFactory.apply(fluidProperties);
+        this.liquidBlock = fluidBuilder.liquidBlockFactory.apply(this.sourceFluid, fluidBuilder.blockProperties);
+        this.bucketItem = fluidBuilder.bucketItemFactory.apply(this.sourceFluid, fluidBuilder.bucketItemProperties);
     }
 
     /**
-     * Gets the fluid. This should be used in recipes or {@link IFluidHandler fluid handlers}.
-     *
-     * @see #getSource()
+     * Creates the {@link IClientFluidTypeExtensions client extensions} for this fluid. The default
+     * implementation creates client extensions that have no special properties, use a still texture
+     * located at {@code [namespace]:block/[path]} and a flowing texture located at
+     * {@code [namespace]:block/[path]_flowing}.
      */
-    @Nonnull
-    public Fluid getFluid() {
-        return this.getSource();
-    }
-
-    /**
-     * Gets the source fluid. In most cases you should use {@link #getFluid()}.
-     *
-     * @see #getFluid()
-     */
-    @Nonnull
-    public ForgeFlowingFluid.Source getSource() {
-        return Objects.requireNonNull(this.source, "FluidBase has not yet been registered.");
-    }
-
-    /**
-     * Gets the fluid type.
-     */
-    @Nonnull
-    public FluidType getType() {
-        return Objects.requireNonNull(this.type, "FluidBase has not yet been registered.");
-    }
-
-    /**
-     * Gets the flowing fluid.
-     *
-     * @see #getSource()
-     */
-    @Nonnull
-    public ForgeFlowingFluid.Flowing getFlowing() {
-        return Objects.requireNonNull(this.flowing, "FluidBase has not yet been registered.");
-    }
-
-    /**
-     * Gets the fluid block for this fluid.
-     */
-    @Nonnull
-    public LiquidBlock getBlock() {
-        return Objects.requireNonNull(this.block, "FluidBase has not yet been registered.");
-    }
-
-    /**
-     * Gets the bucket item for this fluid.
-     */
-    @Nonnull
-    public BucketItem getBucket() {
-        return Objects.requireNonNull(this.bucket, "FluidBase has not yet been registered.");
-    }
-
-    /**
-     * Gets the properties for this fluid.
-     */
-    @Nonnull
-    public ForgeFlowingFluid.Properties getProperties() {
-        return Objects.requireNonNull(this.fluidProperties, "FluidBase has not yet been registered.");
-    }
-
-    /**
-     * Same as {@link #getBucket()}
-     */
-    @Nonnull
-    @Override
-    public Item asItem() {
-        return this.getBucket();
+    @OnlyIn(Dist.CLIENT)
+    protected ClientExtensionInfo.Fluid createClientExtensions(ResourceLocation id) {
+        ResourceLocation stillTexture = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
+        ResourceLocation flowingTexture = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath() + "_flowing");
+        return new ClientExtensionInfo.Fluid(new DefaultClientExtensions(stillTexture, flowingTexture));
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
-        this.init(ctx.id());
-        builder.register(Registries.FLUID, this.source);
-        builder.registerNamed(Registries.FLUID, "flowing", this.flowing);
-        builder.register(Registries.BLOCK, this.block);
-        builder.registerNamed(Registries.ITEM, "bucket", this.bucket);
-        builder.registerNamed(ForgeRegistries.Keys.FLUID_TYPES, "type", this.type);
+        builder.register(NeoForgeRegistries.Keys.FLUID_TYPES, this.fluidType);
+        builder.register(Registries.FLUID, this.sourceFluid);
+        builder.registerNamed(Registries.FLUID, "flowing", this.flowingFluid);
+        builder.register(Registries.BLOCK, this.liquidBlock);
+        builder.registerNamed(Registries.ITEM, "bucket", this.bucketItem);
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     @OverridingMethodsMustInvokeSuper
-    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
-        this.init(ctx.id());
-        builder.track(ForgeRegistries.FLUIDS, FluidBase.class.getDeclaredField("source"));
-        builder.trackNamed(ForgeRegistries.FLUIDS, "flowing", FluidBase.class.getDeclaredField("flowing"));
-        builder.track(ForgeRegistries.BLOCKS, FluidBase.class.getDeclaredField("block"));
-        builder.trackNamed(ForgeRegistries.ITEMS, "bucket", FluidBase.class.getDeclaredField("bucket"));
-        builder.trackNamed(ForgeRegistries.ITEMS, "type", FluidBase.class.getDeclaredField("type"));
+    public void registerClientAdditional(RegistrationContext ctx, EntryCollector builder) {
+        builder.register(null, this.createClientExtensions(ctx.id()));
     }
 
-    private synchronized void init(ResourceLocation id) {
-        if (!this.initialised) {
-            this.initialised = true;
-            this.properties.descriptionId("fluid." + id.getNamespace() + "." + id.getPath());
-            this.type = new FluidTypeBase(this.properties, this.clientExtensions != null ? this.clientExtensions : () -> () -> new DefaultClientExtensions(
-                    new ResourceLocation(id.getNamespace(), "block/" + id.getPath())
-            ));
-
-            this.fluidProperties = new ForgeFlowingFluid.Properties(this::getType, this::getSource, this::getFlowing)
-                    .block(this::getBlock)
-                    .bucket(this::getBucket);
-
-            this.source = this.sourceFactory.apply(this.fluidProperties);
-            this.flowing = this.flowingFactory.apply(this.fluidProperties);
-        }
+    /**
+     * Gets the {@link FluidType fluid type} for this {@link FluidBase}.
+     */
+    @Nonnull
+    public final FluidType getFluidType() {
+        return this.fluidType;
+    }
+    
+    /**
+     * Gets the {@link Fluid source fluid} for this {@link FluidBase}. This is the same as {@link #getSourceFluid()}.
+     * One should prefer this method over {@link #getSourceFluid()} when needing a representative for the whole
+     * {@link FluidType fluid type}, for example when creating {@link FluidStack fluid stacks}.
+     */
+    @Nonnull
+    public final Fluid getFluid() {
+        return this.getSourceFluid();
+    }
+    
+    /**
+     * Gets the {@link Fluid source fluid} for this {@link FluidBase}. This is the same as {@link #getFluid()}.
+     * One should prefer this method over {@link #getFluid()} when a distinction between source and flowing fluids
+     * is to be made.
+     */
+    @Nonnull
+    public final Fluid getSourceFluid() {
+        return this.sourceFluid;
     }
 
-    public static Builder builder(ModX mod) {
-        return new Builder(mod);
+    /**
+     * Gets the {@link Fluid flowing fluid} for this {@link FluidBase}.
+     */
+    @Nonnull
+    public final Fluid getFlowingFluid() {
+        return this.flowingFluid;
     }
 
+    /**
+     * Gets the {@link LiquidBlock liquid block} for this {@link FluidBase}.
+     */
+    @Nonnull
+    public final LiquidBlock getLiquidBlock() {
+        return this.liquidBlock;
+    }
+    
+    /**
+     * Gets the {@link BucketItem bucket item} for this {@link FluidBase}.
+     */
+    @Nonnull
+    public final BucketItem getBucketItem() {
+        return this.bucketItem;
+    }
+
+    /**
+     * This is the same as {@link #getBucketItem()} and allows {@link FluidBase} to be used as an {@link ItemLike}.
+     */
+    @Nonnull
+    @Override
+    public final Item asItem() {
+        return this.getBucketItem();
+    }
+
+    /**
+     * Creates a new fluid builder for setting the basic fluid properties to be passed in the constructor.
+     */
+    public static Builder fluidBuilder() {
+        return new Builder();
+    }
+    
     public static class Builder {
 
-        private final ModX mod;
-
-        private Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory;
-        private Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory;
-
-        @Nullable
-        private Supplier<Supplier<IClientFluidTypeExtensions>> clientExtensions;
-        private FluidType.Properties properties;
+        private Function<? super FluidType.Properties, ? extends FluidType> fluidTypeFactory;
+        private Function<? super BaseFlowingFluid.Properties, ? extends FlowingFluid> sourceFluidFactory;
+        private Function<? super BaseFlowingFluid.Properties, ? extends FlowingFluid> flowingFluidFactory;
+        private BiFunction<? super FlowingFluid, ? super BlockBehaviour.Properties, ? extends LiquidBlock> liquidBlockFactory;
+        private BiFunction<? super Fluid, ? super Item.Properties, ? extends BucketItem> bucketItemFactory;
+        
+        private FluidType.Properties fluidTypeProperties;
         private BlockBehaviour.Properties blockProperties;
-        private Item.Properties itemProperties;
-
-        private Builder(ModX mod) {
-            this.mod = mod;
-            this.sourceFactory = ForgeFlowingFluid.Source::new;
-            this.flowingFactory = ForgeFlowingFluid.Flowing::new;
-            this.clientExtensions = null;
-            this.properties = FluidType.Properties.create();
-            this.blockProperties = BlockBehaviour.Properties.copy(Blocks.WATER);
-                this.itemProperties = new Item.Properties();
+        private Item.Properties bucketItemProperties;
+        private UnaryOperator<BaseFlowingFluid.Properties> fluidProperties;
+        
+        private Builder() {
+            this.fluidTypeFactory = FluidType::new;
+            this.sourceFluidFactory = BaseFlowingFluid.Source::new;
+            this.flowingFluidFactory = BaseFlowingFluid.Flowing::new;
+            this.liquidBlockFactory = LiquidBlock::new;
+            this.bucketItemFactory = DefaultBucketItem::new;
+            
+            this.fluidTypeProperties = FluidType.Properties.create();
+            this.blockProperties = BlockBehaviour.Properties.ofFullCopy(Blocks.WATER);
+            this.bucketItemProperties = new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1);
+            this.fluidProperties = UnaryOperator.identity();
         }
 
-        public Builder sourceFactory(Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Source> sourceFactory) {
-            this.sourceFactory = sourceFactory;
+        /**
+         * Provides a custom implementation for {@link FluidType}.
+         */
+        public FluidBase.Builder fluidType(Function<? super FluidType.Properties, ? extends FluidType> fluidTypeFactory) {
+            this.fluidTypeFactory = fluidTypeFactory;
             return this;
         }
 
-        public Builder flowingFactory(Function<ForgeFlowingFluid.Properties, ForgeFlowingFluid.Flowing> flowingFactory) {
-            this.flowingFactory = flowingFactory;
+        /**
+         * Provides a custom implementation for the {@link FlowingFluid source fluid}.
+         */
+        public FluidBase.Builder sourceFluid(Function<? super BaseFlowingFluid.Properties, ? extends FlowingFluid> sourceFluidFactory) {
+            this.sourceFluidFactory = sourceFluidFactory;
             return this;
         }
 
-        public Builder clientExtensions(Supplier<Supplier<IClientFluidTypeExtensions>> clientExtensions) {
-            this.clientExtensions = clientExtensions;
+        /**
+         * Provides a custom implementation for the {@link FlowingFluid flowing fluid}.
+         */
+        public FluidBase.Builder flowingFluid(Function<? super BaseFlowingFluid.Properties, ? extends FlowingFluid> flowingFluidFactory) {
+            this.flowingFluidFactory = flowingFluidFactory;
             return this;
         }
 
-        public Builder properties(FluidType.Properties properties) {
-            this.properties = properties;
+
+        /**
+         * Provides a custom implementation for the {@link LiquidBlock liquid block}.
+         */
+        public FluidBase.Builder liquidBlock(BiFunction<? super FlowingFluid, ? super BlockBehaviour.Properties, ? extends LiquidBlock> liquidBlockFactory) {
+            this.liquidBlockFactory = liquidBlockFactory;
             return this;
         }
 
-        public Builder properties(Consumer<FluidType.Properties> action) {
-            action.accept(this.properties);
+        /**
+         * Provides a custom implementation for the {@link BucketItem bucket item}.
+         */
+        public FluidBase.Builder bucketItem(BiFunction<? super Fluid, ? super Item.Properties, ? extends BucketItem> bucketItemFactory) {
+            this.bucketItemFactory = bucketItemFactory;
             return this;
         }
 
-        public Builder blockProperties(BlockBehaviour.Properties blockProperties) {
+        /**
+         * Sets the {@link FluidType.Properties fluid type properties}.
+         */
+        public FluidBase.Builder properties(FluidType.Properties fluidTypeProperties) {
+            this.fluidTypeProperties = fluidTypeProperties;
+            return this;
+        }
+        
+        /**
+         * Runs an action on the current {@link FluidType.Properties fluid type properties}.
+         */
+        public FluidBase.Builder properties(UnaryOperator<FluidType.Properties> fluidTypePropertiesOp) {
+            this.fluidTypeProperties = fluidTypePropertiesOp.apply(this.fluidTypeProperties);
+            return this;
+        }
+        
+        /**
+         * Sets the {@link BlockBehaviour.Properties liquid block properties}.
+         */
+        public FluidBase.Builder blockProperties(BlockBehaviour.Properties blockProperties) {
             this.blockProperties = blockProperties;
             return this;
         }
-
-        public Builder blockProperties(Consumer<BlockBehaviour.Properties> action) {
-            action.accept(this.blockProperties);
+        
+        /**
+         * Runs an action on the current {@link BlockBehaviour.Properties liquid block properties}.
+         */
+        public FluidBase.Builder blockProperties(UnaryOperator<BlockBehaviour.Properties> blockPropertiesOp) {
+            this.blockProperties = blockPropertiesOp.apply(this.blockProperties);
+            return this;
+        }
+        
+        /**
+         * Sets the {@link Item.Properties bucket item properties}.
+         */
+        public FluidBase.Builder bucketItemProperties(Item.Properties bucketItemProperties) {
+            this.bucketItemProperties = bucketItemProperties;
+            return this;
+        }
+        
+        /**
+         * Runs an action on the current {@link Item.Properties bucket item properties}.
+         */
+        public FluidBase.Builder bucketItemProperties(UnaryOperator<Item.Properties> bucketItemPropertiesOp) {
+            this.bucketItemProperties = bucketItemPropertiesOp.apply(this.bucketItemProperties);
             return this;
         }
 
-        public Builder itemProperties(Item.Properties itemProperties) {
-            this.itemProperties = itemProperties;
+        /**
+         * Runs an action on the current {@link BaseFlowingFluid.Properties fluid properties}.
+         */
+        public FluidBase.Builder fluidProperties(UnaryOperator<BaseFlowingFluid.Properties> fluidPropertiesOp) {
+            this.fluidProperties = compose(this.fluidProperties, fluidPropertiesOp);
             return this;
         }
-
-        public Builder itemProperties(Consumer<Item.Properties> action) {
-            action.accept(this.itemProperties);
-            return this;
-        }
-
-        public FluidBase build() {
-            return new FluidBase(
-                    this.mod, this.sourceFactory, this.flowingFactory, this.properties,
-                    this.clientExtensions, this.blockProperties, this.itemProperties
-            );
+        
+        private static <T> UnaryOperator<T> compose(UnaryOperator<T> a, UnaryOperator<T> b) {
+            return t -> b.apply(a.apply(t));
         }
     }
 }

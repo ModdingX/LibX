@@ -1,11 +1,8 @@
 package org.moddingx.libx.datagen.provider.loot;
 
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
@@ -27,10 +24,8 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
-import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.*;
-import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.loot.LootBuilders;
@@ -38,11 +33,14 @@ import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.LootFactory;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.SimpleLootFactory;
+import org.moddingx.libx.impl.loot.CopyBlockEntityDataFunction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
@@ -156,7 +154,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      * A loot modifier to apply fortune based on the formula used for ores.
      */
     public LootModifier<Block> fortuneOres() {
-        return this.modifier((block, entry) -> entry.apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE)));
+        return this.modifier((block, entry) -> entry.apply(ApplyBonusCount.addOreBonusCount(this.holder(Enchantments.FORTUNE))));
     }
     
     /**
@@ -170,7 +168,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      * A loot modifier to apply fortune based on a uniform formula.
      */
     public LootModifier<Block> fortuneUniform(int multiplier) {
-        return this.modifier((block, entry) -> entry.apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, multiplier)));
+        return this.modifier((block, entry) -> entry.apply(ApplyBonusCount.addUniformBonusCount(this.holder(Enchantments.FORTUNE), multiplier)));
     }
 
     /**
@@ -184,7 +182,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      * A loot modifier to apply fortune based on a binomial formula.
      */
     public LootModifier<Block> fortuneBinomial(float probability, int bonus) {
-        return this.modifier((block, entry) -> entry.apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, probability, bonus)));
+        return this.modifier((block, entry) -> entry.apply(ApplyBonusCount.addBonusBinomialDistributionCount(this.holder(Enchantments.FORTUNE), probability, bonus)));
     }
     
     
@@ -207,7 +205,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
         float[] chances = new float[levelChances.length + 1];
         chances[0] = baseChance;
         System.arraycopy(levelChances, 0, chances, 1, levelChances.length);
-        return BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances);
+        return BonusLevelTableCondition.bonusLevelFlatChance(this.holder(Enchantments.FORTUNE), chances);
     }
 
     /**
@@ -236,7 +234,9 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      */
     public LootItemCondition.Builder silkCondition() {
         ItemPredicate.Builder predicate = ItemPredicate.Builder.item()
-                .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1)));
+                .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.of(
+                        new EnchantmentPredicate(this.holder(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.ANY)
+                )));
         return MatchTool.toolMatches(predicate);
     }
 
@@ -247,10 +247,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      */
     public LootModifier<Block> copyNBT(String... tags) {
         return this.modifier((block, entry) -> {
-            CopyNbtFunction.Builder func = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY);
-            for (String tag : tags) {
-                func = func.copy(tag, "BlockEntityTag." + tag);
-            }
+            CopyBlockEntityDataFunction.Builder func = CopyBlockEntityDataFunction.copyBlockEntityData(block, Set.of(tags));
             return entry.apply(func);
         });
     }
@@ -289,25 +286,31 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      * This serves as a builder for a loot condition and a builder for a match tool predicate
      * in one.
      */
-    public static class MatchToolBuilder implements LootItemCondition.Builder {
+    public class MatchToolBuilder implements LootItemCondition.Builder {
         
         private final ItemPredicate.Builder builder;
+        private final List<EnchantmentPredicate> enchantments;
 
         private MatchToolBuilder(ItemPredicate.Builder builder) {
             this.builder = builder;
+            this.enchantments = new ArrayList<>();
         }
 
         @Nonnull
         @Override
         public LootItemCondition build() {
+            if (!this.enchantments.isEmpty()) {
+                this.builder.withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.copyOf(this.enchantments)));
+                this.enchantments.clear();
+            }
             return MatchTool.toolMatches(this.builder).build();
         }
 
         /**
          * Adds a required enchantment to this builder.
          */
-        public MatchToolBuilder enchantment(Enchantment enchantment) {
-            return this.enchantment(enchantment, MinMaxBounds.Ints.atLeast(1));
+        public MatchToolBuilder enchantment(ResourceKey<Enchantment> enchantment) {
+            return this.enchantment(enchantment, MinMaxBounds.Ints.ANY);
         }
         
         /**
@@ -315,7 +318,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
          * 
          * @param minLevel The minimum level of the enchantment that must be present.
          */
-        public MatchToolBuilder enchantment(Enchantment enchantment, int minLevel) {
+        public MatchToolBuilder enchantment(ResourceKey<Enchantment> enchantment, int minLevel) {
             return this.enchantment(enchantment, MinMaxBounds.Ints.atLeast(minLevel));
         }
         
@@ -324,20 +327,23 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
          * 
          * @param level The exact level of the enchantment that must be present.
          */
-        public MatchToolBuilder enchantmentExact(Enchantment enchantment, int level) {
+        public MatchToolBuilder enchantmentExact(ResourceKey<Enchantment> enchantment, int level) {
             return this.enchantment(enchantment, MinMaxBounds.Ints.exactly(level));
         }
         
-        private MatchToolBuilder enchantment(Enchantment enchantment, MinMaxBounds.Ints bounds) {
-            this.builder.hasEnchantment(new EnchantmentPredicate(enchantment, bounds));
+        private MatchToolBuilder enchantment(ResourceKey<Enchantment> enchantment, MinMaxBounds.Ints bounds) {
+            this.enchantments.add(new EnchantmentPredicate(BlockLootProviderBase.this.holder(enchantment), bounds));
             return this;
         }
 
         /**
-         * Adds required NBT data to this builder.
+         * Sets an {@link ItemSubPredicate} for this builder. This replaces any previously set values for the given
+         * {@link ItemSubPredicate.Type type}. {@link ItemSubPredicates#ENCHANTMENTS Enchantments} can't be set this
+         * way, use the {@link #enchantment(ResourceKey) enchantments} methods instead.
          */
-        public MatchToolBuilder nbt(CompoundTag nbt) {
-            this.builder.hasNbt(nbt);
+        public <T extends ItemSubPredicate> MatchToolBuilder setSubPredicate(ItemSubPredicate.Type<T> type, T predicate) {
+            if (type == ItemSubPredicates.ENCHANTMENTS) throw new IllegalArgumentException("Use MatchToolBuilder#enchantment");
+            this.builder.withSubPredicate(type, predicate);
             return this;
         }
     }

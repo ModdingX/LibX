@@ -55,7 +55,7 @@ public class RegisterClassProcessor {
         TypeMirror registryClass = env.classType(classAnnotation::registryClass);
         if (registryClass.getKind() == TypeKind.VOID) {
             classesToCheck = List.of(
-                    env.typeElement(Classes.FORGE_KEYS),
+                    env.typeElement(Classes.NEOFORGE_KEYS),
                     env.typeElement(Classes.REGISTRIES)
             );
         } else {

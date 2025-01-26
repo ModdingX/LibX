@@ -134,7 +134,7 @@ public abstract class DimensionTypeProviderBase extends RegistryProviderBase {
         }
         
         public DimensionTypeBuilder effects(String namespace, String path) {
-            return this.effects(new ResourceLocation(namespace, path));
+            return this.effects(ResourceLocation.fromNamespaceAndPath(namespace, path));
         }
             
         public DimensionTypeBuilder effects(ResourceLocation id) {

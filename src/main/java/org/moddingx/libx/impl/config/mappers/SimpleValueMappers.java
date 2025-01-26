@@ -2,9 +2,11 @@ package org.moddingx.libx.impl.config.mappers;
 
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -41,13 +43,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public Boolean fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readBoolean();
-        }
-
-        @Override
-        public void toNetwork(Boolean value, FriendlyByteBuf buffer) {
-            buffer.writeBoolean(value);
+        public StreamCodec<? super FriendlyByteBuf, Boolean> streamCodec() {
+            return ByteBufCodecs.BOOL;
         }
 
         @Override
@@ -80,13 +77,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public Byte fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readByte();
-        }
-
-        @Override
-        public void toNetwork(Byte value, FriendlyByteBuf buffer) {
-            buffer.writeByte(value);
+        public StreamCodec<? super FriendlyByteBuf, Byte> streamCodec() {
+            return ByteBufCodecs.BYTE;
         }
 
         @Override
@@ -119,13 +111,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public Short fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readShort();
-        }
-
-        @Override
-        public void toNetwork(Short value, FriendlyByteBuf buffer) {
-            buffer.writeShort(value);
+        public StreamCodec<? super FriendlyByteBuf, Short> streamCodec() {
+            return ByteBufCodecs.SHORT;
         }
 
         @Override
@@ -166,13 +153,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public Integer fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readVarInt();
-        }
-
-        @Override
-        public void toNetwork(Integer value, FriendlyByteBuf buffer) {
-            buffer.writeVarInt(value);
+        public StreamCodec<? super FriendlyByteBuf, Integer> streamCodec() {
+            return ByteBufCodecs.VAR_INT;
         }
 
         @Override
@@ -213,13 +195,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public Long fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readVarLong();
-        }
-
-        @Override
-        public void toNetwork(Long value, FriendlyByteBuf buffer) {
-            buffer.writeVarLong(value);
+        public StreamCodec<? super FriendlyByteBuf, Long> streamCodec() {
+            return ByteBufCodecs.VAR_LONG;
         }
 
         @Override
@@ -260,13 +237,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public Float fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readFloat();
-        }
-
-        @Override
-        public void toNetwork(Float value, FriendlyByteBuf buffer) {
-            buffer.writeFloat(value);
+        public StreamCodec<? super FriendlyByteBuf, Float> streamCodec() {
+            return ByteBufCodecs.FLOAT;
         }
 
         @Override
@@ -307,13 +279,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public Double fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readDouble();
-        }
-
-        @Override
-        public void toNetwork(Double value, FriendlyByteBuf buffer) {
-            buffer.writeDouble(value);
+        public StreamCodec<? super FriendlyByteBuf, Double> streamCodec() {
+            return ByteBufCodecs.DOUBLE;
         }
 
         @Override
@@ -354,13 +321,8 @@ public class SimpleValueMappers {
         }
 
         @Override
-        public String fromNetwork(FriendlyByteBuf buffer) {
-            return buffer.readUtf();
-        }
-
-        @Override
-        public void toNetwork(String value, FriendlyByteBuf buffer) {
-            buffer.writeUtf(value);
+        public StreamCodec<? super FriendlyByteBuf, String> streamCodec() {
+            return ByteBufCodecs.STRING_UTF8;
         }
 
         @Override

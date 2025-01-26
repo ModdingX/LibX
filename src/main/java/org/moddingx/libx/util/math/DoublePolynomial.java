@@ -1,6 +1,10 @@
 package org.moddingx.libx.util.math;
 
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import org.moddingx.libx.codec.MoreStreamCodecs;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +20,10 @@ public final class DoublePolynomial extends Polynomial<Double> implements Double
             doubles -> new DoublePolynomial(doubles.stream().dropWhile(d -> d == 0).mapToDouble(d -> d).toArray(), true),
             p -> p.coefficients.length == 0 ? List.of(0d) : Arrays.stream(p.coefficients).boxed().toList()
     );
+
+    public static final StreamCodec<ByteBuf, DoublePolynomial> STREAM_CODEC = MoreStreamCodecs.listOf(ByteBufCodecs.DOUBLE).map(
+            doubles-> new DoublePolynomial(doubles.stream().mapToDouble(c -> c).dropWhile(d -> d == 0).toArray()),
+            p -> p.coefficients.length == 0 ? List.of(0d) : Arrays.stream(p.coefficients).boxed().toList());
 
     /**
      * The polynomial that is always zero.

@@ -1,5 +1,6 @@
 package org.moddingx.libx.base.tile;
 
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -24,7 +25,7 @@ public interface GameEventBlock {
      *
      * @return {@code true} to indicate the event was handled, {@code false} otherwise.
      */
-    boolean notifyGameEvent(ServerLevel level, GameEvent message, GameEvent.Context context, Vec3 pos);
+    boolean notifyGameEvent(ServerLevel level, Holder<GameEvent> message, GameEvent.Context context, Vec3 pos);
     
     /**
      * Gets the delivery mode for this game event listener.

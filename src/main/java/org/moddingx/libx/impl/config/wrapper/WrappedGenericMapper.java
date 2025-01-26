@@ -2,8 +2,9 @@ package org.moddingx.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
@@ -44,13 +45,8 @@ public class WrappedGenericMapper<T, E extends JsonElement, C> implements ValueM
     }
 
     @Override
-    public T fromNetwork(FriendlyByteBuf buffer) {
-        return this.parent.fromNetwork(buffer, this.mapper);
-    }
-
-    @Override
-    public void toNetwork(T value, FriendlyByteBuf buffer) {
-        this.parent.toNetwork(value, buffer, this.mapper);
+    public StreamCodec<? super FriendlyByteBuf, T> streamCodec() {
+        return this.parent.streamCodec(this.mapper);
     }
 
     @Override

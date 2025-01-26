@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.loot;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -16,9 +17,10 @@ import java.util.function.Consumer;
 public class AllLootEntry extends CompositeEntryBase {
 
     public static final ResourceLocation ID = LibX.getInstance().resource("all");
-    public static final LootPoolEntryType TYPE = new LootPoolEntryType(CompositeEntryBase.createSerializer(AllLootEntry::new));
+    public static final MapCodec<AllLootEntry> CODEC = createCodec(AllLootEntry::new);
+    public static final LootPoolEntryType TYPE = new LootPoolEntryType(CODEC);
 
-    public AllLootEntry(LootPoolEntryContainer[] children, LootItemCondition[] conditions) {
+    public AllLootEntry(List<LootPoolEntryContainer> children, List<LootItemCondition> conditions) {
         super(children, conditions);
     }
 
@@ -30,14 +32,14 @@ public class AllLootEntry extends CompositeEntryBase {
 
     @Nonnull
     @Override
-    protected ComposableEntryContainer compose(ComposableEntryContainer[] entries) {
-        return switch (entries.length) {
+    protected ComposableEntryContainer compose(@Nonnull List<? extends ComposableEntryContainer> children) {
+        return switch (children.size()) {
             case 0 -> ALWAYS_TRUE;
-            case 1 -> entries[0];
+            case 1 -> children.getFirst();
             default -> (ctx, consumer) -> {
                 List<LootPoolEntry> list = new ArrayList<>();
                 boolean success = false;
-                for (ComposableEntryContainer entry : entries) {
+                for (ComposableEntryContainer entry : children) {
                     if (entry.expand(ctx, list::add)) {
                         success = true;
                     }

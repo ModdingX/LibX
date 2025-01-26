@@ -58,7 +58,7 @@ public class Textures {
      * scaled up to match the target scale.
      */
     public int textureScale(ResourceLocation loc) {
-        return this.imageScale(new ResourceLocation(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
+        return this.imageScale(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
     }
 
     /**
@@ -92,7 +92,7 @@ public class Textures {
      * Gets a preloaded source texture.
      */
     public BufferedImage texture(ResourceLocation loc) {
-        return this.image(new ResourceLocation(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
+        return this.image(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
     }
 
     /**

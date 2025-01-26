@@ -4,9 +4,10 @@ import com.mojang.serialization.Lifecycle;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +23,7 @@ import org.moddingx.libx.sandbox.SandBox;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * SandBox provider for noise related data.
@@ -381,13 +383,13 @@ public abstract class NoiseProviderBase extends RegistryProviderBase {
         }
     }
     
-    private class Bootstrap<T> implements BootstapContext<T> {
+    private class Bootstrap<T> implements BootstrapContext<T> {
         
         @Nonnull
         @Override
         @SuppressWarnings({ "unchecked", "rawtypes", "RedundantCast" })
         public Holder.Reference<T> register(@Nonnull ResourceKey<T> key, @Nonnull T value, @Nonnull Lifecycle lifecycle) {
-            return NoiseProviderBase.this.registries.writableRegistry((ResourceKey) ResourceKey.createRegistryKey(key.registry())).register(key, value, lifecycle);
+            return NoiseProviderBase.this.registries.writableRegistry((ResourceKey) ResourceKey.createRegistryKey(key.registry())).register(key, value, new RegistrationInfo(Optional.empty(), lifecycle));
         }
 
         @Nonnull

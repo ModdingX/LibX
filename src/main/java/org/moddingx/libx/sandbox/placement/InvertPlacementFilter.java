@@ -1,7 +1,7 @@
 package org.moddingx.libx.sandbox.placement;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
  */
 public class InvertPlacementFilter extends PlacementFilter {
 
-    public static final Codec<InvertPlacementFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<InvertPlacementFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             PlacementModifier.CODEC.fieldOf("filter").flatXmap(
                     modifier -> modifier instanceof PlacementFilter filter ? DataResult.success(filter) : DataResult.error(() -> "Can only invert placement filters, not modifiers. Invalid filter: " + modifier),
                     DataResult::success

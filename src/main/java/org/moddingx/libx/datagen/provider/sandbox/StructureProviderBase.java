@@ -3,6 +3,7 @@ package org.moddingx.libx.datagen.provider.sandbox;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.MobCategory;
@@ -15,15 +16,16 @@ import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -66,6 +68,9 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
         private HeightProvider startHeight;
         private Heightmap.Types heightRelativeTo;
         private boolean expansionHack;
+        private final List<PoolAliasBinding> aliases;
+        private DimensionPadding dimensionPading;
+        private LiquidSettings liquidSettings;
 
         private JigsawBuilder(Holder<StructureTemplatePool> startPool) {
             this.startPool = startPool;
@@ -75,6 +80,9 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
             this.startHeight = ConstantHeight.of(VerticalAnchor.absolute(0));
             this.heightRelativeTo = Heightmap.Types.WORLD_SURFACE_WG;
             this.expansionHack = false;
+            this.aliases = new ArrayList<>();
+            this.dimensionPading = DimensionPadding.ZERO;
+            this.liquidSettings = LiquidSettings.APPLY_WATERLOGGING;
         }
 
         /**
@@ -143,10 +151,45 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
         }
 
         /**
+         * Add a {@link PoolAliasBinding} to the list of aliases.
+         */
+        public JigsawBuilder alias(ResourceKey<StructureTemplatePool> newName, ResourceKey<StructureTemplatePool> aliasedTo) {
+            this.aliases.add(PoolAliasBinding.direct(newName, aliasedTo));
+            return this;
+        }
+        
+        /**
+         * Add a {@link PoolAliasBinding} to the list of aliases.
+         */
+        public JigsawBuilder alias(PoolAliasBinding alias) {
+            this.aliases.add(alias);
+            return this;
+        }
+        
+        /**
+         * Set the minimum padding relative to the dimensions logical height.
+         */
+        public JigsawBuilder dimensionPadding(int bottom, int top) {
+            this.dimensionPading = new DimensionPadding(bottom, top);
+            return this;
+        }
+
+        /**
+         * Disable waterlogging of waterloggable blocks when they are be placed in water.
+         */
+        public JigsawBuilder noWaterLogging() {
+            this.liquidSettings = LiquidSettings.IGNORE_WATERLOGGING;
+            return this;
+        }
+        
+        /**
          * Returns a builder for the structure settings.
          */
         public StructureSettingsBuilder structure() {
-            return StructureProviderBase.this.forFactory(settings -> new JigsawStructure(settings, this.startPool, Optional.ofNullable(this.centerJigsawBlockNameInStartPool), this.maxNestingDepth, this.startHeight, this.expansionHack, Optional.ofNullable(this.heightRelativeTo), this.maxDistanceFromCenter));
+            return StructureProviderBase.this.forFactory(settings -> new JigsawStructure(
+                    settings, this.startPool, Optional.ofNullable(this.centerJigsawBlockNameInStartPool), this.maxNestingDepth,
+                    this.startHeight, this.expansionHack, Optional.ofNullable(this.heightRelativeTo), this.maxDistanceFromCenter,
+                    List.copyOf(this.aliases), this.dimensionPading, this.liquidSettings));
         }
     }
     

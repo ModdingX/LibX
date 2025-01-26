@@ -3,9 +3,8 @@ package org.moddingx.libx.impl.config.gui.screen.content.component.type;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
+import net.minecraft.network.chat.contents.PlainTextContents;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -43,11 +42,11 @@ public class TextComponentType implements ComponentType {
     @Override
     public MutableComponent init(Component component, Consumer<MutableComponent> inputChanged) {
         this.inputChanged = inputChanged;
-        if (component.getContents() == ComponentContents.EMPTY) {
+        if (component.getContents() == PlainTextContents.EMPTY) {
             this.value = "";
             return component.plainCopy();
-        } else if (component.getContents() instanceof LiteralContents lc) {
-            this.value = lc.text();
+        } else if (component.getContents() instanceof PlainTextContents pc) {
+            this.value = pc.text();
             return component.plainCopy();
         } else {
             return null;

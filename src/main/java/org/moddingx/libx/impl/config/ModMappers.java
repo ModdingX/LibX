@@ -2,11 +2,11 @@ package org.moddingx.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.OnlyIns;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.OnlyIns;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.loading.FMLLoader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.moddingx.libx.LibX;
@@ -18,12 +18,15 @@ import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ConfigValidator;
 import org.moddingx.libx.impl.config.gui.ModConfigGuiAdapter;
 import org.moddingx.libx.impl.config.mappers.SimpleValueMappers;
-import org.moddingx.libx.impl.config.mappers.advanced.*;
+import org.moddingx.libx.impl.config.mappers.advanced.ComponentValueMapper;
+import org.moddingx.libx.impl.config.mappers.advanced.ResourceListValueMapper;
+import org.moddingx.libx.impl.config.mappers.advanced.ResourceValueMapper;
+import org.moddingx.libx.impl.config.mappers.advanced.UidValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.ListValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.MapValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.OptionValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.SetValueMapper;
-import org.moddingx.libx.impl.config.mappers.special.EnumValueMappers;
+import org.moddingx.libx.impl.config.mappers.special.EnumValueMapper;
 import org.moddingx.libx.impl.config.mappers.special.PairValueMapper;
 import org.moddingx.libx.impl.config.mappers.special.RecordValueMapper;
 import org.moddingx.libx.impl.config.mappers.special.TripleValueMapper;
@@ -71,10 +74,8 @@ public class ModMappers {
             SimpleValueMappers.DOUBLE,
             SimpleValueMappers.STRING,
             ResourceValueMapper.INSTANCE,
-            IngredientValueMapper.INSTANCE,
             ComponentValueMapper.INSTANCE,
             ResourceListValueMapper.INSTANCE,
-            IngredientStackValueMapper.INSTANCE,
             UidValueMapper.INSTANCE
     ).collect(ImmutableMap.toImmutableMap(ValueMapper::type, Function.identity()));
     
@@ -160,8 +161,8 @@ public class ModMappers {
         } else if (globalGenericMappers.containsKey(cls)) {
             return this.resolveGeneric(globalGenericMappers.get(cls), type);
         } else if (cls.isEnum()) {
-            //noinspection unchecked
-            return EnumValueMappers.getMapper((Class<? extends Enum<?>>) cls);
+            //noinspection unchecked,rawtypes
+            return EnumValueMapper.getMapper((Class) cls);
         } else if (cls == Pair.class) {
             return new PairValueMapper<>(this.getWrappedMapperUnsafe(type, 0), this.getWrappedMapperUnsafe(type, 1));
         } else if (cls == Triple.class) {
@@ -209,17 +210,13 @@ public class ModMappers {
     }
     
     private static Class<?> getTypeClass(Type type) {
-        if (type instanceof Class<?> cls) {
-            return cls;
-        } else if (type instanceof ParameterizedType ptype) {
-            return getTypeClass(ptype.getRawType());
-        } else if (type instanceof TypeVariable) {
-            throw new IllegalStateException("Type variables are not allowed in config field types.");
-        } else if (type instanceof WildcardType) {
-            throw new IllegalStateException("Wildcard types are not allowed in config field types.");
-        } else {
-            throw new IllegalStateException("Unknown declared type of config field: " + type);
-        }
+        return switch (type) {
+            case Class<?> cls -> cls;
+            case ParameterizedType ptype -> getTypeClass(ptype.getRawType());
+            case TypeVariable<?> typeVariable -> throw new IllegalStateException("Type variables are not allowed in config field types.");
+            case WildcardType wildcardType -> throw new IllegalStateException("Wildcard types are not allowed in config field types.");
+            case null, default -> throw new IllegalStateException("Unknown declared type of config field: " + type);
+        };
     }
 
     @Nullable
@@ -248,9 +245,9 @@ public class ModMappers {
         }
     }
     
-    public void initAdapter(ModLoadingContext context) {
-        if (this.adapter == null && FMLEnvironment.dist == Dist.CLIENT) {
-            this.adapter = new ModConfigGuiAdapter(this.modid, context.getActiveContainer());
+    public void initAdapter(ModContainer modContainer) {
+        if (this.adapter == null && FMLLoader.getDist() == Dist.CLIENT) {
+            this.adapter = new ModConfigGuiAdapter(this.modid, modContainer);
         }
     }
     

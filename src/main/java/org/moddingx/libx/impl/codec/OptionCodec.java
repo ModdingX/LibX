@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.Lifecycle;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -40,7 +39,7 @@ public class OptionCodec<A> implements Codec<Optional<A>> {
                     if (Objects.equals(pair.getSecond(), ops.empty())) {
                         return DataResult.success(Pair.of(Optional.of(pair.getFirst()), ops.empty()));
                     } else {
-                        return DataResult.error(() -> "Can't decode option: child codec left over some data");
+                        return DataResult.error(() -> "Can't decode option: child streamCodec left over some data");
                     }
                 });
             } else {

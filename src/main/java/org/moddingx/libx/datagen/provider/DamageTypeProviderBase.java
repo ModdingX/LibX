@@ -40,7 +40,7 @@ public abstract class DamageTypeProviderBase extends RegistryProviderBase {
         private DamageEffects effects = DamageEffects.HURT;
         private DeathMessageType deathMessageType = DeathMessageType.DEFAULT;
 
-        public DamageTypeBuilder(String msgId, float exhaustion) {
+        private DamageTypeBuilder(String msgId, float exhaustion) {
             this.msgId = msgId;
             this.exhaustion = exhaustion;
         }

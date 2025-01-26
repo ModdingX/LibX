@@ -1,7 +1,10 @@
 package org.moddingx.libx.crafting;
 
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -13,6 +16,18 @@ import java.util.function.Predicate;
 public record IngredientStack(Ingredient ingredient, int count) implements Predicate<ItemStack> {
 
     public static final IngredientStack EMPTY = new IngredientStack(Ingredient.EMPTY, 0);
+
+    public static final Codec<IngredientStack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Ingredient.CODEC.fieldOf("ingredient").forGetter(IngredientStack::ingredient),
+                    Codec.INT.fieldOf("count").forGetter(IngredientStack::count)
+            ).apply(instance, IngredientStack::new)
+    );
+    
+    public static final StreamCodec<RegistryFriendlyByteBuf, IngredientStack> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, IngredientStack::ingredient,
+            ByteBufCodecs.VAR_INT, IngredientStack::count,
+            IngredientStack::new
+    );
     
     public IngredientStack(Ingredient ingredient, int count) {
         if (count <= 0 || ingredient.isEmpty()) {
@@ -38,42 +53,5 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
      */
     public boolean isEmpty() {
         return this.count == 0 || this.ingredient.isEmpty();
-    }
-
-    /**
-     * Serialises the IngredientStack to json.
-     */
-    public JsonObject toJson() {
-        JsonObject json = new JsonObject();
-        json.add("Ingredient", this.ingredient.toJson());
-        json.addProperty("Count", this.count);
-        return json;
-    }
-
-    /**
-     * Writes this IngredientStack to a {@link FriendlyByteBuf}.
-     */
-    public void toNetwork(FriendlyByteBuf buffer) {
-        buffer.writeVarInt(this.count);
-        this.ingredient.toNetwork(buffer);
-    }
-
-    /**
-     * Deserializes and IngredientStack from json.
-     */
-    public static IngredientStack fromJson(JsonObject json) {
-        Ingredient ingredient = json.has("Ingredient") ? Ingredient.fromJson(json.get("Ingredient")) : Ingredient.EMPTY;
-        int count = json.has("Count") && json.get("Count").isJsonPrimitive() ? json.get("Count").getAsInt() : 1;
-        
-        return new IngredientStack(ingredient, count);
-    }
-
-    /**
-     * Reads an IngredientStack from a {@link FriendlyByteBuf}.
-     */
-    public static IngredientStack fromNetwork(FriendlyByteBuf buffer) {
-        int count = buffer.readVarInt();
-        Ingredient ingredient = Ingredient.fromNetwork(buffer);
-        return new IngredientStack(ingredient, count);
     }
 }

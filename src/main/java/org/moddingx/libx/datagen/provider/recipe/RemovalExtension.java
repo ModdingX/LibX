@@ -6,6 +6,6 @@ import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;
 public interface RemovalExtension extends RecipeExtension {
 
     default void remove(ResourceLocation recipe) {
-        this.consumer().accept(EmptyRecipe.empty(recipe));
+        this.output().accept(recipe, EmptyRecipe.empty(), null);
     }
 }

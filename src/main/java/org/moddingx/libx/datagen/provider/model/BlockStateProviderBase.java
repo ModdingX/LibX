@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider.model;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -10,13 +11,11 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.client.RenderTypeGroup;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.LibX;
+import net.neoforged.neoforge.client.RenderTypeGroup;
+import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.impl.datagen.model.TypedBlockModelProvider;
@@ -27,7 +26,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -41,11 +39,11 @@ import java.util.stream.Stream;
  */
 public abstract class BlockStateProviderBase extends BlockStateProvider {
 
-    public static final ResourceLocation LEAVES_PARENT = new ResourceLocation("minecraft", "block/leaves");
-    public static final ResourceLocation BUTTON_PARENT = new ResourceLocation("minecraft", "block/button");
-    public static final ResourceLocation PRESSED_BUTTON_PARENT = new ResourceLocation("minecraft", "block/button_pressed");
-    public static final ResourceLocation PRESSURE_PLATE_PARENT = new ResourceLocation("minecraft", "block/pressure_plate_up");
-    public static final ResourceLocation PRESSED_PRESSURE_PLATE_PARENT = new ResourceLocation("minecraft", "block/pressure_plate_down");
+    public static final ResourceLocation LEAVES_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/leaves");
+    public static final ResourceLocation BUTTON_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/button");
+    public static final ResourceLocation PRESSED_BUTTON_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/button_pressed");
+    public static final ResourceLocation PRESSURE_PLATE_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/pressure_plate_up");
+    public static final ResourceLocation PRESSED_PRESSURE_PLATE_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/pressure_plate_down");
 
     protected final ModX mod;
     protected final PackOutput packOutput;
@@ -93,6 +91,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         this.customModel.put(b, model);
     }
     
+    @Nonnull
     @Override
     public BlockModelProvider models() {
         return this.models(this.currentRenderTypes);
@@ -122,11 +121,11 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     protected final void registerStatesAndModels() {
         this.setup();
 
-        for (ResourceLocation id : ForgeRegistries.BLOCKS.getKeys().stream().sorted().toList()) {
-            Block block = ForgeRegistries.BLOCKS.getValue(id);
-            if (block != null && this.mod.modid.equals(id.getNamespace()) && !this.manualState.contains(block)) {
+        for (ResourceLocation id : BuiltInRegistries.BLOCK.keySet().stream().sorted().toList()) {
+            Block block = BuiltInRegistries.BLOCK.get(id);
+            if (this.mod.modid.equals(id.getNamespace()) && !this.manualState.contains(block)) {
                 if (this.existingModel.contains(block)) {
-                    this.defaultState(id, block, () -> this.models().getExistingFile(new ResourceLocation(id.getNamespace(), "block/" + id.getPath())));
+                    this.defaultState(id, block, () -> this.models().getExistingFile(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath())));
                 } else if (this.customModel.containsKey(block)) {
                     this.defaultState(id, block, () -> this.customModel.get(block));
                 } else {
@@ -137,8 +136,9 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         }
     }
 
+    @Nonnull
     @Override
-    public CompletableFuture<?> run(CachedOutput cache) {
+    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         CompletableFuture<?> mainFuture = super.run(cache);
         return CompletableFuture.allOf(Stream.concat(Stream.of(mainFuture), this.typedModelProviders.values().stream()
                 .map(provider -> provider.generateAll(cache))
@@ -161,7 +161,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
                 textureSide = textureId(id);
                 textureTop = textureId(id, "top");
             } else if (decorated.parent.has(decorated.log)) {
-                ResourceLocation logId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent.get(decorated.log)));
+                ResourceLocation logId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent.get(decorated.log)));
                 textureSide = textureId(logId);
                 textureTop = textureId(logId);
             } else {
@@ -170,31 +170,31 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             }
             this.axisBlock(decorated, textureSide, textureTop);
         } else if (block instanceof DecoratedSlabBlock decorated) {
-            this.slabBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))), textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
+            this.slabBlock(decorated, textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))), textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))));
         } else if (block instanceof DecoratedStairBlock decorated) {
-            this.stairsBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
+            this.stairsBlock(decorated, textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))));
         } else if (block instanceof DecoratedWallBlock decorated) {
-            this.wallBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
+            this.wallBlock(decorated, textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))));
         } else if (block instanceof DecoratedFenceBlock decorated) {
-            this.fenceBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
+            this.fenceBlock(decorated, textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))));
         } else if (block instanceof DecoratedFenceGateBlock decorated) {
-            this.fenceGateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
+            this.fenceGateBlock(decorated, textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))));
         } else if (block instanceof DecoratedButton decorated) {
-            this.buttonBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
+            this.buttonBlock(decorated, textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))));
         } else if (block instanceof DecoratedPressurePlate decorated) {
-            this.pressurePlateBlock(decorated, textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))));
+            this.pressurePlateBlock(decorated, textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))));
         } else if (block instanceof DecoratedDoorBlock decorated) {
             this.doorBlockWithRenderType(decorated, textureId(id, "bottom"), textureId(id, "top"), RenderTypes.CUTOUT);
         } else if (block instanceof DecoratedTrapdoorBlock decorated) {
             this.trapdoorBlockWithRenderType(decorated, textureId(id), true, RenderTypes.CUTOUT);
         } else if (block instanceof DecoratedSign.Standing decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))))));
         } else if (block instanceof DecoratedSign.Wall decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))))));
         } else if (block instanceof DecoratedHangingSign.Ceiling decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))))));
         } else if (block instanceof DecoratedHangingSign.Wall decorated) {
-            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(decorated.parent))))));
+            this.getVariantBuilder(block).partialState().addModels(new ConfiguredModel(this.models().getBuilder(id.getPath()).texture("particle", textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent))))));
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
@@ -219,17 +219,14 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     protected ModelFile defaultModel(ResourceLocation id, Block block) {
         if (block.getStateDefinition().getPossibleStates().stream().allMatch(state -> state.getRenderShape() != RenderShape.MODEL)) {
             if (block instanceof LiquidBlock liquidBlock) {
-                Optional<ResourceLocation> tex = fluidTextureId(liquidBlock.getFluid());
-                if (tex.isPresent()) {
-                    return this.models().getBuilder(id.getPath()).texture("particle", tex.get());
-                } else {
-                    return this.models().getBuilder(id.getPath());
-                }
+                Optional<ResourceLocation> tex = Optional.ofNullable(this.fluidTextureId(liquidBlock.fluid.getSource().getFluidType()));
+                return tex.map(resourceLocation -> this.models().getBuilder(id.getPath()).texture("particle", resourceLocation))
+                        .orElseGet(() -> this.models().getBuilder(id.getPath()));
             } else {
                 return this.models().getBuilder(id.getPath()); // We don't need a model for that block.
             }
         } else if (block instanceof LeavesBlock) {
-            return this.models().withExistingParent(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath(), LEAVES_PARENT)
+            return this.models().withExistingParent(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block)).getPath(), LEAVES_PARENT)
                     .texture("all", this.blockTexture(block))
                     .renderType(RenderTypes.CUTOUT_MIPPED);
         } else {
@@ -241,7 +238,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * Creates a block state and models for a button.
      */
     public void buttonBlock(Block block, ResourceLocation texture) {
-        ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
+        ResourceLocation blockId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
 
         ModelFile model = this.models().withExistingParent(blockId.getPath(), BUTTON_PARENT)
                 .texture("texture", texture);
@@ -276,7 +273,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
      * Creates a block state and models for a pressure plate.
      */
     public void pressurePlateBlock(Block block, ResourceLocation texture) {
-        ResourceLocation blockId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
+        ResourceLocation blockId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
 
         ModelFile model = this.models().withExistingParent(blockId.getPath(), PRESSURE_PLATE_PARENT)
                 .texture("texture", texture);
@@ -291,36 +288,28 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
     
     private static ResourceLocation textureId(ResourceLocation blockId) {
         Objects.requireNonNull(blockId);
-        return new ResourceLocation(blockId.getNamespace(), "block/" + blockId.getPath());
+        return ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(), "block/" + blockId.getPath());
     }
     
     private static ResourceLocation textureId(ResourceLocation blockId, String suffix) {
         Objects.requireNonNull(blockId);
-        return new ResourceLocation(blockId.getNamespace(), "block/" + blockId.getPath() + "_" + suffix);
+        return ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(), "block/" + blockId.getPath() + "_" + suffix);
     }
 
-    private static Optional<ResourceLocation> fluidTextureId(Fluid fluid) {
-        try {
-            
-            IClientFluidTypeExtensions ext = IClientFluidTypeExtensions.of(fluid);
-            if (ext != IClientFluidTypeExtensions.DEFAULT) {
-                return Optional.ofNullable(ext.getStillTexture());
-            } else {
-                // Forge no longer calls this during datagen
-                // so we need to do it manually
-                AtomicReference<IClientFluidTypeExtensions> ref = new AtomicReference<>(null);
-                fluid.getFluidType().initializeClient(ref::set);
-                ext = ref.get();
-                if (ext != null) {
-                    return Optional.ofNullable(ext.getStillTexture());
-                } else {
-                    return Optional.empty();
-                }
-            }
-        } catch (Exception | NoClassDefFoundError e) {
-            LibX.logger.warn("Failed to load fluid render properties", e);
-            return Optional.empty();
+    /**
+     * Retrieves the texture for a given {@link FluidType}. This is used as particle texture in the default model.
+     * The default implementation returns {@code namespace:block/path} if it exists, otherwise throws an exception.
+     * Returning {@code null} causes no particle texure to be set.
+     */
+    @Nullable
+    protected ResourceLocation fluidTextureId(FluidType fluidType) {
+        ResourceLocation id = NeoForgeRegistries.FLUID_TYPES.getKey(fluidType);
+        if (id == null) throw new IllegalStateException("fluid type not registered: " + fluidType);
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
+        if (!this.fileHelper.exists(texture, ModelProvider.TEXTURE)) {
+            throw new IllegalStateException("Could not find a texture for fluid " + id + ". You can provide one at " + texture + " or override fluidTextureId to use a different texture location.");
         }
+        return texture;
     }
 
     /**
@@ -332,11 +321,11 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
             
         }
         
-        public static final ResourceLocation SOLID = new ResourceLocation("minecraft", "solid");
-        public static final ResourceLocation CUTOUT = new ResourceLocation("minecraft", "cutout");
-        public static final ResourceLocation CUTOUT_MIPPED = new ResourceLocation("minecraft", "cutout_mipped");
-        public static final ResourceLocation CUTOUT_MIPPED_ALL = new ResourceLocation("minecraft", "cutout_mipped_all");
-        public static final ResourceLocation TRANSLUCENT = new ResourceLocation("minecraft", "translucent");
-        public static final ResourceLocation TRIPWIRE = new ResourceLocation("minecraft", "tripwire");
+        public static final ResourceLocation SOLID = ResourceLocation.fromNamespaceAndPath("minecraft", "solid");
+        public static final ResourceLocation CUTOUT = ResourceLocation.fromNamespaceAndPath("minecraft", "cutout");
+        public static final ResourceLocation CUTOUT_MIPPED = ResourceLocation.fromNamespaceAndPath("minecraft", "cutout_mipped");
+        public static final ResourceLocation CUTOUT_MIPPED_ALL = ResourceLocation.fromNamespaceAndPath("minecraft", "cutout_mipped_all");
+        public static final ResourceLocation TRANSLUCENT = ResourceLocation.fromNamespaceAndPath("minecraft", "translucent");
+        public static final ResourceLocation TRIPWIRE = ResourceLocation.fromNamespaceAndPath("minecraft", "tripwire");
     }
 }

@@ -1,13 +1,16 @@
 package org.moddingx.libx.creativetab;
 
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.*;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.RegisterEvent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.GameMasterBlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.mod.ModX;
 
@@ -24,8 +27,15 @@ import java.util.stream.Stream;
 public abstract class CreativeTabX {
     
     // Use numeric ids for ordering as they should represent the order in which items were registered. 
-    @SuppressWarnings("UnstableApiUsage")
-    private static final Comparator<Item> REGISTRY_ORDER = Comparator.comparing(item -> ForgeRegistries.ITEMS instanceof ForgeRegistry<Item> reg ? reg.getID(item) : Integer.MAX_VALUE - 1);
+    private static final Comparator<Item> REGISTRY_ORDER = Comparator.comparing(item -> {
+        if (BuiltInRegistries.ITEM instanceof MappedRegistry<?>) {
+            //noinspection unchecked
+            MappedRegistry<Item> mapped = (MappedRegistry<Item>) BuiltInRegistries.ITEM;
+            return mapped.getId(item);
+        } else {
+            return Integer.MAX_VALUE - 1;
+        }
+    });
     
     protected final ModX mod;
     protected final ResourceLocation id;
@@ -107,7 +117,7 @@ public abstract class CreativeTabX {
      * adds the stacks to the tab using a custom order.
      */
     protected void addModItemStacks(TabContext ctx, Comparator<Item> order, Function<Item, Stream<ItemStack>> stacks) {
-        ForgeRegistries.ITEMS.getEntries().stream()
+        BuiltInRegistries.ITEM.entrySet().stream()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
                 .map(Map.Entry::getValue)
                 .filter(item -> item.isEnabled(ctx.features()))

@@ -1,13 +1,13 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
-import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationType;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
@@ -65,10 +65,10 @@ public class DecorationRecipes {
     
     private static void stoneCutting(RecipeExtension ext, Ingredient input, ItemLike output, int amount) {
         SingleItemRecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(input, RecipeCategory.BUILDING_BLOCKS, output, amount);
-        List<CriterionTriggerInstance> criteria = ext.criteria(input);
+        List<Criterion<?>> criteria = ext.criteria(input);
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));
         }
-        builder.save(ext.consumer(), ext.provider().loc(output, "stonecutting"));
+        builder.save(ext.output(), ext.provider().loc(output, "stonecutting"));
     }
 }

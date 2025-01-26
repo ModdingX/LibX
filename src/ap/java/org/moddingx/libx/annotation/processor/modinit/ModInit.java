@@ -141,28 +141,32 @@ public class ModInit  {
                 writer.write("((" + Classes.sourceName(Classes.MODX_REGISTRATION) + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
             }
             if (!this.models.isEmpty()) {
-                writer.write(Classes.sourceName(Classes.DIST_EXECUTOR) + ".unsafeRunWhenOn(" + Classes.sourceName(Classes.DIST) + ".CLIENT,()->()->{");
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(" + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + ".class," + this.modClass.getSimpleName() + "$::registerModels);");
-                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addLowModListener(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + ".class," + this.modClass.getSimpleName() + "$::bakeModels);");
-                writer.write("});");
+                writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isDistClient()){registerClientOnlyEventListeners();}");
             }
             writer.write("}");
             if (!allReg.isEmpty()) {
                 writer.write("private static void register(){");
                 writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".runUnchecked(()->{");
                 for (RegistrationEntry entry : allReg) {
-                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".register(mod," + (entry.registryFqn() == null ? "null" : entry.registryFqn()) + "," + quote(entry.name()) + "," + entry.fieldClassFqn() + "." + entry.fieldName() + ",()->{return " + entry.fieldClassFqn() + ".class.getDeclaredField(" + quote(entry.fieldName()) + ");});");
+                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".register(mod," + (entry.registryFqn() == null ? "null" : entry.registryFqn()) + "," + quote(entry.name()) + "," + entry.fieldClassFqn() + "." + entry.fieldName() + ");");
                 }
                 writer.write("});");
                 writer.write("}");
             }
             if (!this.models.isEmpty()) {
+                // Not OnlyIn
+                writer.write("private static void registerClientOnlyEventListeners(){");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(mod," + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + ".class," + this.modClass.getSimpleName() + "$::registerModels);");
+                writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addLowModListener(mod," + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + ".class," + this.modClass.getSimpleName() + "$::bakeModels);");
+                writer.write("}");
+                
                 writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void registerModels(" + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
                     writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addSpecialModel(event," + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
                 }
                 writer.write("}");
+                
                 writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void bakeModels(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + " event){");
                 for (LoadableModel model : this.models) {

@@ -7,7 +7,7 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.content.TextContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
@@ -82,7 +82,7 @@ public class EntryBuilder {
      * Sets an advancement needed to unlock the entry.
      */
     public EntryBuilder advancement(String namespace, String path) {
-        return this.advancement(new ResourceLocation(namespace, path));
+        return this.advancement(ResourceLocation.fromNamespaceAndPath(namespace, path));
     }
 
     /**
@@ -127,7 +127,7 @@ public class EntryBuilder {
      * Adds some images to the entry. The image namespaces are set to the namespace of the category, this entry belongs to.
      */
     public EntryBuilder image(String title, String... images) {
-        return this.image(title, Arrays.stream(images).map(s -> new ResourceLocation(this.mod.modid, s)).toArray(ResourceLocation[]::new));
+        return this.image(title, Arrays.stream(images).map(s -> ResourceLocation.fromNamespaceAndPath(this.mod.modid, s)).toArray(ResourceLocation[]::new));
     }
     
     /**
@@ -150,7 +150,7 @@ public class EntryBuilder {
      * and form a double recipe page.
      */
     public EntryBuilder crafting(String namespace, String path) {
-        return this.crafting(new ResourceLocation(namespace, path));
+        return this.crafting(ResourceLocation.fromNamespaceAndPath(namespace, path));
     }
     
     /**
@@ -174,7 +174,7 @@ public class EntryBuilder {
      * and form a double recipe page.
      */
     public EntryBuilder smelting(String namespace, String path) {
-        return this.smelting(new ResourceLocation(namespace, path));
+        return this.smelting(ResourceLocation.fromNamespaceAndPath(namespace, path));
     }
 
     /**

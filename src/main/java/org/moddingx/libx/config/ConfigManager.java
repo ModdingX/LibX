@@ -6,14 +6,14 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.moddingx.libx.LibX;
@@ -22,12 +22,11 @@ import org.moddingx.libx.config.mapper.MapperFactory;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validate.DoubleRange;
 import org.moddingx.libx.config.validator.ConfigValidator;
-import org.moddingx.libx.crafting.IngredientStack;
 import org.moddingx.libx.event.ConfigLoadedEvent;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.ConfigState;
 import org.moddingx.libx.impl.config.ModMappers;
-import org.moddingx.libx.impl.network.ConfigShadowMessage;
+import org.moddingx.libx.impl.network.ConfigShadowHandler;
 import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.util.data.ResourceList;
 
@@ -38,11 +37,10 @@ import java.util.*;
 
 /**
  * Provides a config system for configuration files that is meant to be more easy and powerful than
- * the system by forge based on {@link com.electronwill.nightconfig NightConfig}. This system creates
- * json files with comments based on a class. That class may contain fields with {@link Config @Config}
- * annotations. Each field with a config annotation will get one value in the config file. To create sub
- * groups, you can create static nested classes inside the base class. Suppose you have the following
- * class structure:
+ * the system by neoforge based on NightConfig. This system creates json files with comments based on a
+ * class. That class may contain fields with {@link Config @Config} annotations. Each field with a config
+ * annotation will get one value in the config file. To create sub groups, you can create static nested
+ * classes inside the base class. Suppose you have the following class structure:
  * 
  * <pre>
  * <code>
@@ -118,8 +116,6 @@ import java.util.*;
  *     <li>{@link Set Set&lt;?&gt;}</li>
  *     <li>{@link Map Map&lt;String, ?&gt;}</li>
  *     <li>{@link ResourceLocation}</li>
- *     <li>{@link Ingredient}</li>
- *     <li>{@link IngredientStack}</li>
  *     <li>{@link Component}</li>
  *     <li>{@link ResourceList}</li>
  *     <li>{@link UUID UUID}</li>
@@ -198,7 +194,7 @@ public class ConfigManager {
      * @param clientConfig Whether this is a client config.
      */
     public static void registerConfig(String modid, Class<?> configClass, boolean clientConfig) {
-        registerConfig(new ResourceLocation(modid, "config"), configClass, clientConfig);
+        registerConfig(ResourceLocation.fromNamespaceAndPath(modid, "config"), configClass, clientConfig);
     }
     
     /**
@@ -224,7 +220,7 @@ public class ConfigManager {
     }
 
     /**
-     * Forces reload of all common configs. <b>This will not sync the config though. Use {@link #forceResync(ServerPlayer)} for this.</b>
+     * Forces reload of all common configs. <b>This will not sync the config though. Use {@link #synchronize(ServerPlayer)} for this.</b>
      */
     public static void reloadCommon() {
         for (Class<?> configClass : configs.keySet()) {
@@ -236,7 +232,7 @@ public class ConfigManager {
      * Forces reload of all client configs.
      */
     public static void reloadClient() {
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) return;
+        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) return;
         for (Class<?> configClass : configs.keySet()) {
             reloadConfig(configClass, false, true);
         }
@@ -248,13 +244,13 @@ public class ConfigManager {
         }
         try {
             ConfigImpl config = ConfigImpl.getConfig(configIds.inverse().get(configClass));
-            if (!config.clientConfig || FMLEnvironment.dist == Dist.CLIENT) {
+            if (!config.clientConfig || FMLLoader.getDist() == Dist.CLIENT) {
                 ConfigState defaultState = config.stateFromValues();
                 config.setDefaultState(defaultState);
                 ConfigState state = config.readFromFileOrCreateBy(defaultState);
                 config.saveState(state);
                 state.apply();
-                MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.INITIAL, config.clientConfig, config.path, config.path));
+                NeoForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.INITIAL, config.clientConfig, config.path, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
             LibX.logger.error("Failed to load config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
@@ -262,7 +258,7 @@ public class ConfigManager {
     }
 
     /**
-     * Forces reload of one config. <b>This will not sync the config though. Use {@link #forceResync(ServerPlayer, Class)} for this.</b>
+     * Forces reload of one config. <b>This will not sync the config though. Use {@link #synchronize(ServerPlayer, Class)} for this.</b>
      */
     public static void reloadConfig(Class<?> configClass) {
         reloadConfig(configClass, true, true);
@@ -276,14 +272,14 @@ public class ConfigManager {
         try {
             ConfigImpl config = ConfigImpl.getConfig(configIds.inverse().get(configClass));
             if (config.clientConfig ? allowClient : allowCommon) {
-                if (!config.clientConfig || FMLEnvironment.dist == Dist.CLIENT) {
+                if (!config.clientConfig || FMLLoader.getDist() == Dist.CLIENT) {
                     ConfigState state = config.readFromFileOrCreateByDefault();
                     config.saveState(state);
                     if (!config.isShadowed()) {
                         state.apply();
                     }
                     config.reloadClientWorldState();
-                    MinecraftForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path, config.path));
+                    NeoForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.RELOAD, config.clientConfig, config.path, config.path));
                 }
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
@@ -292,38 +288,75 @@ public class ConfigManager {
     }
 
     /**
-     * Forces a resync of one config to one player.
+     * Forces synchronisation of one config to all players.
      */
-    public static void forceResync(@Nullable ServerPlayer player, Class<?> configClass) {
-        if (!configIds.containsValue(configClass)) {
-            throw new IllegalArgumentException("Class " + configClass + " is not registered as a config.");
-        }
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-            ResourceLocation id = configIds.inverse().get(configClass);
-            ConfigImpl config = ConfigImpl.getConfig(id);
-            if (!config.clientConfig && NetworkImpl.getImpl().canSend()) {
-                PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                NetworkImpl.getImpl().channel.send(target, new ConfigShadowMessage(config, config.cachedOrCurrent()));
-            }
-        } else {
-            LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
-        }
+    public static void synchronize(MinecraftServer server, Class<?> configClass) {
+        synchronize(server, null, List.of(configClass));
     }
 
     /**
-     * Forces a resync of all configs to one player.
+     * Forces synchronisation of all configs to all players.
      */
-    public static void forceResync(@Nullable ServerPlayer player) {
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-            for (ResourceLocation id : ConfigManager.configs()) {
-                ConfigImpl config = ConfigImpl.getConfig(id);
-                if (!config.clientConfig && NetworkImpl.getImpl().canSend()) {
-                    PacketDistributor.PacketTarget target = player == null ? PacketDistributor.ALL.noArg() : PacketDistributor.PLAYER.with(() -> player);
-                    NetworkImpl.getImpl().channel.send(target, new ConfigShadowMessage(config, config.cachedOrCurrent()));
+    public static void synchronize(MinecraftServer server) {
+        synchronize(server, null, null);
+    }
+
+    /**
+     * Forces synchronisation of one config to one player.
+     */
+    public static void synchronize(ServerPlayer player, Class<?> configClass) {
+        synchronize(player.server, player, List.of(configClass));
+    }
+
+    /**
+     * Forces synchronisation of all configs to one player.
+     */
+    public static void synchronize(ServerPlayer player) {
+        synchronize(player.server, player, null);
+    }
+
+    private static void synchronize(MinecraftServer server, @Nullable ServerPlayer receiver, @Nullable List<Class<?>> configClasses) {
+        List<ConfigImpl> configs = new ArrayList<>(configClasses == null ? configs().size() : configClasses.size());
+        
+        if (configClasses != null) {
+            for (Class<?> configClass : configClasses) {
+                if (!configIds.containsValue(configClass)) {
+                    throw new IllegalArgumentException("Class " + configClass + " is not registered as a config.");
                 }
+                ResourceLocation id = configIds.inverse().get(configClass);
+                ConfigImpl config = ConfigImpl.getConfig(id);
+                if (!config.clientConfig) configs.add(config);
             }
         } else {
-            LibX.logger.error("ConfigManager.forceResync was called on a physical client. Ignoring.");
+            for (ResourceLocation id : configs()) {
+                ConfigImpl config = ConfigImpl.getConfig(id);
+                if (!config.clientConfig) configs.add(config);
+            }
+        }
+        
+        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) {
+            sendConfigState(server, receiver, configs);
+        } else {
+            LibX.logger.error("ConfigManager.synchronize was called on a physical client. Ignoring.");
+        }
+    }
+    
+    private static void sendConfigState(MinecraftServer server, @Nullable ServerPlayer receiver, List<ConfigImpl> configs) {
+        if (configs.isEmpty()) return;
+        List<ConfigShadowHandler.Message> messages = configs.stream().map(config -> new ConfigShadowHandler.Message(config, config.cachedOrCurrent())).toList();
+        ConfigShadowHandler.Message firstMessage = messages.getFirst();
+        ConfigShadowHandler.Message[] otherMessages = messages.stream().skip(1).toArray(ConfigShadowHandler.Message[]::new);
+        
+        if (receiver != null) {
+            if (NetworkImpl.getImpl().canSend(receiver, ConfigShadowHandler.TYPE)) {
+                PacketDistributor.sendToPlayer(receiver, firstMessage, otherMessages);
+            }
+        } else {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                if (NetworkImpl.getImpl().canSend(player, ConfigShadowHandler.TYPE)) {
+                    PacketDistributor.sendToPlayer(player, firstMessage, otherMessages);
+                }
+            }
         }
     }
 

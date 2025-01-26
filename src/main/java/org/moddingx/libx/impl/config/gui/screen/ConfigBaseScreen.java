@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.config.gui.screen;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,7 +20,7 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.widget.ScrollPanel;
+import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
@@ -116,7 +117,7 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+            public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
                 ConfigBaseScreen.this.isCapturingTooltips = true;
                 graphics.pose().pushPose();
                 super.render(new TooltipCapturingGuiGraphics(graphics), mouseX, mouseY, partialTicks);
@@ -125,7 +126,7 @@ public abstract class ConfigBaseScreen extends Screen {
                 ConfigBaseScreen.this.capturedTooltips.forEach(pair -> {
                     graphics.pose().pushPose();
                     graphics.pose().setIdentity();
-                    graphics.pose().mulPoseMatrix(pair.getLeft());
+                    graphics.pose().mulPose(pair.getLeft());
                     pair.getRight().accept(graphics);
                     graphics.pose().popPose();
                 });
@@ -133,12 +134,12 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            protected void drawPanel(GuiGraphics graphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
+            protected void drawPanel(@Nonnull GuiGraphics graphics, int entryRight, int relativeY, @Nonnull Tesselator tesselator, int mouseX, int mouseY) {
                 ConfigBaseScreen.this.currentScrollOffset = relativeY;
                 graphics.pose().pushPose();
                 graphics.pose().translate(0, relativeY, 0);
                 for (AbstractWidget widget : widgets) {
-                    widget.render(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaFrameTime());
+                    widget.render(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getTimer().getGameTimeDeltaTicks());
                 }
                 graphics.pose().popPose();
                 ConfigBaseScreen.this.currentScrollOffset = 0;
@@ -209,7 +210,7 @@ public abstract class ConfigBaseScreen extends Screen {
 
     @Override
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderDirtBackground(graphics);
+        this.renderMenuBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         RenderHelper.resetColor();
         graphics.drawString(this.font, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFF, true);
@@ -333,6 +334,15 @@ public abstract class ConfigBaseScreen extends Screen {
                 ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, positioner, x, y + scrollOffset));
             } else {
                 super.renderTooltip(font, text, positioner, x, y);
+            }
+        }
+
+        @Override
+        public void renderComponentTooltipFromElements(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> super.renderComponentTooltipFromElements(font, elements, mouseX, mouseY + scrollOffset, stack));
+            } else {
+                super.renderComponentTooltipFromElements(font, elements, mouseX, mouseY, stack);
             }
         }
     }

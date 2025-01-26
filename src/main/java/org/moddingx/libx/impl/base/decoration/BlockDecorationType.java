@@ -15,6 +15,7 @@ import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.function.BiFunction;
@@ -82,7 +83,7 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
         }
 
         @Override
-        public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType) {
             if (this.burnTimeModifier == 0) return 0;
             int burnTime = this.parent.getBurnTime(stack, recipeType);
             if (burnTime < 0) return burnTime;

@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.moddingx.libx.base.tile.BlockBE;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.registration.RegistrationDispatcher;
@@ -27,7 +26,7 @@ import javax.annotation.Nullable;
  * registration method with a method reference to it. (Example: {@code addRegistrationHandler(ModItems::init)}.
  * The handlers will get called in the order you added them.
  *
- * This system has several advantages over the one recommended by forge:
+ * This system has several advantages over the one recommended by neoforge:
  *
  * <ul>
  *     <li>An object can have dependencies that are automatically registered with it. This is done with
@@ -53,14 +52,12 @@ public abstract class ModXRegistration extends ModX {
         RegistrationBuilder builder = new RegistrationBuilder();
         this.initRegistration(builder);
         this.dispatcher = new RegistrationDispatcher(this, builder.build());
-        ModInternal.get(this).initRegistration(this.dispatcher);
         
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this.dispatcher::registerBy);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this.dispatcher::registerCommon);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this.dispatcher::registerClient);
+        ModInternal modInternal = ModInternal.get(this);
+        this.dispatcher.setupEventListeners(modInternal.modEventBus());
         
         // Call the generated code here as well
-        ModInternal.get(this).callGeneratedCode();
+        modInternal.callGeneratedCode();
     }
 
     /**

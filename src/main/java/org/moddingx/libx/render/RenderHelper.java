@@ -19,7 +19,7 @@ public class RenderHelper {
      * {@link RenderSystem#setShaderColor(float, float, float, float)}.
      */
     public static final ResourceLocation TEXTURE_WHITE = LibX.getInstance().resource("textures/white.png");
-    public static final ResourceLocation TEXTURE_CHEST_GUI = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
+    public static final ResourceLocation TEXTURE_CHEST_GUI = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
 
     /**
      * Same as {@link #repeatBlit(GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
@@ -92,10 +92,10 @@ public class RenderHelper {
         int green = color >> 8 & 255;
         int blue = color & 255;
         Matrix4f pose = poseStack.last().pose();
-        buffer.vertex(pose, x, y + height, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU0(), sprite.getV1()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(pose, x + width, y + height, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU1(), sprite.getV1()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(pose, x + width, y, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU1(), sprite.getV0()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.vertex(pose, x, y, 0.0F).color(red, green, blue, (int) (alpha * 255.0F)).uv(sprite.getU0(), sprite.getV0()).overlayCoords(overlay).uv2(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.addVertex(pose, x, y + height, 0.0F).setColor(red, green, blue, (int) (alpha * 255.0F)).setUv(sprite.getU0(), sprite.getV1()).setOverlay(overlay).setLight(light).setNormal(0.0F, 0.0F, 1.0F);
+        buffer.addVertex(pose, x + width, y + height, 0.0F).setColor(red, green, blue, (int) (alpha * 255.0F)).setUv(sprite.getU1(), sprite.getV1()).setOverlay(overlay).setLight(light).setNormal(0.0F, 0.0F, 1.0F);
+        buffer.addVertex(pose, x + width, y, 0.0F).setColor(red, green, blue, (int) (alpha * 255.0F)).setUv(sprite.getU1(), sprite.getV0()).setOverlay(overlay).setLight(light).setNormal(0.0F, 0.0F, 1.0F);
+        buffer.addVertex(pose, x, y, 0.0F).setColor(red, green, blue, (int) (alpha * 255.0F)).setUv(sprite.getU0(), sprite.getV0()).setOverlay(overlay).setLight(light).setNormal(0.0F, 0.0F, 1.0F);
     }
 
     /**

@@ -5,8 +5,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.ICancellableEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * Fired on right click with an empty hand but after the block action was processed. If this
@@ -20,7 +21,7 @@ import net.minecraftforge.eventbus.api.Event;
  * propagate to the offhand. So in order to swing the main hand, the event for the main hand has to
  * return {@link InteractionResult#SUCCESS} and for the offhand {@link InteractionResult#PASS}.
  */
-public class InteractBlockEmptyHandEvent extends Event {
+public class InteractBlockEmptyHandEvent extends Event implements ICancellableEvent {
 
     private final ServerPlayer player;
     private final Level level;
@@ -59,10 +60,5 @@ public class InteractBlockEmptyHandEvent extends Event {
 
     public void setCancellationResult(InteractionResult cancellationResult) {
         this.cancellationResult = cancellationResult;
-    }
-
-    @Override
-    public boolean isCancelable() {
-        return true;
     }
 }

@@ -1,11 +1,7 @@
 package org.moddingx.libx.codec;
 
-import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
@@ -15,16 +11,6 @@ import java.util.function.Supplier;
  * Some utilities to deal with {@link Codec codecs}.
  */
 public class CodecHelper {
-
-    /**
-     * {@link CodecOps} for {@link JsonOps json}.
-     */
-    public static final CodecOps<JsonElement> JSON = new CodecOps<>(JsonElement.class, JsonOps.INSTANCE);
-
-    /**
-     * {@link CodecOps} for {@link NbtOps nbt}.
-     */
-    public static final CodecOps<Tag> NBT = new CodecOps<>(Tag.class, NbtOps.INSTANCE);
 
     /**
      * Wraps a value into a {@link DataResult}. If the value is non-{@code null}, the result will be

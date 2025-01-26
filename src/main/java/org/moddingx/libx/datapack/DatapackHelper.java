@@ -7,14 +7,10 @@ import net.minecraft.Util;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
-import net.minecraftforge.forgespi.locating.IModFile;
 import org.moddingx.libx.impl.datapack.LibXPack;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Locale;
 
 /**
  * Adds some utilities for creating custom dynamic datapacks.
@@ -45,14 +41,14 @@ public class DatapackHelper {
      * Creates a supplier that can be repeatedly called to create new {@link InputStream}s for
      * a dynamically generated {@code pack.mcmeta} based on the given mod file.
      */
-    public static IoSupplier<InputStream> generatePackMeta(IModFile file, String description, PackType packType) {
+    public static IoSupplier<InputStream> generatePackMeta(String description, PackType packType) {
         try {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             Writer writer = new OutputStreamWriter(bout, StandardCharsets.UTF_8);
             JsonObject packFile = new JsonObject();
             JsonObject packSection = new JsonObject();
             packSection.addProperty("description", description);
-            packSection.addProperty("pack_format", getPackFormat(file, packType));
+            packSection.addProperty("pack_format", LibXPack.PACK_CONFIG.get(packType).version());
             packFile.add("pack", packSection);
             writer.write(GSON.toJson(packFile) + "\n");
             writer.close();
@@ -61,21 +57,6 @@ public class DatapackHelper {
             return () -> new ByteArrayInputStream(data);
         } catch (IOException e) {
             throw new RuntimeException("Failed to create dynamic pack.mcmeta", e);
-        }
-    }
-    
-    private static int getPackFormat(IModFile mod, PackType packType) {
-        try {
-            Path path = mod.findResource("pack.mcmeta");
-            if (!Files.exists(path)) return LibXPack.PACK_CONFIG.get(packType).version();
-            try (Reader in = Files.newBufferedReader(path)) {
-                JsonObject packInfo = GSON.fromJson(in, JsonObject.class).get("pack").getAsJsonObject();
-                String specificKey = "forge:" + packType.name().toLowerCase(Locale.ROOT) + "_pack_format";
-                if (packInfo.has(specificKey)) return packInfo.get(specificKey).getAsInt();
-                return packInfo.get("pack_format").getAsInt();
-            }
-        } catch (Exception e) {
-            return LibXPack.PACK_CONFIG.get(packType).version();
         }
     }
 }

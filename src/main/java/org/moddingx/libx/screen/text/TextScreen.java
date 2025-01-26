@@ -58,13 +58,13 @@ public class TextScreen extends Screen {
 
     @Override
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTick);
         if (this.content == null) return;
         int left = this.left();
         int top = this.top();
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, 20);
-        this.drawBackground(graphics, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20, partialTick);
+        this.drawBackground(graphics, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20);
         graphics.pose().translate(0, 0, 100);
         this.content.render(graphics, left, top);
         graphics.pose().popPose();
@@ -85,7 +85,7 @@ public class TextScreen extends Screen {
         graphics.pose().popPose();
     }
     
-    protected void drawBackground(GuiGraphics graphics, int x, int y, int width, int height, float partialTick) {
+    protected void drawBackground(GuiGraphics graphics, int x, int y, int width, int height) {
         RenderHelper.renderGuiBackground(graphics, x, y, width, height);
     }
 

@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen;
 
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.mod.ModX;
 
 import java.util.function.Function;

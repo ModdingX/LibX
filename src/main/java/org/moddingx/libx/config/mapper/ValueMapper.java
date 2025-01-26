@@ -3,8 +3,9 @@ package org.moddingx.libx.config.mapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.Config;
 import org.moddingx.libx.config.ConfigManager;
 import org.moddingx.libx.config.correct.ConfigCorrection;
@@ -54,19 +55,13 @@ public interface ValueMapper<T, E extends JsonElement> {
     E toJson(T value);
 
     /**
-     * Reads a value from a {@link FriendlyByteBuf}. The default implementation expects a
-     * JSON string and gives this string to {@link #fromJson(JsonElement) fromJSON}.
+     * Gets a {@link StreamCodec} that describes, how to serialise values of this type over the network.
      */
-    default T fromNetwork(FriendlyByteBuf buffer) {
-        return this.fromJson(ConfigImpl.INTERNAL.fromJson(buffer.readUtf(0x40000), this.element()));
-    }
-
-    /**
-     * Writes a value to a {@link FriendlyByteBuf}. The default implementation calls
-     * {@link #toJson(Object) toJSON} and writes the resulting JSON as a string.
-     */
-    default void toNetwork(T value, FriendlyByteBuf buffer) {
-        buffer.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJson(value)), 0x40000);
+    default StreamCodec<? super FriendlyByteBuf, T> streamCodec() {
+        return StreamCodec.of(
+                (buf, value) -> buf.writeUtf(ConfigImpl.INTERNAL.toJson(this.toJson(value)), 0x40000),
+                buf -> this.fromJson(ConfigImpl.INTERNAL.fromJson(buf.readUtf(0x40000), this.element()))
+        );
     }
 
     /**

@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.util.lazy.LazyValue;
@@ -65,6 +66,8 @@ public class ResourceList implements Predicate<ResourceLocation> {
      */
     public static final ResourceList DENY_LIST = new ResourceList(false, b -> {});
     
+    public static final StreamCodec<? super FriendlyByteBuf, ResourceList> STREAM_CODEC = StreamCodec.of((buf, value) -> value.toNetwork(buf), ResourceList::new);
+    
     private static final WildcardString NAMESPACE_MC = new WildcardString(List.of("minecraft"));
     
     private final boolean allowList;
@@ -106,10 +109,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         this.rules = rules.build();
     }
 
-    /**
-     * Reads a resource list from a {@link FriendlyByteBuf}.
-     */
-    public ResourceList(FriendlyByteBuf buffer) {
+    private ResourceList(FriendlyByteBuf buffer) {
         this.allowList = buffer.readBoolean();
         int ruleSize = buffer.readVarInt();
         ImmutableList.Builder<Rule> rules = ImmutableList.builder();
@@ -132,11 +132,8 @@ public class ResourceList implements Predicate<ResourceLocation> {
         json.add("elements", array);
         return json;
     }
-    
-    /**
-     * Writes this resource list to a {@link FriendlyByteBuf}.
-     */
-    public void toNetwork(FriendlyByteBuf buffer) {
+
+    private void toNetwork(FriendlyByteBuf buffer) {
         buffer.writeBoolean(this.allowList);
         buffer.writeVarInt(this.rules.size());
         this.rules.forEach(rule -> rule.toNetwork(buffer));

@@ -1,6 +1,7 @@
 package org.moddingx.libx.base.tile;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -17,9 +18,8 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
@@ -84,13 +84,6 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
         builder.register(Registries.BLOCK_ENTITY_TYPE, this.beType);
     }
 
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
-        super.initTracking(ctx, builder);
-        builder.track(ForgeRegistries.BLOCK_ENTITY_TYPES, BlockBE.class.getDeclaredField("beType"));
-    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
@@ -134,7 +127,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                 }
 
                 @Override
-                public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull GameEvent gameEvent, @Nonnull GameEvent.Context context, @Nonnull Vec3 pos) {
+                public boolean handleGameEvent(@Nonnull ServerLevel level, @Nonnull Holder<GameEvent> gameEvent, @Nonnull GameEvent.Context context, @Nonnull Vec3 pos) {
                     return eventBlock.notifyGameEvent(level, gameEvent, context, pos);
                 }
 
@@ -150,23 +143,20 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
         if (!level.isClientSide && (!state.is(newState.getBlock()) ||  !newState.hasBlockEntity()) && this.shouldDropInventory(level, pos, state)) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be != null) {
-                be.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(handler -> {
-                    if (handler instanceof IItemHandlerModifiable modifiable) {
-                        for (int i = 0; i < modifiable.getSlots(); i++) {
-                            ItemStack stack = modifiable.getStackInSlot(i);
-                            if (!stack.isEmpty()) {
-                                ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, stack.copy());
-                                level.addFreshEntity(entity);
-                                modifiable.setStackInSlot(i, ItemStack.EMPTY);
-                            }
+                if (level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null) instanceof IItemHandlerModifiable modifiable) {
+                    for (int i = 0; i < modifiable.getSlots(); i++) {
+                        ItemStack stack = modifiable.getStackInSlot(i);
+                        if (!stack.isEmpty()) {
+                            ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, stack.copy());
+                            level.addFreshEntity(entity);
+                            modifiable.setStackInSlot(i, ItemStack.EMPTY);
                         }
                     }
-                });
+                }
             }
         }
         super.onRemove(state, level, pos, newState, isMoving);

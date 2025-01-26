@@ -2,8 +2,9 @@ package org.moddingx.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -46,13 +47,8 @@ public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
     }
 
     @Override
-    public C fromNetwork(FriendlyByteBuf buffer) {
-        return this.wrapped.fromNetwork(buffer);
-    }
-
-    @Override
-    public void toNetwork(C value, FriendlyByteBuf buffer) {
-        this.wrapped.toNetwork(value, buffer);
+    public StreamCodec<? super FriendlyByteBuf, C> streamCodec() {
+        return this.wrapped.streamCodec();
     }
 
     @Override

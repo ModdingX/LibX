@@ -2,8 +2,9 @@ package org.moddingx.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -29,7 +30,6 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
         @Override
         public boolean isValid(String str) {
             try {
-                //noinspection ResultOfMethodCallIgnored
                 UUID.fromString(str);
                 return true;
             } catch (IllegalArgumentException e) {
@@ -68,16 +68,8 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     }
 
     @Override
-    public UUID fromNetwork(FriendlyByteBuf buffer) {
-        long mostSignificantBits = buffer.readLong();
-        long leastSignificantBits = buffer.readLong();
-        return new UUID(mostSignificantBits, leastSignificantBits);
-    }
-
-    @Override
-    public void toNetwork(UUID value, FriendlyByteBuf buffer) {
-        buffer.writeLong(value.getMostSignificantBits());
-        buffer.writeLong(value.getLeastSignificantBits());
+    public StreamCodec<? super FriendlyByteBuf, UUID> streamCodec() {
+        return StreamCodec.of((buf, uid) -> buf.writeUUID(uid), buf -> buf.readUUID());
     }
 
     @Override

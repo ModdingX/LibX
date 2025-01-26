@@ -1,11 +1,9 @@
 package org.moddingx.libx.mod;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.moddingx.libx.impl.ModInternal;
 import org.moddingx.libx.impl.config.ModMappers;
 
@@ -32,14 +30,14 @@ public abstract class ModX {
         if (mod == null) throw new IllegalStateException("Mod class has no @Mod annotation.");
         this.modid = mod.value();
 
-        ModInternal.init(this, FMLJavaModLoadingContext.get());
+        ModInternal modInternal = ModInternal.init(this);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        modInternal.modEventBus().addListener(this::setup);
+        modInternal.modEventBus().addListener(this::clientSetup);
 
         // Initialise config system for this mod container
         // Required, so the extension point can be added when required
-        ModMappers.get(this.modid).initAdapter(ModLoadingContext.get());
+        ModMappers.get(this.modid).initAdapter(modInternal.modContainer());
 
         // As the generated code registers registration handlers this will produce a null pointer exception
         // as the list of handlers will be null. So for instances of ModXRegistration we don't call it here
@@ -64,6 +62,6 @@ public abstract class ModX {
      * path is the given string.
      */
     public final ResourceLocation resource(String path) {
-        return new ResourceLocation(this.modid, path);
+        return ResourceLocation.fromNamespaceAndPath(this.modid, path);
     }
 }

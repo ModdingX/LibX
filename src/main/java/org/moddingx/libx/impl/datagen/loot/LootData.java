@@ -1,13 +1,15 @@
 package org.moddingx.libx.impl.datagen.loot;
 
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
-import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.List;
@@ -24,9 +26,9 @@ public class LootData {
             float damage = (stack.getMaxDamage() - stack.getDamageValue()) / (float) stack.getMaxDamage();
             entry.apply(SetItemDamageFunction.setDamage(ConstantValue.exactly(damage)));
         }
-        if (stack.hasTag()) {
-            //noinspection deprecation
-            entry.apply(SetNbtFunction.setTag(stack.getOrCreateTag()));
+        DataComponentPatch components = stack.getComponentsPatch();
+        if (!components.isEmpty()) {
+            entry.apply(LootItemConditionalFunction.simpleBuilder(conditions -> new SetComponentsFunction(conditions, components)));
         }
         return entry;
     }

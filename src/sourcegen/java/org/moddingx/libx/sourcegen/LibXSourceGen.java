@@ -2,15 +2,15 @@ package org.moddingx.libx.sourcegen;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@Mod("libx_sourcegen")
+@Mod("libx")
 public class LibXSourceGen {
     
-    public LibXSourceGen() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::gatherData);
+    public LibXSourceGen(IEventBus modBus) {
+        modBus.addListener(this::gatherData);
     }
     
     private void gatherData(GatherDataEvent event) {

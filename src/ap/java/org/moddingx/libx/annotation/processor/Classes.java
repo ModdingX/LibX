@@ -4,12 +4,11 @@ public class Classes {
 
     public static final String MODX = "org.moddingx.libx.mod.ModX";
     public static final String MODX_REGISTRATION = "org.moddingx.libx.mod.ModXRegistration";
-    public static final String MOD = "net.minecraftforge.fml.common.Mod";
+    public static final String MOD = "net.neoforged.fml.common.Mod";
     public static final String FOR_MOD = "org.moddingx.libx.annotation.ForMod";
-    public static final String DIST = "net.minecraftforge.api.distmarker.Dist";
-    public static final String ONLY_IN = "net.minecraftforge.api.distmarker.OnlyIn";
-    public static final String ONLY_INS = "net.minecraftforge.api.distmarker.OnlyIns";
-    public static final String DIST_EXECUTOR = "net.minecraftforge.fml.DistExecutor";
+    public static final String DIST = "net.neoforged.api.distmarker.Dist";
+    public static final String ONLY_IN = "net.neoforged.api.distmarker.OnlyIn";
+    public static final String ONLY_INS = "net.neoforged.api.distmarker.OnlyIns";
 
     public static final String PROCESSOR_INTERFACE = "org.moddingx.libx.annotation.impl.ProcessorInterface";
     public static final String LAZY_MAP_BUILDER = "org.moddingx.libx.annotation.impl.LazyMapBuilder";
@@ -24,11 +23,11 @@ public class Classes {
     public static final String REGISTRY = "net.minecraft.core.Registry";
     public static final String REGISTRIES = "net.minecraft.core.registries.Registries";
     public static final String RESOURCE_KEY = "net.minecraft.resources.ResourceKey";
-    public static final String FORGE_KEYS = "net.minecraftforge.registries.ForgeRegistries$Keys";
+    public static final String NEOFORGE_KEYS = "net.neoforged.neoforge.registries.NeoForgeRegistries$Keys";
     
     public static final String BAKED_MODEL = "net.minecraft.client.resources.model.BakedModel";
-    public static final String MODEL_REGISTRY_EVENT = "net.minecraftforge.client.event.ModelEvent$RegisterAdditional";
-    public static final String MODEL_BAKE_EVENT = "net.minecraftforge.client.event.ModelEvent$BakingCompleted";
+    public static final String MODEL_REGISTRY_EVENT = "net.neoforged.neoforge.client.event.ModelEvent$RegisterAdditional";
+    public static final String MODEL_BAKE_EVENT = "net.neoforged.neoforge.client.event.ModelEvent$BakingCompleted";
     public static final String CODEC = "com.mojang.serialization.Codec";
     public static final String MAP_CODEC = "com.mojang.serialization.MapCodec";
     public static final String RECORD_CODEC_BUILDER = "com.mojang.serialization.codecs.RecordCodecBuilder";

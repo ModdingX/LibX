@@ -1,6 +1,9 @@
 package org.moddingx.libx.base.decoration;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
@@ -45,7 +48,7 @@ public class DecoratedBlock extends BlockBase {
     }
 
     @Override
-    public void registerCommon(SetupContext ctx) {
+    public void setupCommon(SetupContext ctx) {
         this.init(ctx);
         //noinspection DataFlowIssue
         ctx.enqueue(this.materialProperties::register);
@@ -94,5 +97,10 @@ public class DecoratedBlock extends BlockBase {
         } else {
             throw new NoSuchElementException("Decoration context " + this.context + " has no element of type " + type.name() + ": " + type);
         }
+    }
+    
+    @Override // Widen visibility
+    public int getLightBlock(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
+        return super.getLightBlock(state, level, pos);
     }
 }

@@ -1,29 +1,34 @@
 package org.moddingx.libx.datagen.provider.loot;
 
 import com.google.common.collect.Multimap;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
+import net.minecraft.core.WritableRegistry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.PackTarget;
+import org.moddingx.libx.datagen.RegistrySet;
 import org.moddingx.libx.datagen.loot.LootBuilders;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
 import org.moddingx.libx.datagen.provider.loot.entry.LootFactory;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
@@ -33,22 +38,18 @@ import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class LootProviderBase<T> implements DataProvider {
-
-    private static final ExistingFileHelper.IResourceType LOOT_TYPE = new ExistingFileHelper.ResourceType(PackType.SERVER_DATA, ".json", "loot_tables");
+public abstract class LootProviderBase<T> extends RegistryProviderBase {
 
     protected final ModX mod;
     protected final PackTarget packTarget;
-    protected final ExistingFileHelper fileHelper;
+    protected final RegistrySet registries;
     protected final String folder;
     protected final LootContextParamSet params;
     protected final Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements;
@@ -66,10 +67,11 @@ public abstract class LootProviderBase<T> implements DataProvider {
         );
     }
     
-    protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements, Function<T, ResourceLocation> allElementIds) {
+    private LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements, Function<T, ResourceLocation> allElementIds) {
+        super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
-        this.fileHelper = ctx.fileHelper();
+        this.registries = ctx.registries();
         this.folder = folder;
         this.params = params;
         this.modElements = modElements;
@@ -81,9 +83,10 @@ public abstract class LootProviderBase<T> implements DataProvider {
     }
     
     protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
+        super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
-        this.fileHelper = ctx.fileHelper();
+        this.registries = ctx.registries();
         this.folder = folder;
         this.params = params;
         this.modElements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
@@ -135,56 +138,42 @@ public abstract class LootProviderBase<T> implements DataProvider {
     @Nonnull
     @Override
     public String getName() {
-        ResourceLocation key = LootContextParamSets.getKey(this.params);
-        String name = key == null ? "generic" : ("minecraft".equals(key.getNamespace()) ? key.getPath() : key.toString());
-        return this.mod.modid + " " + name + " loot tables";
+        return this.mod.modid + " " + this.folder + " loot tables";
     }
     
-    @Nonnull
     @Override
-    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
+    public void run() {
+        // We do not invoke super.run()
+        // Because of the validation needed for loot tables, we don't support registering from fields.
         this.setup();
 
         Map<ResourceLocation, LootTable> tables = this.modElements.get()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().getNamespace()))
                 .filter(entry -> !this.ignored.contains(entry.getValue()))
                 .flatMap(this::resolve)
-                .map(entry -> Map.entry(new ResourceLocation(entry.getKey().getNamespace(), this.folder + "/" + entry.getKey().getPath()), entry.getValue()))
+                .map(entry -> Map.entry(ResourceLocation.fromNamespaceAndPath(entry.getKey().getNamespace(), this.folder + "/" + entry.getKey().getPath()), entry.getValue()))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        ValidationContext validationContext = new ValidationContext(this.params, new LootDataResolver() {
-            
-            @Nullable
-            @Override
-            @SuppressWarnings("unchecked")
-            public <A> A getElement(@Nonnull LootDataId<A> id) {
-                if (id.type() != LootDataType.TABLE) return null;
-                if (tables.containsKey(id.location())) return (A) tables.get(id.location());
-                if (LootProviderBase.this.fileHelper.exists(id.location(), LOOT_TYPE)) return (A) LootTable.lootTable().build();
-                return null;
-            }
-        });
-        
+        WritableRegistry<LootTable> registry = this.registries.writableRegistry(Registries.LOOT_TABLE);
         for (Map.Entry<ResourceLocation, LootTable> entry : tables.entrySet()) {
-            entry.getValue().validate(validationContext.enterElement("{" + entry.getKey() + "}", new LootDataId<>(LootDataType.TABLE, entry.getKey())));
+            registry.register(ResourceKey.create(Registries.LOOT_TABLE, entry.getKey()), entry.getValue(), RegistrationInfo.BUILT_IN);
         }
-        
+
+        ProblemReporter.Collector problems = new ProblemReporter.Collector();
+        HolderLookup.Provider lootTableHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.LOOT_TABLE).asLookup()));
+        ValidationContext validationContext = new ValidationContext(problems, this.params, lootTableHolderProvider.asGetterLookup());
+
         for (Map.Entry<ResourceLocation, LootTable> entry : tables.entrySet()) {
-            this.fileHelper.trackGenerated(entry.getKey(), LOOT_TYPE);
+            entry.getValue().validate(validationContext.setParams(this.params).enterElement("{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
         }
-        
-        Multimap<String, String> multimap = validationContext.getProblems();
+
+        Multimap<String, String> multimap = problems.get();
         if (!multimap.isEmpty()) {
-            multimap.forEach((where, what) -> LibX.logger.warn("LootTable validation problem in " + where + ": " + what)); 
+            multimap.forEach((where, what) -> LibX.logger.warn("LootTable validation problem in " + where + ": " + what));
             throw new IllegalStateException("There were problems validating the loot tables.");
         }
-        
-        return CompletableFuture.allOf(tables.entrySet().stream().map(entry -> {
-            Path path = this.packTarget.path(PackType.SERVER_DATA).resolve(entry.getKey().getNamespace()).resolve("loot_tables").resolve(entry.getKey().getPath() + ".json");
-            return DataProvider.saveStable(cache, LootDataType.TABLE.parser().toJsonTree(entry.getValue()), path);
-        }).toArray(CompletableFuture[]::new));
     }
-    
+
     private Stream<Map.Entry<ResourceLocation, LootTable>> resolve(Map.Entry<ResourceLocation, T> entry) {
         Function<T, LootTable.Builder> loot;
         if (this.functionMap.containsKey(entry.getValue())) {
@@ -193,7 +182,10 @@ public abstract class LootProviderBase<T> implements DataProvider {
             LootTable.Builder builder = this.defaultBehavior(entry.getValue());
             loot = builder == null ? null : b -> builder;
         }
-        return loot == null ? Stream.empty() : Stream.of(Map.entry(entry.getKey(), loot.apply(entry.getValue()).setParamSet(this.params).build()));
+        if (loot == null) return Stream.empty();
+        LootTable.Builder builder = loot.apply(entry.getValue());
+        if (builder.randomSequence.isEmpty()) builder.setRandomSequence(entry.getKey());
+        return Stream.of(Map.entry(entry.getKey(), loot.apply(entry.getValue()).setParamSet(this.params).build()));
     }
 
     protected final LootModifier<T> modifier(BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolSingletonContainer.Builder<?>> function) {
@@ -265,14 +257,14 @@ public abstract class LootProviderBase<T> implements DataProvider {
      */
     public SimpleLootFactory<T> reference(T value) {
         ResourceLocation elementId = this.idResolver.apply(value);
-        return this.reference(new ResourceLocation(elementId.getNamespace(), this.folder + "/" + elementId.getPath()));
+        return this.reference(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(elementId.getNamespace(), this.folder + "/" + elementId.getPath())));
     }
 
     /**
      * Makes a reference to another loot table.
      */
-    public SimpleLootFactory<T> reference(ResourceLocation lootTable) {
-        return SimpleLootFactory.from(LootTableReference.lootTableReference(lootTable));
+    public SimpleLootFactory<T> reference(ResourceKey<LootTable> lootTable) {
+        return SimpleLootFactory.from(NestedLootTable.lootTableReference(lootTable));
     }
     
     /**

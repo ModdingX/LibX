@@ -1,12 +1,12 @@
 package org.moddingx.libx.datagen.provider.texture;
 
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.datagen.texture.HangingSignTextureFactory;
 import org.moddingx.libx.impl.datagen.texture.SignTextureFactory;
@@ -90,7 +90,7 @@ public abstract class TextureProviderBase implements DataProvider {
      * Adds a texture that should be generated.
      */
     public void texture(ResourceLocation loc, TextureFactory factory) {
-        this.image(new ResourceLocation(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), factory);
+        this.image(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), factory);
     }
 
     /**
@@ -104,11 +104,11 @@ public abstract class TextureProviderBase implements DataProvider {
      * Generates a sign texture for the given {@link WoodType} with the given two blocks as log and planks.
      */
     public void sign(WoodType wood, Block log, Block planks) {
-        ResourceLocation logId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(log));
-        ResourceLocation planksId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(planks));
+        ResourceLocation logId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(log));
+        ResourceLocation planksId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(planks));
         this.sign(wood,
-                new ResourceLocation(logId.getNamespace(), "block/" + logId.getPath()),
-                new ResourceLocation(planksId.getNamespace(), "block/" + planksId.getPath())
+                ResourceLocation.fromNamespaceAndPath(logId.getNamespace(), "block/" + logId.getPath()),
+                ResourceLocation.fromNamespaceAndPath(planksId.getNamespace(), "block/" + planksId.getPath())
         );
     }
     
@@ -116,8 +116,8 @@ public abstract class TextureProviderBase implements DataProvider {
      * Generates a sign texture for the given {@link WoodType} with the given two textures as log and planks.
      */
     public void sign(WoodType wood, ResourceLocation log, ResourceLocation planks) {
-        ResourceLocation woodId = new ResourceLocation(wood.name());
-        this.sign(new ResourceLocation(woodId.getNamespace(), "entity/signs/" + woodId.getPath()), log, planks);
+        ResourceLocation woodId = ResourceLocation.parse(wood.name());
+        this.sign(ResourceLocation.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/" + woodId.getPath()), log, planks);
     }
 
     /**
@@ -131,16 +131,16 @@ public abstract class TextureProviderBase implements DataProvider {
      * Generates a hanging sign texture for the given {@link WoodType} with the given block as stripped log.
      */
     public void hangingSign(WoodType wood, Block strippedLog) {
-        ResourceLocation logId = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(strippedLog));
-        this.hangingSign(wood, new ResourceLocation(logId.getNamespace(), "block/" + logId.getPath()));
+        ResourceLocation logId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(strippedLog));
+        this.hangingSign(wood, ResourceLocation.fromNamespaceAndPath(logId.getNamespace(), "block/" + logId.getPath()));
     }
 
     /**
      * Generates a hanging sign texture for the given {@link WoodType} with the given texture as stripped log.
      */
     public void hangingSign(WoodType wood, ResourceLocation strippedLog) {
-        ResourceLocation woodId = new ResourceLocation(wood.name());
-        this.hangingSign(new ResourceLocation(woodId.getNamespace(), "entity/signs/hanging/" + woodId.getPath()), strippedLog);
+        ResourceLocation woodId = ResourceLocation.parse(wood.name());
+        this.hangingSign(ResourceLocation.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/hanging/" + woodId.getPath()), strippedLog);
     }
 
     /**

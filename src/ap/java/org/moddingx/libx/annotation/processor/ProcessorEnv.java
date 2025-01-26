@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 public interface ProcessorEnv {
 
-    SourceVersion TARGET = SourceVersion.RELEASE_17;
+    SourceVersion TARGET = SourceVersion.RELEASE_21;
     
     Types types();
     Elements elements();

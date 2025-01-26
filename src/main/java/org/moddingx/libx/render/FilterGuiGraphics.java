@@ -1,6 +1,7 @@
 package org.moddingx.libx.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -234,51 +235,6 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void innerBlit(@Nonnull ResourceLocation atlasLocation, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-        this.parent.innerBlit(atlasLocation, x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
-    }
-
-    @Override
-    public void blitNineSliced(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sliceSize, int sourceWidth, int sourceHeight, int sourceX, int sourceY) {
-        this.parent.blitNineSliced(atlasLocation, targetX, targetY, targetWidth, targetHeight, sliceSize, sourceWidth, sourceHeight, sourceX, sourceY);
-    }
-
-    @Override
-    public void blitNineSliced(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sliceWidth, int sliceHeight, int sourceWidth, int sourceHeight, int sourceX, int sourceY) {
-        this.parent.blitNineSliced(atlasLocation, targetX, targetY, targetWidth, targetHeight, sliceWidth, sliceHeight, sourceWidth, sourceHeight, sourceX, sourceY);
-    }
-
-    @Override
-    public void blitNineSliced(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int cornerWidth, int cornerHeight, int edgeWidth, int edgeHeight, int sourceWidth, int sourceHeight, int sourceX, int sourceY) {
-        this.parent.blitNineSliced(atlasLocation, targetX, targetY, targetWidth, targetHeight, cornerWidth, cornerHeight, edgeWidth, edgeHeight, sourceWidth, sourceHeight, sourceX, sourceY);
-    }
-
-    @Override
-    public void blitNineSlicedSized(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sliceSize, int uWidth, int vHeight, int uOffset, int vOffset, int textureWidth, int textureHeight) {
-        this.parent.blitNineSlicedSized(atlasLocation, targetX, targetY, targetWidth, targetHeight, sliceSize, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
-    }
-
-    @Override
-    public void blitNineSlicedSized(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sliceWidth, int sliceHeight, int uWidth, int vHeight, int uOffset, int vOffset, int textureWidth, int textureHeight) {
-        this.parent.blitNineSlicedSized(atlasLocation, targetX, targetY, targetWidth, targetHeight, sliceWidth, sliceHeight, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
-    }
-
-    @Override
-    public void blitNineSlicedSized(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int cornerWidth, int cornerHeight, int edgeWidth, int edgeHeight, int uWidth, int vHeight, int uOffset, int vOffset, int textureWidth, int textureHeight) {
-        this.parent.blitNineSlicedSized(atlasLocation, targetX, targetY, targetWidth, targetHeight, cornerWidth, cornerHeight, edgeWidth, edgeHeight, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
-    }
-
-    @Override
-    public void blitRepeating(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sourceX, int sourceY, int sourceWidth, int sourceHeight) {
-        this.parent.blitRepeating(atlasLocation, targetX, targetY, targetWidth, targetHeight, sourceX, sourceY, sourceWidth, sourceHeight);
-    }
-
-    @Override
-    public void blitRepeating(@Nonnull ResourceLocation atlasLocation, int targetX, int targetY, int targetWidth, int targetHeight, int sourceX, int sourceY, int sourceWidth, int sourceHeight, int textureWidth, int textureHeight) {
-        this.parent.blitRepeating(atlasLocation, targetX, targetY, targetWidth, targetHeight, sourceX, sourceY, sourceWidth, sourceHeight, textureWidth, textureHeight);
-    }
-
-    @Override
     public void renderItem(@Nonnull ItemStack stack, int x, int y) {
         this.parent.renderItem(stack, x, y);
     }
@@ -381,5 +337,60 @@ public class FilterGuiGraphics extends GuiGraphics {
     @Override
     public void blitInscribed(@Nonnull ResourceLocation texture, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight, boolean centerX, boolean centerY) {
         this.parent.blitInscribed(texture, x, y, boundsWidth, boundsHeight, rectWidth, rectHeight, centerX, centerY);
+    }
+
+    @Override
+    public boolean containsPointInScissor(int x, int y) {
+        return this.parent.containsPointInScissor(x, y);
+    }
+
+    @Override
+    public void fillRenderType(@Nonnull RenderType renderType, int x1, int y1, int x2, int y2, int z) {
+        this.parent.fillRenderType(renderType, x1, y1, x2, y2, z);
+    }
+
+    @Override
+    public int drawStringWithBackdrop(@Nonnull Font font, @Nonnull Component text, int x, int y, int xOffset, int color) {
+        return this.parent.drawStringWithBackdrop(font, text, x, y, xOffset, color);
+    }
+
+    @Override
+    public void blitSprite(@Nonnull ResourceLocation sprite, int x, int y, int width, int height) {
+        this.parent.blitSprite(sprite, x, y, width, height);
+    }
+
+    @Override
+    public void blitSprite(@Nonnull ResourceLocation sprite, int x, int y, int blitOffset, int width, int height) {
+        this.parent.blitSprite(sprite, x, y, blitOffset, width, height);
+    }
+
+    @Override
+    public void blitSprite(@Nonnull ResourceLocation sprite, int textureWidth, int textureHeight, int uPosition, int vPosition, int x, int y, int uWidth, int vHeight) {
+        this.parent.blitSprite(sprite, textureWidth, textureHeight, uPosition, vPosition, x, y, uWidth, vHeight);
+    }
+
+    @Override
+    public void blitSprite(@Nonnull ResourceLocation sprite, int textureWidth, int textureHeight, int uPosition, int vPosition, int x, int y, int blitOffset, int uWidth, int vHeight) {
+        this.parent.blitSprite(sprite, textureWidth, textureHeight, uPosition, vPosition, x, y, blitOffset, uWidth, vHeight);
+    }
+
+    @Override
+    public void renderFakeItem(@Nonnull ItemStack stack, int x, int y, int seed) {
+        this.parent.renderFakeItem(stack, x, y, seed);
+    }
+
+    @Override
+    public void renderComponentTooltipFromElements(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack) {
+        this.parent.renderComponentTooltipFromElements(font, elements, mouseX, mouseY, stack);
+    }
+
+    @Override
+    public int drawScrollingString(@Nonnull Font font, @Nonnull Component text, int minX, int maxX, int y, int color) {
+        return this.parent.drawScrollingString(font, text, minX, maxX, y, color);
+    }
+
+    @Override
+    public void innerBlit(@Nonnull ResourceLocation atlasLocation, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
+        this.parent.innerBlit(atlasLocation, x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
     }
 }

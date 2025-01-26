@@ -6,9 +6,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,7 +136,7 @@ public abstract class MenuBase extends AbstractContainerMenu {
 
                 Slot slot = this.slots.get(idx);
                 ItemStack content = slot.getItem();
-                if (!content.isEmpty() && ItemStack.isSameItemSameTags(stack, content) && slot.mayPlace(stack)) {
+                if (!content.isEmpty() && ItemStack.isSameItemSameComponents(stack, content) && slot.mayPlace(stack)) {
                     int totalCount = content.getCount() + stack.getCount();
                     int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
                     if (totalCount <= maxSize) {

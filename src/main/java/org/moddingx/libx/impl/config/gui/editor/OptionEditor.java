@@ -56,14 +56,15 @@ public class OptionEditor<T> implements ConfigEditor<Optional<T>> {
             this.inputChanged = properties.inputChanged();
             this.value = value;
             
-            this.box = new Checkbox(0, 0, 20, Math.min(20, properties.height()), Component.empty(), selected, false) {
-                @Override
-                public void onPress() {
-                    super.onPress();
-                    EditorOps.wrap(OptionWidget.this.widget).enabled(this.selected());
-                    OptionWidget.this.update(null);
-                }
-            };
+            this.box = Checkbox.builder(Component.empty(), screen.getMinecraft().font)
+                    .pos(0, 0)
+                    .maxWidth(20)
+                    .selected(selected)
+                    .onValueChange((c, sel) -> {
+                        EditorOps.wrap(OptionWidget.this.widget).enabled(sel);
+                        OptionWidget.this.update(null);
+                    })
+                    .build();
 
             WidgetProperties<T> modified = new WidgetProperties<>(22, 0, properties.width(), properties.height(), this::update);
             this.widget = EditorHelper.create(screen, editor, this.value, old, modified);

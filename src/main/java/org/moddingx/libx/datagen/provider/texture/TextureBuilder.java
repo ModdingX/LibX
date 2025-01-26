@@ -83,7 +83,7 @@ public class TextureBuilder {
      * Adds a required texture which has the given width and height by default.
      */
     public TextureBuilder addTexture(ResourceLocation loc, int defaultWidth, int defaultHeight) {
-        return this.addImage(new ResourceLocation(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), defaultWidth, defaultHeight);
+        return this.addImage(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), defaultWidth, defaultHeight);
     }
 
     /**
@@ -113,7 +113,7 @@ public class TextureBuilder {
      * @param loc A fake <i>image</i> id.
      */
     public TextureBuilder addFakeTexture(ResourceLocation loc, ResourceLocation texLoc, UnaryOperator<BufferedImage> image) {
-        return this.addFakeImage(loc, new ResourceLocation(texLoc.getNamespace(), "textures/" + texLoc.getPath() + ".png"), image);
+        return this.addFakeImage(loc, ResourceLocation.fromNamespaceAndPath(texLoc.getNamespace(), "textures/" + texLoc.getPath() + ".png"), image);
     }
 
     /**

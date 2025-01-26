@@ -2,31 +2,23 @@ package org.moddingx.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.impl.config.gui.screen.content.ResourceListContent;
 import org.moddingx.libx.util.data.ResourceList;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonObject> {
 
     public static final ResourceListValueMapper INSTANCE = new ResourceListValueMapper();
     
-    public static final URL INFO_URL;
-
-    static {
-        try {
-            INFO_URL = new URL("https://moddingx.org/libx/org/moddingx/libx/util/data/ResourceList.html#use_resource_lists_in_configs");
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final URI INFO_URL = URI.create("https://moddingx.org/libx/org/moddingx/libx/util/data/ResourceList.html#use_resource_lists_in_configs");
 
     private static final List<String> COMMENT = List.of("This is a resource list. See " + INFO_URL);
 
@@ -55,13 +47,8 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
     }
 
     @Override
-    public ResourceList fromNetwork(FriendlyByteBuf buffer) {
-        return new ResourceList(buffer);
-    }
-
-    @Override
-    public void toNetwork(ResourceList value, FriendlyByteBuf buffer) {
-        value.toNetwork(buffer);
+    public StreamCodec<? super FriendlyByteBuf, ResourceList> streamCodec() {
+        return ResourceList.STREAM_CODEC;
     }
 
     @Override

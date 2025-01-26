@@ -1,100 +1,40 @@
 package org.moddingx.libx.base;
 
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import org.moddingx.libx.codec.MoreStreamCodecs;
+import org.moddingx.libx.inventory.StackItemHandler;
 import org.moddingx.libx.mod.ModX;
+import org.moddingx.libx.registration.Registerable;
+import org.moddingx.libx.registration.RegistrationContext;
+import org.moddingx.libx.registration.util.CapabilityInfo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.function.Function;
 
 /**
  * Base class for {@link Item items} which have an inventory. This will provide the capability to the item.
  */
-public class ItemInventory<T extends IItemHandlerModifiable & INBTSerializable<CompoundTag>> extends ItemBase {
+public class ItemInventory extends ItemBase implements Registerable {
 
-    private final Function<Runnable, T> inventoryFactory;
+    public static final DataComponentType<NonNullList<ItemStack>> INVENTORY_DATA = new DataComponentType.Builder<NonNullList<ItemStack>>()
+            .persistent(NonNullList.codecOf(ItemStack.OPTIONAL_CODEC))
+            .networkSynchronized(MoreStreamCodecs.listOf(ItemStack.OPTIONAL_STREAM_CODEC).map(NonNullList::copyOf, Function.identity()))
+            .build();
+
+    private final int inventorySize;
     
-    /**
-     * Creates a new item with inventory.
-     * 
-     * @param inventoryFactory A factory that creates new item handler for an item stack. The runnable
-     *                         given to that function should be called in {@code onContentsChanged}
-     */
-    public ItemInventory(ModX mod, Properties properties, Function<Runnable, T> inventoryFactory) {
+    public ItemInventory(ModX mod, int inventorySize, Properties properties) {
         super(mod, properties);
-        this.inventoryFactory = inventoryFactory;
+        this.inventorySize = inventorySize;
     }
 
-    @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag capTag) {
-        ICapabilityProvider parent = super.initCapabilities(stack, capTag);
-        
-        LazyOptional<IItemHandlerModifiable> inventoryCapability = LazyOptional.of(() -> {
-            AtomicReference<T> handler = new AtomicReference<>(null);
-            handler.set(this.inventoryFactory.apply(() -> {
-                CompoundTag nbt = stack.getOrCreateTag();
-                nbt.put("Inventory", handler.get().serializeNBT());
-                stack.setTag(nbt);
-            }));
-            CompoundTag nbt = stack.getTag();
-            if (nbt != null && nbt.contains("Inventory", Tag.TAG_COMPOUND)) {
-                handler.get().deserializeNBT(nbt.getCompound("Inventory"));
-            }
-            return handler.get();
-        });
-        
-        return new ICapabilityProvider() {
-            
-            @Nonnull
-            @Override
-            public <C> LazyOptional<C> getCapability(@Nonnull Capability<C> cap, @Nullable Direction side) {
-                if (cap == ForgeCapabilities.ITEM_HANDLER) {
-                    return inventoryCapability.cast();
-                } else {
-                    return parent == null ? LazyOptional.empty() : parent.getCapability(cap, side);
-                }
-            }
-        };
-    }
-
-    /**
-     * Gets the inventory of an {@link ItemStack} or null if the ItemStack doesn't have the item handler capability
-     * or the item handler is not an instance of {@link IItemHandlerModifiable}.
-     */
-    @Nullable
-    public static IItemHandlerModifiable getInventory(ItemStack stack) {
-        IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElse(null);
-        if (handler instanceof IItemHandlerModifiable modifiable) {
-            return modifiable;
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-     * Gets an {@link Optional} containing the inventory of an {@link ItemStack} or an empty optional if the ItemStack
-     * doesn't have the item handler capability or the item handler is not an instance of {@link IItemHandlerModifiable}.
-     */
-    public static Optional<IItemHandlerModifiable> getInventoryOption(ItemStack stack) {
-        IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElse(null);
-        if (handler instanceof IItemHandlerModifiable modifiable) {
-            return Optional.of(modifiable);
-        } else {
-            return Optional.empty();
-        }
+    @OverridingMethodsMustInvokeSuper
+    public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        builder.register(null, new CapabilityInfo.Item<>(this, Capabilities.ItemHandler.ITEM, (stack, ignored) -> new StackItemHandler(this.inventorySize, stack)));
     }
 }

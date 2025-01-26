@@ -12,7 +12,7 @@ import org.moddingx.libx.impl.datapack.DynamicPackLocator;
  * the name of your dynamic resource pack. Inside this folder you can put the content that normally is in the
  * {@code assets} folder. The resource pack is shown in the resource pack selection menu and can be activated based
  * on the users preference.
- * A {@code pack.mcmeta} file is not required and if you provide one it'll be ignored.
+ * A {@code pack.mcmeta} file is not required and if you provide one it'll be ignored. Neither are overlays.
  * 
  * A dynamic datapack must be located in {@code libxdata/[name]} inside your JAR file where {@code [name]} is
  * the name of your dynamic datapack. Inside this folder you can put the content that normally is in the
@@ -36,13 +36,13 @@ public class DynamicPacks {
      * Enables a dynamic pack.
      */
     public void enablePack(String modId, String packName) {
-        this.locator.enablePack(new ResourceLocation(modId, packName));
+        this.locator.enablePack(ResourceLocation.fromNamespaceAndPath(modId, packName));
     }
 
     /**
      * Gets tests whether a dynamic pack is enabled.
      */
     public boolean isEnabled(String modId, String packName) {
-        return this.locator.isEnabled(new ResourceLocation(modId, packName));
+        return this.locator.isEnabled(ResourceLocation.fromNamespaceAndPath(modId, packName));
     }
 }

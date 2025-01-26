@@ -117,9 +117,9 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
                 Component.translatable("libx.config.gui.resource_list.info").withStyle(Style.EMPTY.withUnderlined(true).withColor(ChatFormatting.BLUE)), List.of()) {
 
             @Override
-            public void onClick(double mouseX, double mouseY) {
+            public void onClick(double mouseX, double mouseY, int button) {
                 try {
-                    Util.getPlatform().openUrl(ResourceListValueMapper.INFO_URL);
+                    Util.getPlatform().openUri(ResourceListValueMapper.INFO_URL);
                 } catch (Exception e) {
                     //
                 }

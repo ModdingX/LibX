@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
@@ -77,21 +79,8 @@ public class SetValueMapper<T> implements GenericValueMapper<Set<T>, JsonArray, 
     }
 
     @Override
-    public Set<T> fromNetwork(FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
-        int size = buffer.readVarInt();
-        ImmutableSet.Builder<T> builder = ImmutableSet.builder();
-        for (int i = 0; i < size; i++) {
-            builder.add(mapper.fromNetwork(buffer));
-        }
-        return builder.build();
-    }
-
-    @Override
-    public void toNetwork(Set<T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
-        buffer.writeVarInt(value.size());
-        for (T element : value) {
-            mapper.toNetwork(element, buffer);
-        }
+    public StreamCodec<? super FriendlyByteBuf, Set<T>> streamCodec(ValueMapper<T, JsonElement> mapper) {
+        return MoreStreamCodecs.listOf(mapper.streamCodec()).map(Set::copyOf, List::copyOf);
     }
 
     @Override

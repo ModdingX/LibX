@@ -13,12 +13,10 @@ import javax.annotation.Nonnull;
 public class DecoratedPressurePlate extends PressurePlateBlock {
 
     public final DecoratedBlock parent;
-    public final PressurePlateBlock.Sensitivity sensitivity;
 
-    public DecoratedPressurePlate(PressurePlateBlock.Sensitivity sensitivity, DecoratedBlock parent) {
-        super(sensitivity, Properties.copy(parent), parent.getMaterialProperties().blockSetType());
+    public DecoratedPressurePlate(DecoratedBlock parent) {
+        super(parent.getMaterialProperties().blockSetType(), Properties.ofFullCopy(parent));
         this.parent = parent;
-        this.sensitivity = sensitivity;
     }
 
     @Override
@@ -33,13 +31,12 @@ public class DecoratedPressurePlate extends PressurePlateBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public int getLightBlock(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
         return this.parent.getLightBlock(state, level, pos);
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
+    public int getLightEmission(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos) {
         return this.parent.getLightEmission(state, world, pos);
     }
 }

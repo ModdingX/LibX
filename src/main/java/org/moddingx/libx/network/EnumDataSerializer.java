@@ -1,7 +1,9 @@
 package org.moddingx.libx.network;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 import javax.annotation.Nonnull;
 
@@ -9,22 +11,17 @@ import javax.annotation.Nonnull;
  * {@link EntityDataSerializer Data serializers} for enums. It needs to be registered in order to be used.
  */
 public class EnumDataSerializer<T extends Enum<T>> implements EntityDataSerializer<T> {
-    
-    private final Class<T> enumClass;
+
+    private final StreamCodec<RegistryFriendlyByteBuf, T> codec;
 
     public EnumDataSerializer(Class<T> enumClass) {
-        this.enumClass = enumClass;
-    }
-
-    @Override
-    public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull T value) {
-        buffer.writeEnum(value);
+        this.codec = NeoForgeStreamCodecs.enumCodec(enumClass);
     }
 
     @Nonnull
     @Override
-    public T read(@Nonnull FriendlyByteBuf buffer) {
-        return buffer.readEnum(this.enumClass);
+    public StreamCodec<? super RegistryFriendlyByteBuf, T> codec() {
+        return this.codec;
     }
 
     @Nonnull

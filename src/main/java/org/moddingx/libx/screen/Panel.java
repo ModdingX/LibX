@@ -68,13 +68,18 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
     }
 
     @Override
-    public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public final void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.pose().pushPose();
         graphics.pose().translate(this.getX(), this.getY(), 0);
         for (Renderable widget : this.renderables) {
             widget.render(graphics, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
         }
         graphics.pose().popPose();
+        this.renderWidgetContent(graphics, mouseX, mouseY, partialTicks);
+    }
+    
+    protected void renderWidgetContent(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        //
     }
 
     @Nonnull
@@ -107,8 +112,8 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        return this.getChildAt(mouseX, mouseY).filter(child -> child.mouseScrolled(mouseX - this.getX(), mouseY - this.getY(), delta)).isPresent();
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        return this.getChildAt(mouseX, mouseY).filter(child -> child.mouseScrolled(mouseX - this.getX(), mouseY - this.getY(), scrollX, scrollY)).isPresent();
     }
 
     @Override

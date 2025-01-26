@@ -2,9 +2,10 @@ package org.moddingx.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -33,7 +34,7 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
 
         @Override
         public ResourceLocation valueOf(String str) {
-            return new ResourceLocation(str);
+            return ResourceLocation.parse(str);
         }
     };
 
@@ -53,7 +54,7 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
 
     @Override
     public ResourceLocation fromJson(JsonPrimitive json) {
-        return new ResourceLocation(json.getAsString());
+        return ResourceLocation.parse(json.getAsString());
     }
 
     @Override
@@ -62,13 +63,8 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
     }
 
     @Override
-    public ResourceLocation fromNetwork(FriendlyByteBuf buffer) {
-        return buffer.readResourceLocation();
-    }
-
-    @Override
-    public void toNetwork(ResourceLocation value, FriendlyByteBuf buffer) {
-        buffer.writeResourceLocation(value);
+    public StreamCodec<? super FriendlyByteBuf, ResourceLocation> streamCodec() {
+        return ResourceLocation.STREAM_CODEC;
     }
 
     @Override

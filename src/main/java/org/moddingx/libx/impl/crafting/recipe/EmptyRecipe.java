@@ -1,43 +1,35 @@
 package org.moddingx.libx.impl.crafting.recipe;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import org.moddingx.libx.LibX;
+import org.moddingx.libx.codec.MoreStreamCodecs;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class EmptyRecipe implements Recipe<Container> {
+public class EmptyRecipe implements Recipe<RecipeInput> {
     
     public static final ResourceLocation ID = LibX.getInstance().resource("empty");
     public static final RecipeType<EmptyRecipe> TYPE = RecipeType.simple(ID);
-    
-    private final ResourceLocation id;
 
-    public EmptyRecipe(ResourceLocation id) {
-        this.id = id;
-    }
+    private EmptyRecipe() {}
 
     @Override
-    public boolean matches(@Nonnull Container inv, @Nonnull Level level) {
+    public boolean matches(@Nonnull RecipeInput inv, @Nonnull Level level) {
         return false;
     }
 
     @Nonnull
     @Override
-    public ItemStack assemble(@Nonnull Container inv, @Nonnull RegistryAccess registryAccess) {
+    public ItemStack assemble(@Nonnull RecipeInput input, @Nonnull HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
@@ -48,20 +40,8 @@ public class EmptyRecipe implements Recipe<Container> {
 
     @Nonnull
     @Override
-    public ItemStack getResultItem(@Nonnull RegistryAccess registryAccess) {
+    public ItemStack getResultItem(@Nonnull HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
-    }
-
-    @Nonnull
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
-    }
-
-    @Nonnull
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
     }
 
     @Nonnull
@@ -72,8 +52,15 @@ public class EmptyRecipe implements Recipe<Container> {
 
     @Nonnull
     @Override
-    public NonNullList<ItemStack> getRemainingItems(@Nonnull Container inv) {
-        return NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+    public RecipeSerializer<?> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
+    @Nonnull
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(@Nonnull RecipeInput input) {
+        return NonNullList.withSize(input.size(), ItemStack.EMPTY);
+        
     }
 
     @Nonnull
@@ -93,6 +80,10 @@ public class EmptyRecipe implements Recipe<Container> {
         return new ItemStack(Blocks.BARRIER);
     }
     
+    public static EmptyRecipe empty() {
+        return new EmptyRecipe();
+    }
+    
     public static class Serializer implements RecipeSerializer<EmptyRecipe> {
 
         public static final Serializer INSTANCE = new Serializer();
@@ -100,57 +91,17 @@ public class EmptyRecipe implements Recipe<Container> {
         private Serializer() {
             
         }
-        
+
         @Nonnull
         @Override
-        public EmptyRecipe fromJson(@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json) {
-            return new EmptyRecipe(recipeId);
+        public MapCodec<EmptyRecipe> codec() {
+            return MapCodec.unit(EmptyRecipe::new);
         }
 
-        @Nullable
+        @Nonnull
         @Override
-        public EmptyRecipe fromNetwork(@Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer) {
-            return new EmptyRecipe(recipeId);
+        public StreamCodec<RegistryFriendlyByteBuf, EmptyRecipe> streamCodec() {
+            return MoreStreamCodecs.unit(EmptyRecipe::new);
         }
-
-        @Override
-        public void toNetwork(@Nonnull FriendlyByteBuf buffer, @Nonnull EmptyRecipe recipe) {
-            //
-        }
-    }
-    
-    public static FinishedRecipe empty(ResourceLocation id) {
-        
-        return new FinishedRecipe() {
-
-            @Override
-            public void serializeRecipeData(@Nonnull JsonObject json) {
-                //
-            }
-
-            @Nonnull
-            @Override
-            public ResourceLocation getId() {
-                return id;
-            }
-
-            @Nonnull
-            @Override
-            public RecipeSerializer<?> getType() {
-                return Serializer.INSTANCE;
-            }
-
-            @Nullable
-            @Override
-            public JsonObject serializeAdvancement() {
-                return null;
-            }
-
-            @Nullable
-            @Override
-            public ResourceLocation getAdvancementId() {
-                return null;
-            }
-        };
     }
 }

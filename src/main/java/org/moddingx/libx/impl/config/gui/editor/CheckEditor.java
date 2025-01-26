@@ -22,27 +22,27 @@ public class CheckEditor implements ConfigEditor<Boolean> {
 
     @Override
     public AbstractWidget createWidget(Screen screen, Boolean initialValue, WidgetProperties<Boolean> properties) {
-        int padding = Math.max(0, properties.width() - 20) / 2;
-        return new Checkbox(padding + properties.x(), properties.y(), 20, properties.height(), Component.empty(), initialValue, false) {
-            @Override
-            public void onPress() {
-                super.onPress();
-                properties.inputChanged().accept(this.selected());
-            }
-        };
+        int paddingX = Math.max(0, properties.width() - 20) / 2;
+        int paddingY = Math.max(0, properties.height() - 20) / 2;
+        return Checkbox.builder(Component.empty(), screen.getMinecraft().font)
+                .pos(paddingX + properties.x(), paddingY + properties.y())
+                .maxWidth(properties.width())
+                .selected(initialValue)
+                .onValueChange((c, sel) -> properties.inputChanged().accept(sel))
+                .build();
     }
 
     @Override
     public AbstractWidget updateWidget(Screen screen, AbstractWidget oldWidget, WidgetProperties<Boolean> properties) {
         if (oldWidget instanceof Checkbox old) {
-            int padding = Math.max(0, properties.width() - 20) / 2;
-            return new Checkbox(padding + properties.x(), properties.y(), 20, properties.height(), Component.empty(), old.selected(), false) {
-                @Override
-                public void onPress() {
-                    super.onPress();
-                    properties.inputChanged().accept(this.selected());
-                }
-            };
+            int paddingX = Math.max(0, properties.width() - 20) / 2;
+            int paddingY = Math.max(0, properties.height() - 20) / 2;
+            return Checkbox.builder(Component.empty(), screen.getMinecraft().font)
+                    .pos(paddingX + properties.x(), paddingY + properties.y())
+                    .maxWidth(properties.width())
+                    .selected(old.selected())
+                    .onValueChange((c, sel) -> properties.inputChanged().accept(sel))
+                    .build();
         } else {
             return this.createWidget(screen, this.defaultValue(), properties);
         }

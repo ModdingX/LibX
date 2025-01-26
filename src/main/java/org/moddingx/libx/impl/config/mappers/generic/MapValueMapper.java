@@ -4,8 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
@@ -59,22 +62,8 @@ public class MapValueMapper<T> implements GenericValueMapper<Map<String, T>, Jso
     }
 
     @Override
-    public Map<String, T> fromNetwork(FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
-        int size = buffer.readVarInt();
-        ImmutableMap.Builder<String, T> builder = ImmutableMap.builder();
-        for (int i = 0; i < size; i++) {
-            builder.put(buffer.readUtf(0x7fff), mapper.fromNetwork(buffer));
-        }
-        return builder.build();
-    }
-
-    @Override
-    public void toNetwork(Map<String, T> value, FriendlyByteBuf buffer, ValueMapper<T, JsonElement> mapper) {
-        buffer.writeVarInt(value.size());
-        for (Map.Entry<String, T> entry : value.entrySet()) {
-            buffer.writeUtf(entry.getKey(), 0x7fff);
-            mapper.toNetwork(entry.getValue(), buffer);
-        }
+    public StreamCodec<? super FriendlyByteBuf, Map<String, T>> streamCodec(ValueMapper<T, JsonElement> mapper) {
+        return MoreStreamCodecs.mapOf(ByteBufCodecs.STRING_UTF8, mapper.streamCodec());
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.moddingx.libx.impl.config.wrapper;
 
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import org.moddingx.libx.config.mapper.ValueMapper;
 
 public class TypesafeMapper extends JsonTypesafeMapper<Object> {
@@ -29,11 +30,17 @@ public class TypesafeMapper extends JsonTypesafeMapper<Object> {
     }
 
     @Override
-    public void toNetwork(Object value, FriendlyByteBuf buffer) {
-        if (this.wrapped.type().isAssignableFrom(value.getClass())) {
-            this.wrapped.toNetwork(value, buffer);
-        } else {
-            throw new IllegalArgumentException("Type mismatch in config mapper write: Expected " + this.wrapped.type() + ", got " + value.getClass());
-        }
+    public StreamCodec<? super FriendlyByteBuf, Object> streamCodec() {
+        StreamCodec<? super FriendlyByteBuf, Object> codec = this.wrapped.streamCodec();
+        return StreamCodec.of(
+                (FriendlyByteBuf buf, Object value) -> {
+                    if (this.wrapped.type().isAssignableFrom(value.getClass())) {
+                        codec.encode(buf, value);
+                     } else {
+                         throw new IllegalArgumentException("Type mismatch in config mapper write: Expected " + this.wrapped.type() + ", got " + value.getClass());
+                     }
+                },
+                codec::decode
+        );
     }
 }

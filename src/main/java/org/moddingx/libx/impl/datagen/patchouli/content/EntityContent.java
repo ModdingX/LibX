@@ -1,8 +1,8 @@
 package org.moddingx.libx.impl.datagen.patchouli.content;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 
@@ -36,7 +36,7 @@ public class EntityContent extends CaptionContent {
     protected void specialPage(PageBuilder builder, @Nullable String caption) {
         JsonObject json = new JsonObject();
         json.addProperty("type", "patchouli:entity");
-        json.addProperty("entity", Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(this.entity), "Entity not registered: " + this.entity).toString());
+        json.addProperty("entity", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(this.entity), "Entity not registered: " + this.entity).toString());
         if (caption != null) {
             json.addProperty("text", builder.translate(caption));
         }

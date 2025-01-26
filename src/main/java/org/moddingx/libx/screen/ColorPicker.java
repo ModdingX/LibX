@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.Mth;
@@ -157,38 +158,34 @@ public class ColorPicker extends Panel {
     }
     
     @Override
-    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(graphics, mouseX, mouseY, partialTicks);
-
+    public void renderWidgetContent(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.pose().pushPose();
         graphics.pose().translate(this.getX(), this.getY(), 0);
 
         Matrix4f matrix = graphics.pose().last().pose();
 
         {
-            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorTexLightmapShader);
             RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
-            BufferBuilder vertex = Tesselator.getInstance().getBuilder();
-            vertex.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+            BufferBuilder vertex = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
             if (this.enabled) {
                 this.hsbMatrix.get().forEach(v -> v.add(vertex, matrix));
             } else {
                 this.hsbMatrix.get().forEach(v -> v.addGrayscale(vertex, matrix));
             }
-            Tesselator.getInstance().end();
+            BufferUploader.drawWithShader(vertex.buildOrThrow());
         }
         
         {
-            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.setShader(GameRenderer::getPositionColorTexLightmapShader);
             RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
-            BufferBuilder vertex = Tesselator.getInstance().getBuilder();
-            vertex.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+            BufferBuilder vertex = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
             if (this.enabled) {
                 this.huePanel.forEach(v -> v.add(vertex, matrix));
             } else {
                 this.huePanel.forEach(v -> v.addGrayscale(vertex, matrix));
             }
-            Tesselator.getInstance().end();
+            BufferUploader.drawWithShader(vertex.buildOrThrow());
         }
         
         int colorValue = ((this.red & 0xFF) << 16) | ((this.green & 0xFF) << 8) | (this.blue & 0xFF);
@@ -198,7 +195,7 @@ public class ColorPicker extends Panel {
             displayColor = (value << 16) | (value << 8) | value;
         }
         
-        int highlightColor = this.brightness > 0.5 ? 0x000000 : 0xFFFFFF;
+        int highlightColor = this.brightness > 0.5 ? 0xFF000000 : 0xFFFFFFFF;
 
         RenderHelper.rgb(highlightColor);
         graphics.blit(RenderHelper.TEXTURE_WHITE, 115, 69, 20, 0, 0, 85, 31, 256, 256);
@@ -208,6 +205,7 @@ public class ColorPicker extends Panel {
         
         String colorText = String.format("#%06X", colorValue);
         RenderHelper.resetColor();
+        graphics.pose().translate(0, 0, 60);
         graphics.drawString(Minecraft.getInstance().font, colorText, 157 - (Minecraft.getInstance().font.width(colorText) / 2), 80, highlightColor, false);
         
         graphics.pose().popPose();
@@ -272,12 +270,12 @@ public class ColorPicker extends Panel {
     private record VertexInfo(float x, float y, float u, float v, ColorValue color) {
         
         public void add(VertexConsumer vertex, Matrix4f matrix) {
-            vertex.vertex(matrix, this.x, this.y, 20).color(this.color.red, this.color.green, this.color.blue, 255).uv(this.u, this.v).endVertex();
+            vertex.addVertex(matrix, this.x, this.y, 20).setColor(this.color.red, this.color.green, this.color.blue, 255).setUv(this.u, this.v).setLight(LightTexture.FULL_BRIGHT);
         }
         
         public void addGrayscale(VertexConsumer vertex, Matrix4f matrix) {
             int value = Math.round((this.color.red + this.color.green + this.color.blue) / 3f);
-            vertex.vertex(matrix, this.x, this.y, 20).color(value, value, value, 255).uv(this.u, this.v).endVertex();
+            vertex.addVertex(matrix, this.x, this.y, 20).setColor(value, value, value, 255).setUv(this.u, this.v).setLight(LightTexture.FULL_BRIGHT);
         }
     }
     

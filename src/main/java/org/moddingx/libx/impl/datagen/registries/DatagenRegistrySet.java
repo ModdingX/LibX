@@ -1,9 +1,8 @@
 package org.moddingx.libx.impl.datagen.registries;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.*;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
@@ -11,25 +10,31 @@ import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.datagen.RegistrySet;
-import org.moddingx.libx.impl.datagen.load.DatagenRegistryLoader;
+import org.moddingx.libx.util.Ref;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DatagenRegistrySet implements RegistrySet {
     
     private final RegistryAccess rootAccess;
+    private final KnownRegistries knownRegistries;
     private final DatagenRegistrySet root;
     private final List<DatagenRegistrySet> parents;
     private final List<DatagenRegistrySet> children;
-    private final Map<Holder.Reference<?>, ResourceKey<? extends Registry<?>>> holderMap;
+    // NeoForge patches the holder equals and hashCode to access the key which is impossible for intrusive holders
+    // Therefore we need to use Ref here.
+    private final Map<Ref<Holder.Reference<?>>, ResourceKey<? extends Registry<?>>> holderMap;
 
     private DatagenStage stage;
     private final Map<ResourceKey<? extends Registry<?>>, DatagenRegistry<?>> registries;
     private RegistryAccess localAccess;
     
-    public DatagenRegistrySet(RegistryAccess access) {
+    public DatagenRegistrySet(RegistryAccess access, KnownRegistries knownRegistries) {
         this.rootAccess = access;
+        this.knownRegistries = knownRegistries;
         this.root = this;
         this.parents = List.of();
         this.children = new ArrayList<>();
@@ -47,6 +52,7 @@ public class DatagenRegistrySet implements RegistrySet {
         if (roots.size() != 1) throw new IllegalArgumentException("Registry set can only have a single root");
         this.root = roots.get(0);
         this.rootAccess = this.root.rootAccess;
+        this.knownRegistries = this.root.knownRegistries;
         for (DatagenRegistrySet parent : this.parents) {
             if (parent.stage != DatagenStage.REGISTRY_SETUP) {
                 throw new IllegalStateException("New registry sets ca only be created in registry setup phase");
@@ -95,14 +101,14 @@ public class DatagenRegistrySet implements RegistrySet {
     @Nullable
     @Override
     public <T> ResourceKey<? extends Registry<T>> findRegistryFor(Holder.Reference<T> holder) {
+        Ref<Holder.Reference<?>> key = new Ref<>(holder);
         //noinspection unchecked
-        return (ResourceKey<? extends Registry<T>>) this.holderMap.getOrDefault(holder, null);
+        return (ResourceKey<? extends Registry<T>>) this.holderMap.getOrDefault(key, null);
     }
 
     public <T> Optional<DatagenRegistry<T>> getDatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, boolean forWrite) {
         if (forWrite && this.stage == DatagenStage.DATAGEN) return Optional.empty();
-        Optional<RegistryDataLoader.RegistryData<?>> data = DatagenRegistryLoader.getDataPackRegistries(null).stream()
-                .filter(rd -> Objects.equals(rd.key(), registryKey)).findFirst();
+        Optional<RegistryDataLoader.RegistryData<T>> data = this.knownRegistries.query(registryKey);
         if (data.isEmpty()) return Optional.empty();
         if (forWrite && DatagenSystem.extensionRegistries().contains(registryKey) != (this.stage == DatagenStage.EXTENSION_SETUP)) {
             return Optional.empty();
@@ -111,9 +117,8 @@ public class DatagenRegistrySet implements RegistrySet {
             // Root registry set: Inherit from the registry access instead of parents
             //noinspection unchecked
             return Optional.of((DatagenRegistry<T>) this.registries.computeIfAbsent(registryKey, k -> {
-                //noinspection unchecked
                 DatagenRegistry<T> reg = DatagenRegistry.createRoot(
-                        registryKey, this, (Codec<T>) data.get().elementCodec(),
+                        registryKey, this, data.get().elementCodec(),
                         this.rootAccess.registry(registryKey).orElseThrow(() ->
                                 new IllegalStateException("Could not setup " + registryKey + " registry: Root registry not available")
                         )
@@ -125,9 +130,8 @@ public class DatagenRegistrySet implements RegistrySet {
             // Inherited registry set: Inherit from parents
             //noinspection unchecked
             return Optional.of((DatagenRegistry<T>) this.registries.computeIfAbsent(registryKey, k -> {
-                //noinspection unchecked
                 DatagenRegistry<T> reg = DatagenRegistry.create(
-                        registryKey, this, (Codec<T>) data.get().elementCodec(),
+                        registryKey, this, data.get().elementCodec(),
                         this.getDirectParents().stream().map(parent ->
                                 parent.getDatagenRegistry(registryKey, false).orElseThrow(() ->
                                         new IllegalStateException("Could not setup " + registryKey + " registry: Parent registry not available")
@@ -159,7 +163,7 @@ public class DatagenRegistrySet implements RegistrySet {
     }
     
     public <T> void trackHolderTarget(Holder.Reference<T> holder, ResourceKey<? extends Registry<T>> registryKey) {
-        this.holderMap.put(holder, registryKey);
+        this.holderMap.put(new Ref<>(holder), registryKey);
     }
     
     public void transition(DatagenStage stage) {
@@ -232,9 +236,9 @@ public class DatagenRegistrySet implements RegistrySet {
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Registry<? extends Registry<?>> makeRegistryOfRegistries() {
-        WritableRegistry<? extends Registry<?>> rootRegistry = new MappedRegistry<>(ResourceKey.createRegistryKey(BuiltInRegistries.ROOT_REGISTRY_NAME), Lifecycle.stable());
+        WritableRegistry<? extends Registry<?>> rootRegistry = new MappedRegistry<>(ResourceKey.createRegistryKey(Registries.ROOT_REGISTRY_NAME), Lifecycle.stable());
         for (ResourceKey<? extends Registry<?>> key : this.rootAccess.registries().map(RegistryAccess.RegistryEntry::key).toList()) {
-            ((WritableRegistry) rootRegistry).register(key, this.registry((ResourceKey) key), Lifecycle.stable());
+            ((WritableRegistry) rootRegistry).register(key, this.registry((ResourceKey) key), RegistrationInfo.BUILT_IN);
         }
         return rootRegistry;
     }
@@ -248,6 +252,26 @@ public class DatagenRegistrySet implements RegistrySet {
         }
         for (DatagenRegistry<?> registry : this.registries.values()) {
             registry.writeOwnElements(target, output);
+        }
+    }
+    
+    public static class KnownRegistries {
+        
+        private final List<RegistryDataLoader.RegistryData<?>> knownRegistries;
+        private final Map<ResourceKey<? extends Registry<?>>, RegistryDataLoader.RegistryData<?>> knownRegistriesMap;
+
+        public KnownRegistries(List<RegistryDataLoader.RegistryData<?>> knownRegistries) {
+            this.knownRegistries = List.copyOf(knownRegistries);
+            this.knownRegistriesMap = this.knownRegistries.stream().collect(Collectors.toUnmodifiableMap(RegistryDataLoader.RegistryData::key, Function.identity()));
+        }
+        
+        public List<RegistryDataLoader.RegistryData<?>> list() {
+            return this.knownRegistries;
+        }
+        
+        public <T> Optional<RegistryDataLoader.RegistryData<T>> query(ResourceKey<? extends Registry<T>> registryKey) {
+            //noinspection unchecked
+            return Optional.ofNullable((RegistryDataLoader.RegistryData<T>) this.knownRegistriesMap.get(registryKey));
         }
     }
 }

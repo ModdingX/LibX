@@ -1,8 +1,7 @@
 package org.moddingx.libx.util.game;
 
 import net.minecraft.util.Mth;
-import net.minecraftforge.energy.IEnergyStorage;
-import org.moddingx.libx.capability.LongEnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 /**
  * Utility methods to convert amounts (must be > 0) that are stored as {@code long}

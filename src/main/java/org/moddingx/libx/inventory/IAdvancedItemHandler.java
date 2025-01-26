@@ -1,13 +1,12 @@
 package org.moddingx.libx.inventory;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import org.moddingx.libx.impl.inventory.AdvancedItemHandlerHelper;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -49,46 +48,7 @@ public interface IAdvancedItemHandler extends IItemHandler {
      * @param endExclusive The first slot to after the range of slots to test.
      */
     default boolean hasSpaceFor(List<ItemStack> stacks, int startInclusive, int endExclusive) {
-        if (stacks.isEmpty()) {
-            return true;
-        } else if (stacks.size() == 1) {
-            ItemStack remainder = stacks.get(0).copy();
-            for (int slot = startInclusive; slot < endExclusive; slot++) {
-                remainder = this.insertItem(slot, remainder, true);
-                if (remainder.isEmpty()) return true;
-            }
-            return remainder.isEmpty();
-        } else {
-            Map<Integer, ItemStack> copies = new HashMap<>();
-            for (ItemStack stack : stacks) {
-                if (!stack.isEmpty()) {
-                    int amountLeft = stack.getCount();
-                    for (int slot = startInclusive; slot < endExclusive; slot++) {
-                        if (this.isItemValid(slot, stack)) {
-                            ItemStack content = copies.getOrDefault(slot, this.getStackInSlot(slot));
-                            if (content.isEmpty()) {
-                                amountLeft = 0;
-                                ItemStack modifiableStack = stack.copy();
-                                modifiableStack.setCount(amountLeft);
-                                copies.put(slot, modifiableStack);
-                                break;
-                            } else if (ItemStack.isSameItemSameTags(stack, content)) {
-                                int reduce = Math.max(0, Math.min(content.getMaxStackSize() - content.getCount(), amountLeft));
-                                amountLeft -= reduce;
-                                ItemStack modifiableStack = copies.getOrDefault(slot, this.getStackInSlot(slot).copy());
-                                modifiableStack.grow(reduce);
-                                copies.put(slot, modifiableStack);
-                                if (amountLeft <= 0) break;
-                            }
-                        }
-                    }
-                    if (amountLeft > 0) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+        return AdvancedItemHandlerHelper.hasSpaceFor(this, stacks, startInclusive, endExclusive, this::isItemValid);
     }
 
     /**
@@ -114,7 +74,7 @@ public interface IAdvancedItemHandler extends IItemHandler {
                     }
                 }
             } else {
-                if (ItemStack.isSameItemSameTags(extracted, content)) {
+                if (ItemStack.isSameItemSameComponents(extracted, content)) {
                     extracted.grow(content.getCount());
                     if (!simulate) {
                         this.extractItem(slot, amountToExtract, false);

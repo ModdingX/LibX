@@ -1,7 +1,6 @@
 package org.moddingx.libx.impl.base.decoration;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.PressurePlateBlock;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationType;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
@@ -26,8 +25,7 @@ public class DecorationTypes {
     public static final DecorationType<DecoratedFenceGateBlock> FENCE_GATE = new BlockDecorationType<>("fence_gate", Registries.BLOCK, 1, DecoratedFenceGateBlock::new);
     public static final DecorationType<DecoratedButton> WOOD_BUTTON = new BlockDecorationType<>("button", Registries.BLOCK, 1/3d, block -> new DecoratedButton(block, true));
     public static final DecorationType<DecoratedButton> STONE_BUTTON = new BlockDecorationType<>("button", Registries.BLOCK, 1/3d, block -> new DecoratedButton(block, false));
-    public static final DecorationType<DecoratedPressurePlate> WOOD_PRESSURE_PLATE = new BlockDecorationType<>("pressure_plate", Registries.BLOCK, 1, block -> new DecoratedPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING, block));
-    public static final DecorationType<DecoratedPressurePlate> STONE_PRESSURE_PLATE = new BlockDecorationType<>("pressure_plate", Registries.BLOCK, 1, block -> new DecoratedPressurePlate(PressurePlateBlock.Sensitivity.MOBS, block));
+    public static final DecorationType<DecoratedPressurePlate> PRESSURE_PLATE = new BlockDecorationType<>("pressure_plate", Registries.BLOCK, 1, DecoratedPressurePlate::new);
     public static final DecorationType<DecoratedDoorBlock> DOOR = new BlockDecorationType<>("door", Registries.BLOCK, 2/3d, DecoratedDoorBlock::new);
     public static final DecorationType<DecoratedTrapdoorBlock> TRAPDOOR = new BlockDecorationType<>("trapdoor", Registries.BLOCK, 1, DecoratedTrapdoorBlock::new);
     public static final DecorationType<DecoratedSign> SIGN = new BaseDecorationType<>("sign", null, (mod, context, block) -> new DecoratedSign(mod, block));

@@ -6,8 +6,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.moddingx.libx.creativetab.CreativeTabItemProvider;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
@@ -17,7 +15,6 @@ import org.moddingx.libx.registration.RegistrationContext;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -55,14 +52,6 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
             this.item = new BaseBlockItem(this, itemProperties);
         }
     }
-
-    /**
-     * Called from the item for this block from {@link Item#initializeClient(Consumer)}.
-     * Can be used to set client extensions for the block item.
-     */
-    public void initializeItemClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
-
-    }
     
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
         return -1;
@@ -80,28 +69,15 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
             builder.register(Registries.ITEM, this.item);
         }
     }
-
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void initTracking(RegistrationContext ctx, TrackingCollector builder) throws ReflectiveOperationException {
-        if (this.hasItem) {
-            builder.track(ForgeRegistries.ITEMS, BlockBase.class.getDeclaredField("item"));
-        }
-    }
     
     private class BaseBlockItem extends BlockItem implements CreativeTabItemProvider {
 
         public BaseBlockItem(Block block, Properties itemProperties) {
             super(block, itemProperties);
         }
-
-        @Override
-        public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
-            BlockBase.this.initializeItemClient(consumer);
-        }
         
         @Override
-        public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType) {
             return BlockBase.this.getBurnTime(stack, recipeType);
         }
 

@@ -31,7 +31,7 @@ public class TypeMappedCodec<A> implements Codec<A> {
             }
         }
         if (this.fallback == null) {
-            return DataResult.error(() -> "No fallback in type mapped codec: Can't encode to elements of type " + ops.empty().getClass());
+            return DataResult.error(() -> "No fallback in type mapped streamCodec: Can't encode to elements of type " + ops.empty().getClass());
         } else {
             return this.fallback.encode(input, ops, prefix);
         }
@@ -46,7 +46,7 @@ public class TypeMappedCodec<A> implements Codec<A> {
             }
         }
         if (this.fallback == null) {
-            return DataResult.error(() -> "No fallback in type mapped codec: Can't decode elements of type " + input.getClass());
+            return DataResult.error(() -> "No fallback in type mapped streamCodec: Can't decode elements of type " + input.getClass());
         } else {
             return this.fallback.decode(ops, input);
         }

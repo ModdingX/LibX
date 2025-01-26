@@ -4,13 +4,28 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Utilities for {@link Component text components}.
@@ -37,7 +52,7 @@ public class ComponentUtil {
     
     private static void formattingCodes(StringBuilder sb, Style style) {
         if (style.getColor() != null) {
-            int color = style.getColor().value;
+            int color = style.getColor().getValue();
             sb.append("\u001B[38;2;").append((color >> 16) & 0xFF).append(";").append((color >> 8) & 0xFF).append(";").append(color & 0xFF).append("m");
         }
         if (style.bold != null) {
@@ -82,7 +97,7 @@ public class ComponentUtil {
     }
 
     /**
-     * Turns a {@link JsonElement} to a {@link Component} with syntax highlighting that can be used for display.
+     * Turns a {@link JsonElement} into a {@link Component} with syntax highlighting that can be used for display.
      */
     public static Component toPrettyComponent(JsonElement json) {
         if (json.isJsonNull()) {
@@ -124,6 +139,60 @@ public class ComponentUtil {
         } else {
             throw new IllegalArgumentException("JSON type unknown: " + json.getClass());
         }
+    }
+
+    /**
+     * Turns a {@link DataComponentMap} into a {@link Component} with syntax highlighting that can be used for display.
+     */
+    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, DataComponentMap components) {
+        return toPrettyComponent(registry, components.stream().collect(Collectors.toUnmodifiableMap(TypedDataComponent::type, tc -> Optional.of(tc.value()))));
+    }
+
+    /**
+     * Turns a {@link DataComponentPatch} into a {@link Component} with syntax highlighting that can be used for display.
+     */
+    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, DataComponentPatch patch) {
+        return toPrettyComponent(registry, patch.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
+    }
+    
+    private static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, Map<DataComponentType<?>, Optional<?>> map) {
+        //noinspection unchecked
+        Registry<DataComponentType<?>> theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.location());
+        if (theRegistry == null) throw new IllegalStateException("Registry not found in builtin registries: " + registry);
+        
+        Map<ResourceLocation, DataComponentType<?>> typeMap = new HashMap<>();
+        for (DataComponentType<?> type : map.keySet()) {
+            if (type.isTransient()) continue;
+            ResourceLocation id = theRegistry.getKey(type);
+            if (id == null) throw new IllegalStateException("Unregistered data component type: " + type);
+            typeMap.put(id, type);
+        }
+
+        MutableComponent cmp = Component.literal("[");
+        boolean first = true;
+        for (ResourceLocation typeId : typeMap.keySet().stream().sorted().toList()) {
+            if (first) {
+                first = false;
+                cmp = cmp.append(", ");
+            }
+            DataComponentType<?> type = typeMap.get(typeId);
+            Optional<?> maybeValue = map.get(type);
+            if (maybeValue.isEmpty()) {
+                cmp.append(Component.literal("!"));
+            }
+            cmp = cmp.append(Component.literal(typeId.toString()).withStyle(ChatFormatting.DARK_RED));
+            if (maybeValue.isPresent()) {
+                cmp = cmp.append("=");
+                //noinspection unchecked
+                DataResult<Tag> result = ((Codec<Object>) type.codecOrThrow()).encode(maybeValue.get(), NbtOps.INSTANCE, NbtOps.INSTANCE.empty());
+                if (result instanceof DataResult.Error<Tag>) {
+                    return Component.literal("encoder error for " + typeId).withStyle(ChatFormatting.RED);
+                }
+                cmp = cmp.append(NbtUtils.toPrettyComponent(result.getOrThrow()));
+            }
+        }
+        cmp = cmp.append(Component.literal("]"));
+        return cmp;
     }
 
     /**

@@ -8,23 +8,12 @@ import java.util.List;
  */
 public class RegistrationBuilder {
     
-    private boolean tracking;
     private final List<RegistryCondition> conditions;
     private final List<RegistryTransformer> transformers;
     
     public RegistrationBuilder() {
-        this.tracking = true;
         this.conditions = new ArrayList<>();
         this.transformers = new ArrayList<>();
-    }
-
-    /**
-     * Disables automatic registry tracking. That means when registering objects, 
-     * {@link Registerable#initTracking(RegistrationContext, Registerable.TrackingCollector)}
-     * won't be called and ModInit won't add fields to the tracker.
-     */
-    public void disableRegistryTracking() {
-        this.tracking = false;
     }
 
     /**
@@ -44,8 +33,8 @@ public class RegistrationBuilder {
     }
     
     public Result build() {
-        return new Result(this.tracking, List.copyOf(this.conditions), List.copyOf(this.transformers));
+        return new Result(List.copyOf(this.conditions), List.copyOf(this.transformers));
     }
     
-    public record Result(boolean tracking, List<RegistryCondition> conditions, List<RegistryTransformer> transformers) {}
+    public record Result(List<RegistryCondition> conditions, List<RegistryTransformer> transformers) {}
 }

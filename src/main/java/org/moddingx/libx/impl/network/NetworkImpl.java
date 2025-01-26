@@ -1,16 +1,18 @@
 package org.moddingx.libx.impl.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.moddingx.libx.impl.config.ConfigImpl;
+import org.moddingx.libx.impl.config.ConfigState;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.network.NetworkX;
 
@@ -25,6 +27,10 @@ public final class NetworkImpl extends NetworkX {
         super(mod);
         if (impl != null) throw new IllegalStateException("NetworkImpl created twice.");
         impl = this;
+        
+        this.registerOptional(new ConfigShadowHandler());
+        this.registerOptional(new BeRequestHandler());
+        this.registerOptional(new BeUpdateHandler());
     }
 
     @Nonnull
@@ -34,61 +40,57 @@ public final class NetworkImpl extends NetworkX {
     }
 
     @Override
-    protected Protocol getProtocol() {
-        // Not required on the client, so LibX can be used by client only mods
-        return new Protocol("10", ProtocolSide.VANILLA, ProtocolSide.REQUIRED);
-    }
-    
-    // Gets whether a packet can be currently sent.
-    // Will return false on clients connected to a non-LibX server
-    public boolean canSend() {
-        return DistExecutor.unsafeRunForDist(
-                () -> () -> Minecraft.getInstance().getConnection() != null && this.channel.isRemotePresent(Minecraft.getInstance().getConnection().getConnection()),
-                () -> () -> true
-        );
+    protected String getVersion() {
+        return "11";
     }
 
-    @Override
-    protected void registerPackets() {
-        this.registerGame(NetworkDirection.PLAY_TO_CLIENT, new BeUpdateMessage.Serializer(), () -> BeUpdateMessage.Handler::new);
-        this.registerGame(NetworkDirection.PLAY_TO_CLIENT, new ConfigShadowMessage.Serializer(), () -> ConfigShadowMessage.Handler::new);
-       
-        this.registerGame(NetworkDirection.PLAY_TO_SERVER, new BeRequestMessage.Serializer(), () -> BeRequestMessage.Handler::new);
-    }
-    
-    public void updateBE(Level level, BlockPos pos) {
-        BeUpdateMessage msg = this.getBeUpdateMessage(level, pos);
-        if (msg != null) {
-            this.channel.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(pos)), msg);
+    public void requestBE(Level level, BlockPos pos) {
+        if (level.isClientSide && this.canSend(BeRequestHandler.TYPE)) {
+            PacketDistributor.sendToServer(new BeRequestHandler.Message(pos));
         }
     }
     
-    void updateBE(NetworkEvent.Context context, Level level, BlockPos pos) {
-        BeUpdateMessage msg = this.getBeUpdateMessage(level, pos);
+    public void updateBE(ServerLevel level, BlockPos pos) {
+        BeUpdateHandler.Message msg = this.getBeUpdateMessage(level, pos);
         if (msg != null) {
-            this.channel.reply(msg, context);
+            // We don't use PacketDistributor.sendToPlayersTrackingChunk here because our payload is optional
+            for (ServerPlayer player : level.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false)) {
+                if (this.canSend(player, BeUpdateHandler.TYPE)) {
+                    PacketDistributor.sendToPlayer(player, msg);
+                }
+            }
+        }
+    }
+    
+    public void syncConfig(MinecraftServer server, @Nullable ServerPlayer receiver, ConfigImpl config, ConfigState state) {
+        ConfigShadowHandler.Message msg = new ConfigShadowHandler.Message(config, state);
+        if (receiver != null) {
+            if (this.canSend(receiver, ConfigShadowHandler.TYPE)) {
+                PacketDistributor.sendToPlayer(receiver, msg);
+            }
+        } else {
+            // We don't use PacketDistributor.sendToAllPlayers here because our payload is optional
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                if (this.canSend(player, BeUpdateHandler.TYPE)) {
+                    player.connection.send(msg);
+                }
+            }
         }
     }
 
     @Nullable
-    private BeUpdateMessage getBeUpdateMessage(Level level, BlockPos pos) {
-        if (!level.isClientSide && this.canSend()) {
+    BeUpdateHandler.Message getBeUpdateMessage(Level level, BlockPos pos) {
+        if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be == null) return null;
-            CompoundTag nbt = be.getUpdateTag();
+            CompoundTag nbt = be.getUpdateTag(level.registryAccess());
             //noinspection ConstantConditions
             if (nbt == null) return null;
-            ResourceLocation id = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(be.getType());
+            ResourceLocation id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.getType());
             if (id == null) return null;
-            return new BeUpdateMessage(pos, id, nbt);
+            return new BeUpdateHandler.Message(pos, id, nbt);
         } else {
             return null;
-        }
-    }
-
-    public void requestBE(Level level, BlockPos pos) {
-        if (level.isClientSide && this.canSend()) {
-            this.channel.sendToServer(new BeRequestMessage(pos));
         }
     }
 }

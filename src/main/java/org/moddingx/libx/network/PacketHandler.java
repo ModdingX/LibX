@@ -1,41 +1,51 @@
 package org.moddingx.libx.network;
 
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.registration.HandlerThread;
 
-import java.util.function.Supplier;
+public abstract class PacketHandler<T extends CustomPacketPayload> {
 
-/**
- * An interface implementing the logic on how to handle a type of packet.
- * 
- * <b>Note that {@link PacketSerializer} and {@link PacketHandler} may not be implemented on the same class.</b>
- */
-public interface PacketHandler<T> {
+    private final CustomPacketPayload.Type<T> type;
+    private final PacketFlow direction;
+    private final StreamCodec<? super RegistryFriendlyByteBuf, T> codec;
+    private final HandlerThread thread;
 
-    /**
-     * The target thread, this handler should run on.
-     */
-    Target target();
+    protected PacketHandler(PacketFlow direction, StreamCodec<? super RegistryFriendlyByteBuf, T> codec, CustomPacketPayload.Type<T> type) {
+        this(type, direction, codec, HandlerThread.NETWORK);
+    }
+    
+    protected PacketHandler(CustomPacketPayload.Type<T> type, PacketFlow direction, StreamCodec<? super RegistryFriendlyByteBuf, T> codec, HandlerThread thread) {
+        this.type = type;
+        this.direction = direction;
+        this.codec = codec;
+        this.thread = thread;
+    }
 
-    /**
-     * Handles the given message.
-     * 
-     * @return Whether the message was handled. This is ignored on the {@link Target#MAIN_THREAD main thread} target.
-     */
-    boolean handle(T msg, Supplier<NetworkEvent.Context> ctx);
+    public CustomPacketPayload.Type<T> type() {
+        return this.type;
+    }
 
-    /**
-     * A thread target for a {@link PacketHandler}.
-     */
-    enum Target {
-
-        /**
-         * The main thread, where the game logic happens.
-         */
-        MAIN_THREAD,
-
-        /**
-         * An async network thread. This target may also run on the game thread, but it doesn't need to.
-         */
-        NETWORK_THREAD
+    public final PacketFlow direction() {
+        return this.direction;
+    }
+    
+    public final StreamCodec<? super RegistryFriendlyByteBuf, T> codec() {
+        return this.codec;
+    }
+    
+    public final HandlerThread target() {
+        return this.thread;
+    }
+    
+    public void handle(T msg, IPayloadContext ctx) {
+        // This method does nothing.
+        // It is not abstract to allow implementing handler methods with @OnlyIn in a safe way.
+        // Due to dynamic binding, if the overriding method is removed by the side stripper this
+        // method will be invoked instead and nothing happens. This is also the primary reason,
+        // PacketHandler is an abstract class instead of an interface.
     }
 }

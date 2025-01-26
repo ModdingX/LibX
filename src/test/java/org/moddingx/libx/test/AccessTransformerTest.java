@@ -2,14 +2,12 @@ package org.moddingx.libx.test;
 
 import org.junit.jupiter.api.Test;
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.test.util.Mappings;
 import org.objectweb.asm.Type;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,9 +20,9 @@ public class AccessTransformerTest {
     private static final String CLASS_NAME = Pattern.compile(IDENT + "(?:\\." + IDENT + ")*").pattern();
     
     private static final Pattern CLASS_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")");
-    private static final Pattern FIELD_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+(" + IDENT + ")\\s*#\\s*(" + IDENT + ")");
-    private static final Pattern CTOR_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+<init>\\s*(.+?)(\\s*?:#\\s*<init>)?");
-    private static final Pattern METHOD_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+(" + IDENT + ")\\s*(.+?)\\s*#\\s*(" + IDENT + ")");
+    private static final Pattern FIELD_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+(" + IDENT + ")");
+    private static final Pattern CTOR_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+<init>\\s*(.+?)");
+    private static final Pattern METHOD_PATTERN = Pattern.compile("(?U)" + ACCESS + "\\s+(" + CLASS_NAME + ")\\s+(" + IDENT + ")\\s*(.+?)");
     
     @Test
     public void testAT() throws Throwable {
@@ -38,7 +36,7 @@ public class AccessTransformerTest {
                 }
                 m = FIELD_PATTERN.matcher(line);
                 if (m.matches()) {
-                    this.testField(m.group(1), m.group(2), m.group(3));
+                    this.testField(m.group(1), m.group(2));
                     continue;
                 }
                 m = CTOR_PATTERN.matcher(line);
@@ -48,7 +46,7 @@ public class AccessTransformerTest {
                 }
                 m = METHOD_PATTERN.matcher(line);
                 if (m.matches()) {
-                    this.testMethod(m.group(1), m.group(2), m.group(3), m.group(4));
+                    this.testMethod(m.group(1), m.group(2), m.group(3));
                     continue;
                 }
                 fail("AccessTransformer line matches no pattern. Is the comment with the mapped name missing? " + line);
@@ -60,10 +58,9 @@ public class AccessTransformerTest {
         return assertDoesNotThrow(() -> Class.forName(name, false, ClassLoader.getSystemClassLoader()), "Class in AccessTransformer not found: " + name);
     }
     
-    private void testField(String clsName, String srg, String mapped) {
+    private void testField(String clsName, String name) {
         Class<?> cls = this.testClass(clsName);
-        String actualName = this.testRemap(srg, mapped, "field", n -> Mappings.remapField(cls, n));
-        assertDoesNotThrow(() -> cls.getDeclaredField(actualName), "Unknown field in accesstransformer: " + clsName + "#" + srg + " (" + actualName + ")");
+        assertDoesNotThrow(() -> cls.getDeclaredField(name), "Unknown field in accesstransformer: " + clsName + "#" + name);
     }
     
     private void testConstructor(String clsName, String descriptor) {
@@ -72,11 +69,10 @@ public class AccessTransformerTest {
         assertDoesNotThrow(() -> cls.getDeclaredConstructor(args), "Unknown constructor in accesstransformer: " + clsName + "#<init>" + descriptor + " (<init>)");
     }
     
-    private void testMethod(String clsName, String srg, String descriptor, String mapped) {
+    private void testMethod(String clsName, String name, String descriptor) {
         Class<?> cls = this.testClass(clsName);
         Class<?>[] args = this.resolveArgs(descriptor);
-        String actualName = this.testRemap(srg, mapped, "method", n -> Mappings.remapMethod(cls, n, descriptor));
-        assertDoesNotThrow(() -> cls.getDeclaredMethod(actualName, args), "Unknown method in accesstransformer: " + clsName + "#" + srg + descriptor + " (" + actualName + ")");
+        assertDoesNotThrow(() -> cls.getDeclaredMethod(name, args), "Unknown method in accesstransformer: " + clsName + "#" + name + descriptor);
     }
     
     private Class<?>[] resolveArgs(String descriptor) {
@@ -111,11 +107,5 @@ public class AccessTransformerTest {
             case Type.DOUBLE -> double.class;
             default -> fail("Unknown type in method descriptor: " + type);
         };
-    }
-    
-    private String testRemap(String srg, String mapped, String domain, Function<String, String> remap) {
-        String mappedName = assertDoesNotThrow(() -> remap.apply(srg), "Failed to remap name: " + srg);
-        assertEquals(mappedName, mapped, "Mapped " + domain + " name mismatch in accesstransformer: " + srg);
-        return mappedName;
     }
 }

@@ -1,6 +1,8 @@
 package org.moddingx.libx.impl.config;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import org.moddingx.libx.config.Config;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
@@ -21,6 +23,7 @@ public class ConfigKey {
     
     public final Field field;
     public final ValueMapper<?, ?> mapper;
+    public final StreamCodec<? super FriendlyByteBuf, ?> streamCodec;
     public final List<String> path;
     public final List<String> comment;
     private final ConfiguredValidator<?, ?> validator;
@@ -28,6 +31,7 @@ public class ConfigKey {
     private ConfigKey(Field field, ValueMapper<?, ?> mapper, ImmutableList<String> path, ImmutableList<String> comment, ConfiguredValidator<?, ?> validator) {
         this.field = field;
         this.mapper = mapper;
+        this.streamCodec = mapper.streamCodec();
         this.path = path;
         ImmutableList.Builder<String> commentBuilder = ImmutableList.builder();
         commentBuilder.addAll(comment);

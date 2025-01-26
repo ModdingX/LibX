@@ -3,20 +3,19 @@ package org.moddingx.libx.impl.registration;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.impl.registration.tracking.TrackingInstance;
+import org.moddingx.libx.impl.registration.handler.CapabilityRegistrationHandler;
+import org.moddingx.libx.impl.registration.handler.ClientExtensionRegistrationHandler;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.*;
-import org.moddingx.libx.registration.tracking.RegistryTracker;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -26,7 +25,6 @@ public class RegistrationDispatcher {
     
     private final ModXRegistration mod;
     
-    private final boolean trackingEnabled;
     private final List<RegistryCondition> conditions;
     private final List<RegistryTransformer> transformers;
     
@@ -36,15 +34,19 @@ public class RegistrationDispatcher {
     private final Map<ResourceKey<? extends Registry<?>>, RegistryData> allEntries;
     private final List<NamedRegisterable> registerables;
     
+    private final CapabilityRegistrationHandler capabilityHandler;
+    @Nullable private final ClientExtensionRegistrationHandler clientExtHandler;
+    
     public RegistrationDispatcher(ModXRegistration mod, RegistrationBuilder.Result result) {
         this.mod = mod;
-        this.trackingEnabled = result.tracking();
         this.conditions = result.conditions();
         this.transformers = result.transformers();
         this.hasRegistrationRun = false;
         this.registrationHandlers = new ArrayList<>();
         this.allEntries = new HashMap<>();
         this.registerables = new LinkedList<>();
+        this.capabilityHandler = new CapabilityRegistrationHandler(this::runRegistration);
+        this.clientExtHandler = FMLLoader.getDist() == Dist.CLIENT ? new ClientExtensionRegistrationHandler(this::runRegistration) : null;
     }
     
     private void runRegistration() {
@@ -58,6 +60,17 @@ public class RegistrationDispatcher {
         // Must run registration handlers outside of synchronized block
         // so #register is not blocked.
         this.registrationHandlers.forEach(Runnable::run);
+    }
+    
+    public void setupEventListeners(IEventBus modBus) {
+        modBus.addListener(this::registerBy);
+        modBus.addListener(this::registerCommon);
+        modBus.addListener(this::registerClient);
+        modBus.addListener(this.capabilityHandler::registerCapabilities);
+        if (this.clientExtHandler != null) {
+            modBus.addListener(this.clientExtHandler::registerClientExtensions);
+            modBus.addListener(this.clientExtHandler::registerMenuScreens);
+        }
     }
     
     public void addRegistrationHandler(Runnable handler) {
@@ -86,18 +99,16 @@ public class RegistrationDispatcher {
                 this.addEntry(resourceKey, value);
             }
             
+            this.capabilityHandler.handle(rl, value);
+            if (this.clientExtHandler != null) {
+                this.clientExtHandler.handle(rl, value);
+            }
+            
             if (value instanceof Registerable registerable) {
                 this.registerables.add(new NamedRegisterable(ctx, registerable));
                 registerable.registerAdditional(ctx, collector);
-            }
-            
-            if (registry != null) {
-                if (value instanceof Registerable registerable && this.trackingEnabled) {
-                    try {
-                        registerable.initTracking(ctx, new TrackingInstance(rl, value));
-                    } catch (ReflectiveOperationException e) {
-                        throw new IllegalStateException("Failed to initialise registry tracking for " + id + " in " + registry + ": " + value, e);
-                    }
+                if (FMLLoader.getDist() == Dist.CLIENT) {
+                    RegisterableClientAdapter.registerClientAdditional(registerable, ctx, collector);
                 }
             }
         }
@@ -110,7 +121,7 @@ public class RegistrationDispatcher {
         }
     }
     
-    public void registerBy(RegisterEvent event) {
+    private void registerBy(RegisterEvent event) {
         this.runRegistration();
         
         RegistryData data = this.allEntries.get(event.getRegistryKey());
@@ -123,29 +134,27 @@ public class RegistrationDispatcher {
             });
         }
     }
-    
-    public void registerCommon(FMLCommonSetupEvent event) {
+
+    private void registerCommon(FMLCommonSetupEvent event) {
+        this.runRegistration();
         this.registerables.forEach(reg -> reg.registerCommon(event::enqueueWork));
     }
-    
-    public void registerClient(FMLClientSetupEvent event) {
+
+    private void registerClient(FMLClientSetupEvent event) {
+        this.runRegistration();
         this.registerables.forEach(reg -> reg.registerClient(event::enqueueWork));
-    }
-    
-    public void notifyRegisterField(IForgeRegistry<?> registry, String id, Field field) {
-        if (this.trackingEnabled) {
-            RegistryTracker.track(registry, field, this.mod.resource(id));
-        }
     }
     
     private record NamedRegisterable(RegistrationContext ctx, Registerable value) {
 
         public void registerCommon(Consumer<Runnable> enqueue) {
-            this.value().registerCommon(new SetupContext(this.ctx(), enqueue));
+            this.value().setupCommon(new SetupContext(this.ctx(), enqueue));
         }
 
         public void registerClient(Consumer<Runnable> enqueue) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> this.value().registerClient(new SetupContext(this.ctx(), enqueue)));
+            if (FMLLoader.getDist() == Dist.CLIENT) {
+                RegisterableClientAdapter.registerClient(this.value(), new SetupContext(this.ctx(), enqueue));
+            }
         }
     }
 
@@ -165,6 +174,24 @@ public class RegistrationDispatcher {
 
         public List<Pair<ResourceKey<?>, Object>> values() {
             return Collections.unmodifiableList(this.values);
+        }
+    }
+    
+    // Safely reference the client only methods from registerable
+    private static class RegisterableClientAdapter {
+        
+        static {
+            if (FMLLoader.getDist().isDedicatedServer()) {
+                throw new IllegalStateException("RegisterableClientAdapter should never be loaded on the dedicated server. This is a bug in LibX.");
+            }
+        }
+        
+        public static void registerClient(Registerable registerable, SetupContext ctx) {
+            registerable.setupClient(ctx);
+        }
+        
+        public static void registerClientAdditional(Registerable registerable, RegistrationContext ctx, Registerable.EntryCollector builder) {
+            registerable.registerClientAdditional(ctx, builder);
         }
     }
 }

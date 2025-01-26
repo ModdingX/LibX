@@ -30,13 +30,13 @@ public interface CompressionExtension extends RecipeExtension {
                 .pattern("aaa")
                 .pattern("aaa")
                 .unlockedBy("has_item", this.criterion(item))
-                .save(this.consumer(), this.provider().loc(item, "compress"));
+                .save(this.output(), this.provider().loc(item, "compress"));
 
         if (canRevert) {
             ShapelessRecipeBuilder.shapeless(recipeCategory, item, 9)
                     .requires(compressed)
                     .unlockedBy("has_item", this.criterion(compressed))
-                    .save(this.consumer(), this.provider().loc(compressed, "decompress"));
+                    .save(this.output(), this.provider().loc(compressed, "decompress"));
         }
     }
 
@@ -58,13 +58,13 @@ public interface CompressionExtension extends RecipeExtension {
                 .pattern("aa")
                 .pattern("aa")
                 .unlockedBy("has_item", this.criterion(item))
-                .save(this.consumer(), this.provider().loc(item, "small_compress"));
+                .save(this.output(), this.provider().loc(item, "small_compress"));
 
         if (canRevert) {
             ShapelessRecipeBuilder.shapeless(recipeCategory, item, 4)
                     .requires(compressed)
                     .unlockedBy("has_item", this.criterion(compressed))
-                    .save(this.consumer(), this.provider().loc(compressed, "small_decompress"));
+                    .save(this.output(), this.provider().loc(compressed, "small_decompress"));
         }
     }
 

@@ -15,7 +15,6 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.IOUtils;
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.codec.CodecHelper;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -51,7 +50,7 @@ public class DataLoader {
         return loadJson(rm, basePath, (id, json) -> {
             DataResult<T> result = codec.decode(JsonOps.INSTANCE, json).map(Pair::getFirst);
             if (result.result().isPresent()) return result.result().get();
-            String err = result.error().map(DataResult.PartialResult::message).orElse("Unknown error");
+            String err = result.error().map(DataResult.Error::message).orElse("Unknown error");
             if (err.length() > 100) err = err.substring(0, 100) + " ...";
             LibX.logger.error("Failed to load data entry " + id + ": " + err);
             return null;
@@ -98,7 +97,7 @@ public class DataLoader {
      * resource are mapped to a {@link JsonElement} first.
      */
     public static <T> Map<ResourceLocation, T> collectJson(List<ResourceEntry> resources, Codec<T> codec) throws IOException {
-        return collectJson(resources, (id, json) -> CodecHelper.JSON.read(codec, json));
+        return collectJson(resources, (id, json) -> codec.decode(JsonOps.INSTANCE, json).getOrThrow(IOException::new).getFirst());
     }
     
     /**
@@ -160,8 +159,8 @@ public class DataLoader {
         Set<String> namespaces = rm.getNamespaces();
         ImmutableList.Builder<ResourceEntry> list = ImmutableList.builder();
         for (String namespace : namespaces) {
-            ResourceLocation location = new ResourceLocation(namespace, fullPath);
-            rm.getResource(location).ifPresent(res -> list.add(new ResourceEntry(new ResourceLocation(namespace, idPath), res)));
+            ResourceLocation location = ResourceLocation.fromNamespaceAndPath(namespace, fullPath);
+            rm.getResource(location).ifPresent(res -> list.add(new ResourceEntry(ResourceLocation.fromNamespaceAndPath(namespace, idPath), res)));
         }
         return list.build();
     }
@@ -185,7 +184,7 @@ public class DataLoader {
             if (suffix != null && !id.getPath().endsWith("." + suffix)) continue;
             String realPath = id.getPath().substring(basePath.length() + 1, id.getPath().length() - (suffix == null ? 0 : (suffix.length() + 1)));
             if (realPath.isEmpty() || (!recursive && realPath.contains("/"))) continue;
-            list.add(new ResourceEntry(new ResourceLocation(id.getNamespace(), realPath), entry.getValue()));
+            list.add(new ResourceEntry(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), realPath), entry.getValue()));
         }
         return list.build();
     }

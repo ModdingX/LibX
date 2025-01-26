@@ -1,14 +1,14 @@
 package org.moddingx.libx.datagen.provider;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.SoundDefinition;
-import net.minecraftforge.common.data.SoundDefinitionsProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.SoundDefinition;
+import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.mod.ModX;
 
@@ -53,7 +53,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
      * This sound will not be processed by the default generator
      */
     protected void ignore(SoundEvent sound) {
-        this.ignore(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(sound)));
+        this.ignore(Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(sound)));
     }
     
     /**
@@ -85,7 +85,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
      * Creates a new sound definition for the given sound event.
      */
     protected SoundDefinitionBuilder sound(SoundEvent sound) {
-        return this.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(sound)), this.settings());
+        return this.sound(Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(sound)), this.settings());
     }
 
     /**
@@ -99,7 +99,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
      * Creates a new sound definition for the given sound event and default sound settings.
      */
     protected SoundDefinitionBuilder sound(SoundEvent sound, SoundSettingsBuilder settings) {
-        return this.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(sound)), settings);
+        return this.sound(Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(sound)), settings);
     }
 
     /**
@@ -116,9 +116,9 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     private void registerSounds() {
         this.setup();
 
-        for (ResourceLocation id : ForgeRegistries.SOUND_EVENTS.getKeys().stream().sorted().toList()) {
+        for (ResourceLocation id : BuiltInRegistries.SOUND_EVENT.keySet().stream().sorted().toList()) {
             if (this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(id)) {
-                SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(id);
+                SoundEvent sound = BuiltInRegistries.SOUND_EVENT.get(id);
                 if (sound != null) {
                     this.defaultSound(id, sound);
                 }
@@ -342,7 +342,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          */
         public SoundDefinitionBuilder withRange(ResourceLocation soundId, int amount, Consumer<SoundDefinition.Sound> configure) {
             for (int i = 0; i < amount; i++) {
-                this.with(new ResourceLocation(soundId.getNamespace(), soundId.getPath() + i), configure);
+                this.with(ResourceLocation.fromNamespaceAndPath(soundId.getNamespace(), soundId.getPath() + i), configure);
             }
             return this;
         }
@@ -358,7 +358,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * Adds another sound event as a sound for this definition. Also allows to then further customise the sound.
          */
         public SoundDefinitionBuilder event(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
-            SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getKey(event)), SoundDefinition.SoundType.EVENT);
+            SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(event)), SoundDefinition.SoundType.EVENT);
             this.settings.applyTo(sound);
             configure.accept(sound);
             this.definition.with(sound);

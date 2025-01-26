@@ -17,7 +17,6 @@ public class FixedCodec<A> implements Codec<Unit> {
         this.serializedValue = serializedValue;
     }
 
-
     @Override
     public <T> DataResult<T> encode(Unit unit, DynamicOps<T> ops, T prefix) {
         return ops.mergeToPrimitive(prefix, this.serializedValue.convert(ops).getValue());
@@ -29,7 +28,7 @@ public class FixedCodec<A> implements Codec<Unit> {
         if (Objects.equals(this.serializedValue, dynamic)) {
             return DataResult.success(Pair.of(Unit.INSTANCE, ops.empty()));
         } else {
-            return DataResult.error(() -> "Wrong value in fixed codec.");
+            return DataResult.error(() -> "Wrong value in fixed streamCodec.");
         }
     }
 

@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="APACHE-2.0"
+issueTrackerURL="https://github.com/ModdingX/LibX/issues"
+
+[[mods]]
+modId="libx"
+version="${mod.version}"
+displayName="LibX"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/libx"
+updateJSONURL="https://assets.melanx.de/updates/libx.json"
+authors="ModdingX"
+description='''
+A library mod for minecraft.
+'''
+
+[[dependencies.libx]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${mod.neoforge},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.libx]]
+    modId="minecraft"
+    type="required"
+    versionRange="[${mod.minecraft},)"
+    ordering="NONE"
+    side="BOTH"

@@ -253,15 +253,16 @@ public class ComponentContent implements ConfigScreenContent<Component> {
 
         y += 25;
 
-        Checkbox hasColorWidget = new Checkbox(14, y + ((ColorPicker.HEIGHT - 20) / 2), 20, 20, Component.empty(), this.hasColor, false) {
-            @Override
-            public void onPress() {
-                super.onPress();
-                ComponentContent.this.hasColor = this.selected();
-                EditorOps.wrap(ComponentContent.this.colorWidget).enabled(ComponentContent.this.hasColor);
-                ComponentContent.this.update();
-            }
-        };
+        Checkbox hasColorWidget = Checkbox.builder(Component.empty(), screen.getMinecraft().font)
+                .pos(14, y + ((ColorPicker.HEIGHT - 20) / 2))
+                .maxWidth(20)
+                .selected(this.hasColor)
+                .onValueChange((checkbox, value) -> {
+                    ComponentContent.this.hasColor = value;
+                    EditorOps.wrap(ComponentContent.this.colorWidget).enabled(ComponentContent.this.hasColor);
+                    ComponentContent.this.update();
+                })
+                .build();
         consumer.accept(hasColorWidget);
 
         this.colorWidget = new ColorPicker(37, y, this.colorWidget);

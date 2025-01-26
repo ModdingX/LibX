@@ -223,7 +223,7 @@ public interface SmeltingExtension extends RecipeExtension {
     default void smelting(ResourceLocation outputId, RecipeCategory category, ItemLike in, ItemLike out, float exp, int time) {
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), category, out, exp, time)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "smelting/" + outputId.getPath()));
     }
 
     /**
@@ -235,7 +235,7 @@ public interface SmeltingExtension extends RecipeExtension {
         this.smelting(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "blasting/" + outputId.getPath()));
     }
 
     /**
@@ -247,7 +247,7 @@ public interface SmeltingExtension extends RecipeExtension {
         this.smelting(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.smoking(Ingredient.of(in), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "cooking/" + outputId.getPath()));
     }
 
     /**
@@ -259,7 +259,7 @@ public interface SmeltingExtension extends RecipeExtension {
         this.cooking(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(in), category, out, exp, time * 3)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "campfire/" + outputId.getPath()));
     }
 
     /**
@@ -268,7 +268,7 @@ public interface SmeltingExtension extends RecipeExtension {
     default void smelting(ResourceLocation outputId, RecipeCategory category, TagKey<Item> in, ItemLike out, float exp, int time) {
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), category, out, exp, time)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "smelting/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "smelting/" + outputId.getPath()));
     }
 
     /**
@@ -280,7 +280,7 @@ public interface SmeltingExtension extends RecipeExtension {
         this.smelting(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "blasting/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "blasting/" + outputId.getPath()));
     }
 
     /**
@@ -292,7 +292,7 @@ public interface SmeltingExtension extends RecipeExtension {
         this.smelting(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.smoking(Ingredient.of(in), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "cooking/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "cooking/" + outputId.getPath()));
     }
 
     /**
@@ -304,6 +304,6 @@ public interface SmeltingExtension extends RecipeExtension {
         this.cooking(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(in), category, out, exp, time * 3)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.consumer(), new ResourceLocation(outputId.getNamespace(), "campfire/" + outputId.getPath()));
+                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "campfire/" + outputId.getPath()));
     }
 }

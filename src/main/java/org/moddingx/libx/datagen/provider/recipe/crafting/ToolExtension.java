@@ -1,10 +1,10 @@
 package org.moddingx.libx.datagen.provider.recipe.crafting;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
 import javax.annotation.Nullable;
@@ -28,10 +28,10 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m")
                     .pattern("m")
                     .pattern("s")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_sword")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_sword")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material, "sword"));
+                    .save(this.output(), this.provider().loc(material, "sword"));
         }
 
         if (axe != null) {
@@ -41,10 +41,10 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mm")
                     .pattern("sm")
                     .pattern("s ")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_axe")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_axe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material, "axe"));
+                    .save(this.output(), this.provider().loc(material, "axe"));
         }
 
         if (pick != null) {
@@ -54,10 +54,10 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mmm")
                     .pattern(" s ")
                     .pattern(" s ")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_pick")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_pick")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material, "pick"));
+                    .save(this.output(), this.provider().loc(material, "pick"));
         }
 
         if (shovel != null) {
@@ -67,10 +67,10 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m")
                     .pattern("s")
                     .pattern("s")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_shovel")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_shovel")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material, "shovel"));
+                    .save(this.output(), this.provider().loc(material, "shovel"));
         }
 
         if (hoe != null) {
@@ -80,10 +80,10 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mm")
                     .pattern("s ")
                     .pattern("s ")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_hoe")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_hoe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material, "hoe"));
+                    .save(this.output(), this.provider().loc(material, "hoe"));
         }
     }
 
@@ -98,9 +98,9 @@ public interface ToolExtension extends RecipeExtension {
                     .define('m', material)
                     .pattern("mmm")
                     .pattern("m m")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_helmet")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_helmet")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material.asItem(), "helmet"));
+                    .save(this.output(), this.provider().loc(material.asItem(), "helmet"));
         }
 
         if (chestplate != null) {
@@ -109,9 +109,9 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m m")
                     .pattern("mmm")
                     .pattern("mmm")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_chestplate")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_chestplate")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material.asItem(), "chestplate"));
+                    .save(this.output(), this.provider().loc(material.asItem(), "chestplate"));
         }
 
         if (leggings != null) {
@@ -120,9 +120,9 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mmm")
                     .pattern("m m")
                     .pattern("m m")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_leggings")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_leggings")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material.asItem(), "leggings"));
+                    .save(this.output(), this.provider().loc(material.asItem(), "leggings"));
         }
 
         if (boots != null) {
@@ -130,9 +130,9 @@ public interface ToolExtension extends RecipeExtension {
                     .define('m', material)
                     .pattern("m m")
                     .pattern("m m")
-                    .group(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(material.asItem())) + "_boots")
+                    .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_boots")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.consumer(), this.provider().loc(material.asItem(), "boots"));
+                    .save(this.output(), this.provider().loc(material.asItem(), "boots"));
         }
     }
 }

@@ -1,6 +1,6 @@
 package org.moddingx.libx.sandbox.placement;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
  */
 public class HeightPlacementFilter extends PlacementFilter {
 
-    public static final Codec<HeightPlacementFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<HeightPlacementFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             VerticalAnchor.CODEC.fieldOf("min_inclusive").forGetter(filter -> filter.minInclusive),
             VerticalAnchor.CODEC.fieldOf("max_inclusive").forGetter(filter -> filter.maxInclusive)
     ).apply(instance, HeightPlacementFilter::new));

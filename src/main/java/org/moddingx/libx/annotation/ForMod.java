@@ -1,6 +1,6 @@
 package org.moddingx.libx.annotation;
 
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.Mod;
 import org.moddingx.libx.mod.ModX;
 
 import java.lang.annotation.Documented;

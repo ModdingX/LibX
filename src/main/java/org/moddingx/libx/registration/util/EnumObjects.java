@@ -3,8 +3,7 @@ package org.moddingx.libx.registration.util;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryManager;
+import org.moddingx.libx.annotation.registration.PlainRegisterable;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
@@ -23,7 +22,8 @@ import java.util.function.Function;
  * @param <E> The type of the enum to use.
  * @param <T> The type of the thing to register.
  */
-public class EnumObjects<E extends Enum<E>, T> implements Registerable {
+@PlainRegisterable
+public final class EnumObjects<E extends Enum<E>, T> implements Registerable {
 
     private final ResourceKey<? extends Registry<T>> registryKey;
     private final T defaultValue;
@@ -75,20 +75,6 @@ public class EnumObjects<E extends Enum<E>, T> implements Registerable {
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         for (Map.Entry<E, T> entry : this.map.entrySet()) {
             builder.registerNamed(this.registryKey, entry.getKey().name().toLowerCase(Locale.ROOT), entry.getValue());
-        }
-    }
-
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void initTracking(RegistrationContext ctx, Registerable.TrackingCollector builder) throws ReflectiveOperationException {
-        ResourceKey<? extends Registry<?>> registryKey = ctx.registry().orElse(null);
-        //noinspection UnstableApiUsage
-        IForgeRegistry<?> registry = registryKey == null ? null : RegistryManager.ACTIVE.getRegistry(registryKey.location());
-        if (registry != null) {
-            for (E key : this.keys) {
-                //noinspection unchecked
-                builder.runNamed(registry, key.name().toLowerCase(Locale.ROOT), value -> this.map.put(key, (T) value));
-            }
         }
     }
 }

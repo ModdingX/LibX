@@ -1,9 +1,6 @@
 package org.moddingx.libx.render;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -19,7 +16,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
 
 import java.util.List;
@@ -115,7 +112,7 @@ public class RenderHelperBlock {
     private static void renderBlockOverlayQuad(@SuppressWarnings("SameParameterValue") VertexFormat format, PoseStack.Pose pose, VertexConsumer vertex, List<BakedQuad> list, int light, int overlay, TextureAtlasSprite sprite, Predicate<Direction> dirs) {
         for (BakedQuad quad : list) {
             if (dirs.test(quad.getDirection())) {
-                vertex.putBulkData(pose, modifyBlockQuad(format, quad, sprite), 1, 1, 1, light, overlay);
+                vertex.putBulkData(pose, modifyBlockQuad(format, quad, sprite), 1, 1, 1, 1, light, overlay);
             }
         }
     }
@@ -126,13 +123,14 @@ public class RenderHelperBlock {
             int[] data = quad.getVertices();
             int[] newData = new int[data.length];
             System.arraycopy(data, 0, newData, 0, data.length);
-            int uvIdx = format.getElements().indexOf(DefaultVertexFormat.ELEMENT_UV);
-            if (uvIdx != -1) {
+            int uvByteOff = format.getOffset(VertexFormatElement.UV);
+            //noinspection ConditionCoveredByFurtherCondition
+            if (uvByteOff != -1 && uvByteOff % 4 == 0) {
                 // Byte offset / 4 = integer offset
                 // Will break if UV is not on full ints but that is not the case in regular minecraft
+                int uvOff = uvByteOff / 4;
                 TextureAtlasSprite oldSprite = quad.getSprite();
-                int uvOff = format.getOffset(uvIdx) / 4;
-                int intSize = format.getIntegerSize();
+                int intSize = format.getVertexSize() / 4;
                 for (int off = 0; off + uvOff + 1 < newData.length; off += intSize) {
                     newData[off + uvOff] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff]) - oldSprite.getU0()) * newSprite.contents().width()) / oldSprite.contents().width() + newSprite.getU0());
                     newData[off + uvOff + 1] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff + 1]) - oldSprite.getV0()) * newSprite.contents().height() / oldSprite.contents().height()) + newSprite.getV0());

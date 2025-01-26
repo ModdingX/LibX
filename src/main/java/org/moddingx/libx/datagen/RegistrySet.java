@@ -17,7 +17,7 @@ public interface RegistrySet {
      * Gets a registry from the registry set.
      */
     <T> Registry<T> registry(ResourceKey<? extends Registry<T>> registryKey);
-    
+
     /**
      * Gets a writable registry from the registry set. This only succeeds, if the registry is a datapack registry
      * and this method is called in the correct {@link DatagenStage stage}.

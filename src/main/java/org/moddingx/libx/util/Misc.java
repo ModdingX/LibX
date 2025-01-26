@@ -14,5 +14,5 @@ public class Misc {
      * The reason for {@code minecraft:missigno} is that minecraft uses this resource location
      * on it's own. See for example {@link MissingTextureAtlasSprite}.
      */
-    public static final ResourceLocation MISSINGNO = new ResourceLocation("minecraft", "missingno");
+    public static final ResourceLocation MISSINGNO = ResourceLocation.withDefaultNamespace("missingno");
 }

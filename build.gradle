@@ -1,11 +1,7 @@
-buildscript {
-    apply from: 'https://moddingx.github.io/ModUtils/v5/buildscript.gradle', to: buildscript
+plugins {
+    id 'org.moddingx.modgradle.meta' version '5.0.0'
+    id 'org.moddingx.modgradle.javadoc' version '5.0.0'
 }
-
-apply from: 'https://moddingx.github.io/ModUtils/v5/mod.gradle'
-
-apply plugin: 'org.moddingx.modgradle.javadoc'
-apply plugin: 'org.moddingx.modgradle.coremods'
 
 configurations {
     apCompileOnly
@@ -17,39 +13,72 @@ dependencies {
 }
 
 sourceSets {
-    ap {
-        compileClasspath = configurations.apCompileOnlyResolvable
-    }
-    sourcegen {
-        compileClasspath = configurations.compileClasspath
-    }
-    main {
-        java.srcDirs += [ file('./src/generated/java') ]
-    }
+    ap { compileClasspath = configurations.apCompileOnlyResolvable }
+    sourcegen { compileClasspath = configurations.compileClasspath }
+    main { java.srcDirs += [ file('./src/generated/java') ] }
 }
 
-mod.run.sourceSet(sourceSets.ap)
+mod.configure {
+    modid 'libx'
+    group 'org.moddingx'
+    versioning {
+        base '6.0'
+        maven 'https://maven.moddingx.org/release'
+    }
+    
+    neoforge '21.1.97'
+    extraModSource sourceSets.ap
+    
+    license 'The Apache License, Version 2.0'
+    github 'ModdingX/LibX'
+    
+    runs {
+        data {
+            modSource sourceSets.sourcegen
+        }
+    }
+    
+    artifacts {
+        sources {
+            publishToRepositories()
+            uploadToModHostingSites()
+        }
+        javadoc {}
+    }
+    
+    publishing {
+        maven {
+            name 'moddingx'
+            url 'https://maven.moddingx.org/release'
+            credentials(PasswordCredentials)
+        }
+    }
+    
+    upload {
+        curseforge {
+            projectId 412525
+        }
+        modrinth {
+            projectId 'qEH6GYul'
+        }
+    }
+}
 
 dependencies {
     annotationProcessor sourceSets.ap.output
     implementation sourceSets.ap.output
     
-    coremods 'org.moddingx:CoreModTypes:5.0.2-2'
-
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
-    testImplementation 'net.minecraftforge:srgutils:0.4.13'
-    testImplementation 'com.moandjiezana.toml:toml4j:0.7.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.2'
 }
 
 compileJava.options.compilerArgs += [
         '-Amod.properties.strict_onlyin=true',
         '-Amod.properties.strict_super=true',
-        '-Amod.properties.force_findbugs=true'
+        '-Amod.properties.javax_nullity=true'
 ]
 
 test {
-    dependsOn createSrgToMcp // Needed, so the tests can load mappings
     useJUnitPlatform()
 }
 
@@ -57,12 +86,7 @@ jar {
     from sourceSets.ap.output
 }
 
-sourceJarConfigure {
-    sourceSets.ap.java.srcDirs.forEach { additionalSourceDir it }
-}
-
 javadocConfigure {
-    from sourceSets.ap.java.sourceDirectories
     exclude '**.impl.*?'
     exclude '**.annotation.processor.*?'
 }
@@ -70,9 +94,9 @@ javadocConfigure {
 javadoc {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.destinationDirectory(file("build/docs/javadoc"))
-    title("LibX ${mod.base_version} JavaDoc")
-    options.windowTitle("LibX ${mod.base_version} JavaDoc")
-    options.header('<h3><a href="https://moddingx.github.io/WikiX" target="_blank">Wiki</a>' \
+    title("LibX ${mod.setup.minecraft} JavaDoc")
+    options.windowTitle("LibX ${mod.setup.minecraft} JavaDoc")
+    options.header('<h3><a href="https://moddingx.org/wiki/libx" target="_blank">Wiki</a>' \
             + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
             + '<a href="https://github.com/ModdingX/LibX" target="_blank">GitHub</a></h2>')
     options.memberLevel = JavadocMemberLevel.PROTECTED
@@ -81,21 +105,10 @@ javadoc {
 // Performs checks for releases
 task release {
     finalizedBy compileJava
-    
+
     doFirst {
         compileJava.options.compilerArgs += [
                 '-Amod.properties.release=true'
         ]
     }
-}
-
-minecraft {
-    runs { data {
-        mods {
-            "${mod.modid}_sourcegen" {
-                source sourceSets.sourcegen
-            }
-        }
-        args '--flat', '--mod', "${mod.modid}_sourcegen"
-    }}
 }

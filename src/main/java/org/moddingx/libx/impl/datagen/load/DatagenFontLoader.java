@@ -9,15 +9,12 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -42,17 +39,18 @@ public class DatagenFontLoader {
                 FontManager.Preparation preparation = mgr.prepare(rm, Runnable::run).get(0, TimeUnit.NANOSECONDS);
 
                 // Reverse all glyph provider lists as vanilla sorts higher priorities to the end of the list.
-                Map<ResourceLocation, List<GlyphProvider>> providerMap = preparation.providers().entrySet().stream().map(entry -> {
+                Map<ResourceLocation, List<GlyphProvider.Conditional>> providerMap = preparation.fontSets().entrySet().stream().map(entry -> {
                     ResourceLocation fontId = entry.getKey();
-                    List<GlyphProvider> list = new ArrayList<>(entry.getValue());
+                    List<GlyphProvider.Conditional> list = new ArrayList<>(entry.getValue());
                     Collections.reverse(list);
                     return Map.entry(fontId, Collections.unmodifiableList(list));
                 }).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-                List<GlyphProvider> defaultGlyphProviders = providerMap.getOrDefault(Style.DEFAULT_FONT, List.of());
+                List<GlyphProvider.Conditional> defaultGlyphProviders = providerMap.getOrDefault(Style.DEFAULT_FONT, List.of());
                 fontMetrics = new StringSplitter((cp, style) -> {
                     if (ZERO_WIDTH_FONT.equals(style.getFont())) return 0;
-                    for (GlyphProvider provider : providerMap.getOrDefault(style.getFont(), defaultGlyphProviders)) {
-                        GlyphInfo glyph = provider.getGlyph(cp);
+                    for (GlyphProvider.Conditional conditional : providerMap.getOrDefault(style.getFont(), defaultGlyphProviders)) {
+                        if (!conditional.filter().apply(Set.of())) continue;
+                        GlyphInfo glyph = conditional.provider().getGlyph(cp);
                         if (glyph != null) return glyph.getAdvance(style.isBold());
                     }
                     return SpecialGlyphs.MISSING.getAdvance(style.isBold());

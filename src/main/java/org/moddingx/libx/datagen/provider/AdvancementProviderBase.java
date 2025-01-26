@@ -1,10 +1,16 @@
 package org.moddingx.libx.datagen.provider;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -12,22 +18,25 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.WithConditions;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.PackTarget;
+import org.moddingx.libx.datagen.RegistrySet;
+import org.moddingx.libx.datapack.DatapackHelper;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Base provider for custom {@link Advancement advancements}. If you want to have multiple advancement
@@ -39,16 +48,25 @@ public abstract class AdvancementProviderBase implements DataProvider {
     
     protected final ModX mod;
     protected final PackTarget packTarget;
-    private final Map<ResourceLocation, Supplier<Advancement>> advancements = new HashMap<>();
+    private final RegistrySet registries;
+    private final Map<ResourceLocation, Supplier<AdvancementInfo>> advancements = new HashMap<>();
     private String rootId = null;
-    private Supplier<Advancement> rootSupplier = null;
+    private Supplier<AdvancementInfo> rootSupplier = null;
 
     public AdvancementProviderBase(DatagenContext ctx) {
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
+        this.registries = ctx.registries();
     }
 
     public abstract void setup();
+
+    /**
+     * Gets a list of conditions for all advancements added by this provider.
+     */
+    protected List<ICondition> conditions() {
+        return List.of();
+    }
 
     @Nonnull
     @Override
@@ -60,11 +78,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
     @Override
     public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
         this.setup();
-        return CompletableFuture.allOf(this.advancements.values().stream().map(supplier -> {
-            Advancement advancement = supplier.get();
-            Path path = this.packTarget.path(PackType.SERVER_DATA)
-                    .resolve(advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
-            return DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
+        RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, this.registries.registryAccess());
+        return CompletableFuture.allOf(this.advancements.entrySet().stream().map(entry -> {
+            ResourceLocation id = entry.getKey();
+            ResourceKey<Advancement> key = ResourceKey.create(Registries.ADVANCEMENT, id);
+            AdvancementInfo advancementInfo = entry.getValue().get();
+            if (advancementInfo.advancement() == null) return CompletableFuture.completedFuture(null);
+            WithConditions<Advancement> conditionalAdvancement = new WithConditions<>(this.conditions(), advancementInfo.advancement());
+            JsonElement json = Advancement.CONDITIONAL_CODEC.encodeStart(ops, Optional.of(conditionalAdvancement)).getOrThrow(RuntimeException::new);
+            Path path = this.packTarget.path(PackType.SERVER_DATA).resolve(DatapackHelper.registryPath(key));
+            return DataProvider.saveStable(cache, json, path);
         }).toArray(CompletableFuture[]::new));
     }
 
@@ -119,9 +142,9 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Adds a built {@link Advancement advancement} to the provider.
      */
-    public void advancement(Advancement advancement) {
-        if (this.advancements.put(advancement.getId(), () -> advancement) != null) {
-            throw new IllegalStateException("Duplicate advancement: " + advancement.getId());
+    public void advancement(ResourceLocation id, Advancement advancement) {
+        if (this.advancements.put(id, () -> new AdvancementInfo(id, advancement)) != null) {
+            throw new IllegalStateException("Duplicate advancement: " + id);
         }
     }
 
@@ -146,24 +169,6 @@ public abstract class AdvancementProviderBase implements DataProvider {
         return this.advancement(this.idFor(id));
     }
 
-    /**
-     * Creates a dummy {@link Advancement advancement} with a given id to be used as a parent if your
-     * advancement should have another advancement from another mod as parent.
-     */
-    public Advancement dummy(ResourceLocation id) {
-        return this.dummy(id, false);
-    }
-
-    /**
-     * Creates a dummy {@link Advancement advancement} with a given id to be used as a parent if your
-     * advancement should have another advancement from another mod as parent.
-     * 
-     * @param hidden Whether the advancement is hidden.
-     */
-    public Advancement dummy(ResourceLocation id, boolean hidden) {
-        return new Advancement(id, null, new DisplayInfo(new ItemStack(Items.BARRIER), Component.empty(), Component.empty(), null, FrameType.TASK, true, true, hidden), AdvancementRewards.EMPTY, new HashMap<>(), new String[][]{}, false);
-    }
-
     private ResourceLocation idFor(String id) {
         if (this.rootId == null) {
             throw new IllegalStateException("On advancement providers without a root advancement only fully qualified resource locations are allowed, no plain ids.");
@@ -172,27 +177,27 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires all of the given items to be in
+     * Gets a {@link Criterion criterion} that requires all of the given items to be in
      * the inventory at the same time.
      */
-    public CriterionTriggerInstance items(ItemLike... items) {
+    public Criterion<?> items(ItemLike... items) {
         return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
     
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires all of the given items to be in
+     * Gets a {@link Criterion criterion} that requires all of the given items to be in
      * the inventory at the same time.
      */
     @SafeVarargs
-    public final CriterionTriggerInstance items(TagKey<Item>... items) {
+    public final Criterion<?> items(TagKey<Item>... items) {
         return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
     }
         
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires all of the given items to be in
+     * Gets a {@link Criterion criterion} that requires all of the given items to be in
      * the inventory at the same time.
      */
-    public CriterionTriggerInstance items(ItemPredicate... items) {
+    public Criterion<?> items(ItemPredicate... items) {
         return InventoryChangeTrigger.TriggerInstance.hasItems(items);
     }
 
@@ -215,49 +220,56 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link TaskFactory} that adds a task for every item given to this method.
      */
     public TaskFactory itemTasks(ItemPredicate... items) {
-        return () -> Arrays.stream(items).map(item -> new CriterionTriggerInstance[]{this.items(item) }).toArray(CriterionTriggerInstance[][]::new);
+        return () -> Arrays.stream(items).map(item -> List.<Criterion<?>>of(this.items(item))).toList();
+    }
+    
+    /**
+     * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) any item.
+     */
+    public Criterion<?> eat() {
+        return ConsumeItemTrigger.TriggerInstance.usedItem();
     }
 
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
+     * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
-    public CriterionTriggerInstance eat(ItemLike food) {
-        return this.eat(ItemPredicate.Builder.item().of(food).build());
+    public Criterion<?> eat(ItemLike food) {
+        return this.eat(ItemPredicate.Builder.item().of(food));
     }
 
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
+     * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
-    public CriterionTriggerInstance eat(TagKey<Item> food) {
-        return this.eat(ItemPredicate.Builder.item().of(food).build());
+    public Criterion<?> eat(TagKey<Item> food) {
+        return this.eat(ItemPredicate.Builder.item().of(food));
     }
 
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to consume (eat/drink) an item.
+     * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
-    public CriterionTriggerInstance eat(ItemPredicate food) {
-        return new ConsumeItemTrigger.TriggerInstance(ContextAwarePredicate.ANY, food);
+    public Criterion<?> eat(ItemPredicate.Builder food) {
+        return ConsumeItemTrigger.TriggerInstance.usedItem(food);
     }
 
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to leave a dimension.
+     * Gets a {@link Criterion criterion} that requires a player to leave a dimension.
      */
-    public CriterionTriggerInstance leave(ResourceKey<Level> dimension) {
-        return new ChangeDimensionTrigger.TriggerInstance(ContextAwarePredicate.ANY, dimension, null);
+    public Criterion<?> leave(ResourceKey<Level> dimension) {
+        return ChangeDimensionTrigger.TriggerInstance.changedDimensionFrom(dimension);
     }
 
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to enter a dimension.
+     * Gets a {@link Criterion criterion} that requires a player to enter a dimension.
      */
-    public CriterionTriggerInstance enter(ResourceKey<Level> dimension) {
+    public Criterion<?> enter(ResourceKey<Level> dimension) {
         return ChangeDimensionTrigger.TriggerInstance.changedDimensionTo(dimension);
     }
 
     /**
-     * Gets a {@link CriterionTriggerInstance criterion} that requires a player to perform a specific dimension change.
+     * Gets a {@link Criterion criterion} that requires a player to perform a specific dimension change.
      */
-    public CriterionTriggerInstance changeDim(ResourceKey<Level> from, ResourceKey<Level> to) {
-        return new ChangeDimensionTrigger.TriggerInstance(ContextAwarePredicate.ANY, from, to);
+    public Criterion<?> changeDim(ResourceKey<Level> from, ResourceKey<Level> to) {
+        return ChangeDimensionTrigger.TriggerInstance.changedDimension(from, to);
     }
 
     /**
@@ -277,44 +289,49 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
-    public ItemPredicate stack(ItemLike item, Enchantment... enchs) {
+    @SafeVarargs
+    public final ItemPredicate.Builder stack(ItemLike item, ResourceKey<Enchantment>... enchs) {
         ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(item);
-        for (Enchantment ench : enchs) {
-            builder.hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(1)));
-        }
-        return builder.build();
+        return this.applyEnchantments(builder, enchs);
     }
 
     /**
      * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
-    public ItemPredicate stack(TagKey<Item> item, Enchantment... enchs) {
+    @SafeVarargs
+    public final ItemPredicate.Builder stack(TagKey<Item> item, ResourceKey<Enchantment>... enchs) {
         ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(item);
-        for (Enchantment ench : enchs) {
-            builder.hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(1)));
-        }
-        return builder.build();
+        return this.applyEnchantments(builder, enchs);
     }
 
     /**
      * Gets an {@link ItemPredicate} for some enchantments.
      */
-    public ItemPredicate stack(Enchantment... enchs) {
+    @SafeVarargs
+    public final ItemPredicate.Builder stack(ResourceKey<Enchantment>... enchs) {
         if (enchs.length == 0) {
-            throw new IllegalStateException("Don't use stack() for an any predicate. Use ItemPredicate.ANY instead.");
+            throw new IllegalStateException("stack() can't be used to obtain an allways matching predicate.");
         }
         ItemPredicate.Builder builder = ItemPredicate.Builder.item();
-        for (Enchantment ench : enchs) {
-            builder.hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(1)));
-        }
-        return builder.build();
+        return this.applyEnchantments(builder, enchs);
     }
 
     /**
      * Gets an {@link ItemPredicate} for an enchantment with a minimum level.
      */
-    public ItemPredicate stack(Enchantment ench, int min) {
-        return ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(ench, MinMaxBounds.Ints.atLeast(min))).build();
+    public ItemPredicate.Builder stack(ResourceKey<Enchantment> ench, int min) {
+        Registry<Enchantment> registry = this.registries.registry(Registries.ENCHANTMENT);
+        EnchantmentPredicate enchantmentPredicate = new EnchantmentPredicate(registry.getHolderOrThrow(ench), MinMaxBounds.Ints.atLeast(min));
+        return ItemPredicate.Builder.item().withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.of(enchantmentPredicate)));
+    }
+    
+    private ItemPredicate.Builder applyEnchantments(ItemPredicate.Builder builder, ResourceKey<Enchantment>[] enchantments) {
+        if (enchantments.length == 0) return builder;
+        Registry<Enchantment> registry = this.registries.registry(Registries.ENCHANTMENT);
+        List<EnchantmentPredicate> enchantmentPredicates = Arrays.stream(enchantments)
+                .map(key -> new EnchantmentPredicate(registry.getHolderOrThrow(key), MinMaxBounds.Ints.ANY))
+                .toList();
+        return builder.withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(enchantmentPredicates));
     }
 
     /**
@@ -327,15 +344,15 @@ public abstract class AdvancementProviderBase implements DataProvider {
 
         private final ResourceLocation id;
         private final boolean root;
-        private Supplier<Advancement> parent;
-        private DisplayInfo display;
-        private ResourceLocation background;
-        private final List<List<Criterion>> criteria = new ArrayList<>();
+        private Supplier<AdvancementInfo> parent;
+        @Nullable private DisplayInfo display;
+        @Nullable private ResourceLocation background;
+        private final List<List<Criterion<?>>> criteria = new ArrayList<>();
         private AdvancementRewards reward = AdvancementRewards.EMPTY;
         private boolean telmetryEvent;
 
         private AdvancementFactory(String namespace, String rootId) {
-            this.id = new ResourceLocation(namespace, rootId + "/root");
+            this.id = ResourceLocation.fromNamespaceAndPath(namespace, rootId + "/root");
             this.root = true;
             this.parent = () -> null;
             this.telmetryEvent = false;
@@ -345,15 +362,6 @@ public abstract class AdvancementProviderBase implements DataProvider {
             this.id = id;
             this.root = false;
             this.parent = () -> null;
-        }
-
-        /**
-         * Sets the parent of this advancement.
-         */
-        public AdvancementFactory parent(Advancement parent) {
-            if (this.root) throw new IllegalStateException("Can't set parent for root advancement.");
-            this.parent = () -> parent;
-            return this;
         }
 
         /**
@@ -379,6 +387,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
         }
 
         /**
+         * Sets the parent of this advancement. This method should not be used with advancements from this provider
+         * and is only meant to set foreign advancements as parent.
+         */
+        public AdvancementFactory foreignParent(ResourceLocation id) {
+            if (this.root) throw new IllegalStateException("Can't set parent for root advancement.");
+            this.parent = () -> new AdvancementInfo(id, null);
+            return this;
+        }
+
+        /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
@@ -390,16 +408,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemLike icon, FrameType frame) {
-            return this.display(new ItemStack(icon), frame);
+        public AdvancementFactory display(ItemLike icon, AdvancementType type) {
+            return this.display(new ItemStack(icon), type);
         }
         
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemLike icon, FrameType frame, boolean toast, boolean chat, boolean hidden) {
-            return this.display(new ItemStack(icon), frame, toast, chat, hidden);
+        public AdvancementFactory display(ItemLike icon, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
+            return this.display(new ItemStack(icon), type, toast, chat, hidden);
         }
 
         /**
@@ -407,26 +425,26 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemStack icon) {
-            return this.display(icon, FrameType.TASK);
+            return this.display(icon, AdvancementType.TASK);
         }
 
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, FrameType frame) {
-            return this.display(icon, frame, !this.root, !this.root, false);
+        public AdvancementFactory display(ItemStack icon, AdvancementType type) {
+            return this.display(icon, type, !this.root, !this.root, false);
         }
         
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, FrameType frame, boolean toast, boolean chat, boolean hidden) {
+        public AdvancementFactory display(ItemStack icon, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
             return this.display(icon,
                     Component.translatable("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".title"),
                     Component.translatable("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".description"),
-                    frame, toast, chat, hidden
+                    type, toast, chat, hidden
             );
         }
         
@@ -442,16 +460,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemLike icon, Component title, Component description, FrameType frame) {
-            return this.display(new ItemStack(icon), title, description, frame);
+        public AdvancementFactory display(ItemLike icon, Component title, Component description, AdvancementType type) {
+            return this.display(new ItemStack(icon), title, description, type);
         }
         
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemLike icon, Component title, Component description, FrameType frame, boolean toast, boolean chat, boolean hidden) {
-            return this.display(new ItemStack(icon), title, description, frame, toast, chat, hidden);
+        public AdvancementFactory display(ItemLike icon, Component title, Component description, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
+            return this.display(new ItemStack(icon), title, description, type, toast, chat, hidden);
         }
         
         /**
@@ -459,23 +477,23 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemStack icon, Component title, Component description) {
-            return this.display(icon, title, description, FrameType.TASK);
+            return this.display(icon, title, description, AdvancementType.TASK);
         }
         
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, Component title, Component description, FrameType frame) {
-            return this.display(icon, title, description, frame, !this.root, !this.root, false);
+        public AdvancementFactory display(ItemStack icon, Component title, Component description, AdvancementType type) {
+            return this.display(icon, title, description, type, !this.root, !this.root, false);
         }
         
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, Component title, Component description, FrameType frame, boolean toast, boolean chat, boolean hidden) {
-            this.display = new DisplayInfo(icon, title, description, null, frame, toast, chat, hidden);
+        public AdvancementFactory display(ItemStack icon, Component title, Component description, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
+            this.display = new DisplayInfo(icon, title, description, Optional.empty(), type, toast, chat, hidden);
             return this;
         }
 
@@ -494,11 +512,11 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Adds a task to the advancement. A task can consist of multiple criteria. In this case
          * <b>one</b> of the criteria must be completed to complete the whole task.
          */
-        public AdvancementFactory task(CriterionTriggerInstance... criteria) {
+        public AdvancementFactory task(Criterion<?>... criteria) {
             if (criteria.length == 0) {
                 throw new IllegalStateException("Can not add empty task to advancement.");
             }
-            this.criteria.add(Arrays.stream(criteria).map(Criterion::new).collect(Collectors.toList()));
+            this.criteria.add(List.of(criteria));
             return this;
         }
 
@@ -506,14 +524,13 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Adds multiple tasks to the advancement. Here <b>all</b> criteria must be completed to
          * complete the advancement.
          */
-        public AdvancementFactory tasks(CriterionTriggerInstance... criteria) {
+        public AdvancementFactory tasks(Criterion<?>... criteria) {
             if (criteria.length == 0) {
                 throw new IllegalStateException("Can not add empty task to advancement.");
             }
-            for (CriterionTriggerInstance instance : criteria) {
-                this.criteria.add(List.of(new Criterion(instance)));
+            for (Criterion<?> criterion : criteria) {
+                this.criteria.add(List.of(criterion));
             }
-            this.criteria.add(Arrays.stream(criteria).map(Criterion::new).collect(Collectors.toList()));
             return this;
         }
 
@@ -521,8 +538,8 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Adds multiple tasks to this advancement defined by the given {@link TaskFactory}.
          */
         public AdvancementFactory tasks(TaskFactory factory) {
-            for (CriterionTriggerInstance[] task : factory.apply()) {
-                this.task(task);
+            for (List<Criterion<?>> task : factory.apply()) {
+                this.task(task.toArray(Criterion[]::new));
             }
             return this;
         }
@@ -539,36 +556,42 @@ public abstract class AdvancementProviderBase implements DataProvider {
             this.telmetryEvent = true;
             return this;
         }
-        
-        private Advancement build() {
+
+        private AdvancementInfo build() {
             if (this.criteria.isEmpty()) {
                 throw new IllegalStateException("Can not add advancement without tasks.");
             }
             Set<String> idsTaken = new HashSet<>();
-            String[][] criteriaIds = new String[this.criteria.size()][];
-            Map<String, Criterion> criteriaMap = new HashMap<>();
-            for (int i = 0; i < this.criteria.size(); i++) {
-                String[] criterionGroup = new String[this.criteria.get(i).size()];
-                for (int j = 0; j < this.criteria.get(i).size(); j++) {
-                    String baseName = Objects.requireNonNull(this.criteria.get(i).get(j).getTrigger(), "Can't build advancement: Empty criterion").getCriterion().getPath();
-                    baseName = baseName.replace('.', '_').replace('/', '_');
+            List<List<String>> criteriaIds = new ArrayList<>();
+            Map<String, Criterion<?>> criteriaMap = new HashMap<>();
+            for (List<Criterion<?>> criterionGroup : this.criteria) {
+                List<String> criterionGroupIds = new ArrayList<>();
+                for (Criterion<?> criterion : criterionGroup) {
+                    CriterionTrigger<?> trigger = Objects.requireNonNull(criterion.trigger(), "Can't build advancement: Empty criterion");
+                    ResourceLocation triggerId = Objects.requireNonNull(BuiltInRegistries.TRIGGER_TYPES.getKey(trigger), "Unregistered criterion trigger");
+                    String baseName = "minecraft".equals(triggerId.getNamespace()) ? triggerId.getPath() : triggerId.toString();
+                    baseName = baseName.replace(':', '_').replace('.', '_').replace('/', '_');
                     String nextId = baseName;
                     int num = 2;
                     while ((idsTaken.contains(nextId))) {
                         nextId = baseName + (num++);
                     }
                     idsTaken.add(nextId);
-                    criterionGroup[j] = nextId;
-                    criteriaMap.put(nextId, this.criteria.get(i).get(j));
+                    criterionGroupIds.add(nextId);
+                    criteriaMap.put(nextId, criterion);
                 }
-                criteriaIds[i] = criterionGroup;
+                criteriaIds.add(List.copyOf(criterionGroupIds));
             }
-            Advancement parentAdv = this.parent.get();
-            if (this.root && parentAdv != null) {
+            AdvancementInfo parent = this.parent.get();
+            ResourceLocation parentId = parent == null ? null : parent.id();
+            Advancement parentAdv = parentId == null ? null : parent.advancement();
+            if (this.root && parentId != null) {
                 throw new IllegalStateException("Root advancement can not have a parent.");
-            } else if (!this.root && parentAdv == null) {
+            } else if (!this.root && parentId == null) {
                 if (AdvancementProviderBase.this.rootSupplier != null) {
-                    parentAdv = AdvancementProviderBase.this.rootSupplier.get();
+                    parent = AdvancementProviderBase.this.rootSupplier.get();
+                    parentId = parent == null ? null : parent.id();
+                    parentAdv = parentId == null ? null : parent.advancement();
                     if (parentAdv == null) {
                         throw new IllegalStateException("Root advancement configured wrongly. This is an error in LibX.");
                     }
@@ -583,15 +606,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
                 } else if (this.background == null) {
                     throw new IllegalStateException("Can't build root advancement without background.");
                 }
-                displayInfo = new DisplayInfo(this.display.getIcon(), this.display.getTitle(), this.display.getDescription(), this.background, this.display.getFrame(), this.display.shouldShowToast(), this.display.shouldAnnounceChat(), this.display.isHidden());
+                displayInfo = new DisplayInfo(this.display.getIcon(), this.display.getTitle(), this.display.getDescription(), Optional.ofNullable(this.background), this.display.getType(), this.display.shouldShowToast(), this.display.shouldAnnounceChat(), this.display.isHidden());
             }
-            if (parentAdv != null && parentAdv.getDisplay() == null && displayInfo != null) {
+            if (parentAdv != null && parentAdv.display().isEmpty() && displayInfo != null) {
                 throw new IllegalStateException("Can't build advancement with display and display-less parent.");
             }
-            if (parentAdv != null && parentAdv.getDisplay() != null && displayInfo != null && parentAdv.getDisplay().isHidden() && !displayInfo.isHidden()) {
+            if (parentAdv != null && parentAdv.display().isPresent() && displayInfo != null && parentAdv.display().get().isHidden() && !displayInfo.isHidden()) {
                 throw new IllegalStateException("Can't build visible advancement with hidden parent.");
             }
-            return new Advancement(this.id, parentAdv, displayInfo, this.reward, criteriaMap, criteriaIds, this.telmetryEvent);
+            Advancement advancement = new Advancement(Optional.ofNullable(parentId), Optional.ofNullable(displayInfo), this.reward, criteriaMap, new AdvancementRequirements(List.copyOf(criteriaIds)), this.telmetryEvent);
+            return new AdvancementInfo(this.id, advancement);
         }
     }
 
@@ -600,6 +624,9 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     public interface TaskFactory {
 
-        CriterionTriggerInstance[][] apply();
+        List<List<Criterion<?>>> apply();
     }
+    
+    // null advancement means unknown
+    private record AdvancementInfo(ResourceLocation id, @Nullable Advancement advancement) {}
 }

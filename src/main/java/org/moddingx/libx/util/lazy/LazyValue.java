@@ -1,7 +1,6 @@
 package org.moddingx.libx.util.lazy;
 
 import net.minecraft.util.LazyLoadedValue;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
@@ -54,14 +53,6 @@ public class LazyValue<T> {
         } else {
             return this.value;
         }
-    }
-
-    /**
-     * Gets a lazy value that will have the value of the lazy optional if present. If not
-     * it will have the value of this lazy value.
-     */
-    public LazyValue<T> asDefault(LazyOptional<T> optional) {
-        return new LazyValue<>(() -> optional.resolve().orElseGet(this::get));
     }
 
     /**

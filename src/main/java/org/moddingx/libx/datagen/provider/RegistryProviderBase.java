@@ -1,16 +1,16 @@
 package org.moddingx.libx.datagen.provider;
 
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraftforge.registries.holdersets.AndHolderSet;
-import net.minecraftforge.registries.holdersets.AnyHolderSet;
-import net.minecraftforge.registries.holdersets.NotHolderSet;
-import net.minecraftforge.registries.holdersets.OrHolderSet;
+import net.neoforged.neoforge.registries.holdersets.AndHolderSet;
+import net.neoforged.neoforge.registries.holdersets.AnyHolderSet;
+import net.neoforged.neoforge.registries.holdersets.NotHolderSet;
+import net.neoforged.neoforge.registries.holdersets.OrHolderSet;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
@@ -152,9 +152,20 @@ public abstract class RegistryProviderBase implements RegistryProvider {
     public final <T> HolderSet<T> or(HolderSet<T>... sets) {
         return new OrHolderSet<>(List.of(sets));
     }
-    
+
+    /**
+     * Runs the provider. The default implementation just invokes {@link #registerFields()}.
+     */
     @Override
     public void run() {
+        this.registerFields();
+    }
+
+    /**
+     * Registers all unbound intrusive holders stored in public {@link Holder} fields in this class to their respective
+     * registries.
+     */
+    protected final void registerFields() {
         try {
             for (Field field : this.getClass().getFields()) {
                 if (field.getDeclaringClass() != this.getClass()) continue; // Skip fields from superclasses
@@ -163,13 +174,13 @@ public abstract class RegistryProviderBase implements RegistryProvider {
                 if (!Holder.class.isAssignableFrom(field.getType())) continue;
                 Holder<?> value = (Holder<?>) field.get(this);
                 if (value instanceof Holder.Reference<?> ref) {
-                    if (ref.getType() == Holder.Reference.Type.INTRUSIVE && !ref.isBound()) {
+                    if (ref.type == Holder.Reference.Type.INTRUSIVE && !ref.isBound()) {
                         ResourceKey<? extends Registry<?>> registryKey = this.registries.findRegistryFor(ref);
                         if (registryKey == null) throw new IllegalStateException("Can't infer target registry for " + field.getName() + " in '" + this.getName() + "'. Was the holder created properly?");
                         ResourceLocation id;
                         Id idObj = field.getAnnotation(Id.class);
                         if (idObj != null) {
-                            id = new ResourceLocation(idObj.namespace().isEmpty() ? this.mod.modid : idObj.namespace(), idObj.value());
+                            id = ResourceLocation.fromNamespaceAndPath(idObj.namespace().isEmpty() ? this.mod.modid : idObj.namespace(), idObj.value());
                         } else {
                             StringBuilder sb = new StringBuilder();
                             for (char chr : field.getName().toCharArray()) {
@@ -178,10 +189,10 @@ public abstract class RegistryProviderBase implements RegistryProvider {
                                 }
                                 sb.append(Character.toLowerCase(chr));
                             }
-                            id = new ResourceLocation(this.mod.modid, sb.toString());
+                            id = ResourceLocation.fromNamespaceAndPath(this.mod.modid, sb.toString());
                         }
                         //noinspection unchecked
-                        this.registries.writableRegistry((ResourceKey<? extends Registry<Object>>) registryKey).register(ResourceKey.create((ResourceKey<? extends Registry<Object>>) registryKey, id), ref.value(), Lifecycle.stable());
+                        this.registries.writableRegistry((ResourceKey<? extends Registry<Object>>) registryKey).register(ResourceKey.create((ResourceKey<? extends Registry<Object>>) registryKey, id), ref.value(), RegistrationInfo.BUILT_IN);
                     } else if (field.getAnnotation(Id.class) != null) {
                         Id idObj = field.getAnnotation(Id.class);
                         String id = (idObj.namespace().isEmpty() ? this.mod.modid : idObj.namespace()) + ":" + idObj.value();

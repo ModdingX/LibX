@@ -1,6 +1,10 @@
 package org.moddingx.libx.util.math;
 
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import org.moddingx.libx.codec.MoreStreamCodecs;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +21,10 @@ public final class IntPolynomial extends Polynomial<Integer> implements IntUnary
             ints -> new IntPolynomial(ints.dropWhile(d -> d == 0).toArray(), true),
             p -> p.coefficients.length == 0 ? IntStream.of(0) : Arrays.stream(p.coefficients)
     );
+    
+    public static final StreamCodec<ByteBuf, IntPolynomial> STREAM_CODEC = MoreStreamCodecs.listOf(ByteBufCodecs.INT).map(
+            ints-> new IntPolynomial(ints.stream().mapToInt(c -> c).dropWhile(d -> d == 0).toArray()),
+            p -> p.coefficients.length == 0 ? List.of(0) : Arrays.stream(p.coefficients).boxed().toList());
 
     /**
      * The polynomial that is always zero.

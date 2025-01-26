@@ -3,8 +3,9 @@ package org.moddingx.libx.impl.config.mappers.special;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Triple;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -56,15 +57,13 @@ public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, 
     }
 
     @Override
-    public Triple<A, B, C> fromNetwork(FriendlyByteBuf buffer) {
-        return Triple.of(this.mapper1.fromNetwork(buffer), this.mapper2.fromNetwork(buffer), this.mapper3.fromNetwork(buffer));
-    }
-
-    @Override
-    public void toNetwork(Triple<A, B, C> value, FriendlyByteBuf buffer) {
-        this.mapper1.toNetwork(value.getLeft(), buffer);
-        this.mapper2.toNetwork(value.getMiddle(), buffer);
-        this.mapper3.toNetwork(value.getRight(), buffer);
+    public StreamCodec<? super FriendlyByteBuf, Triple<A, B, C>> streamCodec() {
+        return StreamCodec.composite(
+                this.mapper1.streamCodec(), Triple::getLeft,
+                this.mapper2.streamCodec(), Triple::getMiddle,
+                this.mapper3.streamCodec(), Triple::getRight,
+                Triple::of
+        );
     }
 
     @Override
@@ -92,6 +91,5 @@ public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, 
                 this.mapper2.createEditor(ValidatorInfo.empty()),
                 this.mapper3.createEditor(ValidatorInfo.empty())
         );
-
     }
 }

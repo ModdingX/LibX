@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fStack;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
@@ -55,10 +56,10 @@ public class JobRenderer {
         
         RenderSystem.viewport(0, 0, width, height);
 
-        PoseStack modelViewStack = RenderSystem.getModelViewStack();
-        modelViewStack.pushPose();
-        modelViewStack.setIdentity();
-        modelViewStack.mulPoseMatrix(job.setupModelViewMatrix());
+        Matrix4fStack modelViewStack = RenderSystem.getModelViewStack();
+        modelViewStack.pushMatrix();
+        modelViewStack.identity();
+        modelViewStack.mul(job.setupModelViewMatrix());
         RenderSystem.applyModelViewMatrix();
 
         Matrix4f projectionMatrix = job.setupProjectionMatrix();
@@ -69,14 +70,14 @@ public class JobRenderer {
         RenderHelper.resetColor();
 
         @Nullable
-        Matrix4f transformationMatrix = overlay ? new Matrix4f(modelViewStack.last().pose()) : null;
+        Matrix4f transformationMatrix = overlay ? new Matrix4f(modelViewStack) : null;
         PoseStack poseStack = new PoseStack();
         job.setupTransformation(poseStack);
         if (overlay) {
             transformationMatrix.mul(poseStack.last().pose());
         }
         
-        RenderBuffers buffers = new RenderBuffers();
+        RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
         job.render(poseStack, buffers.bufferSource());
         buffers.bufferSource().endBatch();
         
@@ -87,8 +88,8 @@ public class JobRenderer {
             resetDepthState();
 
             RenderSystem.viewport(0, 0, width, height);
-            modelViewStack.setIdentity();
-            modelViewStack.mulPoseMatrix(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
+            modelViewStack.identity();
+            modelViewStack.mul(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
             RenderSystem.applyModelViewMatrix();
 
             RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z), VertexSorting.ORTHOGRAPHIC_Z);
@@ -102,7 +103,7 @@ public class JobRenderer {
         }
         
         resetDepthState();
-        modelViewStack.popPose();
+        modelViewStack.popMatrix();
         RenderSystem.applyModelViewMatrix();
         
         NativeImage img = takeNonOpaqueScreenshot(target);
