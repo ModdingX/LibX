@@ -1,6 +1,6 @@
 plugins {
-    id 'org.moddingx.modgradle.meta' version '5.0.0'
-    id 'org.moddingx.modgradle.javadoc' version '5.0.0'
+    id 'org.moddingx.modgradle.meta' version '5.0.1'
+    id 'org.moddingx.modgradle.javadoc' version '5.0.1'
 }
 
 configurations {
