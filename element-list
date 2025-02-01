@@ -10,7 +10,6 @@ org.moddingx.libx.base
 org.moddingx.libx.base.decoration
 org.moddingx.libx.base.tile
 org.moddingx.libx.block
-org.moddingx.libx.capability
 org.moddingx.libx.codec
 org.moddingx.libx.command
 org.moddingx.libx.config
@@ -42,10 +41,10 @@ org.moddingx.libx.fi
 org.moddingx.libx.inventory
 org.moddingx.libx.menu
 org.moddingx.libx.menu.slot
+org.moddingx.libx.menu.type
 org.moddingx.libx.mod
 org.moddingx.libx.network
 org.moddingx.libx.registration
-org.moddingx.libx.registration.tracking
 org.moddingx.libx.registration.util
 org.moddingx.libx.render
 org.moddingx.libx.render.block
