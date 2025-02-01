@@ -1,8 +1,8 @@
 # LibX
 
-[![CurseForge](https://cf.way2muchnoise.eu/full_412525_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/libx)
-[![Modrinth](https://img.shields.io/modrinth/dt/qEH6GYul?color=00AF5C&logo=modrinth)](https://modrinth.com/mod/libx)
-[![Issues](https://img.shields.io/github/issues/noeppi-noeppi/LibX)](https://github.com/noeppi-noeppi/LibX/issues)
+[![Modrinth](https://badges.moddingx.org/modrinth/downloads/qEH6GYul)](https://modrinth.com/mod/libx)
+[![CurseForge](https://badges.moddingx.org/curseforge/downloads/412525)](https://www.curseforge.com/minecraft/mc-mods/libx)
+[![Issues](https://img.shields.io/github/issues/ModdingX/LibX)](https://github.com/ModdingX/LibX/issues)
 
 LibX is the library mod of [ModdingX](https://moddingx.org/).
 
@@ -12,13 +12,13 @@ LibX is the library mod of [ModdingX](https://moddingx.org/).
 repositories {
     maven {
         name = 'ModdingX Maven'
-        url = 'https://maven.moddingx.org/'
+        url = 'https://maven.moddingx.org/release'
     }
 }
 
 dependencies {
-    annotationProcessor fg.deobf("org.moddingx:LibX:${mc_version}-${libx-version}")
-    implementation fg.deobf("org.moddingx:LibX:${mc_version}-${libx-version}")
+    annotationProcessor "org.moddingx:LibX:${mc_version}-${libx-version}"
+    implementation "org.moddingx:LibX:${mc_version}-${libx-version}"
 }
 ```
 
