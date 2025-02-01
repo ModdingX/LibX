@@ -1,13 +1,13 @@
 modLoader="javafml"
 loaderVersion="[4,)"
 license="APACHE-2.0"
-issueTrackerURL="https://github.com/ModdingX/LibX/issues"
+issueTrackerURL="${mod.issue_url}"
 
 [[mods]]
-modId="libx"
+modId="${mod.modid}"
 version="${mod.version}"
-displayName="LibX"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/libx"
+displayName="${mod.name}"
+displayURL="${mod.source_url}"
 updateJSONURL="https://assets.melanx.de/updates/libx.json"
 authors="ModdingX"
 description='''
