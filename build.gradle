@@ -22,7 +22,7 @@ mod.configure {
     modid 'libx'
     group 'org.moddingx'
     versioning {
-        base '6.0'
+        base '1.21.1-6.0'
         maven 'https://maven.moddingx.org/release'
     }
     
