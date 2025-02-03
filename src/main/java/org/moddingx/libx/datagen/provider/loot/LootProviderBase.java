@@ -48,7 +48,6 @@ import java.util.stream.Stream;
 public abstract class LootProviderBase<T> extends RegistryProviderBase {
 
     protected final ModX mod;
-    protected final PackTarget packTarget;
     protected final RegistrySet registries;
     protected final String folder;
     protected final LootContextParamSet params;
@@ -70,7 +69,6 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     private LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements, Function<T, ResourceLocation> allElementIds) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
-        this.packTarget = ctx.target();
         this.registries = ctx.registries();
         this.folder = folder;
         this.params = params;
@@ -85,7 +83,6 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
-        this.packTarget = ctx.target();
         this.registries = ctx.registries();
         this.folder = folder;
         this.params = params;
