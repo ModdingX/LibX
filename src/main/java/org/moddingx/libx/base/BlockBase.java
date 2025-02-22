@@ -54,7 +54,7 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
     }
     
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
-        return -1;
+        return 0;
     }
     
     @Override
