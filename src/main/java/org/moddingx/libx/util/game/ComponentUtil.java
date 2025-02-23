@@ -171,10 +171,10 @@ public class ComponentUtil {
         MutableComponent cmp = Component.literal("[");
         boolean first = true;
         for (ResourceLocation typeId : typeMap.keySet().stream().sorted().toList()) {
-            if (first) {
-                first = false;
+            if (!first) {
                 cmp = cmp.append(", ");
             }
+            first = false;
             DataComponentType<?> type = typeMap.get(typeId);
             Optional<?> maybeValue = map.get(type);
             if (maybeValue.isEmpty()) {
