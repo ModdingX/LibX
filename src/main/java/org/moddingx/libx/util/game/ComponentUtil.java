@@ -7,7 +7,7 @@ import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
@@ -17,7 +17,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -144,26 +144,24 @@ public class ComponentUtil {
     /**
      * Turns a {@link DataComponentMap} into a {@link Component} with syntax highlighting that can be used for display.
      */
-    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, DataComponentMap components) {
-        return toPrettyComponent(registry, components.stream().collect(Collectors.toUnmodifiableMap(TypedDataComponent::type, tc -> Optional.of(tc.value()))));
+    public static Component toPrettyComponent(HolderLookup.Provider lookupProvider, DataComponentMap components) {
+        return toPrettyComponent(lookupProvider, components.stream().collect(Collectors.toUnmodifiableMap(TypedDataComponent::type, tc -> Optional.of(tc.value()))));
     }
 
     /**
      * Turns a {@link DataComponentPatch} into a {@link Component} with syntax highlighting that can be used for display.
      */
-    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, DataComponentPatch patch) {
-        return toPrettyComponent(registry, patch.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
+    public static Component toPrettyComponent(HolderLookup.Provider lookupProvider, DataComponentPatch patch) {
+        return toPrettyComponent(lookupProvider, patch.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
     
-    private static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, Map<DataComponentType<?>, Optional<?>> map) {
-        //noinspection unchecked
-        Registry<DataComponentType<?>> theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.location());
-        if (theRegistry == null) throw new IllegalStateException("Registry not found in builtin registries: " + registry);
+    private static Component toPrettyComponent(HolderLookup.Provider lookupProvider, Map<DataComponentType<?>, Optional<?>> map) {
+        RegistryOps<Tag> registryOps = RegistryOps.create(NbtOps.INSTANCE, lookupProvider);
         
         Map<ResourceLocation, DataComponentType<?>> typeMap = new HashMap<>();
         for (DataComponentType<?> type : map.keySet()) {
             if (type.isTransient()) continue;
-            ResourceLocation id = theRegistry.getKey(type);
+            ResourceLocation id = BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type);
             if (id == null) throw new IllegalStateException("Unregistered data component type: " + type);
             typeMap.put(id, type);
         }
@@ -184,7 +182,7 @@ public class ComponentUtil {
             if (maybeValue.isPresent()) {
                 cmp = cmp.append("=");
                 //noinspection unchecked
-                DataResult<Tag> result = ((Codec<Object>) type.codecOrThrow()).encode(maybeValue.get(), NbtOps.INSTANCE, NbtOps.INSTANCE.empty());
+                DataResult<Tag> result = ((Codec<Object>) type.codecOrThrow()).encodeStart(registryOps, maybeValue.get());
                 if (result instanceof DataResult.Error<Tag>) {
                     return Component.literal("encoder error for " + typeId).withStyle(ChatFormatting.RED);
                 }
