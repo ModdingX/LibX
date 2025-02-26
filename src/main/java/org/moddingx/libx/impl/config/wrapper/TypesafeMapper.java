@@ -25,7 +25,7 @@ public class TypesafeMapper extends JsonTypesafeMapper<Object> {
         if (this.wrapped.type().isAssignableFrom(value.getClass())) {
             return this.wrapped.toJson(value);
         } else {
-            throw new IllegalArgumentException("Type mismatch in config mapper toJSON: Expected " + this.wrapped.type() + ", got " + value.getClass());
+            throw new IllegalArgumentException("Type mismatch in config mapper toJson: Expected " + this.wrapped.type() + ", got " + value.getClass());
         }
     }
 

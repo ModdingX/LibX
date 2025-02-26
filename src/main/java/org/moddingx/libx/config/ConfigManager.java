@@ -182,6 +182,9 @@ public class ConfigManager {
      * Registers a new {@link ConfigValidator} that can be used to validate config values.
      */
     public static void registerConfigValidator(String modid, ConfigValidator<?, ?> validator) {
+        if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
+            LibX.logger.error("Wrong modid for config validator, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+        }
         ModMappers.get(modid).registerConfigValidator(validator);
     }
 
