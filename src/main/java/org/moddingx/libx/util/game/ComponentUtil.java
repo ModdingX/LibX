@@ -6,8 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
@@ -17,6 +19,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -143,22 +146,32 @@ public class ComponentUtil {
 
     /**
      * Turns a {@link DataComponentMap} into a {@link Component} with syntax highlighting that can be used for display.
+     *
+     * @param registry The registry in which the data component types for the {@link DataComponentMap data component map} are registered.
+     * @param registryAccess A {@link RegistryAccess registry access} to provide access to datapack registries when encoding data component values.
      */
-    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, DataComponentMap components) {
-        return toPrettyComponent(registry, components.stream().collect(Collectors.toUnmodifiableMap(TypedDataComponent::type, tc -> Optional.of(tc.value()))));
+    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, RegistryAccess registryAccess, DataComponentMap components) {
+        return toPrettyComponent(registry, registryAccess, components.stream().collect(Collectors.toUnmodifiableMap(TypedDataComponent::type, tc -> Optional.of(tc.value()))));
     }
 
     /**
      * Turns a {@link DataComponentPatch} into a {@link Component} with syntax highlighting that can be used for display.
+     *
+     * @param registry The registry in which the data component types for the {@link DataComponentPatch data component patch} are registered.
+     * @param registryAccess A {@link RegistryAccess registry access} to provide access to datapack registries when encoding data component values.
      */
-    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, DataComponentPatch patch) {
-        return toPrettyComponent(registry, patch.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
+    public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, RegistryAccess registryAccess, DataComponentPatch patch) {
+        return toPrettyComponent(registry, registryAccess, patch.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
     
-    private static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, Map<DataComponentType<?>, Optional<?>> map) {
-        //noinspection unchecked
-        Registry<DataComponentType<?>> theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.location());
-        if (theRegistry == null) throw new IllegalStateException("Registry not found in builtin registries: " + registry);
+    private static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, RegistryAccess registryAccess, Map<DataComponentType<?>, Optional<?>> map) {
+        Registry<DataComponentType<?>> theRegistry = registryAccess.registry(registry).orElse(null);
+        if (theRegistry == null) {
+            //noinspection unchecked
+            theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.location());
+        }
+        if (theRegistry == null) throw new IllegalStateException("Registry not found: " + registry);
+        DynamicOps<Tag> registryOps = RegistryOps.create(NbtOps.INSTANCE, registryAccess);
         
         Map<ResourceLocation, DataComponentType<?>> typeMap = new HashMap<>();
         for (DataComponentType<?> type : map.keySet()) {
@@ -171,9 +184,7 @@ public class ComponentUtil {
         MutableComponent cmp = Component.literal("[");
         boolean first = true;
         for (ResourceLocation typeId : typeMap.keySet().stream().sorted().toList()) {
-            if (!first) {
-                cmp = cmp.append(", ");
-            }
+            if (!first) cmp = cmp.append(", ");
             first = false;
             DataComponentType<?> type = typeMap.get(typeId);
             Optional<?> maybeValue = map.get(type);
@@ -184,7 +195,7 @@ public class ComponentUtil {
             if (maybeValue.isPresent()) {
                 cmp = cmp.append("=");
                 //noinspection unchecked
-                DataResult<Tag> result = ((Codec<Object>) type.codecOrThrow()).encode(maybeValue.get(), NbtOps.INSTANCE, NbtOps.INSTANCE.empty());
+                DataResult<Tag> result = ((Codec<Object>) type.codecOrThrow()).encodeStart(registryOps, maybeValue.get());
                 if (result instanceof DataResult.Error<Tag>) {
                     return Component.literal("encoder error for " + typeId).withStyle(ChatFormatting.RED);
                 }

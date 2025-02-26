@@ -48,7 +48,7 @@ public class HandCommand implements Command<CommandSourceStack> {
         }
 
         if (components.size() != 0) {
-            Component componentsText = ComponentUtil.toPrettyComponent(Registries.DATA_COMPONENT_TYPE, components);
+            Component componentsText = ComponentUtil.toPrettyComponent(Registries.DATA_COMPONENT_TYPE, ctx.getSource().getServer().registryAccess(), components);
             componentsText = ComponentUtil.withCopyAction(componentsText, componentsText.getString());
             message = message.append(Component.literal(" ")).append(componentsText);
         }
