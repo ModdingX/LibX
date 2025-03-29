@@ -2,6 +2,7 @@ package org.moddingx.libx.screen.text;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -71,7 +72,9 @@ public class TextScreen extends Screen {
         
         graphics.pose().pushPose();
         graphics.pose().translate(0, 0, 200);
-        super.render(graphics, mouseX, mouseY, partialTick);
+        for (Renderable renderable : this.renderables) {
+            renderable.render(graphics, mouseX, mouseY, partialTick);
+        }
         graphics.pose().popPose();
 
         graphics.pose().pushPose();
