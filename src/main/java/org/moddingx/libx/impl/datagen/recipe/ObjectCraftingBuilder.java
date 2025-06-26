@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
-import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
 import javax.annotation.Nonnull;
@@ -29,9 +28,9 @@ public class ObjectCraftingBuilder {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
-        Pair<ItemLike, Integer> output = getOutput(reader);
-        if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(recipeCategory, output.getLeft(), output.getRight());
+        ItemStack output = getOutput(reader);
+        if (id == null) id = ext.provider().loc(output.getItem());
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(recipeCategory, output);
         for (String line : reader.consumeWhile(String.class)) {
             builder.pattern(line);
         }
@@ -43,9 +42,9 @@ public class ObjectCraftingBuilder {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
-        Pair<ItemLike, Integer> output = getOutput(reader);
-        if (id == null) id = ext.provider().loc(output.getLeft());
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output.getLeft(), output.getRight());
+        ItemStack output = getOutput(reader);
+        if (id == null) id = ext.provider().loc(output.getItem());
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output);
         addShapelessIngredients(ext, builder, reader);
         builder.save(ext.output(), id);
     }
@@ -107,10 +106,10 @@ public class ObjectCraftingBuilder {
     }
 
     @Nonnull
-    private static Pair<ItemLike, Integer> getOutput(ObjectReader reader) {
-        return ObjectCraftingBuilder.<Pair<ItemLike, Integer>>first(
-                () -> reader.optConsume(ItemLike.class).map(item -> Pair.of(item, reader.optConsume(Integer.class).orElse(1))),
-                () -> reader.optConsume(ItemStack.class).map(stack -> Pair.of(stack.getItem(), stack.getCount()))
+    private static ItemStack getOutput(ObjectReader reader) {
+        return ObjectCraftingBuilder.first(
+                () -> reader.optConsume(ItemLike.class).map(item -> new ItemStack(item, reader.optConsume(Integer.class).orElse(1))),
+                () -> reader.optConsume(ItemStack.class).map(ItemStack::copy)
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid output at position " + reader.pos()));
     }
 
