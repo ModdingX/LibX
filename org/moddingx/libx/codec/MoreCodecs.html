@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final com.mojang.serialization.Codec<wbr>&lt;net.minecraft.util.Unit&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#UNIT" class="member-name-link">UNIT</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">A streamCodec for the <code>Unit</code> constant that encodes to nothing.</div>
+<div class="block">A codec for the <code>Unit</code> constant that encodes to nothing.</div>
 </div>
 </div>
 </section>
@@ -141,18 +141,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;T&gt;&gt;<br>com.mojang.serialization.Codec<wbr>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#enumCodec(java.lang.Class)" class="member-name-link">enumCodec</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;clazz)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Gets a streamCodec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
+<div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#error(java.lang.String)" class="member-name-link">error</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Gets a streamCodec that always errors with the given message.</div>
+<div class="block">Gets a codec that always errors with the given message.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#error(java.lang.String,java.lang.String)" class="member-name-link">error</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encodeMsg,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;decodeMsg)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Gets a streamCodec that always errors with the given messages.</div>
+<div class="block">Gets a codec that always errors with the given messages.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;M,<wbr>
 E&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;com.mojang.datafixers.util.Pair&lt;M,<wbr>E&gt;&gt;</code></div>
@@ -174,17 +174,17 @@ E&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static com.mojang.serialization.Codec<wbr>&lt;net.minecraft.util.Unit&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixed(com.mojang.serialization.Dynamic)" class="member-name-link">fixed</a><wbr>(com.mojang.serialization.Dynamic&lt;?&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.</div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static com.mojang.serialization.Codec<wbr>&lt;net.minecraft.util.Unit&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixed(java.lang.Number)" class="member-name-link">fixed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.</div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static com.mojang.serialization.Codec<wbr>&lt;net.minecraft.util.Unit&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fixed(java.lang.String)" class="member-name-link">fixed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.</div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#lazy(java.util.function.Supplier)" class="member-name-link">lazy</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.mojang.serialization.Codec&lt;T&gt;&gt;&nbsp;codec)</code></div>
@@ -199,12 +199,12 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;K,<wbr>V&gt;&gt;&nbsp;decompose,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;K,<wbr>V,<wbr>com.mojang.serialization.DataResult&lt;A&gt;&gt;&nbsp;construct)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a map dispatched streamCodec.</div>
+<div class="block">Creates a map dispatched codec.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#option(com.mojang.serialization.Codec)" class="member-name-link">option</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Gets a streamCodec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child streamCodec.</div>
+<div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child codec.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.MapCodec<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#optionalFieldOf(com.mojang.serialization.Codec,java.lang.String)" class="member-name-link">optionalFieldOf</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec,
@@ -225,13 +225,13 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(com.mojang.serialization.Codec,org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
  <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Gets a type mapped streamCodec that will try to encode and decode values with the first
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#typeMapped(org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped</a><wbr>(<a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Gets a type mapped streamCodec that will try to encode and decode values with the first
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.</div>
 </div>
 </div>
@@ -255,7 +255,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <section class="detail" id="UNIT">
 <h3>UNIT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</span>&nbsp;<span class="element-name">UNIT</span></div>
-<div class="block">A streamCodec for the <code>Unit</code> constant that encodes to nothing.</div>
+<div class="block">A codec for the <code>Unit</code> constant that encodes to nothing.</div>
 </section>
 </li>
 </ul>
@@ -284,7 +284,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <section class="detail" id="error(java.lang.String)">
 <h3>error</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">error</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
-<div class="block">Gets a streamCodec that always errors with the given message.</div>
+<div class="block">Gets a codec that always errors with the given message.</div>
 </section>
 </li>
 <li>
@@ -292,7 +292,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <h3>error</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">error</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encodeMsg,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;decodeMsg)</span></div>
-<div class="block">Gets a streamCodec that always errors with the given messages.</div>
+<div class="block">Gets a codec that always errors with the given messages.</div>
 </section>
 </li>
 <li>
@@ -300,14 +300,14 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <h3>option</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
 <span class="return-type">com.mojang.serialization.Codec&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">option</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;T&gt;&nbsp;codec)</span></div>
-<div class="block">Gets a streamCodec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child streamCodec.</div>
+<div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child codec.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="fixed(java.lang.Number)">
 <h3>fixed</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</span>&nbsp;<span class="element-name">fixed</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;value)</span></div>
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.
  Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
  useful in <code>either</code>-codecs.</div>
 </section>
@@ -316,7 +316,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <section class="detail" id="fixed(java.lang.String)">
 <h3>fixed</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</span>&nbsp;<span class="element-name">fixed</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.
  Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
  useful in <code>either</code>-codecs.</div>
 </section>
@@ -325,7 +325,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <section class="detail" id="fixed(com.mojang.serialization.Dynamic)">
 <h3>fixed</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;net.minecraft.util.Unit&gt;</span>&nbsp;<span class="element-name">fixed</span><wbr><span class="parameters">(com.mojang.serialization.Dynamic&lt;?&gt;&nbsp;value)</span></div>
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.
  Decoding will succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
  useful in <code>either</code>-codecs.</div>
 </section>
@@ -335,7 +335,7 @@ V&gt;&nbsp;com.mojang.serialization.Codec<wbr>&lt;A&gt;</code></div>
 <h3>enumCodec</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;T&gt;&gt;</span>
 <span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">enumCodec</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;clazz)</span></div>
-<div class="block">Gets a streamCodec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
+<div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
 </section>
 </li>
 <li>
@@ -346,7 +346,7 @@ E&gt;</span>
 <span class="return-type">com.mojang.serialization.Codec&lt;com.mojang.datafixers.util.Pair&lt;M,<wbr>E&gt;&gt;</span>&nbsp;<span class="element-name">extend</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;M&gt;&nbsp;codec,
  com.mojang.serialization.MapCodec&lt;E&gt;&nbsp;extension)</span></div>
 <div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>. The given
- streamCodec <b>must</b> encode to a <code>MapLike</code>.</div>
+ codec <b>must</b> encode to a <code>MapLike</code>.</div>
 </section>
 </li>
 <li>
@@ -360,7 +360,7 @@ E&gt;</span>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;M,<wbr>E&gt;&gt;&nbsp;decompose,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;M,<wbr>E,<wbr>A&gt;&nbsp;construct)</span></div>
 <div class="block">Extends the give <code>Codec</code> with some new fields defined by the given <code>MapCodec</code>. The given
- streamCodec <b>must</b> encode to a <code>MapLike</code>.</div>
+ codec <b>must</b> encode to a <code>MapLike</code>.</div>
 </section>
 </li>
 <li>
@@ -373,13 +373,13 @@ V&gt;</span>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;K,<wbr>com.mojang.serialization.DataResult&lt;com.mojang.serialization.Codec&lt;? extends V&gt;&gt;&gt;&nbsp;valueCodecs,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;A,<wbr>com.mojang.datafixers.util.Pair&lt;K,<wbr>V&gt;&gt;&nbsp;decompose,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;K,<wbr>V,<wbr>com.mojang.serialization.DataResult&lt;A&gt;&gt;&nbsp;construct)</span></div>
-<div class="block">Creates a map dispatched streamCodec. When encoding an element, it ist first decomposed into key and value.
- The key is used to obtain a streamCodec to encode the value using the passed <code>valueCodecs</code> function.
+<div class="block">Creates a map dispatched codec. When encoding an element, it ist first decomposed into key and value.
+ The key is used to obtain a codec to encode the value using the passed <code>valueCodecs</code> function.
  The <code>Codec</code> returned from that function <b>must</b> encode to a <code>MapLike</code>.
- After that, the key is encoded and merged into the <code>MapLike</code> from the value streamCodec.
+ After that, the key is encoded and merged into the <code>MapLike</code> from the value codec.
  
  Decoding works the other way round in that the key is read first. Then the <code>valueCodecs</code> function
- is used to obtain a <code>Codec</code> to decode the value. In the end, the streamCodec uses both key and value to
+ is used to obtain a <code>Codec</code> to decode the value. In the end, the codec uses both key and value to
  construct the resulting element. Both the <code>MapCodec</code> and the codecs returned from <code>valueCodecs</code>
  <b>must</b> be able to work with additional values, they don't know about.</div>
 </section>
@@ -419,7 +419,7 @@ V&gt;</span>
 <h3>typeMapped</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">typeMapped</span><wbr><span class="parameters">(<a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</span></div>
-<div class="block">Gets a type mapped streamCodec that will try to encode and decode values with the first
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.
  If no <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a> matches, an error will be returned.</div>
 </section>
@@ -430,7 +430,7 @@ V&gt;</span>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">com.mojang.serialization.Codec&lt;T&gt;</span>&nbsp;<span class="element-name">typeMapped</span><wbr><span class="parameters">(com.mojang.serialization.Codec&lt;T&gt;&nbsp;fallback,
  <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec">TypedEncoder</a>&lt;T,<wbr>?&gt;...&nbsp;encoders)</span></div>
-<div class="block">Gets a type mapped streamCodec that will try to encode and decode values with the first
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.
  If no <a href="TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a> matches, the fallback is used.</div>
 </section>

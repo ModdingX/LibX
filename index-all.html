@@ -2725,7 +2725,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#enumCodec(java.lang.Class)" class="member-name-link">enumCodec(Class&lt;T&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Gets a streamCodec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
+<div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>enum</code></a> as a string.</div>
 </dd>
 <dt><a href="org/moddingx/libx/network/EnumDataSerializer.html" class="type-name-link" title="class in org.moddingx.libx.network">EnumDataSerializer&lt;T&gt;</a> - Class in <a href="org/moddingx/libx/network/package-summary.html">org.moddingx.libx.network</a></dt>
 <dd>
@@ -2870,11 +2870,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#error(java.lang.String)" class="member-name-link">error(String)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Gets a streamCodec that always errors with the given message.</div>
+<div class="block">Gets a codec that always errors with the given message.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#error(java.lang.String,java.lang.String)" class="member-name-link">error(String, String)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Gets a streamCodec that always errors with the given messages.</div>
+<div class="block">Gets a codec that always errors with the given messages.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.SoundDefinitionBuilder.html#event(net.minecraft.sounds.SoundEvent)" class="member-name-link">event(SoundEvent)</a> - Method in class org.moddingx.libx.datagen.provider.<a href="org/moddingx/libx/datagen/provider/SoundDefinitionProviderBase.SoundDefinitionBuilder.html" title="class in org.moddingx.libx.datagen.provider">SoundDefinitionProviderBase.SoundDefinitionBuilder</a></dt>
 <dd>
@@ -3098,15 +3098,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#fixed(com.mojang.serialization.Dynamic)" class="member-name-link">fixed(Dynamic&lt;?&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.</div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#fixed(java.lang.Number)" class="member-name-link">fixed(Number)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.</div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#fixed(java.lang.String)" class="member-name-link">fixed(String)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Creates a fixed streamCodec that always encodes the <code>unit value</code> to the given serialized value.</div>
+<div class="block">Creates a fixed codec that always encodes the <code>unit value</code> to the given serialized value.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html#fixedBiome(net.minecraft.core.Holder)" class="member-name-link">fixedBiome(Holder&lt;Biome&gt;)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/DimensionProviderBase.BiomeSourceBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">DimensionProviderBase.BiomeSourceBuilder</a></dt>
 <dd>
@@ -4806,7 +4806,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#mapDispatch(com.mojang.serialization.MapCodec,java.util.function.Function,java.util.function.Function,java.util.function.BiFunction)" class="member-name-link">mapDispatch(MapCodec&lt;K&gt;, Function&lt;K, DataResult&lt;Codec&lt;? extends V&gt;&gt;&gt;, Function&lt;A, Pair&lt;K, V&gt;&gt;, BiFunction&lt;K, V, DataResult&lt;A&gt;&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Creates a map dispatched streamCodec.</div>
+<div class="block">Creates a map dispatched codec.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreStreamCodecs.html#mapOf(net.minecraft.network.codec.StreamCodec,net.minecraft.network.codec.StreamCodec)" class="member-name-link">mapOf(StreamCodec&lt;? super B, K&gt;, StreamCodec&lt;? super B, V&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreStreamCodecs.html" title="class in org.moddingx.libx.codec">MoreStreamCodecs</a></dt>
 <dd>&nbsp;</dd>
@@ -5315,7 +5315,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#option(com.mojang.serialization.Codec)" class="member-name-link">option(Codec&lt;T&gt;)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Gets a streamCodec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child streamCodec.</div>
+<div class="block">Gets a codec that encodes an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> with a given child codec.</div>
 </dd>
 <dt><a href="org/moddingx/libx/config/gui/ConfigEditor.html#option(org.moddingx.libx.config.gui.ConfigEditor)" class="member-name-link">option(ConfigEditor&lt;T&gt;)</a> - Static method in interface org.moddingx.libx.config.gui.<a href="org/moddingx/libx/config/gui/ConfigEditor.html" title="interface in org.moddingx.libx.config.gui">ConfigEditor</a></dt>
 <dd>
@@ -8424,12 +8424,12 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#typeMapped(com.mojang.serialization.Codec,org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped(Codec&lt;T&gt;, TypedEncoder&lt;T, ?&gt;...)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Gets a type mapped streamCodec that will try to encode and decode values with the first
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="org/moddingx/libx/codec/TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.</div>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#typeMapped(org.moddingx.libx.codec.TypedEncoder...)" class="member-name-link">typeMapped(TypedEncoder&lt;T, ?&gt;...)</a> - Static method in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">Gets a type mapped streamCodec that will try to encode and decode values with the first
+<div class="block">Gets a type mapped codec that will try to encode and decode values with the first
  matching <a href="org/moddingx/libx/codec/TypedEncoder.html" title="interface in org.moddingx.libx.codec"><code>TypedEncoder</code></a>.</div>
 </dd>
 <dt><a href="org/moddingx/libx/base/decoration/DecorationContext.html#types()" class="member-name-link">types()</a> - Method in class org.moddingx.libx.base.decoration.<a href="org/moddingx/libx/base/decoration/DecorationContext.html" title="class in org.moddingx.libx.base.decoration">DecorationContext</a></dt>
@@ -8452,7 +8452,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/moddingx/libx/codec/MoreCodecs.html#UNIT" class="member-name-link">UNIT</a> - Static variable in class org.moddingx.libx.codec.<a href="org/moddingx/libx/codec/MoreCodecs.html" title="class in org.moddingx.libx.codec">MoreCodecs</a></dt>
 <dd>
-<div class="block">A streamCodec for the <code>Unit</code> constant that encodes to nothing.</div>
+<div class="block">A codec for the <code>Unit</code> constant that encodes to nothing.</div>
 </dd>
 <dt><a href="org/moddingx/libx/command/EnumArgumentIgnoreCase.Info.html#unpack(org.moddingx.libx.command.EnumArgumentIgnoreCase)" class="member-name-link">unpack(EnumArgumentIgnoreCase&lt;?&gt;)</a> - Method in class org.moddingx.libx.command.<a href="org/moddingx/libx/command/EnumArgumentIgnoreCase.Info.html" title="class in org.moddingx.libx.command">EnumArgumentIgnoreCase.Info</a></dt>
 <dd>&nbsp;</dd>
