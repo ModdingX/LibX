@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.datagen.recipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -11,12 +12,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -35,7 +38,12 @@ public class ObjectCraftingBuilder {
             builder.pattern(line);
         }
         addShapedIngredients(ext, builder, reader);
-        builder.save(ext.output(), id);
+        RecipeOutput recipeOutput = ext.output();
+        List<ICondition> conditions = consumeConditions(reader);
+        if (!conditions.isEmpty()) {
+            recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
+        }
+        builder.save(recipeOutput, id);
     }
 
     public static void buildShapeless(RecipeExtension ext, Object[] objects) {
@@ -46,7 +54,12 @@ public class ObjectCraftingBuilder {
         if (id == null) id = ext.provider().loc(output.getItem());
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output);
         addShapelessIngredients(ext, builder, reader);
-        builder.save(ext.output(), id);
+        RecipeOutput recipeOutput = ext.output();
+        List<ICondition> conditions = consumeConditions(reader);
+        if (!conditions.isEmpty()) {
+            recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
+        }
+        builder.save(recipeOutput, id);
     }
 
     @Nullable
@@ -57,6 +70,25 @@ public class ObjectCraftingBuilder {
     @Nonnull
     private static RecipeCategory getRecipeCategory(ObjectReader reader) {
         return reader.optConsume(RecipeCategory.class).orElse(RecipeCategory.MISC);
+    }
+
+    @Nonnull
+    private static List<ICondition> consumeConditions(ObjectReader reader) {
+        List<ICondition> conditions = new ArrayList<>();
+        while (reader.hasNext()) {
+            Object next = reader.peek();
+            if (next instanceof ICondition condition) {
+                reader.consume();
+                conditions.add(condition);
+            } else if (next instanceof ICondition[] conditionArray) {
+                reader.consume();
+                conditions.addAll(List.of(conditionArray));
+            } else {
+                break;
+            }
+        }
+
+        return conditions;
     }
 
     private static void addShapedIngredients(RecipeExtension ext, ShapedRecipeBuilder builder, ObjectReader reader) {
@@ -77,6 +109,11 @@ public class ObjectCraftingBuilder {
     private static void addShapelessIngredients(RecipeExtension ext, ShapelessRecipeBuilder builder, ObjectReader reader) {
         int nextId = 0;
         while (reader.hasNext()) {
+            Object peek = reader.peek();
+            if (peek instanceof ICondition || peek instanceof ICondition[]) {
+                break;
+            }
+
             Ingredient ingredient = getIngredient(reader);
             builder.requires(ingredient);
             nextId = addCriteriaToBuilder(builder::unlockedBy, ext.criteria(ingredient), nextId);
@@ -118,7 +155,7 @@ public class ObjectCraftingBuilder {
         //noinspection unchecked
         return Ingredient.of((TagKey<Item>) key);
     }
-    
+
     @SafeVarargs
     private static <T> Optional<T> first(Supplier<Optional<T>>... values) {
         for (Supplier<Optional<T>> value : values) {
@@ -215,7 +252,7 @@ public class ObjectCraftingBuilder {
                 }
             }
         }
-        
+
         @Nonnull
         @SuppressWarnings("UnusedReturnValue")
         public Object consume() {
