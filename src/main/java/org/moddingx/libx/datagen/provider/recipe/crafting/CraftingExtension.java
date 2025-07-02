@@ -17,7 +17,7 @@ public interface CraftingExtension extends RecipeExtension {
     /**
      * Adds a new shaped recipe based on the input objects. The input objects must
      * be built like this:
-     * <p>
+     *<p>
      * (A sub list means that <b>one</b> of its elements can be used.)
      *
      * <ul>
@@ -48,11 +48,12 @@ public interface CraftingExtension extends RecipeExtension {
     /**
      * Adds a new shapeless recipe based on the input objects. The input objects must
      * be built like this:
-     *
+     * <p>
      * (A sub list means that <b>one</b> of its elements can be used.)
      *
      * <ul>
      *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
+     *     <li>Optional: A {@link RecipeCategory}. Defaults to {@link RecipeCategory#MISC}</li>
      *     <ul>
      *         <li>An {@link ItemLike} for the output, optionally followed by an {@link Integer} for the amount.</li>
      *         <li>An {@link ItemStack} whose item and count form the output.</li>
