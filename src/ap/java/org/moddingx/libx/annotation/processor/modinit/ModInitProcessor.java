@@ -19,6 +19,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ModInitProcessor extends Processor implements ModEnv {
 
@@ -54,14 +55,23 @@ public class ModInitProcessor extends Processor implements ModEnv {
         
         {
             TypeElement modAnnotation = this.typeElement(Classes.MOD);
+            TypeMirror modxType = this.forClass(Classes.MODX);
             Set<? extends Element> elems = roundEnv.getElementsAnnotatedWith(modAnnotation);
-            if (elems.size() == 1) {
-                Element elem = elems.iterator().next();
-                String modid = this.modidFromAnnotation(elems.iterator().next());
-                if (modid != null) {
-                    this.defaultModid = modid;
-                    this.defaultMod = elem;
-                }
+
+            Set<String> modids = elems.stream()
+                    .map(this::modidFromAnnotation)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            if (modids.size() == 1) {
+                Optional<? extends Element> main = elems.stream()
+                        .filter(e -> this.subTypeErasure(e.asType(), modxType))
+                        .findFirst();
+
+                main.ifPresent(element -> {
+                    this.defaultModid = modids.iterator().next();
+                    this.defaultMod = element;
+                });
             }
         }
         
