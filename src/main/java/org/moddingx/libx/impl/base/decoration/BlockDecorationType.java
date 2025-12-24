@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.base.decoration;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -88,6 +89,11 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
             int burnTime = this.parent.getBurnTime(stack, recipeType);
             if (burnTime < 0) return burnTime;
             return (int) Math.round(this.burnTimeModifier * burnTime);
+        }
+
+        @Override
+        public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+            return this.parent.isEnabled(enabledFeatures);
         }
     }
 }

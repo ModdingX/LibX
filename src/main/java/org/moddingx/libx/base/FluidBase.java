@@ -2,6 +2,7 @@ package org.moddingx.libx.base;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -30,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 /**
@@ -168,18 +170,20 @@ public class FluidBase implements ItemLike, Registerable {
         private BlockBehaviour.Properties blockProperties;
         private Item.Properties bucketItemProperties;
         private UnaryOperator<BaseFlowingFluid.Properties> fluidProperties;
+        private Supplier<Boolean> enabled;
         
         private Builder() {
             this.fluidTypeFactory = FluidType::new;
             this.sourceFluidFactory = BaseFlowingFluid.Source::new;
             this.flowingFluidFactory = BaseFlowingFluid.Flowing::new;
-            this.liquidBlockFactory = LiquidBlock::new;
-            this.bucketItemFactory = DefaultBucketItem::new;
+            this.liquidBlockFactory = this.defaultLiquidBlockFactory();
+            this.bucketItemFactory = this.defaultBucketItemFactory();
             
             this.fluidTypeProperties = FluidType.Properties.create();
             this.blockProperties = BlockBehaviour.Properties.ofFullCopy(Blocks.WATER);
             this.bucketItemProperties = new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1);
             this.fluidProperties = UnaryOperator.identity();
+            this.enabled = () -> true;
         }
 
         /**
@@ -277,6 +281,29 @@ public class FluidBase implements ItemLike, Registerable {
         public FluidBase.Builder fluidProperties(UnaryOperator<BaseFlowingFluid.Properties> fluidPropertiesOp) {
             this.fluidProperties = compose(this.fluidProperties, fluidPropertiesOp);
             return this;
+        }
+
+        public FluidBase.Builder isEnabled(Supplier<Boolean> enabled) {
+            this.enabled = enabled;
+            return this;
+        }
+
+        private BiFunction<? super FlowingFluid, ? super BlockBehaviour.Properties, ? extends LiquidBlock> defaultLiquidBlockFactory() {
+            return (FlowingFluid fluid, BlockBehaviour.Properties properties) -> new LiquidBlock(fluid, properties) {
+                @Override
+                public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+                    return Builder.this.enabled.get();
+                }
+            };
+        }
+
+        private BiFunction<? super Fluid, ? super Item.Properties, ? extends BucketItem> defaultBucketItemFactory() {
+            return (Fluid content, Item.Properties properties) -> new  DefaultBucketItem(content, properties) {
+                @Override
+                public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+                    return Builder.this.enabled.get();
+                }
+            };
         }
         
         private static <T> UnaryOperator<T> compose(UnaryOperator<T> a, UnaryOperator<T> b) {

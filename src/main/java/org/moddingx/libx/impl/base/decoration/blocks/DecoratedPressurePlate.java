@@ -2,6 +2,7 @@ package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.PressurePlateBlock;
@@ -38,5 +39,10 @@ public class DecoratedPressurePlate extends PressurePlateBlock {
     @Override
     public int getLightEmission(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos) {
         return this.parent.getLightEmission(state, world, pos);
+    }
+
+    @Override
+    public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+        return this.parent.isEnabled(enabledFeatures);
     }
 }

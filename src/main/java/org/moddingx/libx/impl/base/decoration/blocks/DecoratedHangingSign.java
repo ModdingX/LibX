@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.CeilingHangingSignBlock;
@@ -47,7 +48,13 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.ceiling, this.wall), null);
-        this.item = new HangingSignItem(this.ceiling, this.wall, new Item.Properties().stacksTo(16));
+        this.item = new HangingSignItem(this.ceiling, this.wall, new Item.Properties().stacksTo(16)) {
+
+            @Override
+            public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+                return parent.isEnabled(enabledFeatures);
+            }
+        };
     }
 
     @Override
@@ -108,6 +115,11 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
             return this.beType.get().create(pos, state);
         }
+
+        @Override
+        public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+            return this.parent.isEnabled(enabledFeatures);
+        }
     }
     
     public static class Wall extends WallHangingSignBlock {
@@ -126,6 +138,11 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         @SuppressWarnings("NullableProblems")
         public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
             return this.beType.get().create(pos, state);
+        }
+
+        @Override
+        public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+            return this.parent.isEnabled(enabledFeatures);
         }
     }
     
