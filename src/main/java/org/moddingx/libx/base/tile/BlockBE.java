@@ -147,7 +147,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
         if (!level.isClientSide && (!state.is(newState.getBlock()) ||  !newState.hasBlockEntity()) && this.shouldDropInventory(level, pos, state)) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be != null) {
-                if (level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null) instanceof IItemHandlerModifiable modifiable) {
+                if (level.getCapability(Capabilities.ItemHandler.BLOCK, pos, state, be, null) instanceof IItemHandlerModifiable modifiable) {
                     for (int i = 0; i < modifiable.getSlots(); i++) {
                         ItemStack stack = modifiable.getStackInSlot(i);
                         if (!stack.isEmpty()) {
