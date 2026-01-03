@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -22,6 +23,7 @@ import org.moddingx.libx.LibX;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
@@ -65,6 +67,7 @@ public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
                         data = data.update(nbt -> nbt.put(tagName, tag.copy()));
                     }
                 }
+                data = data.update(nbt -> nbt.putString("id", Objects.requireNonNull(BlockEntityType.getKey(blockEntity.getType())).toString()));
                 return data;
             });
         }
