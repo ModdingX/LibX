@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.config.gui.screen;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.ConfigKey;
@@ -47,10 +48,13 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
     }
 
     private static BuiltEntry createEntry(ConfigKey key, ConfigScreen<ConfigKey> screen, @Nullable AbstractWidget old, int x, int y, int width, int height) {
+        AbstractWidget widget = screen.display.createWidget(key, screen, old, x, y, width, height);
+        String configName = key.path.getLast();
+        widget.setTooltip(Tooltip.create(Component.literal(configName)));
         return new BuiltEntry(
-                Component.literal(key.path.get(key.path.size() - 1)),
+                Component.literal(configName),
                 key.comment.stream().map(Component::literal).collect(ImmutableList.toImmutableList()),
-                screen.display.createWidget(key, screen, old, x, y, width, height)
+                widget
         );
     }
 
