@@ -142,25 +142,26 @@ extends <a href="../RecipeExtension.html" title="interface in org.moddingx.libx.
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">shaped</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;objects)</span></div>
 <div class="block">Adds a new shaped recipe based on the input objects. The input objects must
  be built like this:
- 
+<p>
  (A sub list means that <b>one</b> of its elements can be used.)
- 
+
  <ul>
      <li>Optional: A <code>ResourceLocation</code> that serves as the recipe id.</li>
      <li>Optional: A <code>RecipeCategory</code>. Defaults to <code>RecipeCategory.MISC</code></li>
+     <li>Optional: A single <code>ICondition</code> or an array of <code>IConditions</code> as conditions for the recipe.</li>
      <ul>
-         <li>An <code>ItemLike</code> for the output optionally followed by an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a> for the amount.</li>
-         <li>An <code>ItemStack</code> that is used to determine the output item and count.</li>
+         <li>An <code>ItemLike</code> for the output, optionally followed by an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a> for the amount.</li>
+         <li>An <code>ItemStack</code> which is the result of the crafting recipe.</li>
      </ul>
-     <li>A set of strings which are the pattern lines for the recipe.</li>
-     <li>The rest of the input must be a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Character.html" title="class or interface in java.lang" class="external-link"><code>Character</code></a> followed by an ingredient identifier repeated for each key from the pattern lines.</li>
+     <li>One or more <code>String</code>s that form the pattern lines of the recipe.</li>
+     <li>For every non-space character used in the pattern: the <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Character.html" title="class or interface in java.lang" class="external-link"><code>Character</code></a> itself followed by the ingredient identifier that defines that key.</li>
  </ul>
- 
+
  An ingredient identifier is one of the following:
- 
+
  <ul>
      <li>An <code>ItemLike</code></li>
-     <li>An <code>TagKey&lt;Item&gt;</code></li>
+     <li>A <code>TagKey&lt;Item&gt;</code></li>
      <li>An <code>Ingredient</code></li>
      <li>A list of the ones above.</li>
  </ul></div>
@@ -172,23 +173,26 @@ extends <a href="../RecipeExtension.html" title="interface in org.moddingx.libx.
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">shapeless</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;objects)</span></div>
 <div class="block">Adds a new shapeless recipe based on the input objects. The input objects must
  be built like this:
-
+ <p>
  (A sub list means that <b>one</b> of its elements can be used.)
 
  <ul>
      <li>Optional: A <code>ResourceLocation</code> that serves as the recipe id.</li>
+     <li>Optional: A <code>RecipeCategory</code>. Defaults to <code>RecipeCategory.MISC</code></li>
+     <li>Optional: A single <code>ICondition</code> or an array of <code>IConditions</code> as conditions for the recipe.</li>
      <ul>
-         <li>An <code>ItemLike</code> for the output optionally followed by an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a> for the amount.</li>
-         <li>An <code>ItemStack</code> that is used to determine the output item and count.</li>
+         <li>An <code>ItemLike</code> for the output, optionally followed by an <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a> for the amount.</li>
+         <li>An <code>ItemStack</code> which is the result of the crafting recipe.</li>
      </ul>
-     <li>The rest of the input must be ingredient identifiers which set the required items.</li>
+     <li>One or more ingredient identifiers that make up the recipe inputs.</li>
+     <li>Optional: One or more <code>ICondition</code>s as conditions for the recipe.</li>
  </ul>
 
  An ingredient identifier is one of the following:
 
  <ul>
      <li>An <code>ItemLike</code></li>
-     <li>An <code>TagKey&lt;Item&gt;</code></li>
+     <li>A <code>TagKey&lt;Item&gt;</code></li>
      <li>An <code>Ingredient</code></li>
      <li>A list of the ones above.</li>
  </ul></div>
