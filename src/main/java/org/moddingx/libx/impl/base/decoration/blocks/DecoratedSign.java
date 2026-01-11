@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.StandingSignBlock;
@@ -47,7 +48,12 @@ public class DecoratedSign implements Registerable, SignAccess {
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.standing, this.wall), null);
-        this.item = new SignItem(new Item.Properties().stacksTo(16), this.standing, this.wall);
+        this.item = new SignItem(new Item.Properties().stacksTo(16), this.standing, this.wall) {
+            @Override
+            public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+                return parent.isEnabled(enabledFeatures);
+            }
+        };
     }
 
     @Override
@@ -108,6 +114,11 @@ public class DecoratedSign implements Registerable, SignAccess {
         public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
             return this.beType.get().create(pos, state);
         }
+
+        @Override
+        public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+            return this.parent.isEnabled(enabledFeatures);
+        }
     }
     
     public static class Wall extends WallSignBlock {
@@ -126,6 +137,11 @@ public class DecoratedSign implements Registerable, SignAccess {
         @SuppressWarnings("NullableProblems")
         public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
             return this.beType.get().create(pos, state);
+        }
+
+        @Override
+        public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+            return this.parent.isEnabled(enabledFeatures);
         }
     }
     

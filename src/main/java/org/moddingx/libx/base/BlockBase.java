@@ -1,6 +1,7 @@
 package org.moddingx.libx.base;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -84,6 +85,11 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
         @Override
         public Stream<ItemStack> makeCreativeTabStacks() {
             return BlockBase.this.makeCreativeTabStacks();
+        }
+
+        @Override
+        public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+            return this.getBlock().isEnabled(enabledFeatures);
         }
     }
 }

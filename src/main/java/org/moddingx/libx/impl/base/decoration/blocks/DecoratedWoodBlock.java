@@ -2,6 +2,7 @@ package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -60,5 +61,10 @@ public class DecoratedWoodBlock extends RotatedPillarBlock {
         } else {
             return super.getToolModifiedState(state, context, itemAbility, simulate);
         }
+    }
+
+    @Override
+    public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
+        return this.parent.isEnabled(enabledFeatures);
     }
 }
