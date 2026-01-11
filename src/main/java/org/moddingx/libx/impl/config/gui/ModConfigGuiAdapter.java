@@ -9,10 +9,9 @@ import org.moddingx.libx.impl.config.gui.screen.ConfigScreenManager;
 import org.moddingx.libx.impl.config.gui.screen.ConfigSelectScreen;
 import org.moddingx.libx.impl.config.gui.screen.RootConfigScreen;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class ModConfigGuiAdapter {
     
@@ -41,14 +40,14 @@ public class ModConfigGuiAdapter {
         if (configs.isEmpty()) {
             return modListScreen;
         } else if (configs.size() == 1) {
-            return this.factory(modListScreen.getMinecraft(), modListScreen).apply(configs.get(0));
+            return this.factory(modListScreen.getMinecraft()).apply(configs.getFirst(), modListScreen);
         } else {
-            return new ConfigSelectScreen(this.factory(modListScreen.getMinecraft(), modListScreen), configs, modListScreen);
+            return new ConfigSelectScreen(this.factory(modListScreen.getMinecraft()), configs, modListScreen);
         }
     }
     
-    private Function<ConfigImpl, Screen> factory(Minecraft minecraft, @Nullable Screen root) {
-        return config -> {
+    private BiFunction<ConfigImpl, Screen, Screen> factory(Minecraft minecraft) {
+        return (config, root) -> {
             ConfigDisplay display = config.createDisplay();
             ConfigScreenManager manager = new ConfigScreenManager(minecraft, root, display);
             // Must also push to the manager

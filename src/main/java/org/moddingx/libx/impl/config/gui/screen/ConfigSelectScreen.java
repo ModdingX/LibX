@@ -8,16 +8,16 @@ import org.lwjgl.glfw.GLFW;
 import org.moddingx.libx.impl.config.ConfigImpl;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ConfigSelectScreen extends ConfigBaseScreen {
 
-    private final Function<ConfigImpl, Screen> factory;
+    private final BiFunction<ConfigImpl, Screen, Screen> factory;
     private final List<ConfigImpl> configs;
     private final Screen root;
     
-    public ConfigSelectScreen(Function<ConfigImpl, Screen> factory, List<ConfigImpl> configs, Screen root) {
+    public ConfigSelectScreen(BiFunction<ConfigImpl, Screen, Screen> factory, List<ConfigImpl> configs, Screen root) {
         super(Component.translatable("libx.config.gui.selection.title"), null, false);
         this.factory = factory;
         this.configs = configs;
@@ -26,10 +26,19 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
 
     @Override
     protected void buildGui(Consumer<AbstractWidget> consumer) {
+        Button back = Button.builder(Component.literal("\u2190 ").append(Component.translatable("libx.config.gui.back")), button -> this.mc.setScreen(this.root))
+                .pos(5, 5)
+                .size(52, 20)
+                .build();
+        this.addRenderableWidget(back);
+
         int y = 5;
         int buttonWidth = Math.min(200, this.contentWidth() - 10);
         for (ConfigImpl config : this.configs) {
-            Button button = Button.builder(Component.literal(config.id.getPath()), b -> this.mc.setScreen(this.factory.apply(config)))
+            Button button = Button.builder(Component.literal(config.id.getPath()), b -> {
+                        Screen configSelectScreen = this.factory.apply(config, this);
+                        this.mc.setScreen(configSelectScreen);
+                    })
                     .pos((this.contentWidth() - buttonWidth) / 2, y)
                     .size(buttonWidth, 20)
                     .build();

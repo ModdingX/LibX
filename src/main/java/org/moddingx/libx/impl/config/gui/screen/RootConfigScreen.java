@@ -48,7 +48,7 @@ public class RootConfigScreen extends ConfigScreen<ConfigKey> {
 
     private static BuiltEntry createEntry(ConfigKey key, ConfigScreen<ConfigKey> screen, @Nullable AbstractWidget old, int x, int y, int width, int height) {
         return new BuiltEntry(
-                Component.literal(key.path.get(key.path.size() - 1)),
+                Component.literal(key.path.getLast()),
                 key.comment.stream().map(Component::literal).collect(ImmutableList.toImmutableList()),
                 screen.display.createWidget(key, screen, old, x, y, width, height)
         );
