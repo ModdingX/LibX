@@ -30,7 +30,7 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
         int buttonWidth = Math.min(200, this.contentWidth() - 10);
         for (ConfigImpl config : this.configs) {
             Button button = Button.builder(Component.literal(config.id.getPath()), b -> this.mc.setScreen(this.factory.apply(config)))
-                    .pos((this.contentWidth() - buttonWidth) / 2, y)
+                    .pos((this.width - buttonWidth) / 2, y)
                     .size(buttonWidth, 20)
                     .build();
             consumer.accept(button);
