@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.config.gui.screen;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.impl.config.gui.ConfigDisplay;
@@ -35,7 +36,7 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
         this.keys = elements.entrySet().stream()
                 .map(e -> Pair.of(e.getKey(), (List < T >) ImmutableList.copyOf(e.getValue())))
                 .collect(ImmutableMap.toImmutableMap(Pair::getKey, Pair::getValue));
-        this.factory = factory;
+        this.factory = new ApplyTooltipFactory<>(factory);
         this.searchPredicate = searchPredicate;
     }
 
@@ -87,5 +88,17 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
     public interface SearchPredicate<T> {
         
         boolean test(T elem, ConfigScreen<T> screen, String query);
+    }
+
+    private record ApplyTooltipFactory<T>(ElementFactory<T> factory) implements ElementFactory<T> {
+
+        @Override
+        public BuiltEntry create(T elem, ConfigScreen<T> screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height) {
+            BuiltEntry entry = this.factory().create(elem, screen, oldWidget, x, y, width, height);
+            if (entry.widget().getTooltip() == null) {
+                entry.widget().setTooltip(Tooltip.create(entry.title()));
+            }
+            return entry;
+        }
     }
 }
