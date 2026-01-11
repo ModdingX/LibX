@@ -1,5 +1,7 @@
 package org.moddingx.libx.annotation.processor;
 
+import com.sun.source.util.Trees;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.lang.model.SourceVersion;
@@ -23,6 +25,7 @@ public interface ProcessorEnv {
     
     Types types();
     Elements elements();
+    Trees trees();
     Filer filer();
     Messager messager();
     Map<String, String> options();

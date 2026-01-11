@@ -1,5 +1,7 @@
 package org.moddingx.libx.annotation.processor;
 
+import com.sun.source.util.Trees;
+
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -20,6 +22,7 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
 
     private Types types;
     private Elements elements;
+    private Trees trees;
     private Filer filer;
     private Messager messager;
     private Map<String, String> options;
@@ -33,6 +36,7 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
         super.init(processingEnv);
         this.types = processingEnv.getTypeUtils();
         this.elements = processingEnv.getElementUtils();
+        this.trees = Trees.instance(processingEnv);
         this.messager = processingEnv.getMessager();
         this.filer = processingEnv.getFiler();
         this.options = Map.copyOf(processingEnv.getOptions());
@@ -48,6 +52,11 @@ public abstract class Processor extends AbstractProcessor implements ProcessorEn
     @Override
     public Elements elements() {
         return Objects.requireNonNull(this.elements);
+    }
+
+    @Override
+    public Trees trees() {
+        return Objects.requireNonNull(this.trees);
     }
 
     @Override
