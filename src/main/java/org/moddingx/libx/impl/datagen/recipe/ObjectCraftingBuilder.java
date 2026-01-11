@@ -19,7 +19,6 @@ import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -31,6 +30,7 @@ public class ObjectCraftingBuilder {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
+        List<ICondition> conditions = getConditions(reader);
         ItemStack output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getItem());
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(recipeCategory, output);
@@ -39,10 +39,7 @@ public class ObjectCraftingBuilder {
         }
         addShapedIngredients(ext, builder, reader);
         RecipeOutput recipeOutput = ext.output();
-        List<ICondition> conditions = consumeConditions(reader);
-        if (!conditions.isEmpty()) {
-            recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
-        }
+        if (!conditions.isEmpty()) recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
         builder.save(recipeOutput, id);
     }
 
@@ -50,15 +47,13 @@ public class ObjectCraftingBuilder {
         ObjectReader reader = new ObjectReader(objects);
         ResourceLocation id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
+        List<ICondition> conditions = getConditions(reader);
         ItemStack output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getItem());
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output);
         addShapelessIngredients(ext, builder, reader);
         RecipeOutput recipeOutput = ext.output();
-        List<ICondition> conditions = consumeConditions(reader);
-        if (!conditions.isEmpty()) {
-            recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
-        }
+        if (!conditions.isEmpty()) recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
         builder.save(recipeOutput, id);
     }
 
@@ -73,22 +68,11 @@ public class ObjectCraftingBuilder {
     }
 
     @Nonnull
-    private static List<ICondition> consumeConditions(ObjectReader reader) {
-        List<ICondition> conditions = new ArrayList<>();
-        while (reader.hasNext()) {
-            Object next = reader.peek();
-            if (next instanceof ICondition condition) {
-                reader.consume();
-                conditions.add(condition);
-            } else if (next instanceof ICondition[] conditionArray) {
-                reader.consume();
-                conditions.addAll(List.of(conditionArray));
-            } else {
-                break;
-            }
-        }
-
-        return conditions;
+    private static List<ICondition> getConditions(ObjectReader reader) {
+        return ObjectCraftingBuilder.first(
+                () -> reader.optConsume(ICondition.class).map(List::of),
+                () -> reader.optConsume(ICondition[].class).map(List::of)
+        ).orElse(List.of());
     }
 
     private static void addShapedIngredients(RecipeExtension ext, ShapedRecipeBuilder builder, ObjectReader reader) {
@@ -109,11 +93,6 @@ public class ObjectCraftingBuilder {
     private static void addShapelessIngredients(RecipeExtension ext, ShapelessRecipeBuilder builder, ObjectReader reader) {
         int nextId = 0;
         while (reader.hasNext()) {
-            Object peek = reader.peek();
-            if (peek instanceof ICondition || peek instanceof ICondition[]) {
-                break;
-            }
-
             Ingredient ingredient = getIngredient(reader);
             builder.requires(ingredient);
             nextId = addCriteriaToBuilder(builder::unlockedBy, ext.criteria(ingredient), nextId);
