@@ -63,7 +63,7 @@ public class ModInitProcessor extends Processor implements ModEnv {
 
             if (elems.size() == 1) {
                 Element elem = elems.iterator().next();
-                String modid = this.modidFromAnnotation(elems.iterator().next());
+                String modid = this.modidFromAnnotation(elem);
                 if (modid != null) {
                     this.defaultModid = modid;
                     this.defaultMod = elem;
