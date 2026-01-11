@@ -17,25 +17,26 @@ public interface CraftingExtension extends RecipeExtension {
     /**
      * Adds a new shaped recipe based on the input objects. The input objects must
      * be built like this:
-     * 
+     *<p>
      * (A sub list means that <b>one</b> of its elements can be used.)
-     * 
+     *
      * <ul>
      *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
      *     <li>Optional: A {@link RecipeCategory}. Defaults to {@link RecipeCategory#MISC}</li>
      *     <ul>
-     *         <li>An {@link ItemLike} for the output optionally followed by an {@link Integer} for the amount.</li>
-     *         <li>An {@link ItemStack} that is used to determine the output item and count.</li>
+     *         <li>An {@link ItemLike} for the output, optionally followed by an {@link Integer} for the amount.</li>
+     *         <li>An {@link ItemStack} whose item and count form the output.</li>
      *     </ul>
-     *     <li>A set of strings which are the pattern lines for the recipe.</li>
-     *     <li>The rest of the input must be a {@link Character} followed by an ingredient identifier repeated for each key from the pattern lines.</li>
+     *     <li>One or more {@code String}s that form the pattern lines of the recipe.</li>
+     *     <li>For every non-space character used in the pattern: the {@link Character} itself followed by the ingredient identifier that defines that key.</li>
+     *     <li>Optional: One or more {@code ICondition}s as conditions for the recipe.</li>
      * </ul>
-     * 
+     *
      * An ingredient identifier is one of the following:
-     * 
+     *
      * <ul>
      *     <li>An {@link ItemLike}</li>
-     *     <li>An {@link TagKey TagKey&lt;Item&gt;}</li>
+     *     <li>A {@link TagKey TagKey&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>
@@ -47,23 +48,25 @@ public interface CraftingExtension extends RecipeExtension {
     /**
      * Adds a new shapeless recipe based on the input objects. The input objects must
      * be built like this:
-     *
+     * <p>
      * (A sub list means that <b>one</b> of its elements can be used.)
      *
      * <ul>
      *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
+     *     <li>Optional: A {@link RecipeCategory}. Defaults to {@link RecipeCategory#MISC}</li>
      *     <ul>
-     *         <li>An {@link ItemLike} for the output optionally followed by an {@link Integer} for the amount.</li>
-     *         <li>An {@link ItemStack} that is used to determine the output item and count.</li>
+     *         <li>An {@link ItemLike} for the output, optionally followed by an {@link Integer} for the amount.</li>
+     *         <li>An {@link ItemStack} whose item and count form the output.</li>
      *     </ul>
-     *     <li>The rest of the input must be ingredient identifiers which set the required items.</li>
+     *     <li>One or more ingredient identifiers that make up the recipe inputs.</li>
+     *     <li>Optional: One or more {@code ICondition}s as conditions for the recipe.</li>
      * </ul>
      *
      * An ingredient identifier is one of the following:
      *
      * <ul>
      *     <li>An {@link ItemLike}</li>
-     *     <li>An {@link TagKey TagKey&lt;Item&gt;}</li>
+     *     <li>A {@link TagKey TagKey&lt;Item&gt;}</li>
      *     <li>An {@link Ingredient}</li>
      *     <li>A list of the ones above.</li>
      * </ul>
