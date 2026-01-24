@@ -14,6 +14,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
 import javax.annotation.Nonnull;
@@ -111,6 +112,7 @@ public class ObjectCraftingBuilder {
         return ObjectCraftingBuilder.first(
                 () -> reader.optConsume(ItemLike.class).map(Ingredient::of),
                 () -> reader.optConsume(TagKey.class).map(ObjectCraftingBuilder::createTagIngredient),
+                () -> reader.optConsume(ICustomIngredient.class).map(ICustomIngredient::toVanilla),
                 () -> reader.optConsume(Ingredient.class),
                 () -> reader.optConsume(List.class).map(list -> {
                     ObjectReader sub = new ObjectReader(list.toArray());
