@@ -48,7 +48,7 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
         return stack.getCount() >= this.count && this.ingredient.test(stack);
     }
     
-    /**
+    /* todo 26.1: re-add Javadoc
      * Returns whether the count is 0 or {@link Ingredient#isEmpty()} returns true.
      */
     public boolean isEmpty() {

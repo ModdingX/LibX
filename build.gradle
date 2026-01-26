@@ -45,6 +45,7 @@ mod.configure {
     }
 
     artifacts {
+        useJarJar()
         sources {
             publishToRepositories()
             uploadToModHostingSites()
@@ -54,8 +55,8 @@ mod.configure {
 
     publishing {
         maven {
-            name 'moddingx'
-            url 'https://maven.moddingx.org/release'
+            name = 'moddingx'
+            url = 'https://maven.moddingx.org/release'
             credentials(PasswordCredentials)
         }
     }
@@ -73,6 +74,8 @@ mod.configure {
 dependencies {
     annotationProcessor sourceSets.ap.output
     implementation sourceSets.ap.output
+
+    runtimeOnly(jarJar(project(':coremods')))
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.2'
@@ -101,7 +104,7 @@ javadocConfigure {
 javadoc {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.destinationDirectory(file("build/docs/javadoc"))
-    title("LibX ${mod.setup.minecraft} JavaDoc")
+    title = "LibX ${mod.setup.minecraft} JavaDoc"
     options.windowTitle("LibX ${mod.setup.minecraft} JavaDoc")
     options.header('<h3><a href="https://moddingx.org/wiki/libx" target="_blank">Wiki</a>' \
             + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' \
@@ -120,8 +123,31 @@ task release {
     }
 }
 
-tasks.withType(Javadoc).configureEach { // todo remove in Minecraft 26.1
-    javadocTool = javaToolchains.javadocToolFor {
+tasks.withType(Javadoc).configureEach {
+    def linksRootProvider = project.layout.buildDirectory.dir("javadocLinks/links")
+    doFirst {
+        def linksRoot = linksRootProvider.get().asFile
+        if (!linksRoot.exists()) return
+
+        linksRoot.eachDirRecurse { dir ->
+            def pkgList = new File(dir, "package-list")
+            if (pkgList.exists()) return
+
+            def elementList = new File(dir, "element-list")
+            if (elementList.exists()) {
+                def entries = elementList.getText("UTF-8")
+                        .split(/\s+/)
+                        .findAll { it && !it.startsWith("module:") }
+
+                pkgList.setText(entries.join(System.lineSeparator()) + System.lineSeparator(), "UTF-8")
+            } else {
+                // Fallback: prevent "FileNotFoundException: .../package-list"
+                pkgList.setText("", "UTF-8")
+            }
+        }
+    }
+
+    javadocTool = javaToolchains.javadocToolFor { // todo remove in Minecraft 26.1
         languageVersion = JavaLanguageVersion.of(25)
     }
 }

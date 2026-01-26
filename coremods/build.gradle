@@ -1,0 +1,36 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+}
+
+version = rootProject.version
+
+repositories {
+    maven { url = 'https://maven.neoforged.net/releases' }
+    maven { url = 'https://libraries.minecraft.net' }
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+dependencies {
+    compileOnly "net.neoforged.fancymodloader:loader:4.0.35"
+}
+
+base {
+    archivesName = "libx-coremods"
+}
+
+jar {
+    manifest {
+        attributes(
+                'FMLModType': "LIBRARY",
+                'Specification-Title': "libx-coremods",
+                'Specification-Vendor': "libx"
+        )
+    }
+}

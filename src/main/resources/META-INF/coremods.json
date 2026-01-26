@@ -1,6 +1,0 @@
-{
-  "holder_serialize": "coremods/holder_serialize.js",
-  "interact": "coremods/interact.js",
-  "level_load": "coremods/level_load.js",
-  "registry_load": "coremods/registry_load.js"
-}
