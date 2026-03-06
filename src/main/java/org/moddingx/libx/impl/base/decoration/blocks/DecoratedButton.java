@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 
 import javax.annotation.Nonnull;
 
@@ -16,7 +17,7 @@ public class DecoratedButton extends ButtonBlock {
     public final DecoratedBlock parent;
 
     public DecoratedButton(DecoratedBlock parent, boolean wooden) {
-        super(parent.getMaterialProperties().blockSetType(), wooden ? 30 : 20, Properties.ofFullCopy(parent));
+        super(parent.getMaterialProperties().blockSetType(), wooden ? 30 : 20, DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
         this.parent = parent;
     }
 

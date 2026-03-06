@@ -68,7 +68,7 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(ModX mod, DecorationContext context, DecoratedBlock block, T element, RegistrationContext ctx, Registerable.EntryCollector builder) {
-        Item.Properties itemProperties = this.properties.get();
+        Item.Properties itemProperties = this.properties.get().setId(ResourceKey.create(Registries.ITEM, ctx.id())).useBlockDescriptionPrefix();
         DecoratedBlockItem item = new DecoratedBlockItem(element, block, this.burnTimeModifier, itemProperties);
         builder.register(Registries.ITEM, item);
     }

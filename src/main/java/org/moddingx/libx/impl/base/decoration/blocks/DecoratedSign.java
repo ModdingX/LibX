@@ -5,9 +5,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,6 +22,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.SignAccess;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
@@ -43,12 +47,31 @@ public class DecoratedSign implements Registerable, SignAccess {
     public DecoratedSign(ModX mod, DecoratedBlock parent) {
         this.mod = mod;
         this.parent = parent;
-        
+
+        ResourceKey<Block> signKey = DecorationBlockIdContext.get();
+
         this.standing = new Standing(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
+
+        // Wall block is registered under a "_wall" sub-name, so it needs a different block id.
+        if (signKey != null) {
+            DecorationBlockIdContext.set(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(
+                    signKey.location().getNamespace(), signKey.location().getPath() + "_wall")));
+        }
+
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
+        if (signKey != null) {
+            DecorationBlockIdContext.set(signKey);
+        }
+
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.standing, this.wall));
-        this.item = new SignItem(this.standing, this.wall, new Item.Properties().stacksTo(16)) {
+
+        Item.Properties itemProps = new Item.Properties().stacksTo(16).useBlockDescriptionPrefix();
+        if (signKey != null) {
+            itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.location()));
+        }
+
+        this.item = new SignItem(this.standing, this.wall, itemProps) {
             @Override
             public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
                 return parent.isEnabled(enabledFeatures);
@@ -103,7 +126,7 @@ public class DecoratedSign implements Registerable, SignAccess {
         private final Supplier<BlockEntityType<Entity>> beType;
         
         public Standing(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
-            super(wood, Properties.ofFullCopy(parent));
+            super(wood, DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
             this.parent = parent;
             this.beType = beType;
         }
@@ -127,7 +150,7 @@ public class DecoratedSign implements Registerable, SignAccess {
         private final Supplier<BlockEntityType<Entity>> beType;
 
         public Wall(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
-            super(wood, Properties.ofFullCopy(parent));
+            super(wood, DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
             this.parent = parent;
             this.beType = beType;
         }

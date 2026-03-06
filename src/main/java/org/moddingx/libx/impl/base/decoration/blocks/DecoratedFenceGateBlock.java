@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 
 import javax.annotation.Nonnull;
 
@@ -16,7 +17,7 @@ public class DecoratedFenceGateBlock extends FenceGateBlock {
     public final DecoratedBlock parent;
 
     public DecoratedFenceGateBlock(DecoratedBlock parent) {
-        super(parent.getMaterialProperties().woodType(), Properties.ofFullCopy(parent));
+        super(parent.getMaterialProperties().woodType(), DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
         this.parent = parent;
     }
 

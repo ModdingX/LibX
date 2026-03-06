@@ -71,7 +71,15 @@ public abstract class RegistryProviderBase implements RegistryProvider {
      */
     public final <T> HolderSet<T> set(TagKey<T> tag) {
         Registry<T> registry = this.registries.registry(tag.registry());
-        return registry.getOrThrow(tag);
+        try {
+            return registry.getOrThrow(tag);
+        } catch (IllegalStateException e) {
+            // Tags not available in this datagen stage (tags unbound or tag not yet defined).
+            // Create an unbound named holder set — it serializes as "#namespace:path" via
+            // unwrap(), so generated JSON correctly references the tag by key without requiring
+            // the tag to be resolved. The tag is bound when data packs are loaded in-game.
+            return new HolderSet.Named<>(registry, tag);
+        }
     }
     
     /**

@@ -1,8 +1,6 @@
 package org.moddingx.libx.base.decoration;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.mod.ModX;
@@ -59,7 +57,7 @@ public class DecoratedBlock extends BlockBase {
             this.materialProperties = this.context.material().init(ctx.id());
         }
         if (this.info == null) {
-            this.info = this.context.register(this.mod, this);
+            this.info = this.context.register(this.mod, this, ctx);
         }
     }
 

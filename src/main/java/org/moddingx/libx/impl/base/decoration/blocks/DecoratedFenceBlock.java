@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 
 import javax.annotation.Nonnull;
 
@@ -16,7 +17,7 @@ public class DecoratedFenceBlock extends FenceBlock {
     public final DecoratedBlock parent;
 
     public DecoratedFenceBlock(DecoratedBlock parent) {
-        super(Properties.ofFullCopy(parent));
+        super(DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
         this.parent = parent;
     }
 

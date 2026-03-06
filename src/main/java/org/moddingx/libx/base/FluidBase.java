@@ -1,6 +1,7 @@
 package org.moddingx.libx.base;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -44,9 +45,15 @@ public class FluidBase implements ItemLike, Registerable {
     private final FluidType fluidType;
     private final FlowingFluid sourceFluid;
     private final FlowingFluid flowingFluid;
-    private final LiquidBlock liquidBlock;
-    private final BucketItem bucketItem;
-    
+    private LiquidBlock liquidBlock;
+    private BucketItem bucketItem;
+
+    // Factories and raw properties kept to create block/item in registerAdditional where the id is known.
+    private final BiFunction<? super FlowingFluid, ? super BlockBehaviour.Properties, ? extends LiquidBlock> liquidBlockFactory;
+    private final BiFunction<? super Fluid, ? super Item.Properties, ? extends BucketItem> bucketItemFactory;
+    private final BlockBehaviour.Properties pendingBlockProperties;
+    private final Item.Properties pendingBucketItemProperties;
+
     public FluidBase(ModX mod, Builder fluidBuilder) {
         this.mod = mod;
         BaseFlowingFluid.Properties fluidProperties = fluidBuilder.fluidProperties.apply(new BaseFlowingFluid.Properties(this::getFluidType, this::getSourceFluid, this::getFlowingFluid));
@@ -54,8 +61,11 @@ public class FluidBase implements ItemLike, Registerable {
         this.fluidType = fluidBuilder.fluidTypeFactory.apply(fluidBuilder.fluidTypeProperties);
         this.sourceFluid = fluidBuilder.sourceFluidFactory.apply(fluidProperties);
         this.flowingFluid = fluidBuilder.flowingFluidFactory.apply(fluidProperties);
-        this.liquidBlock = fluidBuilder.liquidBlockFactory.apply(this.sourceFluid, fluidBuilder.blockProperties);
-        this.bucketItem = fluidBuilder.bucketItemFactory.apply(this.sourceFluid, fluidBuilder.bucketItemProperties);
+
+        this.liquidBlockFactory = fluidBuilder.liquidBlockFactory;
+        this.bucketItemFactory = fluidBuilder.bucketItemFactory;
+        this.pendingBlockProperties = fluidBuilder.blockProperties;
+        this.pendingBucketItemProperties = fluidBuilder.bucketItemProperties;
     }
 
     /**
@@ -74,6 +84,15 @@ public class FluidBase implements ItemLike, Registerable {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        if (this.liquidBlock == null) {
+            this.liquidBlock = this.liquidBlockFactory.apply(this.sourceFluid,
+                    this.pendingBlockProperties.setId(ResourceKey.create(Registries.BLOCK, ctx.id())));
+        }
+        if (this.bucketItem == null) {
+            ResourceLocation bucketLoc = ResourceLocation.fromNamespaceAndPath(ctx.id().getNamespace(), ctx.id().getPath() + "_bucket");
+            this.bucketItem = this.bucketItemFactory.apply(this.sourceFluid,
+                    this.pendingBucketItemProperties.setId(ResourceKey.create(Registries.ITEM, bucketLoc)));
+        }
         builder.register(NeoForgeRegistries.Keys.FLUID_TYPES, this.fluidType);
         builder.register(Registries.FLUID, this.sourceFluid);
         builder.registerNamed(Registries.FLUID, "flowing", this.flowingFluid);

@@ -2,6 +2,11 @@ package org.moddingx.libx.base.decoration;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
@@ -119,12 +124,25 @@ public class DecorationContext {
     public Set<DecorationType<?>> types() {
         return this.typeSet;
     }
-    
-    public RegistrationInfo register(ModX mod, DecoratedBlock block) {
+
+    public RegistrationInfo register(ModX mod, DecoratedBlock block, RegistrationContext baseCtx) {
         ImmutableMap.Builder<DecorationType<?>, DecorationType.DecorationElement<?, ?>> elementMap = ImmutableMap.builder();
         ImmutableMap.Builder<String, Registerable> registerMap = ImmutableMap.builder();
         for (Map.Entry<String, DecorationType<?>> entry : this.types.entrySet()) {
-            DecorationType.DecorationElement<?, ?> element = entry.getValue().element(mod, this, block);
+            // Compute the variant's block ResourceKey so that variant constructors can call setId.
+            String suffix = entry.getKey();
+            ResourceLocation variantLoc = suffix.isEmpty()
+                    ? baseCtx.id()
+                    : ResourceLocation.fromNamespaceAndPath(baseCtx.id().getNamespace(), baseCtx.id().getPath() + "_" + suffix);
+            ResourceKey<Block> variantKey = ResourceKey.create(Registries.BLOCK, variantLoc);
+
+            DecorationBlockIdContext.set(variantKey);
+            DecorationType.DecorationElement<?, ?> element;
+            try {
+                element = entry.getValue().element(mod, this, block);
+            } finally {
+                DecorationBlockIdContext.clear();
+            }
             Objects.requireNonNull(element.element(), "DecorationType registered a null element: "+ entry.getKey() + " - " + entry.getValue());
             elementMap.put(entry.getValue(), element);
             // Don't add base type to register map, as it is registered through the DecoratedBock class itself.
@@ -134,7 +152,6 @@ public class DecorationContext {
                     @Override
                     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
                         element.registerTo(builder);
-                        //noinspection unchecked
                         ((DecorationType<Object>) entry.getValue()).registerAdditional(mod, DecorationContext.this, block, element.element(), ctx, builder);
                     }
                 });

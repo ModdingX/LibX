@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -27,6 +28,7 @@ import org.moddingx.libx.sandbox.SandBox;
 import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -103,6 +105,7 @@ public class DatagenSystem {
     private final ModX mod;
     private final DataGenerator generator;
     private final ExistingFileHelper fileHelper;
+    private final CompletableFuture<HolderLookup.Provider> lookupProvider;
     private final DatagenRegistrySet rootRegistries;
     private final PackTarget mainTarget;
     
@@ -118,6 +121,7 @@ public class DatagenSystem {
         this.mod = mod;
         this.generator = event.getGenerator();
         this.fileHelper = event.getExistingFileHelper();
+        this.lookupProvider = event.getLookupProvider();
         DatagenRegistryLoader.RegistrySelector selector = (layer, registries) -> {
             if (layer != RegistryLayer.WORLDGEN) return registries;
             List<RegistryDataLoader.RegistryData<?>> extraRegistries = new ArrayList<>();
@@ -125,7 +129,6 @@ public class DatagenSystem {
                 if (registries.stream().anyMatch(registryData -> Objects.equals(extraEntry.getKey(), registryData.key()))) {
                     throw new IllegalStateException("Registry " + extraEntry.getKey() + " is a regular registry and was defined as datagen-only registry.");
                 }
-                //noinspection unchecked
                 extraRegistries.add(new RegistryDataLoader.RegistryData<>(
                         (ResourceKey<? extends Registry<Object>>) extraEntry.getKey(),
                         (Codec<Object>) extraEntry.getValue(),
@@ -163,6 +166,14 @@ public class DatagenSystem {
     
     public ExistingFileHelper fileHelper() {
         return this.fileHelper;
+    }
+
+    /**
+     * Gets the full {@link HolderLookup.Provider} from the datagen event, which includes all tags from all
+     * loaded data packs (including NeoForge convention tags).
+     */
+    public CompletableFuture<HolderLookup.Provider> lookupProvider() {
+        return this.lookupProvider;
     }
 
     /**

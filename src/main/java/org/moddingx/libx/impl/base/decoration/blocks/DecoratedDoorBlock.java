@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.PushReaction;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationMaterial;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 import org.moddingx.libx.registration.Registerable;
 
 import javax.annotation.Nonnull;
@@ -22,7 +23,7 @@ public class DecoratedDoorBlock extends DoorBlock implements Registerable {
 
     public DecoratedDoorBlock(DecoratedBlock parent) {
         super(parent.getMaterialProperties().blockSetType(), Util.make(() -> {
-                    Properties blockProperties = Properties.ofFullCopy(parent)
+            Properties blockProperties = DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent))
                             .noOcclusion()
                             .pushReaction(PushReaction.DESTROY);
                     // we need to check for WOOD since isWood() is true for the non-burnable NETHER_WOOD, too

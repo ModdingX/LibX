@@ -40,8 +40,8 @@ public class RegisterClassProcessor {
         }
         
         TargetRegistry target = resolveRegistry(element, registerClass, env);
-        
-        List<RegistrationEntry> entries = element.getEnclosedElements().stream().flatMap(e -> fromElement(registerClass, e, target, env)).collect(Collectors.toList());
+
+        List<RegistrationEntry> entries = element.getEnclosedElements().stream().flatMap(e -> fromElement(registerClass, e, target, mod, env)).collect(Collectors.toList());
         mod.addRegistration(registerClass.priority(), entries);
     }
     
@@ -95,9 +95,25 @@ public class RegisterClassProcessor {
             throw new FailureException();
         }
     }
-    
-    private static Stream<RegistrationEntry> fromElement(RegisterClass classAnnotation, Element element, TargetRegistry target, ModEnv env) {
-        if (element.getKind() != ElementKind.FIELD || element.getAnnotation(Reg.Exclude.class) != null) {
+
+    private static Stream<RegistrationEntry> fromElement(RegisterClass classAnnotation, Element element, TargetRegistry target, ModInit mod, ModEnv env) {
+        if (element.getKind() != ElementKind.FIELD) {
+            return Stream.empty();
+        }
+
+        if (element.getAnnotation(Reg.Exclude.class) != null) {
+            // Excluded fields that create Block/Item intrusive holders must be cleaned up to avoid startup errors.
+            if (element.getEnclosingElement() instanceof QualifiedNameable qualified) {
+                if (env.types().isSubtype(element.asType(), env.forClass(Classes.ITEM))) {
+                    mod.addCleanup(new ModInit.CleanupEntry(qualified.getQualifiedName().toString(), element.getSimpleName().toString(), ModInit.RegistrationType.ITEM));
+                } else if (env.types().isSubtype(element.asType(), env.forClass(Classes.BLOCK))) {
+                    mod.addCleanup(new ModInit.CleanupEntry(qualified.getQualifiedName().toString(), element.getSimpleName().toString(), ModInit.RegistrationType.BLOCK));
+                } else if (env.types().isSubtype(element.asType(), env.forClass(Classes.FLUID))) {
+                    mod.addCleanup(new ModInit.CleanupEntry(qualified.getQualifiedName().toString(), element.getSimpleName().toString(), ModInit.RegistrationType.FLUID));
+                } else if (env.types().isSubtype(element.asType(), env.forClass(Classes.ENTITY_TYPE))) {
+                    mod.addCleanup(new ModInit.CleanupEntry(qualified.getQualifiedName().toString(), element.getSimpleName().toString(), ModInit.RegistrationType.ENTITY_TYPE));
+                }
+            }
             return Stream.empty();
         } else if (!(element.getEnclosingElement() instanceof QualifiedNameable qualified)) {
             env.messager().printMessage(Diagnostic.Kind.ERROR, "Failed to get qualified name for member: " + element, element.getEnclosingElement());

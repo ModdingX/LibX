@@ -10,8 +10,14 @@ public class Classes {
     public static final String ONLY_IN = "net.neoforged.api.distmarker.OnlyIn";
     public static final String ONLY_INS = "net.neoforged.api.distmarker.OnlyIns";
 
+    public static final String ITEM = "net.minecraft.world.item.Item";
+    public static final String BLOCK = "net.minecraft.world.level.block.Block";
+    public static final String FLUID = "net.minecraft.world.level.material.Fluid";
+    public static final String ENTITY_TYPE = "net.minecraft.world.entity.EntityType";
+
     public static final String PROCESSOR_INTERFACE = "org.moddingx.libx.annotation.impl.ProcessorInterface";
     public static final String LAZY_MAP_BUILDER = "org.moddingx.libx.annotation.impl.LazyMapBuilder";
+    public static final String REGISTRATION_PROPERTIES_HELPER = "org.moddingx.libx.annotation.impl.RegistrationPropertiesHelper";
 
     public static final String CONFIG = "org.moddingx.libx.config.Config";
     public static final String CONFIG_MANAGER = "org.moddingx.libx.config.ConfigManager";

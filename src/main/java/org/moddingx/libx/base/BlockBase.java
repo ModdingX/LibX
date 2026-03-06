@@ -1,6 +1,7 @@
 package org.moddingx.libx.base;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -26,10 +27,11 @@ import java.util.stream.Stream;
 public class BlockBase extends Block implements Registerable, CreativeTabItemProvider {
 
     protected final ModX mod;
-    
+
     private final boolean hasItem;
-    @Nullable private final Item item;
-    
+    @Nullable private Item item;
+    @Nullable private Item.Properties pendingItemProperties;
+
     /**
      * Creates a new instance of BlockBase.
      */
@@ -49,16 +51,18 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
         if (itemProperties == null) {
             this.hasItem = false;
             this.item = null;
+            this.pendingItemProperties = null;
         } else {
             this.hasItem = true;
-            this.item = new BaseBlockItem(this, itemProperties);
+            this.item = null;
+            this.pendingItemProperties = itemProperties;
         }
     }
-    
+
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType, FuelValues fuelValues) {
         return 0;
     }
-    
+
     @Override
     public Stream<ItemStack> makeCreativeTabStacks() {
         return Stream.of(new ItemStack(this));
@@ -68,10 +72,13 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         if (this.hasItem) {
+            //noinspection DataFlowIssue
+            this.item = new BaseBlockItem(this, this.pendingItemProperties.setId(ResourceKey.create(Registries.ITEM, ctx.id())).useBlockDescriptionPrefix());
+            this.pendingItemProperties = null;
             builder.register(Registries.ITEM, this.item);
         }
     }
-    
+
     private class BaseBlockItem extends BlockItem implements CreativeTabItemProvider {
 
         public BaseBlockItem(Block block, Properties itemProperties) {

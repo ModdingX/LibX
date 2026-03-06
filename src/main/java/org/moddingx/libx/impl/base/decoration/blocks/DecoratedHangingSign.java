@@ -5,9 +5,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CeilingHangingSignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,6 +22,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.HangingSignAccess;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
@@ -44,11 +48,28 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         this.mod = mod;
         this.parent = parent;
 
+        ResourceKey<Block> signKey = DecorationBlockIdContext.get();
+
         this.ceiling = new Ceiling(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
+
+        if (signKey != null) {
+            DecorationBlockIdContext.set(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(
+                    signKey.location().getNamespace(), signKey.location().getPath() + "_wall")));
+        }
+
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
+        if (signKey != null) {
+            DecorationBlockIdContext.set(signKey);
+        }
+
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.ceiling, this.wall));
-        this.item = new HangingSignItem(this.ceiling, this.wall, new Item.Properties().stacksTo(16)) {
+
+        Item.Properties itemProps = new Item.Properties().stacksTo(16).useBlockDescriptionPrefix();
+        if (signKey != null) {
+            itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.location()));
+        }
+        this.item = new HangingSignItem(this.ceiling, this.wall, itemProps) {
 
             @Override
             public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
@@ -104,7 +125,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         private final Supplier<BlockEntityType<Entity>> beType;
 
         public Ceiling(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
-            super(wood, Properties.ofFullCopy(parent));
+            super(wood, DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
             this.parent = parent;
             this.beType = beType;
         }
@@ -128,7 +149,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         private final Supplier<BlockEntityType<Entity>> beType;
 
         public Wall(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
-            super(wood, Properties.ofFullCopy(parent));
+            super(wood, DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
             this.parent = parent;
             this.beType = beType;
         }

@@ -7,11 +7,9 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexSorting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.FogParameters;
-import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
@@ -77,34 +75,41 @@ public class JobRenderer {
         if (overlay) {
             transformationMatrix.mul(poseStack.last().pose());
         }
-        
-        RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
-        job.render(poseStack, buffers.bufferSource());
-        buffers.bufferSource().endBatch();
-        
-        if (overlay) {
-            // Render overlay
-            target.bindWrite(true);
-            RenderSystem.setShaderFog(FogParameters.NO_FOG);
-            resetDepthState();
 
-            RenderSystem.viewport(0, 0, width, height);
-            modelViewStack.identity();
-            modelViewStack.mul(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
-
-            RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z), ProjectionType.ORTHOGRAPHIC);
-
-            PoseStack overlayPoseStack = new PoseStack();
-            Lighting.setupFor3DItems();
-
-            RenderJob.Projector projector = new ProjectorImpl(projectionMatrix, transformationMatrix, 0, 0, width, height);
-            job.renderOverlay(overlayPoseStack, buffers.bufferSource(), projector);
+        Minecraft mc = Minecraft.getInstance();
+        RenderTarget previousMainRenderTarget = mc.mainRenderTarget;
+        mc.mainRenderTarget = target;
+        try {
+            RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
+            job.render(poseStack, buffers.bufferSource());
             buffers.bufferSource().endBatch();
+
+            if (overlay) {
+                // Render overlay
+                target.bindWrite(true);
+                RenderSystem.setShaderFog(FogParameters.NO_FOG);
+                resetDepthState();
+
+                RenderSystem.viewport(0, 0, width, height);
+                modelViewStack.identity();
+                modelViewStack.mul(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
+
+                RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z), ProjectionType.ORTHOGRAPHIC);
+
+                PoseStack overlayPoseStack = new PoseStack();
+                Lighting.setupFor3DItems();
+
+                RenderJob.Projector projector = new ProjectorImpl(projectionMatrix, transformationMatrix, 0, 0, width, height);
+                job.renderOverlay(overlayPoseStack, buffers.bufferSource(), projector);
+                buffers.bufferSource().endBatch();
+            }
+        } finally {
+            mc.mainRenderTarget = previousMainRenderTarget;
         }
         
         resetDepthState();
         modelViewStack.popMatrix();
-        
+
         NativeImage img = takeNonOpaqueScreenshot(target);
         target.unbindWrite();
         return img;

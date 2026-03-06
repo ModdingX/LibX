@@ -1,8 +1,8 @@
 package org.moddingx.libx.impl.registration;
 
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -16,6 +16,7 @@ import org.moddingx.libx.impl.registration.handler.CapabilityRegistrationHandler
 import org.moddingx.libx.impl.registration.handler.ClientExtensionRegistrationHandler;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.*;
+import org.moddingx.libx.registration.util.EnumObjects;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -94,6 +95,10 @@ public class RegistrationDispatcher {
             if (!failedConditions.isEmpty()) {
                 if (registry != null) {
                     cleanupIntrusiveHolder(registry, value);
+                } else if (value instanceof EnumObjects<?, ?> enumObject && enumObject.registryKey() != null) {
+                    for (Object object : enumObject.values()) {
+                        cleanupIntrusiveHolder((ResourceKey<? extends Registry<T>>) enumObject.registryKey(), (T) object);
+                    }
                 }
                 return;
             }
@@ -152,7 +157,6 @@ public class RegistrationDispatcher {
         this.registerables.forEach(reg -> reg.registerClient(event::enqueueWork));
     }
 
-    @SuppressWarnings("unchecked")
     private static <T> void cleanupIntrusiveHolder(ResourceKey<? extends Registry<T>> registryKey, T value) {
         BuiltInRegistries.REGISTRY.get(registryKey.location()).ifPresent(registryHolder -> {
             if (registryHolder.value() instanceof MappedRegistry<?> mappedRegistry && mappedRegistry.unregisteredIntrusiveHolders != null) {

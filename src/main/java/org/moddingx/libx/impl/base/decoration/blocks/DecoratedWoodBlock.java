@@ -14,6 +14,7 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationType;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +26,7 @@ public class DecoratedWoodBlock extends RotatedPillarBlock {
     @Nullable public final DecorationType<? extends Block> stripped;
 
     public DecoratedWoodBlock(DecoratedBlock parent, @Nullable DecorationType<? extends Block> log, @Nullable DecorationType<? extends Block> stripped) {
-        super(Properties.ofFullCopy(parent));
+        super(DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
         this.parent = parent;
         this.log = log;
         this.stripped = stripped;

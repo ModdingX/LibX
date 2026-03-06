@@ -9,6 +9,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import org.moddingx.libx.annotation.processor.modinit.ModInit;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -71,7 +72,7 @@ public class RegistryKeyProvider<T> implements DataProvider {
             sourceFile.append("public class ").append(this.className).append(" {\n\n");
             sourceFile.append("    private ").append(this.className).append("() {}\n\n");
             sourceFile.append("    private static final ResourceKey<Registry<").append(type).append(">> REGISTRY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(")
-                    .append(quote(this.registry.location().getNamespace())).append(",").append(quote(this.registry.location().getPath()))
+                    .append(ModInit.quote(this.registry.location().getNamespace())).append(",").append(ModInit.quote(this.registry.location().getPath()))
                     .append("));\n\n");
             for (ResourceLocation key : lookup.listElementIds().map(ResourceKey::location).sorted(ResourceLocation::compareNamespaced).toList()) {
                 StringBuilder fnb = new StringBuilder();
@@ -89,7 +90,7 @@ public class RegistryKeyProvider<T> implements DataProvider {
                 }
                 String fn = fnb.toString();
                 sourceFile.append("    public static final ResourceKey<").append(type).append("> ").append(fn).append(" = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath(")
-                        .append(quote(key.getNamespace())).append(",").append(quote(key.getPath()))
+                        .append(ModInit.quote(key.getNamespace())).append(",").append(ModInit.quote(key.getPath()))
                         .append("));\n");
             }
             sourceFile.append("}\n");
@@ -105,32 +106,5 @@ public class RegistryKeyProvider<T> implements DataProvider {
                 return CompletableFuture.failedFuture(e);
             }
         });
-    }
-
-    private static String quote(String str) {
-        StringBuilder sb = new StringBuilder("\"");
-        for (char chr : str.toCharArray()) {
-            if (chr == '\\') {
-                sb.append("\\\\");
-            } else if (chr == '\"') {
-                sb.append("\\\"");
-            } else if (chr == '\'') {
-                sb.append("\\'");
-            } else if (chr == '\n') {
-                sb.append("\\n");
-            } else if (chr == '\r') {
-                sb.append("\\r");
-            } else if (chr == '\t') {
-                sb.append("\\t");
-            } else if (chr == '\b') {
-                sb.append("\\b");
-            } else if (chr <= 0x1F || chr > 0xFF) {
-                sb.append(String.format("\\u%04d", (int) chr));
-            } else {
-                sb.append(chr);
-            }
-        }
-        sb.append("\"");
-        return sb.toString();
     }
 }

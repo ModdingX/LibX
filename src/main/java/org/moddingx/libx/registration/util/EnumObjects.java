@@ -8,10 +8,7 @@ import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -68,6 +65,20 @@ public final class EnumObjects<E extends Enum<E>, T> implements Registerable {
      */
     public T random(RandomSource random) {
         return this.map.get(this.keys[random.nextInt(this.keys.length)]);
+    }
+
+    /**
+     *
+     */
+    public Collection<T> values() {
+        return this.map.values();
+    }
+
+    /**
+     * Gets the registry key of the registry this EnumObjects registers to.
+     */
+    public ResourceKey<? extends Registry<T>> registryKey() {
+        return this.registryKey;
     }
 
     @Override

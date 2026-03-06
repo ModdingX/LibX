@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationMaterial;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 import org.moddingx.libx.registration.Registerable;
 
 import javax.annotation.Nonnull;
@@ -22,7 +23,7 @@ public class DecoratedTrapdoorBlock extends TrapDoorBlock implements Registerabl
 
     public DecoratedTrapdoorBlock(DecoratedBlock parent) {
         super(parent.getMaterialProperties().blockSetType(), Util.make(() -> {
-                    Properties blockProperties = Properties.ofFullCopy(parent)
+            Properties blockProperties = DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent))
                             .noOcclusion()
                             .isValidSpawn(Blocks::never);
                     // we need to check for WOOD since isWood() is true for the non-burnable NETHER_WOOD, too

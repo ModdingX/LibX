@@ -47,7 +47,7 @@ public abstract class RecipeProviderBase implements DataProvider, RecipeExtensio
     @Nonnull
     @Override
     public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
-        RecipeProvider.Runner runner = new RecipeProvider.Runner(this.ctx.output(), CompletableFuture.completedFuture(this.ctx.registries().registryAccess())) {
+        RecipeProvider.Runner runner = new RecipeProvider.Runner(this.ctx.output(), this.ctx.system().lookupProvider()) {
 
             @Nonnull
             @Override

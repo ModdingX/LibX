@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
+import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 
 import javax.annotation.Nonnull;
 
@@ -16,7 +17,7 @@ public class DecoratedStairBlock extends StairBlock {
     public final DecoratedBlock parent;
     
     public DecoratedStairBlock(DecoratedBlock parent) {
-        super(parent.defaultBlockState(), Properties.ofFullCopy(parent));
+        super(parent.defaultBlockState(), DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
         this.parent = parent;
     }
 

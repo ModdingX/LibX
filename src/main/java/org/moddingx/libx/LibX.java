@@ -17,6 +17,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.moddingx.libx.command.EnumArgumentIgnoreCase;
 import org.moddingx.libx.crafting.ingredient.EffectIngredient;
+import org.moddingx.libx.crafting.ingredient.EmptyIngredient;
 import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.impl.BlockEntityUpdateQueue;
 import org.moddingx.libx.impl.InternalDataGen;
@@ -31,7 +32,6 @@ import org.moddingx.libx.impl.loot.modifier.AdditionLootModifier;
 import org.moddingx.libx.impl.loot.modifier.RemovalLootModifier;
 import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
-import org.moddingx.libx.render.ItemStackRenderer;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
 import org.moddingx.libx.impl.sandbox.density.*;
 import org.moddingx.libx.inventory.StackItemHandler;
@@ -90,7 +90,6 @@ public final class LibX extends ModX {
         NeoForge.EVENT_BUS.register(new ConfigEvents());
         if (FMLLoader.getDist().isClient()) {
             NeoForge.EVENT_BUS.addListener(ClientCommandsImpl::registerClientCommands);
-            NeoForge.EVENT_BUS.addListener(ItemStackRenderer::onLevelUnload);
         }
     }
 
@@ -130,6 +129,7 @@ public final class LibX extends ModX {
         event.register(Registries.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, () -> AllLootEntry.TYPE);
         event.register(Registries.LOOT_FUNCTION_TYPE, CopyBlockEntityDataFunction.ID, () -> CopyBlockEntityDataFunction.TYPE);
         event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, this.resource("effect"), () -> EffectIngredient.TYPE);
+        event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, this.resource("empty"), () -> EmptyIngredient.TYPE);
         event.register(Registries.RECIPE_TYPE, EmptyRecipe.ID, () -> EmptyRecipe.TYPE);
         event.register(Registries.RECIPE_SERIALIZER, EmptyRecipe.ID, () -> EmptyRecipe.Serializer.INSTANCE);
         event.register(Registries.COMMAND_ARGUMENT_TYPE, this.resource("enum"), () -> EnumArgumentIgnoreCase.Info.INSTANCE);

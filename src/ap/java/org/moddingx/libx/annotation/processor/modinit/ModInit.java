@@ -14,12 +14,14 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.tools.Diagnostic;
+import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
+import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 
-public class ModInit  {
+public class ModInit {
 
     public static final List<String> DEFAULT_PARAM_CODEC_FIELDS = List.of("CODEC", "DIRECT_CODEC");
 
@@ -30,6 +32,13 @@ public class ModInit  {
     private final List<RegisteredMapper> configMappers = new ArrayList<>();
     private final List<RegisteredConfig> configs = new ArrayList<>();
     private final List<GeneratedCodec> codecs = new ArrayList<>();
+    private final List<CleanupEntry> cleanupEntries = new ArrayList<>();
+
+    public enum RegistrationType {
+        ITEM, BLOCK, FLUID, ENTITY_TYPE
+    }
+
+    public record CleanupEntry(String fieldClassFqn, String fieldName, RegistrationType registrationType) {}
 
     public ModInit(String modid, Element modClass, Messager messager) {
         this.modid = modid;
@@ -62,13 +71,17 @@ public class ModInit  {
     public void addCodec(GeneratedCodec codec) {
         this.codecs.add(codec);
     }
-    
+
+    public void addCleanup(CleanupEntry entry) {
+        this.cleanupEntries.add(entry);
+    }
+
     public void write(Filer filer, Messager messager) {
         try {
             List<RegistrationEntry> allReg = this.registration.entrySet().stream()
                     .sorted(Comparator.comparingInt(e -> -e.getKey()))
                     .flatMap(e -> e.getValue().stream()).toList();
-            
+
             JavaFileObject file = filer.createSourceFile(((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + "." + this.modClass.getSimpleName() + "$", this.modClass);
             Writer writer = file.openWriter();
             writer.write("package " + ((PackageElement) this.modClass.getEnclosingElement()).getQualifiedName() + ";");
@@ -137,18 +150,28 @@ public class ModInit  {
                     writer.write("}");
                 }
             }
-            if (!allReg.isEmpty()) {
+            boolean hasRegisterMethod = !allReg.isEmpty() || !this.cleanupEntries.isEmpty();
+            if (hasRegisterMethod) {
                 writer.write("((" + Classes.sourceName(Classes.MODX_REGISTRATION) + ")mod).addRegistrationHandler(" + this.modClass.getSimpleName() + "$::register);");
             }
             if (!this.models.isEmpty()) {
                 writer.write("if(" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".isDistClient()){registerClientOnlyEventListeners();}");
             }
             writer.write("}");
-            if (!allReg.isEmpty()) {
+            if (hasRegisterMethod) {
                 writer.write("private static void register(){");
                 writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".runUnchecked(()->{");
                 for (RegistrationEntry entry : allReg) {
                     writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".register(mod," + (entry.registryFqn() == null ? "null" : entry.registryFqn()) + "," + quote(entry.name()) + "," + entry.fieldClassFqn() + "." + entry.fieldName() + ");");
+                }
+                for (CleanupEntry entry : this.cleanupEntries) {
+                    String method = switch(entry.registrationType()) {
+                        case ITEM -> "cleanupItemHolder";
+                        case BLOCK -> "cleanupBlockHolder";
+                        case FLUID -> "cleanupFluidHolder";
+                        case ENTITY_TYPE -> "cleanupEntityTypeHolder";
+                    };
+                    writer.write(Classes.sourceName(Classes.REGISTRATION_PROPERTIES_HELPER) + "." + method + "(" + entry.fieldClassFqn() + "." + entry.fieldName() + ");");
                 }
                 writer.write("});");
                 writer.write("}");
@@ -159,14 +182,14 @@ public class ModInit  {
                 writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addModListener(mod," + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + ".class," + this.modClass.getSimpleName() + "$::registerModels);");
                 writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addLowModListener(mod," + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + ".class," + this.modClass.getSimpleName() + "$::bakeModels);");
                 writer.write("}");
-                
+
                 writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void registerModels(" + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
                     writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addSpecialModel(event," + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
                 }
                 writer.write("}");
-                
+
                 writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void bakeModels(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
@@ -176,11 +199,43 @@ public class ModInit  {
             }
             writer.write("}\n");
             writer.close();
+
+            // Emit registration id metadata consumed by the RegisterClassIds coremod transformer.
+            // Each line is a JSON object: {"class":"a/b/C","field":"fieldName","id":"modid:name"}
+            List<RegistrationEntry> idEntries = allReg.stream()
+                    .filter(e -> e.registryFqn() != null)
+                    .toList();
+            if (!idEntries.isEmpty()) {
+                try {
+                    FileObject metaFile = filer.createResource(
+                            StandardLocation.CLASS_OUTPUT, "", "META-INF/libx_registration.json",
+                            this.modClass);
+                    Writer meta = metaFile.openWriter();
+                    meta.write("[");
+                    for (int i = 0; i < idEntries.size(); i++) {
+                        RegistrationEntry e = idEntries.get(i);
+                        meta.write("{\"class\":\"");
+                        meta.write(e.fieldClassFqn().replace('.', '/'));
+                        meta.write("\",\"field\":\"");
+                        meta.write(e.fieldName());
+                        meta.write("\",\"id\":\"");
+                        meta.write(this.modid + ":" + e.name());
+                        meta.write("\"}");
+                        if (i < idEntries.size() - 1) meta.write(",");
+                    }
+                    meta.write("]");
+                    meta.close();
+                } catch (IOException e) {
+                    // Not fatal – the coremod just won't transform this mod's classes.
+                    messager.printMessage(Diagnostic.Kind.WARNING,
+                            "Failed to write libx_registration.json metadata: " + e, this.modClass);
+                }
+            }
         } catch (IOException e) {
             messager.printMessage(Diagnostic.Kind.ERROR, "Failed to generate source code: " + e, this.modClass);
         }
     }
-    
+
     public static String quote(String str) {
         StringBuilder sb = new StringBuilder("\"");
         for (char chr : str.toCharArray()) {

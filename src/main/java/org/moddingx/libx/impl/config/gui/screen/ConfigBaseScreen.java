@@ -118,6 +118,7 @@ public abstract class ConfigBaseScreen extends Screen {
 
             @Override
             public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+                graphics.flush();
                 ConfigBaseScreen.this.isCapturingTooltips = true;
                 graphics.pose().pushPose();
                 super.render(new TooltipCapturingGuiGraphics(graphics), mouseX, mouseY, partialTicks);
