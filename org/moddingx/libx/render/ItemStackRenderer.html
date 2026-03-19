@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
      <a href="#addRenderBlock(net.minecraft.world.level.block.entity.BlockEntityType,boolean)"><code>addRenderBlock(BlockEntityType, boolean)</code></a></li>
  </ul>
  
- You item also needs a special item model. <a href="../datagen/provider/model/ItemModelProviderBase.html" title="class in org.moddingx.libx.datagen.provider.model"><code>ItemModelProviderBase</code></a> provides a method to generate that for you.</div>
+ Your item also needs a special item model. <a href="../datagen/provider/model/ItemModelProviderBase.html" title="class in org.moddingx.libx.datagen.provider.model"><code>ItemModelProviderBase</code></a> provides a method to generate that for you.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -170,14 +170,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets the instance of the ItemStackRenderer.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renderByItem(net.minecraft.world.item.ItemStack,net.minecraft.world.item.ItemDisplayContext,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int)" class="member-name-link">renderByItem</a><wbr>(net.minecraft.world.item.ItemStack&nbsp;stack,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#onLevelUnload(net.neoforged.neoforge.event.level.LevelEvent.Unload)" class="member-name-link">onLevelUnload</a><wbr>(net.neoforged.neoforge.event.level.LevelEvent.Unload&nbsp;event)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Clears cached block entity instances when a client level is unloaded so they
+ do not hold a stale reference to the old level.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renderByItem(net.minecraft.world.item.ItemStack,net.minecraft.world.item.ItemDisplayContext,com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,int,int)" class="member-name-link">renderByItem</a><wbr>(net.minecraft.world.item.ItemStack&nbsp;stack,
  net.minecraft.world.item.ItemDisplayContext&nbsp;ctx,
  com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
  net.minecraft.client.renderer.MultiBufferSource&nbsp;buffer,
  int&nbsp;light,
  int&nbsp;overlay)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -250,6 +256,14 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code>renderByItem</code>&nbsp;in class&nbsp;<code>net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer</code></dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="onLevelUnload(net.neoforged.neoforge.event.level.LevelEvent.Unload)">
+<h3>onLevelUnload</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onLevelUnload</span><wbr><span class="parameters">(net.neoforged.neoforge.event.level.LevelEvent.Unload&nbsp;event)</span></div>
+<div class="block">Clears cached block entity instances when a client level is unloaded so they
+ do not hold a stale reference to the old level.</div>
 </section>
 </li>
 <li>
