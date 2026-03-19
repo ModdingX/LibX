@@ -3,6 +3,7 @@ package org.moddingx.libx.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
@@ -20,14 +21,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.event.level.LevelEvent;
 import org.apache.commons.lang3.tuple.Pair;
+import org.moddingx.libx.util.lazy.LazyValue;
 import org.moddingx.libx.datagen.provider.model.ItemModelProviderBase;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.SetupContext;
-import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * This class is meant to apply a {@link BlockEntityRenderer} to items. Using it is really straightforward:
@@ -38,14 +41,15 @@ import java.util.*;
  *     {@link ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)}</li>
  * </ul>
  * 
- * You item also needs a special item model. {@link ItemModelProviderBase} provides a method to generate that for you.
+ * Your item also needs a special item model. {@link ItemModelProviderBase} provides a method to generate that for you.
  */
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
 
     private static final LazyValue<ItemStackRenderer> INSTANCE = new LazyValue<>(() -> new ItemStackRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
     private static final List<BlockEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
-    private static final Map<Block, Pair<LazyValue<BlockEntity>, Boolean>> blocks = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Block, Pair<Supplier<BlockEntity>, Boolean>> blocks = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Block, BlockEntity> cachedBlockEntities = Collections.synchronizedMap(new HashMap<>());
     private static final Map<BlockEntityType<?>, CompoundTag> defaultTags = new HashMap<>();
 
     public ItemStackRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
@@ -62,7 +66,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     public static <T extends BlockEntity> void addRenderBlock(BlockEntityType<T> beType, boolean readBlockEntityTag) {
         types.add(beType);
         for (Block block : beType.getValidBlocks()) {
-            blocks.put(block, Pair.of(new LazyValue<>(() -> beType.create(BlockPos.ZERO, block.defaultBlockState())), readBlockEntityTag));
+            blocks.put(block, Pair.of(() -> beType.create(BlockPos.ZERO, block.defaultBlockState()), readBlockEntityTag));
         }
     }
 
@@ -71,9 +75,9 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
         Block block = Block.byItem(stack.getItem());
         if (block != Blocks.AIR) {
             if (blocks.containsKey(block)) {
-                Pair<LazyValue<BlockEntity>, Boolean> pair = blocks.get(block);
+                Pair<Supplier<BlockEntity>, Boolean> pair = blocks.get(block);
                 BlockState state = block.defaultBlockState();
-                BlockEntity blockEntity = pair.getLeft().get();
+                BlockEntity blockEntity = cachedBlockEntities.computeIfAbsent(block, b -> pair.getLeft().get());
                 BlockEntityType<?> teType = blockEntity.getType();
 
                 BlockEntityRenderer<BlockEntity> renderer = this.blockEntityRenderDispatcher.getRenderer(blockEntity);
@@ -106,6 +110,17 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
                     poseStack.popPose();
                 }
             }
+        }
+    }
+
+    /**
+     * Clears cached block entity instances when a client level is unloaded so they
+     * do not hold a stale reference to the old level.
+     */
+    public static void onLevelUnload(LevelEvent.Unload event) {
+        if (event.getLevel() instanceof ClientLevel) {
+            cachedBlockEntities.clear();
+            defaultTags.clear();
         }
     }
 
