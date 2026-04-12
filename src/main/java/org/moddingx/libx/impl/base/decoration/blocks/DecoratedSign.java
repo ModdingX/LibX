@@ -147,17 +147,8 @@ public class DecoratedSign implements Registerable, SignAccess {
     
     public static class Entity extends SignBlockEntity {
         
-        private final BlockEntityType<?> signType;
-        
         public Entity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-            super(pos, state);
-            this.signType = type;
-        }
-
-        @Nonnull
-        @Override
-        public BlockEntityType<?> getType() {
-            return this.signType;
+            super(type, pos, state);
         }
     }
 }

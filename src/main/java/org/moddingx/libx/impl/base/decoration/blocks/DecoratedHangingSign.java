@@ -34,7 +34,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
 
     public final ModX mod;
     public final DecoratedBlock parent;
-    
+
     private final Ceiling ceiling;
     private final Wall wall;
     private final HangingSignItem item;
@@ -43,7 +43,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
     public DecoratedHangingSign(ModX mod, DecoratedBlock parent) {
         this.mod = mod;
         this.parent = parent;
-        
+
         this.ceiling = new Ceiling(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         //noinspection ConstantConditions
@@ -97,12 +97,12 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         if (this.beType == null) throw new IllegalStateException("Can't get hanging sign block entity type before registration");
         return this.beType;
     }
-    
+
     public static class Ceiling extends CeilingHangingSignBlock {
 
         public final DecoratedBlock parent;
         private final Supplier<BlockEntityType<Entity>> beType;
-        
+
         public Ceiling(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
             super(wood, Properties.ofFullCopy(parent));
             this.parent = parent;
@@ -121,7 +121,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
             return this.parent.isEnabled(enabledFeatures);
         }
     }
-    
+
     public static class Wall extends WallHangingSignBlock {
 
         public final DecoratedBlock parent;
@@ -132,7 +132,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
             this.parent = parent;
             this.beType = beType;
         }
-        
+
         @Nullable
         @Override
         @SuppressWarnings("NullableProblems")
@@ -145,20 +145,32 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
             return this.parent.isEnabled(enabledFeatures);
         }
     }
-    
+
     public static class Entity extends HangingSignBlockEntity {
-        
+
+        // BlockEntity.<init> calls validateBlockState() -> HangingSignBlockEntity#getType
+        // BEFORE the Entity constructor body runs, so this.signType is still null at that point.
+        // We pass the type through a ThreadLocal so getType() can return it during the
+        // super() chain, then store it in signType once super() returns.
+        private static final ThreadLocal<BlockEntityType<?>> INIT_TYPE = new ThreadLocal<>();
         private final BlockEntityType<?> signType;
-        
+
         public Entity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-            super(pos, state);
-            this.signType = type;
+            super(initType(type, pos), state);
+            this.signType = INIT_TYPE.get();
+            INIT_TYPE.remove();
+        }
+
+        private static BlockPos initType(BlockEntityType<?> type, BlockPos pos) {
+            INIT_TYPE.set(type);
+            return pos;
         }
 
         @Nonnull
         @Override
         public BlockEntityType<?> getType() {
-            return this.signType;
+            BlockEntityType<?> init = INIT_TYPE.get();
+            return init != null ? init : this.signType;
         }
     }
 }
