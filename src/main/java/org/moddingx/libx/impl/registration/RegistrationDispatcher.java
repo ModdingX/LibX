@@ -1,5 +1,7 @@
 package org.moddingx.libx.impl.registration;
 
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -89,7 +91,12 @@ public class RegistrationDispatcher {
             RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
             
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
-            if (!failedConditions.isEmpty()) return;
+            if (!failedConditions.isEmpty()) {
+                if (registry != null) {
+                    cleanupIntrusiveHolder(registry, value);
+                }
+                return;
+            }
             
             EntryCollectorImpl collector = new EntryCollectorImpl(this, id);
             
@@ -144,6 +151,14 @@ public class RegistrationDispatcher {
         this.runRegistration();
         this.registerables.forEach(reg -> reg.registerClient(event::enqueueWork));
     }
+
+    @SuppressWarnings("unchecked")
+    private static <T> void cleanupIntrusiveHolder(ResourceKey<? extends Registry<T>> registryKey, T value) {
+        Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(registryKey.location());
+        if (registry instanceof MappedRegistry<T> mappedRegistry && mappedRegistry.unregisteredIntrusiveHolders != null) {
+            mappedRegistry.unregisteredIntrusiveHolders.remove(value);
+        }
+    }
     
     private record NamedRegisterable(RegistrationContext ctx, Registerable value) {
 
@@ -176,7 +191,7 @@ public class RegistrationDispatcher {
             return Collections.unmodifiableList(this.values);
         }
     }
-    
+
     // Safely reference the client only methods from registerable
     private static class RegisterableClientAdapter {
         
