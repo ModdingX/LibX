@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.render;
 
+import com.mojang.blaze3d.ProjectionType;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.Lighting;
@@ -9,6 +10,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexSorting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.FogParameters;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.world.phys.Vec2;
@@ -36,21 +38,21 @@ public class JobRenderer {
             throw new RenderJobFailedException(RenderJobFailedException.Reason.TEXTURE_TOO_LARGE, "Maximum texture size exceeded: " + width + "x" + height + ", maximum is " + maxTextureSize + "x" + maxTextureSize);
         }
         
-        RenderTarget target = new TextureTarget(width, height, true, Minecraft.ON_OSX);
+        RenderTarget target = new TextureTarget(width, height, true);
         
         target.setClearColor(0, 0, 0, 0);
-        target.clear(true);
+        target.clear();
 
         resetDepthState();
 
         // Clear buffer
         target.bindWrite(true);
-        RenderSystem.clear(0x4100, Minecraft.ON_OSX);
+        RenderSystem.clear(0x4100);
         
         // Render main scene
         target.bindWrite(true);
-        
-        FogRenderer.setupNoFog();
+
+        RenderSystem.setShaderFog(FogParameters.NO_FOG);
         
         RenderSystem.enableCull();
         
@@ -60,10 +62,9 @@ public class JobRenderer {
         modelViewStack.pushMatrix();
         modelViewStack.identity();
         modelViewStack.mul(job.setupModelViewMatrix());
-        RenderSystem.applyModelViewMatrix();
 
         Matrix4f projectionMatrix = job.setupProjectionMatrix();
-        RenderSystem.setProjectionMatrix(projectionMatrix, job.getVertexSorting());
+        RenderSystem.setProjectionMatrix(projectionMatrix, job.getProjectionType());
         
         Lighting.setupFor3DItems();
         RenderSystem.defaultBlendFunc();
@@ -84,15 +85,14 @@ public class JobRenderer {
         if (overlay) {
             // Render overlay
             target.bindWrite(true);
-            FogRenderer.setupNoFog();
+            RenderSystem.setShaderFog(FogParameters.NO_FOG);
             resetDepthState();
 
             RenderSystem.viewport(0, 0, width, height);
             modelViewStack.identity();
             modelViewStack.mul(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
-            RenderSystem.applyModelViewMatrix();
 
-            RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z), VertexSorting.ORTHOGRAPHIC_Z);
+            RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z), ProjectionType.ORTHOGRAPHIC);
 
             PoseStack overlayPoseStack = new PoseStack();
             Lighting.setupFor3DItems();
@@ -104,7 +104,6 @@ public class JobRenderer {
         
         resetDepthState();
         modelViewStack.popMatrix();
-        RenderSystem.applyModelViewMatrix();
         
         NativeImage img = takeNonOpaqueScreenshot(target);
         target.unbindWrite();

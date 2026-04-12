@@ -2,8 +2,10 @@ package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -98,7 +100,7 @@ public interface StoneCuttingExtension extends RecipeExtension {
      * Adds a stone cutting recipe with the given input, output and output amount.
      */
     default void stoneCutting(RecipeCategory category, TagKey<Item> input, ItemLike output, int amount) {
-        this.stoneCutting(category, Ingredient.of(input), output, amount, "stonecutting_from_" + input.location().getPath());
+        this.stoneCutting(category, Ingredient.of(this.items().getOrThrow(input)), output, amount, "stonecutting_from_" + input.location().getPath());
     }
 
     /**
@@ -131,6 +133,6 @@ public interface StoneCuttingExtension extends RecipeExtension {
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));
         }
-        builder.save(this.output(), this.provider().loc(output, suffix));
+        builder.save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(output, suffix)));
     }
 }

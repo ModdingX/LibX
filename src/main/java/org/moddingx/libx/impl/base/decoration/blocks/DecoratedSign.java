@@ -47,8 +47,8 @@ public class DecoratedSign implements Registerable, SignAccess {
         this.standing = new Standing(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         //noinspection ConstantConditions
-        this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.standing, this.wall), null);
-        this.item = new SignItem(new Item.Properties().stacksTo(16), this.standing, this.wall) {
+        this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.standing, this.wall));
+        this.item = new SignItem(this.standing, this.wall, new Item.Properties().stacksTo(16)) {
             @Override
             public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
                 return parent.isEnabled(enabledFeatures);

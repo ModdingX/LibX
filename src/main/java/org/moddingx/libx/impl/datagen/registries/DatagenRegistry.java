@@ -25,7 +25,6 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
 
     private final DatagenRegistrySet registrySet;
     private final Codec<T> codec;
-    private final Lookup lookup;
     private boolean frozen;
     private boolean propagateNewElementsToChildren;
     
@@ -41,7 +40,6 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
         super(registryKey, Lifecycle.stable(), true);
         this.registrySet = registrySet;
         this.codec = codec;
-        this.lookup = new Lookup();
         this.frozen = false;
         this.propagateNewElementsToChildren = true;
         // Load this registry with the elements from the parents
@@ -61,18 +59,6 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
         for (Map.Entry<ResourceKey<T>, T> entry : parentElements.entrySet()) {
             this.register(entry.getKey(), entry.getValue(), RegistrationInfo.BUILT_IN);
         }
-    }
-    
-    @Nonnull
-    @Override
-    public HolderOwner<T> holderOwner() {
-        return this.lookup;
-    }
-
-    @Nonnull
-    @Override
-    public HolderLookup.RegistryLookup<T> asLookup() {
-        return this.lookup;
     }
 
     @Nonnull
@@ -103,7 +89,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
     @Nonnull
     @Override
     public Holder.Reference<T> createIntrusiveHolder(@Nonnull T value) {
-        Holder.Reference<T> holder = this.getResourceKey(value).flatMap(this::getHolder).orElse(null);
+        Holder.Reference<T> holder = this.getResourceKey(value).flatMap(this::get).orElse(null);
         if (holder == null) holder = super.createIntrusiveHolder(value);
         this.registrySet.trackHolderTarget(holder, this.key());
         return holder;
@@ -134,7 +120,7 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
 
     @Override
     @SuppressWarnings("deprecation")
-    public void unfreeze() {
+    public void unfreeze(boolean clearTags) {
         throw new UnsupportedOperationException();
     }
 
@@ -156,50 +142,6 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
                     throw new RuntimeException("Failed to serialise element " + entry.getKey() + " in datagen registry", e);
                 }
             }
-        }
-    }
-
-    private class Lookup implements HolderLookup.RegistryLookup<T> {
-
-        @Nonnull
-        @Override
-        public ResourceKey<? extends Registry<? extends T>> key() {
-            return DatagenRegistry.this.key();
-        }
-
-        @Nonnull
-        @Override
-        public Lifecycle registryLifecycle() {
-            return DatagenRegistry.this.registryLifecycle();
-        }
-
-        @Nonnull
-        @Override
-        public Stream<Holder.Reference<T>> listElements() {
-            return DatagenRegistry.this.holders();
-        }
-
-        @Nonnull
-        @Override
-        public Stream<HolderSet.Named<T>> listTags() {
-            return DatagenRegistry.this.getTags().map(Pair::getSecond);
-        }
-
-        @Nonnull
-        @Override
-        public Optional<Holder.Reference<T>> get(@Nonnull ResourceKey<T> key) {
-            return DatagenRegistry.this.getHolder(key);
-        }
-
-        @Nonnull
-        @Override
-        public Optional<HolderSet.Named<T>> get(@Nonnull TagKey<T> key) {
-            return DatagenRegistry.this.getTag(key);
-        }
-
-        @Override
-        public boolean canSerializeIn(@Nonnull HolderOwner<T> owner) {
-            return true;
         }
     }
 }

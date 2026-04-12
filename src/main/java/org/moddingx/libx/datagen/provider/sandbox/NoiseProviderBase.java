@@ -396,7 +396,7 @@ public abstract class NoiseProviderBase extends RegistryProviderBase {
         @Override
         @SuppressWarnings({ "unchecked" })
         public <S> HolderGetter<S> lookup(@Nonnull ResourceKey<? extends Registry<? extends S>> registryKey) {
-            return NoiseProviderBase.this.registries.registry((ResourceKey<? extends Registry<S>>) registryKey).asLookup();
+            return NoiseProviderBase.this.registries.registry((ResourceKey<? extends Registry<S>>) registryKey);
         }
     }
 }

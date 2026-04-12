@@ -40,7 +40,7 @@ public class DynamicPackLocator implements RepositorySource {
     
     public synchronized void enablePack(ResourceLocation id) {
         if (!Objects.equals(id.getNamespace(), ModLoadingContext.get().getActiveNamespace())) {
-            LibX.logger.error("Wrong modid for dynamic pack, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + id.getNamespace());
+            LibX.logger.error("Wrong modid for dynamic pack, expected {} got {}", ModLoadingContext.get().getActiveNamespace(), id.getNamespace());
         }
         this.enabledPacks.add(id);
     }
@@ -55,7 +55,7 @@ public class DynamicPackLocator implements RepositorySource {
             IModInfo modInfo = ModList.get().getModContainerById(id.getNamespace()).map(ModContainer::getModInfo).orElse(null);
             IModFileInfo modFileInfo = modInfo == null ? null : modInfo.getOwningFile();
             if (modInfo == null || modFileInfo == null || modFileInfo.getFile() == null) {
-                LibX.logger.error("Can't create dynamic pack " + id + ": Invalid mod file: " + id.getNamespace() + " (" + modFileInfo + ")");
+                LibX.logger.error("Can't create dynamic pack {}: Invalid mod file: {} ({})", id, id.getNamespace(), modFileInfo);
             } else {
                 PackLocationInfo location = LibXPack.generateLocationInfo(modInfo, this.type, id.getPath());
                 LazyValue<LibXPack> resources = new LazyValue<>(() -> new LibXPack(location, this.type, modInfo, modFileInfo.getFile(), id.getPath()));

@@ -154,12 +154,13 @@ public class RegistrationDispatcher {
 
     @SuppressWarnings("unchecked")
     private static <T> void cleanupIntrusiveHolder(ResourceKey<? extends Registry<T>> registryKey, T value) {
-        Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(registryKey.location());
-        if (registry instanceof MappedRegistry<T> mappedRegistry && mappedRegistry.unregisteredIntrusiveHolders != null) {
-            mappedRegistry.unregisteredIntrusiveHolders.remove(value);
-        }
+        BuiltInRegistries.REGISTRY.get(registryKey.location()).ifPresent(registryHolder -> {
+            if (registryHolder.value() instanceof MappedRegistry<?> mappedRegistry && mappedRegistry.unregisteredIntrusiveHolders != null) {
+                ((MappedRegistry<T>) mappedRegistry).unregisteredIntrusiveHolders.remove(value);
+            }
+        });
     }
-    
+
     private record NamedRegisterable(RegistrationContext ctx, Registerable value) {
 
         public void registerCommon(Consumer<Runnable> enqueue) {

@@ -1,8 +1,10 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.Criterion;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -69,6 +71,6 @@ public class DecorationRecipes {
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));
         }
-        builder.save(ext.output(), ext.provider().loc(output, "stonecutting"));
+        builder.save(ext.output(), ResourceKey.create(Registries.RECIPE, ext.provider().loc(output, "stonecutting")));
     }
 }

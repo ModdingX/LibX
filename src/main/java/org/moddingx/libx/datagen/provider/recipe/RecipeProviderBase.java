@@ -2,7 +2,12 @@ package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -26,14 +31,47 @@ import java.util.concurrent.CompletableFuture;
  * As this class implements {@link RecipeExtension} as well, you don't need to implement any methods when
  * adding an extension. For a list of available extensions, see the subclasses of {@link RecipeExtension}.
  */
-public abstract class RecipeProviderBase extends RecipeProvider implements RecipeExtension {
+public abstract class RecipeProviderBase implements DataProvider, RecipeExtension {
 
+    protected final DatagenContext ctx;
     protected final ModX mod;
+
+    protected HolderLookup.Provider registries;
     private RecipeOutput output;
 
     public RecipeProviderBase(DatagenContext ctx) {
-        super(ctx.output(), CompletableFuture.completedFuture(ctx.registries().registryAccess()));
+        this.ctx = ctx;
         this.mod = ctx.mod();
+    }
+
+    @Nonnull
+    @Override
+    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
+        RecipeProvider.Runner runner = new RecipeProvider.Runner(this.ctx.output(), CompletableFuture.completedFuture(this.ctx.registries().registryAccess())) {
+
+            @Nonnull
+            @Override
+            public String getName() {
+                return RecipeProviderBase.this.getName();
+            }
+
+            @Nonnull
+            @Override
+            protected RecipeProvider createRecipeProvider(@Nonnull HolderLookup.Provider registries, @Nonnull RecipeOutput output) {
+                return new RecipeProvider(registries, output) {
+
+                    @Override
+                    protected void buildRecipes() {
+                        RecipeProviderBase.this.registries = this.registries;
+                        RecipeProviderBase.this.output = this.output.withConditions(RecipeProviderBase.this.conditions().toArray(ICondition[]::new));
+                        RecipeProviderBase.this.setupExtensions();
+                        RecipeProviderBase.this.setup();
+                    }
+                };
+            }
+        };
+
+        return runner.run(cache);
     }
 
     @Nonnull
@@ -41,7 +79,7 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     public final String getName() {
         return this.mod.modid + " recipes";
     }
-    
+
     protected abstract void setup();
 
     /**
@@ -52,18 +90,16 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
     }
 
     @Override
-    protected final void buildRecipes(@Nonnull RecipeOutput output) {
-        this.output = output.withConditions(this.conditions().toArray(ICondition[]::new));
-        this.setupExtensions();
-        this.setup();
+    public HolderGetter<Item> items() {
+        return this.registries.lookupOrThrow(Registries.ITEM);
     }
-    
+
     private void setupExtensions() {
         Set<Class<?>> collectedClasses = new HashSet<>();
         List<Method> extensionMethods = new ArrayList<>();
         // Collect all extensions, this class implements up to RecipeProviderBase
         Class<?> currentClass = this.getClass();
-        while(currentClass != null && currentClass != RecipeProviderBase.class && currentClass != Object.class) {
+        while (currentClass != null && currentClass != RecipeProviderBase.class && currentClass != Object.class) {
             for (Class<?> iface : currentClass.getInterfaces()) {
                 if (RecipeExtension.class.isAssignableFrom(iface) && collectedClasses.add(iface)) {
                     try {
@@ -119,16 +155,16 @@ public abstract class RecipeProviderBase extends RecipeProvider implements Recip
 
     @Override
     public Criterion<?> criterion(ItemLike item) {
-        return has(item);
+        return RecipeProvider.inventoryTrigger(ItemPredicate.Builder.item().of(this.items(), item));
     }
 
     @Override
     public Criterion<?> criterion(TagKey<Item> item) {
-        return has(item);
+        return RecipeProvider.inventoryTrigger(ItemPredicate.Builder.item().of(this.items(), item));
     }
 
     @Override
     public Criterion<?> criterion(ItemPredicate... items) {
-        return inventoryTrigger(items);
+        return RecipeProvider.inventoryTrigger(items);
     }
 }

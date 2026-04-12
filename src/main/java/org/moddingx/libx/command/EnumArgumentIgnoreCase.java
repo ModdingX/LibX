@@ -91,11 +91,11 @@ public class EnumArgumentIgnoreCase<T extends Enum<T>> implements ArgumentType<T
                 if (cls.isEnum()) {
                     return new Template((Class<? extends Enum<?>>) cls);
                 } else {
-                    LibX.logger.warn("Can't get enum value of type " + name + " in command argument: No enum");
+                    LibX.logger.warn("Can't get enum value of type {} in command argument: No enum", name);
                     return new Template(Unit.class);
                 }
             } catch (ClassNotFoundException e) {
-                LibX.logger.warn("Can't get enum value of type " + name + " in command argument: " + e.getMessage());
+                LibX.logger.warn("Can't get enum value of type {} in command argument: {}", name, e.getMessage());
                 return new Template(Unit.class);
             }
         }

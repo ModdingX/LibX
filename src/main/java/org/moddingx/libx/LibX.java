@@ -54,9 +54,9 @@ import org.slf4j.LoggerFactory;
  */
 @Mod("libx")
 public final class LibX extends ModX {
-    
+
     public static final Logger logger = LoggerFactory.getLogger("libx");
-    
+
     private static LibX instance;
     private static CommonNetwork networkWrapper;
 
@@ -76,7 +76,7 @@ public final class LibX extends ModX {
         DatagenSystem.defineDatagenRegistry(Registries.RECIPE, Recipe.CODEC);
         DatagenSystem.defineDatagenRegistry(Registries.ADVANCEMENT, Advancement.CODEC);
         InternalDataGen.init();
-        
+
         modBus.addListener(EventPriority.LOW, DynamicPackLocator::locatePacks);
         modBus.addListener(this::createRegistries);
         modBus.addListener(this::registerStuff);

@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
@@ -107,10 +108,10 @@ public class InputEditor<T> implements ConfigEditor<T> {
                 graphics.pose().pushPose();
                 graphics.pose().translate(0, 0, 10);
                 RenderHelper.rgb(0xFF2222);
-                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, this.width + 2, 1, 256, 256);
-                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() + this.height, 0, 0, this.width + 2, 1, 256, 256);
-                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
-                graphics.blit(RenderHelper.TEXTURE_WHITE, this.getX() + this.width, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
+                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, this.width + 2, 1, 256, 256);
+                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() + this.height, 0, 0, this.width + 2, 1, 256, 256);
+                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
+                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() + this.width, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256);
                 RenderHelper.resetColor();
                 graphics.pose().popPose();
             }

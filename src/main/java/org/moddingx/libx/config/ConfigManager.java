@@ -153,7 +153,7 @@ public class ConfigManager {
      */
     public static void registerValueMapper(String modid, ValueMapper<?, ?> mapper) {
         if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
-            LibX.logger.error("Wrong modid for value mapper, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+            LibX.logger.error("Wrong modid for value mapper, expected {} got {}", ModLoadingContext.get().getActiveNamespace(), modid);
         }
         ModMappers.get(modid).registerValueMapper(mapper);
     }
@@ -163,7 +163,7 @@ public class ConfigManager {
      */
     public static void registerValueMapper(String modid, GenericValueMapper<?, ?, ?> mapper) {
         if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
-            LibX.logger.error("Wrong modid for generic value mapper, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+            LibX.logger.error("Wrong modid for generic value mapper, expected {} got {}", ModLoadingContext.get().getActiveNamespace(), modid);
         }
         ModMappers.get(modid).registerValueMapper(mapper);
     }
@@ -173,7 +173,7 @@ public class ConfigManager {
      */
     public static void registerValueMapperFactory(String modid, MapperFactory<?> factory) {
         if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
-            LibX.logger.error("Wrong modid for value mapper factory, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+            LibX.logger.error("Wrong modid for value mapper factory, expected {} got {}", ModLoadingContext.get().getActiveNamespace(), modid);
         }
         ModMappers.get(modid).registerValueMapperFactory(factory);
     }
@@ -183,7 +183,7 @@ public class ConfigManager {
      */
     public static void registerConfigValidator(String modid, ConfigValidator<?, ?> validator) {
         if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
-            LibX.logger.error("Wrong modid for config validator, expected " + ModLoadingContext.get().getActiveNamespace() + " got " + modid);
+            LibX.logger.error("Wrong modid for config validator, expected {} got {}", ModLoadingContext.get().getActiveNamespace(), modid);
         }
         ModMappers.get(modid).registerConfigValidator(validator);
     }
@@ -256,7 +256,7 @@ public class ConfigManager {
                 NeoForge.EVENT_BUS.post(new ConfigLoadedEvent(config.id, config.baseClass, ConfigLoadedEvent.LoadReason.INITIAL, config.clientConfig, config.path, config.path));
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
-            LibX.logger.error("Failed to load config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
+            LibX.logger.error("Failed to load config '{}' (class: {})", configIds.inverse().get(configClass), configClass, e);
         }
     }
 
@@ -286,7 +286,7 @@ public class ConfigManager {
                 }
             }
         } catch (IOException | IllegalStateException | JsonParseException e) {
-            LibX.logger.error("Failed to reload config '" + configIds.inverse().get(configClass) + "' (class: " + configClass + ")", e);
+            LibX.logger.error("Failed to reload config '{}' (class: {})", configIds.inverse().get(configClass), configClass, e);
         }
     }
 

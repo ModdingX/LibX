@@ -6,8 +6,10 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.Mth;
@@ -165,7 +167,7 @@ public class ColorPicker extends Panel {
         Matrix4f matrix = graphics.pose().last().pose();
 
         {
-            RenderSystem.setShader(GameRenderer::getPositionColorTexLightmapShader);
+            RenderSystem.setShader(CoreShaders.POSITION_COLOR_TEX_LIGHTMAP);
             RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
             BufferBuilder vertex = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
             if (this.enabled) {
@@ -177,7 +179,7 @@ public class ColorPicker extends Panel {
         }
         
         {
-            RenderSystem.setShader(GameRenderer::getPositionColorTexLightmapShader);
+            RenderSystem.setShader(CoreShaders.POSITION_COLOR_TEX_LIGHTMAP);
             RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
             BufferBuilder vertex = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
             if (this.enabled) {
@@ -198,10 +200,10 @@ public class ColorPicker extends Panel {
         int highlightColor = this.brightness > 0.5 ? 0xFF000000 : 0xFFFFFFFF;
 
         RenderHelper.rgb(highlightColor);
-        graphics.blit(RenderHelper.TEXTURE_WHITE, 115, 69, 20, 0, 0, 85, 31, 256, 256);
+        graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, 115, 69, 20, 0, 0, 85, 31, 256, 256);
         
         RenderHelper.rgb(displayColor);
-        graphics.blit(RenderHelper.TEXTURE_WHITE, 116, 70, 40, 0, 0, 83, 29, 256, 256);
+        graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, 116, 70, 40, 0, 0, 83, 29, 256, 256);
         
         String colorText = String.format("#%06X", colorValue);
         RenderHelper.resetColor();

@@ -1,43 +1,49 @@
 plugins {
-    id 'org.moddingx.modgradle.meta' version '5.0.2'
-    id 'org.moddingx.modgradle.javadoc' version '5.0.2'
+    id 'org.moddingx.modgradle.meta' version '5.1.0'
+    id 'org.moddingx.modgradle.javadoc' version '5.1.0'
+}
+
+sourceSets {
+    ap
+    sourcegen
+    main { java.srcDirs += [ file('./src/generated/java') ] }
 }
 
 configurations {
-    apCompileOnly
-    apCompileOnlyResolvable.extendsFrom apCompileOnly
+    apCompileOnlyResolvable {
+        canBeResolved = true
+        canBeConsumed = false
+        extendsFrom configurations.apCompileOnly
+    }
 }
 
 dependencies {
     apCompileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
-sourceSets {
-    ap { compileClasspath = configurations.apCompileOnlyResolvable }
-    sourcegen { compileClasspath = configurations.compileClasspath }
-    main { java.srcDirs += [ file('./src/generated/java') ] }
-}
+sourceSets.ap.compileClasspath = configurations.apCompileOnlyResolvable
+sourceSets.sourcegen.compileClasspath = configurations.compileClasspath
 
 mod.configure {
     modid 'libx'
     group 'org.moddingx'
     versioning {
-        base '1.21.1-6.0'
+        base '1.21.3-6.1'
         maven 'https://maven.moddingx.org/release'
     }
-    
-    neoforge '21.1.97'
+
+    neoforge '21.3.95'
     extraModSource sourceSets.ap
-    
+
     license 'The Apache License, Version 2.0'
     github 'ModdingX/LibX'
-    
+
     runs {
         data {
             modSource sourceSets.sourcegen
         }
     }
-    
+
     artifacts {
         sources {
             publishToRepositories()
@@ -45,7 +51,7 @@ mod.configure {
         }
         javadoc {}
     }
-    
+
     publishing {
         maven {
             name 'moddingx'
@@ -53,7 +59,7 @@ mod.configure {
             credentials(PasswordCredentials)
         }
     }
-    
+
     upload {
         curseforge {
             projectId 412525
@@ -67,9 +73,10 @@ mod.configure {
 dependencies {
     annotationProcessor sourceSets.ap.output
     implementation sourceSets.ap.output
-    
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.2'
 }
 
 compileJava.options.compilerArgs += [
@@ -110,5 +117,11 @@ task release {
         compileJava.options.compilerArgs += [
                 '-Amod.properties.release=true'
         ]
+    }
+}
+
+tasks.withType(Javadoc).configureEach { // todo remove in Minecraft 26.1
+    javadocTool = javaToolchains.javadocToolFor {
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }

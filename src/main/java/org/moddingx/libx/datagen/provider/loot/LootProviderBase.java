@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -25,7 +25,6 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
-import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.datagen.RegistrySet;
 import org.moddingx.libx.datagen.loot.LootBuilders;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
@@ -50,15 +49,15 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     protected final ModX mod;
     protected final RegistrySet registries;
     protected final String folder;
-    protected final LootContextParamSet params;
+    protected final ContextKeySet contextKeySet;
     protected final Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements;
     protected final Function<T, ResourceLocation> idResolver;
 
     private final Set<T> ignored = new HashSet<>();
     private final Map<T, Function<T, LootTable.Builder>> functionMap = new HashMap<>();
 
-    protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, ResourceKey<? extends Registry<T>> registryKey) {
-        this(ctx, folder, params,
+    protected LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, ResourceKey<? extends Registry<T>> registryKey) {
+        this(ctx, folder, contextKeySet,
                 () -> ctx.registries().registry(registryKey).entrySet().stream()
                         .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
                         .map(entry -> Map.entry(entry.getKey().location(), entry.getValue())),
@@ -66,12 +65,12 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         );
     }
     
-    private LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements, Function<T, ResourceLocation> allElementIds) {
+    private LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements, Function<T, ResourceLocation> allElementIds) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
         this.registries = ctx.registries();
         this.folder = folder;
-        this.params = params;
+        this.contextKeySet = contextKeySet;
         this.modElements = modElements;
         this.idResolver = value -> {
             ResourceLocation id = allElementIds.apply(value);
@@ -80,12 +79,12 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         };
     }
     
-    protected LootProviderBase(DatagenContext ctx, String folder, LootContextParamSet params, Function<T, ResourceLocation> elementIds) {
+    protected LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, Function<T, ResourceLocation> elementIds) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
         this.registries = ctx.registries();
         this.folder = folder;
-        this.params = params;
+        this.contextKeySet = contextKeySet;
         this.modElements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
         this.idResolver = value -> {
             ResourceLocation id = elementIds.apply(value);
@@ -157,16 +156,16 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         }
 
         ProblemReporter.Collector problems = new ProblemReporter.Collector();
-        HolderLookup.Provider lootTableHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.LOOT_TABLE).asLookup()));
-        ValidationContext validationContext = new ValidationContext(problems, this.params, lootTableHolderProvider.asGetterLookup());
+        HolderLookup.Provider lootTableHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.LOOT_TABLE)));
+        ValidationContext validationContext = new ValidationContext(problems, this.contextKeySet, lootTableHolderProvider);
 
         for (Map.Entry<ResourceLocation, LootTable> entry : tables.entrySet()) {
-            entry.getValue().validate(validationContext.setParams(this.params).enterElement("{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
+            entry.getValue().validate(validationContext.setContextKeySet(this.contextKeySet).enterElement("{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
         }
 
         Multimap<String, String> multimap = problems.get();
         if (!multimap.isEmpty()) {
-            multimap.forEach((where, what) -> LibX.logger.warn("LootTable validation problem in " + where + ": " + what));
+            multimap.forEach((where, what) -> LibX.logger.warn("LootTable validation problem in {}: {}", where, what));
             throw new IllegalStateException("There were problems validating the loot tables.");
         }
     }
@@ -182,7 +181,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         if (loot == null) return Stream.empty();
         LootTable.Builder builder = loot.apply(entry.getValue());
         if (builder.randomSequence.isEmpty()) builder.setRandomSequence(entry.getKey());
-        return Stream.of(Map.entry(entry.getKey(), loot.apply(entry.getValue()).setParamSet(this.params).build()));
+        return Stream.of(Map.entry(entry.getKey(), loot.apply(entry.getValue()).setParamSet(this.contextKeySet).build()));
     }
 
     protected final LootModifier<T> modifier(BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolSingletonContainer.Builder<?>> function) {

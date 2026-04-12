@@ -28,7 +28,7 @@ public class ConfiguredValidator<T, A extends Annotation> {
     public T validate(T value, String action, List<String> path, @Nullable AtomicBoolean needsCorrection) {
         Optional<T> result = this.validator.validate(value, this.annotation);
         if (result.isPresent()) {
-            LibX.logger.warn(action + ". Corrected value " + String.join(".", path) + " from " + value + " to " + result.get() + ".");
+            LibX.logger.warn("{}. Corrected value {} from {} to {}.", action, String.join(".", path), value, result.get());
             if (needsCorrection != null) {
                 needsCorrection.set(true);
             }

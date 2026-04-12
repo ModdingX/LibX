@@ -139,7 +139,7 @@ public abstract class ConfigBaseScreen extends Screen {
                 graphics.pose().pushPose();
                 graphics.pose().translate(0, relativeY, 0);
                 for (AbstractWidget widget : widgets) {
-                    widget.render(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getTimer().getGameTimeDeltaTicks());
+                    widget.render(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaTracker().getGameTimeDeltaTicks());
                 }
                 graphics.pose().popPose();
                 ConfigBaseScreen.this.currentScrollOffset = 0;

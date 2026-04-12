@@ -52,7 +52,7 @@ public class DataLoader {
             if (result.result().isPresent()) return result.result().get();
             String err = result.error().map(DataResult.Error::message).orElse("Unknown error");
             if (err.length() > 100) err = err.substring(0, 100) + " ...";
-            LibX.logger.error("Failed to load data entry " + id + ": " + err);
+            LibX.logger.error("Failed to load data entry {}: {}", id, err);
             return null;
         });
     }

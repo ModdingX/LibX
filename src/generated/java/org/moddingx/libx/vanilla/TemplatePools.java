@@ -107,7 +107,9 @@ public class TemplatePools {
     public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_CORRIDORS_ADDON_MIDDLE = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/corridors/addon/middle"));
     public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_CORRIDORS_ADDON_MIDDLE_UPPER = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/corridors/addon/middle_upper"));
     public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_DECOR = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/decor"));
+    public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_DECOR_BED = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/decor/bed"));
     public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_DECOR_CHAMBER = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/decor/chamber"));
+    public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_DECOR_DISPOSAL = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/decor/disposal"));
     public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_DISPENSERS_CHAMBER = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/dispensers/chamber"));
     public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_ENTRANCE = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/entrance"));
     public static final ResourceKey<StructureTemplatePool> TRIAL_CHAMBERS_HALLWAY = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath("minecraft","trial_chambers/hallway"));

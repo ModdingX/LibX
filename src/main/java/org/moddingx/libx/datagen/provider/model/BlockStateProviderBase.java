@@ -122,7 +122,7 @@ public abstract class BlockStateProviderBase extends BlockStateProvider {
         this.setup();
 
         for (ResourceLocation id : BuiltInRegistries.BLOCK.keySet().stream().sorted().toList()) {
-            Block block = BuiltInRegistries.BLOCK.get(id);
+            Block block = BuiltInRegistries.BLOCK.getValue(id);
             if (this.mod.modid.equals(id.getNamespace()) && !this.manualState.contains(block)) {
                 if (this.existingModel.contains(block)) {
                     this.defaultState(id, block, () -> this.models().getExistingFile(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath())));

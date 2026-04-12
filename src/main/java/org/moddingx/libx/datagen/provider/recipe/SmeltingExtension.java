@@ -1,7 +1,9 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -223,7 +225,7 @@ public interface SmeltingExtension extends RecipeExtension {
     default void smelting(ResourceLocation outputId, RecipeCategory category, ItemLike in, ItemLike out, float exp, int time) {
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), category, out, exp, time)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "smelting/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "smelting/" + outputId.getPath())));
     }
 
     /**
@@ -235,7 +237,7 @@ public interface SmeltingExtension extends RecipeExtension {
         this.smelting(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "blasting/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "blasting/" + outputId.getPath())));
     }
 
     /**
@@ -247,7 +249,7 @@ public interface SmeltingExtension extends RecipeExtension {
         this.smelting(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.smoking(Ingredient.of(in), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "cooking/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "cooking/" + outputId.getPath())));
     }
 
     /**
@@ -259,16 +261,16 @@ public interface SmeltingExtension extends RecipeExtension {
         this.cooking(outputId, in, out, exp, time);
         SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(in), category, out, exp, time * 3)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "campfire/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "campfire/" + outputId.getPath())));
     }
 
     /**
      * Adds a smelting recipe.
      */
     default void smelting(ResourceLocation outputId, RecipeCategory category, TagKey<Item> in, ItemLike out, float exp, int time) {
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(in), category, out, exp, time)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(this.items().getOrThrow(in)), category, out, exp, time)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "smelting/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "smelting/" + outputId.getPath())));
     }
 
     /**
@@ -278,9 +280,9 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void blasting(ResourceLocation outputId, RecipeCategory category, TagKey<Item> in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.blasting(Ingredient.of(in), category, out, exp, time / 2)
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(this.items().getOrThrow(in)), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "blasting/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "blasting/" + outputId.getPath())));
     }
 
     /**
@@ -290,9 +292,9 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void cooking(ResourceLocation outputId, RecipeCategory category, TagKey<Item> in, ItemLike out, float exp, int time) {
         this.smelting(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.smoking(Ingredient.of(in), category, out, exp, time / 2)
+        SimpleCookingRecipeBuilder.smoking(Ingredient.of(this.items().getOrThrow(in)), category, out, exp, time / 2)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "cooking/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "cooking/" + outputId.getPath())));
     }
 
     /**
@@ -302,8 +304,8 @@ public interface SmeltingExtension extends RecipeExtension {
      */
     default void campfire(ResourceLocation outputId, RecipeCategory category, TagKey<Item> in, ItemLike out, float exp, int time) {
         this.cooking(outputId, in, out, exp, time);
-        SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(in), category, out, exp, time * 3)
+        SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(this.items().getOrThrow(in)), category, out, exp, time * 3)
                 .unlockedBy("has_item", this.criterion(in))
-                .save(this.output(), ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "campfire/" + outputId.getPath()));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(outputId.getNamespace(), "campfire/" + outputId.getPath())));
     }
 }

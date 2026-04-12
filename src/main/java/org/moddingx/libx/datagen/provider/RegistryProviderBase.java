@@ -47,7 +47,7 @@ public abstract class RegistryProviderBase implements RegistryProvider {
      */
     public final <T> Holder.Reference<T> holder(ResourceKey<T> key) {
         Registry<T> registry = this.registries.registry(ResourceKey.createRegistryKey(key.registry()));
-        return registry.getHolder(key).orElseThrow(() -> new IllegalArgumentException("Unregistered element in registry " + key.registry() + ": " + key.location()));
+        return registry.get(key).orElseThrow(() -> new IllegalArgumentException("Unregistered element in registry " + key.registry() + ": " + key.location()));
     }
     
     /**
@@ -71,28 +71,28 @@ public abstract class RegistryProviderBase implements RegistryProvider {
      */
     public final <T> HolderSet<T> set(TagKey<T> tag) {
         Registry<T> registry = this.registries.registry(tag.registry());
-        return registry.getOrCreateTag(tag);
+        return registry.getOrThrow(tag);
     }
     
     /**
      * Gets a holder set matching any value from the given registry.
      */
     public final <T> HolderSet<T> any(ResourceKey<? extends Registry<T>> registryKey) {
-        return new AnyHolderSet<>(this.registries.registry(registryKey).asLookup());
+        return new AnyHolderSet<>(this.registries.registry(registryKey));
     }
     
     /**
      * Gets a holder set matching any value not in the given tag.
      */
     public final <T> HolderSet<T> not(TagKey<T> tag) {
-        return new NotHolderSet<>(this.registries.registry(tag.registry()).asLookup(), this.set(tag));
+        return new NotHolderSet<>(this.registries.registry(tag.registry()), this.set(tag));
     }
     
     /**
      * Gets a holder set matching any value not in the given holder set.
      */
     public final <T> HolderSet<T> not(ResourceKey<? extends Registry<T>> registryKey, HolderSet<T> set) {
-        return new NotHolderSet<>(this.registries.registry(registryKey).asLookup(), set);
+        return new NotHolderSet<>(this.registries.registry(registryKey), set);
     }
 
     /**
@@ -196,10 +196,10 @@ public abstract class RegistryProviderBase implements RegistryProvider {
                     } else if (field.getAnnotation(Id.class) != null) {
                         Id idObj = field.getAnnotation(Id.class);
                         String id = (idObj.namespace().isEmpty() ? this.mod.modid : idObj.namespace()) + ":" + idObj.value();
-                        LibX.logger.warn("Skipping bound holder " + field.getName() + " with explicit id " + id + " in '" + this.getName() + "'");
+                        LibX.logger.warn("Skipping bound holder {} with explicit id {} in '{}'", field.getName(), id, this.getName());
                     }
                 } else {
-                    LibX.logger.warn("Skipping direct holder in '" + this.getName() + "' (from " + field.getName() + ")");
+                    LibX.logger.warn("Skipping direct holder in '{}' (from {})", this.getName(), field.getName());
                 }
             }
         } catch (ReflectiveOperationException e) {

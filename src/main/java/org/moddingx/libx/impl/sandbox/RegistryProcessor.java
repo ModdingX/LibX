@@ -15,8 +15,8 @@ import java.util.Map;
 public class RegistryProcessor {
     
     public static void processWorldGenStage(LayeredRegistryAccess<RegistryLayer> access) {
-        Registry<StructureTemplatePool> poolRegistry = access.getLayer(RegistryLayer.WORLDGEN).registry(Registries.TEMPLATE_POOL).orElse(null);
-        Registry<PoolExtension> extRegistry = access.getLayer(RegistryLayer.WORLDGEN).registry(SandBox.TEMPLATE_POOL_EXTENSION).orElse(null);
+        Registry<StructureTemplatePool> poolRegistry = access.getLayer(RegistryLayer.WORLDGEN).lookup(Registries.TEMPLATE_POOL).orElse(null);
+        Registry<PoolExtension> extRegistry = access.getLayer(RegistryLayer.WORLDGEN).lookup(SandBox.TEMPLATE_POOL_EXTENSION).orElse(null);
         if (poolRegistry != null && extRegistry != null) {
             for (PoolExtension ext : extRegistry.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).toList()) {
                 StructureTemplatePool pool = poolRegistry.getOptional(ext.pool()).orElse(null);

@@ -165,10 +165,10 @@ public class ComponentUtil {
     }
     
     private static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, RegistryAccess registryAccess, Map<DataComponentType<?>, Optional<?>> map) {
-        Registry<DataComponentType<?>> theRegistry = registryAccess.registry(registry).orElse(null);
+        Registry<DataComponentType<?>> theRegistry = registryAccess.lookup(registry).orElse(null);
         if (theRegistry == null) {
             //noinspection unchecked
-            theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.location());
+            theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.location()).orElse(null);
         }
         if (theRegistry == null) throw new IllegalStateException("Registry not found: " + registry);
         DynamicOps<Tag> registryOps = RegistryOps.create(NbtOps.INSTANCE, registryAccess);

@@ -17,6 +17,7 @@ import org.moddingx.libx.sandbox.generator.ExtendedNoiseChunkGenerator;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -52,14 +53,14 @@ public record SurfaceRuleSet(boolean useDefaultNoiseSurface, SurfaceRules.RuleSo
                 case DIRECT -> biomeRegistry.getKey(biome.value());
             };
             if (id != null) {
-                BiomeSurface biomeSurface = surfaceRegistry.get(id);
-                if (biomeSurface != null) {
+                Optional<Holder.Reference<BiomeSurface>> biomeSurface = surfaceRegistry.get(id);
+                if (biomeSurface.isPresent()) {
                     ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, id);
                     if (!biomesWithRules.contains(biomeKey)) {
                         biomesWithRules.add(biomeKey);
                         rules.add(SurfaceRules.ifTrue(
                                 SurfaceRules.isBiome(biomeKey),
-                                biomeSurface.rule()
+                                biomeSurface.get().value().rule()
                         ));
                     }
                 }

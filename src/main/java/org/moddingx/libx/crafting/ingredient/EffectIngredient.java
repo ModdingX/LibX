@@ -3,12 +3,14 @@ package org.moddingx.libx.crafting.ingredient;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -111,15 +113,6 @@ public class EffectIngredient implements ICustomIngredient {
         return TYPE;
     }
 
-    @Nonnull
-    @Override
-    public Stream<ItemStack> getItems() {
-        ItemStack potion = new ItemStack(this.potionItem == null ? Items.POTION : this.potionItem);
-        PotionContents potionContents = new PotionContents(Optional.empty(), Optional.empty(), this.effects.stream().map(MobEffectInstance::new).toList());
-        potion.set(DataComponents.POTION_CONTENTS, potionContents);
-        return Stream.of(potion);
-    }
-
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if (stack != null && !stack.isEmpty() && (this.potionItem == null || stack.getItem() == this.potionItem)) {
@@ -136,7 +129,18 @@ public class EffectIngredient implements ICustomIngredient {
             return false;
         }
     }
-    
+
+    @Nonnull
+    @Override
+    public Stream<Holder<Item>> items() {
+        Item potion = this.potionItem == null ? Items.POTION : this.potionItem;
+
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(potion);
+        Optional<Holder.Reference<Item>> optional = BuiltInRegistries.ITEM.get(id);
+
+        return optional.stream().map(itemReference -> itemReference);
+    }
+
     private static Stream<MobEffectInstance> getEffects(ItemStack stack) {
         PotionContents potionContents = stack.get(DataComponents.POTION_CONTENTS);
         if (potionContents == null) return Stream.of();

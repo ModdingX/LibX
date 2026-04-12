@@ -136,7 +136,7 @@ public class RenderHelperBlock {
                     newData[off + uvOff + 1] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + uvOff + 1]) - oldSprite.getV0()) * newSprite.contents().height() / oldSprite.contents().height()) + newSprite.getV0());
                 }
             }
-            result = new BakedQuad(newData, quad.getTintIndex(), quad.getDirection(), newSprite, quad.isShade());
+            result = new BakedQuad(newData, quad.getTintIndex(), quad.getDirection(), newSprite, quad.isShade(), quad.getLightEmission(), quad.hasAmbientOcclusion());
             BlockOverlayQuadCache.put(quad, result);
         }
         return result;

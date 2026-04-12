@@ -16,9 +16,9 @@ public class RecipeHelper {
      * @param rm The recipe manager to use. You can get one from a world.
      */
     public static <I extends RecipeInput, T extends Recipe<I>> boolean isItemValidInput(RecipeManager rm, RecipeType<T> recipeType, ItemStack stack) {
-        Collection<? extends RecipeHolder<T>> recipes = rm.getAllRecipesFor(recipeType);
+        Collection<RecipeHolder<T>> recipes = rm.recipes.byType(recipeType);
         for (RecipeHolder<?> recipe : recipes) {
-            for (Ingredient ingredient : recipe.value().getIngredients()) {
+            for (Ingredient ingredient : recipe.value().placementInfo().ingredients()) {
                 if (ingredient.test(stack)) {
                     return true;
                 }
@@ -40,7 +40,7 @@ public class RecipeHelper {
             countsLeft.add(stack.isEmpty() ? 0 : stack.getCount());
         }
 
-        ingredientLoop: for (Ingredient ingredient : recipe.getIngredients()) {
+        ingredientLoop: for (Ingredient ingredient : recipe.placementInfo().ingredients()) {
             for (int i = 0; i < stacks.size(); i++) {
                 if (countsLeft.get(i) > 0) {
                     if (ingredient.test(stacks.get(i))) {

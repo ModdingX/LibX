@@ -45,12 +45,12 @@ public class ConfigShadowHandler extends PacketHandler<ConfigShadowHandler.Messa
         ConfigImpl config = ConfigImpl.getConfigNullable(configId);
         int size = buffer.readVarInt();
         if (config == null) {
-            LibX.logger.warn("Received shadow message for unknown config: '" + configId + "'. Ignoring");
+            LibX.logger.warn("Received shadow message for unknown config: '{}'. Ignoring", configId);
             // Skip the bytes we don't know about.
             buffer.skipBytes(size);
             return new Message(null, null);
         } else if (config.clientConfig) {
-            LibX.logger.warn("Received shadow message for not-synced config: '" + configId + "'. Ignoring");
+            LibX.logger.warn("Received shadow message for not-synced config: '{}'. Ignoring", configId);
             // Skip the bytes we don't know about.
             buffer.skipBytes(size);
             return new Message(null, null);

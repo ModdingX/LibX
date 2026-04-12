@@ -16,8 +16,8 @@ public class BuiltinRegistryHelper {
 
         @Nonnull
         @Override
-        public Stream<ResourceKey<? extends Registry<?>>> listRegistries() {
-            return BuiltInRegistries.REGISTRY.registryKeySet().stream().map(key -> key);
+        public Stream<ResourceKey<? extends Registry<?>>> listRegistryKeys() {
+            return BuiltInRegistries.REGISTRY.registryKeySet().stream().map(key -> (ResourceKey<? extends Registry<?>>) key);
         }
 
         @Nonnull

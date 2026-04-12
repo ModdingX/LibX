@@ -123,7 +123,7 @@ public class ModMappers {
             throw new IllegalStateException("Config mapper for type '" + type + "' is already registered.");
         } else {
             if (globalMappers.containsKey(type) || globalGenericMappers.containsKey(type)) {
-                LibX.logger.warn(this.modid + " registers a custom value mapper for type " + type + ", shading a builtin one. This is discouraged.");
+                LibX.logger.warn("{} registers a custom value mapper for type {}, shading a builtin one. This is discouraged.", this.modid, type);
             }
             map.put(type, mapper);
         }

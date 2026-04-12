@@ -4,10 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import org.moddingx.libx.LibX;
+
+import java.util.function.Function;
 
 /**
  * Some utilities for rendering in general.
@@ -22,10 +25,10 @@ public class RenderHelper {
     public static final ResourceLocation TEXTURE_CHEST_GUI = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
 
     /**
-     * Same as {@link #repeatBlit(GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
+     * Same as {@link #repeatBlit(Function, GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)}. texWidth and texHeight are set from the sprite.
      */
-    public static void repeatBlit(GuiGraphics graphics, int x, int y, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
-        repeatBlit(graphics, sprite.atlasLocation(), x, y, sprite.contents().width(), sprite.contents().height(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
+    public static void repeatBlit(Function<ResourceLocation, RenderType> renderTypeFunction, GuiGraphics graphics, int x, int y, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
+        repeatBlit(renderTypeFunction, graphics, sprite.atlasLocation(), x, y, sprite.contents().width(), sprite.contents().height(), displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
     }
 
     /**
@@ -39,14 +42,14 @@ public class RenderHelper {
      * @param displayHeight the height of the blit
      * @param sprite        A texture sprite
      */
-    public static void repeatBlit(GuiGraphics graphics, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
-        repeatBlit(graphics, sprite.atlasLocation(), x, y, texWidth, texHeight, displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
+    public static void repeatBlit(Function<ResourceLocation, RenderType> renderTypeFunction, GuiGraphics graphics, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
+        repeatBlit(renderTypeFunction, graphics, sprite.atlasLocation(), x, y, texWidth, texHeight, displayWidth, displayHeight, sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1());
     }
 
     /**
-     * Same as {@link #repeatBlit(GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
+     * Same as {@link #repeatBlit(Function, GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
      */
-    public static void repeatBlit(GuiGraphics graphics, ResourceLocation texture, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
+    public static void repeatBlit(Function<ResourceLocation, RenderType> renderTypeFunction, GuiGraphics graphics, ResourceLocation texture, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
         int pixelsRenderedX = 0;
         while (pixelsRenderedX < displayWidth) {
             int pixelsNowX = Math.min(texWidth, displayWidth - pixelsRenderedX);
@@ -63,9 +66,9 @@ public class RenderHelper {
                     maxVThisTime = minV + ((maxV - minV) * (pixelsNowY / (float) texHeight));
                 }
 
-                graphics.innerBlit(texture, x + pixelsRenderedX, x + pixelsRenderedX + pixelsNowX,
+                graphics.innerBlit(renderTypeFunction, texture, x + pixelsRenderedX, x + pixelsRenderedX + pixelsNowX,
                         y + pixelsRenderedY, y + pixelsRenderedY + pixelsNowY,
-                        0, minU, maxUThisTime, minV, maxVThisTime);
+                        minU, maxUThisTime, minV, maxVThisTime, -1);
 
                 pixelsRenderedY += pixelsNowY;
             }
@@ -120,18 +123,18 @@ public class RenderHelper {
     }
 
     /**
-     * Same as {@link #renderGuiBackground(GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground} but with pre-set texture.
+     * Same as {@link #renderGuiBackground(Function, GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground} but with pre-set texture.
      */
-    public static void renderGuiBackground(GuiGraphics graphics, int x, int y, int width, int height) {
-        renderGuiBackground(graphics, x, y, width, height, TEXTURE_CHEST_GUI);
+    public static void renderGuiBackground(Function<ResourceLocation, RenderType> renderTypeFunction, GuiGraphics graphics, int x, int y, int width, int height) {
+        renderGuiBackground(renderTypeFunction, graphics, x, y, width, height, TEXTURE_CHEST_GUI);
     }
 
     /**
-     * Same as {@link #renderGuiBackground(GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground}
+     * Same as {@link #renderGuiBackground(Function, GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground}
      * with the default GUI texture.
      */
-    public static void renderGuiBackground(GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture) {
-        renderGuiBackground(graphics, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);
+    public static void renderGuiBackground(Function<ResourceLocation, RenderType> renderTypeFunction, GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture) {
+        renderGuiBackground(renderTypeFunction, graphics, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);
     }
 
     /**
@@ -150,30 +153,30 @@ public class RenderHelper {
      * @param minV     The minimum v position for the filling part of the texture
      * @param maxV     The maximum v position for the filling part of the texture
      */
-    public static void renderGuiBackground(GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
+    public static void renderGuiBackground(Function<ResourceLocation, RenderType> renderTypeFunction, GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
         // Background
-        repeatBlit(graphics, texture, x + 2, y + 2,
+        repeatBlit(renderTypeFunction, graphics, texture, x + 2, y + 2,
                 maxU - minU, maxV - minV, width - 4, height - 4,
                 minU / 256f, maxU / 256f, minV / 256f, maxV / 256f);
         // Corners
-        graphics.blit(texture, x, y, 0, 0, 0, 4, 4, 256, 256);
-        graphics.blit(texture, x + width - 5, y, 0, textureX - 4, 0, 4, 4, 256, 256);
-        graphics.blit(texture, x, y + height - 5, 0, 0, textureY - 4, 4, 4, 256, 256);
-        graphics.blit(texture, x + width - 5, y + height - 5, 0, textureX - 4, textureY - 4, 4, 4, 256, 256);
+        graphics.blit(renderTypeFunction, texture, x, y, 0, 0, 4, 4, 256, 256);
+        graphics.blit(renderTypeFunction, texture, x + width - 5, y, textureX - 4, 0, 4, 4, 256, 256);
+        graphics.blit(renderTypeFunction, texture, x, y + height - 5, 0, textureY - 4, 4, 4, 256, 256);
+        graphics.blit(renderTypeFunction, texture, x + width - 5, y + height - 5, textureX - 4, textureY - 4, 4, 4, 256, 256);
         // Top edge
-        repeatBlit(graphics, texture, x + 4, y,
+        repeatBlit(renderTypeFunction, graphics, texture, x + 4, y,
                 169, 3, width - 8, 3,
                 4 / 256f, (textureX - 3) / 256f, 0 / 256f, 3 / 256f);
         // Bottom edge
-        repeatBlit(graphics, texture, x + 4, y + height - 4,
+        repeatBlit(renderTypeFunction, graphics, texture, x + 4, y + height - 4,
                 169, 3, width - 8, 3,
                 4 / 256f, (textureX - 3) / 256f, (textureY - 3) / 256f, textureY / 256f);
         // Left edge
-        repeatBlit(graphics, texture, x, y + 4,
+        repeatBlit(renderTypeFunction, graphics, texture, x, y + 4,
                 3, 214, 3, height - 8,
                 0 / 256f, 3 / 256f, 4 / 256f, (textureY - 4) / 256f);
         // Right edge
-        repeatBlit(graphics, texture, x + width - 4, y + 4,
+        repeatBlit(renderTypeFunction, graphics, texture, x + width - 4, y + 4,
                 3, 214, 3, height - 8,
                 (textureX - 3) / 256f, textureX / 256f, 4 / 256f, (textureY - 4) / 256f);
     }

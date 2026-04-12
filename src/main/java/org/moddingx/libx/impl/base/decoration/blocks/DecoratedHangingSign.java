@@ -47,7 +47,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         this.ceiling = new Ceiling(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
         //noinspection ConstantConditions
-        this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.ceiling, this.wall), null);
+        this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.ceiling, this.wall));
         this.item = new HangingSignItem(this.ceiling, this.wall, new Item.Properties().stacksTo(16)) {
 
             @Override

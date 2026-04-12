@@ -53,7 +53,7 @@ public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
             NoiseGeneratorSettings settings = this.actualSettings.value();
             SurfaceRuleSet set = this.surfaceOverride.get().value();
             Set<Holder<Biome>> biomes = this.biomeSource.possibleBiomes();
-            SurfaceRules.RuleSource surfaceRule = set.build(access.registryOrThrow(Registries.BIOME), access.registryOrThrow(SandBox.BIOME_SURFACE), biomes, this.actualSettings.value());
+            SurfaceRules.RuleSource surfaceRule = set.build(access.lookupOrThrow(Registries.BIOME), access.lookupOrThrow(SandBox.BIOME_SURFACE), biomes, this.actualSettings.value());
             this.fakeSettings.set(Holder.direct(withSurface(settings, surfaceRule)));
         }
     }

@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.FuelValues;
 import org.moddingx.libx.creativetab.CreativeTabItemProvider;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
@@ -54,7 +55,7 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
         }
     }
     
-    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType, FuelValues fuelValues) {
         return 0;
     }
     
@@ -76,10 +77,10 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
         public BaseBlockItem(Block block, Properties itemProperties) {
             super(block, itemProperties);
         }
-        
+
         @Override
-        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType) {
-            return BlockBase.this.getBurnTime(stack, recipeType);
+        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType, @Nonnull FuelValues fuelValues) {
+            return BlockBase.this.getBurnTime(stack, recipeType, fuelValues);
         }
 
         @Override

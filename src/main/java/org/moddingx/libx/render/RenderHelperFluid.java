@@ -3,6 +3,7 @@ package org.moddingx.libx.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
@@ -44,7 +45,7 @@ public class RenderHelperFluid {
         } else {
             RenderHelper.rgb(color);
         }
-        RenderHelper.repeatBlit(graphics, x, y, width, height, sprite);
+        RenderHelper.repeatBlit(RenderType::guiTextured, graphics, x, y, width, height, sprite);
         if (alpha > 0 && alpha < 255) {
             RenderSystem.disableBlend();
         }

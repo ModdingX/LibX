@@ -118,7 +118,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
 
         for (ResourceLocation id : BuiltInRegistries.SOUND_EVENT.keySet().stream().sorted().toList()) {
             if (this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(id)) {
-                SoundEvent sound = BuiltInRegistries.SOUND_EVENT.get(id);
+                SoundEvent sound = BuiltInRegistries.SOUND_EVENT.getValue(id);
                 if (sound != null) {
                     this.defaultSound(id, sound);
                 }

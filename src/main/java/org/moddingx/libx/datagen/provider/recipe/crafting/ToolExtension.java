@@ -1,8 +1,10 @@
 package org.moddingx.libx.datagen.provider.recipe.crafting;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
@@ -19,10 +21,10 @@ public interface ToolExtension extends RecipeExtension {
      * Creates tool recipes for a material. All the tool items may be null in which case the recipe is not created.
      */
     default void makeTools(ItemLike material, @Nullable ItemLike sword, @Nullable ItemLike axe,
-                           @Nullable ItemLike pick, @Nullable ItemLike shovel, @Nullable ItemLike hoe) {
+            @Nullable ItemLike pick, @Nullable ItemLike shovel, @Nullable ItemLike hoe) {
 
         if (sword != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, sword)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.COMBAT, sword)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("m")
@@ -31,11 +33,11 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_sword")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material, "sword"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "sword")));
         }
 
         if (axe != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, axe)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.TOOLS, axe)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("mm")
@@ -44,11 +46,11 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_axe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material, "axe"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "axe")));
         }
 
         if (pick != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, pick)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.TOOLS, pick)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("mmm")
@@ -57,11 +59,11 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_pick")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material, "pick"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "pick")));
         }
 
         if (shovel != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, shovel)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.TOOLS, shovel)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("m")
@@ -70,11 +72,11 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_shovel")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material, "shovel"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "shovel")));
         }
 
         if (hoe != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, hoe)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.TOOLS, hoe)
                     .define('m', material)
                     .define('s', Tags.Items.RODS_WOODEN)
                     .pattern("mm")
@@ -83,7 +85,7 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_hoe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material, "hoe"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "hoe")));
         }
     }
 
@@ -91,48 +93,48 @@ public interface ToolExtension extends RecipeExtension {
      * Creates armor recipes for a material. All the armor items may be null in which case the recipe is not created.
      */
     default void makeArmor(ItemLike material, @Nullable ItemLike helmet, @Nullable ItemLike chestplate,
-                           @Nullable ItemLike leggings, @Nullable ItemLike boots) {
+            @Nullable ItemLike leggings, @Nullable ItemLike boots) {
 
         if (helmet != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, helmet)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.COMBAT, helmet)
                     .define('m', material)
                     .pattern("mmm")
                     .pattern("m m")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_helmet")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material.asItem(), "helmet"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "helmet")));
         }
 
         if (chestplate != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, chestplate)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.COMBAT, chestplate)
                     .define('m', material)
                     .pattern("m m")
                     .pattern("mmm")
                     .pattern("mmm")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_chestplate")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material.asItem(), "chestplate"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "chestplate")));
         }
 
         if (leggings != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, leggings)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.COMBAT, leggings)
                     .define('m', material)
                     .pattern("mmm")
                     .pattern("m m")
                     .pattern("m m")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_leggings")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material.asItem(), "leggings"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "leggings")));
         }
 
         if (boots != null) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, boots)
+            ShapedRecipeBuilder.shaped(this.items(), RecipeCategory.COMBAT, boots)
                     .define('m', material)
                     .pattern("m m")
                     .pattern("m m")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_boots")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), this.provider().loc(material.asItem(), "boots"));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "boots")));
         }
     }
 }

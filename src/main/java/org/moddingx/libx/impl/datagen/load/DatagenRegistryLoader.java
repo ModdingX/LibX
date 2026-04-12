@@ -1,11 +1,13 @@
 package org.moddingx.libx.impl.datagen.load;
 
+import net.minecraft.Util;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.TagLoader;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 import org.moddingx.libx.LibX;
@@ -32,7 +34,7 @@ public class DatagenRegistryLoader {
     }
 
     private static LayeredRegistryAccess<RegistryLayer> loadLayer(ResourceManager mgr, LayeredRegistryAccess<RegistryLayer> access, RegistryLayer layer, List<RegistryDataLoader.RegistryData<?>> registries) {
-        return access.replaceFrom(layer, RegistryDataLoader.load(mgr, access.getAccessForLoading(layer), registries));
+        return access.replaceFrom(layer, RegistryDataLoader.load(mgr, TagLoader.buildUpdatedLookups(access.getAccessForLoading(layer), TagLoader.loadTagsForExistingRegistries(mgr, access.getLayer(RegistryLayer.STATIC))), registries));
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -49,14 +51,14 @@ public class DatagenRegistryLoader {
                     )
             ).toList();
         }
-        List<RegistryDataLoader.RegistryData<?>> defaultRegistries = switch (layer) {
+        List<RegistryDataLoader.RegistryData<?>> defaultRegistries = switch(layer) {
             case STATIC, RELOADABLE -> List.of();
             case WORLDGEN -> List.copyOf(DataPackRegistriesHooks.getDataPackRegistries());
             case DIMENSIONS -> List.copyOf(RegistryDataLoader.DIMENSION_REGISTRIES);
         };
         return selector == null ? defaultRegistries : List.copyOf(selector.selectRegistries(layer, defaultRegistries));
     }
-    
+
     @FunctionalInterface
     public interface RegistrySelector {
         List<RegistryDataLoader.RegistryData<?>> selectRegistries(RegistryLayer layer, List<RegistryDataLoader.RegistryData<?>> registries);

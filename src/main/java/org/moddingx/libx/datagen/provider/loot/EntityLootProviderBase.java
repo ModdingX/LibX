@@ -49,7 +49,7 @@ public abstract class EntityLootProviderBase extends LootProviderBase<EntityType
      * @param max The maximum amount of additional drops.
      */
     public LootModifier<EntityType<?>> looting(int min, int max) {
-        HolderLookup.Provider enchantmentHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.ENCHANTMENT).asLookup()));
+        HolderLookup.Provider enchantmentHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.ENCHANTMENT)));
         return this.modifier((entity, entry) -> entry.apply(EnchantedCountIncreaseFunction.lootingMultiplier(enchantmentHolderProvider, UniformGenerator.between(min, max))));
     }
 

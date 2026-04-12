@@ -81,7 +81,7 @@ public abstract class ItemModelProviderBase extends ItemModelProvider {
         this.setup();
 
         for (ResourceLocation id : BuiltInRegistries.ITEM.keySet().stream().sorted().toList()) {
-            Item item = BuiltInRegistries.ITEM.get(id);
+            Item item = BuiltInRegistries.ITEM.getValue(id);
             if (this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(item)) {
                 if (item instanceof BlockItem blockItem) {
                     this.defaultBlock(id, blockItem);

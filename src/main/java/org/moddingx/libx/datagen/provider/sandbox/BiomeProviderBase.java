@@ -155,7 +155,7 @@ public abstract class BiomeProviderBase extends RegistryProviderBase {
     private class BiomeGenerationBuilder extends BiomeGenerationSettings.Builder {
         
         private BiomeGenerationBuilder() {
-            super(BiomeProviderBase.this.registries.registry(Registries.PLACED_FEATURE).asLookup(), BiomeProviderBase.this.registries.registry(Registries.CONFIGURED_CARVER).asLookup());
+            super(BiomeProviderBase.this.registries.registry(Registries.PLACED_FEATURE), BiomeProviderBase.this.registries.registry(Registries.CONFIGURED_CARVER));
         }
     }
 }

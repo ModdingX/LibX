@@ -29,19 +29,7 @@ public class DefaultBucketItem extends BucketItem implements Registerable {
 
     @Nonnull
     @Override
-    protected String getOrCreateDescriptionId() {
-        return "libx.tooltip.fluid_base.bucket";
-    }
-
-    @Nonnull
-    @Override
     public Component getName(@Nonnull ItemStack stack) {
-        return Component.translatable("libx.tooltip.fluid_base.bucket", this.content.getFluidType().getDescription(new FluidStack(this.content, FluidType.BUCKET_VOLUME)));
-    }
-
-    @Nonnull
-    @Override
-    public Component getDescription() {
         return Component.translatable("libx.tooltip.fluid_base.bucket", this.content.getFluidType().getDescription(new FluidStack(this.content, FluidType.BUCKET_VOLUME)));
     }
 }

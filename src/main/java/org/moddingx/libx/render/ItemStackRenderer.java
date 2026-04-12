@@ -105,7 +105,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
                         //noinspection deprecation
                         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay);
                     }
-                    renderer.render(blockEntity, Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay);
+                    renderer.render(blockEntity, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay);
 
                     poseStack.popPose();
                 }

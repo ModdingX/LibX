@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.FuelValues;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationContext;
 import org.moddingx.libx.fi.Function3;
@@ -84,9 +85,9 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
         }
 
         @Override
-        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType, @Nonnull FuelValues fuelValues) {
             if (this.burnTimeModifier == 0) return 0;
-            int burnTime = this.parent.getBurnTime(stack, recipeType);
+            int burnTime = this.parent.getBurnTime(stack, recipeType, fuelValues);
             if (burnTime < 0) return burnTime;
             return (int) Math.round(this.burnTimeModifier * burnTime);
         }

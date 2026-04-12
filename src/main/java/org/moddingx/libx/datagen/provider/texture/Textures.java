@@ -69,7 +69,7 @@ public class Textures {
         if (this.images.containsKey(loc)) {
             return this.scale / this.images.get(loc).getRight();
         } else {
-            LibX.logger.warn("Requesting texture scale for " + loc + " after scale was built. It should be added to the texture builder.");
+            LibX.logger.warn("Requesting texture scale for {} after scale was built. It should be added to the texture builder.", loc);
             return 1;
         }
     }
@@ -102,7 +102,7 @@ public class Textures {
         if (this.images.containsKey(loc)) {
             return this.images.get(loc).getLeft();
         } else {
-            LibX.logger.warn("Loading texture " + loc + " after scale was built. It should be added to the texture builder.");
+            LibX.logger.warn("Loading texture {} after scale was built. It should be added to the texture builder.", loc);
             return this.textureLoader.apply(loc);
         }
     }

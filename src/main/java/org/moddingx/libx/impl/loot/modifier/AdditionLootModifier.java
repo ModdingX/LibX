@@ -44,7 +44,7 @@ public class AdditionLootModifier extends LootModifier {
     @Nonnull
     @Override
     protected ObjectArrayList<ItemStack> doApply(@Nonnull ObjectArrayList<ItemStack> loot, @Nonnull LootContext context) {
-        Holder.Reference<LootTable> table = context.getResolver().get(Registries.LOOT_TABLE, this.table).orElse(null);
+        Holder.Reference<LootTable> table = context.getResolver().get(this.table).orElse(null);
         if (table != null) {
             LootContext copy = new LootContext.Builder(context).withQueriedLootTableId(this.table.location()).create(this.randomSequence);
             ObjectArrayList<ItemStack> stacks = table.value().getRandomItems(copy);

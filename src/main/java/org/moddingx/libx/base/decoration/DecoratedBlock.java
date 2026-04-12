@@ -98,9 +98,13 @@ public class DecoratedBlock extends BlockBase {
             throw new NoSuchElementException("Decoration context " + this.context + " has no element of type " + type.name() + ": " + type);
         }
     }
-    
+
     @Override // Widen visibility
-    public int getLightBlock(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
-        return super.getLightBlock(state, level, pos);
+    public int getLightBlock(@Nonnull BlockState state) {
+        return super.getLightBlock(state);
+    }
+
+    public boolean isBurnable() {
+        return this.context == DecorationContext.WOOD || this.context == DecorationContext.PLANKS;
     }
 }

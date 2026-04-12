@@ -57,7 +57,7 @@ public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
     @Nonnull
     @Override
     protected ItemStack run(@Nonnull ItemStack stack, @Nonnull LootContext context) {
-        BlockEntity blockEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+        BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity != null) {
             stack.update(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY, data -> {
                 CompoundTag blockEntityData = blockEntity.saveCustomOnly(context.getLevel().registryAccess());

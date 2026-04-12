@@ -15,7 +15,7 @@ import java.util.function.Predicate;
  */
 public record IngredientStack(Ingredient ingredient, int count) implements Predicate<ItemStack> {
 
-    public static final IngredientStack EMPTY = new IngredientStack(Ingredient.EMPTY, 0);
+    public static final IngredientStack EMPTY = new IngredientStack(Ingredient.of(), 0);
 
     public static final Codec<IngredientStack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                     Ingredient.CODEC.fieldOf("ingredient").forGetter(IngredientStack::ingredient),
@@ -30,8 +30,8 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     );
     
     public IngredientStack(Ingredient ingredient, int count) {
-        if (count <= 0 || ingredient.isEmpty()) {
-            this.ingredient = Ingredient.EMPTY;
+        if (count <= 0 || (ingredient.values.size() == 0 && !ingredient.isCustom())) { // todo 26.1: use Ingredient#isEmpty
+            this.ingredient = Ingredient.of();
             this.count = 0;
         } else {
             this.ingredient = ingredient;
@@ -52,6 +52,6 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
      * Returns whether the count is 0 or {@link Ingredient#isEmpty()} returns true.
      */
     public boolean isEmpty() {
-        return this.count == 0 || this.ingredient.isEmpty();
+        return this.count == 0 || (this.ingredient.values.size() == 0 && !this.ingredient.isCustom()); // todo 26.1: use Ingredient#isEmpty
     }
 }

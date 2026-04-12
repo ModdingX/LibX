@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -49,6 +50,8 @@ public abstract class AdvancementProviderBase implements DataProvider {
     protected final ModX mod;
     protected final PackTarget packTarget;
     private final RegistrySet registries;
+    private final HolderGetter<Item> itemRegistries;
+    private final HolderGetter<EntityType<?>> entityRegistries;
     private final Map<ResourceLocation, Supplier<AdvancementInfo>> advancements = new HashMap<>();
     private String rootId = null;
     private Supplier<AdvancementInfo> rootSupplier = null;
@@ -57,6 +60,8 @@ public abstract class AdvancementProviderBase implements DataProvider {
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
         this.registries = ctx.registries();
+        this.itemRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ITEM);
+        this.entityRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ENTITY_TYPE);
     }
 
     public abstract void setup();
@@ -181,7 +186,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * the inventory at the same time.
      */
     public Criterion<?> items(ItemLike... items) {
-        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
+        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
     }
     
     /**
@@ -190,7 +195,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     @SafeVarargs
     public final Criterion<?> items(TagKey<Item>... items) {
-        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
+        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
     }
         
     /**
@@ -205,7 +210,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link TaskFactory} that adds a task for every item given to this method.
      */
     public TaskFactory itemTasks(ItemLike... items) {
-        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
+        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
     }
 
     /**
@@ -213,7 +218,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     @SafeVarargs
     public final TaskFactory itemTasks(TagKey<Item>... items) {
-        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(item).build()).toArray(ItemPredicate[]::new));
+        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
     }
 
     /**
@@ -234,14 +239,14 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
     public Criterion<?> eat(ItemLike food) {
-        return this.eat(ItemPredicate.Builder.item().of(food));
+        return this.eat(ItemPredicate.Builder.item().of(this.itemRegistries, food));
     }
 
     /**
      * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
     public Criterion<?> eat(TagKey<Item> food) {
-        return this.eat(ItemPredicate.Builder.item().of(food));
+        return this.eat(ItemPredicate.Builder.item().of(this.itemRegistries, food));
     }
 
     /**
@@ -283,7 +288,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets an {@link ContextAwarePredicate} that matches for a specific entity type.
      */
     public ContextAwarePredicate entity(EntityType<?> type) {
-        return this.entity(EntityPredicate.Builder.entity().of(type).build());
+        return this.entity(EntityPredicate.Builder.entity().of(this.entityRegistries, type).build());
     }
 
     /**
@@ -291,7 +296,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     @SafeVarargs
     public final ItemPredicate.Builder stack(ItemLike item, ResourceKey<Enchantment>... enchs) {
-        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(item);
+        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(this.itemRegistries, item);
         return this.applyEnchantments(builder, enchs);
     }
 
@@ -300,7 +305,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     @SafeVarargs
     public final ItemPredicate.Builder stack(TagKey<Item> item, ResourceKey<Enchantment>... enchs) {
-        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(item);
+        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(this.itemRegistries, item);
         return this.applyEnchantments(builder, enchs);
     }
 
@@ -321,7 +326,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     public ItemPredicate.Builder stack(ResourceKey<Enchantment> ench, int min) {
         Registry<Enchantment> registry = this.registries.registry(Registries.ENCHANTMENT);
-        EnchantmentPredicate enchantmentPredicate = new EnchantmentPredicate(registry.getHolderOrThrow(ench), MinMaxBounds.Ints.atLeast(min));
+        EnchantmentPredicate enchantmentPredicate = new EnchantmentPredicate(registry.getOrThrow(ench), MinMaxBounds.Ints.atLeast(min));
         return ItemPredicate.Builder.item().withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.of(enchantmentPredicate)));
     }
     
@@ -329,7 +334,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         if (enchantments.length == 0) return builder;
         Registry<Enchantment> registry = this.registries.registry(Registries.ENCHANTMENT);
         List<EnchantmentPredicate> enchantmentPredicates = Arrays.stream(enchantments)
-                .map(key -> new EnchantmentPredicate(registry.getHolderOrThrow(key), MinMaxBounds.Ints.ANY))
+                .map(key -> new EnchantmentPredicate(registry.getOrThrow(key), MinMaxBounds.Ints.ANY))
                 .toList();
         return builder.withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(enchantmentPredicates));
     }

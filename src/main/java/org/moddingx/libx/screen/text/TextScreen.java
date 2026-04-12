@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.lwjgl.glfw.GLFW;
@@ -89,7 +90,7 @@ public class TextScreen extends Screen {
     }
     
     protected void drawBackground(GuiGraphics graphics, int x, int y, int width, int height) {
-        RenderHelper.renderGuiBackground(graphics, x, y, width, height);
+        RenderHelper.renderGuiBackground(RenderType::guiTextured, graphics, x, y, width, height);
     }
 
     @Override

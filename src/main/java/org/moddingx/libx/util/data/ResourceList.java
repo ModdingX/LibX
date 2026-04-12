@@ -103,7 +103,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
             try {
                 rules.add(this.parseRule(elem));
             } catch (IllegalStateException e) {
-                LibX.logger.warn("Skipping invalid rule in resource list: " + e.getMessage());
+                LibX.logger.warn("Skipping invalid rule in resource list: {}", e.getMessage());
             }
         }
         this.rules = rules.build();

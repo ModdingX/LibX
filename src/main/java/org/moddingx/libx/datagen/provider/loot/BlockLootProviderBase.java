@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider.loot;
 
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -44,6 +45,8 @@ import java.util.Set;
 
 public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
+    private final HolderLookup<Item> items = this.registries.registry(Registries.ITEM);
+
     protected BlockLootProviderBase(DatagenContext ctx) {
         super(ctx, "blocks", LootContextParamSets.BLOCK, Registries.BLOCK);
     }
@@ -78,7 +81,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      */
     protected boolean needsLootTable(BlockState state) {
         return !state.isAir() && state.getFluidState().createLegacyBlock().getBlock() != state.getBlock()
-                && !BuiltInLootTables.EMPTY.equals(state.getBlock().getLootTable());
+                && state.getBlock().getLootTable().isPresent();
     }
 
     @Override
@@ -212,14 +215,14 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      * Gets a loot condition builder for a match tool condition.
      */
     public MatchToolBuilder matchTool(ItemLike item) {
-        return new MatchToolBuilder(ItemPredicate.Builder.item().of(item));
+        return new MatchToolBuilder(ItemPredicate.Builder.item().of(this.items, item));
     }
 
     /**
      * Gets a loot condition builder for a match tool condition.
      */
     public MatchToolBuilder matchTool(TagKey<Item> item) {
-        return new MatchToolBuilder(ItemPredicate.Builder.item().of(item));
+        return new MatchToolBuilder(ItemPredicate.Builder.item().of(this.items, item));
     }
 
     /**

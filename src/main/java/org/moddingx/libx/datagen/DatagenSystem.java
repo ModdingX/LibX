@@ -51,7 +51,7 @@ public class DatagenSystem {
         String activeMod = ModLoadingContext.get().getActiveNamespace();
         if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.location().getNamespace(), activeMod)) {
             // LibX is the exception: It has to make vanilla and neoforge registries extension registries
-            LibX.logger.warn("Registry " + registryKey.location() + " marked as extension registry by foreign mod: " + activeMod);
+            LibX.logger.warn("Registry {} marked as extension registry by foreign mod: {}", registryKey.location(), activeMod);
         }
         EXTENSION_REGISTRIES.add(registryKey);
     }
@@ -67,10 +67,10 @@ public class DatagenSystem {
         String activeMod = ModLoadingContext.get().getActiveNamespace();
         if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.location().getNamespace(), activeMod)) {
             // LibX is the exception: It has to make vanilla and neoforge registries extension registries
-            LibX.logger.warn("Registry " + registryKey.location() + " defined for datagen by foreign mod: " + activeMod);
+            LibX.logger.warn("Registry {} defined for datagen by foreign mod: {}", registryKey.location(), activeMod);
         }
         if (EXTRA_REGISTRIES.containsKey(registryKey)) {
-            LibX.logger.error("Registry " + registryKey.location() + " defined for datagen twice.");
+            LibX.logger.error("Registry {} defined for datagen twice.", registryKey.location());
             throw new IllegalStateException("Registry " + registryKey.location() + " defined for datagen twice.");
         }
         EXTRA_REGISTRIES.put(registryKey, codec);

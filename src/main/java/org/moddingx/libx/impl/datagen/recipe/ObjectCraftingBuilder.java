@@ -1,11 +1,13 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.Criterion;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -34,14 +36,14 @@ public class ObjectCraftingBuilder {
         List<ICondition> conditions = getConditions(reader);
         ItemStack output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getItem());
-        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(recipeCategory, output);
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(ext.items(), recipeCategory, output);
         for (String line : reader.consumeWhile(String.class)) {
             builder.pattern(line);
         }
         addShapedIngredients(ext, builder, reader);
         RecipeOutput recipeOutput = ext.output();
         if (!conditions.isEmpty()) recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
-        builder.save(recipeOutput, id);
+        builder.save(recipeOutput, ResourceKey.create(Registries.RECIPE, id));
     }
 
     public static void buildShapeless(RecipeExtension ext, Object[] objects) {
@@ -51,11 +53,11 @@ public class ObjectCraftingBuilder {
         List<ICondition> conditions = getConditions(reader);
         ItemStack output = getOutput(reader);
         if (id == null) id = ext.provider().loc(output.getItem());
-        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(recipeCategory, output);
+        ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(ext.items(), recipeCategory, output);
         addShapelessIngredients(ext, builder, reader);
         RecipeOutput recipeOutput = ext.output();
         if (!conditions.isEmpty()) recipeOutput = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
-        builder.save(recipeOutput, id);
+        builder.save(recipeOutput, ResourceKey.create(Registries.RECIPE, id));
     }
 
     @Nullable
@@ -133,8 +135,10 @@ public class ObjectCraftingBuilder {
 
     private static Ingredient createTagIngredient(TagKey<?> key) {
         if (key.registry() != Registries.ITEM) throw new IllegalArgumentException("Non-item tag in recipe: " + key);
+        List<Item> items = new ArrayList<>();
         //noinspection unchecked
-        return Ingredient.of((TagKey<Item>) key);
+        BuiltInRegistries.ITEM.getTagOrEmpty((TagKey<Item>) key).forEach(item -> items.add(item.value()));
+        return Ingredient.of(items.toArray(new Item[0]));
     }
 
     @SafeVarargs

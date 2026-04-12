@@ -81,7 +81,7 @@ public class DatagenRegistrySet implements RegistrySet {
     public <T> Registry<T> registry(ResourceKey<? extends Registry<T>> registryKey) {
          Optional<DatagenRegistry<T>> writable = this.getDatagenRegistry(registryKey, false);
          if (writable.isPresent()) return writable.get();
-         return this.rootAccess.registry(registryKey).orElseThrow(() -> new NoSuchElementException("Registry not known: " + registryKey));
+         return this.rootAccess.lookup(registryKey).orElseThrow(() -> new NoSuchElementException("Registry not known: " + registryKey));
     }
     
     @Override
@@ -119,7 +119,7 @@ public class DatagenRegistrySet implements RegistrySet {
             return Optional.of((DatagenRegistry<T>) this.registries.computeIfAbsent(registryKey, k -> {
                 DatagenRegistry<T> reg = DatagenRegistry.createRoot(
                         registryKey, this, data.get().elementCodec(),
-                        this.rootAccess.registry(registryKey).orElseThrow(() ->
+                        this.rootAccess.lookup(registryKey).orElseThrow(() ->
                                 new IllegalStateException("Could not setup " + registryKey + " registry: Root registry not available")
                         )
                 );

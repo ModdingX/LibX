@@ -1,8 +1,10 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.Criterion;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -82,63 +84,63 @@ public interface SmithingExtension extends RecipeExtension {
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, ItemLike base, ItemLike addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, ItemLike base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, ItemLike base, Ingredient addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, TagKey<Item> base, ItemLike addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, TagKey<Item> base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, TagKey<Item> base, Ingredient addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, Ingredient base, ItemLike addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, Ingredient base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(TagKey<Item> template, Ingredient base, Ingredient addition, ItemLike result) {
-        this.smithing(Ingredient.of(template), base, addition, result);
+        this.smithing(Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
     
     /**
@@ -271,63 +273,63 @@ public interface SmithingExtension extends RecipeExtension {
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, ItemLike base, ItemLike addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, ItemLike base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, ItemLike base, Ingredient addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, TagKey<Item> base, ItemLike addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, TagKey<Item> base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, TagKey<Item> base, Ingredient addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, Ingredient base, ItemLike addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, Ingredient base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, TagKey<Item> template, Ingredient base, Ingredient addition, ItemLike result) {
-        this.smithing(category, Ingredient.of(template), base, addition, result);
+        this.smithing(category, Ingredient.of(this.items().getOrThrow(template)), base, addition, result);
     }
     
     /**
@@ -341,7 +343,7 @@ public interface SmithingExtension extends RecipeExtension {
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, Ingredient template, ItemLike base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(category, template, Ingredient.of(base), Ingredient.of(addition), result);
+        this.smithing(category, template, Ingredient.of(base), Ingredient.of(this.items().getOrThrow(addition)), result);
     }
 
     /**
@@ -355,21 +357,21 @@ public interface SmithingExtension extends RecipeExtension {
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, Ingredient template, TagKey<Item> base, ItemLike addition, ItemLike result) {
-        this.smithing(category, template, Ingredient.of(base), Ingredient.of(addition), result);
+        this.smithing(category, template, Ingredient.of(this.items().getOrThrow(base)), Ingredient.of(addition), result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, Ingredient template, TagKey<Item> base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(category, template, Ingredient.of(base), Ingredient.of(addition), result);
+        this.smithing(category, template, Ingredient.of(this.items().getOrThrow(base)), Ingredient.of(this.items().getOrThrow(addition)), result);
     }
 
     /**
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, Ingredient template, TagKey<Item> base, Ingredient addition, ItemLike result) {
-        this.smithing(category, template, Ingredient.of(base), addition, result);
+        this.smithing(category, template, Ingredient.of(this.items().getOrThrow(base)), addition, result);
     }
 
     /**
@@ -383,7 +385,7 @@ public interface SmithingExtension extends RecipeExtension {
      * Adds a smithing recipe with the given inputs and output.
      */
     default void smithing(RecipeCategory category, Ingredient template, Ingredient base, TagKey<Item> addition, ItemLike result) {
-        this.smithing(category, template, base, Ingredient.of(addition), result);
+        this.smithing(category, template, base, Ingredient.of(this.items().getOrThrow(addition)), result);
     }
 
     /**
@@ -395,6 +397,6 @@ public interface SmithingExtension extends RecipeExtension {
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlocks("has_item" + i, criteria.get(i));
         }
-        builder.save(this.output(), this.provider().loc(result, "smithing"));
+        builder.save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(result, "smithing")));
     }
 }

@@ -12,7 +12,7 @@ public class DecorationTags {
         if (block instanceof DecoratedWoodBlock decorated) {
             initInternal.run();
             provider.block(InternalTags.Blocks.LOGS).add(decorated);
-            if (new ItemStack(decorated).getBurnTime(null) > 0) {
+            if (decorated.isBurnable()) {
                 provider.block(InternalTags.Blocks.LOGS_THAT_BURN).add(decorated);
             }
         } else if (block instanceof DecoratedSlabBlock decorated) {
