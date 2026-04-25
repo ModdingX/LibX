@@ -26,7 +26,7 @@ public class SimpleSelectEditor<T> implements ConfigEditor<T> {
 
     @Override
     public T defaultValue() {
-        return this.list.get(0);
+        return this.list.getFirst();
     }
 
     @Override

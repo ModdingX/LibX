@@ -9,7 +9,6 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
@@ -76,7 +75,8 @@ public interface RecipeExtension {
                 instances.addAll(this.criteria(i));
             }
         } else {
-            for (Holder<Item> stack : item.items()) {
+            //noinspection deprecation
+            for (Holder<Item> stack : item.items().toList()) {
                 HolderLookup.RegistryLookup<Item> itemLookup = stack.unwrapLookup();
                 if (itemLookup == null) continue;
                 Optional<ResourceKey<Item>> itemResourceKey = stack.unwrapKey();

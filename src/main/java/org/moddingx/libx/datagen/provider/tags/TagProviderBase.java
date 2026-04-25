@@ -32,7 +32,7 @@ public abstract class TagProviderBase<T> extends IntrinsicHolderTagsProvider<T> 
     }
     
     private TagProviderBase(DatagenContext ctx, ResourceKey<? extends Registry<T>> registryKey, Registry<T> registry, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(ctx.output(), registryKey, lookupProvider, (T value) -> ResourceKey.create(registry.key(), Objects.requireNonNull(registry.getKey(value), () -> "Value not registered: " + value)), ctx.mod().modid, ctx.fileHelper());
+        super(ctx.output(), registryKey, lookupProvider, (T value) -> ResourceKey.create(registry.key(), Objects.requireNonNull(registry.getKey(value), () -> "Value not registered: " + value)), ctx.mod().modid);
         this.mod = ctx.mod();
         this.registry = registry;
     }

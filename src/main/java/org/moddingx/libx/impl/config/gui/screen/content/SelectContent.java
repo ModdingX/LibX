@@ -25,7 +25,7 @@ public class SelectContent<T> implements ConfigScreenContent<T> {
         if (this.list.contains(current)) {
             this.current = current;
         } else {
-            this.current = this.list.get(0);
+            this.current = this.list.getFirst();
         }
     }
 

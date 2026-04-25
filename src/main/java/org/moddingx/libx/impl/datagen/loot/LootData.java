@@ -41,7 +41,7 @@ public class LootData {
         if (loot.isEmpty()) {
             return EmptyLootItem.emptyItem();
         } else if (loot.size() == 1) {
-            return loot.get(0);
+            return loot.getFirst();
         } else {
             return combineFunc.apply(loot);
         }

@@ -129,7 +129,7 @@ public class CollectionContent<T, C> implements ConfigScreenContent<C> {
         int from = Mth.clamp(from0, 0, list.size() - 1);
         int to = Mth.clamp(to0, 0, list.size() - 1);
         T elem = list.remove(from);
-        list.add(list.get(list.size() - 1));
+        list.add(list.getLast());
         for (int i = list.size() - 2; i >= to && i > 0; i--) {
             list.set(i, list.get(i - 1));
         }

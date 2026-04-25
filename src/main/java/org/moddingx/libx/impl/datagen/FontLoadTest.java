@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.datagen;
 import net.minecraft.client.StringSplitter;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
+import net.minecraft.server.packs.PackType;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
 
@@ -13,7 +14,7 @@ public class FontLoadTest implements DataProvider {
     
     public FontLoadTest(DatagenContext ctx) {
         // Font metric loading is wonky, test that it works
-        StringSplitter fontMetrics = DatagenFontLoader.getFontMetrics(ctx.fileHelper());
+        StringSplitter fontMetrics = DatagenFontLoader.getFontMetrics(ctx.resourceManager(PackType.CLIENT_RESOURCES));
         if (fontMetrics == DatagenFontLoader.MISSING) {
             throw new IllegalStateException("Datagen font loading failed.");
         }

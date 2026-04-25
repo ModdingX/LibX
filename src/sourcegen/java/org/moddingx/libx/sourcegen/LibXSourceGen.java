@@ -10,9 +10,18 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 public class LibXSourceGen {
     
     public LibXSourceGen(IEventBus modBus) {
-        modBus.addListener(this::gatherData);
+        modBus.addListener(GatherDataEvent.Client.class, this::gatherClientData);
+        modBus.addListener(GatherDataEvent.Server.class, this::gatherServerData);
     }
-    
+
+    private void gatherClientData(GatherDataEvent.Client event) {
+        this.gatherData(event);
+    }
+
+    private void gatherServerData(GatherDataEvent.Server event) {
+        this.gatherData(event);
+    }
+
     private void gatherData(GatherDataEvent event) {
         RegistryKeyProvider.create(event, StructureTemplatePool.class, Registries.TEMPLATE_POOL, "TemplatePools");
     }

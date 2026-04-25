@@ -3,11 +3,10 @@ package org.moddingx.libx.datagen.provider.patchouli;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.content.TextContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
@@ -214,14 +213,14 @@ public class EntryBuilder {
     }
 
     /**
-     * Adds some content to the entry that display the given entity.
+     * Adds some content to the entry that displays the given entity.
      */
     public EntryBuilder entity(EntityType<?> entity) {
         return this.add(new EntityContent(entity));
     }
 
     /**
-     * Adds some content to the entry that display a multiblock.
+     * Adds some content to the entry that displays a multiblock.
      * 
      * @param data The multiblock data as recognised by patchouli.
      */
@@ -244,8 +243,8 @@ public class EntryBuilder {
         this.postProcessors.add(postProcessor);
         return this;
     }
-    
-    JsonObject build(BiFunction<String, List<String>, String> translations, ExistingFileHelper fileHelper) {
+
+    JsonObject build(BiFunction<String, List<String>, String> translations, ResourceManager resourceManager) {
         if (this.name == null) throw new IllegalStateException("Entry name not set: " + this.category + "/" + this.id);
         if (this.icon == null) throw new IllegalStateException("Entry icon not set: " + this.category + "/" + this.id);
         JsonObject json = new JsonObject();
@@ -308,7 +307,7 @@ public class EntryBuilder {
 
             @Override
             public void checkAssets(ResourceLocation path) {
-                if (!fileHelper.exists(path, PackType.CLIENT_RESOURCES)) {
+                if (resourceManager.getResource(path).isEmpty()) {
                     throw new IllegalStateException("Resource " + path + " does not exist.");
                 }
             }

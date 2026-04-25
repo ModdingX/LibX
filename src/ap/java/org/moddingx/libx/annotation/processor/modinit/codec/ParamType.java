@@ -161,7 +161,7 @@ public class ParamType implements CodecType {
 
     public static boolean genericMatches(TypeMirror typeWithGeneric, TypeMirror compare, ModEnv env) {
         if (typeWithGeneric.getKind() == TypeKind.DECLARED && typeWithGeneric instanceof DeclaredType declared && declared.getTypeArguments().size() == 1) {
-            TypeMirror generic = declared.getTypeArguments().get(0);
+            TypeMirror generic = declared.getTypeArguments().getFirst();
             return env.sameErasure(generic, compare);
         } else {
             // Something is wrong. We assume true to let it run. It might fail later on when

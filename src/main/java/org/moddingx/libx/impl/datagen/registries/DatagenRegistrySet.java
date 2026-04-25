@@ -50,7 +50,7 @@ public class DatagenRegistrySet implements RegistrySet {
         this.children = new ArrayList<>();
         List<DatagenRegistrySet> roots = this.parents.stream().map(set -> set.root).distinct().toList();
         if (roots.size() != 1) throw new IllegalArgumentException("Registry set can only have a single root");
-        this.root = roots.get(0);
+        this.root = roots.getFirst();
         this.rootAccess = this.root.rootAccess;
         this.knownRegistries = this.root.knownRegistries;
         for (DatagenRegistrySet parent : this.parents) {

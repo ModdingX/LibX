@@ -47,13 +47,13 @@ public class ConfigGroup {
             @Nullable
             Group group = type.getAnnotation(Group.class);
             List<String> path = new ArrayList<>();
-            path.add(0, type.getSimpleName());
+            path.addFirst(type.getSimpleName());
             Class<?> currentStep = type.getDeclaringClass();
             while (currentStep != configBaseClass) {
                 if (currentStep == null || currentStep == Object.class) {
                     throw new IllegalStateException("LibX config internal error: Can't create config group for class that is not part of config base class.");
                 }
-                path.add(0, currentStep.getSimpleName());
+                path.addFirst(currentStep.getSimpleName());
                 currentStep = currentStep.getDeclaringClass();
             }
             return new ConfigGroup(type, ImmutableList.copyOf(path), group == null ? ImmutableList.of() : ImmutableList.copyOf(group.value()));

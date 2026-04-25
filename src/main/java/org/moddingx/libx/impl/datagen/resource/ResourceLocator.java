@@ -2,15 +2,17 @@ package org.moddingx.libx.impl.datagen.resource;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nullable;
-import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class ResourceLocator {
 
@@ -36,7 +38,7 @@ public class ResourceLocator {
     }
     
     @Nullable
-    public PackTarget.Resource getResource(ExistingFileHelper fileHelper, ResourceLocation res) {
+    public PackTarget.Resource getResource(Map<PackType, ResourceManager> resourceManagerMap, ResourceLocation res) {
         for (Path basePath : this.paths) {
             Path path = basePath.resolve(res.getNamespace()).resolve(res.getPath());
             if (Files.isRegularFile(path)) {
@@ -46,12 +48,12 @@ public class ResourceLocator {
         if (this.prefix != null) {
             ResourceLocation resolved = ResourceLocation.fromNamespaceAndPath(res.getNamespace(), this.prefix + "/" + res.getPath());
             for (ResourceLocator parent : this.parents) {
-                PackTarget.Resource resource = parent.getResource(fileHelper, resolved);
+                PackTarget.Resource resource = parent.getResource(resourceManagerMap, resolved);
                 if (resource != null) return resource;
             }
         }
         for (ResourceLocator parent : this.parents) {
-            PackTarget.Resource resource = parent.getResource(fileHelper, res);
+            PackTarget.Resource resource = parent.getResource(resourceManagerMap, res);
             if (resource != null) return resource;
         }
         return null;
@@ -68,13 +70,10 @@ public class ResourceLocator {
 
         @Nullable
         @Override
-        public PackTarget.Resource getResource(ExistingFileHelper fileHelper, ResourceLocation res) {
-            if (!fileHelper.exists(res, this.type)) return null;
-            try {
-                return new VanillaResource(fileHelper.getResource(res, this.type));
-            } catch (FileNotFoundException e) {
-                return null;
-            }
+        public PackTarget.Resource getResource(Map<PackType, ResourceManager> resourceManagerMap, ResourceLocation res) {
+            Optional<Resource> resource = resourceManagerMap.get(this.type).getResource(res);
+
+            return resource.map(VanillaResource::new).orElse(null);
         }
     }
 }

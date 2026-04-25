@@ -80,7 +80,7 @@ public interface ConfigEditor<T> {
         if (elems.size() <= 5) {
             return new SimpleSelectEditor<>(elems, name);
         } else {
-            return custom(elems.get(0), current -> new SelectContent<>(elems, name, current));
+            return custom(elems.getFirst(), current -> new SelectContent<>(elems, name, current));
         }
     }
 

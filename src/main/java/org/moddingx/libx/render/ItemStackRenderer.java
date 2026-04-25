@@ -1,15 +1,17 @@
 package org.moddingx.libx.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -19,14 +21,13 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.apache.commons.lang3.tuple.Pair;
-import org.moddingx.libx.datagen.provider.model.ItemModelProviderBase;
-import org.moddingx.libx.registration.Registerable;
-import org.moddingx.libx.registration.SetupContext;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -40,24 +41,20 @@ import java.util.*;
  * 
  * Your item also needs a special item model. {@link ItemModelProviderBase} provides a method to generate that for you.
  */
-public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
+public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
 
-    private static final LazyValue<ItemStackRenderer> INSTANCE = new LazyValue<>(() -> new ItemStackRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
+    public static final ResourceLocation RENDERER_ID = ResourceLocation.fromNamespaceAndPath("libx", "item_stack_renderer");
 
+    private static final LazyValue<ItemStackRenderer> INSTANCE = new LazyValue<>(ItemStackRenderer::new);
     private static final List<BlockEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
     private static final Map<Block, Pair<LazyValue<BlockEntity>, Boolean>> blocks = Collections.synchronizedMap(new HashMap<>());
     private static final Map<BlockEntityType<?>, CompoundTag> defaultTags = new HashMap<>();
-
-    public ItemStackRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
-        super(dispatcher, modelSet);
-    }
 
     /**
      * Registers a {@link BlockEntityType} to be rendered with the ItemStackRenderer.
      *
      * @param beType             The Block Entity Type.
-     * @param readBlockEntityTag If this is set to true and an item has a {@code BlockEntityTag}, the block
-     *                           entities {@code load} method will get called before rendering.
+     * @param readBlockEntityTag If this is set to true and an item has block entity data, it is loaded before rendering.
      */
     public static <T extends BlockEntity> void addRenderBlock(BlockEntityType<T> beType, boolean readBlockEntityTag) {
         types.add(beType);
@@ -66,55 +63,60 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
         }
     }
 
+    @Nullable
     @Override
-    public void renderByItem(ItemStack stack, @Nonnull ItemDisplayContext ctx, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
+    public ItemStack extractArgument(@Nonnull ItemStack stack) {
+        return stack;
+    }
+
+    @Override
+    public void render(@Nullable ItemStack stack, @Nonnull ItemDisplayContext ctx, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay, boolean hasFoilType) {
+        if (stack == null) return;
         Block block = Block.byItem(stack.getItem());
-        if (block != Blocks.AIR) {
-            if (blocks.containsKey(block)) {
-                Pair<LazyValue<BlockEntity>, Boolean> pair = blocks.get(block);
-                BlockState state = block.defaultBlockState();
-                BlockEntity blockEntity = pair.getLeft().get();
-                BlockEntityType<?> teType = blockEntity.getType();
+        if (block == Blocks.AIR || !blocks.containsKey(block)) return;
 
-                BlockEntityRenderer<BlockEntity> renderer = this.blockEntityRenderDispatcher.getRenderer(blockEntity);
-                if (renderer != null) {
-                    setLevelAndState(blockEntity, state);
-                    if (pair.getRight()) {
-                        if (Minecraft.getInstance().level != null) {
-                            if (!defaultTags.containsKey(teType)) {
-                                defaultTags.put(teType, blockEntity.saveCustomOnly(Minecraft.getInstance().level.registryAccess()));
-                            } else {
-                                blockEntity.loadCustomOnly(defaultTags.get(teType), Minecraft.getInstance().level.registryAccess());
-                            }
-                            setLevelAndState(blockEntity, state);
-                            
-                            CustomData customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-                            if (customData != null) {
-                                customData.loadInto(blockEntity, Minecraft.getInstance().level.registryAccess());
-                            }
-                        }
-                    }
+        Pair<LazyValue<BlockEntity>, Boolean> pair = blocks.get(block);
+        BlockState state = block.defaultBlockState();
+        BlockEntity blockEntity = pair.getLeft().get();
+        BlockEntityType<?> teType = blockEntity.getType();
+        BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
 
-                    poseStack.pushPose();
+        BlockEntityRenderer<BlockEntity> renderer = dispatcher.getRenderer(blockEntity);
+        if (renderer == null) return;
 
-                    if (state.getRenderShape() != RenderShape.ENTITYBLOCK_ANIMATED) {
-                        //noinspection deprecation
-                        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay);
-                    }
-                    renderer.render(blockEntity, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay);
-                    blockEntity.setLevel(null); // avoid storing the level for too long
+        setLevelAndState(blockEntity, state);
+        if (pair.getRight() && Minecraft.getInstance().level != null) {
+            if (!defaultTags.containsKey(teType)) {
+                defaultTags.put(teType, blockEntity.saveCustomOnly(Minecraft.getInstance().level.registryAccess()));
+            } else {
+                blockEntity.loadCustomOnly(defaultTags.get(teType), Minecraft.getInstance().level.registryAccess());
+            }
+            setLevelAndState(blockEntity, state);
 
-                    poseStack.popPose();
-                }
+            CustomData customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+            if (customData != null) {
+                customData.loadInto(blockEntity, Minecraft.getInstance().level.registryAccess());
             }
         }
+
+        poseStack.pushPose();
+
+        if (state.getRenderShape() == RenderShape.MODEL) {
+            //noinspection deprecation
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay);
+        }
+        renderer.render(blockEntity, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay);
+                    blockEntity.setLevel(null); // avoid storing the level for too long
+
+        poseStack.popPose();
     }
 
     private static void setLevelAndState(BlockEntity blockEntity, BlockState state) {
         if (Minecraft.getInstance().level != null) {
             blockEntity.setLevel(Minecraft.getInstance().level);
         }
-        blockEntity.blockState = state;
+        //noinspection deprecation
+        blockEntity.setBlockState(state);
     }
 
     /**
@@ -123,18 +125,31 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     public static ItemStackRenderer get() {
         return INSTANCE.get();
     }
-    
+
+    public static void registerSpecialModelRenderer(RegisterSpecialModelRendererEvent event) {
+        event.register(RENDERER_ID, Unbaked.MAP_CODEC);
+    }
+
     /**
-     * Creates some {@link IClientItemExtensions} for with use the {@link ItemStackRenderer}.
+     * Compatibility method retained for old API users.
      */
     public static IClientItemExtensions createProperties() {
-        return new IClientItemExtensions() {
+        return IClientItemExtensions.DEFAULT;
+    }
 
-            @Nonnull
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return ItemStackRenderer.get();
-            }
-        };
+    public record Unbaked() implements SpecialModelRenderer.Unbaked {
+
+        public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(new Unbaked());
+
+        @Nonnull
+        @Override
+        public MapCodec<Unbaked> type() {
+            return MAP_CODEC;
+        }
+
+        @Override
+        public SpecialModelRenderer<?> bake(@Nonnull EntityModelSet modelSet) {
+            return ItemStackRenderer.get();
+        }
     }
 }

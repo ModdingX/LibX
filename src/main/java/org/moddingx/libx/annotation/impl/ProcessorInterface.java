@@ -2,7 +2,6 @@ package org.moddingx.libx.annotation.impl;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -91,13 +90,12 @@ public class ProcessorInterface {
     }
 
     public static void addSpecialModel(ModelEvent.RegisterAdditional event, ResourceLocation id) {
-        event.register(new ModelResourceLocation(id, ModelResourceLocation.STANDALONE_VARIANT));
+        event.register(id);
     }
 
     public static BakedModel getSpecialModel(ModelEvent.BakingCompleted event, ResourceLocation id) {
-        ModelResourceLocation modelId = new ModelResourceLocation(id, ModelResourceLocation.STANDALONE_VARIANT);
-        if (event.getModels().containsKey(modelId)) {
-            return event.getModels().get(modelId);
+        if (event.getBakingResult().standaloneModels().containsKey(id)) {
+            return event.getBakingResult().standaloneModels().get(id);
         } else {
             throw new IllegalStateException("Model not loaded: " + id);
         }

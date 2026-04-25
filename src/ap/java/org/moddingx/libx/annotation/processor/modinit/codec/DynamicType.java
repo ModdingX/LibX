@@ -52,7 +52,7 @@ public class DynamicType implements CodecType {
             if (elem.getKind() == ElementKind.METHOD && elem instanceof ExecutableElement exec && elem.getSimpleName().contentEquals(methodName)
                     && elem.getModifiers().contains(Modifier.PUBLIC) && elem.getModifiers().contains(Modifier.STATIC)) {
                 if (env.sameErasure(env.forClass(Classes.MAP_CODEC), exec.getReturnType())) {
-                    if (exec.getParameters().size() == 1 && env.sameErasure(env.forClass(String.class), exec.getParameters().get(0).asType())) {
+                    if (exec.getParameters().size() == 1 && env.sameErasure(env.forClass(String.class), exec.getParameters().getFirst().asType())) {
                         method = exec;
                     }
                 }

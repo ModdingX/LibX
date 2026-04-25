@@ -1,14 +1,11 @@
 package org.moddingx.libx.impl.datagen.load;
 
-import net.minecraft.Util;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.RegistryLayer;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagLoader;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.libxcore.CoreRegistryLoad;
@@ -21,9 +18,8 @@ public class DatagenRegistryLoader {
 
     // Hacky code to load a registry access during datagen from a resource manager
     // See WorldLoader#load
-    public static RegistryAccess.Frozen loadRegistries(ExistingFileHelper fileHelper, RegistrySelector selector) {
+    public static RegistryAccess.Frozen loadRegistries(ResourceManager mgr, RegistrySelector selector) {
         LibX.logger.info("Start loading registries for datagen");
-        ResourceManager mgr = DatagenLoader.resources(fileHelper, PackType.SERVER_DATA);
         LayeredRegistryAccess<RegistryLayer> access = RegistryLayer.createRegistryAccess();
         access = loadLayer(mgr, access, RegistryLayer.WORLDGEN, getDataPackRegistries(RegistryLayer.WORLDGEN, selector));
         // Invoke our coremod patch here

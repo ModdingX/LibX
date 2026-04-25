@@ -41,7 +41,7 @@ public class ModConfigGuiAdapter {
         if (configs.isEmpty()) {
             return modListScreen;
         } else if (configs.size() == 1) {
-            return this.factory(modListScreen.getMinecraft(), modListScreen).apply(configs.get(0));
+            return this.factory(modListScreen.getMinecraft(), modListScreen).apply(configs.getFirst());
         } else {
             return new ConfigSelectScreen(this.factory(modListScreen.getMinecraft(), modListScreen), configs, modListScreen);
         }

@@ -169,7 +169,7 @@ public class DecoratedSign implements Registerable, SignAccess {
     }
     
     public static class Entity extends SignBlockEntity {
-        
+
         public Entity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
         }

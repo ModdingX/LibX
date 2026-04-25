@@ -65,7 +65,7 @@ public class ConfigProcessor extends Processor {
             if (element.asType().getKind() == TypeKind.DECLARED && element.asType() instanceof DeclaredType declared) {
                 List<? extends TypeMirror> parameters = declared.getTypeArguments();
                 if (!parameters.isEmpty()) {
-                    firstGeneric = parameters.get(0);
+                    firstGeneric = parameters.getFirst();
                 }
             }
             

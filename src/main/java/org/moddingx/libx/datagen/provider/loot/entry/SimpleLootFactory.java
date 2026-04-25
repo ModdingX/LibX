@@ -34,7 +34,7 @@ public interface SimpleLootFactory<T> extends LootFactory<T> {
     
     default SimpleLootFactory<T> with(List<LootModifier<T>> modifiers) {
         if (modifiers.isEmpty()) return this;
-        LootModifier<T> chained = LootModifier.chain(modifiers.get(0).element(), modifiers);
+        LootModifier<T> chained = LootModifier.chain(modifiers.getFirst().element(), modifiers);
         return b -> chained.apply(b, this.build(b));
     }
 

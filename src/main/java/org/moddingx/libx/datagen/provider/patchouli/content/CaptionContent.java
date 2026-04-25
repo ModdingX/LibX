@@ -50,9 +50,9 @@ public abstract class CaptionContent implements Content {
         if (pages.isEmpty()) {
             this.specialPage(builder, null);
         } else if (pages.size() == 1) {
-            this.specialPage(builder, pages.get(0));
+            this.specialPage(builder, pages.getFirst());
         } else {
-            this.specialPage(builder, pages.get(0));
+            this.specialPage(builder, pages.getFirst());
             TextContent.addTextPages(builder, pages, false);
         }
     }

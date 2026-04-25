@@ -159,7 +159,7 @@ public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider 
             if (this.conditions.isEmpty()) {
                 throw new IllegalStateException("Can't invert last loot condition: No conditions.");
             }
-            LootItemCondition cond = this.conditions.remove(this.conditions.size() - 1);
+            LootItemCondition cond = this.conditions.removeLast();
             this.conditions.add(InvertedLootItemCondition.invert(() -> cond).build());
             return this.self();
         }

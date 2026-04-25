@@ -35,7 +35,7 @@ public final class CompositeContent implements Content {
         // Merge to last child and then join back to composite
         return new CompositeContent(Stream.concat(
                 this.children.stream().limit(this.children.size() - 1),
-                Stream.of(this.children.get(this.children.size() - 1).with(next))
+                Stream.of(this.children.getLast().with(next))
         ));
     }
 }

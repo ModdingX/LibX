@@ -6,7 +6,6 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SoundDefinition;
 import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 import org.moddingx.libx.datagen.DatagenContext;
@@ -34,7 +33,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
 
     public SoundDefinitionProviderBase(DatagenContext ctx) {
         this.mod = ctx.mod();
-        this.provider = new ParentProvider(ctx.output(), ctx.mod().modid, ctx.fileHelper()) {
+        this.provider = new ParentProvider(ctx.output(), ctx.mod().modid) {
             
             @Override
             public void registerSounds() {
@@ -368,9 +367,9 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     
     // Required to make a method public
     private static abstract class ParentProvider extends SoundDefinitionsProvider {
-        
-        protected ParentProvider(PackOutput packOutput, String modId, ExistingFileHelper helper) {
-            super(packOutput, modId, helper);
+
+        protected ParentProvider(PackOutput packOutput, String modId) {
+            super(packOutput, modId);
         }
 
         @Override

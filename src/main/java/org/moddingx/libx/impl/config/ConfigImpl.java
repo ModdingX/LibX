@@ -277,7 +277,7 @@ public class ConfigImpl {
                  current = elem.getAsJsonObject();
             }
         }
-        return current.get(key.path.get(key.path.size() - 1));
+        return current.get(key.path.getLast());
     }
     
     public  void shadowBy(ConfigState state) {

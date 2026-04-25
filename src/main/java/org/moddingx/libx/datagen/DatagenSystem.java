@@ -11,10 +11,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.loading.FMLPaths;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -94,17 +95,21 @@ public class DatagenSystem {
      */
     public static void create(ModX mod, Consumer<DatagenSystem> configure) {
         if (ModInternal.get(mod).addDatagenConfiguration(configure)) {
-            ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.class, event -> {
+            AtomicBoolean handled = new AtomicBoolean(false);
+            Consumer<GatherDataEvent> handleGatherData = event -> {
+                if (!handled.compareAndSet(false, true)) return;
                 DatagenSystem system = new DatagenSystem(mod, event);
                 ModInternal.get(mod).configureDatagenSystem(system);
                 system.hookIntoGenerator();
-            });
+            };
+            ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.Client.class, handleGatherData::accept);
+            ModInternal.get(mod).modEventBus().addListener(EventPriority.NORMAL, false, GatherDataEvent.Server.class, handleGatherData::accept);
         }
     }
     
     private final ModX mod;
     private final DataGenerator generator;
-    private final ExistingFileHelper fileHelper;
+    private final Map<PackType, ResourceManager> resourceManagers;
     private final CompletableFuture<HolderLookup.Provider> lookupProvider;
     private final DatagenRegistrySet rootRegistries;
     private final PackTarget mainTarget;
@@ -120,7 +125,10 @@ public class DatagenSystem {
     private DatagenSystem(ModX mod, GatherDataEvent event) {
         this.mod = mod;
         this.generator = event.getGenerator();
-        this.fileHelper = event.getExistingFileHelper();
+        this.resourceManagers = Map.of(
+                PackType.SERVER_DATA, event.getResourceManager(PackType.SERVER_DATA),
+                PackType.CLIENT_RESOURCES, event.getResourceManager(PackType.CLIENT_RESOURCES)
+        );
         this.lookupProvider = event.getLookupProvider();
         DatagenRegistryLoader.RegistrySelector selector = (layer, registries) -> {
             if (layer != RegistryLayer.WORLDGEN) return registries;
@@ -138,7 +146,7 @@ public class DatagenSystem {
             return Stream.concat(registries.stream(), extraRegistries.stream()).toList();
         };
         this.rootRegistries = new DatagenRegistrySet(
-                DatagenRegistryLoader.loadRegistries(this.fileHelper, selector),
+                DatagenRegistryLoader.loadRegistries(this.resourceManagers.get(PackType.SERVER_DATA), selector),
                 new DatagenRegistrySet.KnownRegistries(DatagenRegistryLoader.getDataPackRegistries(null, selector))
         );
         this.mainTarget = new PackTarget("main", this, new DatagenRegistrySet(List.of(this.rootRegistries)), Map.of(
@@ -163,10 +171,6 @@ public class DatagenSystem {
     public ModX mod() {
         return this.mod;
     }
-    
-    public ExistingFileHelper fileHelper() {
-        return this.fileHelper;
-    }
 
     /**
      * Gets the full {@link HolderLookup.Provider} from the datagen event, which includes all tags from all
@@ -188,6 +192,16 @@ public class DatagenSystem {
      */
     public Path mainOutput() {
         return this.generator.getPackOutput().getOutputFolder();
+    }
+
+    /**
+     * Gets the {@link ResourceManager resource managers} available during datagen, keyed by {@link PackType}.
+     * <p>
+     * The returned map is unmodifiable and contains entries for {@link PackType#SERVER_DATA} and
+     * {@link PackType#CLIENT_RESOURCES}.
+     */
+    public Map<PackType, ResourceManager> resourceManagers() {
+        return Collections.unmodifiableMap(this.resourceManagers);
     }
 
     /**

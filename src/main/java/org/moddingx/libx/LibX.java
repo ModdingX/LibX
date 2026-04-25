@@ -37,6 +37,7 @@ import org.moddingx.libx.impl.sandbox.density.*;
 import org.moddingx.libx.inventory.StackItemHandler;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
+import org.moddingx.libx.render.ItemStackRenderer;
 import org.moddingx.libx.sandbox.SandBox;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.generator.ExtendedNoiseChunkGenerator;
@@ -82,6 +83,7 @@ public final class LibX extends ModX {
         modBus.addListener(this::registerStuff);
         if (FMLLoader.getDist().isClient()) {
             modBus.addListener(BlockOverlayQuadCache::resourcesReload);
+            modBus.addListener(ItemStackRenderer::registerSpecialModelRenderer);
         }
 
         NeoForge.EVENT_BUS.addListener(ClientTickHandler::tick);

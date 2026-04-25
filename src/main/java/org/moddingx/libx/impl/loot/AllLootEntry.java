@@ -45,7 +45,7 @@ public class AllLootEntry extends CompositeEntryBase {
                     }
                 }
                 if (list.size() == 1) {
-                    consumer.accept(list.get(0));
+                    consumer.accept(list.getFirst());
                 } else if (!list.isEmpty()) {
                     // Just hand one entry to the parent consumer that will if picked call all entries from
                     // the children.

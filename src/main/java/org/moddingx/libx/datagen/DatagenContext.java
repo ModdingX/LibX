@@ -2,7 +2,8 @@ package org.moddingx.libx.datagen;
 
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.moddingx.libx.mod.ModX;
 
 import java.util.function.Function;
@@ -44,10 +45,10 @@ public abstract class DatagenContext {
     }
 
     /**
-     * Gets the {@link ExistingFileHelper}.
+     * Gets the {@link ResourceManager} for the given pack type.
      */
-    public ExistingFileHelper fileHelper() {
-        return this.system.fileHelper();
+    public ResourceManager resourceManager(PackType type) {
+        return this.system.resourceManagers().get(type);
     }
 
     /**
@@ -60,7 +61,7 @@ public abstract class DatagenContext {
         }
         return this.target;
     }
-    
+
     /**
      * Gets the {@link PackOutput} for output. <b>This may only be used during
      * {@link DatagenStage#DATAGEN datagen stage}.</b>
@@ -81,13 +82,13 @@ public abstract class DatagenContext {
      * be a single provider of that class. It's impossible to lookup providers from later stages.
      */
     public abstract <T extends RegistryProvider> T findRegistryProvider(Class<T> cls);
-    
+
     /**
      * Queries a {@link DataProvider} by class. This provider must have been registered before and there may only
      * be a single provider of that class. It's impossible to lookup providers from later stages.
      */
     public abstract <T extends DataProvider> T findDataProvider(Class<T> cls);
-    
+
     /**
      * Adds an additional provider for the {@link DatagenStage#DATAGEN datagen stage} that runs on the same
      * {@link PackTarget} as this provider.

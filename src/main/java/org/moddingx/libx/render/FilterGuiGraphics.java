@@ -195,6 +195,11 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
+    public void drawWordWrap(@Nonnull Font p_378059_, @Nonnull FormattedText p_377920_, int p_377936_, int p_377197_, int p_378705_, int p_378768_, boolean p_378157_) {
+        this.parent.drawWordWrap(p_378059_, p_377920_, p_377936_, p_377197_, p_378705_, p_378768_, p_378157_);
+    }
+
+    @Override
     public int drawStringWithBackdrop(@Nonnull Font p_348650_, @Nonnull Component p_348614_, int p_348465_, int p_348495_, int p_348581_, int p_348666_) {
         return this.parent.drawStringWithBackdrop(p_348650_, p_348614_, p_348465_, p_348495_, p_348581_, p_348666_);
     }

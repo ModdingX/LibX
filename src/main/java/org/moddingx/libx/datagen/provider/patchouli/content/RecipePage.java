@@ -39,7 +39,7 @@ public abstract class RecipePage extends CaptionContent {
             }
             json.add("recipe", array);
         } else {
-            json.addProperty("recipe", this.recipes.get(0).toString());
+            json.addProperty("recipe", this.recipes.getFirst().toString());
         }
     }
     

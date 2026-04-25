@@ -96,13 +96,13 @@ public class ConfigKey {
             }
             field.setAccessible(true);
             List<String> path = new ArrayList<>();
-            path.add(0, field.getName());
+            path.addFirst(field.getName());
             Class<?> currentStep = field.getDeclaringClass();
             while (currentStep != configBaseClass) {
                 if (currentStep == null || currentStep == Object.class) {
                     throw new IllegalStateException("LibX config internal error: Can't create config key for field that is not part of config base class.");
                 }
-                path.add(0, currentStep.getSimpleName());
+                path.addFirst(currentStep.getSimpleName());
                 currentStep = currentStep.getDeclaringClass();
             }
             ConfiguredValidator<?, ?> validator = ConfiguredValidator.create(modid, field);

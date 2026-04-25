@@ -14,7 +14,7 @@ public class AdvancedItemHandlerHelper {
         if (stacks.isEmpty()) {
             return true;
         } else if (stacks.size() == 1) {
-            ItemStack remainder = stacks.get(0).copy();
+            ItemStack remainder = stacks.getFirst().copy();
             for (int slot = startInclusive; slot < endExclusive; slot++) {
                 remainder = itemHandler.insertItem(slot, remainder, true);
                 if (remainder.isEmpty()) return true;

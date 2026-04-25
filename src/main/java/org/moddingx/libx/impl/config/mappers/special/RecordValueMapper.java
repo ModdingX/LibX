@@ -170,7 +170,7 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
             }
         } else if (parts.length == 1) {
             // Probably just forgot the json object around.
-            Optional<Object> singleArgValue = correction.tryCorrect(json, this.entries.get(0).mapper(), record -> {
+            Optional<Object> singleArgValue = correction.tryCorrect(json, this.entries.getFirst().mapper(), record -> {
                 try {
                     return Optional.of(accessComponent(parts[0], record));
                 } catch (IllegalAccessException | InvocationTargetException e) {

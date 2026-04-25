@@ -5,7 +5,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import org.moddingx.libx.LibX;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,15 +21,15 @@ public class BlockOverlayQuadCache {
         WeakHashMap<BakedQuad, BakedQuad> quads = quadCache.computeIfAbsent(sprite, k -> new WeakHashMap<>());
         return quads.get(source);
     }
-    
+
     public static void put(BakedQuad source, BakedQuad transformed) {
         WeakHashMap<BakedQuad, BakedQuad> quads = quadCache.computeIfAbsent(transformed.getSprite(), k -> new WeakHashMap<>());
         quads.put(source, transformed);
     }
-    
-    public static void resourcesReload(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener(new SimplePreparableReloadListener<Void>() {
-            
+
+    public static void resourcesReload(AddClientReloadListenersEvent event) {
+        event.addListener(LibX.getInstance().resource("quad_cache"), new SimplePreparableReloadListener<Void>() {
+
             @Nonnull
             @Override
             protected Void prepare(@Nonnull ResourceManager rm, @Nonnull ProfilerFiller filler) {

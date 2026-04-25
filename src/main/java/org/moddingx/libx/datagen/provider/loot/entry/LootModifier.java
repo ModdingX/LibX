@@ -42,10 +42,10 @@ public interface LootModifier<T> extends GenericLootModifier<T>, SimpleLootFacto
      * (Applies the first, then the second to the result of the first and so on)
      */
     static <T> LootModifier<T> chain(SimpleLootFactory<T> element, List<LootModifier<T>> children) {
-        if (children.size() == 0) {
+        if (children.isEmpty()) {
             return identity(element);
         } else if (children.size() == 1) {
-            return children.get(0);
+            return children.getFirst();
         } else {
             return of(element, (item, entry) -> {
                 for (LootModifier<T> modifier : children) {

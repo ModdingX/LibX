@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -12,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,7 +27,7 @@ import java.util.function.Predicate;
  */
 public class RenderHelperBlock {
 
-    private static final RenderType RENDER_TYPE_BREAK = RenderType.crumbling(InventoryMenu.BLOCK_ATLAS);
+    private static final RenderType RENDER_TYPE_BREAK = RenderType.crumbling(TextureAtlas.LOCATION_BLOCKS);
     private static final RandomSource random = RandomSource.create();
 
     /**
@@ -48,14 +48,14 @@ public class RenderHelperBlock {
     public static void renderBlockBreak(BlockState state, PoseStack poseStack, int light, int overlay, int breakProgress, long positionRandom) {
         if (breakProgress > 0) {
             ResourceLocation tex = ModelBakery.DESTROY_STAGES.get((breakProgress - 1) % ModelBakery.DESTROY_STAGES.size());
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(tex);
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(tex);
             renderBlockOverlaySprite(state, poseStack, light, overlay, sprite, positionRandom);
         }
     }
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link TextureAtlas#LOCATION_BLOCKS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, int light, int overlay, TextureAtlasSprite sprite) {
         renderBlockOverlaySprite(state, poseStack, light, overlay, sprite, state.getSeed(BlockPos.ZERO));
@@ -63,7 +63,7 @@ public class RenderHelperBlock {
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link TextureAtlas#LOCATION_BLOCKS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, int light, int overlay, TextureAtlasSprite sprite, long positionRandom) {
         renderBlockOverlaySprite(state, poseStack, light, overlay, sprite, positionRandom, dir -> true);
@@ -71,7 +71,7 @@ public class RenderHelperBlock {
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link TextureAtlas#LOCATION_BLOCKS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, int light, int overlay, TextureAtlasSprite sprite, Predicate<Direction> dirs) {
         renderBlockOverlaySprite(state, poseStack, light, overlay, sprite, state.getSeed(BlockPos.ZERO), dirs);
@@ -79,7 +79,7 @@ public class RenderHelperBlock {
 
     /**
      * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
-     * your own TextureAtlasSprite here to be used. (It must be from {@link InventoryMenu#BLOCK_ATLAS})
+     * your own TextureAtlasSprite here to be used. (It must be from {@link TextureAtlas#LOCATION_BLOCKS})
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, int light, int overlay, TextureAtlasSprite sprite, long positionRandom, Predicate<Direction> dirs) {
         if (state.getRenderShape() == RenderShape.MODEL) {

@@ -5,7 +5,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
@@ -29,7 +29,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
     
     protected final ModX mod;
     protected final PackTarget packTarget;
-    protected final ExistingFileHelper fileHelper;
+    protected final ResourceManager resourceManager;
     private final BookProperties properties;
     private final String bookNamespace;
     
@@ -40,13 +40,13 @@ public abstract class PatchouliProviderBase implements DataProvider {
     public PatchouliProviderBase(DatagenContext ctx, BookProperties properties) {
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
-        this.fileHelper = ctx.fileHelper();
+        this.resourceManager = ctx.resourceManager(PackType.CLIENT_RESOURCES);
         this.properties = properties;
         this.bookNamespace = properties.namespace() != null ? properties.namespace() : this.mod.modid;
         
         // Preload font information now as we won't have an ExistingFileHelper available later
         // See PageJson#splitText
-        DatagenFontLoader.getFontMetrics(this.fileHelper);
+        DatagenFontLoader.getFontMetrics(ctx.resourceManager(PackType.CLIENT_RESOURCES));
         
         this.categories = new ArrayList<>();
         this.categoryIds = new HashSet<>();
@@ -77,7 +77,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
      */
     public EntryBuilder entry(String id) {
         if (this.categories.isEmpty()) throw new IllegalStateException("No categories defined");
-        return this.entry(id, this.categories.get(this.categories.size() - 1).id.getPath());
+        return this.entry(id, this.categories.getLast().id.getPath());
     }
 
     /**
@@ -138,7 +138,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
                 }),
                 this.entries.stream().map(entry -> {
                     Path path = this.packTarget.path(PackType.CLIENT_RESOURCES).resolve(entry.category.getNamespace() + "/patchouli_books/" + this.properties.bookName() + "/en_us/entries/" + entry.category.getPath() + "/" + entry.id + ".json");
-                    return DataProvider.saveStable(cache, entry.build(translations, this.fileHelper), path);
+                    return DataProvider.saveStable(cache, entry.build(translations, this.resourceManager), path);
                 }),
                 Stream.ofNullable(mgr).map(theMgr -> {
                     Path langPath = this.packTarget.path(PackType.CLIENT_RESOURCES).resolve(this.mod.modid + "_" + this.properties.bookName() + "/lang/en_us.json");

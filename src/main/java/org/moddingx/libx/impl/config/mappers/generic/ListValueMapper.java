@@ -77,7 +77,7 @@ public class ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray
                 correction.tryCorrect(json.getAsJsonArray().get(i), mapper, ConfigCorrection.check(value -> idx < value.size(), value -> value.get(idx))).ifPresent(list::add);
             }
             List<T> result = list.build();
-            if (result.isEmpty() && json.getAsJsonArray().size() > 0) {
+            if (result.isEmpty() && !json.getAsJsonArray().isEmpty()) {
                 // Nothing matched. Might be better to return the default value here
                 return Optional.empty();
             } else {
@@ -86,7 +86,7 @@ public class ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray
         } else {
             // Maybe someone forgot to add a list for a single item.
             // We just try to pass the entire json to the child mapper.
-            return correction.tryCorrect(json, mapper, ConfigCorrection.check(value -> value.size() == 1, value -> value.get(0))).map(ImmutableList::of);
+            return correction.tryCorrect(json, mapper, ConfigCorrection.check(value -> value.size() == 1, List::getFirst)).map(ImmutableList::of);
         }
     }
 

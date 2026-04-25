@@ -7,9 +7,7 @@ import net.minecraft.client.gui.font.FontManager;
 import net.minecraft.client.gui.font.glyphs.SpecialGlyphs;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 
@@ -19,20 +17,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class DatagenFontLoader {
-    
+
     // Makes everything zero-width. Useful when splitting strings that have formatting codes.
     public static final ResourceLocation ZERO_WIDTH_FONT = LibX.getInstance().resource("zero_width");
     public static final StringSplitter MISSING = new StringSplitter((cp, style) -> ZERO_WIDTH_FONT.equals(style.getFont()) ? 0 : SpecialGlyphs.MISSING.getAdvance(style.isBold()));
-    
+
     private static StringSplitter fontMetrics;
-    
-    public static StringSplitter getFontMetrics(@Nullable ExistingFileHelper fileHelper) {
+
+    public static StringSplitter getFontMetrics(@Nullable ResourceManager rm) {
         if (fontMetrics == null) {
-            if (fileHelper == null) throw new RuntimeException("Can't load font without file helper.");
+            if (rm == null) throw new RuntimeException("Can't load font without file helper.");
             try {
                 LibX.logger.info("Loading font metrics during datagen.");
-                ResourceManager rm = DatagenLoader.resources(fileHelper, PackType.CLIENT_RESOURCES);
-                
+
                 // We can't call the constructor as it would access the render system
                 // However, the prepare method does not need any instance fields, so this works
                 FontManager mgr = ReflectionHacks.newInstance(FontManager.class);

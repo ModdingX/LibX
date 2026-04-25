@@ -95,7 +95,7 @@ public class ConfigState {
                 builder.append(",\n\n");
             }
             key.comment.forEach(line -> builder.append("// ").append(line.replace('\n', ' ')).append("\n"));
-            builder.append("\"").append(quote(key.path.get(key.path.size() - 1))).append("\": ");
+            builder.append("\"").append(quote(key.path.getLast())).append("\": ");
             Object value = this.values.get(key);
             //noinspection unchecked
             JsonElement json = ((ValueMapper<Object, ?>) key.mapper).toJson(value);

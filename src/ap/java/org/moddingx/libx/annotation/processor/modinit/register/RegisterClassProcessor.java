@@ -84,7 +84,7 @@ public class RegisterClassProcessor {
     
     private static TypeMirror generic(Element elem, TypeMirror type, String error, ModEnv env) {
         if (type.getKind() == TypeKind.DECLARED && type instanceof DeclaredType declared && declared.getTypeArguments().size() == 1) {
-            TypeMirror genericType = declared.getTypeArguments().get(0);
+            TypeMirror genericType = declared.getTypeArguments().getFirst();
             if (genericType.getKind() == TypeKind.WILDCARD && genericType instanceof WildcardType wildcard && wildcard.getExtendsBound() != null) {
                 return wildcard.getExtendsBound();
             } else {

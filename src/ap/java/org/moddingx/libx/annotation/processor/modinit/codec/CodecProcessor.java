@@ -192,7 +192,7 @@ public class CodecProcessor {
                 return null;
             }
             nesting += 1;
-            baseType = generics.get(0);
+            baseType = generics.getFirst();
         }
         return new ListInfo(nesting, baseType);
     }

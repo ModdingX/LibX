@@ -35,7 +35,7 @@ public class OptionCodec<A> implements Codec<Optional<A>> {
             if (list.isEmpty()) {
                 return DataResult.success(Pair.of(Optional.empty(), ops.empty()));
             } else if (list.size() == 1) {
-                return this.codec.decode(ops, list.get(0)).flatMap(pair -> {
+                return this.codec.decode(ops, list.getFirst()).flatMap(pair -> {
                     if (Objects.equals(pair.getSecond(), ops.empty())) {
                         return DataResult.success(Pair.of(Optional.of(pair.getFirst()), ops.empty()));
                     } else {

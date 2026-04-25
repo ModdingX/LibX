@@ -96,7 +96,7 @@ public class PackTarget {
      */
     public Resource find(PackType type, ResourceLocation resourceId) throws FileNotFoundException {
         if (!this.resourceMap.containsKey(type)) throw new UnsupportedOperationException("The pack target '" + this.name + "' does not support output on " + type);
-        Resource resource = this.resourceMap.get(type).getResource(this.system.fileHelper(), resourceId);
+        Resource resource = this.resourceMap.get(type).getResource(this.system.resourceManagers(), resourceId);
         if (resource == null) throw new FileNotFoundException(this.name + "/" + resourceId);
         return resource;
     }

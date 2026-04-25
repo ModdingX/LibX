@@ -16,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.datagen.tags.DecorationTags;
@@ -55,9 +54,9 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     public CommonTagsProviderBase(DatagenContext ctx) {
         this.mod = ctx.mod();
         CompletableFuture<HolderLookup.Provider> lookupProvider = CompletableFuture.completedFuture(ctx.registries().registryAccess());
-        this.blockTags = new BlockTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid, ctx.fileHelper());
-        this.itemTags = new ItemTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid, ctx.fileHelper(), this.blockTags);
-        this.fluidTags = new FluidTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid, ctx.fileHelper());
+        this.blockTags = new BlockTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid);
+        this.itemTags = new ItemTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid, this.blockTags);
+        this.fluidTags = new FluidTagProviderBase(ctx.output(), lookupProvider, ctx.mod().modid);
         ctx.addAdditionalProvider(c -> this.blockTags);
         ctx.addAdditionalProvider(c -> this.itemTags);
         ctx.addAdditionalProvider(c -> this.fluidTags);
@@ -176,8 +175,8 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         private Map<ResourceLocation, TagBuilder> tagCache;
 
-        protected BlockTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, ExistingFileHelper fileHelper) {
-            super(packOutput, lookupProvider, modid, fileHelper);
+        protected BlockTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid) {
+            super(packOutput, lookupProvider, modid);
         }
 
         @Override
@@ -221,8 +220,8 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         private Map<ResourceLocation, TagBuilder> tagCache;
 
-        protected ItemTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, ExistingFileHelper fileHelper, BlockTagProviderBase blockTags) {
-            super(packOutput, lookupProvider, blockTags.contentsGetter(), modid, fileHelper);
+        protected ItemTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, BlockTagProviderBase blockTags) {
+            super(packOutput, lookupProvider, blockTags.contentsGetter(), modid);
         }
 
         @Override
@@ -267,8 +266,8 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         private Map<ResourceLocation, TagBuilder> tagCache;
 
-        protected FluidTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, ExistingFileHelper fileHelper) {
-            super(packOutput, lookupProvider, modid, fileHelper);
+        protected FluidTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid) {
+            super(packOutput, lookupProvider, modid);
         }
 
         @Override
