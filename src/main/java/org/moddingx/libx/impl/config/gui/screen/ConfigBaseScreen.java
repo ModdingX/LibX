@@ -2,7 +2,6 @@ package org.moddingx.libx.impl.config.gui.screen;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -135,7 +134,7 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            protected void drawPanel(@Nonnull GuiGraphics graphics, int entryRight, int relativeY, @Nonnull Tesselator tesselator, int mouseX, int mouseY) {
+            protected void drawPanel(@Nonnull GuiGraphics graphics, int entryRight, int relativeY, int mouseX, int mouseY) {
                 ConfigBaseScreen.this.currentScrollOffset = relativeY;
                 graphics.pose().pushPose();
                 graphics.pose().translate(0, relativeY, 0);
@@ -214,7 +213,7 @@ public abstract class ConfigBaseScreen extends Screen {
         this.renderMenuBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         RenderHelper.resetColor();
-        graphics.drawString(this.font, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFF, true);
+        graphics.drawString(this.font, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFFFF, true);
     }
 
     @Override
@@ -264,6 +263,11 @@ public abstract class ConfigBaseScreen extends Screen {
         
         public TooltipCapturingGuiGraphics(GuiGraphics parent) {
             super(parent);
+        }
+
+        @Override
+        public boolean containsPointInScissor(int x, int y) {
+            return super.containsPointInScissor(x, y + ConfigBaseScreen.this.currentScrollOffset);
         }
 
         @Override

@@ -1,11 +1,10 @@
 package org.moddingx.libx.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -17,18 +16,20 @@ import net.neoforged.neoforge.fluids.FluidStack;
  */
 public class RenderHelperFluid {
 
+    private static final ResourceLocation BLOCK_ATLAS = ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png");
+
     public static void renderFluid(GuiGraphics graphics, FluidStack stack, int x, int y, int width, int height) {
         if (!stack.isEmpty()) {
             Fluid fluid = stack.getFluid();
             IClientFluidTypeExtensions properties = IClientFluidTypeExtensions.of(fluid);
             int color = properties.getTintColor(stack);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(properties.getStillTexture(stack));
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(BLOCK_ATLAS).apply(properties.getStillTexture(stack));
             renderFluid(graphics, sprite, color, x, y, width, height);
         }
     }
 
     public static void renderFluid(GuiGraphics graphics, int color, int x, int y, int width, int height) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
         renderFluid(graphics, sprite, color, x, y, width, height);
     }
 
@@ -39,16 +40,10 @@ public class RenderHelperFluid {
         int alpha = (color >>> 24) & 0xFF;
         if (alpha > 0) {
             RenderHelper.argb(color);
-            if (alpha < 255) {
-                RenderSystem.enableBlend();
-            }
         } else {
             RenderHelper.rgb(color);
         }
         RenderHelper.repeatBlit(RenderType::guiTextured, graphics, x, y, width, height, sprite);
-        if (alpha > 0 && alpha < 255) {
-            RenderSystem.disableBlend();
-        }
         RenderHelper.resetColor();
         graphics.pose().popPose();
     }

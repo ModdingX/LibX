@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.network;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
@@ -24,8 +25,8 @@ public class BeRequestHandler extends PacketHandler<BeRequestHandler.Message> {
     public void handle(Message msg, IPayloadContext ctx) {
         if (ctx.player() instanceof ServerPlayer sender) {
             ServerLevel level = sender.serverLevel();
-            //noinspection deprecation
-            if (level.hasChunkAt(msg.pos()) && NetworkImpl.getImpl().canSend(sender, BeUpdateHandler.TYPE)) {
+            if (level.hasChunk(SectionPos.blockToSectionCoord(msg.pos().getX()), SectionPos.blockToSectionCoord(msg.pos().getZ()))
+                    && NetworkImpl.getImpl().canSend(sender, BeUpdateHandler.TYPE)) {
                 BeUpdateHandler.Message reply = NetworkImpl.getImpl().getBeUpdateMessage(sender.level(), msg.pos());
                 if (reply != null) ctx.reply(reply);
             }

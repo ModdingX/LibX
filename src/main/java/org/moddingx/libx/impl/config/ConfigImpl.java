@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.Strictness;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -36,7 +37,7 @@ public class ConfigImpl {
     public static final Gson GSON = Util.make(() -> {
         GsonBuilder builder = new GsonBuilder();
         builder.disableHtmlEscaping();
-        builder.setLenient();
+        builder.setStrictness(Strictness.LENIENT);
         builder.setPrettyPrinting();
         return builder.create();
     });

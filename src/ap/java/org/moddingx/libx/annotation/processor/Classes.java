@@ -31,8 +31,8 @@ public class Classes {
     public static final String RESOURCE_KEY = "net.minecraft.resources.ResourceKey";
     public static final String NEOFORGE_KEYS = "net.neoforged.neoforge.registries.NeoForgeRegistries$Keys";
     
-    public static final String BAKED_MODEL = "net.minecraft.client.resources.model.BakedModel";
-    public static final String MODEL_REGISTRY_EVENT = "net.neoforged.neoforge.client.event.ModelEvent$RegisterAdditional";
+    public static final String BAKED_MODEL = "net.minecraft.client.resources.model.QuadCollection";
+    public static final String MODEL_REGISTRY_EVENT = "net.neoforged.neoforge.client.event.ModelEvent$RegisterStandalone";
     public static final String MODEL_BAKE_EVENT = "net.neoforged.neoforge.client.event.ModelEvent$BakingCompleted";
     public static final String CODEC = "com.mojang.serialization.Codec";
     public static final String MAP_CODEC = "com.mojang.serialization.MapCodec";

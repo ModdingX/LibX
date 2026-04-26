@@ -1,6 +1,7 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -155,16 +156,16 @@ public abstract class RecipeProviderBase implements DataProvider, RecipeExtensio
 
     @Override
     public Criterion<?> criterion(ItemLike item) {
-        return RecipeProvider.inventoryTrigger(ItemPredicate.Builder.item().of(this.items(), item));
+        return InventoryChangeTrigger.TriggerInstance.hasItems(this.item(item));
     }
 
     @Override
     public Criterion<?> criterion(TagKey<Item> item) {
-        return RecipeProvider.inventoryTrigger(ItemPredicate.Builder.item().of(this.items(), item));
+        return InventoryChangeTrigger.TriggerInstance.hasItems(this.item(item));
     }
 
     @Override
     public Criterion<?> criterion(ItemPredicate... items) {
-        return RecipeProvider.inventoryTrigger(items);
+        return InventoryChangeTrigger.TriggerInstance.hasItems(items);
     }
 }

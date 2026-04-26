@@ -18,9 +18,11 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.EmptyBlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.apache.commons.lang3.tuple.Pair;
@@ -84,14 +86,14 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         BlockEntityRenderer<BlockEntity> renderer = dispatcher.getRenderer(blockEntity);
         if (renderer == null) return;
 
-        setLevelAndState(blockEntity, state);
+        setLevel(blockEntity);
         if (pair.getRight() && Minecraft.getInstance().level != null) {
             if (!defaultTags.containsKey(teType)) {
                 defaultTags.put(teType, blockEntity.saveCustomOnly(Minecraft.getInstance().level.registryAccess()));
             } else {
                 blockEntity.loadCustomOnly(defaultTags.get(teType), Minecraft.getInstance().level.registryAccess());
             }
-            setLevelAndState(blockEntity, state);
+            setLevel(blockEntity);
 
             CustomData customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
             if (customData != null) {
@@ -102,21 +104,18 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         poseStack.pushPose();
 
         if (state.getRenderShape() == RenderShape.MODEL) {
-            //noinspection deprecation
-            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay);
+            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay, EmptyBlockAndTintGetter.INSTANCE, BlockPos.ZERO);
         }
-        renderer.render(blockEntity, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay);
+        renderer.render(blockEntity, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay, Vec3.ZERO);
                     blockEntity.setLevel(null); // avoid storing the level for too long
 
         poseStack.popPose();
     }
 
-    private static void setLevelAndState(BlockEntity blockEntity, BlockState state) {
+    private static void setLevel(BlockEntity blockEntity) {
         if (Minecraft.getInstance().level != null) {
             blockEntity.setLevel(Minecraft.getInstance().level);
         }
-        //noinspection deprecation
-        blockEntity.setBlockState(state);
     }
 
     /**

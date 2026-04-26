@@ -23,7 +23,7 @@ public class BlockOverlayQuadCache {
     }
 
     public static void put(BakedQuad source, BakedQuad transformed) {
-        WeakHashMap<BakedQuad, BakedQuad> quads = quadCache.computeIfAbsent(transformed.getSprite(), k -> new WeakHashMap<>());
+        WeakHashMap<BakedQuad, BakedQuad> quads = quadCache.computeIfAbsent(transformed.sprite(), k -> new WeakHashMap<>());
         quads.put(source, transformed);
     }
 

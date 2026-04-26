@@ -2,7 +2,6 @@ package org.moddingx.libx.util.data;
 
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
@@ -26,8 +25,8 @@ public class NbtX {
      */
     @Nullable
     public static ResourceLocation getResource(CompoundTag nbt, String key) {
-        if (nbt.contains(key, Tag.TAG_STRING)) {
-            return ResourceLocation.tryParse(nbt.getString(key));
+        if (nbt.contains(key)) {
+            return nbt.getString(key).map(ResourceLocation::tryParse).orElse(null);
         } else {
             return null;
         }

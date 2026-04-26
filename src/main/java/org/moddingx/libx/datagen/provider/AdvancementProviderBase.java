@@ -5,7 +5,10 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.ClientAsset;
+import net.minecraft.core.component.predicates.DataComponentPredicates;
+import net.minecraft.core.component.predicates.EnchantmentsPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
@@ -51,6 +54,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     protected final PackTarget packTarget;
     private final RegistrySet registries;
     private final HolderGetter<Item> itemRegistries;
+    private final HolderGetter<Enchantment> enchantmentRegistries;
     private final HolderGetter<EntityType<?>> entityRegistries;
     private final Map<ResourceLocation, Supplier<AdvancementInfo>> advancements = new HashMap<>();
     private String rootId = null;
@@ -61,6 +65,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         this.packTarget = ctx.target();
         this.registries = ctx.registries();
         this.itemRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ITEM);
+        this.enchantmentRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
         this.entityRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ENTITY_TYPE);
     }
 
@@ -186,7 +191,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * the inventory at the same time.
      */
     public Criterion<?> items(ItemLike... items) {
-        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
+        return this.items(Arrays.stream(items).map(this::stack).toArray(ItemPredicate[]::new));
     }
     
     /**
@@ -195,7 +200,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     @SafeVarargs
     public final Criterion<?> items(TagKey<Item>... items) {
-        return this.items(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
+        return this.items(Arrays.stream(items).map(this::stack).toArray(ItemPredicate[]::new));
     }
         
     /**
@@ -210,7 +215,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link TaskFactory} that adds a task for every item given to this method.
      */
     public TaskFactory itemTasks(ItemLike... items) {
-        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
+        return this.itemTasks(Arrays.stream(items).map(this::stack).toArray(ItemPredicate[]::new));
     }
 
     /**
@@ -218,7 +223,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     @SafeVarargs
     public final TaskFactory itemTasks(TagKey<Item>... items) {
-        return this.itemTasks(Arrays.stream(items).map(item -> ItemPredicate.Builder.item().of(this.itemRegistries, item).build()).toArray(ItemPredicate[]::new));
+        return this.itemTasks(Arrays.stream(items).map(this::stack).toArray(ItemPredicate[]::new));
     }
 
     /**
@@ -239,21 +244,21 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
     public Criterion<?> eat(ItemLike food) {
-        return this.eat(ItemPredicate.Builder.item().of(this.itemRegistries, food));
+        return this.eat(this.stack(food));
     }
 
     /**
      * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
     public Criterion<?> eat(TagKey<Item> food) {
-        return this.eat(ItemPredicate.Builder.item().of(this.itemRegistries, food));
+        return this.eat(this.stack(food));
     }
 
     /**
      * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) an item.
      */
-    public Criterion<?> eat(ItemPredicate.Builder food) {
-        return ConsumeItemTrigger.TriggerInstance.usedItem(food);
+    public Criterion<?> eat(ItemPredicate food) {
+        return ConsumeItemTrigger.TriggerInstance.usedItem(this.itemPredicateBuilder(food));
     }
 
     /**
@@ -295,48 +300,68 @@ public abstract class AdvancementProviderBase implements DataProvider {
      * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
     @SafeVarargs
-    public final ItemPredicate.Builder stack(ItemLike item, ResourceKey<Enchantment>... enchs) {
-        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(this.itemRegistries, item);
-        return this.applyEnchantments(builder, enchs);
+    public final ItemPredicate stack(ItemLike item, ResourceKey<Enchantment>... enchs) {
+        HolderSet<Item> items = HolderSet.direct(BuiltInRegistries.ITEM.wrapAsHolder(item.asItem()));
+        return this.applyEnchantments(items, enchs);
     }
 
     /**
      * Gets an {@link ItemPredicate} for an item and optionally some enchantments.
      */
     @SafeVarargs
-    public final ItemPredicate.Builder stack(TagKey<Item> item, ResourceKey<Enchantment>... enchs) {
-        ItemPredicate.Builder builder = ItemPredicate.Builder.item().of(this.itemRegistries, item);
-        return this.applyEnchantments(builder, enchs);
+    public final ItemPredicate stack(TagKey<Item> item, ResourceKey<Enchantment>... enchs) {
+        HolderSet<Item> items = this.itemRegistries.getOrThrow(item);
+        return this.applyEnchantments(items, enchs);
     }
 
     /**
      * Gets an {@link ItemPredicate} for some enchantments.
      */
     @SafeVarargs
-    public final ItemPredicate.Builder stack(ResourceKey<Enchantment>... enchs) {
+    public final ItemPredicate stack(ResourceKey<Enchantment>... enchs) {
         if (enchs.length == 0) {
             throw new IllegalStateException("stack() can't be used to obtain an allways matching predicate.");
         }
-        ItemPredicate.Builder builder = ItemPredicate.Builder.item();
-        return this.applyEnchantments(builder, enchs);
+        return this.applyEnchantments(null, enchs);
     }
 
     /**
      * Gets an {@link ItemPredicate} for an enchantment with a minimum level.
      */
-    public ItemPredicate.Builder stack(ResourceKey<Enchantment> ench, int min) {
-        Registry<Enchantment> registry = this.registries.registry(Registries.ENCHANTMENT);
-        EnchantmentPredicate enchantmentPredicate = new EnchantmentPredicate(registry.getOrThrow(ench), MinMaxBounds.Ints.atLeast(min));
-        return ItemPredicate.Builder.item().withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.of(enchantmentPredicate)));
+    public ItemPredicate stack(ResourceKey<Enchantment> ench, int min) {
+        EnchantmentPredicate enchantmentPredicate = new EnchantmentPredicate(this.enchantmentRegistries.getOrThrow(ench), MinMaxBounds.Ints.atLeast(min));
+        return this.itemPredicate(null, List.of(enchantmentPredicate));
     }
     
-    private ItemPredicate.Builder applyEnchantments(ItemPredicate.Builder builder, ResourceKey<Enchantment>[] enchantments) {
-        if (enchantments.length == 0) return builder;
-        Registry<Enchantment> registry = this.registries.registry(Registries.ENCHANTMENT);
+    private ItemPredicate applyEnchantments(@Nullable HolderSet<Item> items, ResourceKey<Enchantment>[] enchantments) {
+        if (enchantments.length == 0) return this.itemPredicate(items, List.of());
         List<EnchantmentPredicate> enchantmentPredicates = Arrays.stream(enchantments)
-                .map(key -> new EnchantmentPredicate(registry.getOrThrow(key), MinMaxBounds.Ints.ANY))
+                .map(key -> new EnchantmentPredicate(this.enchantmentRegistries.getOrThrow(key), MinMaxBounds.Ints.ANY))
                 .toList();
-        return builder.withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(enchantmentPredicates));
+        return this.itemPredicate(items, enchantmentPredicates);
+    }
+
+    private ItemPredicate itemPredicate(@Nullable HolderSet<Item> items, List<EnchantmentPredicate> enchantments) {
+        DataComponentMatchers components;
+        if (enchantments.isEmpty()) {
+            components = DataComponentMatchers.ANY;
+        } else {
+            components = DataComponentMatchers.Builder.components()
+                    .partial(DataComponentPredicates.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.copyOf(enchantments)))
+                    .build();
+        }
+        return new ItemPredicate(Optional.ofNullable(items), MinMaxBounds.Ints.ANY, components);
+    }
+
+    private ItemPredicate.Builder itemPredicateBuilder(ItemPredicate predicate) {
+        ItemPredicate.Builder builder = ItemPredicate.Builder.item()
+                .withCount(predicate.count())
+                .withComponents(predicate.components());
+        predicate.items().ifPresent(items -> items.unwrapKey().ifPresentOrElse(
+                tag -> builder.of(this.itemRegistries, tag),
+                () -> builder.of(this.itemRegistries, items.stream().map(holder -> holder.value()).toArray(Item[]::new))
+        ));
+        return builder;
     }
 
     /**
@@ -611,7 +636,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
                 } else if (this.background == null) {
                     throw new IllegalStateException("Can't build root advancement without background.");
                 }
-                displayInfo = new DisplayInfo(this.display.getIcon(), this.display.getTitle(), this.display.getDescription(), Optional.ofNullable(this.background), this.display.getType(), this.display.shouldShowToast(), this.display.shouldAnnounceChat(), this.display.isHidden());
+                displayInfo = new DisplayInfo(
+                        this.display.getIcon(),
+                        this.display.getTitle(),
+                        this.display.getDescription(),
+                        Optional.ofNullable(this.background).map(ClientAsset::new),
+                        this.display.getType(),
+                        this.display.shouldShowToast(),
+                        this.display.shouldAnnounceChat(),
+                        this.display.isHidden()
+                );
             }
             if (parentAdv != null && parentAdv.display().isEmpty() && displayInfo != null) {
                 throw new IllegalStateException("Can't build advancement with display and display-less parent.");

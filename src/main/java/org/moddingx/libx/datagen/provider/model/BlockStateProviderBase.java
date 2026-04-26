@@ -1,12 +1,13 @@
 package org.moddingx.libx.datagen.provider.model;
 
+import com.mojang.math.Quadrant;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.blockstates.Variant;
-import net.minecraft.client.data.models.blockstates.VariantProperties;
+import net.minecraft.client.renderer.block.model.VariantMutator;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
@@ -164,21 +165,21 @@ public abstract class BlockStateProviderBase extends ModelProvider {
                     TextureMapping.column(textureSide, textureTop),
                     this.currentRenderTypes
             );
-            generators.blockStateOutput.accept(BlockModelGenerators.createAxisAlignedPillarBlock(block, axisModel));
+            generators.blockStateOutput.accept(BlockModelGenerators.createAxisAlignedPillarBlock(block, variant(axisModel)));
         } else if (block instanceof DecoratedSlabBlock decorated) {
             ResourceLocation texture = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
             TextureMapping mapping = new TextureMapping().put(TextureSlot.BOTTOM, texture).put(TextureSlot.TOP, texture).put(TextureSlot.SIDE, texture);
             ResourceLocation bottom = this.createBlockModel(blockModelId(id), ModelTemplates.SLAB_BOTTOM, mapping, this.currentRenderTypes);
             ResourceLocation top = this.createBlockModel(blockModelId(id, "_top"), ModelTemplates.SLAB_TOP, mapping, this.currentRenderTypes);
             ResourceLocation doubled = blockModelId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
-            generators.blockStateOutput.accept(BlockModelGenerators.createSlab(block, bottom, top, doubled));
+            generators.blockStateOutput.accept(BlockModelGenerators.createSlab(block, variant(bottom), variant(top), variant(doubled)));
         } else if (block instanceof DecoratedStairBlock decorated) {
             ResourceLocation texture = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
             TextureMapping mapping = new TextureMapping().put(TextureSlot.BOTTOM, texture).put(TextureSlot.TOP, texture).put(TextureSlot.SIDE, texture);
             ResourceLocation inner = this.createBlockModel(blockModelId(id, "_inner"), ModelTemplates.STAIRS_INNER, mapping, this.currentRenderTypes);
             ResourceLocation straight = this.createBlockModel(blockModelId(id), ModelTemplates.STAIRS_STRAIGHT, mapping, this.currentRenderTypes);
             ResourceLocation outer = this.createBlockModel(blockModelId(id, "_outer"), ModelTemplates.STAIRS_OUTER, mapping, this.currentRenderTypes);
-            generators.blockStateOutput.accept(BlockModelGenerators.createStairs(block, inner, straight, outer));
+            generators.blockStateOutput.accept(BlockModelGenerators.createStairs(block, variant(inner), variant(straight), variant(outer)));
         } else if (block instanceof DecoratedWallBlock decorated) {
             ResourceLocation texture = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
             this.wallBlock(block, texture);
@@ -199,28 +200,28 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         } else if (block instanceof DecoratedSign.Standing decorated) {
             ResourceLocation particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
             ResourceLocation signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(particle), this.currentRenderTypes);
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, signModel));
+            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
         } else if (block instanceof DecoratedSign.Wall decorated) {
             ResourceLocation particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
             ResourceLocation signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(particle), this.currentRenderTypes);
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, signModel));
+            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
         } else if (block instanceof DecoratedHangingSign.Ceiling decorated) {
             ResourceLocation particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
             ResourceLocation signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(particle), this.currentRenderTypes);
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, signModel));
+            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
         } else if (block instanceof DecoratedHangingSign.Wall decorated) {
             ResourceLocation particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
             ResourceLocation signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(particle), this.currentRenderTypes);
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, signModel));
+            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             generators.blockStateOutput.accept(
-                    MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, model.get()))
-                            .with(BlockModelGenerators.createHorizontalFacingDispatchAlt())
+                    MultiVariantGenerator.dispatch(block, variant(model.get()))
+                            .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT)
             );
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.FACING)) {
             generators.blockStateOutput.accept(
-                    MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, model.get()))
-                            .with(PropertyDispatch.property(BlockStateProperties.FACING)
+                    MultiVariantGenerator.dispatch(block, variant(model.get()))
+                            .with(PropertyDispatch.modify(BlockStateProperties.FACING)
                                     .select(Direction.DOWN, rotation(180, 0))
                                     .select(Direction.UP, rotation(0, 0))
                                     .select(Direction.NORTH, rotation(90, 0))
@@ -230,7 +231,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
                             )
             );
         } else {
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, model.get()));
+            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(model.get())));
         }
     }
 
@@ -259,7 +260,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         TextureMapping mapping = TextureMapping.singleSlot(TextureSlot.TEXTURE, texture);
         ResourceLocation model = this.createBlockModel(blockModelId(block), ModelTemplates.BUTTON, mapping, this.currentRenderTypes);
         ResourceLocation pressed = this.createBlockModel(blockModelId(block, "_pressed"), ModelTemplates.BUTTON_PRESSED, mapping, this.currentRenderTypes);
-        this.models().blockStateOutput.accept(BlockModelGenerators.createButton(block, model, pressed));
+        this.models().blockStateOutput.accept(BlockModelGenerators.createButton(block, variant(model), variant(pressed)));
     }
 
     /**
@@ -269,7 +270,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         TextureMapping mapping = TextureMapping.singleSlot(TextureSlot.TEXTURE, texture);
         ResourceLocation model = this.createBlockModel(blockModelId(block), ModelTemplates.PRESSURE_PLATE_UP, mapping, this.currentRenderTypes);
         ResourceLocation pressed = this.createBlockModel(blockModelId(block, "_down"), ModelTemplates.PRESSURE_PLATE_DOWN, mapping, this.currentRenderTypes);
-        this.models().blockStateOutput.accept(BlockModelGenerators.createPressurePlate(block, model, pressed));
+        this.models().blockStateOutput.accept(BlockModelGenerators.createPressurePlate(block, variant(model), variant(pressed)));
     }
 
     public void wallBlock(Block block, ResourceLocation texture) {
@@ -277,14 +278,14 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         ResourceLocation post = this.createBlockModel(blockModelId(block, "_post"), ModelTemplates.WALL_POST, mapping, this.currentRenderTypes);
         ResourceLocation low = this.createBlockModel(blockModelId(block, "_side"), ModelTemplates.WALL_LOW_SIDE, mapping, this.currentRenderTypes);
         ResourceLocation tall = this.createBlockModel(blockModelId(block, "_side_tall"), ModelTemplates.WALL_TALL_SIDE, mapping, this.currentRenderTypes);
-        this.models().blockStateOutput.accept(BlockModelGenerators.createWall(block, post, low, tall));
+        this.models().blockStateOutput.accept(BlockModelGenerators.createWall(block, variant(post), variant(low), variant(tall)));
     }
 
     public void fenceBlock(Block block, ResourceLocation texture) {
         TextureMapping mapping = TextureMapping.singleSlot(TextureSlot.TEXTURE, texture);
         ResourceLocation post = this.createBlockModel(blockModelId(block, "_post"), ModelTemplates.FENCE_POST, mapping, this.currentRenderTypes);
         ResourceLocation side = this.createBlockModel(blockModelId(block, "_side"), ModelTemplates.FENCE_SIDE, mapping, this.currentRenderTypes);
-        this.models().blockStateOutput.accept(BlockModelGenerators.createFence(block, post, side));
+        this.models().blockStateOutput.accept(BlockModelGenerators.createFence(block, variant(post), variant(side)));
     }
 
     public void fenceGateBlock(Block block, ResourceLocation texture) {
@@ -293,7 +294,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         ResourceLocation closed = this.createBlockModel(blockModelId(block), ModelTemplates.FENCE_GATE_CLOSED, mapping, this.currentRenderTypes);
         ResourceLocation wallOpen = this.createBlockModel(blockModelId(block, "_wall_open"), ModelTemplates.FENCE_GATE_WALL_OPEN, mapping, this.currentRenderTypes);
         ResourceLocation wallClosed = this.createBlockModel(blockModelId(block, "_wall"), ModelTemplates.FENCE_GATE_WALL_CLOSED, mapping, this.currentRenderTypes);
-        this.models().blockStateOutput.accept(BlockModelGenerators.createFenceGate(block, open, closed, wallOpen, wallClosed, true));
+        this.models().blockStateOutput.accept(BlockModelGenerators.createFenceGate(block, variant(open), variant(closed), variant(wallOpen), variant(wallClosed), true));
     }
 
     public void doorBlockWithRenderType(Block block, ResourceLocation bottom, ResourceLocation top, ResourceLocation renderType) {
@@ -306,7 +307,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         ResourceLocation tlo = this.createBlockModel(blockModelId(block, "_top_left_open"), ModelTemplates.DOOR_TOP_LEFT_OPEN, mapping, renderType);
         ResourceLocation tr = this.createBlockModel(blockModelId(block, "_top_right"), ModelTemplates.DOOR_TOP_RIGHT, mapping, renderType);
         ResourceLocation tro = this.createBlockModel(blockModelId(block, "_top_right_open"), ModelTemplates.DOOR_TOP_RIGHT_OPEN, mapping, renderType);
-        this.models().blockStateOutput.accept(BlockModelGenerators.createDoor(block, bl, blo, br, bro, tl, tlo, tr, tro));
+        this.models().blockStateOutput.accept(BlockModelGenerators.createDoor(block, variant(bl), variant(blo), variant(br), variant(bro), variant(tl), variant(tlo), variant(tr), variant(tro)));
     }
 
     public void trapdoorBlockWithRenderType(Block block, ResourceLocation texture, boolean orientable, ResourceLocation renderType) {
@@ -318,12 +319,12 @@ public abstract class BlockStateProviderBase extends ModelProvider {
             top = this.createBlockModel(blockModelId(block, "_top"), ModelTemplates.ORIENTABLE_TRAPDOOR_TOP, mapping, renderType);
             bottom = this.createBlockModel(blockModelId(block, "_bottom"), ModelTemplates.ORIENTABLE_TRAPDOOR_BOTTOM, mapping, renderType);
             open = this.createBlockModel(blockModelId(block, "_open"), ModelTemplates.ORIENTABLE_TRAPDOOR_OPEN, mapping, renderType);
-            this.models().blockStateOutput.accept(BlockModelGenerators.createOrientableTrapdoor(block, top, bottom, open));
+            this.models().blockStateOutput.accept(BlockModelGenerators.createOrientableTrapdoor(block, variant(top), variant(bottom), variant(open)));
         } else {
             top = this.createBlockModel(blockModelId(block, "_top"), ModelTemplates.TRAPDOOR_TOP, mapping, renderType);
             bottom = this.createBlockModel(blockModelId(block, "_bottom"), ModelTemplates.TRAPDOOR_BOTTOM, mapping, renderType);
             open = this.createBlockModel(blockModelId(block, "_open"), ModelTemplates.TRAPDOOR_OPEN, mapping, renderType);
-            this.models().blockStateOutput.accept(BlockModelGenerators.createTrapdoor(block, top, bottom, open));
+            this.models().blockStateOutput.accept(BlockModelGenerators.createTrapdoor(block, variant(top), variant(bottom), variant(open)));
         }
     }
 
@@ -342,19 +343,26 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         return usedTemplate.create(modelId, mapping, this.models().modelOutput);
     }
 
-    private static Variant rotation(int xRot, int yRot) {
-        Variant variant = Variant.variant();
-        if (xRot != 0) variant = variant.with(VariantProperties.X_ROT, toRotation(xRot));
-        if (yRot != 0) variant = variant.with(VariantProperties.Y_ROT, toRotation(yRot));
-        return variant;
+    private static MultiVariant variant(ResourceLocation model) {
+        return BlockModelGenerators.plainVariant(model);
     }
 
-    private static VariantProperties.Rotation toRotation(int rot) {
+    private static VariantMutator rotation(int xRot, int yRot) {
+        Quadrant x = toRotation(xRot);
+        Quadrant y = toRotation(yRot);
+        return variant -> {
+            if (x != Quadrant.R0) variant = variant.with(VariantMutator.X_ROT.withValue(x));
+            if (y != Quadrant.R0) variant = variant.with(VariantMutator.Y_ROT.withValue(y));
+            return variant;
+        };
+    }
+
+    private static Quadrant toRotation(int rot) {
         return switch(Math.floorMod(rot, 360)) {
-            case 0 -> VariantProperties.Rotation.R0;
-            case 90 -> VariantProperties.Rotation.R90;
-            case 180 -> VariantProperties.Rotation.R180;
-            case 270 -> VariantProperties.Rotation.R270;
+            case 0 -> Quadrant.R0;
+            case 90 -> Quadrant.R90;
+            case 180 -> Quadrant.R180;
+            case 270 -> Quadrant.R270;
             default -> throw new IllegalArgumentException("Invalid rotation: " + rot);
         };
     }

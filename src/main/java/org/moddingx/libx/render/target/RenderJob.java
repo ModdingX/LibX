@@ -2,7 +2,6 @@ package org.moddingx.libx.render.target;
 
 import com.mojang.blaze3d.ProjectionType;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexSorting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec2;
@@ -33,7 +32,7 @@ public interface RenderJob {
     }
 
     /**
-     * Gets the vertex sorting to use. Defaults to {@link VertexSorting#ORTHOGRAPHIC_Z}.
+     * Gets the vertex sorting to use. Defaults to {@link ProjectionType#ORTHOGRAPHIC}.
      */
     default ProjectionType getProjectionType() {
         return ProjectionType.ORTHOGRAPHIC;

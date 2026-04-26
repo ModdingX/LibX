@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
  * Helper to render scenes into images in the context of minecraft.
  */
 public class ImageHelper {
-    
+
     /**
      * Renders the given {@link RenderJob job} into an image. The future will be completed
      * when the next frame of the game is rendered.
@@ -19,11 +19,9 @@ public class ImageHelper {
         CompletableFuture<NativeImage> future = new CompletableFuture<>();
         Minecraft.getInstance().progressTasks.add(() -> {
             try {
-                future.complete(JobRenderer.renderJob(job));
+                JobRenderer.renderJob(job, future);
             } catch (Exception e) {
                 future.completeExceptionally(e);
-            } finally {
-                future.completeExceptionally(new Exception("Failed"));
             }
         });
         return future;

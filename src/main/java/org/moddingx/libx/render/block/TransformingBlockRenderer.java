@@ -4,22 +4,23 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 
 /**
  * A {@link BlockEntityRenderer} that transforms the {@link PoseStack pose stack} in some way before
- * the actual render code. The {@link #render(BlockEntity, float, PoseStack, MultiBufferSource, int, int) render}
+ * the actual render code. The {@link #render(BlockEntity, float, PoseStack, MultiBufferSource, int, int, Vec3) render}
  * methode takes care of the {@link PoseStack pose stack} being pushed and popped.
  * @param <T>
  */
 public abstract class TransformingBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
     @Override
-    public final void render(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
+    public final void render(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay, @Nonnull Vec3 cameraPos) {
         poseStack.pushPose();
         this.transform(blockEntity, partialTicks, poseStack);
-        this.doRender(blockEntity, partialTicks, poseStack, buffer, light, overlay);
+        this.doRender(blockEntity, partialTicks, poseStack, buffer, light, overlay, cameraPos);
         poseStack.popPose();
     }
 
@@ -31,5 +32,5 @@ public abstract class TransformingBlockRenderer<T extends BlockEntity> implement
     /**
      * Renders the {@link BlockEntity block entity}.
      */
-    protected abstract void doRender(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay);
+    protected abstract void doRender(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay, @Nonnull Vec3 cameraPos);
 }

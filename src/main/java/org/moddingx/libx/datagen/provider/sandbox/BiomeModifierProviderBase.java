@@ -5,6 +5,8 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -136,7 +138,7 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
     public class AddMobSpawnsBuilder {
 
         private final HolderSet<Biome> biomes;
-        private final List<MobSpawnSettings.SpawnerData> spawns;
+        private final List<Weighted<MobSpawnSettings.SpawnerData>> spawns;
 
         private AddMobSpawnsBuilder(HolderSet<Biome> biomes) {
             this.biomes = biomes;
@@ -144,11 +146,15 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
         }
 
         public AddMobSpawnsBuilder spawn(EntityType<?> type, int weight, int min, int max) {
-            return this.spawn(new MobSpawnSettings.SpawnerData(type, weight, min, max));
+            return this.spawn(new MobSpawnSettings.SpawnerData(type, min, max), weight);
         }
         
         public AddMobSpawnsBuilder spawn(MobSpawnSettings.SpawnerData spawn) {
-            this.spawns.add(spawn);
+            return this.spawn(spawn, 1);
+        }
+
+        public AddMobSpawnsBuilder spawn(MobSpawnSettings.SpawnerData spawn, int weight) {
+            this.spawns.add(new Weighted<>(spawn, weight));
             return this;
         }
 
@@ -160,7 +166,7 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeModifier> build() {
-            BiomeModifier modifier = new BiomeModifiers.AddSpawnsBiomeModifier(this.biomes, List.copyOf(this.spawns));
+            BiomeModifier modifier = new BiomeModifiers.AddSpawnsBiomeModifier(this.biomes, WeightedList.of(List.copyOf(this.spawns)));
             return BiomeModifierProviderBase.this.registries.writableRegistry(NeoForgeRegistries.Keys.BIOME_MODIFIERS).createIntrusiveHolder(modifier);
         }
     }

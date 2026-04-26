@@ -4,9 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,8 +16,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
@@ -65,7 +61,6 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
                 e.getCause().printStackTrace();
             throw new RuntimeException("Could not get constructor for block entity " + beClass + ".", e);
         }
-        //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> {
             try {
                 return this.beConstructor.newInstance(this.getBlockEntityType(), pos, state);
@@ -142,26 +137,6 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
         }
     }
 
-    @Override
-    public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
-        if (!level.isClientSide && (!state.is(newState.getBlock()) ||  !newState.hasBlockEntity()) && this.shouldDropInventory(level, pos, state)) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be != null) {
-                if (level.getCapability(Capabilities.ItemHandler.BLOCK, pos, state, be, null) instanceof IItemHandlerModifiable modifiable) {
-                    for (int i = 0; i < modifiable.getSlots(); i++) {
-                        ItemStack stack = modifiable.getStackInSlot(i);
-                        if (!stack.isEmpty()) {
-                            ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, stack.copy());
-                            level.addFreshEntity(entity);
-                            modifiable.setStackInSlot(i, ItemStack.EMPTY);
-                        }
-                    }
-                }
-            }
-        }
-        super.onRemove(state, level, pos, newState, isMoving);
-    }
-
     public T getBlockEntity(Level level, BlockPos pos) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be == null || !this.beClass.isAssignableFrom(be.getClass())) {
@@ -177,8 +152,9 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
 
     /**
      * Override this to prevent the inventory of the block entity to be dropped when the block is
-     * broken. To automatically drop the inventory the block entity must provide an item handler
-     * capability that is an instance of {@link IItemHandlerModifiable}
+     * broken. To automatically drop the inventory the block entity should extend {@link BlockEntityBase}
+     * and provide an item handler
+     * capability that is an instance of {@link net.neoforged.neoforge.items.IItemHandlerModifiable}.
      */
     protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState state) {
         return true;

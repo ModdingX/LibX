@@ -1,11 +1,16 @@
 package org.moddingx.libx.impl.render;
 
 import com.mojang.blaze3d.ProjectionType;
+import com.mojang.blaze3d.buffers.BufferType;
+import com.mojang.blaze3d.buffers.BufferUsage;
+import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.systems.CommandEncoder;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,45 +21,33 @@ import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL11;
 import org.moddingx.libx.render.RenderHelper;
 import org.moddingx.libx.render.target.RenderJob;
 import org.moddingx.libx.render.target.RenderJobFailedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
 public class JobRenderer {
-    
-    public static NativeImage renderJob(RenderJob job) {
+
+    public static void renderJob(RenderJob job, CompletableFuture<NativeImage> future) {
         int width = job.width();
         int height = job.height();
         boolean overlay = job.usesOverlay();
-        
-        int maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
+
+        int maxTextureSize = RenderSystem.getDevice().getMaxTextureSize();
         if (width > maxTextureSize || height > maxTextureSize) {
             throw new RenderJobFailedException(RenderJobFailedException.Reason.TEXTURE_TOO_LARGE, "Maximum texture size exceeded: " + width + "x" + height + ", maximum is " + maxTextureSize + "x" + maxTextureSize);
         }
-        
-        RenderTarget target = new TextureTarget(width, height, true);
-        
-        target.setClearColor(0, 0, 0, 0);
-        target.clear();
 
-        resetDepthState();
+        RenderTarget target = new TextureTarget("LibX render job", width, height, true);
 
-        // Clear buffer
-        target.bindWrite(true);
-        RenderSystem.clear(0x4100);
-        
-        // Render main scene
-        target.bindWrite(true);
+        // Clear color and depth
+        RenderSystem.getDevice().createCommandEncoder()
+                .clearColorAndDepthTextures(target.getColorTexture(), 0x00000000, target.getDepthTexture(), 1.0);
 
         RenderSystem.setShaderFog(FogParameters.NO_FOG);
-        
-        RenderSystem.enableCull();
-        
-        RenderSystem.viewport(0, 0, width, height);
 
         Matrix4fStack modelViewStack = RenderSystem.getModelViewStack();
         modelViewStack.pushMatrix();
@@ -63,9 +56,8 @@ public class JobRenderer {
 
         Matrix4f projectionMatrix = job.setupProjectionMatrix();
         RenderSystem.setProjectionMatrix(projectionMatrix, job.getProjectionType());
-        
+
         Lighting.setupFor3DItems();
-        RenderSystem.defaultBlendFunc();
         RenderHelper.resetColor();
 
         @Nullable
@@ -79,18 +71,16 @@ public class JobRenderer {
         Minecraft mc = Minecraft.getInstance();
         RenderTarget previousMainRenderTarget = mc.mainRenderTarget;
         mc.mainRenderTarget = target;
+
+        boolean screenshotScheduled = false;
         try {
             RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
             job.render(poseStack, buffers.bufferSource());
             buffers.bufferSource().endBatch();
 
             if (overlay) {
-                // Render overlay
-                target.bindWrite(true);
                 RenderSystem.setShaderFog(FogParameters.NO_FOG);
-                resetDepthState();
 
-                RenderSystem.viewport(0, 0, width, height);
                 modelViewStack.identity();
                 modelViewStack.mul(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
 
@@ -103,35 +93,55 @@ public class JobRenderer {
                 job.renderOverlay(overlayPoseStack, buffers.bufferSource(), projector);
                 buffers.bufferSource().endBatch();
             }
+
+            takeNonOpaqueScreenshot(target, future);
+            screenshotScheduled = true;
         } finally {
             mc.mainRenderTarget = previousMainRenderTarget;
+            modelViewStack.popMatrix();
+            if (!screenshotScheduled) {
+                target.destroyBuffers();
+            }
         }
-        
-        resetDepthState();
-        modelViewStack.popMatrix();
-
-        NativeImage img = takeNonOpaqueScreenshot(target);
-        target.unbindWrite();
-        return img;
-    }
-    
-    private static void resetDepthState() {
-        RenderSystem.clearDepth(1);
-        RenderSystem.depthFunc(GL11.GL_LEQUAL);
-        GL11.glFrontFace(GL11.GL_CCW);
     }
 
-    // See Screenshot.takeScreenshot
-    private static NativeImage takeNonOpaqueScreenshot(RenderTarget fb) {
-        NativeImage img = new NativeImage(fb.width, fb.height, false);
-        RenderSystem.bindTexture(fb.getColorTextureId());
-        img.downloadTexture(0, false);
-        img.flipY();
-        return img;
+    // See Screenshot.takeScreenshot - but preserves alpha (no | 0xFF000000)
+    private static void takeNonOpaqueScreenshot(RenderTarget fb, CompletableFuture<NativeImage> future) {
+        int width = fb.width;
+        int height = fb.height;
+        GpuTexture texture = fb.getColorTexture();
+        if (texture == null) {
+            fb.destroyBuffers();
+            future.completeExceptionally(new IllegalStateException("Tried to capture screenshot of an incomplete framebuffer"));
+            return;
+        }
+        int pixelSize = texture.getFormat().pixelSize();
+        GpuBuffer gpuBuffer = RenderSystem.getDevice().createBuffer(
+                () -> "LibX render job screenshot", BufferType.PIXEL_PACK, BufferUsage.STATIC_READ, width * height * pixelSize);
+        CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
+        RenderSystem.getDevice().createCommandEncoder().copyTextureToBuffer(texture, gpuBuffer, 0, () -> {
+            try {
+                try (GpuBuffer.ReadView view = encoder.readBuffer(gpuBuffer)) {
+                    NativeImage img = new NativeImage(width, height, false);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            int color = view.data().getInt((x + y * width) * pixelSize);
+                            img.setPixelABGR(x, height - y - 1, color);
+                        }
+                    }
+                    future.complete(img);
+                }
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            } finally {
+                gpuBuffer.close();
+                fb.destroyBuffers();
+            }
+        }, 0);
     }
-    
+
     private static class ProjectorImpl implements RenderJob.Projector {
-        
+
         private final Matrix4f projection;
         private final Matrix4f transformation;
         private final int viewportX;
@@ -147,7 +157,7 @@ public class JobRenderer {
             this.viewportWidth = viewportWidth;
             this.viewportHeight = viewportHeight;
         }
-        
+
         @Override
         public Vec2 projectPoint(Vector3f point) {
             Vector4f vec4 = new Vector4f(point, 1);

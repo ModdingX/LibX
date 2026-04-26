@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 public class ComponentUtil {
 
-    private static final HoverEvent HOVER_COPY = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("libx.misc.copy"));
+    private static final HoverEvent HOVER_COPY = new HoverEvent.ShowText(Component.translatable("libx.misc.copy"));
     
     /**
      * Gets a {@link Component text component} as a string formatted with ANSI escape codes to
@@ -210,7 +210,7 @@ public class ComponentUtil {
      * Adds a {@link ClickEvent click event} to the given component to copy the given text to clipboard.
      */
     public static Component withCopyAction(Component component, String copyText) {
-        return component.copy().withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, copyText)).withHoverEvent(HOVER_COPY));
+        return component.copy().withStyle(Style.EMPTY.withClickEvent(new ClickEvent.CopyToClipboard(copyText)).withHoverEvent(HOVER_COPY));
     }
     
     /**

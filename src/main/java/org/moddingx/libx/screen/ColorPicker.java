@@ -1,13 +1,10 @@
 package org.moddingx.libx.screen;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
-import net.minecraft.client.renderer.CoreShaders;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -164,30 +161,16 @@ public class ColorPicker extends Panel {
         graphics.pose().translate(this.getX(), this.getY(), 0);
 
         Matrix4f matrix = graphics.pose().last().pose();
-
-        {
-            RenderSystem.setShader(CoreShaders.POSITION_COLOR_TEX_LIGHTMAP);
-            RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
-            BufferBuilder vertex = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
+        graphics.drawSpecial(bufferSource -> {
+            VertexConsumer vertex = bufferSource.getBuffer(RenderType.gui());
             if (this.enabled) {
                 this.hsbMatrix.get().forEach(v -> v.add(vertex, matrix));
-            } else {
-                this.hsbMatrix.get().forEach(v -> v.addGrayscale(vertex, matrix));
-            }
-            BufferUploader.drawWithShader(vertex.buildOrThrow());
-        }
-
-        {
-            RenderSystem.setShader(CoreShaders.POSITION_COLOR_TEX_LIGHTMAP);
-            RenderSystem.setShaderTexture(0, RenderHelper.TEXTURE_WHITE);
-            BufferBuilder vertex = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
-            if (this.enabled) {
                 this.huePanel.forEach(v -> v.add(vertex, matrix));
             } else {
+                this.hsbMatrix.get().forEach(v -> v.addGrayscale(vertex, matrix));
                 this.huePanel.forEach(v -> v.addGrayscale(vertex, matrix));
             }
-            BufferUploader.drawWithShader(vertex.buildOrThrow());
-        }
+        });
 
         int colorValue = ((this.red & 0xFF) << 16) | ((this.green & 0xFF) << 8) | (this.blue & 0xFF);
         int displayColor = colorValue;
@@ -264,15 +247,15 @@ public class ColorPicker extends Panel {
         }
     }
 
-    private record VertexInfo(float x, float y, float u, float v, ColorValue color) {
+    private record VertexInfo(float x, float y, ColorValue color) {
 
         public void add(VertexConsumer vertex, Matrix4f matrix) {
-            vertex.addVertex(matrix, this.x, this.y, 20).setColor(this.color.red, this.color.green, this.color.blue, 255).setUv(this.u, this.v).setLight(LightTexture.FULL_BRIGHT);
+            vertex.addVertex(matrix, this.x, this.y, 20).setColor(this.color.red, this.color.green, this.color.blue, 255);
         }
 
         public void addGrayscale(VertexConsumer vertex, Matrix4f matrix) {
             int value = Math.round((this.color.red + this.color.green + this.color.blue) / 3f);
-            vertex.addVertex(matrix, this.x, this.y, 20).setColor(value, value, value, 255).setUv(this.u, this.v).setLight(LightTexture.FULL_BRIGHT);
+            vertex.addVertex(matrix, this.x, this.y, 20).setColor(value, value, value, 255);
         }
     }
 
@@ -305,21 +288,21 @@ public class ColorPicker extends Panel {
     private static List<VertexInfo> createColorMatrix(int x1, int y1, int x2, int y2, List<List<ColorValue>> list) {
         ImmutableList.Builder<VertexInfo> vertices = ImmutableList.builder();
         for (int i = 0; i < list.size() - 1; i++) {
-            float v1 = i / (float) (list.size() - 1);
-            float v2 = (i + 1) / (float) (list.size() - 1);
+            float ty1 = i / (float) (list.size() - 1);
+            float ty2 = (i + 1) / (float) (list.size() - 1);
             for (int j = 0; j < list.get(i).size() - 1; j++) {
-                float u1 = j / (float) (list.get(i).size() - 1);
-                float u2 = (j + 1) / (float) (list.get(i).size() - 1);
+                float tx1 = j / (float) (list.get(i).size() - 1);
+                float tx2 = (j + 1) / (float) (list.get(i).size() - 1);
 
-                float cx1 = Mth.lerp(u1, x1, x2);
-                float cx2 = Mth.lerp(u2, x1, x2);
-                float cy1 = Mth.lerp(v1, y1, y2);
-                float cy2 = Mth.lerp(v2, y1, y2);
+                float cx1 = Mth.lerp(tx1, x1, x2);
+                float cx2 = Mth.lerp(tx2, x1, x2);
+                float cy1 = Mth.lerp(ty1, y1, y2);
+                float cy2 = Mth.lerp(ty2, y1, y2);
 
-                vertices.add(new VertexInfo(cx1, cy1, u1, v1, list.get(i).get(j)));
-                vertices.add(new VertexInfo(cx1, cy2, u1, v2, list.get(i + 1).get(j)));
-                vertices.add(new VertexInfo(cx2, cy2, u2, v2, list.get(i + 1).get(j + 1)));
-                vertices.add(new VertexInfo(cx2, cy1, u2, v1, list.get(i).get(j + 1)));
+                vertices.add(new VertexInfo(cx1, cy1, list.get(i).get(j)));
+                vertices.add(new VertexInfo(cx1, cy2, list.get(i + 1).get(j)));
+                vertices.add(new VertexInfo(cx2, cy2, list.get(i + 1).get(j + 1)));
+                vertices.add(new VertexInfo(cx2, cy1, list.get(i).get(j + 1)));
             }
         }
         return vertices.build();

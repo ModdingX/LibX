@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.Strictness;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -35,7 +36,7 @@ public class DataLoader {
     private static final Gson GSON = Util.make(() -> {
         GsonBuilder builder = new GsonBuilder();
         builder.disableHtmlEscaping();
-        builder.setLenient();
+        builder.setStrictness(Strictness.LENIENT);
         builder.setPrettyPrinting();
         return builder.create();
     });

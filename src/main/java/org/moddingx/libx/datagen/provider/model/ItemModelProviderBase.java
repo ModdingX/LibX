@@ -35,6 +35,7 @@ public abstract class ItemModelProviderBase extends ModelProvider {
     public static final ResourceLocation GENERATED = ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated");
     public static final ResourceLocation HANDHELD = ResourceLocation.fromNamespaceAndPath("minecraft", "item/handheld");
     public static final ResourceLocation SPECIAL_BLOCK_PARENT = LibX.getInstance().resource("item/base/special_block");
+    public static final ResourceLocation SPAWN_EGG_PARENT = LibX.getInstance().resource("item/base/spawn_egg");
     public static final ResourceLocation FENCE_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/fence_inventory");
     public static final ResourceLocation BUTTON_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/button_inventory");
     public static final ResourceLocation WALL_PARENT = ResourceLocation.fromNamespaceAndPath("minecraft", "block/wall_inventory");
@@ -113,7 +114,14 @@ public abstract class ItemModelProviderBase extends ModelProvider {
 
     protected void defaultItem(Item item, ItemModelGenerators itemModels) {
         if (item instanceof SpawnEggItemBase spawnEggItem) {
-            itemModels.generateSpawnEgg(item, spawnEggItem.getPrimaryColor(), spawnEggItem.getSecondaryColor());
+            itemModels.itemModelOutput.accept(
+                    item,
+                    ItemModelUtils.tintedModel(
+                            SPAWN_EGG_PARENT,
+                            ItemModelUtils.constantTint(spawnEggItem.getPrimaryColor()),
+                            ItemModelUtils.constantTint(spawnEggItem.getSecondaryColor())
+                    )
+            );
         } else if (item instanceof BucketItem bucketItem) {
             itemModels.itemModelOutput.accept(
                     item,

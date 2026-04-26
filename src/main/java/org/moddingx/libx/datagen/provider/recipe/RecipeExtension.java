@@ -1,13 +1,15 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.DataComponentMatchers;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -61,30 +63,33 @@ public interface RecipeExtension {
     Criterion<?> criterion(ItemPredicate... items);
 
     /**
+     * Builds an item predicate for a specific item.
+     */
+    default ItemPredicate item(ItemLike item) {
+        return new ItemPredicate(Optional.of(HolderSet.direct(BuiltInRegistries.ITEM.wrapAsHolder(item.asItem()))), MinMaxBounds.Ints.ANY, DataComponentMatchers.ANY);
+    }
+
+    /**
+     * Builds an item predicate for a specific item tag.
+     */
+    default ItemPredicate item(TagKey<Item> item) {
+        return new ItemPredicate(Optional.of(this.items().getOrThrow(item)), MinMaxBounds.Ints.ANY, DataComponentMatchers.ANY);
+    }
+
+    /**
      * Gets a list of criteria that should be ORed, meaning that the recipe should unlock when one of
      * them is completed instead of all of them.
      */
     default List<Criterion<?>> criteria(Ingredient item) {
         List<Criterion<?>> instances = new ArrayList<>();
-        if (item.isSimple()) {
-            for (Holder<Item> entry : item.getValues()) {
-                instances.add(this.criterion(ItemPredicate.Builder.item().of(this.items(), entry.value()).build()));
-            }
-        } else if (item.getCustomIngredient() instanceof CompoundIngredient(List<Ingredient> children)) {
+        if (item.getCustomIngredient() instanceof CompoundIngredient(List<Ingredient> children)) {
             for (Ingredient i : children) {
                 instances.addAll(this.criteria(i));
             }
         } else {
             //noinspection deprecation
             for (Holder<Item> stack : item.items().toList()) {
-                HolderLookup.RegistryLookup<Item> itemLookup = stack.unwrapLookup();
-                if (itemLookup == null) continue;
-                Optional<ResourceKey<Item>> itemResourceKey = stack.unwrapKey();
-                if (itemResourceKey.isEmpty()) continue;
-                Optional<Holder.Reference<Item>> optionalHolder = itemLookup.get(itemResourceKey.get());
-                if (optionalHolder.isEmpty()) continue;
-                Holder.Reference<Item> itemReference = optionalHolder.get();
-                instances.add(this.criterion(ItemPredicate.Builder.item().of(itemLookup, itemReference.value()).build()));
+                instances.add(this.criterion(this.item(stack.value())));
             }
         }
         return instances;

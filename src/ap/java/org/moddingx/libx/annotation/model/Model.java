@@ -3,7 +3,7 @@ package org.moddingx.libx.annotation.model;
 import java.lang.annotation.*;
 
 /**
- * Can be attached to public static non-final baked model fields. The model will
+ * Can be attached to public static non-final model quad fields. The model will
  * then be put into those fields.
  */
 @Retention(RetentionPolicy.SOURCE)

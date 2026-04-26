@@ -2,6 +2,11 @@ package org.moddingx.libx.datagen.provider.loot;
 
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
+import net.minecraft.core.component.predicates.DataComponentPredicates;
+import net.minecraft.core.component.predicates.EnchantmentsPredicate;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -40,7 +45,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
@@ -215,14 +223,14 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      * Gets a loot condition builder for a match tool condition.
      */
     public MatchToolBuilder matchTool(ItemLike item) {
-        return new MatchToolBuilder(ItemPredicate.Builder.item().of(this.items, item));
+        return new MatchToolBuilder(HolderSet.direct(BuiltInRegistries.ITEM.wrapAsHolder(item.asItem())));
     }
 
     /**
      * Gets a loot condition builder for a match tool condition.
      */
     public MatchToolBuilder matchTool(TagKey<Item> item) {
-        return new MatchToolBuilder(ItemPredicate.Builder.item().of(this.items, item));
+        return new MatchToolBuilder(this.items.getOrThrow(item));
     }
 
     /**
@@ -236,11 +244,43 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      * Gets a loot condition for silk touch tools.
      */
     public LootItemCondition.Builder silkCondition() {
-        ItemPredicate.Builder predicate = ItemPredicate.Builder.item()
-                .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.of(
-                        new EnchantmentPredicate(this.holder(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.ANY)
-                )));
-        return MatchTool.toolMatches(predicate);
+        ItemPredicate predicate = itemPredicate(
+                null,
+                List.of(new EnchantmentPredicate(this.holder(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.ANY)),
+                Map.of()
+        );
+        return MatchTool.toolMatches(this.itemPredicateBuilder(predicate));
+    }
+
+    private static ItemPredicate itemPredicate(@Nullable HolderSet<Item> items, List<EnchantmentPredicate> enchantments, Map<DataComponentPredicate.Type<?>, DataComponentPredicate> componentPredicates) {
+        DataComponentMatchers components = DataComponentMatchers.ANY;
+        if (!enchantments.isEmpty() || !componentPredicates.isEmpty()) {
+            DataComponentMatchers.Builder builder = DataComponentMatchers.Builder.components();
+            for (Map.Entry<DataComponentPredicate.Type<?>, DataComponentPredicate> entry : componentPredicates.entrySet()) {
+                addPartialComponent(builder, entry.getKey(), entry.getValue());
+            }
+            if (!enchantments.isEmpty()) {
+                builder.partial(DataComponentPredicates.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.copyOf(enchantments)));
+            }
+            components = builder.build();
+        }
+        return new ItemPredicate(Optional.ofNullable(items), MinMaxBounds.Ints.ANY, components);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private static void addPartialComponent(DataComponentMatchers.Builder builder, DataComponentPredicate.Type<?> type, DataComponentPredicate predicate) {
+        builder.partial((DataComponentPredicate.Type) type, predicate);
+    }
+
+    private ItemPredicate.Builder itemPredicateBuilder(ItemPredicate predicate) {
+        ItemPredicate.Builder builder = ItemPredicate.Builder.item()
+                .withCount(predicate.count())
+                .withComponents(predicate.components());
+        predicate.items().ifPresent(items -> items.unwrapKey().ifPresentOrElse(
+                tag -> builder.of(this.items, tag),
+                () -> builder.of(this.items, items.stream().map(holder -> holder.value()).toArray(Item[]::new))
+        ));
+        return builder;
     }
 
     /**
@@ -291,22 +331,21 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
      */
     public class MatchToolBuilder implements LootItemCondition.Builder {
         
-        private final ItemPredicate.Builder builder;
+        @Nullable
+        private final HolderSet<Item> items;
         private final List<EnchantmentPredicate> enchantments;
+        private final Map<DataComponentPredicate.Type<?>, DataComponentPredicate> componentPredicates;
 
-        private MatchToolBuilder(ItemPredicate.Builder builder) {
-            this.builder = builder;
+        private MatchToolBuilder(@Nullable HolderSet<Item> items) {
+            this.items = items;
             this.enchantments = new ArrayList<>();
+            this.componentPredicates = new LinkedHashMap<>();
         }
 
         @Nonnull
         @Override
         public LootItemCondition build() {
-            if (!this.enchantments.isEmpty()) {
-                this.builder.withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.copyOf(this.enchantments)));
-                this.enchantments.clear();
-            }
-            return MatchTool.toolMatches(this.builder).build();
+            return MatchTool.toolMatches(BlockLootProviderBase.this.itemPredicateBuilder(itemPredicate(this.items, this.enchantments, this.componentPredicates))).build();
         }
 
         /**
@@ -340,13 +379,13 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
         }
 
         /**
-         * Sets an {@link ItemSubPredicate} for this builder. This replaces any previously set values for the given
-         * {@link ItemSubPredicate.Type type}. {@link ItemSubPredicates#ENCHANTMENTS Enchantments} can't be set this
+         * Sets a {@link DataComponentPredicate} for this builder. This replaces any previously set value for the given
+         * {@link DataComponentPredicate.Type type}. {@link DataComponentPredicates#ENCHANTMENTS Enchantments} can't be set this
          * way, use the {@link #enchantment(ResourceKey) enchantments} methods instead.
          */
-        public <T extends ItemSubPredicate> MatchToolBuilder setSubPredicate(ItemSubPredicate.Type<T> type, T predicate) {
-            if (type == ItemSubPredicates.ENCHANTMENTS) throw new IllegalArgumentException("Use MatchToolBuilder#enchantment");
-            this.builder.withSubPredicate(type, predicate);
+        public <T extends DataComponentPredicate> MatchToolBuilder setSubPredicate(DataComponentPredicate.Type<T> type, T predicate) {
+            if (type == DataComponentPredicates.ENCHANTMENTS) throw new IllegalArgumentException("Use MatchToolBuilder#enchantment");
+            this.componentPredicates.put(type, predicate);
             return this;
         }
     }

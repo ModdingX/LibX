@@ -1,7 +1,7 @@
 package org.moddingx.libx.annotation.impl;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.QuadCollection;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +11,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.model.standalone.StandaloneModelBaker;
+import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 import org.moddingx.libx.codec.MoreCodecs;
 import org.moddingx.libx.config.ConfigManager;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
@@ -22,9 +24,13 @@ import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
 
 import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class ProcessorInterface {
+
+    private static final Map<ResourceLocation, StandaloneModelKey<QuadCollection>> specialModels = new ConcurrentHashMap<>();
 
     public static boolean isDistClient() {
         return FMLLoader.getDist() == Dist.CLIENT;
@@ -89,16 +95,23 @@ public class ProcessorInterface {
         return ModList.get().isLoaded(modid);
     }
 
-    public static void addSpecialModel(ModelEvent.RegisterAdditional event, ResourceLocation id) {
-        event.register(id);
+    private static StandaloneModelKey<QuadCollection> specialModelKey(ResourceLocation id) {
+        return specialModels.computeIfAbsent(id, StandaloneModelKey::new);
     }
 
-    public static BakedModel getSpecialModel(ModelEvent.BakingCompleted event, ResourceLocation id) {
-        if (event.getBakingResult().standaloneModels().containsKey(id)) {
-            return event.getBakingResult().standaloneModels().get(id);
-        } else {
-            throw new IllegalStateException("Model not loaded: " + id);
+    public static void addSpecialModel(ModelEvent.RegisterStandalone event, ResourceLocation id) {
+        event.register(specialModelKey(id), StandaloneModelBaker.quadCollection());
+    }
+
+    public static QuadCollection getSpecialModel(ModelEvent.BakingCompleted event, ResourceLocation id) {
+        StandaloneModelKey<QuadCollection> key = specialModels.get(id);
+        if (key != null) {
+            QuadCollection model = event.getBakingResult().standaloneModels().get(key);
+            if (model != null) {
+                return model;
+            }
         }
+        throw new IllegalStateException("Model not loaded: " + id);
     }
 
     @FunctionalInterface
