@@ -17,7 +17,7 @@ public class ImageHelper {
      */
     public static CompletableFuture<NativeImage> render(RenderJob job) {
         CompletableFuture<NativeImage> future = new CompletableFuture<>();
-        Minecraft.getInstance().progressTasks.add(() -> {
+        Minecraft.getInstance().execute(() -> {
             try {
                 JobRenderer.renderJob(job, future);
             } catch (Exception e) {

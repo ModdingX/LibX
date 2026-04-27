@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -23,13 +24,13 @@ public class RenderHelperFluid {
             Fluid fluid = stack.getFluid();
             IClientFluidTypeExtensions properties = IClientFluidTypeExtensions.of(fluid);
             int color = properties.getTintColor(stack);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(BLOCK_ATLAS).apply(properties.getStillTexture(stack));
+            TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(properties.getStillTexture(stack));
             renderFluid(graphics, sprite, color, x, y, width, height);
         }
     }
 
     public static void renderFluid(GuiGraphics graphics, int color, int x, int y, int width, int height) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
         renderFluid(graphics, sprite, color, x, y, width, height);
     }
 

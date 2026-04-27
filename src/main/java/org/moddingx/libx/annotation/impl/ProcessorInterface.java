@@ -8,7 +8,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.moddingx.libx.codec.MoreCodecs;
 import org.moddingx.libx.config.ConfigManager;
 import org.moddingx.libx.config.mapper.GenericValueMapper;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public class ProcessorInterface {
 
     public static boolean isDistClient() {
-        return FMLLoader.getDist() == Dist.CLIENT;
+        return FMLEnvironment.getDist() == Dist.CLIENT;
     }
 
     public static ResourceLocation newRL(String rl) {

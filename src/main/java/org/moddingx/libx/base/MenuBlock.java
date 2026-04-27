@@ -54,7 +54,7 @@ public class MenuBlock<C extends BlockMenu> extends BlockBase {
     @Nonnull
     @Override
     public InteractionResult useWithoutItem(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull BlockHitResult hit) {
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             Component title = Component.translatable("screen." + this.mod.modid + "." + Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(this)).getPath());
             this.menu.open(serverPlayer, title, pos);
         }

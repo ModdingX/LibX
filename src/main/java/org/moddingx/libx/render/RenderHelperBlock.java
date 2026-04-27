@@ -1,6 +1,9 @@
 package org.moddingx.libx.render;
 
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -11,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.EmptyBlockAndTintGetter;
@@ -53,7 +57,7 @@ public class RenderHelperBlock {
     public static void renderBlockBreak(BlockState state, PoseStack poseStack, int light, int overlay, int breakProgress, long positionRandom) {
         if (breakProgress > 0) {
             ResourceLocation tex = ModelBakery.DESTROY_STAGES.get((breakProgress - 1) % ModelBakery.DESTROY_STAGES.size());
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(BLOCK_ATLAS).apply(tex);
+            TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(tex);
             renderBlockOverlaySprite(state, poseStack, light, overlay, sprite, positionRandom);
         }
     }

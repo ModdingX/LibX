@@ -1,20 +1,18 @@
 package org.moddingx.libx.coremods.transformers;
 
-import cpw.mods.modlauncher.api.ITransformer;
-import cpw.mods.modlauncher.api.ITransformerVotingContext;
-import cpw.mods.modlauncher.api.TargetType;
-import cpw.mods.modlauncher.api.TransformerVoteResult;
+import net.neoforged.neoforgespi.transformation.ProcessorName;
+import net.neoforged.neoforgespi.transformation.SimpleClassProcessor;
+import net.neoforged.neoforgespi.transformation.SimpleTransformationContext;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import javax.annotation.Nonnull;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class RegisterClassIds implements ITransformer<MethodNode> {
+public class RegisterClassIds extends SimpleClassProcessor {
 
     private static final String HELPER = "org/moddingx/libx/annotation/impl/RegistrationPropertiesHelper";
     private static final String ITEM_PROPS = "net/minecraft/world/item/Item$Properties";
@@ -26,56 +24,39 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
         this.entries = RegisterClassIds.loadEntries();
     }
 
-    // -------------------------------------------------------------------------
-    // ITransformer implementation
-    // -------------------------------------------------------------------------
-
-    @Nonnull
     @Override
-    public TargetType<MethodNode> getTargetType() {
-        return TargetType.METHOD;
+    public ProcessorName name() {
+        return new ProcessorName("libx", "register_class_ids");
     }
 
-    @Nonnull
     @Override
-    public Set<Target<MethodNode>> targets() {
-        Set<Target<MethodNode>> targets = new HashSet<>();
-        for (String binaryClass : this.entries.keySet()) {
-            targets.add(Target.targetMethod(
-                    binaryClass.replace('/', '.'),
-                    "<clinit>",
-                    "()V"
-            ));
-        }
-
-        return targets;
+    public Set<Target> targets() {
+        return this.entries.keySet().stream()
+                .map(k -> new Target(k.replace('/', '.')))
+                .collect(Collectors.toUnmodifiableSet());
     }
 
-    @Nonnull
     @Override
-    public TransformerVoteResult castVote(ITransformerVotingContext ctx) {
-        return TransformerVoteResult.YES;
-    }
-
-    @Nonnull
-    @Override
-    public MethodNode transform(MethodNode method, ITransformerVotingContext ctx) {
-        // Determine which class this <clinit> belongs to from the voting context.
-        String binaryName = ctx.getClassName().replace('.', '/');
-        List<FieldEntry> fields = this.entries.get(binaryName);
-        if (fields == null) {
-            return method;
-        }
-
+    public void transform(ClassNode cn, SimpleTransformationContext ctx) {
+        List<FieldEntry> fields = this.entries.get(cn.name);
+        if (fields == null) return;
         for (FieldEntry fe : fields) {
-            RegisterClassIds.injectField(method, binaryName, fe);
+            RegisterClassIds.injectField(cn, cn.name, fe);
         }
-
-        return method;
     }
 
-    private static void injectField(MethodNode method, String owner, FieldEntry fe) {
-        InsnList insns = method.instructions;
+    private static void injectField(ClassNode cn, String owner, FieldEntry fe) {
+        // Find the <clinit> method
+        MethodNode clinit = null;
+        for (MethodNode mn : cn.methods) {
+            if ("<clinit>".equals(mn.name) && "()V".equals(mn.desc)) {
+                clinit = mn;
+                break;
+            }
+        }
+        if (clinit == null) return;
+
+        InsnList insns = clinit.instructions;
 
         // Find the PUTSTATIC for this field.
         FieldInsnNode putStatic = null;
@@ -130,8 +111,6 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
             InsnList injection = new InsnList();
 
             if (!bothPresent) {
-                // Simple case: only one Properties type in the constructor.
-                // TOP of stack is the Properties object.
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
                 if (lastIsItem) {
@@ -148,8 +127,7 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
                     ));
                 }
             } else if (lastIsItem) {
-                // Stack: [..., blockProps, itemProps]  (item on TOP, block second)
-                // Set item id (TOP):  DUP, LDC, setItemId  → stack unchanged
+                // Stack: [..., blockProps, itemProps]  (item on TOP)
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
                 injection.add(new MethodInsnNode(
@@ -157,7 +135,7 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
                         HELPER, "setItemId",
                         "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V"
                 ));
-                // Set block id (second): SWAP, DUP, LDC, setBlockId, SWAP  → stack unchanged
+
                 injection.add(new InsnNode(Opcodes.SWAP));
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
@@ -168,8 +146,7 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
                 ));
                 injection.add(new InsnNode(Opcodes.SWAP));
             } else {
-                // Stack: [..., itemProps, blockProps]  (block on TOP, item second)
-                // Set block id (TOP):  DUP, LDC, setBlockId  → stack unchanged
+                // Stack: [..., itemProps, blockProps]  (block on TOP)
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
                 injection.add(new MethodInsnNode(
@@ -191,7 +168,7 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
 
             insns.insertBefore(node, injection);
 
-            return; // one injection per field is enough
+            return;
         }
     }
 
@@ -199,39 +176,38 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
         Map<String, List<FieldEntry>> map = new HashMap<>();
         Set<String> seenUrls = new HashSet<>();
 
-        // Try multiple classloaders in priority order.
-        // ClassLoader.getSystemClassLoader() is the app classloader and does NOT see mod jars
-        // in NeoForge's module-based setup. RegisterClassIds.class.getClassLoader() is the
-        // coremod service classloader (a URLClassLoader wrapping all game jars) and is the
-        // most reliable option.
-        ClassLoader[] candidates = {
-                RegisterClassIds.class.getClassLoader(),
-                Thread.currentThread().getContextClassLoader(),
-                ClassLoader.getSystemClassLoader()
-        };
-
-        for (ClassLoader cl : candidates) {
-            if (cl == null) continue;
-            try {
-                Enumeration<URL> resources = cl.getResources("META-INF/libx_registration.json");
-                while (resources.hasMoreElements()) {
-                    URL url = resources.nextElement();
-                    if (seenUrls.add(url.toString())) {
-                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
-                            StringBuilder sb = new StringBuilder();
-                            String line;
-                            while ((line = reader.readLine()) != null) {
-                                sb.append(line);
-                            }
-
-                            RegisterClassIds.parseJson(sb.toString(), map);
-                        } catch (Exception e) {
-                            System.err.println("[LibX] Failed to parse libx_registration.json from " + url + ": " + e);
-                        }
+        // Production: mod JARs are accessible via the service classloader
+        try {
+            Enumeration<URL> resources = RegisterClassIds.class.getClassLoader().getResources("META-INF/libx_registration.json");
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+                if (seenUrls.add(url.toString())) {
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
+                        RegisterClassIds.readAndParse(reader, map);
+                    } catch (Exception e) {
+                        System.err.println("[LibX] Failed to parse libx_registration.json from " + url + ": " + e);
                     }
                 }
-            } catch (Exception e) {
-                System.err.println("[LibX] Failed to enumerate libx_registration.json via " + cl + ": " + e);
+            }
+        } catch (Exception e) {
+            System.err.println("[LibX] Failed to enumerate libx_registration.json: " + e);
+        }
+
+        // Dev: NeoForge InDevFolderLocator exposes mod output dirs via MOD_CLASSES env var
+        // in the format "modid%%/path/to/dir:modid%%/path/to/other/dir:..."
+        String modClassesEnv = System.getenv("MOD_CLASSES");
+        if (modClassesEnv != null) {
+            for (String entry : modClassesEnv.split(File.pathSeparator)) {
+                int sep = entry.indexOf("%%");
+                String dirPath = (sep >= 0) ? entry.substring(sep + 2) : entry;
+                File jsonFile = new File(dirPath, "META-INF/libx_registration.json");
+                if (jsonFile.isFile() && seenUrls.add(jsonFile.toURI().toString())) {
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8))) {
+                        RegisterClassIds.readAndParse(reader, map);
+                    } catch (Exception e) {
+                        System.err.println("[LibX] Failed to parse libx_registration.json from " + jsonFile + ": " + e);
+                    }
+                }
             }
         }
 
@@ -242,6 +218,13 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
         }
 
         return map;
+    }
+
+    private static void readAndParse(BufferedReader reader, Map<String, List<FieldEntry>> map) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) sb.append(line);
+        RegisterClassIds.parseJson(sb.toString(), map);
     }
 
     // Expected format: {@code [{"class":"a/b/C","field":"f","id":"m:n"}, ...]}

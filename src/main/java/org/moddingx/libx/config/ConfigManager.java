@@ -10,7 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -235,7 +235,7 @@ public class ConfigManager {
      * Forces reload of all client configs.
      */
     public static void reloadClient() {
-        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) return;
+        if (FMLEnvironment.getDist() == Dist.DEDICATED_SERVER) return;
         for (Class<?> configClass : configs.keySet()) {
             reloadConfig(configClass, false, true);
         }
@@ -247,7 +247,7 @@ public class ConfigManager {
         }
         try {
             ConfigImpl config = ConfigImpl.getConfig(configIds.inverse().get(configClass));
-            if (!config.clientConfig || FMLLoader.getDist() == Dist.CLIENT) {
+            if (!config.clientConfig || FMLEnvironment.getDist() == Dist.CLIENT) {
                 ConfigState defaultState = config.stateFromValues();
                 config.setDefaultState(defaultState);
                 ConfigState state = config.readFromFileOrCreateBy(defaultState);
@@ -275,7 +275,7 @@ public class ConfigManager {
         try {
             ConfigImpl config = ConfigImpl.getConfig(configIds.inverse().get(configClass));
             if (config.clientConfig ? allowClient : allowCommon) {
-                if (!config.clientConfig || FMLLoader.getDist() == Dist.CLIENT) {
+                if (!config.clientConfig || FMLEnvironment.getDist() == Dist.CLIENT) {
                     ConfigState state = config.readFromFileOrCreateByDefault();
                     config.saveState(state);
                     if (!config.isShadowed()) {
@@ -308,7 +308,7 @@ public class ConfigManager {
      * Forces synchronisation of one config to one player.
      */
     public static void synchronize(ServerPlayer player, Class<?> configClass) {
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.level().getServer();
         if (server != null) {
             synchronize(server, player, List.of(configClass));
         }
@@ -318,7 +318,7 @@ public class ConfigManager {
      * Forces synchronisation of all configs to one player.
      */
     public static void synchronize(ServerPlayer player) {
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.level().getServer();
         if (server != null) {
             synchronize(server, player, null);
         }
@@ -342,8 +342,8 @@ public class ConfigManager {
                 if (!config.clientConfig) configs.add(config);
             }
         }
-        
-        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) {
+
+        if (FMLEnvironment.getDist() == Dist.DEDICATED_SERVER) {
             sendConfigState(server, receiver, configs);
         } else {
             LibX.logger.error("ConfigManager.synchronize was called on a physical client. Ignoring.");

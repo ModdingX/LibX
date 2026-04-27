@@ -72,10 +72,10 @@ public abstract class DefaultMenu extends MenuBase {
                 if (!this.moveItemStackTo(stack, 0, this.firstOutputSlot, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
-                    if (!this.moveItemStackTo(stack, playerInventoryEnd, playerHotBarEnd, false)) {
+                    if (!stack.isEmpty() && !this.moveItemStackTo(stack, playerInventoryEnd, playerHotBarEnd, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < playerHotBarEnd && !this.moveItemStackTo(stack, inventorySize, playerInventoryEnd, false)) {
+                } else if (index < playerHotBarEnd && !stack.isEmpty() && !this.moveItemStackTo(stack, inventorySize, playerInventoryEnd, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.moveItemStackTo(stack, inventorySize, playerHotBarEnd, false)) {

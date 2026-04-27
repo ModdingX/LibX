@@ -7,7 +7,10 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.BucketResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 import org.moddingx.libx.registration.util.CapabilityInfo;
@@ -24,7 +27,7 @@ public class DefaultBucketItem extends BucketItem implements Registerable {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
-        builder.register(null, new CapabilityInfo.Item<>(this, Capabilities.FluidHandler.ITEM, (stack, ignored) -> new FluidBucketWrapper(stack)));
+        builder.register(null, new CapabilityInfo.Item<ResourceHandler<FluidResource>, ItemAccess>(this, Capabilities.Fluid.ITEM, (stack, itemAccess) -> new BucketResourceHandler(itemAccess)));
     }
 
     @Nonnull

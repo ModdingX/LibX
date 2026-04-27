@@ -153,8 +153,7 @@ public class BlockBE<T extends BlockEntity> extends BlockBase implements EntityB
     /**
      * Override this to prevent the inventory of the block entity to be dropped when the block is
      * broken. To automatically drop the inventory the block entity should extend {@link BlockEntityBase}
-     * and provide an item handler
-     * capability that is an instance of {@link net.neoforged.neoforge.items.IItemHandlerModifiable}.
+     * and provide an item handler capability.
      */
     protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState state) {
         return true;

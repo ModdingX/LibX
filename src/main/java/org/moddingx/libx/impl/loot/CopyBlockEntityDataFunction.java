@@ -10,10 +10,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -23,7 +22,6 @@ import org.moddingx.libx.LibX;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
@@ -59,16 +57,16 @@ public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
     protected ItemStack run(@Nonnull ItemStack stack, @Nonnull LootContext context) {
         BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity != null) {
-            stack.update(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY, data -> {
+            stack.update(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(blockEntity.getType(), new CompoundTag()), data -> {
+                CompoundTag result = data.type() == blockEntity.getType() ? data.copyTagWithoutId() : new CompoundTag();
                 CompoundTag blockEntityData = blockEntity.saveCustomOnly(context.getLevel().registryAccess());
                 for (String tagName : this.tags) {
                     Tag tag;
                     if (blockEntityData.contains(tagName) && (tag = blockEntityData.get(tagName)) != null) {
-                        data = data.update(nbt -> nbt.put(tagName, tag.copy()));
+                        result.put(tagName, tag.copy());
                     }
                 }
-                data = data.update(nbt -> nbt.putString("id", Objects.requireNonNull(BlockEntityType.getKey(blockEntity.getType())).toString()));
-                return data;
+                return TypedEntityData.of(blockEntity.getType(), result);
             });
         }
         return stack;

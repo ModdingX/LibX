@@ -46,7 +46,7 @@ public final class NetworkImpl extends NetworkX {
     }
 
     public void requestBE(Level level, BlockPos pos) {
-        if (level.isClientSide && this.canSend(BeRequestHandler.TYPE)) {
+        if (level.isClientSide() && this.canSend(BeRequestHandler.TYPE)) {
             ClientPacketDistributor.sendToServer(new BeRequestHandler.Message(pos));
         }
     }
@@ -81,7 +81,7 @@ public final class NetworkImpl extends NetworkX {
 
     @Nullable
     BeUpdateHandler.Message getBeUpdateMessage(Level level, BlockPos pos) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be == null) return null;
             CompoundTag nbt = be.getUpdateTag(level.registryAccess());

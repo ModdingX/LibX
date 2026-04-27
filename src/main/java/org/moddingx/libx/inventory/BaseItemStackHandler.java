@@ -6,7 +6,11 @@ import com.google.common.collect.Range;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.minecraft.world.level.storage.ValueInput;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.moddingx.libx.impl.inventory.AdvancedItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -16,10 +20,10 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 /**
- * An {@link ItemStackHandler} that can be configured with common things required for many inventories.
+ * An {@link ItemStacksResourceHandler} that can be configured with common things required for many inventories.
  * To get a BaseItemStackHandler, use {@link #builder(int)}.
  */
-public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedItemHandlerModifiable {
+public class BaseItemStackHandler extends ItemStacksResourceHandler implements IAdvancedItemHandlerModifiable {
 
     private final int size;
     private final int defaultSlotLimit;
@@ -28,6 +32,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     private final Map<Integer, Integer> slotLimits;
     private final Map<Integer, Predicate<ItemStack>> slotValidators;
     private final Consumer<Integer> contentsChanged;
+    private final List<SlotJournal> slotJournals;
 
     private Container vanilla = null;
     private Unrestricted unrestricted = null;
@@ -41,42 +46,74 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         this.slotLimits = ImmutableMap.copyOf(slotLimits);
         this.slotValidators = ImmutableMap.copyOf(slotValidators);
         this.contentsChanged = contentsChanged;
+        List<SlotJournal> journals = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) journals.add(new SlotJournal(i));
+        this.slotJournals = Collections.unmodifiableList(journals);
     }
 
-    @Nonnull
-    @Override
-    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        return this.outputSlots.contains(slot) ? stack : super.insertItem(slot, stack, simulate);
+    void updateSnapshots(int index, TransactionContext transaction) {
+        this.slotJournals.get(index).updateSnapshots(transaction);
     }
 
-    @Nonnull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return this.insertionOnlySlots.contains(slot) ? ItemStack.EMPTY : super.extractItem(slot, amount, simulate);
-    }
+    private class SlotJournal extends SnapshotJournal<ItemStack> {
+        private final int index;
 
-    @Override
-    public int getSlotLimit(int slot) {
-        return this.slotLimits.getOrDefault(slot, this.defaultSlotLimit);
-    }
+        SlotJournal(int index) {
+            this.index = index;
+        }
 
-    @Override
-    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return !this.slotValidators.containsKey(slot) || this.slotValidators.get(slot).test(stack);
-    }
+        @Override
+        protected ItemStack createSnapshot() {
+            return BaseItemStackHandler.this.stacks.get(this.index).copy();
+        }
 
-    @Override
-    public void onContentsChanged(int slot) {
-        if (this.contentsChanged != null) {
-            this.contentsChanged.accept(slot);
+        @Override
+        protected void revertToSnapshot(ItemStack snapshot) {
+            BaseItemStackHandler.this.stacks.set(this.index, snapshot);
+        }
+
+        @Override
+        protected void onRootCommit(ItemStack originalState) {
+            BaseItemStackHandler.this.onContentsChanged(this.index, originalState);
         }
     }
 
     @Override
-    protected void onLoad() {
+    public boolean isValid(int slot, ItemResource resource) {
+        return !resource.isEmpty() && (!this.slotValidators.containsKey(slot) || this.slotValidators.get(slot).test(resource.toStack()));
+    }
+
+    @Override
+    protected int getCapacity(int index, ItemResource resource) {
+        if (resource.isEmpty()) {
+            return this.slotLimits.getOrDefault(index, this.defaultSlotLimit);
+        }
+        return Math.min(this.slotLimits.getOrDefault(index, this.defaultSlotLimit), resource.getMaxStackSize());
+    }
+
+    @Override
+    public int insert(int index, @Nonnull ItemResource resource, int amount, @Nonnull TransactionContext tx) {
+        return this.outputSlots.contains(index) ? 0 : super.insert(index, resource, amount, tx);
+    }
+
+    @Override
+    public int extract(int index, @Nonnull ItemResource resource, int amount, @Nonnull TransactionContext tx) {
+        return this.insertionOnlySlots.contains(index) ? 0 : super.extract(index, resource, amount, tx);
+    }
+
+    @Override
+    protected void onContentsChanged(int index, @Nonnull ItemStack previousContents) {
+        if (this.contentsChanged != null) {
+            this.contentsChanged.accept(index);
+        }
+    }
+
+    @Override
+    public void deserialize(@Nonnull ValueInput input) {
+        super.deserialize(input);
         if (this.stacks.size() != this.size) {
             // BaseItemStackHandler does not allow setting the size through NBT
-            // Don't use setSize as it will clear the contents
+            // Don't clear the contents, just resize
             NonNullList<ItemStack> oldStacks = this.stacks;
             this.stacks = NonNullList.withSize(this.size, ItemStack.EMPTY);
             for (int slot = 0; slot < Math.min(oldStacks.size(), this.size); slot++) {
@@ -87,7 +124,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
 
     @Override
     public boolean hasSpaceFor(List<ItemStack> stacks, int startInclusive, int endExclusive) {
-        return AdvancedItemHandlerHelper.hasSpaceFor(this, stacks, startInclusive, endExclusive, (slot, stack) -> !this.outputSlots.contains(slot) && this.isItemValid(slot, stack));
+        return AdvancedItemHandlerHelper.hasSpaceFor(this, stacks, startInclusive, endExclusive);
     }
 
     /**
@@ -117,68 +154,65 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
     private class Unrestricted implements IAdvancedItemHandlerModifiable {
 
         @Override
-        public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-            BaseItemStackHandler.this.setStackInSlot(slot, stack);
+        public void set(int index, ItemResource resource, int amount) {
+            BaseItemStackHandler.this.set(index, resource, amount);
         }
 
         @Override
-        public int getSlots() {
-            return BaseItemStackHandler.this.getSlots();
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return BaseItemStackHandler.this.getStackInSlot(slot);
+        public int size() {
+            return BaseItemStackHandler.this.size();
         }
 
         @Nonnull
         @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if (stack.isEmpty()) return ItemStack.EMPTY;
-            BaseItemStackHandler.this.validateSlotIndex(slot);
-            ItemStack current = BaseItemStackHandler.this.stacks.get(slot);
-            int amount = BaseItemStackHandler.this.getStackLimit(slot, stack);
-            if (!current.isEmpty()) {
-                if (!ItemStack.isSameItemSameComponents(stack, current)) return stack;
-                amount -= current.getCount();
-            }
-            if (amount <= 0) return stack;
-
-            if (!simulate) {
-                if (current.isEmpty()) {
-                    BaseItemStackHandler.this.stacks.set(slot, stack.copyWithCount(Math.min(stack.getCount(), amount)));
-                } else {
-                    current.grow(Math.min(stack.getCount(), amount));
-                }
-                BaseItemStackHandler.this.onContentsChanged(slot);
-            }
-            return stack.copyWithCount(Math.max(0, stack.getCount() - amount));
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (amount <= 0) return ItemStack.EMPTY;
-            BaseItemStackHandler.this.validateSlotIndex(slot);
-            ItemStack current = BaseItemStackHandler.this.stacks.get(slot);
-            if (current.isEmpty()) return ItemStack.EMPTY;
-            int count = Math.min(current.getCount(), Math.min(amount, current.getMaxStackSize()));
-            if (!simulate) {
-                BaseItemStackHandler.this.stacks.set(slot, current.copyWithCount(Math.max(0, current.getCount() - count)));
-                BaseItemStackHandler.this.onContentsChanged(slot);
-            }
-            return current.copyWithCount(count);
+        public ItemResource getResource(int index) {
+            return BaseItemStackHandler.this.getResource(index);
         }
 
         @Override
-        public int getSlotLimit(int slot) {
-            return BaseItemStackHandler.this.getSlotLimit(slot);
+        public long getAmountAsLong(int index) {
+            return BaseItemStackHandler.this.getAmountAsLong(index);
         }
 
         @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+        public long getCapacityAsLong(int index, @Nonnull ItemResource resource) {
+            return BaseItemStackHandler.this.getCapacityAsLong(index, resource);
+        }
+
+        @Override
+        public boolean isValid(int index, @Nonnull ItemResource resource) {
             return true;
+        }
+
+        @Override
+        public int insert(int index, @Nonnull ItemResource resource, int amount, @Nonnull TransactionContext transaction) {
+            if (resource.isEmpty() || amount <= 0) return 0;
+            ItemStack current = BaseItemStackHandler.this.stacks.get(index);
+            int capacity = BaseItemStackHandler.this.getCapacity(index, resource);
+            if (!current.isEmpty()) {
+                if (!ItemResource.of(current).equals(resource)) return 0;
+                capacity -= current.getCount();
+            }
+            if (capacity <= 0) return 0;
+            int toInsert = Math.min(amount, capacity);
+            BaseItemStackHandler.this.updateSnapshots(index, transaction);
+            if (current.isEmpty()) {
+                BaseItemStackHandler.this.stacks.set(index, resource.toStack(toInsert));
+            } else {
+                current.grow(toInsert);
+            }
+            return toInsert;
+        }
+
+        @Override
+        public int extract(int index, @Nonnull ItemResource resource, int amount, @Nonnull TransactionContext transaction) {
+            if (amount <= 0) return 0;
+            ItemStack current = BaseItemStackHandler.this.stacks.get(index);
+            if (current.isEmpty() || !ItemResource.of(current).equals(resource)) return 0;
+            int toExtract = Math.min(current.getCount(), amount);
+            BaseItemStackHandler.this.updateSnapshots(index, transaction);
+            BaseItemStackHandler.this.stacks.set(index, current.copyWithCount(current.getCount() - toExtract));
+            return toExtract;
         }
     }
 
@@ -205,7 +239,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
         public Builder contentsChanged(Runnable action) {
             return this.contentsChanged(slot -> action.run());
         }
-        
+
         /**
          * Adds an action that runs whenever the contents of the inventory change. The action
          * will get passed the slot that was changed.
@@ -235,7 +269,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             }
             return this;
         }
-        
+
         /**
          * Marks the given slots as outputs. That means it's not possible to insert items
          * into these slots. Marking a slot as insertion only and output at the same time
@@ -245,7 +279,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             this.outputSlots.addAll(slots);
             return this;
         }
-        
+
         /**
          * Marks the given slots as outputs. That means it's not possible to insert items
          * into these slots. Marking a slot as insertion only and output at the same time
@@ -255,7 +289,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             IntStream.range(0, this.size).filter(slots::contains).forEach(this.outputSlots::add);
             return this;
         }
-        
+
         /**
          * Marks the given slots as insertion only. That means it's not possible to extract
          * items from these slots. Marking a slot as insertion only and output at the same
@@ -295,7 +329,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             this.defaultSlotLimit = defaultSlotLimit;
             return this;
         }
-        
+
         /**
          * Sets a maximum stack size for some slots.
          */
@@ -305,7 +339,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             }
             return this;
         }
-        
+
         /**
          * Sets a maximum stack size for some slots.
          */
@@ -315,7 +349,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             }
             return this;
         }
-        
+
         /**
          * Sets a maximum stack size for some slots.
          */
@@ -323,7 +357,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             IntStream.range(0, this.size).filter(slots::contains).forEach(slot -> this.slotLimits.put(slot, slotLimit));
             return this;
         }
-        
+
         /**
          * Sets a slot validator for some slots.
          */
@@ -333,7 +367,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             }
             return this;
         }
-        
+
         /**
          * Sets a slot validator for some slots.
          */
@@ -343,7 +377,7 @@ public class BaseItemStackHandler extends ItemStackHandler implements IAdvancedI
             }
             return this;
         }
-        
+
         /**
          * Sets a slot validator for some slots.
          */

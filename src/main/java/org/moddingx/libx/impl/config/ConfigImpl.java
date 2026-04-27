@@ -2,11 +2,7 @@ package org.moddingx.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.Strictness;
+import com.google.gson.*;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -286,7 +282,7 @@ public class ConfigImpl {
     }
     
     private void shadowBy(ConfigState state, boolean local, @Nullable Path loadPath) {
-        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) {
+        if (FMLEnvironment.getDist() == Dist.DEDICATED_SERVER) {
             LibX.logger.error("Config shadow was called on a dedicated server. This should not happen!");
         }
         if (!this.shadowed && this.savedState == null) {
@@ -312,7 +308,7 @@ public class ConfigImpl {
     }
     
     public void reloadClientWorldState() {
-        if (FMLLoader.getDist() == Dist.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             if (!this.shadowed || this.shadowedLocal) {
                 Level clientLevel = ClientCallbacks.getClientLevel();
                 MinecraftServer server = ClientCallbacks.getSinglePlayerServer();
@@ -374,7 +370,7 @@ public class ConfigImpl {
     }
 
     public ConfigState cachedOrCurrent() {
-        if (FMLLoader.getDist() != Dist.DEDICATED_SERVER) {
+        if (FMLEnvironment.getDist() != Dist.DEDICATED_SERVER) {
             LibX.logger.error("Config cached or current method was called on a physical client. This should not happen!");
         }
         if (this.savedState == null) {

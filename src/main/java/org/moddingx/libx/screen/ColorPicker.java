@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.state.GuiElementRenderState;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -172,13 +173,13 @@ public class ColorPicker extends Panel {
 
         graphics.submitGuiElementRenderState(new GuiElementRenderState() {
             @Override
-            public void buildVertices(@Nonnull VertexConsumer consumer, float z) {
+            public void buildVertices(@Nonnull VertexConsumer consumer) {
                 if (isEnabled) {
-                    hsbList.forEach(v -> v.add(consumer, matrix, z));
-                    huePanelList.forEach(v -> v.add(consumer, matrix, z));
+                    hsbList.forEach(v -> v.add(consumer, matrix));
+                    huePanelList.forEach(v -> v.add(consumer, matrix));
                 } else {
-                    hsbList.forEach(v -> v.addGrayscale(consumer, matrix, z));
-                    huePanelList.forEach(v -> v.addGrayscale(consumer, matrix, z));
+                    hsbList.forEach(v -> v.addGrayscale(consumer, matrix));
+                    huePanelList.forEach(v -> v.addGrayscale(consumer, matrix));
                 }
             }
 
@@ -227,20 +228,20 @@ public class ColorPicker extends Panel {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        if (super.mouseClicked(event, isDoubleClick)) {
             return true;
         } else {
-            return this.updateColorValue(mouseX, mouseY, mouseX, mouseY);
+            return this.updateColorValue(event.x(), event.y(), event.x(), event.y());
         }
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        if (super.mouseDragged(event, dragX, dragY)) {
             return true;
         } else {
-            return this.updateColorValue(mouseX, mouseY, mouseX - dragX, mouseY - dragY);
+            return this.updateColorValue(event.x(), event.y(), event.x() - dragX, event.y() - dragY);
         }
     }
 
@@ -284,13 +285,13 @@ public class ColorPicker extends Panel {
 
     private record VertexInfo(float x, float y, ColorValue color) {
 
-        public void add(VertexConsumer vertex, Matrix3x2f matrix, float z) {
-            vertex.addVertexWith2DPose(matrix, this.x, this.y, z).setColor(this.color.red, this.color.green, this.color.blue, 255);
+        public void add(VertexConsumer vertex, Matrix3x2f matrix) {
+            vertex.addVertexWith2DPose(matrix, this.x, this.y).setColor(this.color.red, this.color.green, this.color.blue, 255);
         }
 
-        public void addGrayscale(VertexConsumer vertex, Matrix3x2f matrix, float z) {
+        public void addGrayscale(VertexConsumer vertex, Matrix3x2f matrix) {
             int value = Math.round((this.color.red + this.color.green + this.color.blue) / 3f);
-            vertex.addVertexWith2DPose(matrix, this.x, this.y, z).setColor(value, value, value, 255);
+            vertex.addVertexWith2DPose(matrix, this.x, this.y).setColor(value, value, value, 255);
         }
     }
 

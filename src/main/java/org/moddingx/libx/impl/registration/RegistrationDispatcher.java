@@ -9,7 +9,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.impl.registration.handler.CapabilityRegistrationHandler;
@@ -49,7 +49,7 @@ public class RegistrationDispatcher {
         this.allEntries = new HashMap<>();
         this.registerables = new LinkedList<>();
         this.capabilityHandler = new CapabilityRegistrationHandler(this::runRegistration);
-        this.clientExtHandler = FMLLoader.getDist() == Dist.CLIENT ? new ClientExtensionRegistrationHandler(this::runRegistration) : null;
+        this.clientExtHandler = FMLEnvironment.getDist() == Dist.CLIENT ? new ClientExtensionRegistrationHandler(this::runRegistration) : null;
     }
     
     private void runRegistration() {
@@ -119,7 +119,7 @@ public class RegistrationDispatcher {
             if (value instanceof Registerable registerable) {
                 this.registerables.add(new NamedRegisterable(ctx, registerable));
                 registerable.registerAdditional(ctx, collector);
-                if (FMLLoader.getDist() == Dist.CLIENT) {
+                if (FMLEnvironment.getDist() == Dist.CLIENT) {
                     RegisterableClientAdapter.registerClientAdditional(registerable, ctx, collector);
                 }
             }
@@ -172,7 +172,7 @@ public class RegistrationDispatcher {
         }
 
         public void registerClient(Consumer<Runnable> enqueue) {
-            if (FMLLoader.getDist() == Dist.CLIENT) {
+            if (FMLEnvironment.getDist() == Dist.CLIENT) {
                 RegisterableClientAdapter.registerClient(this.value(), new SetupContext(this.ctx(), enqueue));
             }
         }
@@ -201,7 +201,7 @@ public class RegistrationDispatcher {
     private static class RegisterableClientAdapter {
         
         static {
-            if (FMLLoader.getDist().isDedicatedServer()) {
+            if (FMLEnvironment.getDist().isDedicatedServer()) {
                 throw new IllegalStateException("RegisterableClientAdapter should never be loaded on the dedicated server. This is a bug in LibX.");
             }
         }

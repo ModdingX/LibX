@@ -16,7 +16,7 @@ public class BlockEntityUpdateQueue {
     private static final Map<ServerLevel, Set<BlockPos>> updateQueue = new HashMap<>();
 
     public static void scheduleUpdate(Level level, BlockPos pos) {
-        if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
             if (!updateQueue.containsKey(serverLevel)) {
                 updateQueue.put(serverLevel, new HashSet<>());
             }

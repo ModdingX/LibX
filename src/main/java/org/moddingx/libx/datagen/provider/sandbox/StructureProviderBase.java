@@ -188,7 +188,7 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
         public StructureSettingsBuilder structure() {
             return StructureProviderBase.this.forFactory(settings -> new JigsawStructure(
                     settings, this.startPool, Optional.ofNullable(this.centerJigsawBlockNameInStartPool), this.maxNestingDepth,
-                    this.startHeight, this.expansionHack, Optional.ofNullable(this.heightRelativeTo), this.maxDistanceFromCenter,
+                    this.startHeight, this.expansionHack, Optional.ofNullable(this.heightRelativeTo), new JigsawStructure.MaxDistance(this.maxDistanceFromCenter),
                     List.copyOf(this.aliases), this.dimensionPading, this.liquidSettings));
         }
     }

@@ -5,14 +5,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.BlockEntityUpdateQueue;
 import org.slf4j.Logger;
@@ -33,18 +34,25 @@ public class BlockEntityBase extends BlockEntity {
 
     @Override
     public void preRemoveSideEffects(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-        if (this.level != null && !this.level.isClientSide && state.getBlock() instanceof BlockBE<?> block) {
+        if (this.level != null && !this.level.isClientSide() && state.getBlock() instanceof BlockBE<?> block) {
             if (!block.shouldDropInventory(this.level, pos, state)) {
                 return;
             }
-            if (this.level.getCapability(Capabilities.ItemHandler.BLOCK, pos, state, this, null) instanceof IItemHandlerModifiable modifiable) {
-                for (int i = 0; i < modifiable.getSlots(); i++) {
-                    ItemStack stack = modifiable.getStackInSlot(i);
-                    if (!stack.isEmpty()) {
-                        ItemEntity entity = new ItemEntity(this.level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, stack.copy());
-                        this.level.addFreshEntity(entity);
-                        modifiable.setStackInSlot(i, ItemStack.EMPTY);
+            ResourceHandler<ItemResource> handler = this.level.getCapability(Capabilities.Item.BLOCK, pos, state, this, null);
+            if (handler != null) {
+                try (Transaction transaction = Transaction.openRoot()) {
+                    for (int i = 0; i < handler.size(); i++) {
+                        ItemResource resource = handler.getResource(i);
+                        int amount = handler.getAmountAsInt(i);
+                        if (!resource.isEmpty()) {
+                            int extracted = handler.extract(i, resource, amount, transaction);
+                            if (extracted > 0) {
+                                ItemEntity entity = new ItemEntity(this.level, pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, resource.toStack(extracted));
+                                this.level.addFreshEntity(entity);
+                            }
+                        }
                     }
+                    transaction.commit();
                 }
                 return;
             }
@@ -71,7 +79,7 @@ public class BlockEntityBase extends BlockEntity {
     @Override
     public void onLoad() {
         super.onLoad();
-        if (this.level != null && this.level.isClientSide) {
+        if (this.level != null && this.level.isClientSide()) {
             LibX.getNetwork().requestBE(this.level, this.worldPosition);
         }
     }
@@ -90,7 +98,7 @@ public class BlockEntityBase extends BlockEntity {
      * {@link #handleUpdateTag(ValueInput)} at the end of the current tick.
      */
     public void setDispatchable() {
-        if (this.level != null && !this.level.isClientSide) {
+        if (this.level != null && !this.level.isClientSide()) {
             BlockEntityUpdateQueue.scheduleUpdate(this.level, this.worldPosition);
         }
     }

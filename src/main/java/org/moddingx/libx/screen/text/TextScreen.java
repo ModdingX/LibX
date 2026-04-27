@@ -3,7 +3,9 @@ package org.moddingx.libx.screen.text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -86,12 +88,12 @@ public class TextScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        if (super.mouseClicked(event, isDoubleClick)) {
             return true;
         }
-        if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && this.content != null) {
-            Style click = this.content.hoveredStyle(((int) mouseX) - this.left(), ((int) mouseY) - this.top());
+        if (event.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT && this.content != null) {
+            Style click = this.content.hoveredStyle(((int) event.x()) - this.left(), ((int) event.y()) - this.top());
             if (click != null) {
                 return this.handleComponentClicked(click);
             }
@@ -101,6 +103,6 @@ public class TextScreen extends Screen {
 
     @Override
     protected void insertText(@Nonnull String text, boolean overwrite) {
-        Minecraft.getInstance().openChatScreen(text);
+        Minecraft.getInstance().setScreen(new ChatScreen(text, false));
     }
 }

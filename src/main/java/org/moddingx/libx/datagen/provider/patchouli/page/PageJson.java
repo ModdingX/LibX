@@ -9,10 +9,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
@@ -114,7 +111,7 @@ public class PageJson {
     
     // Make a component, where formatting codes use a marker for a zero width font recognised by the splitter.
     private static Component displayText(String text) {
-        Style zeroWidth = Style.EMPTY.withFont(DatagenFontLoader.ZERO_WIDTH_FONT);
+        Style zeroWidth = Style.EMPTY.withFont(new FontDescription.Resource(DatagenFontLoader.ZERO_WIDTH_FONT));
         MutableComponent display = Component.empty();
         
         StringBuilder current = new StringBuilder();

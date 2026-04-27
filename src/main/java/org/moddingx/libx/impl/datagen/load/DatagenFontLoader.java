@@ -4,12 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.blaze3d.font.GlyphInfo;
 import com.mojang.blaze3d.font.GlyphProvider;
+import com.mojang.blaze3d.font.UnbakedGlyph;
 import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.font.FontManager;
 import net.minecraft.client.gui.font.glyphs.SpecialGlyphs;
-import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.FontDescription;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.resources.Resource;
@@ -33,7 +33,8 @@ public class DatagenFontLoader {
 
     // Makes everything zero-width. Useful when splitting strings that have formatting codes.
     public static final ResourceLocation ZERO_WIDTH_FONT = LibX.getInstance().resource("zero_width");
-    public static final StringSplitter MISSING = new StringSplitter((cp, style) -> ZERO_WIDTH_FONT.equals(style.getFont()) ? 0 : SpecialGlyphs.MISSING.getAdvance(style.isBold()));
+    public static final FontDescription.Resource ZERO_WIDTH_FONT_DESCRIPTION = new FontDescription.Resource(ZERO_WIDTH_FONT);
+    public static final StringSplitter MISSING = new StringSplitter((cp, style) -> ZERO_WIDTH_FONT_DESCRIPTION.equals(style.getFont()) ? 0 : SpecialGlyphs.MISSING.getAdvance(style.isBold()));
     private static final ResourceLocation UNIFONT_PUA_INCLUDE = ResourceLocation.withDefaultNamespace("font/include/unifont_pua.json");
 
     private static StringSplitter fontMetrics;
@@ -57,13 +58,15 @@ public class DatagenFontLoader {
                     Collections.reverse(list);
                     return Map.entry(fontId, Collections.unmodifiableList(list));
                 }).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-                List<GlyphProvider.Conditional> defaultGlyphProviders = providerMap.getOrDefault(Style.DEFAULT_FONT, List.of());
+                List<GlyphProvider.Conditional> defaultGlyphProviders = providerMap.getOrDefault(ResourceLocation.withDefaultNamespace("default"), List.of());
                 fontMetrics = new StringSplitter((cp, style) -> {
-                    if (ZERO_WIDTH_FONT.equals(style.getFont())) return 0;
-                    for (GlyphProvider.Conditional conditional : providerMap.getOrDefault(style.getFont(), defaultGlyphProviders)) {
+                    FontDescription font = style.getFont();
+                    if (ZERO_WIDTH_FONT_DESCRIPTION.equals(font)) return 0;
+                    ResourceLocation fontId = font instanceof FontDescription.Resource resource ? resource.id() : ResourceLocation.withDefaultNamespace("default");
+                    for (GlyphProvider.Conditional conditional : providerMap.getOrDefault(fontId, defaultGlyphProviders)) {
                         if (!conditional.filter().apply(Set.of())) continue;
-                        GlyphInfo glyph = conditional.provider().getGlyph(cp);
-                        if (glyph != null) return glyph.getAdvance(style.isBold());
+                        UnbakedGlyph glyph = conditional.provider().getGlyph(cp);
+                        if (glyph != null) return glyph.info().getAdvance(style.isBold());
                     }
                     return SpecialGlyphs.MISSING.getAdvance(style.isBold());
                 });

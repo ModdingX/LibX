@@ -2,7 +2,6 @@ package org.moddingx.libx;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,7 +23,7 @@ public class CommonNetwork {
     /**
      * Sends the nbt tag retrieved from {@link BlockEntity#getUpdateTag(HolderLookup.Provider)} from the block entity
      * at the given position to all clients tracking the chunk. On the client the tag is passed
-     * to {@link BlockEntity#handleUpdateTag(CompoundTag, HolderLookup.Provider)}. Does nothing when called on the client.
+     * to {@link BlockEntity#handleUpdateTag(net.minecraft.world.level.storage.ValueInput)}. Does nothing when called on the client.
      */
     public void updateBE(ServerLevel level, BlockPos pos) {
         this.network.updateBE(level, pos);

@@ -13,6 +13,8 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
@@ -136,24 +138,24 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
                 // Without this, the panel would process clicks from areas currently not on the screen
-                if (mouseX >= this.left && mouseX <= this.left + this.width && mouseY >= this.top && mouseY <= this.top + this.height) {
-                    return super.mouseClicked(mouseX, mouseY, button);
+                if (event.x() >= this.left && event.x() <= this.left + this.width && event.y() >= this.top && event.y() <= this.top + this.height) {
+                    return super.mouseClicked(event, isDoubleClick);
                 } else {
                     return false;
                 }
             }
 
             @Override
-            protected boolean clickPanel(double mouseX, double mouseY, int button) {
+            protected boolean clickPanel(double mouseX, double mouseY, MouseButtonEvent event) {
                 // Extra var required as we need to cal all listeners
                 // so widgets can for example handle their loss of focus.
                 boolean success = false;
                 for (GuiEventListener widget : widgets) {
-                    if (widget.mouseClicked(mouseX, mouseY, button)) {
+                    if (widget.mouseClicked(new MouseButtonEvent(mouseX, mouseY, event.buttonInfo()), false)) {
                         this.setFocused(widget);
-                        if (button == 0) {
+                        if (event.button() == 0) {
                             this.setDragging(true);
                         }
                         success = true;
@@ -163,10 +165,11 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-                if (!super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
-                    if (this.getFocused() != null && this.isDragging() && button == 0) {
-                        return this.getFocused().mouseDragged(mouseX, mouseY - this.top + ((int) this.scrollDistance) - this.border, button, dragX, dragY);
+            public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+                if (!super.mouseDragged(event, dragX, dragY)) {
+                    if (this.getFocused() != null && this.isDragging() && event.button() == 0) {
+                        MouseButtonEvent translatedEvent = new MouseButtonEvent(event.x(), event.y() - this.top + ((int) this.scrollDistance) - this.border, event.buttonInfo());
+                        return this.getFocused().mouseDragged(translatedEvent, dragX, dragY);
                     } else {
                         return false;
                     }
@@ -176,10 +179,11 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public boolean mouseReleased(double mouseX, double mouseY, int button) {
-                if (!super.mouseReleased(mouseX, mouseY, button)) {
+            public boolean mouseReleased(MouseButtonEvent event) {
+                if (!super.mouseReleased(event)) {
                     if (this.getFocused() != null) {
-                        return this.getFocused().mouseReleased(mouseX, mouseY - this.top + ((int) this.scrollDistance) - this.border, button);
+                        MouseButtonEvent translatedEvent = new MouseButtonEvent(event.x(), event.y() - this.top + ((int) this.scrollDistance) - this.border, event.buttonInfo());
+                        return this.getFocused().mouseReleased(translatedEvent);
                     } else {
                         return false;
                     }
@@ -207,12 +211,12 @@ public abstract class ConfigBaseScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int key, int i1, int i2) {
-        if (key == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc() && this.manager != null) {
+    public boolean keyPressed(KeyEvent event) {
+        if (event.key() == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc() && this.manager != null) {
             this.manager.close();
             return true;
         } else {
-            return super.keyPressed(key, i1, i2);
+            return super.keyPressed(event);
         }
     }
 

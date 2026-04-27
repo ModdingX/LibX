@@ -3,7 +3,6 @@ package org.moddingx.libx.impl.libxcore;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.storage.LevelStorageSource;
@@ -16,7 +15,7 @@ import java.util.concurrent.Executor;
 public class CoreLevelLoad {
 
     /**
-     * Patched into {@link ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, LevelStem, ChunkProgressListener, boolean, long, List, boolean, net.minecraft.world.RandomSequences)}
+     * Patched into {@link ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, LevelStem, boolean, long, List, boolean, net.minecraft.world.RandomSequences)}
      * after the call to {@link LevelStem#generator()}.
      */
     public static void startLevelLoad(ChunkGenerator generator, MinecraftServer server) {

@@ -28,11 +28,11 @@ mod.configure {
     modid 'libx'
     group 'org.moddingx'
     versioning {
-        base '1.21.8-6.4'
+        base '1.21.10-6.5'
         maven 'https://maven.moddingx.org/release'
     }
 
-    neoforge '21.8.53'
+    neoforge '21.10.64'
     extraModSource sourceSets.ap
 
     license 'The Apache License, Version 2.0'

@@ -1,0 +1,313 @@
+package org.moddingx.libx.impl.render;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.block.MovingBlockRenderState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.HitboxRenderState;
+import net.minecraft.client.renderer.entity.state.HitboxesRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.AtlasManager;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+
+/**
+ * A {@link SubmitNodeCollector} that bridges item rendering to a {@link MultiBufferSource}.
+ * Used by {@link org.moddingx.libx.render.RenderHelper#renderItem} to render items inside
+ * a {@link org.moddingx.libx.render.target.RenderJob} without requiring callers to
+ * implement all 15 abstract methods of {@code SubmitNodeCollector}.
+ */
+public class MultiBufferSourceSubmitCollector implements SubmitNodeCollector {
+
+    private static final RenderType SHADOW_RENDER_TYPE = RenderType.entityShadow(
+            ResourceLocation.withDefaultNamespace("textures/misc/shadow.png"));
+
+    private final MultiBufferSource buffer;
+
+    public MultiBufferSourceSubmitCollector(MultiBufferSource buffer) {
+        this.buffer = buffer;
+    }
+
+    @Nonnull
+    @Override
+    public OrderedSubmitNodeCollector order(int index) {
+        return this;
+    }
+
+    @Override
+    public void submitItem(
+            @Nonnull PoseStack poseStack,
+            @Nonnull ItemDisplayContext displayContext,
+            int packedLight,
+            int packedOverlay,
+            int outlineColor,
+            @Nonnull int[] tintLayers,
+            @Nonnull List<BakedQuad> quads,
+            @Nonnull RenderType renderType,
+            @Nonnull ItemStackRenderState.FoilType foilType
+    ) {
+        ItemRenderer.renderItem(displayContext, poseStack, this.buffer, packedLight, packedOverlay, tintLayers, quads, renderType, foilType);
+    }
+
+    @Override
+    public void submitCustomGeometry(PoseStack poseStack, @Nonnull RenderType renderType, SubmitNodeCollector.CustomGeometryRenderer renderer) {
+        renderer.render(poseStack.last(), this.buffer.getBuffer(renderType));
+    }
+
+    @Override
+    public <S> void submitModel(
+            Model<? super S> model,
+            @Nonnull S renderState,
+            @Nonnull PoseStack poseStack,
+            @Nonnull RenderType renderType,
+            int packedLight,
+            int packedOverlay,
+            int tintColor,
+            @Nullable TextureAtlasSprite sprite,
+            int outlineColor,
+            @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay
+    ) {
+        model.setupAnim(renderState);
+        VertexConsumer consumer = this.buffer.getBuffer(renderType);
+        VertexConsumer wrapped = sprite == null ? consumer : sprite.wrap(consumer);
+        model.renderToBuffer(poseStack, wrapped, packedLight, packedOverlay, tintColor);
+    }
+
+    @Override
+    public void submitModelPart(
+            @Nonnull ModelPart modelPart,
+            @Nonnull PoseStack poseStack,
+            @Nonnull RenderType renderType,
+            int packedLight,
+            int packedOverlay,
+            @Nullable TextureAtlasSprite sprite,
+            boolean sheeted,
+            boolean hasFoil,
+            int tintColor,
+            @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay,
+            int outlineColor
+    ) {
+        VertexConsumer base = this.buffer.getBuffer(renderType);
+        VertexConsumer consumer;
+        if (sprite != null) {
+            consumer = hasFoil
+                    ? sprite.wrap(ItemRenderer.getFoilBuffer(this.buffer, renderType, sheeted, true))
+                    : sprite.wrap(base);
+        } else if (hasFoil) {
+            consumer = ItemRenderer.getFoilBuffer(this.buffer, renderType, sheeted, true);
+        } else {
+            consumer = base;
+        }
+        modelPart.render(poseStack, consumer, packedLight, packedOverlay, tintColor);
+    }
+
+    @Override
+    public void submitBlock(@Nonnull PoseStack poseStack, @Nonnull BlockState blockState, int packedLight, int packedOverlay, int outlineColor) {
+        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, this.buffer, packedLight, packedOverlay);
+    }
+
+    @Override
+    public void submitMovingBlock(@Nonnull PoseStack poseStack, MovingBlockRenderState renderState) {
+        BlockState blockState = renderState.blockState;
+        RenderType renderType = ItemBlockRenderTypes.getMovingBlockRenderType(blockState);
+        List<BlockModelPart> parts = Minecraft.getInstance().getBlockRenderer()
+                .getBlockModel(blockState)
+                .collectParts(renderState.level, renderState.blockPos, blockState,
+                        net.minecraft.util.RandomSource.create(blockState.getSeed(renderState.randomSeedPos)));
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer()
+                .tesselateBlock(renderState, parts, blockState, renderState.blockPos, poseStack,
+                        this.buffer.getBuffer(renderType), false, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY);
+    }
+
+    @Override
+    public void submitBlockModel(PoseStack poseStack, @Nonnull RenderType renderType, @Nonnull BlockStateModel model, float r, float g, float b, int packedLight, int packedOverlay, int outlineColor) {
+        ModelBlockRenderer.renderModel(poseStack.last(), this.buffer.getBuffer(renderType), model, r, g, b, packedLight, packedOverlay);
+    }
+
+    @Override
+    public void submitShadow(PoseStack poseStack, float radius, List<EntityRenderState.ShadowPiece> pieces) {
+        VertexConsumer consumer = this.buffer.getBuffer(SHADOW_RENDER_TYPE);
+        Matrix4f pose = poseStack.last().pose();
+        for (EntityRenderState.ShadowPiece piece : pieces) {
+            var bounds = piece.shapeBelow().bounds();
+            float x0 = piece.relativeX() + (float) bounds.minX;
+            float x1 = piece.relativeX() + (float) bounds.maxX;
+            float y = piece.relativeY() + (float) bounds.minY;
+            float z0 = piece.relativeZ() + (float) bounds.minZ;
+            float z1 = piece.relativeZ() + (float) bounds.maxZ;
+            float u0 = -x0 / 2f / radius + 0.5f;
+            float u1 = -x1 / 2f / radius + 0.5f;
+            float v0 = -z0 / 2f / radius + 0.5f;
+            float v1 = -z1 / 2f / radius + 0.5f;
+            int color = ARGB.white(piece.alpha());
+            shadowVertex(pose, consumer, color, x0, y, z0, u0, v0);
+            shadowVertex(pose, consumer, color, x0, y, z1, u0, v1);
+            shadowVertex(pose, consumer, color, x1, y, z1, u1, v1);
+            shadowVertex(pose, consumer, color, x1, y, z0, u1, v0);
+        }
+    }
+
+    private static void shadowVertex(Matrix4f pose, VertexConsumer consumer, int color, float x, float y, float z, float u, float v) {
+        Vector3f pos = pose.transformPosition(x, y, z, new Vector3f());
+        consumer.addVertex(pos.x(), pos.y(), pos.z(), color, u, v,
+                net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 15728880, 0f, 1f, 0f);
+    }
+
+    @Override
+    public void submitHitbox(@Nonnull PoseStack poseStack, @Nonnull EntityRenderState entityRenderState, HitboxesRenderState hitboxesRenderState) {
+        VertexConsumer consumer = this.buffer.getBuffer(RenderType.lines());
+        for (HitboxRenderState box : hitboxesRenderState.hitboxes()) {
+            poseStack.pushPose();
+            poseStack.translate(box.offsetX(), box.offsetY(), box.offsetZ());
+            ShapeRenderer.renderLineBox(poseStack.last(), consumer,
+                    box.x0(), box.y0(), box.z0(), box.x1(), box.y1(), box.z1(),
+                    box.red(), box.green(), box.blue(), 1f);
+            poseStack.popPose();
+        }
+        Vec3 view = new Vec3(hitboxesRenderState.viewX(), hitboxesRenderState.viewY(), hitboxesRenderState.viewZ());
+        ShapeRenderer.renderVector(poseStack, consumer, new Vector3f(0f, entityRenderState.eyeHeight, 0f), view.scale(2.0), -16776961);
+    }
+
+    @Override
+    public void submitFlame(PoseStack poseStack, EntityRenderState renderState, @Nonnull Quaternionf rotation) {
+        AtlasManager atlasManager = Minecraft.getInstance().getAtlasManager();
+        TextureAtlasSprite fire0 = atlasManager.get(ModelBakery.FIRE_0);
+        TextureAtlasSprite fire1 = atlasManager.get(ModelBakery.FIRE_1);
+        float scale = renderState.boundingBoxWidth * 1.4f;
+        poseStack.pushPose();
+        poseStack.scale(scale, scale, scale);
+        float height = renderState.boundingBoxHeight / scale;
+        float vOff = 0f;
+        float zOff = 0f;
+        poseStack.last().rotate(rotation);
+        poseStack.last().translate(0f, 0f, 0.3f - (int) height * 0.02f);
+        VertexConsumer consumer = this.buffer.getBuffer(net.minecraft.client.renderer.Sheets.cutoutBlockSheet());
+        for (int i = 0; height > 0f; i++) {
+            TextureAtlasSprite sprite = i % 2 == 0 ? fire0 : fire1;
+            float u0 = sprite.getU0(), u1 = sprite.getU1();
+            float v0 = sprite.getV0(), v1 = sprite.getV1();
+            if (i / 2 % 2 == 0) {
+                float tmp = u1;
+                u1 = u0;
+                u0 = tmp;
+            }
+            float hw = 0.5f;
+            flameVertex(poseStack.last(), consumer, -hw, 0f - vOff, zOff, u1, v1);
+            flameVertex(poseStack.last(), consumer, hw, 0f - vOff, zOff, u0, v1);
+            flameVertex(poseStack.last(), consumer, hw, 1.4f - vOff, zOff, u0, v0);
+            flameVertex(poseStack.last(), consumer, -hw, 1.4f - vOff, zOff, u1, v0);
+            height -= 0.45f;
+            vOff -= 0.45f;
+            hw *= 0.9f;
+            zOff -= 0.03f;
+        }
+        poseStack.popPose();
+    }
+
+    private static void flameVertex(PoseStack.Pose pose, VertexConsumer consumer, float x, float y, float z, float u, float v) {
+        consumer.addVertex(pose, x, y, z).setColor(-1).setUv(u, v).setUv1(0, 10).setLight(240).setNormal(pose, 0f, 1f, 0f);
+    }
+
+    @Override
+    public void submitLeash(PoseStack poseStack, EntityRenderState.LeashState leashState) {
+        Matrix4f pose = new Matrix4f(poseStack.last().pose());
+        pose.translate((float) leashState.offset.x, (float) leashState.offset.y, (float) leashState.offset.z);
+        float dx = (float) (leashState.end.x - leashState.start.x);
+        float dy = (float) (leashState.end.y - leashState.start.y);
+        float dz = (float) (leashState.end.z - leashState.start.z);
+        float f3 = Mth.invSqrt(dx * dx + dz * dz) * 0.05f / 2f;
+        float nx = dz * f3;
+        float nz = dx * f3;
+        VertexConsumer consumer = this.buffer.getBuffer(RenderType.leash());
+        for (int i = 0; i <= 24; i++) {
+            addLeashVertexPair(consumer, pose, dx, dy, dz, 0.05f, nx, nz, i, false, leashState);
+        }
+        for (int i = 24; i >= 0; i--) {
+            addLeashVertexPair(consumer, pose, dx, dy, dz, 0f, nx, nz, i, true, leashState);
+        }
+    }
+
+    private static void addLeashVertexPair(VertexConsumer consumer, Matrix4f pose, float dx, float dy, float dz,
+            float yOffset, float nx, float nz, int index, boolean reverse, EntityRenderState.LeashState leashState) {
+        float t = index / 24f;
+        int blockLight = (int) Mth.lerp(t, leashState.startBlockLight, leashState.endBlockLight);
+        int skyLight = (int) Mth.lerp(t, leashState.startSkyLight, leashState.endSkyLight);
+        int light = LightTexture.pack(blockLight, skyLight);
+        float bright = index % 2 == (reverse ? 1 : 0) ? 0.7f : 1f;
+        float r = 0.5f * bright, g = 0.4f * bright, b = 0.3f * bright;
+        float px = dx * t;
+        float py = leashState.slack
+                ? (dy > 0f ? dy * t * t : dy - dy * (1f - t) * (1f - t))
+                : dy * t;
+        float pz = dz * t;
+        consumer.addVertex(pose, px - nx, py + yOffset, pz + nz).setColor(r, g, b, 1f).setLight(light);
+        consumer.addVertex(pose, px + nx, py + 0.05f - yOffset, pz - nz).setColor(r, g, b, 1f).setLight(light);
+    }
+
+    @Override
+    public void submitNameTag(@Nonnull PoseStack poseStack, @Nullable Vec3 pos, int yOffset, @Nonnull Component text,
+            boolean seethrough, int packedLight, double distanceToCameraSq, @Nonnull CameraRenderState cameraRenderState) {
+        if (pos == null) return;
+        Minecraft mc = Minecraft.getInstance();
+        poseStack.pushPose();
+        poseStack.translate(pos.x, pos.y + 0.5, pos.z);
+        poseStack.mulPose(cameraRenderState.orientation);
+        poseStack.scale(0.025f, -0.025f, 0.025f);
+        Matrix4f pose = poseStack.last().pose();
+        float x = -mc.font.width(text) / 2f;
+        int bgColor = (int) (mc.options.getBackgroundOpacity(0.25f) * 255f) << 24;
+        if (seethrough) {
+            mc.font.drawInBatch(text, x, yOffset, -1, false, pose, this.buffer,
+                    Font.DisplayMode.NORMAL, 0, LightTexture.lightCoordsWithEmission(packedLight, 2));
+            mc.font.drawInBatch(text, x, yOffset, -2130706433, false, pose, this.buffer,
+                    Font.DisplayMode.SEE_THROUGH, bgColor, packedLight);
+        } else {
+            mc.font.drawInBatch(text, x, yOffset, -2130706433, false, pose, this.buffer,
+                    Font.DisplayMode.NORMAL, bgColor, packedLight);
+        }
+        poseStack.popPose();
+    }
+
+    @Override
+    public void submitText(PoseStack poseStack, float x, float y, @Nonnull FormattedCharSequence string,
+            boolean dropShadow, @Nonnull Font.DisplayMode displayMode, int packedLight, int color,
+            int backgroundColor, int outlineColor) {
+        Font font = Minecraft.getInstance().font;
+        Matrix4f pose = poseStack.last().pose();
+        if (outlineColor != 0) {
+            font.drawInBatch8xOutline(string, x, y, color, outlineColor, pose, this.buffer, packedLight);
+        } else {
+            font.drawInBatch(string, x, y, color, dropShadow, pose, this.buffer, displayMode, backgroundColor, packedLight);
+        }
+    }
+
+    @Override
+    public void submitParticleGroup(@Nonnull SubmitNodeCollector.ParticleGroupRenderer renderer) {}
+}

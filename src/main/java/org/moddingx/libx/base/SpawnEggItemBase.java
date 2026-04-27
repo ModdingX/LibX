@@ -15,7 +15,7 @@ public class SpawnEggItemBase extends SpawnEggItem implements CreativeTabItemPro
     private final int secondaryColor;
 
     public SpawnEggItemBase(EntityType<? extends Mob> defaultType, int primaryColor, int secondaryColor, Item.Properties properties) {
-        super(defaultType, properties);
+        super(properties.spawnEgg(defaultType));
         this.primaryColor = primaryColor;
         this.secondaryColor = secondaryColor;
     }

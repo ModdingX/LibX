@@ -25,28 +25,42 @@ import java.util.Optional;
 
 public class LibXPack extends PathPackResources {
 
-    @SuppressWarnings("deprecation")
     public static final Map<PackType, PackTypeConfig> PACK_CONFIG = Map.of(
-            PackType.CLIENT_RESOURCES, new PackTypeConfig(PackSource.FEATURE, new PackSelectionConfig(false, Pack.Position.BOTTOM, false), "libxassets", SharedConstants.RESOURCE_PACK_FORMAT),
-            PackType.SERVER_DATA, new PackTypeConfig(PackSource.DEFAULT, new PackSelectionConfig(true, Pack.Position.BOTTOM, true), "libxdata", SharedConstants.DATA_PACK_FORMAT)
+            PackType.CLIENT_RESOURCES, new PackTypeConfig(PackSource.FEATURE, new PackSelectionConfig(false, Pack.Position.BOTTOM, false), "libxassets", SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES).major()),
+            PackType.SERVER_DATA, new PackTypeConfig(PackSource.DEFAULT, new PackSelectionConfig(true, Pack.Position.BOTTOM, true), "libxdata", SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA).major())
     );
     
     private final PackType type;
     private final IoSupplier<InputStream> packMcmeta;
 
     public LibXPack(PackLocationInfo location, PackType type, IModInfo mod, IModFile modFile, String packId) {
-        // Get the base part of the mod in there and the override resolve
-        super(location, modFile.findResource(PACK_CONFIG.get(type).prefix()).resolve(packId));
+        this(location, type, mod, packId, locatePackRoot(mod, type, packId));
+    }
+
+    private LibXPack(PackLocationInfo location, PackType type, IModInfo mod, String packId, Path packRoot) {
+        super(location, packRoot);
         this.type = type;
-        
+
         String description = mod.getDisplayName() + " (" + packId + ")";
         try {
-            Path descPath = modFile.findResource(PACK_CONFIG.get(type).prefix()).resolve(packId).resolve("description.txt");
+            Path descPath = packRoot.resolve("description.txt");
             if (Files.isRegularFile(descPath)) description = Files.readString(descPath, StandardCharsets.UTF_8).strip();
         } catch (Exception e) {
             //
         }
         this.packMcmeta = DatapackHelper.generatePackMeta(description, type);
+    }
+
+    private static Path locatePackRoot(IModInfo mod, PackType type, String packId) {
+        IModFile modFile = mod.getOwningFile().getFile();
+        String packPath = PACK_CONFIG.get(type).prefix() + "/" + packId;
+        try {
+            // The runtime mod file exposes pack lookup helpers that are not always present in the compile signature.
+            return (Path) modFile.getClass().getMethod("findResource", String[].class).invoke(modFile, (Object) new String[]{packPath});
+        } catch (ReflectiveOperationException e) {
+            Path root = modFile.getFilePath();
+            return root.resolve(PACK_CONFIG.get(type).prefix()).resolve(packId);
+        }
     }
     
     public static PackLocationInfo generateLocationInfo(IModInfo mod, PackType type, String packId) {

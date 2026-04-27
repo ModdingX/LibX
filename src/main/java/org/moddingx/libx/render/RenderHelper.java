@@ -1,16 +1,20 @@
 package org.moddingx.libx.render;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
 import org.moddingx.libx.LibX;
+import org.moddingx.libx.impl.render.MultiBufferSourceSubmitCollector;
 
 /**
  * Some utilities for rendering in general.
@@ -18,8 +22,7 @@ import org.moddingx.libx.LibX;
 public class RenderHelper {
 
     /**
-     * ResourceLocation of a texture with the size 512x512 that is purely white. It can be colored with
-     * {@link RenderSystem#setShaderColor(float, float, float, float)}.
+     * ResourceLocation of a texture with the size 512x512 that is purely white.
      */
     public static final ResourceLocation TEXTURE_WHITE = LibX.getInstance().resource("textures/white.png");
     public static final ResourceLocation TEXTURE_CHEST_GUI = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
@@ -139,6 +142,25 @@ public class RenderHelper {
      */
     public static void resetColor() {
         GUI_COLOR = 0xFFFFFFFF;
+    }
+
+    /**
+     * Renders an {@link ItemStack} into a {@link MultiBufferSource}. This bridges the 1.21.10
+     * submission-based item rendering ({@link ItemStackRenderState}) back to a buffer source,
+     * which is needed inside {@link org.moddingx.libx.render.target.RenderJob#render}.
+     *
+     * @param stack          The item stack to render.
+     * @param displayContext The display context (e.g. {@link ItemDisplayContext#GUI}).
+     * @param poseStack      The current pose stack.
+     * @param buffer         The buffer source to render into.
+     * @param packedLight    Packed light value.
+     * @param packedOverlay  Packed overlay value.
+     */
+    public static void renderItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        Minecraft mc = Minecraft.getInstance();
+        ItemStackRenderState renderState = new ItemStackRenderState();
+        mc.getItemModelResolver().updateForTopItem(renderState, stack, displayContext, mc.level, null, 0);
+        renderState.submit(poseStack, new MultiBufferSourceSubmitCollector(buffer), packedLight, packedOverlay, 0);
     }
 
     /**

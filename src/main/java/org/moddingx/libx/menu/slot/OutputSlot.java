@@ -1,18 +1,18 @@
 package org.moddingx.libx.menu.slot;
 
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
+import org.moddingx.libx.inventory.IAdvancedItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 
 /**
- * A {@link SlotItemHandler slot} that no items can be inserted in.
+ * A {@link ResourceHandlerSlot slot} that no items can be inserted in.
  */
-public class OutputSlot extends SlotItemHandler {
+public class OutputSlot extends ResourceHandlerSlot {
 
-    public OutputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-        super(itemHandler, index, xPosition, yPosition);
+    public OutputSlot(IAdvancedItemHandlerModifiable handler, int index, int xPosition, int yPosition) {
+        super(handler, handler::set, index, xPosition, yPosition);
     }
 
     @Override

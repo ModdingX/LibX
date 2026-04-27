@@ -365,7 +365,7 @@ public abstract class NoiseProviderBase extends RegistryProviderBase {
                 this.erosion = router.erosion();
                 this.depth = router.depth();
                 this.ridges = router.ridges();
-                this.initialDensityWithoutJaggedness = router.initialDensityWithoutJaggedness();
+                this.initialDensityWithoutJaggedness = router.preliminarySurfaceLevel();
                 this.finalDensity = router.finalDensity();
                 this.veinToggle = router.veinToggle();
                 this.veinRidged = router.veinRidged();

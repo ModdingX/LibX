@@ -6,9 +6,12 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
+import org.moddingx.libx.inventory.IAdvancedItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,12 +22,14 @@ import javax.annotation.Nullable;
  * {@link #layoutPlayerInventorySlots(int, int)} and after all the other slots.
  */
 public abstract class MenuBase extends AbstractContainerMenu {
-    
-    public final IItemHandler playerInventory;
-    
+
+    public final ResourceHandler<ItemResource> playerInventory;
+    private final Inventory playerInventoryContainer;
+
     protected MenuBase(@Nullable MenuType<?> type, int id, Inventory inventory) {
         super(type, id);
-        this.playerInventory = new InvWrapper(inventory);
+        this.playerInventoryContainer = inventory;
+        this.playerInventory = VanillaContainerWrapper.of(inventory);
     }
 
     /**
@@ -34,9 +39,10 @@ public abstract class MenuBase extends AbstractContainerMenu {
      * @param topRow  The y coordinate of the top left slot
      */
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
-        this.addSlotBox(this.playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
+        IndexModifier<ItemResource> modifier = (idx, resource, amount) -> this.playerInventoryContainer.setItem(idx, resource.toStack(amount));
+        this.addSlotBox(this.playerInventory, modifier, 9, leftCol, topRow, 9, 18, 3, 18);
         topRow += 58;
-        this.addSlotRange(this.playerInventory, 0, leftCol, topRow, 9, 18);
+        this.addSlotRange(this.playerInventory, modifier, 0, leftCol, topRow, 9, 18);
     }
 
     /**
@@ -54,8 +60,8 @@ public abstract class MenuBase extends AbstractContainerMenu {
      *                  you create overlapping slots. Most of the time this is 18
      * @return The next index to be used to create a slot
      */
-    protected int addSlotBox(IItemHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
-        return this.addSlotBox(handler, index, x, y, horAmount, dx, verAmount, dy, SlotItemHandler::new);
+    protected int addSlotBox(IAdvancedItemHandlerModifiable handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+        return this.addSlotBox(handler, handler::set, index, x, y, horAmount, dx, verAmount, dy);
     }
 
     /**
@@ -70,8 +76,8 @@ public abstract class MenuBase extends AbstractContainerMenu {
      *                you create overlapping slots. Most of the time this is 18
      * @return The next index to be used to create a slot
      */
-    protected int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
-        return this.addSlotRange(handler, index, x, y, amount, dx, SlotItemHandler::new);
+    protected int addSlotRange(IAdvancedItemHandlerModifiable handler, int index, int x, int y, int amount, int dx) {
+        return this.addSlotRange(handler, handler::set, index, x, y, amount, dx);
     }
 
     /**
@@ -87,11 +93,11 @@ public abstract class MenuBase extends AbstractContainerMenu {
      * @param verAmount   The amount of slots in vertical direction
      * @param dy          The space between two slots in vertical direction. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
-     * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
-     *                    or {@code SlotOutputOnly::new} for output slots.
+     * @param slotFactory A factory to create a slot. This could be {@code ResourceHandlerSlot::new}
+     *                    or {@code OutputSlot::new} for output slots.
      * @return The next index to be used to create a slot
      */
-    protected int addSlotBox(IItemHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy, Function4<IItemHandler, Integer, Integer, Integer, Slot> slotFactory) {
+    protected int addSlotBox(IAdvancedItemHandlerModifiable handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy, Function4<IAdvancedItemHandlerModifiable, Integer, Integer, Integer, Slot> slotFactory) {
         for (int j = 0; j < verAmount; j++) {
             index = this.addSlotRange(handler, index, x, y, horAmount, dx, slotFactory);
             y += dy;
@@ -109,13 +115,31 @@ public abstract class MenuBase extends AbstractContainerMenu {
      * @param amount      The amount of slots
      * @param dx          The space between two slots. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
-     * @param slotFactory A factory to create a slot. This could be {@code SlotItemHandler::new}
-     *                    or {@code SlotOutputOnly::new} for output slots.
+     * @param slotFactory A factory to create a slot. This could be {@code ResourceHandlerSlot::new}
+     *                    or {@code OutputSlot::new} for output slots.
      * @return The next index to be used to create a slot
      */
-    protected int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx, Function4<IItemHandler, Integer, Integer, Integer, Slot> slotFactory) {
+    protected int addSlotRange(IAdvancedItemHandlerModifiable handler, int index, int x, int y, int amount, int dx, Function4<IAdvancedItemHandlerModifiable, Integer, Integer, Integer, Slot> slotFactory) {
         for (int i = 0; i < amount; i++) {
             this.addSlot(slotFactory.apply(handler, index, x, y));
+            x += dx;
+            index++;
+        }
+        return index;
+    }
+
+    // Lower-level methods with explicit IndexModifier (used internally for player inventory)
+    private int addSlotBox(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> modifier, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+        for (int j = 0; j < verAmount; j++) {
+            index = this.addSlotRange(handler, modifier, index, x, y, horAmount, dx);
+            y += dy;
+        }
+        return index;
+    }
+
+    private int addSlotRange(ResourceHandler<ItemResource> handler, IndexModifier<ItemResource> modifier, int index, int x, int y, int amount, int dx) {
+        for (int i = 0; i < amount; i++) {
+            this.addSlot(new ResourceHandlerSlot(handler, modifier, index, x, y));
             x += dx;
             index++;
         }
@@ -126,7 +150,7 @@ public abstract class MenuBase extends AbstractContainerMenu {
     @Override
     protected boolean moveItemStackTo(@Nonnull ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
         boolean success = false;
-        
+
         if (stack.isStackable()) {
             int idx = reverseDirection ? endIndex - 1 : startIndex;
             while(!stack.isEmpty()) {

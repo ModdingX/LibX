@@ -61,7 +61,7 @@ public class DecorationRecipes {
         } else if (block instanceof DecoratedSign.Standing decorated) {
             ObjectCraftingBuilder.buildShaped(ext, new Object[]{ RecipeCategory.DECORATIONS, decorated, 3, "###", "###", " s ", '#', decorated.parent, 's', Tags.Items.RODS_WOODEN });
         } else if (block instanceof DecoratedHangingSign.Ceiling decorated && decorated.parent.has(DecorationType.STRIPPED_LOG)) {
-            ObjectCraftingBuilder.buildShaped(ext, new Object[]{ RecipeCategory.DECORATIONS, decorated, 3, "c c", "###", "###", '#', decorated.parent.get(DecorationType.STRIPPED_LOG), 'c', Items.CHAIN });
+            ObjectCraftingBuilder.buildShaped(ext, new Object[]{RecipeCategory.DECORATIONS, decorated, 3, "c c", "###", "###", '#', decorated.parent.get(DecorationType.STRIPPED_LOG), 'c', Items.IRON_CHAIN});
         }
     }
     

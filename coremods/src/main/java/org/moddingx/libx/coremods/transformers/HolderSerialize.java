@@ -1,63 +1,50 @@
 package org.moddingx.libx.coremods.transformers;
 
-import cpw.mods.modlauncher.api.ITransformer;
-import cpw.mods.modlauncher.api.ITransformerVotingContext;
-import cpw.mods.modlauncher.api.TargetType;
-import cpw.mods.modlauncher.api.TransformerVoteResult;
+import net.neoforged.neoforgespi.transformation.ProcessorName;
+import net.neoforged.neoforgespi.transformation.SimpleClassProcessor;
+import net.neoforged.neoforgespi.transformation.SimpleTransformationContext;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 
-public class HolderSerialize implements ITransformer<MethodNode> {
+public class HolderSerialize extends SimpleClassProcessor {
 
-    @Nonnull
     @Override
-    public MethodNode transform(MethodNode methodNode, ITransformerVotingContext iTransformerVotingContext) {
-        LabelNode label = new LabelNode();
-        InsnList target = new InsnList();
-
-        target.add(new VarInsnNode(Opcodes.ALOAD, 0));
-        target.add(new VarInsnNode(Opcodes.ALOAD, 1));
-        target.add(new MethodInsnNode(
-                Opcodes.INVOKESTATIC,
-                "org/moddingx/libx/impl/libxcore/CoreHolderSerialize",
-                "forceSerializeIn",
-                "(Lnet/minecraft/core/Holder$Reference;Lnet/minecraft/core/HolderOwner;)Z",
-                false
-        ));
-        target.add(new JumpInsnNode(Opcodes.IFEQ, label));
-        target.add(new InsnNode(Opcodes.ICONST_1));
-        target.add(new InsnNode(Opcodes.IRETURN));
-        target.add(label);
-
-        methodNode.instructions.insert(target);
-
-        return methodNode;
+    public ProcessorName name() {
+        return new ProcessorName("libx", "holder_serialize");
     }
 
-    @Nonnull
     @Override
-    public TransformerVoteResult castVote(ITransformerVotingContext iTransformerVotingContext) {
-        return TransformerVoteResult.YES;
+    public Set<Target> targets() {
+        return Set.of(new Target("net.minecraft.core.Holder$Reference"));
     }
 
-    @Nonnull
     @Override
-    public Set<Target<MethodNode>> targets() {
-        return Set.of(
-                Target.targetMethod(
-                        "net.minecraft.core.Holder$Reference",
-                        "canSerializeIn",
-                        "(Lnet/minecraft/core/HolderOwner;)Z"
-                )
-        );
-    }
+    public void transform(ClassNode cn, SimpleTransformationContext ctx) {
+        for (MethodNode mn : cn.methods) {
+            if ("canSerializeIn".equals(mn.name) && "(Lnet/minecraft/core/HolderOwner;)Z".equals(mn.desc)) {
+                LabelNode label = new LabelNode();
+                InsnList target = new InsnList();
 
-    @Nonnull
-    @Override
-    public TargetType<MethodNode> getTargetType() {
-        return TargetType.METHOD;
+                target.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                target.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                target.add(new MethodInsnNode(
+                        Opcodes.INVOKESTATIC,
+                        "org/moddingx/libx/impl/libxcore/CoreHolderSerialize",
+                        "forceSerializeIn",
+                        "(Lnet/minecraft/core/Holder$Reference;Lnet/minecraft/core/HolderOwner;)Z",
+                        false
+                ));
+                target.add(new JumpInsnNode(Opcodes.IFEQ, label));
+                target.add(new InsnNode(Opcodes.ICONST_1));
+                target.add(new InsnNode(Opcodes.IRETURN));
+                target.add(label);
+
+                mn.instructions.insert(target);
+                return;
+            }
+        }
+        throw new IllegalStateException("Failed to patch Holder$Reference.class");
     }
 }

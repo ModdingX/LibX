@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
@@ -107,7 +107,7 @@ public abstract class NetworkX {
      * current connection supports the given packet type. On a dedicated server, this always returns {@code true}.
      */
     public boolean canSend(CustomPacketPayload.Type<?> type) {
-        return switch (FMLLoader.getDist()) {
+        return switch(FMLEnvironment.getDist()) {
             case CLIENT -> ClientCanSendCheck.canSendOnClient(type);
             case DEDICATED_SERVER -> true;
         };

@@ -4,9 +4,9 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.ClientAsset;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.ClientAsset;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
 import net.minecraft.core.component.predicates.EnchantmentsPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -640,7 +640,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
                         this.display.getIcon(),
                         this.display.getTitle(),
                         this.display.getDescription(),
-                        Optional.ofNullable(this.background).map(ClientAsset::new),
+                        Optional.ofNullable(this.background).map(ClientAsset.ResourceTexture::new),
                         this.display.getType(),
                         this.display.shouldShowToast(),
                         this.display.shouldAnnounceChat(),

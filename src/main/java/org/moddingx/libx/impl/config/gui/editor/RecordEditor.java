@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -131,7 +132,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
         }
         
         @Override
-        public void onPress() {
+        public void onPress(InputWithModifiers input) {
             this.manager.open(new RecordConfigScreen(this.manager, Component.literal(this.clazz.getSimpleName()), this.entries.get()));
         }
         

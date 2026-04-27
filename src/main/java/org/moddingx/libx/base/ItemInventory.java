@@ -6,7 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import org.moddingx.libx.codec.MoreStreamCodecs;
-import org.moddingx.libx.inventory.StackItemHandler;
+import org.moddingx.libx.inventory.StackItemResourceHandler;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
@@ -35,6 +35,6 @@ public class ItemInventory extends ItemBase implements Registerable {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
-        builder.register(null, new CapabilityInfo.Item<>(this, Capabilities.ItemHandler.ITEM, (stack, ignored) -> new StackItemHandler(this.inventorySize, stack)));
+        builder.register(null, new CapabilityInfo.Item<>(this, Capabilities.Item.ITEM, (stack, ignored) -> new StackItemResourceHandler(this.inventorySize, stack)));
     }
 }

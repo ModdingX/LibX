@@ -1,6 +1,8 @@
 package org.moddingx.libx.render;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.platform.cursor.CursorType;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -11,13 +13,14 @@ import net.minecraft.client.gui.render.state.GuiElementRenderState;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.model.BannerFlagModel;
 import net.minecraft.client.model.BookModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.state.MapRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
@@ -189,8 +192,8 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void renderOutline(int x, int y, int width, int height, int color) {
-        this.parent.renderOutline(x, y, width, height, color);
+    public void submitOutline(int x, int y, int width, int height, int color) {
+        this.parent.submitOutline(x, y, width, height, color);
     }
 
     @Override
@@ -389,8 +392,8 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void renderDeferredTooltip() {
-        this.parent.renderDeferredTooltip();
+    public void renderDeferredElements() {
+        this.parent.renderDeferredElements();
     }
 
     @Override
@@ -419,12 +422,12 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void submitBannerPatternRenderState(@Nonnull ModelPart flag, @Nonnull DyeColor baseColor, @Nonnull BannerPatternLayers resultBannerPatterns, int x0, int y0, int x1, int y1) {
+    public void submitBannerPatternRenderState(@Nonnull BannerFlagModel flag, @Nonnull DyeColor baseColor, @Nonnull BannerPatternLayers resultBannerPatterns, int x0, int y0, int x1, int y1) {
         this.parent.submitBannerPatternRenderState(flag, baseColor, resultBannerPatterns, x0, y0, x1, y1);
     }
 
     @Override
-    public void submitSignRenderState(@Nonnull Model signModel, float scale, @Nonnull WoodType woodType, int x0, int y0, int x1, int y1) {
+    public void submitSignRenderState(@Nonnull Model.Simple signModel, float scale, @Nonnull WoodType woodType, int x0, int y0, int x1, int y1) {
         this.parent.submitSignRenderState(signModel, scale, woodType, x0, y0, x1, y1);
     }
 
@@ -441,6 +444,22 @@ public class FilterGuiGraphics extends GuiGraphics {
     @Override
     public void submitPictureInPictureRenderState(@Nonnull PictureInPictureRenderState renderState) {
         this.parent.submitPictureInPictureRenderState(renderState);
+    }
+
+    @Override
+    public void requestCursor(@Nonnull CursorType cursor) {
+        this.parent.requestCursor(cursor);
+    }
+
+    @Override
+    public void applyCursor(@Nonnull Window window) {
+        this.parent.applyCursor(window);
+    }
+
+    @Nonnull
+    @Override
+    public TextureAtlasSprite getSprite(@Nonnull Material material) {
+        return this.parent.getSprite(material);
     }
 
     @Nullable

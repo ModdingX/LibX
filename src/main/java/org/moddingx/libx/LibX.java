@@ -10,7 +10,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -82,7 +82,7 @@ public final class LibX extends ModX {
         modBus.addListener(EventPriority.LOW, DynamicPackLocator::locatePacks);
         modBus.addListener(this::createRegistries);
         modBus.addListener(this::registerStuff);
-        if (FMLLoader.getDist().isClient()) {
+        if (FMLEnvironment.getDist().isClient()) {
             modBus.addListener(BlockOverlayQuadCache::resourcesReload);
             modBus.addListener(ItemStackRenderer::registerSpecialModelRenderer);
         }
@@ -91,7 +91,7 @@ public final class LibX extends ModX {
         NeoForge.EVENT_BUS.addListener(BlockEntityUpdateQueue::tick);
         NeoForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
         NeoForge.EVENT_BUS.register(new ConfigEvents());
-        if (FMLLoader.getDist().isClient()) {
+        if (FMLEnvironment.getDist().isClient()) {
             NeoForge.EVENT_BUS.register(new ConfigEventsClient());
             NeoForge.EVENT_BUS.addListener(ClientCommandsImpl::registerClientCommands);
         }

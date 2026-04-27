@@ -3,11 +3,12 @@ package org.moddingx.libx.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -15,8 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.level.EmptyBlockAndTintGetter;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
@@ -75,7 +75,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
     }
 
     @Override
-    public void render(@Nullable ItemStack stack, @Nonnull ItemDisplayContext ctx, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay, boolean hasFoilType) {
+    public void submit(@Nullable ItemStack stack, @Nonnull ItemDisplayContext ctx, @Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector nodeCollector, int light, int overlay, boolean hasFoilType, int outlineColor) {
         if (stack == null) return;
         Block block = Block.byItem(stack.getItem());
         if (block == Blocks.AIR || !blocks.containsKey(block)) return;
@@ -86,7 +86,8 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         BlockEntityType<?> teType = blockEntity.getType();
         BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
 
-        BlockEntityRenderer<BlockEntity> renderer = dispatcher.getRenderer(blockEntity);
+        @SuppressWarnings("unchecked")
+        BlockEntityRenderer<BlockEntity, BlockEntityRenderState> renderer = (BlockEntityRenderer<BlockEntity, BlockEntityRenderState>) dispatcher.getRenderer(blockEntity);
         if (renderer == null) return;
 
         setLevel(blockEntity);
@@ -98,8 +99,8 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
             }
             setLevel(blockEntity);
 
-            CustomData customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-            if (customData != null) {
+            TypedEntityData<BlockEntityType<?>> customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+            if (customData != null && customData.type() == blockEntity.getType()) {
                 customData.loadInto(blockEntity, Minecraft.getInstance().level.registryAccess());
             }
         }
@@ -107,9 +108,14 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         poseStack.pushPose();
 
         if (state.getRenderShape() == RenderShape.MODEL) {
-            Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack, buffer, light, overlay, EmptyBlockAndTintGetter.INSTANCE, BlockPos.ZERO);
+            nodeCollector.submitBlock(poseStack, block.defaultBlockState(), light, overlay, outlineColor);
         }
-        renderer.render(blockEntity, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false), poseStack, buffer, light, overlay, Vec3.ZERO);
+        float partialTick = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        BlockEntityRenderState renderState = renderer.createRenderState();
+        renderer.extractRenderState(blockEntity, renderState, partialTick, Vec3.ZERO, null);
+        CameraRenderState cameraRenderState = new CameraRenderState();
+        cameraRenderState.initialized = true;
+        renderer.submit(renderState, poseStack, nodeCollector, cameraRenderState);
                     blockEntity.setLevel(null); // avoid storing the level for too long
 
         poseStack.popPose();
@@ -156,7 +162,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         }
 
         @Override
-        public SpecialModelRenderer<?> bake(@Nonnull EntityModelSet modelSet) {
+        public SpecialModelRenderer<?> bake(@Nonnull SpecialModelRenderer.BakingContext context) {
             return ItemStackRenderer.get();
         }
     }

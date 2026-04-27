@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.config.gui.screen;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.moddingx.libx.impl.config.ConfigImpl;
@@ -39,13 +40,13 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
     }
 
     @Override
-    public boolean keyPressed(int key, int i1, int i2) {
+    public boolean keyPressed(KeyEvent event) {
         // The manager is not available in the select screen, so we need to handle escape ourselves
-        if (key == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
+        if (event.key() == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
             this.mc.setScreen(this.root);
             return true;
         } else {
-            return super.keyPressed(key, i1, i2);
+            return super.keyPressed(event);
         }
     }
 }

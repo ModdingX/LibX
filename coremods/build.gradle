@@ -18,7 +18,7 @@ java {
 }
 
 dependencies {
-    compileOnly "net.neoforged.fancymodloader:loader:9.0.18"
+    compileOnly "net.neoforged.fancymodloader:loader:10.0.32"
 }
 
 base {

@@ -8,6 +8,9 @@ import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.EditorOps;
 
@@ -89,11 +92,12 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         for (GuiEventListener child : this.children) {
-            if (child.mouseClicked(mouseX - this.getX(), mouseY - this.getY(), button)) {
+            MouseButtonEvent translatedEvent = new MouseButtonEvent(event.x() - this.getX(), event.y() - this.getY(), event.buttonInfo());
+            if (child.mouseClicked(translatedEvent, isDoubleClick)) {
                 this.setFocused(child);
-                if (button == 0) this.setDragging(true);
+                if (event.button() == 0) this.setDragging(true);
                 return true;
             }
         }
@@ -101,14 +105,16 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
         this.setDragging(false);
-        return this.getChildAt(mouseX, mouseY).filter(child -> child.mouseReleased(mouseX - this.getX(), mouseY - this.getY(), button)).isPresent();
+        MouseButtonEvent translatedEvent = new MouseButtonEvent(event.x() - this.getX(), event.y() - this.getY(), event.buttonInfo());
+        return this.getChildAt(event.x(), event.y()).filter(child -> child.mouseReleased(translatedEvent)).isPresent();
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return this.focused != null && this.dragging && button == 0 && this.focused.mouseDragged(mouseX - this.getX(), mouseY - this.getY(), button, dragX - this.getX(), dragY - this.getY());
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        MouseButtonEvent translatedEvent = new MouseButtonEvent(event.x() - this.getX(), event.y() - this.getY(), event.buttonInfo());
+        return this.focused != null && this.dragging && event.button() == 0 && this.focused.mouseDragged(translatedEvent, dragX, dragY);
     }
 
     @Override
@@ -117,18 +123,18 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return ContainerEventHandler.super.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(KeyEvent event) {
+        return ContainerEventHandler.super.keyPressed(event);
     }
 
     @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        return ContainerEventHandler.super.keyReleased(keyCode, scanCode, modifiers);
+    public boolean keyReleased(KeyEvent event) {
+        return ContainerEventHandler.super.keyReleased(event);
     }
 
     @Override
-    public boolean charTyped(char value, int modifiers) {
-        return ContainerEventHandler.super.charTyped(value, modifiers);
+    public boolean charTyped(CharacterEvent event) {
+        return ContainerEventHandler.super.charTyped(event);
     }
 
     @Override

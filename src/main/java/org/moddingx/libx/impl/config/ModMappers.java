@@ -6,7 +6,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.api.distmarker.OnlyIns;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.moddingx.libx.LibX;
@@ -246,7 +246,7 @@ public class ModMappers {
     }
     
     public void initAdapter(ModContainer modContainer) {
-        if (this.adapter == null && FMLLoader.getDist() == Dist.CLIENT) {
+        if (this.adapter == null && FMLEnvironment.getDist() == Dist.CLIENT) {
             this.adapter = new ModConfigGuiAdapter(this.modid, modContainer);
         }
     }

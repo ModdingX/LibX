@@ -3,6 +3,7 @@ package org.moddingx.libx.impl.config.gui.editor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.InputWithModifiers;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.WidgetProperties;
@@ -71,7 +72,7 @@ public class CustomEditor<T> implements ConfigEditor<T> {
         }
 
         @Override
-        public void onPress() {
+        public void onPress(InputWithModifiers input) {
             this.manager.open(new CustomConfigScreen<>(this.manager, this.content, () -> this.setMessage(this.content.message())));
         }
     }

@@ -5,6 +5,7 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -117,7 +118,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
                 Component.translatable("libx.config.gui.resource_list.info").withStyle(Style.EMPTY.withUnderlined(true).withColor(ChatFormatting.BLUE)), List.of()) {
 
             @Override
-            public void onClick(double mouseX, double mouseY, int button) {
+            public void onClick(MouseButtonEvent event, boolean isDoubleClick) {
                 try {
                     Util.getPlatform().openUri(ResourceListValueMapper.INFO_URL);
                 } catch (Exception e) {

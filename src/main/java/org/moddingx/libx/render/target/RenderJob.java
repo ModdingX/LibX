@@ -14,7 +14,7 @@ public interface RenderJob {
 
     float GUI_Z_NEAR = 1000.0F;
     float GUI_Z_RANGE = 20000.0F;
-    float GUI_Z_TRANSLATION = 11000.0F;
+    float GUI_Z_TRANSLATION = -11000.0F;
 
     /**
      * The image width in pixels.

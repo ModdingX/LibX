@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -63,7 +64,7 @@ public class SimpleSelectEditor<T> implements ConfigEditor<T> {
         }
 
         @Override
-        public void onPress() {
+        public void onPress(InputWithModifiers input) {
             this.idx += 1;
             this.inputChanged.accept(this.update());
         }

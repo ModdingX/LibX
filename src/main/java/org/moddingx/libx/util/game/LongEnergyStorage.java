@@ -1,37 +1,29 @@
 package org.moddingx.libx.util.game;
 
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 
 /**
- * An {@link IEnergyStorage} that allows storing the energy value as long. 
+ * An {@link EnergyHandler} that allows storing the energy value as long.
  */
-public interface LongEnergyStorage extends IEnergyStorage {
-
-    /**
-     * Gets the long energy stored best represented as an {@code int}.
-     * This uses {@link LongAmountToIntUtil}.
-     */
-    @Override
-    default int getEnergyStored() {
-        return LongAmountToIntUtil.getValue(this.getLongEnergyStored(), this.getLongMaxEnergyStored());
-    }
-    
-    /**
-     * Gets the long maximum energy stored best represented as an {@code int}.
-     * This uses {@link LongAmountToIntUtil}.
-     */
-    @Override
-    default int getMaxEnergyStored() {
-        return LongAmountToIntUtil.getMaxValue(this.getLongMaxEnergyStored());
-    }
+public interface LongEnergyStorage extends EnergyHandler {
 
     /**
      * Gets the energy stored as a long.
      */
     long getLongEnergyStored();
-    
+
     /**
      * Gets the maximum energy stored as a long.
      */
     long getLongMaxEnergyStored();
+
+    @Override
+    default long getAmountAsLong() {
+        return this.getLongEnergyStored();
+    }
+
+    @Override
+    default long getCapacityAsLong() {
+        return this.getLongMaxEnergyStored();
+    }
 }

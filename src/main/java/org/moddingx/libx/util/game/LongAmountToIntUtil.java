@@ -1,17 +1,16 @@
 package org.moddingx.libx.util.game;
 
 import net.minecraft.util.Mth;
-import net.neoforged.neoforge.energy.IEnergyStorage;
 
 /**
  * Utility methods to convert amounts (must be > 0) that are stored as {@code long}
  * to {@code int}. This is meant to be used whenever an API only allows int values
- * (like {@link IEnergyStorage}) but you store the value as a long. This will output
+ * but you store the value as a long. This will output
  * half of {@link Integer#MAX_VALUE} if there's more energy stored and more free than
  * the maximum int value so things using these APIs will detect that they can extract
  * stuff and also insert it. (Only at half of the possible maximum speed though)
- * 
- * To use this with {@link IEnergyStorage}, you can use {@link LongEnergyStorage}.
+ *
+ * {@link LongEnergyStorage} is an example of how to implement a long-backed handler on top of this utility.
  */
 public class LongAmountToIntUtil {
 
