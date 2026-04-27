@@ -4,7 +4,6 @@ import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
 import cpw.mods.modlauncher.api.TargetType;
 import cpw.mods.modlauncher.api.TransformerVoteResult;
-import net.neoforged.coremod.api.ASMAPI;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -20,11 +19,12 @@ public class LevelLoad implements ITransformer<MethodNode> {
 
         target.add(new InsnNode(Opcodes.DUP));
         target.add(new VarInsnNode(Opcodes.ALOAD, 1));
-        target.add(ASMAPI.buildMethodCall(
+        target.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
                 "org/moddingx/libx/impl/libxcore/CoreLevelLoad",
                 "startLevelLoad",
                 "(Lnet/minecraft/world/level/chunk/ChunkGenerator;Lnet/minecraft/server/MinecraftServer;)V",
-                ASMAPI.MethodType.STATIC
+                false
         ));
         for (int i = 0; i < methodNode.instructions.size(); i++) {
             AbstractInsnNode node = methodNode.instructions.get(i);

@@ -1,15 +1,19 @@
 package org.moddingx.libx.screen;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.gui.render.TextureSetup;
+import net.minecraft.client.gui.render.state.GuiElementRenderState;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.Mth;
-import org.joml.Matrix4f;
+import org.joml.Matrix3x2f;
 import org.moddingx.libx.render.RenderHelper;
 import org.moddingx.libx.util.lazy.CachedValue;
 
@@ -27,12 +31,12 @@ import java.util.function.Supplier;
 public class ColorPicker extends Panel {
 
     /**
-     * The width of a colour picker widget
+     * The width of a color picker widget
      */
     public static final int WIDTH = 200;
 
     /**
-     * The height of a colour picker widget
+     * The height of a color picker widget
      */
     public static final int HEIGHT = 100;
 
@@ -157,18 +161,49 @@ public class ColorPicker extends Panel {
 
     @Override
     public void renderWidgetContent(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        graphics.pose().pushPose();
-        graphics.pose().translate(this.getX(), this.getY(), 0);
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(this.getX(), this.getY());
 
-        Matrix4f matrix = graphics.pose().last().pose();
-        graphics.drawSpecial(bufferSource -> {
-            VertexConsumer vertex = bufferSource.getBuffer(RenderType.gui());
-            if (this.enabled) {
-                this.hsbMatrix.get().forEach(v -> v.add(vertex, matrix));
-                this.huePanel.forEach(v -> v.add(vertex, matrix));
-            } else {
-                this.hsbMatrix.get().forEach(v -> v.addGrayscale(vertex, matrix));
-                this.huePanel.forEach(v -> v.addGrayscale(vertex, matrix));
+        // Capture the current transform matrix as a snapshot for deferred rendering
+        Matrix3x2f matrix = new Matrix3x2f(graphics.pose());
+        List<VertexInfo> hsbList = this.hsbMatrix.get();
+        List<VertexInfo> huePanelList = this.huePanel;
+        boolean isEnabled = this.enabled;
+
+        graphics.submitGuiElementRenderState(new GuiElementRenderState() {
+            @Override
+            public void buildVertices(@Nonnull VertexConsumer consumer, float z) {
+                if (isEnabled) {
+                    hsbList.forEach(v -> v.add(consumer, matrix, z));
+                    huePanelList.forEach(v -> v.add(consumer, matrix, z));
+                } else {
+                    hsbList.forEach(v -> v.addGrayscale(consumer, matrix, z));
+                    huePanelList.forEach(v -> v.addGrayscale(consumer, matrix, z));
+                }
+            }
+
+            @Nonnull
+            @Override
+            public RenderPipeline pipeline() {
+                return RenderPipelines.GUI;
+            }
+
+            @Nonnull
+            @Override
+            public TextureSetup textureSetup() {
+                return TextureSetup.noTexture();
+            }
+
+            @Nullable
+            @Override
+            public ScreenRectangle scissorArea() {
+                return null;
+            }
+
+            @Nonnull
+            @Override
+            public ScreenRectangle bounds() {
+                return new ScreenRectangle((int) matrix.m20(), (int) matrix.m21(), 110, 100);
             }
         });
 
@@ -181,14 +216,14 @@ public class ColorPicker extends Panel {
 
         int highlightColor = this.brightness > 0.5 ? 0xFF000000 : 0xFFFFFFFF;
 
-        graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, 115, 69, 0, 0, 85, 31, 256, 256, highlightColor);
-        graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, 116, 70, 0, 0, 83, 29, 256, 256, 0xFF000000 | displayColor);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, RenderHelper.TEXTURE_WHITE, 115, 69, 0, 0, 85, 31, 256, 256, highlightColor);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, RenderHelper.TEXTURE_WHITE, 116, 70, 0, 0, 83, 29, 256, 256, 0xFF000000 | displayColor);
 
         String colorText = String.format("#%06X", colorValue);
-        graphics.pose().translate(0, 0, 60);
+        graphics.nextStratum();
         graphics.drawString(Minecraft.getInstance().font, colorText, 157 - (Minecraft.getInstance().font.width(colorText) / 2), 80, highlightColor, false);
 
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     @Override
@@ -249,13 +284,13 @@ public class ColorPicker extends Panel {
 
     private record VertexInfo(float x, float y, ColorValue color) {
 
-        public void add(VertexConsumer vertex, Matrix4f matrix) {
-            vertex.addVertex(matrix, this.x, this.y, 20).setColor(this.color.red, this.color.green, this.color.blue, 255);
+        public void add(VertexConsumer vertex, Matrix3x2f matrix, float z) {
+            vertex.addVertexWith2DPose(matrix, this.x, this.y, z).setColor(this.color.red, this.color.green, this.color.blue, 255);
         }
 
-        public void addGrayscale(VertexConsumer vertex, Matrix4f matrix) {
+        public void addGrayscale(VertexConsumer vertex, Matrix3x2f matrix, float z) {
             int value = Math.round((this.color.red + this.color.green + this.color.blue) / 3f);
-            vertex.addVertex(matrix, this.x, this.y, 20).setColor(value, value, value, 255);
+            vertex.addVertexWith2DPose(matrix, this.x, this.y, z).setColor(value, value, value, 255);
         }
     }
 

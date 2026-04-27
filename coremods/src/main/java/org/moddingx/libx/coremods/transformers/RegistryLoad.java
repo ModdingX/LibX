@@ -4,7 +4,6 @@ import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
 import cpw.mods.modlauncher.api.TargetType;
 import cpw.mods.modlauncher.api.TransformerVoteResult;
-import net.neoforged.coremod.api.ASMAPI;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -21,11 +20,12 @@ public class RegistryLoad implements ITransformer<MethodNode> {
         InsnList target = new InsnList();
 
         target.add(new InsnNode(Opcodes.DUP));
-        target.add(ASMAPI.buildMethodCall(
+        target.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
                 "org/moddingx/libx/impl/libxcore/CoreRegistryLoad",
                 "afterWorldGenLayerLoad",
                 "(Lnet/minecraft/core/LayeredRegistryAccess;)V",
-                ASMAPI.MethodType.STATIC
+                false
         ));
 
         int foundWorldGenFieldCounter = 0;

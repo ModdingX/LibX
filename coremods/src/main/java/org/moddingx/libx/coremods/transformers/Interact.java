@@ -4,7 +4,6 @@ import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
 import cpw.mods.modlauncher.api.TargetType;
 import cpw.mods.modlauncher.api.TransformerVoteResult;
-import net.neoforged.coremod.api.ASMAPI;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -24,11 +23,12 @@ public class Interact implements ITransformer<MethodNode> {
         target.add(new VarInsnNode(Opcodes.ALOAD, 3));
         target.add(new VarInsnNode(Opcodes.ALOAD, 4));
         target.add(new VarInsnNode(Opcodes.ALOAD, 5));
-        target.add(ASMAPI.buildMethodCall(
+        target.add(new MethodInsnNode(
+                Opcodes.INVOKESTATIC,
                 "org/moddingx/libx/impl/libxcore/CoreInteract",
                 "useItemOn",
                 "(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;",
-                ASMAPI.MethodType.STATIC
+                false
         ));
         target.add(new InsnNode(Opcodes.DUP));
         target.add(new JumpInsnNode(Opcodes.IFNULL, label));

@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -74,7 +72,6 @@ public class FluidBase implements ItemLike, Registerable {
      * located at {@code [namespace]:block/[path]} and a flowing texture located at
      * {@code [namespace]:block/[path]_flowing}.
      */
-    @OnlyIn(Dist.CLIENT)
     protected ClientExtensionInfo.Fluid createClientExtensions(ResourceLocation id) {
         ResourceLocation stillTexture = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
         ResourceLocation flowingTexture = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath() + "_flowing");
@@ -101,7 +98,6 @@ public class FluidBase implements ItemLike, Registerable {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     @OverridingMethodsMustInvokeSuper
     public void registerClientAdditional(RegistrationContext ctx, EntryCollector builder) {
         builder.register(null, this.createClientExtensions(ctx.id()));

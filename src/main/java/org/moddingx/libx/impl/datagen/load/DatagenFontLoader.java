@@ -1,11 +1,11 @@
 package org.moddingx.libx.impl.datagen.load;
 
-import com.mojang.blaze3d.font.GlyphInfo;
-import com.mojang.blaze3d.font.GlyphProvider;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.blaze3d.font.GlyphInfo;
+import com.mojang.blaze3d.font.GlyphProvider;
 import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.font.FontManager;
 import net.minecraft.client.gui.font.glyphs.SpecialGlyphs;
@@ -17,6 +17,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.reflect.ReflectionHacks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -24,6 +25,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -77,37 +79,44 @@ public class DatagenFontLoader {
 
     private static ResourceManager patchFontResources(ResourceManager resourceManager) {
         return new ResourceManager() {
+
+            @Nonnull
             @Override
             public Set<String> getNamespaces() {
                 return resourceManager.getNamespaces();
             }
 
+            @Nonnull
             @Override
-            public Optional<Resource> getResource(ResourceLocation id) {
+            public Optional<Resource> getResource(@Nonnull ResourceLocation id) {
                 return resourceManager.getResource(id).map(resource -> maybePatchResource(id, resource));
             }
 
+            @Nonnull
             @Override
-            public List<Resource> getResourceStack(ResourceLocation id) {
+            public List<Resource> getResourceStack(@Nonnull ResourceLocation id) {
                 return resourceManager.getResourceStack(id).stream().map(resource -> maybePatchResource(id, resource)).toList();
             }
 
+            @Nonnull
             @Override
-            public Map<ResourceLocation, Resource> listResources(String path, java.util.function.Predicate<ResourceLocation> filter) {
+            public Map<ResourceLocation, Resource> listResources(@Nonnull String path, @Nonnull Predicate<ResourceLocation> filter) {
                 return resourceManager.listResources(path, filter).entrySet().stream().collect(Collectors.toUnmodifiableMap(
                         Map.Entry::getKey,
                         entry -> maybePatchResource(entry.getKey(), entry.getValue())
                 ));
             }
 
+            @Nonnull
             @Override
-            public Map<ResourceLocation, List<Resource>> listResourceStacks(String path, java.util.function.Predicate<ResourceLocation> filter) {
+            public Map<ResourceLocation, List<Resource>> listResourceStacks(@Nonnull String path, @Nonnull Predicate<ResourceLocation> filter) {
                 return resourceManager.listResourceStacks(path, filter).entrySet().stream().collect(Collectors.toUnmodifiableMap(
                         Map.Entry::getKey,
                         entry -> entry.getValue().stream().map(resource -> maybePatchResource(entry.getKey(), resource)).toList()
                 ));
             }
 
+            @Nonnull
             @Override
             public Stream<PackResources> listPacks() {
                 return resourceManager.listPacks();

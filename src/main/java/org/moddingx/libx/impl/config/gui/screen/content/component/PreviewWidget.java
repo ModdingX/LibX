@@ -19,12 +19,12 @@ public class PreviewWidget extends TextWidget {
     @Override
     public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         int color = this.getFGColor() | Mth.ceil(this.alpha * 255) << 24;
-        graphics.pose().pushPose();
-        //noinspection IntegerDivisionInFloatingPointContext
-        graphics.pose().translate(this.getX() + (this.width / 2), this.getY() + ((this.height - 8) / 2), 20);
-        graphics.pose().scale(2, 2, 2);
+        graphics.pose().pushMatrix();
+        graphics.nextStratum();
+        graphics.pose().translate(this.getX() + (this.width / 2f), this.getY() + ((this.height - 8) / 2f));
+        graphics.pose().scale(2, 2);
         RenderHelper.resetColor();
         graphics.drawCenteredString(Minecraft.getInstance().font, this.getMessage(), 0, 0, color);
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 }

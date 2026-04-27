@@ -3,8 +3,6 @@ package org.moddingx.libx.impl.config.mappers.advanced;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -73,7 +71,6 @@ public class UidValueMapper implements ValueMapper<UUID, JsonPrimitive> {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<UUID> createEditor(ValidatorInfo<?> validator) {
         return ConfigEditor.input(INPUT, validator);
     }

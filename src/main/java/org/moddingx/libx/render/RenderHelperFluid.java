@@ -2,7 +2,7 @@ package org.moddingx.libx.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
@@ -34,8 +34,8 @@ public class RenderHelperFluid {
     }
 
     private static void renderFluid(GuiGraphics graphics, TextureAtlasSprite sprite, int color, int x, int y, int width, int height) {
-        graphics.pose().pushPose();
-        graphics.pose().translate(0, 0, 100);
+        graphics.pose().pushMatrix();
+        graphics.nextStratum();
         // Some mods set alpha, other leave it 0, so we use the alpha whenever it is not 0.
         int alpha = (color >>> 24) & 0xFF;
         if (alpha > 0) {
@@ -43,8 +43,8 @@ public class RenderHelperFluid {
         } else {
             RenderHelper.rgb(color);
         }
-        RenderHelper.repeatBlit(RenderType::guiTextured, graphics, x, y, width, height, sprite);
+        RenderHelper.repeatBlit(RenderPipelines.GUI_TEXTURED, graphics, x, y, width, height, sprite);
         RenderHelper.resetColor();
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 }

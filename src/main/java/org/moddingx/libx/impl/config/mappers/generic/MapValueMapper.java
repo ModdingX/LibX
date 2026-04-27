@@ -6,8 +6,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -93,7 +91,6 @@ public class MapValueMapper<T> implements GenericValueMapper<Map<String, T>, Jso
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Map<String, T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
         return ConfigEditor.custom(Map.of(), map -> new MapContent<>(map, mapper.createEditor(ValidatorInfo.empty())));
     }

@@ -95,9 +95,10 @@ public abstract class ConfigScreen<T> extends ConfigBaseScreen {
         @Override
         public BuiltEntry create(T elem, ConfigScreen<T> screen, @Nullable AbstractWidget oldWidget, int x, int y, int width, int height) {
             BuiltEntry entry = this.factory().create(elem, screen, oldWidget, x, y, width, height);
-            if (entry.widget().getTooltip() == null) {
+            if (entry.widget().tooltip.get() == null) {
                 entry.widget().setTooltip(Tooltip.create(entry.title()));
             }
+
             return entry;
         }
     }

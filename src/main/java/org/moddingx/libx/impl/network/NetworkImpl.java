@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.moddingx.libx.impl.config.ConfigImpl;
 import org.moddingx.libx.impl.config.ConfigState;
@@ -46,7 +47,7 @@ public final class NetworkImpl extends NetworkX {
 
     public void requestBE(Level level, BlockPos pos) {
         if (level.isClientSide && this.canSend(BeRequestHandler.TYPE)) {
-            PacketDistributor.sendToServer(new BeRequestHandler.Message(pos));
+            ClientPacketDistributor.sendToServer(new BeRequestHandler.Message(pos));
         }
     }
     

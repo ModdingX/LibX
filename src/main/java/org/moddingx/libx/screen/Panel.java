@@ -69,12 +69,12 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
 
     @Override
     public final void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        graphics.pose().pushPose();
-        graphics.pose().translate(this.getX(), this.getY(), 0);
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(this.getX(), this.getY());
         for (Renderable widget : this.renderables) {
             widget.render(graphics, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
         }
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
         this.renderWidgetContent(graphics, mouseX, mouseY, partialTicks);
     }
     

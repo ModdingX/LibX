@@ -4,8 +4,6 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -68,7 +66,6 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<ResourceLocation> createEditor(ValidatorInfo<?> validator) {
         return ConfigEditor.input(INPUT, validator);
     }

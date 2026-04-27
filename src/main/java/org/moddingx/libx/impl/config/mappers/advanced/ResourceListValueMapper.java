@@ -3,8 +3,6 @@ package org.moddingx.libx.impl.config.mappers.advanced;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
@@ -57,7 +55,6 @@ public class ResourceListValueMapper implements ValueMapper<ResourceList, JsonOb
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<ResourceList> createEditor(ValidatorInfo<?> validator) {
         return ConfigEditor.custom(ResourceList.ALLOW_LIST, ResourceListContent::new);
     }

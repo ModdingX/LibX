@@ -2,8 +2,6 @@ package org.moddingx.libx.registration;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.mod.ModXRegistration;
 
@@ -25,7 +23,6 @@ public interface Registerable {
     /**
      * Do stuff needed in the client setup phase. This is called during parallel mod loading.
      */
-    @OnlyIn(Dist.CLIENT)
     default void setupClient(SetupContext ctx) {
         
     }
@@ -43,7 +40,6 @@ public interface Registerable {
      * Similar to {@link #registerAdditional(RegistrationContext, EntryCollector)} but only invoked on the client.
      */
     @SuperChainRequired
-    @OnlyIn(Dist.CLIENT)
     default void registerClientAdditional(RegistrationContext ctx, EntryCollector builder) {
         
     }

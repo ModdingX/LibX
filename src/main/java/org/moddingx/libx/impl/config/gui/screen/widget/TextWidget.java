@@ -27,7 +27,7 @@ public class TextWidget extends AbstractWidget {
         RenderHelper.resetColor();
         graphics.drawString(Minecraft.getInstance().font, this.getMessage(), this.getX(), this.getY() + ((this.height - 8) / 2), 0xFFFFFFFF, true);
         if (this.isHovered && !this.tooltip.isEmpty()) {
-            graphics.renderComponentTooltip(Minecraft.getInstance().font, this.tooltip, mouseX, mouseY);
+            graphics.setComponentTooltipForNextFrame(Minecraft.getInstance().font, this.tooltip, mouseX, mouseY);
         }
     }
 

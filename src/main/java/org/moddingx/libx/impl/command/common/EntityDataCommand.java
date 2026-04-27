@@ -9,8 +9,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,9 +43,11 @@ public class EntityDataCommand implements Command<CommandSourceStack> {
         
         for (Entity entity : entities) {
             UUID uid = entity.getUUID();
-            CompoundTag entityNBT = entity.saveWithoutId(new CompoundTag());
+            TagValueOutput output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, entity.registryAccess());
+            entity.saveWithoutId(output);
+            CompoundTag entityNBT = output.buildResult();
             entityNBT.merge(nbt);
-            entity.load(entityNBT);
+            entity.load(TagValueInput.create(ProblemReporter.DISCARDING, entity.registryAccess(), entityNBT));
             entity.setUUID(uid);
         }
         context.getSource().sendSuccess(Suppliers.ofInstance(Component.translatable(players ? "libx.command.entity_data.modified_player" : "libx.command.entity_data.modified", entities.size())), true);

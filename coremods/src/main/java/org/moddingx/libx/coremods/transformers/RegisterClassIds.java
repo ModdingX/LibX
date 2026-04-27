@@ -4,7 +4,6 @@ import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.ITransformerVotingContext;
 import cpw.mods.modlauncher.api.TargetType;
 import cpw.mods.modlauncher.api.TransformerVoteResult;
-import net.neoforged.coremod.api.ASMAPI;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -136,16 +135,16 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
                 if (lastIsItem) {
-                    injection.add(ASMAPI.buildMethodCall(
+                    injection.add(new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
                             HELPER, "setItemId",
-                            "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V",
-                            ASMAPI.MethodType.STATIC
+                            "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V"
                     ));
                 } else {
-                    injection.add(ASMAPI.buildMethodCall(
+                    injection.add(new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
                             HELPER, "setBlockId",
-                            "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V",
-                            ASMAPI.MethodType.STATIC
+                            "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V"
                     ));
                 }
             } else if (lastIsItem) {
@@ -153,19 +152,19 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
                 // Set item id (TOP):  DUP, LDC, setItemId  → stack unchanged
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
-                injection.add(ASMAPI.buildMethodCall(
+                injection.add(new MethodInsnNode(
+                        Opcodes.INVOKESTATIC,
                         HELPER, "setItemId",
-                        "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V",
-                        ASMAPI.MethodType.STATIC)
-                );
+                        "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V"
+                ));
                 // Set block id (second): SWAP, DUP, LDC, setBlockId, SWAP  → stack unchanged
                 injection.add(new InsnNode(Opcodes.SWAP));
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
-                injection.add(ASMAPI.buildMethodCall(
+                injection.add(new MethodInsnNode(
+                        Opcodes.INVOKESTATIC,
                         HELPER, "setBlockId",
-                        "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V",
-                        ASMAPI.MethodType.STATIC
+                        "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V"
                 ));
                 injection.add(new InsnNode(Opcodes.SWAP));
             } else {
@@ -173,19 +172,19 @@ public class RegisterClassIds implements ITransformer<MethodNode> {
                 // Set block id (TOP):  DUP, LDC, setBlockId  → stack unchanged
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
-                injection.add(ASMAPI.buildMethodCall(
+                injection.add(new MethodInsnNode(
+                        Opcodes.INVOKESTATIC,
                         HELPER, "setBlockId",
-                        "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V",
-                        ASMAPI.MethodType.STATIC
+                        "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V"
                 ));
                 // Set item id (second): SWAP, DUP, LDC, setItemId, SWAP  → stack unchanged
                 injection.add(new InsnNode(Opcodes.SWAP));
                 injection.add(new InsnNode(Opcodes.DUP));
                 injection.add(new LdcInsnNode(fe.id()));
-                injection.add(ASMAPI.buildMethodCall(
+                injection.add(new MethodInsnNode(
+                        Opcodes.INVOKESTATIC,
                         HELPER, "setItemId",
-                        "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V",
-                        ASMAPI.MethodType.STATIC
+                        "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V"
                 ));
                 injection.add(new InsnNode(Opcodes.SWAP));
             }

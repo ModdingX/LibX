@@ -4,8 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Triple;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -84,7 +82,6 @@ public class TripleValueMapper<A, B, C> implements ValueMapper<Triple<A, B, C>, 
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Triple<A, B, C>> createEditor(ValidatorInfo<?> validator) {
         return new TripleEditor<>(
                 this.mapper1.createEditor(ValidatorInfo.empty()),

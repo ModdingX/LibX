@@ -183,17 +183,15 @@ public class ModInit {
                 writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addLowModListener(mod," + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + ".class," + this.modClass.getSimpleName() + "$::bakeModels);");
                 writer.write("}");
 
-                writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void registerModels(" + Classes.sourceName(Classes.MODEL_REGISTRY_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
-                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".addSpecialModel(event," + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
+                    writer.write(Classes.sourceName(Classes.PROCESSOR_INTERFACE_CLIENT) + ".addSpecialModel(event," + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
                 }
                 writer.write("}");
 
-                writer.write("@" + Classes.sourceName(Classes.ONLY_IN) + "(" + Classes.sourceName(Classes.DIST) + ".CLIENT)");
                 writer.write("private static void bakeModels(" + Classes.sourceName(Classes.MODEL_BAKE_EVENT) + " event){");
                 for (LoadableModel model : this.models) {
-                    writer.write(model.classFqn() + "." + model.fieldName() + "=" + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".getSpecialModel(event," + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
+                    writer.write(model.classFqn() + "." + model.fieldName() + "=" + Classes.sourceName(Classes.PROCESSOR_INTERFACE_CLIENT) + ".getSpecialModel(event," + Classes.sourceName(Classes.PROCESSOR_INTERFACE) + ".newRL(" + quote(model.modelNamespace()) + "," + quote(model.modelPath()) + "));");
                 }
                 writer.write("}");
             }

@@ -98,7 +98,7 @@ public class TextScreenContent {
                     height += 2;
                 }
                 width = Math.max(width, theLeft + font.width(line));
-                list.add(new PlacedText(line, theLeft, height, 0xFFFFFF & component.color(), component.shadow()));
+                list.add(new PlacedText(line, theLeft, height, 0xFF000000 | (0xFFFFFF & component.color()), component.shadow()));
                 height += font.lineHeight;
             }
             return new DirectElementBox(list.build(), List.of(), width, height, first ? 0 : component.top());

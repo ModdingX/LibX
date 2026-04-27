@@ -1,5 +1,6 @@
 package org.moddingx.libx.base.tile;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -8,11 +9,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.BlockEntityUpdateQueue;
+import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,6 +24,8 @@ import javax.annotation.Nullable;
  * A base class for {@link BlockEntity block entities}. This provides some useful methods.
  */
 public class BlockEntityBase extends BlockEntity {
+
+    protected static final Logger LOGGER = LogUtils.getLogger();
 
     public BlockEntityBase(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -53,9 +58,15 @@ public class BlockEntityBase extends BlockEntity {
         return this.level.getCapability(capability, this.getBlockPos(), this.getBlockState(), this, context);
     }
 
+    @Nonnull
+    @Override
+    public CompoundTag getUpdateTag(@Nonnull HolderLookup.Provider registries) {
+        return this.saveWithFullMetadata(registries);
+    }
+
     /**
      * If the block entity is loaded on the logical client, this will update the block entity using
-     * {@link #getUpdateTag(HolderLookup.Provider)} and {@link #handleUpdateTag(CompoundTag, HolderLookup.Provider)}.
+     * {@link #getUpdateTag(HolderLookup.Provider)} and {@link #handleUpdateTag(ValueInput)}.
      */
     @Override
     public void onLoad() {
@@ -76,7 +87,7 @@ public class BlockEntityBase extends BlockEntity {
     /**
      * When called on the logical server, this will update the block entity to all clients that are
      * tracking it using {@link #getUpdateTag(HolderLookup.Provider)} and
-     * {@link #handleUpdateTag(CompoundTag, HolderLookup.Provider)} at the end of the current tick.
+     * {@link #handleUpdateTag(ValueInput)} at the end of the current tick.
      */
     public void setDispatchable() {
         if (this.level != null && !this.level.isClientSide) {

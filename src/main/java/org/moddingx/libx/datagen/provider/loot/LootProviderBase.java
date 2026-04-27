@@ -1,6 +1,5 @@
 package org.moddingx.libx.datagen.provider.loot;
 
-import com.google.common.collect.Multimap;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
@@ -160,12 +159,11 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         ValidationContext validationContext = new ValidationContext(problems, this.contextKeySet, lootTableHolderProvider);
 
         for (Map.Entry<ResourceLocation, LootTable> entry : tables.entrySet()) {
-            entry.getValue().validate(validationContext.setContextKeySet(this.contextKeySet).enterElement("{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
+            entry.getValue().validate(validationContext.setContextKeySet(this.contextKeySet).enterElement(() -> "{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
         }
 
-        Multimap<String, String> multimap = problems.get();
-        if (!multimap.isEmpty()) {
-            multimap.forEach((where, what) -> LibX.logger.warn("LootTable validation problem in {}: {}", where, what));
+        if (!problems.isEmpty()) {
+            problems.forEach((where, what) -> LibX.logger.warn("LootTable validation problem in {}: {}", where, what.description()));
             throw new IllegalStateException("There were problems validating the loot tables.");
         }
     }

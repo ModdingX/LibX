@@ -1,7 +1,6 @@
 package org.moddingx.libx.impl.config.gui.screen;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -16,12 +15,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
-import org.apache.commons.lang3.tuple.Pair;
-import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.moddingx.libx.render.FilterGuiGraphics;
 import org.moddingx.libx.render.RenderHelper;
@@ -32,7 +30,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public abstract class ConfigBaseScreen extends Screen {
@@ -52,7 +49,7 @@ public abstract class ConfigBaseScreen extends Screen {
     // While rendering the scrollable view, tooltips must be delayed
     // Because clipping is enabled, and they need to be rendered with
     // absolute coordinates as they should not be cut by the screen border.
-    private final List<Pair<Matrix4f, Consumer<GuiGraphics>>> capturedTooltips = new LinkedList<>();
+    private final List<Consumer<GuiGraphics>> capturedTooltips = new LinkedList<>();
     private boolean isCapturingTooltips = false;
     private int currentScrollOffset = 0;
 
@@ -117,31 +114,24 @@ public abstract class ConfigBaseScreen extends Screen {
 
             @Override
             public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-                graphics.flush();
                 ConfigBaseScreen.this.isCapturingTooltips = true;
-                graphics.pose().pushPose();
+                graphics.pose().pushMatrix();
                 super.render(new TooltipCapturingGuiGraphics(graphics), mouseX, mouseY, partialTicks);
-                graphics.pose().popPose();
+                graphics.pose().popMatrix();
                 ConfigBaseScreen.this.isCapturingTooltips = false;
-                ConfigBaseScreen.this.capturedTooltips.forEach(pair -> {
-                    graphics.pose().pushPose();
-                    graphics.pose().setIdentity();
-                    graphics.pose().mulPose(pair.getLeft());
-                    pair.getRight().accept(graphics);
-                    graphics.pose().popPose();
-                });
+                ConfigBaseScreen.this.capturedTooltips.forEach(action -> action.accept(graphics));
                 ConfigBaseScreen.this.capturedTooltips.clear();
             }
 
             @Override
             protected void drawPanel(@Nonnull GuiGraphics graphics, int entryRight, int relativeY, int mouseX, int mouseY) {
                 ConfigBaseScreen.this.currentScrollOffset = relativeY;
-                graphics.pose().pushPose();
-                graphics.pose().translate(0, relativeY, 0);
+                graphics.pose().pushMatrix();
+                graphics.pose().translate(0, relativeY);
                 for (AbstractWidget widget : widgets) {
                     widget.render(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaTracker().getGameTimeDeltaTicks());
                 }
-                graphics.pose().popPose();
+                graphics.pose().popMatrix();
                 ConfigBaseScreen.this.currentScrollOffset = 0;
             }
 
@@ -252,11 +242,8 @@ public abstract class ConfigBaseScreen extends Screen {
         }
     }
 
-    private void captureTooltip(PoseStack.Pose pose, BiConsumer<GuiGraphics, Integer> action) {
-        final int theOffset = this.currentScrollOffset;
-        Matrix4f matrix = new Matrix4f(pose.pose());
-        matrix.translate(0, -theOffset, 0);
-        this.capturedTooltips.add(Pair.of(matrix, poseStack -> action.accept(poseStack, theOffset)));
+    private void captureTooltip(Consumer<GuiGraphics> action) {
+        this.capturedTooltips.add(action);
     }
     
     private class TooltipCapturingGuiGraphics extends FilterGuiGraphics {
@@ -271,83 +258,162 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void renderTooltip(@Nonnull Font font, @Nonnull ItemStack stack, int x, int y) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull ItemStack stack, int x, int y) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, stack, x, y + scrollOffset));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, stack, x, y + scrollOffset));
             } else {
-                super.renderTooltip(font, stack, x, y);
+                super.setTooltipForNextFrame(font, stack, x, y);
             }
         }
 
         @Override
-        public void renderTooltip(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, @Nonnull ItemStack stack, int x, int y) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, @Nonnull ItemStack stack, int x, int y) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, component, stack, x, y + scrollOffset));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, component, stack, x, y + scrollOffset));
             } else {
-                super.renderTooltip(font, text, component, stack, x, y);
+                super.setTooltipForNextFrame(font, text, component, stack, x, y);
             }
         }
 
         @Override
-        public void renderTooltip(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, int x, int y) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, @Nonnull ItemStack stack, int x, int y, @Nullable ResourceLocation backgroundTexture) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, component, x, y + scrollOffset));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, component, stack, x, y + scrollOffset, backgroundTexture));
             } else {
-                super.renderTooltip(font, text, component, x, y);
+                super.setTooltipForNextFrame(font, text, component, stack, x, y, backgroundTexture);
             }
         }
 
         @Override
-        public void renderTooltip(@Nonnull Font font, @Nonnull Component text, int x, int y) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, int x, int y) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, x, y + scrollOffset));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, component, x, y + scrollOffset));
             } else {
-                super.renderTooltip(font, text, x, y);
+                super.setTooltipForNextFrame(font, text, component, x, y);
             }
         }
 
         @Override
-        public void renderComponentTooltip(@Nonnull Font font, @Nonnull List<Component> text, int x, int y) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, int x, int y, @Nullable ResourceLocation background) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderComponentTooltip(font, text, x, y + scrollOffset));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, component, x, y + scrollOffset, background));
             } else {
-                super.renderComponentTooltip(font, text, x, y);
+                super.setTooltipForNextFrame(font, text, component, x, y, background);
             }
         }
 
         @Override
-        public void renderComponentTooltip(@Nonnull Font font, @Nonnull List<? extends FormattedText> text, int x, int y, @Nonnull ItemStack stack) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull Component text, int x, int y) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderComponentTooltip(font, text, x, y + scrollOffset, stack));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, x, y + scrollOffset));
             } else {
-                super.renderComponentTooltip(font, text, x, y, stack);
+                super.setTooltipForNextFrame(font, text, x, y);
             }
         }
 
         @Override
-        public void renderTooltip(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> text, int x, int y) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull Component text, int x, int y, @Nullable ResourceLocation background) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, x, y + scrollOffset));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, x, y + scrollOffset, background));
             } else {
-                super.renderTooltip(font, text, x, y);
+                super.setTooltipForNextFrame(font, text, x, y, background);
             }
         }
 
         @Override
-        public void renderTooltip(@Nonnull Font font, @Nonnull List<FormattedCharSequence> text, @Nonnull ClientTooltipPositioner positioner, int x, int y) {
+        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, int x, int y) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> graphics.renderTooltip(font, text, positioner, x, y + scrollOffset));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipForNextFrame(font, text, x, y + scrollOffset));
             } else {
-                super.renderTooltip(font, text, positioner, x, y);
+                super.setComponentTooltipForNextFrame(font, text, x, y);
             }
         }
 
         @Override
-        public void renderComponentTooltipFromElements(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack) {
+        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, int x, int y, @Nullable ResourceLocation background) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
-                ConfigBaseScreen.this.captureTooltip(this.pose().last(), (graphics, scrollOffset) -> super.renderComponentTooltipFromElements(font, elements, mouseX, mouseY + scrollOffset, stack));
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipForNextFrame(font, text, x, y + scrollOffset, background));
             } else {
-                super.renderComponentTooltipFromElements(font, elements, mouseX, mouseY, stack);
+                super.setComponentTooltipForNextFrame(font, text, x, y, background);
+            }
+        }
+
+        @Override
+        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedText> text, int x, int y, @Nonnull ItemStack stack) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipForNextFrame(font, text, x, y + scrollOffset, stack));
+            } else {
+                super.setComponentTooltipForNextFrame(font, text, x, y, stack);
+            }
+        }
+
+        @Override
+        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedText> text, int x, int y, @Nonnull ItemStack stack, @Nullable ResourceLocation backgroundTexture) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipForNextFrame(font, text, x, y + scrollOffset, stack, backgroundTexture));
+            } else {
+                super.setComponentTooltipForNextFrame(font, text, x, y, stack, backgroundTexture);
+            }
+        }
+
+        @Override
+        public void setComponentTooltipFromElementsForNextFrame(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipFromElementsForNextFrame(font, elements, mouseX, mouseY + scrollOffset, stack));
+            } else {
+                super.setComponentTooltipFromElementsForNextFrame(font, elements, mouseX, mouseY, stack);
+            }
+        }
+
+        @Override
+        public void setComponentTooltipFromElementsForNextFrame(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack, @Nullable ResourceLocation backgroundTexture) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipFromElementsForNextFrame(font, elements, mouseX, mouseY + scrollOffset, stack, backgroundTexture));
+            } else {
+                super.setComponentTooltipFromElementsForNextFrame(font, elements, mouseX, mouseY, stack, backgroundTexture);
+            }
+        }
+
+        @Override
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> text, int x, int y) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, x, y + scrollOffset));
+            } else {
+                super.setTooltipForNextFrame(font, text, x, y);
+            }
+        }
+
+        @Override
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> text, int x, int y, @Nullable ResourceLocation background) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, x, y + scrollOffset, background));
+            } else {
+                super.setTooltipForNextFrame(font, text, x, y, background);
+            }
+        }
+
+        @Override
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<FormattedCharSequence> text, @Nonnull ClientTooltipPositioner positioner, int x, int y, boolean focused) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, positioner, x, y + scrollOffset, focused));
+            } else {
+                super.setTooltipForNextFrame(font, text, positioner, x, y, focused);
             }
         }
     }

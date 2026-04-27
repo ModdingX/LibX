@@ -12,20 +12,23 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.EmptyBlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.EmptyBlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joml.Vector3f;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
@@ -34,13 +37,13 @@ import java.util.*;
 
 /**
  * This class is meant to apply a {@link BlockEntityRenderer} to items. Using it is really straightforward:
- * 
+ *
  * <ul>
  *     <li>Add custom {@link IClientItemExtensions client extensions} to your item.</li>
  *     <li>In {@link Registerable#setupClient(SetupContext)} call
  *     {@link ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)}</li>
  * </ul>
- * 
+ *
  * Your item also needs a special item model. {@link ItemModelProviderBase} provides a method to generate that for you.
  */
 public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
@@ -91,7 +94,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
             if (!defaultTags.containsKey(teType)) {
                 defaultTags.put(teType, blockEntity.saveCustomOnly(Minecraft.getInstance().level.registryAccess()));
             } else {
-                blockEntity.loadCustomOnly(defaultTags.get(teType), Minecraft.getInstance().level.registryAccess());
+                blockEntity.loadCustomOnly(TagValueInput.create(ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), defaultTags.get(teType)));
             }
             setLevel(blockEntity);
 
@@ -110,6 +113,12 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
                     blockEntity.setLevel(null); // avoid storing the level for too long
 
         poseStack.popPose();
+    }
+
+    @Override
+    public void getExtents(Set<Vector3f> output) {
+        output.add(new Vector3f(0, 0, 0));
+        output.add(new Vector3f(1, 1, 1));
     }
 
     private static void setLevel(BlockEntity blockEntity) {

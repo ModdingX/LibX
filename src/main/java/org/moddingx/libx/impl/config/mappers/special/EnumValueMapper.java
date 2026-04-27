@@ -6,8 +6,6 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -108,7 +106,6 @@ public class EnumValueMapper<T extends Enum<T>> implements ValueMapper<T, JsonPr
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<T> createEditor(ValidatorInfo<?> validator) {
         return ConfigEditor.toggle(ImmutableList.copyOf(this.cls.getEnumConstants()), e -> Component.literal(e.name().toLowerCase(Locale.ROOT)));
     }

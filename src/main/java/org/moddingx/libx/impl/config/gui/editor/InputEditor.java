@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
@@ -105,13 +105,13 @@ public class InputEditor<T> implements ConfigEditor<T> {
         public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
             super.renderWidget(graphics, mouseX, mouseY, partialTicks);
             if (this.isVisible() && this.getValidInput(this.getValue()).isEmpty()) {
-                graphics.pose().pushPose();
-                graphics.pose().translate(0, 0, 10);
-                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, this.width + 2, 1, 256, 256);
-                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() + this.height, 0, 0, this.width + 2, 1, 256, 256, 0xFFFF2222);
-                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256, 0xFFFF2222);
-                graphics.blit(RenderType::guiTextured, RenderHelper.TEXTURE_WHITE, this.getX() + this.width, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256, 0xFFFF2222);
-                graphics.pose().popPose();
+                graphics.pose().pushMatrix();
+                graphics.nextStratum();
+                graphics.blit(RenderPipelines.GUI_TEXTURED, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, this.width + 2, 1, 256, 256);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() + this.height, 0, 0, this.width + 2, 1, 256, 256, 0xFFFF2222);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, RenderHelper.TEXTURE_WHITE, this.getX() - 1, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256, 0xFFFF2222);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, RenderHelper.TEXTURE_WHITE, this.getX() + this.width, this.getY() - 1, 0, 0, 1, this.height + 2, 256, 256, 0xFFFF2222);
+                graphics.pose().popMatrix();
             }
         }
     }

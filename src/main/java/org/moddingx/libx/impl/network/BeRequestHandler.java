@@ -24,7 +24,7 @@ public class BeRequestHandler extends PacketHandler<BeRequestHandler.Message> {
     @Override
     public void handle(Message msg, IPayloadContext ctx) {
         if (ctx.player() instanceof ServerPlayer sender) {
-            ServerLevel level = sender.serverLevel();
+            ServerLevel level = sender.level();
             if (level.hasChunk(SectionPos.blockToSectionCoord(msg.pos().getX()), SectionPos.blockToSectionCoord(msg.pos().getZ()))
                     && NetworkImpl.getImpl().canSend(sender, BeUpdateHandler.TYPE)) {
                 BeUpdateHandler.Message reply = NetworkImpl.getImpl().getBeUpdateMessage(sender.level(), msg.pos());

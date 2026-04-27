@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -190,7 +188,6 @@ public class RecordValueMapper<T extends Record> implements ValueMapper<T, JsonO
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<T> createEditor(ValidatorInfo<?> validator) {
         return new RecordEditor<>(this.cls, this.entries, this.ctor);
     }

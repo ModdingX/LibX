@@ -24,6 +24,7 @@ import org.moddingx.libx.impl.InternalDataGen;
 import org.moddingx.libx.impl.command.client.ClientCommandsImpl;
 import org.moddingx.libx.impl.command.common.CommandsImpl;
 import org.moddingx.libx.impl.config.ConfigEvents;
+import org.moddingx.libx.impl.config.ConfigEventsClient;
 import org.moddingx.libx.impl.crafting.recipe.EmptyRecipe;
 import org.moddingx.libx.impl.datapack.DynamicPackLocator;
 import org.moddingx.libx.impl.loot.AllLootEntry;
@@ -91,13 +92,14 @@ public final class LibX extends ModX {
         NeoForge.EVENT_BUS.addListener(CommandsImpl::registerCommands);
         NeoForge.EVENT_BUS.register(new ConfigEvents());
         if (FMLLoader.getDist().isClient()) {
+            NeoForge.EVENT_BUS.register(new ConfigEventsClient());
             NeoForge.EVENT_BUS.addListener(ClientCommandsImpl::registerClientCommands);
         }
     }
 
     @Override
     protected void setup(FMLCommonSetupEvent event) {
-        //noinspection unchecked,rawtypes
+        // noinspection rawtypes
         ArgumentTypeInfos.registerByClass((Class) EnumArgumentIgnoreCase.class, EnumArgumentIgnoreCase.Info.INSTANCE);
     }
 

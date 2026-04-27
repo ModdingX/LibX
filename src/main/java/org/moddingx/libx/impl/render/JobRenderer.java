@@ -1,9 +1,8 @@
 package org.moddingx.libx.impl.render;
 
 import com.mojang.blaze3d.ProjectionType;
-import com.mojang.blaze3d.buffers.BufferType;
-import com.mojang.blaze3d.buffers.BufferUsage;
 import com.mojang.blaze3d.buffers.GpuBuffer;
+import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.Lighting;
@@ -13,8 +12,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.FogParameters;
+import net.minecraft.client.renderer.PerspectiveProjectionMatrixBuffer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
@@ -30,6 +28,11 @@ import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class JobRenderer {
+
+    // Hardcoded GUI Z range constants (from GuiRenderer, previously GuiGraphics.MIN_GUI_Z / MAX_GUI_Z)
+    public static final float GUI_MIN_Z = 0.0F;
+    public static final float GUI_MAX_Z = 10000.0F;
+    public static final float GUI_Z_NEAR = 1000.0F;
 
     public static void renderJob(RenderJob job, CompletableFuture<NativeImage> future) {
         int width = job.width();
@@ -47,7 +50,10 @@ public class JobRenderer {
         RenderSystem.getDevice().createCommandEncoder()
                 .clearColorAndDepthTextures(target.getColorTexture(), 0x00000000, target.getDepthTexture(), 1.0);
 
-        RenderSystem.setShaderFog(FogParameters.NO_FOG);
+        // Save fog and projection state to restore after the render job
+        GpuBufferSlice savedFog = RenderSystem.getShaderFog();
+        GpuBufferSlice savedProjMatrix = RenderSystem.getProjectionMatrixBuffer();
+        ProjectionType savedProjType = RenderSystem.getProjectionType();
 
         Matrix4fStack modelViewStack = RenderSystem.getModelViewStack();
         modelViewStack.pushMatrix();
@@ -55,52 +61,57 @@ public class JobRenderer {
         modelViewStack.mul(job.setupModelViewMatrix());
 
         Matrix4f projectionMatrix = job.setupProjectionMatrix();
-        RenderSystem.setProjectionMatrix(projectionMatrix, job.getProjectionType());
 
-        Lighting.setupFor3DItems();
-        RenderHelper.resetColor();
+        // PerspectiveProjectionMatrixBuffer converts a Matrix4f into a GPU uniform buffer
+        try (PerspectiveProjectionMatrixBuffer projBuffer = new PerspectiveProjectionMatrixBuffer("LibX render job")) {
+            RenderSystem.setProjectionMatrix(projBuffer.getBuffer(projectionMatrix), job.getProjectionType());
 
-        @Nullable
-        Matrix4f transformationMatrix = overlay ? new Matrix4f(modelViewStack) : null;
-        PoseStack poseStack = new PoseStack();
-        job.setupTransformation(poseStack);
-        if (overlay) {
-            transformationMatrix.mul(poseStack.last().pose());
-        }
+            Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_3D);
+            RenderHelper.resetColor();
 
-        Minecraft mc = Minecraft.getInstance();
-        RenderTarget previousMainRenderTarget = mc.mainRenderTarget;
-        mc.mainRenderTarget = target;
-
-        boolean screenshotScheduled = false;
-        try {
-            RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
-            job.render(poseStack, buffers.bufferSource());
-            buffers.bufferSource().endBatch();
-
+            @Nullable
+            Matrix4f transformationMatrix = overlay ? new Matrix4f(modelViewStack) : null;
+            PoseStack poseStack = new PoseStack();
+            job.setupTransformation(poseStack);
             if (overlay) {
-                RenderSystem.setShaderFog(FogParameters.NO_FOG);
-
-                modelViewStack.identity();
-                modelViewStack.mul(new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z));
-
-                RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z), ProjectionType.ORTHOGRAPHIC);
-
-                PoseStack overlayPoseStack = new PoseStack();
-                Lighting.setupFor3DItems();
-
-                RenderJob.Projector projector = new ProjectorImpl(projectionMatrix, transformationMatrix, 0, 0, width, height);
-                job.renderOverlay(overlayPoseStack, buffers.bufferSource(), projector);
-                buffers.bufferSource().endBatch();
+                transformationMatrix.mul(poseStack.last().pose());
             }
 
-            takeNonOpaqueScreenshot(target, future);
-            screenshotScheduled = true;
-        } finally {
-            mc.mainRenderTarget = previousMainRenderTarget;
-            modelViewStack.popMatrix();
-            if (!screenshotScheduled) {
-                target.destroyBuffers();
+            Minecraft mc = Minecraft.getInstance();
+            RenderTarget previousMainRenderTarget = mc.mainRenderTarget;
+            mc.mainRenderTarget = target;
+
+            boolean screenshotScheduled = false;
+            try {
+                RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
+                job.render(poseStack, buffers.bufferSource());
+                buffers.bufferSource().endBatch();
+
+                if (overlay) {
+                    modelViewStack.identity();
+                    modelViewStack.mul(new Matrix4f().translate(0, 0, GUI_Z_NEAR - GUI_MIN_Z));
+
+                    Matrix4f orthoMatrix = new Matrix4f().setOrtho(0, width, height, 0, GUI_Z_NEAR, GUI_Z_NEAR + GUI_MAX_Z - GUI_MIN_Z);
+                    RenderSystem.setProjectionMatrix(projBuffer.getBuffer(orthoMatrix), ProjectionType.ORTHOGRAPHIC);
+
+                    PoseStack overlayPoseStack = new PoseStack();
+                    Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_3D);
+
+                    RenderJob.Projector projector = new ProjectorImpl(projectionMatrix, transformationMatrix, 0, 0, width, height);
+                    job.renderOverlay(overlayPoseStack, buffers.bufferSource(), projector);
+                    buffers.bufferSource().endBatch();
+                }
+
+                takeNonOpaqueScreenshot(target, future);
+                screenshotScheduled = true;
+            } finally {
+                mc.mainRenderTarget = previousMainRenderTarget;
+                modelViewStack.popMatrix();
+                RenderSystem.setShaderFog(savedFog);
+                RenderSystem.setProjectionMatrix(savedProjMatrix, savedProjType);
+                if (!screenshotScheduled) {
+                    target.destroyBuffers();
+                }
             }
         }
     }
@@ -117,11 +128,11 @@ public class JobRenderer {
         }
         int pixelSize = texture.getFormat().pixelSize();
         GpuBuffer gpuBuffer = RenderSystem.getDevice().createBuffer(
-                () -> "LibX render job screenshot", BufferType.PIXEL_PACK, BufferUsage.STATIC_READ, width * height * pixelSize);
+                () -> "LibX render job screenshot", GpuBuffer.USAGE_COPY_DST | GpuBuffer.USAGE_MAP_READ, width * height * pixelSize);
         CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
         RenderSystem.getDevice().createCommandEncoder().copyTextureToBuffer(texture, gpuBuffer, 0, () -> {
             try {
-                try (GpuBuffer.ReadView view = encoder.readBuffer(gpuBuffer)) {
+                try (GpuBuffer.MappedView view = encoder.mapBuffer(gpuBuffer, true, false)) {
                     NativeImage img = new NativeImage(width, height, false);
                     for (int y = 0; y < height; y++) {
                         for (int x = 0; x < width; x++) {

@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -91,7 +89,6 @@ public class PairValueMapper<A, B> implements ValueMapper<Pair<A, B>, JsonArray>
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Pair<A, B>> createEditor(ValidatorInfo<?> validator) {
         return new PairEditor<>(
                 this.mapper1.createEditor(ValidatorInfo.empty()),

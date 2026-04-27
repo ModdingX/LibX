@@ -4,8 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -71,7 +69,6 @@ public class OptionValueMapper<T> implements GenericValueMapper<Optional<T>, Jso
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Optional<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
         return ConfigEditor.option(mapper.createEditor(ValidatorInfo.empty()));
     }

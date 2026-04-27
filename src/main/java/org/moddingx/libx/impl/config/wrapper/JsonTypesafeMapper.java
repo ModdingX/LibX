@@ -3,8 +3,6 @@ package org.moddingx.libx.impl.config.wrapper;
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -62,7 +60,6 @@ public class JsonTypesafeMapper<C> implements ValueMapper<C, JsonElement> {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<C> createEditor(ValidatorInfo<?> validator) {
         return this.wrapped.createEditor(validator);
     }

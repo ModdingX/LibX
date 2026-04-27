@@ -4,8 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.Config;
 import org.moddingx.libx.config.ConfigManager;
 import org.moddingx.libx.config.correct.ConfigCorrection;
@@ -94,6 +92,5 @@ public interface ValueMapper<T, E extends JsonElement> {
      * @param validator Access to the current validator used. Can be used to create different
      *                  editors based on validators.
      */
-    @OnlyIn(Dist.CLIENT)
     ConfigEditor<T> createEditor(ValidatorInfo<?> validator);
 }

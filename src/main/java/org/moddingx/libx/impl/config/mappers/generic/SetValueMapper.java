@@ -5,8 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -106,7 +104,6 @@ public class SetValueMapper<T> implements GenericValueMapper<Set<T>, JsonArray, 
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Set<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
         return ConfigEditor.custom(Set.of(), set -> new CollectionContent<>(this.getSortedElements(set), mapper.createEditor(ValidatorInfo.empty()), Set::copyOf, false));
     }

@@ -1,9 +1,10 @@
 package org.moddingx.libx.impl.config.mappers.advanced;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.RegistryOps;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
@@ -30,16 +31,15 @@ public class ComponentValueMapper implements ValueMapper<Component, JsonElement>
 
     @Override
     public Component fromJson(JsonElement json) {
-        return Component.Serializer.deserialize(json, BuiltinRegistryHelper.BUILTIN_REGISTRY_LOOKUP);
+        return ComponentSerialization.CODEC.parse(RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistryHelper.BUILTIN_REGISTRY_LOOKUP), json).getOrThrow();
     }
 
     @Override
     public JsonElement toJson(Component value) {
-        return Component.Serializer.serialize(value, BuiltinRegistryHelper.BUILTIN_REGISTRY_LOOKUP);
+        return ComponentSerialization.CODEC.encodeStart(RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistryHelper.BUILTIN_REGISTRY_LOOKUP), value).getOrThrow();
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<Component> createEditor(ValidatorInfo<?> validator) {
         return ConfigEditor.custom(Component.empty(), ComponentContent::new);
     }

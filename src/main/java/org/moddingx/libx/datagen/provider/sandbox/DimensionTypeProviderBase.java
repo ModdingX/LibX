@@ -15,6 +15,7 @@ import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 
+import java.util.Optional;
 import java.util.OptionalLong;
 
 /**
@@ -178,6 +179,7 @@ public abstract class DimensionTypeProviderBase extends RegistryProviderBase {
             DimensionType type = new DimensionType(
                     this.fixedTime, this.hasSkyLight, this.hasCeiling, this.ultraWarm, this.natural, this.coordinateScale, this.bedWorks,
                     this.respawnAnchorWorks, this.minY, this.height, this.logicalHeight, this.infiniburn, this.effectsLocation, this.ambientLight,
+                    Optional.empty(),
                     new DimensionType.MonsterSettings(this.piglinSafe, this.hasRaids, this.monsterSpawnLightTest, this.monsterSpawnBlockLightLimit)
             );
             return DimensionTypeProviderBase.this.registries.writableRegistry(Registries.DIMENSION_TYPE).createIntrusiveHolder(type);

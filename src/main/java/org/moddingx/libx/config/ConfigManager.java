@@ -308,14 +308,20 @@ public class ConfigManager {
      * Forces synchronisation of one config to one player.
      */
     public static void synchronize(ServerPlayer player, Class<?> configClass) {
-        synchronize(player.server, player, List.of(configClass));
+        MinecraftServer server = player.getServer();
+        if (server != null) {
+            synchronize(server, player, List.of(configClass));
+        }
     }
 
     /**
      * Forces synchronisation of all configs to one player.
      */
     public static void synchronize(ServerPlayer player) {
-        synchronize(player.server, player, null);
+        MinecraftServer server = player.getServer();
+        if (server != null) {
+            synchronize(server, player, null);
+        }
     }
 
     private static void synchronize(MinecraftServer server, @Nullable ServerPlayer receiver, @Nullable List<Class<?>> configClasses) {

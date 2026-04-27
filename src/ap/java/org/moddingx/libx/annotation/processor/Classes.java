@@ -16,6 +16,7 @@ public class Classes {
     public static final String ENTITY_TYPE = "net.minecraft.world.entity.EntityType";
 
     public static final String PROCESSOR_INTERFACE = "org.moddingx.libx.annotation.impl.ProcessorInterface";
+    public static final String PROCESSOR_INTERFACE_CLIENT = "org.moddingx.libx.annotation.impl.ProcessorInterfaceClient";
     public static final String LAZY_MAP_BUILDER = "org.moddingx.libx.annotation.impl.LazyMapBuilder";
     public static final String REGISTRATION_PROPERTIES_HELPER = "org.moddingx.libx.annotation.impl.RegistrationPropertiesHelper";
 

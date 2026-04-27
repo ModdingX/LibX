@@ -5,8 +5,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
 import org.moddingx.libx.config.mapper.ValueMapper;
@@ -48,7 +46,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Boolean> createEditor(ValidatorInfo<?> validator) {
             return CheckEditor.INSTANCE;
         }
@@ -82,7 +79,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Byte> createEditor(ValidatorInfo<?> validator) {
             return ConfigEditor.input(number(false, (byte) 0, Byte::parseByte), validator);
         }
@@ -116,7 +112,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Short> createEditor(ValidatorInfo<?> validator) {
             ShortRange range = validator.value(ShortRange.class);
             if (range != null && range.min() != Short.MIN_VALUE && range.max() != Short.MAX_VALUE) {
@@ -158,7 +153,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Integer> createEditor(ValidatorInfo<?> validator) {
             IntRange range = validator.value(IntRange.class);
             if (range != null && range.min() != Integer.MIN_VALUE && range.max() != Integer.MAX_VALUE) {
@@ -200,7 +194,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Long> createEditor(ValidatorInfo<?> validator) {
             LongRange range = validator.value(LongRange.class);
             if (range != null && range.min() != Long.MIN_VALUE && range.max() != Long.MAX_VALUE) {
@@ -242,7 +235,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Float> createEditor(ValidatorInfo<?> validator) {
             FloatRange range = validator.value(FloatRange.class);
             if (range != null && Float.isFinite(range.min()) && Float.isFinite(range.max())) {
@@ -284,7 +276,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<Double> createEditor(ValidatorInfo<?> validator) {
             DoubleRange range = validator.value(DoubleRange.class);
             if (range != null && Double.isFinite(range.min()) && Double.isFinite(range.max())) {
@@ -326,7 +317,6 @@ public class SimpleValueMappers {
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ConfigEditor<String> createEditor(ValidatorInfo<?> validator) {
             return ConfigEditor.input(validator);
         }

@@ -2,7 +2,6 @@ package org.moddingx.libx.render.target;
 
 import com.mojang.blaze3d.ProjectionType;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
@@ -12,6 +11,10 @@ import org.joml.Vector3f;
  * A render job defines the logic on how to render a scene into an image. Can be used with {@link ImageHelper}.
  */
 public interface RenderJob {
+
+    float GUI_Z_NEAR = 1000.0F;
+    float GUI_Z_RANGE = 20000.0F;
+    float GUI_Z_TRANSLATION = 11000.0F;
 
     /**
      * The image width in pixels.
@@ -28,7 +31,7 @@ public interface RenderJob {
      * (Everything from 0 to image width/height is projected onto the image).
      */
     default Matrix4f setupProjectionMatrix() {
-        return new Matrix4f().setOrtho(0, this.width(), this.height(), 0, 1000, 1000 + GuiGraphics.MAX_GUI_Z - GuiGraphics.MIN_GUI_Z);
+        return new Matrix4f().setOrtho(0, this.width(), this.height(), 0, GUI_Z_NEAR, GUI_Z_NEAR + GUI_Z_RANGE);
     }
 
     /**
@@ -44,7 +47,7 @@ public interface RenderJob {
      * @see #setupTransformation(PoseStack)
      */
     default Matrix4f setupModelViewMatrix() {
-        return new Matrix4f().translate(0, 0, 1000 - GuiGraphics.MIN_GUI_Z);
+        return new Matrix4f().translate(0, 0, GUI_Z_TRANSLATION);
     }
 
     /**

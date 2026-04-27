@@ -5,8 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.config.correct.ConfigCorrection;
 import org.moddingx.libx.config.gui.ConfigEditor;
@@ -91,7 +89,6 @@ public class ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ConfigEditor<List<T>> createEditor(ValueMapper<T, JsonElement> mapper, ValidatorInfo<?> validator) {
         return ConfigEditor.custom(List.of(), list -> new CollectionContent<>(list, mapper.createEditor(ValidatorInfo.empty()), Function.identity(), true));
     }

@@ -6,15 +6,14 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider.IntrinsicTagAppender;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.data.BlockTagCopyingItemTagProvider;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.datagen.DatagenContext;
@@ -109,23 +108,23 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     }
 
     /**
-     * Gets a {@link TagsProvider.TagAppender tag appender} for an {@link Item}
+     * Gets a {@link TagAppender tag appender} for an {@link Item}
      */
-    public IntrinsicTagAppender<Item> item(TagKey<Item> tag) {
+    public TagAppender<Item, Item> item(TagKey<Item> tag) {
         return this.itemTags.tag(tag);
     }
 
     /**
-     * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Block}
+     * Gets a {@link TagAppender tag appender} for a {@link Block}
      */
-    public IntrinsicTagAppender<Block> block(TagKey<Block> tag) {
+    public TagAppender<Block, Block> block(TagKey<Block> tag) {
         return this.blockTags.tag(tag);
     }
 
     /**
-     * Gets a {@link TagsProvider.TagAppender tag appender} for a {@link Fluid}
+     * Gets a {@link TagAppender tag appender} for a {@link Fluid}
      */
-    public IntrinsicTagAppender<Fluid> fluid(TagKey<Fluid> tag) {
+    public TagAppender<Fluid, Fluid> fluid(TagKey<Fluid> tag) {
         return this.fluidTags.tag(tag);
     }
 
@@ -189,7 +188,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             }
             // Add fluid copies
             for (Pair<TagKey<Fluid>, TagKey<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
-                IntrinsicTagAppender<Block> builder = this.tag(copy.getRight());
+                TagAppender<Block, Block> builder = this.tag(copy.getRight());
                 for (ResourceLocation entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
                     BuiltInRegistries.FLUID.getOptional(entry).ifPresent(fluid -> builder.add(fluid.defaultFluidState().createLegacyBlock().getBlock()));
                 }
@@ -205,7 +204,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public IntrinsicTagAppender<Block> tag(@Nonnull TagKey<Block> tag) {
+        public TagAppender<Block, Block> tag(@Nonnull TagKey<Block> tag) {
             return super.tag(tag);
         }
 
@@ -216,7 +215,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         }
     }
 
-    private class ItemTagProviderBase extends ItemTagsProvider {
+    private class ItemTagProviderBase extends BlockTagCopyingItemTagProvider {
 
         private Map<ResourceLocation, TagBuilder> tagCache;
 
@@ -246,7 +245,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public IntrinsicTagAppender<Item> tag(@Nonnull TagKey<Item> tag) {
+        public TagAppender<Item, Item> tag(@Nonnull TagKey<Item> tag) {
             return super.tag(tag);
         }
 
@@ -289,14 +288,19 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public IntrinsicTagAppender<Fluid> tag(@Nonnull TagKey<Fluid> tag) {
+        public TagAppender<Fluid, Fluid> tag(@Nonnull TagKey<Fluid> tag) {
             return super.tag(tag);
         }
 
         public List<ResourceLocation> getTagInfo(TagKey<Fluid> tag) {
-            IntrinsicTagAppender<Fluid> builder = this.tag(tag);
-            return builder.getInternalBuilder().entries.stream()
-                    .filter(p -> !p.tag)
+            TagBuilder builder = this.builders.get(tag.location());
+
+            if (builder == null) {
+                return List.of();
+            }
+
+            return builder.entries.stream()
+                    .filter(p -> !p.isTag())
                     .map(TagEntry::getId)
                     .toList();
         }

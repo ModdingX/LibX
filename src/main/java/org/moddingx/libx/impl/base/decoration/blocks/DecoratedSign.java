@@ -18,8 +18,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.SignAccess;
 import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
@@ -89,7 +87,6 @@ public class DecoratedSign implements Registerable, SignAccess {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void setupClient(SetupContext ctx) {
         BlockEntityRenderers.register(this.beType, SignRenderer::new);
         // Add sign texture to sheet.

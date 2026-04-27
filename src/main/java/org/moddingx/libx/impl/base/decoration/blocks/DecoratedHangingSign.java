@@ -18,8 +18,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.HangingSignAccess;
 import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
@@ -88,7 +86,6 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void setupClient(SetupContext ctx) {
         BlockEntityRenderers.register(this.beType, HangingSignRenderer::new);
         // Add sign texture to sheet.
