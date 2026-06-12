@@ -95,7 +95,7 @@ public class RecordEditor<T extends Record> implements ConfigEditor<T> {
         }
     }
     
-    private static class RecordButton<T> extends Button {
+    private static class RecordButton<T> extends Button.Plain {
         
         private final ConfigScreenManager manager;
         private final Class<T> clazz;

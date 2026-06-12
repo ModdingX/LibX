@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
@@ -52,8 +52,8 @@ public class DecoratedSign implements Registerable, SignAccess {
 
         // Wall block is registered under a "_wall" sub-name, so it needs a different block id.
         if (signKey != null) {
-            DecorationBlockIdContext.set(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(
-                    signKey.location().getNamespace(), signKey.location().getPath() + "_wall")));
+            DecorationBlockIdContext.set(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(
+                    signKey.identifier().getNamespace(), signKey.identifier().getPath() + "_wall")));
         }
 
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
@@ -66,7 +66,7 @@ public class DecoratedSign implements Registerable, SignAccess {
 
         Item.Properties itemProps = new Item.Properties().stacksTo(16).useBlockDescriptionPrefix();
         if (signKey != null) {
-            itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.location()));
+            itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.identifier()));
         }
 
         this.item = new SignItem(this.standing, this.wall, itemProps) {

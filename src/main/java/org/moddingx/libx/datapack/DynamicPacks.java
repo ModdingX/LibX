@@ -1,6 +1,6 @@
 package org.moddingx.libx.datapack;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.impl.datapack.DynamicPackLocator;
 
 /**
@@ -36,13 +36,13 @@ public class DynamicPacks {
      * Enables a dynamic pack.
      */
     public void enablePack(String modId, String packName) {
-        this.locator.enablePack(ResourceLocation.fromNamespaceAndPath(modId, packName));
+        this.locator.enablePack(Identifier.fromNamespaceAndPath(modId, packName));
     }
 
     /**
      * Gets tests whether a dynamic pack is enabled.
      */
     public boolean isEnabled(String modId, String packName) {
-        return this.locator.isEnabled(ResourceLocation.fromNamespaceAndPath(modId, packName));
+        return this.locator.isEnabled(Identifier.fromNamespaceAndPath(modId, packName));
     }
 }

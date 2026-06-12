@@ -28,18 +28,18 @@ mod.configure {
     modid 'libx'
     group 'org.moddingx'
     versioning {
-        base '1.21.10-6.5'
+        base '1.21.11-6.5'
         maven 'https://maven.moddingx.org/release'
     }
 
-    neoforge '21.10.64'
+    neoforge '21.11.42'
     extraModSource sourceSets.ap
 
     license 'The Apache License, Version 2.0'
     github 'ModdingX/LibX'
 
     runs {
-        data {
+        serverData {
             modSource sourceSets.sourcegen
         }
     }
@@ -94,6 +94,11 @@ test {
 
 jar {
     from sourceSets.ap.output
+}
+
+def localJavadocLinks = file("../moddingx/assets/javadoc_links/${mod.setup.minecraft}.json")
+if (localJavadocLinks.exists()) {
+    tasks.named('javadocLinks').configure { config localJavadocLinks.toURI().toString() }
 }
 
 javadocConfigure {

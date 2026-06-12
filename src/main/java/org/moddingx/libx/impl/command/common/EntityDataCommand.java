@@ -9,6 +9,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.PermissionSet;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -33,7 +35,7 @@ public class EntityDataCommand implements Command<CommandSourceStack> {
         boolean players = false;
         for (Entity entity : entities) {
             if (entity instanceof Player) {
-                if (!context.getSource().hasPermission(4)) {
+                if (!context.getSource().permissions().hasPermission(Permissions.COMMANDS_OWNER)) {
                     throw new SimpleCommandExceptionType(Component.translatable("libx.command.entity_data.player_modify_no_permission")).create();
                 } else {
                     players = true;

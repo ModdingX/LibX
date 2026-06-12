@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import org.moddingx.libx.datagen.DatagenContext;
@@ -26,11 +26,11 @@ import java.util.concurrent.CompletableFuture;
  * 
  * When using this, notice the difference between a <i>texture</i> id and an <i>image</i> id.
  * 
- * A <i>texture</i> id is a {@link ResourceLocation} holding the namespace and the path of a texture
+ * A <i>texture</i> id is a {@link Identifier} holding the namespace and the path of a texture
  * as it is used in block and item models.
  * 
- * An <i>image</i> id is a {@link ResourceLocation} in the format that is passed
- * to {@link TextureManager#getTexture(ResourceLocation)}.
+ * An <i>image</i> id is a {@link Identifier} in the format that is passed
+ * to {@link TextureManager#getTexture(Identifier)}.
  * A <i>texture</i> id is converted to an <i>image</i> id like this: {@code namespace:textures/path.png}.
  * 
  * <h3>Scaling</h3>
@@ -56,7 +56,7 @@ public abstract class TextureProviderBase implements DataProvider {
 
     private final ModX mod;
     private final TextureGenerator generator;
-    private final Map<ResourceLocation, TextureFactory> textures;
+    private final Map<Identifier, TextureFactory> textures;
 
     protected TextureProviderBase(DatagenContext ctx) {
         this.mod = ctx.mod();
@@ -89,14 +89,14 @@ public abstract class TextureProviderBase implements DataProvider {
     /**
      * Adds a texture that should be generated.
      */
-    public void texture(ResourceLocation loc, TextureFactory factory) {
-        this.image(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), factory);
+    public void texture(Identifier loc, TextureFactory factory) {
+        this.image(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), factory);
     }
 
     /**
      * Adds an image that should be generated.
      */
-    public void image(ResourceLocation loc, TextureFactory factory) {
+    public void image(Identifier loc, TextureFactory factory) {
         this.textures.put(loc, factory);
     }
 
@@ -104,26 +104,26 @@ public abstract class TextureProviderBase implements DataProvider {
      * Generates a sign texture for the given {@link WoodType} with the given two blocks as log and planks.
      */
     public void sign(WoodType wood, Block log, Block planks) {
-        ResourceLocation logId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(log));
-        ResourceLocation planksId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(planks));
+        Identifier logId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(log));
+        Identifier planksId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(planks));
         this.sign(wood,
-                ResourceLocation.fromNamespaceAndPath(logId.getNamespace(), "block/" + logId.getPath()),
-                ResourceLocation.fromNamespaceAndPath(planksId.getNamespace(), "block/" + planksId.getPath())
+                Identifier.fromNamespaceAndPath(logId.getNamespace(), "block/" + logId.getPath()),
+                Identifier.fromNamespaceAndPath(planksId.getNamespace(), "block/" + planksId.getPath())
         );
     }
     
     /**
      * Generates a sign texture for the given {@link WoodType} with the given two textures as log and planks.
      */
-    public void sign(WoodType wood, ResourceLocation log, ResourceLocation planks) {
-        ResourceLocation woodId = ResourceLocation.parse(wood.name());
-        this.sign(ResourceLocation.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/" + woodId.getPath()), log, planks);
+    public void sign(WoodType wood, Identifier log, Identifier planks) {
+        Identifier woodId = Identifier.parse(wood.name());
+        this.sign(Identifier.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/" + woodId.getPath()), log, planks);
     }
 
     /**
      * Generates a sign texture with the given id and the given two textures as log and planks.
      */
-    public void sign(ResourceLocation signTexture, ResourceLocation log, ResourceLocation planks) {
+    public void sign(Identifier signTexture, Identifier log, Identifier planks) {
         this.texture(signTexture, new SignTextureFactory(log, planks));
     }
 
@@ -131,22 +131,22 @@ public abstract class TextureProviderBase implements DataProvider {
      * Generates a hanging sign texture for the given {@link WoodType} with the given block as stripped log.
      */
     public void hangingSign(WoodType wood, Block strippedLog) {
-        ResourceLocation logId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(strippedLog));
-        this.hangingSign(wood, ResourceLocation.fromNamespaceAndPath(logId.getNamespace(), "block/" + logId.getPath()));
+        Identifier logId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(strippedLog));
+        this.hangingSign(wood, Identifier.fromNamespaceAndPath(logId.getNamespace(), "block/" + logId.getPath()));
     }
 
     /**
      * Generates a hanging sign texture for the given {@link WoodType} with the given texture as stripped log.
      */
-    public void hangingSign(WoodType wood, ResourceLocation strippedLog) {
-        ResourceLocation woodId = ResourceLocation.parse(wood.name());
-        this.hangingSign(ResourceLocation.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/hanging/" + woodId.getPath()), strippedLog);
+    public void hangingSign(WoodType wood, Identifier strippedLog) {
+        Identifier woodId = Identifier.parse(wood.name());
+        this.hangingSign(Identifier.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/hanging/" + woodId.getPath()), strippedLog);
     }
 
     /**
      * Generates a hanging sign texture with the given id and the given texture as stripped log.
      */
-    public void hangingSign(ResourceLocation signTexture, ResourceLocation strippedLog) {
+    public void hangingSign(Identifier signTexture, Identifier strippedLog) {
         this.texture(signTexture, new HangingSignTextureFactory(strippedLog));
     }
 
@@ -155,7 +155,7 @@ public abstract class TextureProviderBase implements DataProvider {
     public CompletableFuture<?> run(@Nonnull CachedOutput output) {
         this.setup();
         return CompletableFuture.allOf(this.textures.entrySet().stream().map(entry -> {
-            ResourceLocation id = entry.getKey();
+            Identifier id = entry.getKey();
             TextureFactory factory = entry.getValue();
 
             TextureBuilder builder = new TextureBuilder(this.mod, this.generator::loadImage);

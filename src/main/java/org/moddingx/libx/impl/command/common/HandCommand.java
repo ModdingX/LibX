@@ -11,7 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
@@ -21,7 +21,7 @@ import org.moddingx.libx.util.game.ComponentUtil;
 // Not a client command as the client does not have the full stack data
 public class HandCommand implements Command<CommandSourceStack> {
 
-    private static final ResourceKey<Item> AIR = ResourceKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("air"));
+    private static final ResourceKey<Item> AIR = ResourceKey.create(Registries.ITEM, Identifier.withDefaultNamespace("air"));
     
     @Override
     public int run(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
@@ -41,7 +41,7 @@ public class HandCommand implements Command<CommandSourceStack> {
             components = stack.getComponentsPatch();
         }
         
-        MutableComponent message = ComponentUtil.withCopyAction(Component.literal(item.location().toString()), item.location().toString()).copy();
+        MutableComponent message = ComponentUtil.withCopyAction(Component.literal(item.identifier().toString()), item.identifier().toString()).copy();
 
         if (count != 1) {
             message = message.append(Component.literal(" ")).append(Component.literal(Integer.toString(count)));

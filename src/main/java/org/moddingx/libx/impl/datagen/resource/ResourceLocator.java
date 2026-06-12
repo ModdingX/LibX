@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.datagen.resource;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -38,7 +38,7 @@ public class ResourceLocator {
     }
     
     @Nullable
-    public PackTarget.Resource getResource(Map<PackType, ResourceManager> resourceManagerMap, ResourceLocation res) {
+    public PackTarget.Resource getResource(Map<PackType, ResourceManager> resourceManagerMap, Identifier res) {
         for (Path basePath : this.paths) {
             Path path = basePath.resolve(res.getNamespace()).resolve(res.getPath());
             if (Files.isRegularFile(path)) {
@@ -46,7 +46,7 @@ public class ResourceLocator {
             }
         }
         if (this.prefix != null) {
-            ResourceLocation resolved = ResourceLocation.fromNamespaceAndPath(res.getNamespace(), this.prefix + "/" + res.getPath());
+            Identifier resolved = Identifier.fromNamespaceAndPath(res.getNamespace(), this.prefix + "/" + res.getPath());
             for (ResourceLocator parent : this.parents) {
                 PackTarget.Resource resource = parent.getResource(resourceManagerMap, resolved);
                 if (resource != null) return resource;
@@ -70,7 +70,7 @@ public class ResourceLocator {
 
         @Nullable
         @Override
-        public PackTarget.Resource getResource(Map<PackType, ResourceManager> resourceManagerMap, ResourceLocation res) {
+        public PackTarget.Resource getResource(Map<PackType, ResourceManager> resourceManagerMap, Identifier res) {
             Optional<Resource> resource = resourceManagerMap.get(this.type).getResource(res);
 
             return resource.map(VanillaResource::new).orElse(null);

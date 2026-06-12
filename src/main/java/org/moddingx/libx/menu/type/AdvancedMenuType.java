@@ -4,7 +4,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -97,7 +97,7 @@ public class AdvancedMenuType<T extends AbstractContainerMenu, S> extends MenuTy
         public T create(int windowId, @Nonnull Inventory inventory, @Nullable RegistryFriendlyByteBuf data) {
             MenuType<T> menuType = Objects.requireNonNull(this.menuType.get());
             if (this.codec != null && data == null) {
-                @Nullable ResourceLocation id = BuiltInRegistries.MENU.getKey(menuType);
+                @Nullable Identifier id = BuiltInRegistries.MENU.getKey(menuType);
                 throw new IllegalStateException("Can't open menus of type " + id + " without extra payload.");
             }
             S payload = this.codec == null ? null : this.codec.decode(data);

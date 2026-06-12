@@ -17,7 +17,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -282,7 +282,7 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, @Nonnull ItemStack stack, int x, int y, @Nullable ResourceLocation backgroundTexture) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, @Nonnull ItemStack stack, int x, int y, @Nullable Identifier backgroundTexture) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
                 int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, component, stack, x, y + scrollOffset, backgroundTexture));
@@ -302,7 +302,7 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, int x, int y, @Nullable ResourceLocation background) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, @Nonnull Optional<TooltipComponent> component, int x, int y, @Nullable Identifier background) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
                 int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, component, x, y + scrollOffset, background));
@@ -322,7 +322,7 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull Component text, int x, int y, @Nullable ResourceLocation background) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull Component text, int x, int y, @Nullable Identifier background) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
                 int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, x, y + scrollOffset, background));
@@ -342,7 +342,7 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, int x, int y, @Nullable ResourceLocation background) {
+        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> text, int x, int y, @Nullable Identifier background) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
                 int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipForNextFrame(font, text, x, y + scrollOffset, background));
@@ -362,7 +362,7 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedText> text, int x, int y, @Nonnull ItemStack stack, @Nullable ResourceLocation backgroundTexture) {
+        public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedText> text, int x, int y, @Nonnull ItemStack stack, @Nullable Identifier backgroundTexture) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
                 int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipForNextFrame(font, text, x, y + scrollOffset, stack, backgroundTexture));
@@ -382,7 +382,7 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void setComponentTooltipFromElementsForNextFrame(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack, @Nullable ResourceLocation backgroundTexture) {
+        public void setComponentTooltipFromElementsForNextFrame(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack, @Nullable Identifier backgroundTexture) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
                 int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setComponentTooltipFromElementsForNextFrame(font, elements, mouseX, mouseY + scrollOffset, stack, backgroundTexture));
@@ -402,7 +402,7 @@ public abstract class ConfigBaseScreen extends Screen {
         }
 
         @Override
-        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> text, int x, int y, @Nullable ResourceLocation background) {
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> text, int x, int y, @Nullable Identifier background) {
             if (ConfigBaseScreen.this.isCapturingTooltips) {
                 int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, x, y + scrollOffset, background));

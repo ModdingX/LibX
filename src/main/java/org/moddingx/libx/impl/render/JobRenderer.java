@@ -14,7 +14,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PerspectiveProjectionMatrixBuffer;
 import net.minecraft.client.renderer.RenderBuffers;
-import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.rendertype.OutputTarget;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
@@ -30,11 +30,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class JobRenderer {
 
-    private static final RenderStateShard.OutputStateShard[] OUTPUT_STATE_SHARDS = new RenderStateShard.OutputStateShard[]{
-            RenderStateShard.MAIN_TARGET,
-            RenderStateShard.OUTLINE_TARGET,
-            RenderStateShard.WEATHER_TARGET,
-            RenderStateShard.ITEM_ENTITY_TARGET
+    private static final OutputTarget[] OUTPUT_TARGETS = new OutputTarget[]{
+            OutputTarget.MAIN_TARGET,
+            OutputTarget.OUTLINE_TARGET,
+            OutputTarget.WEATHER_TARGET,
+            OutputTarget.ITEM_ENTITY_TARGET
     };
 
     // Hardcoded GUI Z range constants (from GuiRenderer, previously GuiGraphics.MIN_GUI_Z / MAX_GUI_Z)

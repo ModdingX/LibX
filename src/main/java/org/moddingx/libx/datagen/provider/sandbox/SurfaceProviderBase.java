@@ -66,7 +66,7 @@ public abstract class SurfaceProviderBase extends RegistryProviderBase {
      */
     public Holder<BiomeSurface> biome(ResourceKey<Biome> biome, SurfaceRules.RuleSource... rules) {
         BiomeSurface surface = new BiomeSurface(of(rules));
-        return this.registries.writableRegistry(SandBox.BIOME_SURFACE).register(ResourceKey.create(SandBox.BIOME_SURFACE, biome.location()), surface, RegistrationInfo.BUILT_IN);
+        return this.registries.writableRegistry(SandBox.BIOME_SURFACE).register(ResourceKey.create(SandBox.BIOME_SURFACE, biome.identifier()), surface, RegistrationInfo.BUILT_IN);
     }
     
     private static SurfaceRules.RuleSource of(SurfaceRules.RuleSource[] rules) {

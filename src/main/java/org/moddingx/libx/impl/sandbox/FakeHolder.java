@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderOwner;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 
 import javax.annotation.Nonnull;
@@ -44,7 +44,7 @@ public class FakeHolder<T> implements Holder<T> {
     }
 
     @Override
-    public boolean is(@Nonnull ResourceLocation id) {
+    public boolean is(@Nonnull Identifier id) {
         return false;
     }
 

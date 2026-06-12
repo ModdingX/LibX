@@ -9,12 +9,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
 import org.moddingx.libx.LibX;
-import org.moddingx.libx.impl.render.MultiBufferSourceSubmitCollector;
 
 /**
  * Some utilities for rendering in general.
@@ -22,10 +21,10 @@ import org.moddingx.libx.impl.render.MultiBufferSourceSubmitCollector;
 public class RenderHelper {
 
     /**
-     * ResourceLocation of a texture with the size 512x512 that is purely white.
+     * Identifier of a texture with the size 512x512 that is purely white.
      */
-    public static final ResourceLocation TEXTURE_WHITE = LibX.getInstance().resource("textures/white.png");
-    public static final ResourceLocation TEXTURE_CHEST_GUI = ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
+    public static final Identifier TEXTURE_WHITE = LibX.getInstance().resource("textures/white.png");
+    public static final Identifier TEXTURE_CHEST_GUI = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
     private static int GUI_COLOR = 0xFFFFFFFF;
 
     /**
@@ -53,7 +52,7 @@ public class RenderHelper {
     /**
      * Same as {@link #repeatBlit(RenderPipeline, GuiGraphics, int, int, int, int, int, int, TextureAtlasSprite)} but with the u and v values set directly and not with a TextureAtlasSprite.
      */
-    public static void repeatBlit(RenderPipeline pipeline, GuiGraphics graphics, ResourceLocation texture, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
+    public static void repeatBlit(RenderPipeline pipeline, GuiGraphics graphics, Identifier texture, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
         GpuTexture gpuTexture = Minecraft.getInstance().getTextureManager().getTexture(texture).getTexture();
         int textureWidth = gpuTexture.getWidth(0);
         int textureHeight = gpuTexture.getHeight(0);
@@ -164,17 +163,17 @@ public class RenderHelper {
     }
 
     /**
-     * Same as {@link #renderGuiBackground(RenderPipeline, GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground} but with pre-set texture.
+     * Same as {@link #renderGuiBackground(RenderPipeline, GuiGraphics, int, int, int, int, Identifier, int, int, int, int, int, int) renderGuiBackground} but with pre-set texture.
      */
     public static void renderGuiBackground(RenderPipeline pipeline, GuiGraphics graphics, int x, int y, int width, int height) {
         renderGuiBackground(pipeline, graphics, x, y, width, height, TEXTURE_CHEST_GUI);
     }
 
     /**
-     * Same as {@link #renderGuiBackground(RenderPipeline, GuiGraphics, int, int, int, int, ResourceLocation, int, int, int, int, int, int) renderGuiBackground}
+     * Same as {@link #renderGuiBackground(RenderPipeline, GuiGraphics, int, int, int, int, Identifier, int, int, int, int, int, int) renderGuiBackground}
      * with the default GUI texture.
      */
-    public static void renderGuiBackground(RenderPipeline pipeline, GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture) {
+    public static void renderGuiBackground(RenderPipeline pipeline, GuiGraphics graphics, int x, int y, int width, int height, Identifier texture) {
         renderGuiBackground(pipeline, graphics, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);
     }
 
@@ -194,7 +193,7 @@ public class RenderHelper {
      * @param minV     The minimum v position for the filling part of the texture
      * @param maxV     The maximum v position for the filling part of the texture
      */
-    public static void renderGuiBackground(RenderPipeline pipeline, GuiGraphics graphics, int x, int y, int width, int height, ResourceLocation texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
+    public static void renderGuiBackground(RenderPipeline pipeline, GuiGraphics graphics, int x, int y, int width, int height, Identifier texture, int textureX, int textureY, int minU, int maxU, int minV, int maxV) {
         // Background
         repeatBlit(pipeline, graphics, texture, x + 2, y + 2,
                 maxU - minU, maxV - minV, width - 4, height - 4,

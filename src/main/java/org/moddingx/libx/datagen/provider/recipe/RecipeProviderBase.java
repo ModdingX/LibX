@@ -1,8 +1,8 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,7 +11,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -128,20 +128,20 @@ public abstract class RecipeProviderBase implements DataProvider, RecipeExtensio
     }
 
     /**
-     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
+     * Gets a {@link Identifier} with the namespace being the modid of the mod given in constructor
      * and the path being the registry path of the given item.
      */
-    public ResourceLocation loc(ItemLike item) {
-        return ResourceLocation.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath());
+    public Identifier loc(ItemLike item) {
+        return Identifier.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath());
     }
 
     /**
-     * Gets a {@link ResourceLocation} with the namespace being the modid of the mod given in constructor
+     * Gets a {@link Identifier} with the namespace being the modid of the mod given in constructor
      * and the path being the registry path of the given item followed by an underscore and the
      * given suffix.
      */
-    public ResourceLocation loc(ItemLike item, String suffix) {
-        return ResourceLocation.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath() + "_" + suffix);
+    public Identifier loc(ItemLike item, String suffix) {
+        return Identifier.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath() + "_" + suffix);
     }
 
     @Override

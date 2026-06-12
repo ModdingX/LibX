@@ -3,7 +3,7 @@ package org.moddingx.libx.impl.network;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -87,7 +87,7 @@ public final class NetworkImpl extends NetworkX {
             CompoundTag nbt = be.getUpdateTag(level.registryAccess());
             //noinspection ConstantConditions
             if (nbt == null) return null;
-            ResourceLocation id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.getType());
+            Identifier id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.getType());
             if (id == null) return null;
             return new BeUpdateHandler.Message(pos, id, nbt);
         } else {

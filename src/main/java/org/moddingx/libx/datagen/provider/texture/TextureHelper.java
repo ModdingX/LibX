@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.texture;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +18,7 @@ public class TextureHelper {
     /**
      * Copies a texture to an image.
      * 
-     * @see #copyImage(BufferedImage, Textures, ResourceLocation, int, int, int, int, int, int)
+     * @see #copyImage(BufferedImage, Textures, Identifier, int, int, int, int, int, int)
      */
     public static void copyTexture(BufferedImage image, Textures textures, String src, int x, int y, int width, int height, int u, int v) {
         doCopyImage(image, textures, textures.texture(src), textures.textureScale(src), x, y, width, height, u, v);
@@ -27,7 +27,7 @@ public class TextureHelper {
     /**
      * Copies an image to another image.
      * 
-     * @see #copyImage(BufferedImage, Textures, ResourceLocation, int, int, int, int, int, int)
+     * @see #copyImage(BufferedImage, Textures, Identifier, int, int, int, int, int, int)
      */
     public static void copyImage(BufferedImage image, Textures textures, String src, int x, int y, int width, int height, int u, int v) {
         doCopyImage(image, textures, textures.image(src), textures.imageScale(src), x, y, width, height, u, v);
@@ -36,9 +36,9 @@ public class TextureHelper {
     /**
      * Copies a texture to an image.
      * 
-     * @see #copyImage(BufferedImage, Textures, ResourceLocation, int, int, int, int, int, int)
+     * @see #copyImage(BufferedImage, Textures, Identifier, int, int, int, int, int, int)
      */
-    public static void copyTexture(BufferedImage image, Textures textures, ResourceLocation src, int x, int y, int width, int height, int u, int v) {
+    public static void copyTexture(BufferedImage image, Textures textures, Identifier src, int x, int y, int width, int height, int u, int v) {
         doCopyImage(image, textures, textures.texture(src), textures.textureScale(src), x, y, width, height, u, v);
     }
 
@@ -55,7 +55,7 @@ public class TextureHelper {
      * @param u        Unscaled x position on source image.
      * @param v        Unscaled y position on source image.
      */
-    public static void copyImage(BufferedImage image, Textures textures, ResourceLocation src, int x, int y, int width, int height, int u, int v) {
+    public static void copyImage(BufferedImage image, Textures textures, Identifier src, int x, int y, int width, int height, int u, int v) {
         doCopyImage(image, textures, textures.image(src), textures.imageScale(src), x, y, width, height, u, v);
     }
 

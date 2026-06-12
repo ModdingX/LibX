@@ -58,7 +58,7 @@ public class CustomEditor<T> implements ConfigEditor<T> {
         }
     }
     
-    private static class CustomButton<T> extends Button {
+    private static class CustomButton<T> extends Button.Plain {
 
         private final ConfigScreenManager manager;
         private final ConfigScreenContent<T> content;

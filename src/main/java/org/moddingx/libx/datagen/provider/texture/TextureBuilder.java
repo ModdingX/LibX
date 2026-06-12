@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.texture;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.mod.ModX;
 
@@ -22,13 +22,13 @@ import java.util.function.UnaryOperator;
 public class TextureBuilder {
 
     private final ModX mod;
-    private final Function<ResourceLocation, BufferedImage> textureLoader;
+    private final Function<Identifier, BufferedImage> textureLoader;
     
     private int scale;
-    private final Map<ResourceLocation, Pair<BufferedImage, Integer>> images;
-    private final Map<ResourceLocation, Pair<BufferedImage, Integer>> fakes;
+    private final Map<Identifier, Pair<BufferedImage, Integer>> images;
+    private final Map<Identifier, Pair<BufferedImage, Integer>> fakes;
 
-    public TextureBuilder(ModX mod, Function<ResourceLocation, BufferedImage> textureLoader) {
+    public TextureBuilder(ModX mod, Function<Identifier, BufferedImage> textureLoader) {
         this.mod = mod;
         this.textureLoader = textureLoader;
         
@@ -54,14 +54,14 @@ public class TextureBuilder {
     /**
      * Adds a required texture which has the given size by default as width and height.
      */
-    public TextureBuilder addTexture(ResourceLocation loc, int defaultSize) {
+    public TextureBuilder addTexture(Identifier loc, int defaultSize) {
         return this.addTexture(loc, defaultSize, defaultSize);
     }
 
     /**
      * Adds a required image which has the given size by default as width and height.
      */
-    public TextureBuilder addImage(ResourceLocation loc, int defaultSize) {
+    public TextureBuilder addImage(Identifier loc, int defaultSize) {
         return this.addImage(loc, defaultSize, defaultSize);
     }
 
@@ -82,8 +82,8 @@ public class TextureBuilder {
     /**
      * Adds a required texture which has the given width and height by default.
      */
-    public TextureBuilder addTexture(ResourceLocation loc, int defaultWidth, int defaultHeight) {
-        return this.addImage(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), defaultWidth, defaultHeight);
+    public TextureBuilder addTexture(Identifier loc, int defaultWidth, int defaultHeight) {
+        return this.addImage(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), defaultWidth, defaultHeight);
     }
 
     /**
@@ -91,7 +91,7 @@ public class TextureBuilder {
      *
      * @param loc A fake <i>image</i> id.
      */
-    public TextureBuilder addFake(ResourceLocation loc, BufferedImage image) {
+    public TextureBuilder addFake(Identifier loc, BufferedImage image) {
         return this.addFake(loc, image, 1);
     }
 
@@ -100,7 +100,7 @@ public class TextureBuilder {
      *
      * @param loc A fake <i>image</i> id.
      */
-    public TextureBuilder addFake(ResourceLocation loc, BufferedImage image, int scale) {
+    public TextureBuilder addFake(Identifier loc, BufferedImage image, int scale) {
         if (this.fakes.containsKey(loc)) throw new IllegalStateException("Duplicate fake texture: " + loc);
         this.fakes.put(loc, Pair.of(image, scale));
         return this;
@@ -112,8 +112,8 @@ public class TextureBuilder {
      * 
      * @param loc A fake <i>image</i> id.
      */
-    public TextureBuilder addFakeTexture(ResourceLocation loc, ResourceLocation texLoc, UnaryOperator<BufferedImage> image) {
-        return this.addFakeImage(loc, ResourceLocation.fromNamespaceAndPath(texLoc.getNamespace(), "textures/" + texLoc.getPath() + ".png"), image);
+    public TextureBuilder addFakeTexture(Identifier loc, Identifier texLoc, UnaryOperator<BufferedImage> image) {
+        return this.addFakeImage(loc, Identifier.fromNamespaceAndPath(texLoc.getNamespace(), "textures/" + texLoc.getPath() + ".png"), image);
     }
 
     /**
@@ -122,7 +122,7 @@ public class TextureBuilder {
      *
      * @param loc A fake <i>image</i> id.
      */
-    public TextureBuilder addFakeImage(ResourceLocation loc, ResourceLocation imgLoc, UnaryOperator<BufferedImage> image) {
+    public TextureBuilder addFakeImage(Identifier loc, Identifier imgLoc, UnaryOperator<BufferedImage> image) {
         if (!this.images.containsKey(imgLoc)) throw new IllegalStateException("Can't add fake transform of non-loaded image: " + imgLoc);
         if (this.fakes.containsKey(loc)) throw new IllegalStateException("Duplicate fake texture: " + loc);
         Pair<BufferedImage, Integer> original = this.images.get(imgLoc);
@@ -133,7 +133,7 @@ public class TextureBuilder {
     /**
      * Adds a required image which has the given width and height by default.
      */
-    public TextureBuilder addImage(ResourceLocation loc, int defaultWidth, int defaultHeight) {
+    public TextureBuilder addImage(Identifier loc, int defaultWidth, int defaultHeight) {
         if (!isPowerOfTwo(defaultWidth)) throw new IllegalArgumentException("Invalid default width for texture " + loc + ": " + defaultWidth + " is not a power of two.");
         if (!isPowerOfTwo(defaultHeight)) throw new IllegalArgumentException("Invalid default height for texture " + loc + ": " + defaultHeight + " is not a power of two.");
         if (!this.images.containsKey(loc)) {
@@ -157,7 +157,7 @@ public class TextureBuilder {
      * Creates the resulting {@link Textures} object.
      */
     public Textures build() {
-        Map<ResourceLocation, Pair<BufferedImage, Integer>> allImages = new HashMap<>(this.images);
+        Map<Identifier, Pair<BufferedImage, Integer>> allImages = new HashMap<>(this.images);
         allImages.putAll(this.fakes);
         return new Textures(this.mod, this.textureLoader, this.scale, allImages);
     }

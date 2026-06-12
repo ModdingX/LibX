@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.texture;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.commons.lang3.tuple.Pair;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.mod.ModX;
@@ -18,12 +18,12 @@ import java.util.function.Function;
 public class Textures {
 
     private final ModX mod;
-    private final Function<ResourceLocation, BufferedImage> textureLoader;
+    private final Function<Identifier, BufferedImage> textureLoader;
     
     private final int scale;
-    private final Map<ResourceLocation, Pair<BufferedImage, Integer>> images;
+    private final Map<Identifier, Pair<BufferedImage, Integer>> images;
 
-    public Textures(ModX mod, Function<ResourceLocation, BufferedImage> textureLoader, int scale, Map<ResourceLocation, Pair<BufferedImage, Integer>> images) {
+    public Textures(ModX mod, Function<Identifier, BufferedImage> textureLoader, int scale, Map<Identifier, Pair<BufferedImage, Integer>> images) {
         this.mod = mod;
         this.textureLoader = textureLoader;
         this.scale = scale;
@@ -57,15 +57,15 @@ public class Textures {
      * Gets the scale for a source texture. This indicates, how much the given source texture needs to be
      * scaled up to match the target scale.
      */
-    public int textureScale(ResourceLocation loc) {
-        return this.imageScale(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
+    public int textureScale(Identifier loc) {
+        return this.imageScale(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
     }
 
     /**
      * Gets the scale for a source image. This indicates, how much the given source image needs to be
      * scaled up to match the target scale.
      */
-    public int imageScale(ResourceLocation loc) {
+    public int imageScale(Identifier loc) {
         if (this.images.containsKey(loc)) {
             return this.scale / this.images.get(loc).getRight();
         } else {
@@ -91,14 +91,14 @@ public class Textures {
     /**
      * Gets a preloaded source texture.
      */
-    public BufferedImage texture(ResourceLocation loc) {
-        return this.image(ResourceLocation.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
+    public BufferedImage texture(Identifier loc) {
+        return this.image(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
     }
 
     /**
      * Gets a preloaded source image.
      */
-    public BufferedImage image(ResourceLocation loc) {
+    public BufferedImage image(Identifier loc) {
         if (this.images.containsKey(loc)) {
             return this.images.get(loc).getLeft();
         } else {

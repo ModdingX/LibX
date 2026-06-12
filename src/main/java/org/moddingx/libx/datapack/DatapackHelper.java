@@ -3,7 +3,7 @@ package org.moddingx.libx.datapack;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
@@ -34,7 +34,7 @@ public class DatapackHelper {
         } else {
             registryPart = key.registry().getNamespace() + "/" + key.registry().getPath();
         }
-        return key.location().getNamespace() + "/" + registryPart + "/" + key.location().getPath() + ".json";
+        return key.identifier().getNamespace() + "/" + registryPart + "/" + key.identifier().getPath() + ".json";
     }
     
     /**

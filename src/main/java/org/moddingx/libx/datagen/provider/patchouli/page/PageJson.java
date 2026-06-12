@@ -10,7 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
 
@@ -27,7 +27,7 @@ public class PageJson {
      */
     public static JsonElement stack(ItemStack stack) {
         StringBuilder sb = new StringBuilder();
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         sb.append(id.getNamespace());
         sb.append(":");
         sb.append(id.getPath());

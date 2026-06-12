@@ -1,7 +1,7 @@
 package org.moddingx.libx.datagen.provider.recipe.crafting;
 
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -22,7 +22,7 @@ public interface CraftingExtension extends RecipeExtension {
      * (A sub list means that <b>one</b> of its elements can be used.)
      *
      * <ul>
-     *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
+     *     <li>Optional: A {@link Identifier} that serves as the recipe id.</li>
      *     <li>Optional: A {@link RecipeCategory}. Defaults to {@link RecipeCategory#MISC}</li>
      *     <li>Optional: A single {@link ICondition} or an array of {@link ICondition IConditions} as conditions for the recipe.</li>
      *     <ul>
@@ -53,7 +53,7 @@ public interface CraftingExtension extends RecipeExtension {
      * (A sub list means that <b>one</b> of its elements can be used.)
      *
      * <ul>
-     *     <li>Optional: A {@link ResourceLocation} that serves as the recipe id.</li>
+     *     <li>Optional: A {@link Identifier} that serves as the recipe id.</li>
      *     <li>Optional: A {@link RecipeCategory}. Defaults to {@link RecipeCategory#MISC}</li>
      *     <li>Optional: A single {@link ICondition} or an array of {@link ICondition IConditions} as conditions for the recipe.</li>
      *     <ul>

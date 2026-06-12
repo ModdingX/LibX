@@ -7,7 +7,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.SurfaceRules;
@@ -48,8 +48,8 @@ public record SurfaceRuleSet(boolean useDefaultNoiseSurface, SurfaceRules.RuleSo
         ArrayList<ResourceKey<Biome>> biomesWithRules = new ArrayList<>(); 
         for (Holder<Biome> biome : biomes) {
             @Nullable
-            ResourceLocation id = switch (biome.kind()) {
-                case REFERENCE -> ((Holder.Reference<Biome>) biome).key().location();
+            Identifier id = switch (biome.kind()) {
+                case REFERENCE -> ((Holder.Reference<Biome>) biome).key().identifier();
                 case DIRECT -> biomeRegistry.getKey(biome.value());
             };
             if (id != null) {

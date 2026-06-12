@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.base.decoration;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -9,7 +9,7 @@ import org.moddingx.libx.base.decoration.DecorationMaterial;
 
 import java.util.function.Function;
 
-public record BaseMaterial(boolean isWood, boolean isStone, boolean isMetal, Function<ResourceLocation, DecorationMaterial.MaterialProperties> factory) implements DecorationMaterial {
+public record BaseMaterial(boolean isWood, boolean isStone, boolean isMetal, Function<Identifier, DecorationMaterial.MaterialProperties> factory) implements DecorationMaterial {
 
     public static final BaseMaterial GENERIC = new BaseMaterial(false, false, false, id -> new DecorationMaterial.MaterialProperties(null, null));
     
@@ -79,7 +79,7 @@ public record BaseMaterial(boolean isWood, boolean isStone, boolean isMetal, Fun
     });
 
     @Override
-    public MaterialProperties init(ResourceLocation id) {
+    public MaterialProperties init(Identifier id) {
         return this.factory.apply(id);
     }
 }

@@ -1,13 +1,14 @@
 package org.moddingx.libx.coremods.transformers;
 
+import net.neoforged.fml.jarcontents.JarContents;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforgespi.transformation.ProcessorName;
 import net.neoforged.neoforgespi.transformation.SimpleClassProcessor;
 import net.neoforged.neoforgespi.transformation.SimpleTransformationContext;
+import net.neoforged.neoforgespi.locating.IModFile;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -173,44 +174,28 @@ public class RegisterClassIds extends SimpleClassProcessor {
     }
 
     private static Map<String, List<FieldEntry>> loadEntries() {
+        Collection<JarContents> sources = FMLLoader.getCurrent().getLoadingModList().getAllModFiles().stream()
+                .map(IModFile::getContents)
+                .toList();
+        return RegisterClassIds.loadEntries(sources);
+    }
+
+    static Map<String, List<FieldEntry>> loadEntries(Collection<JarContents> sources) {
         Map<String, List<FieldEntry>> map = new HashMap<>();
-        Set<String> seenUrls = new HashSet<>();
-
-        // Production: mod JARs are accessible via the service classloader
-        try {
-            Enumeration<URL> resources = RegisterClassIds.class.getClassLoader().getResources("META-INF/libx_registration.json");
-            while (resources.hasMoreElements()) {
-                URL url = resources.nextElement();
-                if (seenUrls.add(url.toString())) {
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
-                        RegisterClassIds.readAndParse(reader, map);
-                    } catch (Exception e) {
-                        System.err.println("[LibX] Failed to parse libx_registration.json from " + url + ": " + e);
-                    }
+        for (JarContents contents : sources) {
+            try {
+                byte[] data = contents.readFile("META-INF/libx_registration.json");
+                if (data != null) {
+                    Map<String, List<FieldEntry>> sourceEntries = new HashMap<>();
+                    RegisterClassIds.parseJson(new String(data, StandardCharsets.UTF_8), sourceEntries);
+                    sourceEntries.forEach((className, entries) ->
+                            map.computeIfAbsent(className, key -> new ArrayList<>()).addAll(entries));
                 }
-            }
-        } catch (Exception e) {
-            System.err.println("[LibX] Failed to enumerate libx_registration.json: " + e);
-        }
-
-        // Dev: NeoForge InDevFolderLocator exposes mod output dirs via MOD_CLASSES env var
-        // in the format "modid%%/path/to/dir:modid%%/path/to/other/dir:..."
-        String modClassesEnv = System.getenv("MOD_CLASSES");
-        if (modClassesEnv != null) {
-            for (String entry : modClassesEnv.split(File.pathSeparator)) {
-                int sep = entry.indexOf("%%");
-                String dirPath = (sep >= 0) ? entry.substring(sep + 2) : entry;
-                File jsonFile = new File(dirPath, "META-INF/libx_registration.json");
-                if (jsonFile.isFile() && seenUrls.add(jsonFile.toURI().toString())) {
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8))) {
-                        RegisterClassIds.readAndParse(reader, map);
-                    } catch (Exception e) {
-                        System.err.println("[LibX] Failed to parse libx_registration.json from " + jsonFile + ": " + e);
-                    }
-                }
+            } catch (Exception e) {
+                System.err.println("[LibX] Failed to read or parse libx_registration.json from mod file "
+                        + contents.getPrimaryPath() + ": " + e);
             }
         }
-
         if (map.isEmpty()) {
             System.err.println("[LibX] WARNING: No libx_registration.json entries found — @RegisterClass ids will not be injected!");
         } else {
@@ -220,19 +205,16 @@ public class RegisterClassIds extends SimpleClassProcessor {
         return map;
     }
 
-    private static void readAndParse(BufferedReader reader, Map<String, List<FieldEntry>> map) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) sb.append(line);
-        RegisterClassIds.parseJson(sb.toString(), map);
-    }
-
     // Expected format: {@code [{"class":"a/b/C","field":"f","id":"m:n"}, ...]}
     private static void parseJson(String json, Map<String, List<FieldEntry>> map) {
-        // Strip outer array brackets
         json = json.trim();
-        if (json.startsWith("[")) json = json.substring(1);
-        if (json.endsWith("]")) json = json.substring(0, json.length() - 1);
+        if (!json.startsWith("[") || !json.endsWith("]")) {
+            throw new IllegalArgumentException("Registration metadata must be a JSON array");
+        }
+        json = json.substring(1, json.length() - 1).trim();
+        if (json.isEmpty()) {
+            return;
+        }
 
         // Split on "},{" to get individual objects
         for (String obj : json.split("\\},\\s*\\{")) {
@@ -241,7 +223,7 @@ public class RegisterClassIds extends SimpleClassProcessor {
             String field = extractValue(obj, "field");
             String id = extractValue(obj, "id");
             if (cls == null || field == null || id == null) {
-                continue;
+                throw new IllegalArgumentException("Invalid registration metadata entry: {" + obj + "}");
             }
 
             map.computeIfAbsent(cls, k -> new ArrayList<>()).add(new FieldEntry(field, id));
@@ -264,5 +246,5 @@ public class RegisterClassIds extends SimpleClassProcessor {
         return obj.substring(start, end);
     }
 
-    private record FieldEntry(String fieldName, String id) {}
+    record FieldEntry(String fieldName, String id) {}
 }

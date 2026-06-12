@@ -2,11 +2,15 @@ package org.moddingx.libx.impl.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.*;
-import net.minecraft.Util;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.Strictness;
+import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -44,10 +48,10 @@ public class ConfigImpl {
         return builder.create();
     });
 
-    private static final Map<ResourceLocation, ConfigImpl> configs = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Identifier, ConfigImpl> configs = Collections.synchronizedMap(new HashMap<>());
 
     @Nonnull
-    public static ConfigImpl getConfig(ResourceLocation id) {
+    public static ConfigImpl getConfig(Identifier id) {
         if (configs.containsKey(id)) {
             return configs.get(id);
         } else {
@@ -56,7 +60,7 @@ public class ConfigImpl {
     }
     
     @Nullable
-    public static ConfigImpl getConfigNullable(ResourceLocation id) {
+    public static ConfigImpl getConfigNullable(Identifier id) {
         return configs.getOrDefault(id, null);
     }
 
@@ -64,7 +68,7 @@ public class ConfigImpl {
         return Set.copyOf(configs.values());
     }
     
-    public final ResourceLocation id;
+    public final Identifier id;
     public final Class<?> baseClass;
     public final Path path;
     public final Map<Field, ConfigKey> keys;
@@ -76,7 +80,7 @@ public class ConfigImpl {
     private ConfigState savedState;
     private ConfigState defaultState;
 
-    public ConfigImpl(ResourceLocation id, Class<?> baseClass, Path path, boolean clientConfig) {
+    public ConfigImpl(Identifier id, Class<?> baseClass, Path path, boolean clientConfig) {
         if (configs.containsKey(id)) {
             throw new IllegalStateException("Config registered twice: " + id + " (" + baseClass + ")");
         }
@@ -384,7 +388,7 @@ public class ConfigImpl {
         return this.shadowed;
     }
     
-    public static Path resolveConfigPath(Path configDir, ResourceLocation id) {
+    public static Path resolveConfigPath(Path configDir, Identifier id) {
         return id.getPath().equals("config") ? configDir.resolve(id.getNamespace() + ".json5") : configDir.resolve(id.getNamespace()).resolve(id.getPath() + ".json5");
     }
 

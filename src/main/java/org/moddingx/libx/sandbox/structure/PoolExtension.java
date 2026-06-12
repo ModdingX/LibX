@@ -7,7 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.moddingx.libx.sandbox.SandBox;
@@ -20,7 +20,7 @@ import java.util.List;
 public class PoolExtension {
     
     public static final Codec<PoolExtension> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("pool").forGetter(p -> p.pool.location()),
+            Identifier.CODEC.fieldOf("pool").forGetter(p -> p.pool.identifier()),
             Codec.BOOL.optionalFieldOf("required", false).forGetter(p -> p.required),
             Codec.mapPair(
                     StructurePoolElement.CODEC.fieldOf("element"),
@@ -34,7 +34,7 @@ public class PoolExtension {
     private final boolean required;
     private final List<Pair<StructurePoolElement, Integer>> elements;
 
-    private PoolExtension(ResourceLocation poolId, boolean required, List<Pair<StructurePoolElement, Integer>> elements) {
+    private PoolExtension(Identifier poolId, boolean required, List<Pair<StructurePoolElement, Integer>> elements) {
         this(ResourceKey.create(Registries.TEMPLATE_POOL, poolId), required, elements);
     }
     

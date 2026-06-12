@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
@@ -51,8 +51,8 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         this.ceiling = new Ceiling(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
 
         if (signKey != null) {
-            DecorationBlockIdContext.set(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(
-                    signKey.location().getNamespace(), signKey.location().getPath() + "_wall")));
+            DecorationBlockIdContext.set(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(
+                    signKey.identifier().getNamespace(), signKey.identifier().getPath() + "_wall")));
         }
 
         this.wall = new Wall(this.parent, this::getBlockEntityType, this.parent.getMaterialProperties().woodType());
@@ -65,7 +65,7 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
 
         Item.Properties itemProps = new Item.Properties().stacksTo(16).useBlockDescriptionPrefix();
         if (signKey != null) {
-            itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.location()));
+            itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.identifier()));
         }
         this.item = new HangingSignItem(this.ceiling, this.wall, itemProps) {
 

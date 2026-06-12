@@ -8,7 +8,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,7 @@ public class ObjectCraftingBuilder {
 
     public static void buildShaped(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
-        ResourceLocation id = getId(reader);
+        Identifier id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
         List<ICondition> conditions = getConditions(reader);
         ItemStack output = getOutput(reader);
@@ -48,7 +48,7 @@ public class ObjectCraftingBuilder {
 
     public static void buildShapeless(RecipeExtension ext, Object[] objects) {
         ObjectReader reader = new ObjectReader(objects);
-        ResourceLocation id = getId(reader);
+        Identifier id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
         List<ICondition> conditions = getConditions(reader);
         ItemStack output = getOutput(reader);
@@ -61,8 +61,8 @@ public class ObjectCraftingBuilder {
     }
 
     @Nullable
-    private static ResourceLocation getId(ObjectReader reader) {
-        return reader.optConsume(ResourceLocation.class).orElse(null);
+    private static Identifier getId(ObjectReader reader) {
+        return reader.optConsume(Identifier.class).orElse(null);
     }
 
     @Nonnull

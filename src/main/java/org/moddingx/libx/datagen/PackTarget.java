@@ -1,7 +1,7 @@
 package org.moddingx.libx.datagen;
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceMetadata;
 import org.moddingx.libx.impl.datagen.registries.DatagenRegistrySet;
@@ -94,7 +94,7 @@ public class PackTarget {
     /**
      * Finds an existing resource in this pack target. Resources can only be located in pack types, where this pack target supports output.
      */
-    public Resource find(PackType type, ResourceLocation resourceId) throws FileNotFoundException {
+    public Resource find(PackType type, Identifier resourceId) throws FileNotFoundException {
         if (!this.resourceMap.containsKey(type)) throw new UnsupportedOperationException("The pack target '" + this.name + "' does not support output on " + type);
         Resource resource = this.resourceMap.get(type).getResource(this.system.resourceManagers(), resourceId);
         if (resource == null) throw new FileNotFoundException(this.name + "/" + resourceId);

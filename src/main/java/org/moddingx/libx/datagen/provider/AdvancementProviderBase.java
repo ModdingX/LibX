@@ -3,7 +3,7 @@ package org.moddingx.libx.datagen.provider;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -16,7 +16,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -56,7 +56,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     private final HolderGetter<Item> itemRegistries;
     private final HolderGetter<Enchantment> enchantmentRegistries;
     private final HolderGetter<EntityType<?>> entityRegistries;
-    private final Map<ResourceLocation, Supplier<AdvancementInfo>> advancements = new HashMap<>();
+    private final Map<Identifier, Supplier<AdvancementInfo>> advancements = new HashMap<>();
     private String rootId = null;
     private Supplier<AdvancementInfo> rootSupplier = null;
 
@@ -90,7 +90,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         this.setup();
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, this.registries.registryAccess());
         return CompletableFuture.allOf(this.advancements.entrySet().stream().map(entry -> {
-            ResourceLocation id = entry.getKey();
+            Identifier id = entry.getKey();
             ResourceKey<Advancement> key = ResourceKey.create(Registries.ADVANCEMENT, id);
             AdvancementInfo advancementInfo = entry.getValue().get();
             if (advancementInfo.advancement() == null) return CompletableFuture.completedFuture(null);
@@ -152,17 +152,17 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Adds a built {@link Advancement advancement} to the provider.
      */
-    public void advancement(ResourceLocation id, Advancement advancement) {
+    public void advancement(Identifier id, Advancement advancement) {
         if (this.advancements.put(id, () -> new AdvancementInfo(id, advancement)) != null) {
             throw new IllegalStateException("Duplicate advancement: " + id);
         }
     }
 
     /**
-     * Adds an advancement to the provider identified by its {@link ResourceLocation}. Returns
+     * Adds an advancement to the provider identified by its {@link Identifier}. Returns
      * an {@link AdvancementFactory} to customise the advancement.
      */
-    public AdvancementFactory advancement(ResourceLocation id) {
+    public AdvancementFactory advancement(Identifier id) {
         AdvancementFactory factory = new AdvancementFactory(id);
         if (this.advancements.put(id, factory::build) != null) {
             throw new IllegalStateException("Duplicate advancement: " + id);
@@ -172,14 +172,14 @@ public abstract class AdvancementProviderBase implements DataProvider {
 
     /**
      * Adds an {@link Advancement advancement} to the provider identified by an id. The
-     * {@link ResourceLocation} is built with the modid and the root advancement id. Returns an
+     * {@link Identifier} is built with the modid and the root advancement id. Returns an
      * {@link AdvancementFactory} to customise the advancement.
      */
     public AdvancementFactory advancement(String id) {
         return this.advancement(this.idFor(id));
     }
 
-    private ResourceLocation idFor(String id) {
+    private Identifier idFor(String id) {
         if (this.rootId == null) {
             throw new IllegalStateException("On advancement providers without a root advancement only fully qualified resource locations are allowed, no plain ids.");
         }
@@ -372,23 +372,23 @@ public abstract class AdvancementProviderBase implements DataProvider {
      */
     public class AdvancementFactory {
 
-        private final ResourceLocation id;
+        private final Identifier id;
         private final boolean root;
         private Supplier<AdvancementInfo> parent;
         @Nullable private DisplayInfo display;
-        @Nullable private ResourceLocation background;
+        @Nullable private Identifier background;
         private final List<List<Criterion<?>>> criteria = new ArrayList<>();
         private AdvancementRewards reward = AdvancementRewards.EMPTY;
         private boolean telmetryEvent;
 
         private AdvancementFactory(String namespace, String rootId) {
-            this.id = ResourceLocation.fromNamespaceAndPath(namespace, rootId + "/root");
+            this.id = Identifier.fromNamespaceAndPath(namespace, rootId + "/root");
             this.root = true;
             this.parent = () -> null;
             this.telmetryEvent = false;
         }
         
-        private AdvancementFactory(ResourceLocation id) {
+        private AdvancementFactory(Identifier id) {
             this.id = id;
             this.root = false;
             this.parent = () -> null;
@@ -397,7 +397,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         /**
          * Sets the parent of this advancement. The advancement must be found in this provider.
          */
-        public AdvancementFactory parent(ResourceLocation id) {
+        public AdvancementFactory parent(Identifier id) {
             if (this.root) throw new IllegalStateException("Can't set parent for root advancement.");
             if (!AdvancementProviderBase.this.advancements.containsKey(id)) {
                 throw new IllegalStateException("Parent advancement unknown: " + id);
@@ -420,7 +420,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Sets the parent of this advancement. This method should not be used with advancements from this provider
          * and is only meant to set foreign advancements as parent.
          */
-        public AdvancementFactory foreignParent(ResourceLocation id) {
+        public AdvancementFactory foreignParent(Identifier id) {
             if (this.root) throw new IllegalStateException("Can't set parent for root advancement.");
             this.parent = () -> new AdvancementInfo(id, null);
             return this;
@@ -530,7 +530,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         /**
          * Sets the background of the advancement tab. Must be used on the root advancement as is not allowed on others.
          */
-        public AdvancementFactory background(ResourceLocation background) {
+        public AdvancementFactory background(Identifier background) {
             if (!this.root) {
                 throw new IllegalStateException("Can't set background on non-root advancement.");
             }
@@ -598,7 +598,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
                 List<String> criterionGroupIds = new ArrayList<>();
                 for (Criterion<?> criterion : criterionGroup) {
                     CriterionTrigger<?> trigger = Objects.requireNonNull(criterion.trigger(), "Can't build advancement: Empty criterion");
-                    ResourceLocation triggerId = Objects.requireNonNull(BuiltInRegistries.TRIGGER_TYPES.getKey(trigger), "Unregistered criterion trigger");
+                    Identifier triggerId = Objects.requireNonNull(BuiltInRegistries.TRIGGER_TYPES.getKey(trigger), "Unregistered criterion trigger");
                     String baseName = "minecraft".equals(triggerId.getNamespace()) ? triggerId.getPath() : triggerId.toString();
                     baseName = baseName.replace(':', '_').replace('.', '_').replace('/', '_');
                     String nextId = baseName;
@@ -613,7 +613,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
                 criteriaIds.add(List.copyOf(criterionGroupIds));
             }
             AdvancementInfo parent = this.parent.get();
-            ResourceLocation parentId = parent == null ? null : parent.id();
+            Identifier parentId = parent == null ? null : parent.id();
             Advancement parentAdv = parentId == null ? null : parent.advancement();
             if (this.root && parentId != null) {
                 throw new IllegalStateException("Root advancement can not have a parent.");
@@ -667,5 +667,5 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
     
     // null advancement means unknown
-    private record AdvancementInfo(ResourceLocation id, @Nullable Advancement advancement) {}
+    private record AdvancementInfo(Identifier id, @Nullable Advancement advancement) {}
 }

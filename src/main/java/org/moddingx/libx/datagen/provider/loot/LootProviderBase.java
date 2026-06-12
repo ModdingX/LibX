@@ -6,7 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.item.ItemStack;
@@ -49,8 +49,8 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     protected final RegistrySet registries;
     protected final String folder;
     protected final ContextKeySet contextKeySet;
-    protected final Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements;
-    protected final Function<T, ResourceLocation> idResolver;
+    protected final Supplier<Stream<Map.Entry<Identifier, T>>> modElements;
+    protected final Function<T, Identifier> idResolver;
 
     private final Set<T> ignored = new HashSet<>();
     private final Map<T, Function<T, LootTable.Builder>> functionMap = new HashMap<>();
@@ -58,13 +58,13 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     protected LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, ResourceKey<? extends Registry<T>> registryKey) {
         this(ctx, folder, contextKeySet,
                 () -> ctx.registries().registry(registryKey).entrySet().stream()
-                        .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
-                        .map(entry -> Map.entry(entry.getKey().location(), entry.getValue())),
+                        .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::identifier)))
+                        .map(entry -> Map.entry(entry.getKey().identifier(), entry.getValue())),
                 id -> ctx.registries().registry(registryKey).getKey(id)
         );
     }
     
-    private LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, Supplier<Stream<Map.Entry<ResourceLocation, T>>> modElements, Function<T, ResourceLocation> allElementIds) {
+    private LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, Supplier<Stream<Map.Entry<Identifier, T>>> modElements, Function<T, Identifier> allElementIds) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
         this.registries = ctx.registries();
@@ -72,13 +72,13 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         this.contextKeySet = contextKeySet;
         this.modElements = modElements;
         this.idResolver = value -> {
-            ResourceLocation id = allElementIds.apply(value);
+            Identifier id = allElementIds.apply(value);
             if (id == null) throw new IllegalStateException("Unregistered value: " + value);
             return id;
         };
     }
     
-    protected LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, Function<T, ResourceLocation> elementIds) {
+    protected LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, Function<T, Identifier> elementIds) {
         super(ctx, DatagenStage.REGISTRY_SETUP);
         this.mod = ctx.mod();
         this.registries = ctx.registries();
@@ -86,7 +86,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         this.contextKeySet = contextKeySet;
         this.modElements = () -> this.functionMap.keySet().stream().map(element -> Map.entry(elementIds.apply(element), element));
         this.idResolver = value -> {
-            ResourceLocation id = elementIds.apply(value);
+            Identifier id = elementIds.apply(value);
             if (id == null) throw new IllegalStateException("Unregistered value: " + value);
             return id;
         };
@@ -142,15 +142,15 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         // Because of the validation needed for loot tables, we don't support registering from fields.
         this.setup();
 
-        Map<ResourceLocation, LootTable> tables = this.modElements.get()
+        Map<Identifier, LootTable> tables = this.modElements.get()
                 .filter(entry -> this.mod.modid.equals(entry.getKey().getNamespace()))
                 .filter(entry -> !this.ignored.contains(entry.getValue()))
                 .flatMap(this::resolve)
-                .map(entry -> Map.entry(ResourceLocation.fromNamespaceAndPath(entry.getKey().getNamespace(), this.folder + "/" + entry.getKey().getPath()), entry.getValue()))
+                .map(entry -> Map.entry(Identifier.fromNamespaceAndPath(entry.getKey().getNamespace(), this.folder + "/" + entry.getKey().getPath()), entry.getValue()))
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
         WritableRegistry<LootTable> registry = this.registries.writableRegistry(Registries.LOOT_TABLE);
-        for (Map.Entry<ResourceLocation, LootTable> entry : tables.entrySet()) {
+        for (Map.Entry<Identifier, LootTable> entry : tables.entrySet()) {
             registry.register(ResourceKey.create(Registries.LOOT_TABLE, entry.getKey()), entry.getValue(), RegistrationInfo.BUILT_IN);
         }
 
@@ -158,7 +158,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         HolderLookup.Provider lootTableHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.LOOT_TABLE)));
         ValidationContext validationContext = new ValidationContext(problems, this.contextKeySet, lootTableHolderProvider);
 
-        for (Map.Entry<ResourceLocation, LootTable> entry : tables.entrySet()) {
+        for (Map.Entry<Identifier, LootTable> entry : tables.entrySet()) {
             entry.getValue().validate(validationContext.setContextKeySet(this.contextKeySet).enterElement(() -> "{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
         }
 
@@ -168,7 +168,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         }
     }
 
-    private Stream<Map.Entry<ResourceLocation, LootTable>> resolve(Map.Entry<ResourceLocation, T> entry) {
+    private Stream<Map.Entry<Identifier, LootTable>> resolve(Map.Entry<Identifier, T> entry) {
         Function<T, LootTable.Builder> loot;
         if (this.functionMap.containsKey(entry.getValue())) {
             loot = this.functionMap.get(entry.getValue());
@@ -250,8 +250,8 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
      * Makes a reference to another loot table in this mod.
      */
     public SimpleLootFactory<T> reference(T value) {
-        ResourceLocation elementId = this.idResolver.apply(value);
-        return this.reference(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(elementId.getNamespace(), this.folder + "/" + elementId.getPath())));
+        Identifier elementId = this.idResolver.apply(value);
+        return this.reference(ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(elementId.getNamespace(), this.folder + "/" + elementId.getPath())));
     }
 
     /**

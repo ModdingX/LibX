@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,7 +28,7 @@ public class BeUpdateHandler extends PacketHandler<BeUpdateHandler.Message> {
     protected BeUpdateHandler() {
         super(TYPE, PacketFlow.CLIENTBOUND, StreamCodec.composite(
                 BlockPos.STREAM_CODEC, Message::pos,
-                ResourceLocation.STREAM_CODEC, Message::id,
+                Identifier.STREAM_CODEC, Message::id,
                 MoreStreamCodecs.COMPOUND_TAG, Message::nbt,
                 Message::new
         ), HandlerThread.MAIN);
@@ -53,7 +53,7 @@ public class BeUpdateHandler extends PacketHandler<BeUpdateHandler.Message> {
         }
     }
 
-    public record Message(BlockPos pos, ResourceLocation id, CompoundTag nbt) implements CustomPacketPayload {
+    public record Message(BlockPos pos, Identifier id, CompoundTag nbt) implements CustomPacketPayload {
 
         @Nonnull
         @Override

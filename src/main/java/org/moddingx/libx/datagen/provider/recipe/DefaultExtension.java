@@ -16,7 +16,7 @@ public interface DefaultExtension extends RecipeExtension {
     
     static void setup(ModX mod, DefaultExtension ext) {
         BuiltInRegistries.ITEM.entrySet().stream()
-                .filter(e -> mod.modid.equals(e.getKey().location().getNamespace()))
+                .filter(e -> mod.modid.equals(e.getKey().identifier().getNamespace()))
                 .map(Map.Entry::getValue)
                 .filter(item -> item instanceof BlockItem)
                 .map(item -> ((BlockItem) item).getBlock())

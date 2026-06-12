@@ -2,7 +2,7 @@ package org.moddingx.libx.impl.datagen.texture;
 
 import com.google.common.hash.HashCode;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import org.moddingx.libx.datagen.PackTarget;
 
@@ -23,7 +23,7 @@ public class TextureGenerator {
         this.packTarget = packTarget;
     }
 
-    public CompletableFuture<?> save(CachedOutput output, ResourceLocation id, BufferedImage image) {
+    public CompletableFuture<?> save(CachedOutput output, Identifier id, BufferedImage image) {
         Path path = this.packTarget.path(PackType.CLIENT_RESOURCES).resolve(id.getNamespace()).resolve(id.getPath());
         return this.save(output, image, path);
     }
@@ -44,7 +44,7 @@ public class TextureGenerator {
         return new BufferedImage(width * scale, height * scale, BufferedImage.TYPE_INT_ARGB);
     }
     
-    public BufferedImage loadImage(ResourceLocation image) {
+    public BufferedImage loadImage(Identifier image) {
         try (InputStream in = this.packTarget.find(PackType.CLIENT_RESOURCES, image).open()) {
             return ImageIO.read(in);
         } catch (FileNotFoundException e) {

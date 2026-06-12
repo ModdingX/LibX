@@ -8,7 +8,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +26,7 @@ import java.util.Set;
 
 public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
 
-    public static final ResourceLocation ID = LibX.getInstance().resource("copy_block_entity_data");
+    public static final Identifier ID = LibX.getInstance().resource("copy_block_entity_data");
     public static final MapCodec<CopyBlockEntityDataFunction> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(instance.group(
             BuiltInRegistries.BLOCK.holderByNameCodec().fieldOf("block").forGetter(function -> function.block),
             Codec.STRING.listOf().fieldOf("tags").forGetter(function -> function.tags.stream().sorted().toList())

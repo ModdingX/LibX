@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.registration.handler;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -11,10 +11,10 @@ import java.util.Map;
 
 public class CapabilityRegistrationHandler extends SpecialRegistrationHandler {
     
-    private final Map<ResourceLocation, CapabilityInfo.Item<?, ?>> items;
-    private final Map<ResourceLocation, CapabilityInfo.Block<?, ?>> blocks;
-    private final Map<ResourceLocation, CapabilityInfo.BlockEntity<?, ?, ?>> blockEntities;
-    private final Map<ResourceLocation, CapabilityInfo.Entity<?, ?, ?>> entities;
+    private final Map<Identifier, CapabilityInfo.Item<?, ?>> items;
+    private final Map<Identifier, CapabilityInfo.Block<?, ?>> blocks;
+    private final Map<Identifier, CapabilityInfo.BlockEntity<?, ?, ?>> blockEntities;
+    private final Map<Identifier, CapabilityInfo.Entity<?, ?, ?>> entities;
 
     public CapabilityRegistrationHandler(Runnable runRegistration) {
         super(runRegistration);
@@ -25,7 +25,7 @@ public class CapabilityRegistrationHandler extends SpecialRegistrationHandler {
     }
 
     @Override
-    public void handle(ResourceLocation id, Object object) {
+    public void handle(Identifier id, Object object) {
         if (object instanceof CapabilityInfo.Item<?, ?> itemInfo) {
             this.addToMap("CapabilityInfo.Item", this.items, id, itemInfo);
         }

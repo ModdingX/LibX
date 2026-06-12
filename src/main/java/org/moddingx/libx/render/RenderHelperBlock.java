@@ -5,8 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.builders.UVPair;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -15,7 +17,7 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.data.AtlasIds;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.EmptyBlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
@@ -32,12 +34,10 @@ import java.util.function.Predicate;
  */
 public class RenderHelperBlock {
 
-    private static final ResourceLocation BLOCK_ATLAS = ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png");
-    private static final RenderType RENDER_TYPE_BREAK = RenderType.crumbling(BLOCK_ATLAS);
+    private static final Identifier BLOCK_ATLAS = Identifier.withDefaultNamespace("textures/atlas/blocks.png");
+    private static final RenderType RENDER_TYPE_BREAK = RenderTypes.crumbling(BLOCK_ATLAS);
     private static final RandomSource random = RandomSource.create();
     private static final List<BlockModelPart> partCache = new ArrayList<>();
-    private static final int BLOCK_VERTEX_STRIDE = DefaultVertexFormat.BLOCK.getVertexSize() / 4;
-    private static final int BLOCK_UV_OFFSET = DefaultVertexFormat.BLOCK.contains(VertexFormatElement.UV0) ? DefaultVertexFormat.BLOCK.getOffset(VertexFormatElement.UV0) / 4 : -1;
 
     /**
      * Renders the break effect for a {@link BlockState}.
@@ -56,7 +56,7 @@ public class RenderHelperBlock {
      */
     public static void renderBlockBreak(BlockState state, PoseStack poseStack, int light, int overlay, int breakProgress, long positionRandom) {
         if (breakProgress > 0) {
-            ResourceLocation tex = ModelBakery.DESTROY_STAGES.get((breakProgress - 1) % ModelBakery.DESTROY_STAGES.size());
+            Identifier tex = ModelBakery.DESTROY_STAGES.get((breakProgress - 1) % ModelBakery.DESTROY_STAGES.size());
             TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(tex);
             renderBlockOverlaySprite(state, poseStack, light, overlay, sprite, positionRandom);
         }
@@ -131,17 +131,24 @@ public class RenderHelperBlock {
     private static BakedQuad modifyBlockQuad(BakedQuad quad, TextureAtlasSprite newSprite) {
         BakedQuad result = BlockOverlayQuadCache.get(quad, newSprite);
         if (result == null) {
-            int[] data = quad.vertices();
-            int[] newData = new int[data.length];
-            System.arraycopy(data, 0, newData, 0, data.length);
-            if (BLOCK_UV_OFFSET != -1) {
-                TextureAtlasSprite oldSprite = quad.sprite();
-                for (int off = 0; off + BLOCK_UV_OFFSET + 1 < newData.length; off += BLOCK_VERTEX_STRIDE) {
-                    newData[off + BLOCK_UV_OFFSET] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + BLOCK_UV_OFFSET]) - oldSprite.getU0()) * newSprite.contents().width()) / oldSprite.contents().width() + newSprite.getU0());
-                    newData[off + BLOCK_UV_OFFSET + 1] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + BLOCK_UV_OFFSET + 1]) - oldSprite.getV0()) * newSprite.contents().height() / oldSprite.contents().height()) + newSprite.getV0());
-                }
+            TextureAtlasSprite oldSprite = quad.sprite();
+            long[] newUVs = new long[4];
+            for (int i = 0; i < 4; i++) {
+                long packed = quad.packedUV(i);
+                float u = UVPair.unpackU(packed);
+                float v = UVPair.unpackV(packed);
+                float localU = (u - oldSprite.getU0()) / (oldSprite.getU1() - oldSprite.getU0());
+                float localV = (v - oldSprite.getV0()) / (oldSprite.getV1() - oldSprite.getV0());
+                float newU = newSprite.getU0() + localU * (newSprite.getU1() - newSprite.getU0());
+                float newV = newSprite.getV0() + localV * (newSprite.getV1() - newSprite.getV0());
+                newUVs[i] = UVPair.pack(newU, newV);
             }
-            result = new BakedQuad(newData, quad.tintIndex(), quad.direction(), newSprite, quad.shade(), quad.lightEmission(), quad.hasAmbientOcclusion());
+            result = new BakedQuad(
+                quad.position0(), quad.position1(), quad.position2(), quad.position3(),
+                newUVs[0], newUVs[1], newUVs[2], newUVs[3],
+                quad.tintIndex(), quad.direction(), newSprite, quad.shade(), quad.lightEmission(),
+                quad.bakedNormals(), quad.bakedColors(), quad.hasAmbientOcclusion()
+            );
             BlockOverlayQuadCache.put(quad, result);
         }
         return result;

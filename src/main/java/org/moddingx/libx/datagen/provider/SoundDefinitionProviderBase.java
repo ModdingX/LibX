@@ -4,7 +4,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.common.data.SoundDefinition;
 import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
@@ -28,8 +28,8 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     // because of conflicting methods.
     private final ParentProvider provider;
 
-    private final Set<ResourceLocation> ignored = new HashSet<>();
-    private final Map<ResourceLocation, SoundDefinitionBuilder> sounds = new HashMap<>();
+    private final Set<Identifier> ignored = new HashSet<>();
+    private final Map<Identifier, SoundDefinitionBuilder> sounds = new HashMap<>();
 
     public SoundDefinitionProviderBase(DatagenContext ctx) {
         this.mod = ctx.mod();
@@ -58,7 +58,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     /**
      * This sound will not be processed by the default generator
      */
-    protected void ignore(ResourceLocation sound) {
+    protected void ignore(Identifier sound) {
         this.ignored.add(sound);
     }
 
@@ -67,7 +67,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     /**
      * Default behaviour for sound events. Override to change.
      */
-    protected void defaultSound(ResourceLocation id, SoundEvent sound) {
+    protected void defaultSound(Identifier id, SoundEvent sound) {
         this.sound(sound)
                 .subtitle("subtitle." + id.getNamespace() + "." + id.getPath().replace("/", "."))
                 .with(id);
@@ -90,7 +90,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     /**
      * Creates a new sound definition for the given sound event.
      */
-    protected SoundDefinitionBuilder sound(ResourceLocation sound) {
+    protected SoundDefinitionBuilder sound(Identifier sound) {
         return this.sound(sound, this.settings());
     }
 
@@ -104,7 +104,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     /**
      * Creates a new sound definition for the given sound event and default sound settings.
      */
-    protected SoundDefinitionBuilder sound(ResourceLocation sound, SoundSettingsBuilder settings) {
+    protected SoundDefinitionBuilder sound(Identifier sound, SoundSettingsBuilder settings) {
         this.ignore(sound);
         if (this.sounds.containsKey(sound)) throw new IllegalArgumentException("Sound processed twice: " + sound);
         SoundDefinitionBuilder builder = new SoundDefinitionBuilder(settings);
@@ -115,7 +115,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     private void registerSounds() {
         this.setup();
 
-        for (ResourceLocation id : BuiltInRegistries.SOUND_EVENT.keySet().stream().sorted().toList()) {
+        for (Identifier id : BuiltInRegistries.SOUND_EVENT.keySet().stream().sorted().toList()) {
             if (this.mod.modid.equals(id.getNamespace()) && !this.ignored.contains(id)) {
                 SoundEvent sound = BuiltInRegistries.SOUND_EVENT.getValue(id);
                 if (sound != null) {
@@ -124,7 +124,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
             }
         }
         
-        for (Map.Entry<ResourceLocation, SoundDefinitionBuilder> entry : this.sounds.entrySet()) {
+        for (Map.Entry<Identifier, SoundDefinitionBuilder> entry : this.sounds.entrySet()) {
             this.provider.add(entry.getKey(), entry.getValue().definition);
         }
     }
@@ -288,7 +288,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         /**
          * Adds a sound to this sound definition.
          */
-        public SoundDefinitionBuilder with(ResourceLocation soundId) {
+        public SoundDefinitionBuilder with(Identifier soundId) {
             return this.with(soundId, sound -> {});
         }
 
@@ -303,7 +303,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         /**
          * Adds a sound to this sound definition. Also allows to then further customise the sound.
          */
-        public SoundDefinitionBuilder with(ResourceLocation soundId, Consumer<SoundDefinition.Sound> configure) {
+        public SoundDefinitionBuilder with(Identifier soundId, Consumer<SoundDefinition.Sound> configure) {
             SoundDefinition.Sound sound = SoundDefinition.Sound.sound(soundId, SoundDefinition.SoundType.SOUND);
             this.settings.applyTo(sound);
             configure.accept(sound);
@@ -323,7 +323,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * Adds {@code amount} sounds to the definition. They are constructed by appending the numbers from
          * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
          */
-        public SoundDefinitionBuilder withRange(ResourceLocation soundId, int amount) {
+        public SoundDefinitionBuilder withRange(Identifier soundId, int amount) {
             return this.withRange(soundId, amount, sound -> {});
         }
 
@@ -339,9 +339,9 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * Adds {@code amount} sounds to the definition. They are constructed by appending the numbers from
          * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
          */
-        public SoundDefinitionBuilder withRange(ResourceLocation soundId, int amount, Consumer<SoundDefinition.Sound> configure) {
+        public SoundDefinitionBuilder withRange(Identifier soundId, int amount, Consumer<SoundDefinition.Sound> configure) {
             for (int i = 0; i < amount; i++) {
-                this.with(ResourceLocation.fromNamespaceAndPath(soundId.getNamespace(), soundId.getPath() + i), configure);
+                this.with(Identifier.fromNamespaceAndPath(soundId.getNamespace(), soundId.getPath() + i), configure);
             }
             return this;
         }
@@ -373,7 +373,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         }
 
         @Override
-        public void add(@Nonnull ResourceLocation sound, @Nonnull SoundDefinition definition) {
+        public void add(@Nonnull Identifier sound, @Nonnull SoundDefinition definition) {
             super.add(sound, definition);
         }
     }

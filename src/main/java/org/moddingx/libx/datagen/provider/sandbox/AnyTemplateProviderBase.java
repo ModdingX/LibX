@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.ProcessorLists;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.pools.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
@@ -129,14 +129,14 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
         /**
          * Add a single pool element to this pool.
          */
-        public T single(ResourceLocation templateId) {
+        public T single(Identifier templateId) {
             return this.single(1, templateId);
         }
 
         /**
          * Add a single pool element to this pool.
          */
-        public T single(int weight, ResourceLocation templateId) {
+        public T single(int weight, Identifier templateId) {
             return this.single(weight, templateId, AnyTemplateProviderBase.this.holder(ProcessorLists.EMPTY));
         }
 
@@ -165,20 +165,20 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a single pool element to this pool.
          */
         public T single(int weight, String namespace, String path, Holder<StructureProcessorList> processor) {
-            return this.single(weight, ResourceLocation.fromNamespaceAndPath(namespace, path), processor);
+            return this.single(weight, Identifier.fromNamespaceAndPath(namespace, path), processor);
         }
 
         /**
          * Add a single pool element to this pool.
          */
-        public T single(ResourceLocation templateId, Holder<StructureProcessorList> processor) {
+        public T single(Identifier templateId, Holder<StructureProcessorList> processor) {
             return this.single(1, templateId, processor);
         }
 
         /**
          * Add a single pool element to this pool.
          */
-        public T single(int weight, ResourceLocation templateId, Holder<StructureProcessorList> processor) {
+        public T single(int weight, Identifier templateId, Holder<StructureProcessorList> processor) {
             return this.element(weight, new SinglePoolElement(Either.left(templateId), processor, this.currentProjection, this.liquidOverride));
         }
 
@@ -210,14 +210,14 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
         /**
          * Add a legacy pool element to this pool.
          */
-        public T legacy(ResourceLocation templateId) {
+        public T legacy(Identifier templateId) {
             return this.legacy(1, templateId);
         }
 
         /**
          * Add a legacy pool element to this pool.
          */
-        public T legacy(int weight, ResourceLocation templateId) {
+        public T legacy(int weight, Identifier templateId) {
             return this.legacy(weight, templateId, AnyTemplateProviderBase.this.holder(ProcessorLists.EMPTY));
         }
 
@@ -246,20 +246,20 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a legacy pool element to this pool.
          */
         public T legacy(int weight, String namespace, String path, Holder<StructureProcessorList> processor) {
-            return this.legacy(weight, ResourceLocation.fromNamespaceAndPath(namespace, path), processor);
+            return this.legacy(weight, Identifier.fromNamespaceAndPath(namespace, path), processor);
         }
 
         /**
          * Add a legacy pool element to this pool.
          */
-        public T legacy(ResourceLocation templateId, Holder<StructureProcessorList> processor) {
+        public T legacy(Identifier templateId, Holder<StructureProcessorList> processor) {
             return this.legacy(1, templateId, processor);
         }
 
         /**
          * Add a legacy pool element to this pool.
          */
-        public T legacy(int weight, ResourceLocation templateId, Holder<StructureProcessorList> processor) {
+        public T legacy(int weight, Identifier templateId, Holder<StructureProcessorList> processor) {
             return this.element(weight, new LegacySinglePoolElement(Either.left(templateId), processor, this.currentProjection, this.liquidOverride));
         }
 

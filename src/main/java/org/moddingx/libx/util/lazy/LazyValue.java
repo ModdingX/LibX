@@ -1,7 +1,5 @@
 package org.moddingx.libx.util.lazy;
 
-import net.minecraft.util.LazyLoadedValue;
-
 import javax.annotation.Nonnull;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -23,14 +21,6 @@ public class LazyValue<T> {
         this.supplier = supplier;
         this.value = null;
         this.evaluationException = null;
-    }
-
-    /**
-     * Wraps a {@link LazyLoadedValue} to a lazy value.
-     */
-    @SuppressWarnings("deprecation")
-    public static <T> LazyValue<T> wrap(LazyLoadedValue<T> value) {
-        return new LazyValue<>(value::get);
     }
 
     /**

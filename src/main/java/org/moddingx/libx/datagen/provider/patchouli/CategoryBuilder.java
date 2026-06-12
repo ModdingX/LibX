@@ -1,7 +1,7 @@
 package org.moddingx.libx.datagen.provider.patchouli;
 
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 public class CategoryBuilder {
 
     public final ModX mod;
-    public final ResourceLocation id;
+    public final Identifier id;
     private String name;
     private String description;
     private ItemStack icon;
@@ -26,7 +26,7 @@ public class CategoryBuilder {
     private int sort;
     private final List<Consumer<JsonObject>> postProcessors;
 
-    public CategoryBuilder(ModX mod, ResourceLocation id) {
+    public CategoryBuilder(ModX mod, Identifier id) {
         this.mod = mod;
         this.id = id;
         this.sort = -1;

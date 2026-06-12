@@ -180,7 +180,17 @@ public class TextScreenContent {
         for (PlacedText line : this.lines) {
             if (mouseX >= line.x() && mouseX <= line.x() + this.font.width(line.text()) && mouseY >= line.y() && mouseY <= line.y() + this.font.lineHeight) {
                 int relX = mouseX - line.x();
-                Style style = this.font.getSplitter().componentStyleAtWidth(line.text(), relX);
+                final Style[] foundStyle = {null};
+                final float[] acc = {0};
+                line.text().accept((index, s, codePoint) -> {
+                    if (acc[0] > relX) {
+                        return false;
+                    }
+                    foundStyle[0] = s;
+                    acc[0] += this.font.getSplitter().stringWidth(FormattedCharSequence.codepoint(codePoint, s));
+                    return true;
+                });
+                Style style = foundStyle[0];
                 if (style != null) return style;
             }
         }

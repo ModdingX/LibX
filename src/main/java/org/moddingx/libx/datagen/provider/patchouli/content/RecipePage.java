@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.patchouli.content;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 
 import javax.annotation.Nullable;
@@ -14,13 +14,13 @@ import java.util.List;
 public abstract class RecipePage extends CaptionContent {
 
     protected final String pageType;
-    protected final List<ResourceLocation> recipes;
+    protected final List<Identifier> recipes;
 
-    public RecipePage(String pageType, ResourceLocation... recipes) {
+    public RecipePage(String pageType, Identifier... recipes) {
         this(pageType, List.of(recipes), null);
     }
     
-    protected RecipePage(String pageType, List<ResourceLocation> recipes, @Nullable String caption) {
+    protected RecipePage(String pageType, List<Identifier> recipes, @Nullable String caption) {
         super(caption);
         this.pageType = pageType;
         this.recipes = List.copyOf(recipes);
@@ -34,7 +34,7 @@ public abstract class RecipePage extends CaptionContent {
     protected void addRecipeKey(JsonObject json) {
         if (this.recipes.size() != 1) {
             JsonArray array = new JsonArray();
-            for (ResourceLocation recipe : this.recipes) {
+            for (Identifier recipe : this.recipes) {
                 array.add(recipe.toString());
             }
             json.add("recipe", array);

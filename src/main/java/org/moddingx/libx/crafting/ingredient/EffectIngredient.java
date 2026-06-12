@@ -10,7 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -135,7 +135,7 @@ public class EffectIngredient implements ICustomIngredient {
     public Stream<Holder<Item>> items() {
         Item potion = this.potionItem == null ? Items.POTION : this.potionItem;
 
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(potion);
+        Identifier id = BuiltInRegistries.ITEM.getKey(potion);
         Optional<Holder.Reference<Item>> optional = BuiltInRegistries.ITEM.get(id);
 
         return optional.stream().map(itemReference -> itemReference);

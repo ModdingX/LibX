@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.datapack;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -27,7 +27,7 @@ public class DynamicPackLocator implements RepositorySource {
     public static final DynamicPackLocator DATA_PACKS = new DynamicPackLocator(PackType.SERVER_DATA);
     
     private final PackType type;
-    private final Set<ResourceLocation> enabledPacks = new HashSet<>();
+    private final Set<Identifier> enabledPacks = new HashSet<>();
     
     private DynamicPackLocator(PackType type) {
         this.type = type;
@@ -38,20 +38,20 @@ public class DynamicPackLocator implements RepositorySource {
         if (PackType.SERVER_DATA.equals(event.getPackType())) event.addRepositorySource(DATA_PACKS);
     }
     
-    public synchronized void enablePack(ResourceLocation id) {
+    public synchronized void enablePack(Identifier id) {
         if (!Objects.equals(id.getNamespace(), ModLoadingContext.get().getActiveNamespace())) {
             LibX.logger.error("Wrong modid for dynamic pack, expected {} got {}", ModLoadingContext.get().getActiveNamespace(), id.getNamespace());
         }
         this.enabledPacks.add(id);
     }
     
-    public synchronized boolean isEnabled(ResourceLocation id) {
+    public synchronized boolean isEnabled(Identifier id) {
         return this.enabledPacks.contains(id);
     }
     
     @Override
     public void loadPacks(@Nonnull Consumer<Pack> packs) {
-        for (ResourceLocation id : this.enabledPacks) {
+        for (Identifier id : this.enabledPacks) {
             IModInfo modInfo = ModList.get().getModContainerById(id.getNamespace()).map(ModContainer::getModInfo).orElse(null);
             IModFileInfo modFileInfo = modInfo == null ? null : modInfo.getOwningFile();
             if (modInfo == null || modFileInfo == null || modFileInfo.getFile() == null) {

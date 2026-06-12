@@ -5,7 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
@@ -115,7 +115,7 @@ import java.util.*;
  *     <li>{@link List List&lt;?&gt;}</li>
  *     <li>{@link Set Set&lt;?&gt;}</li>
  *     <li>{@link Map Map&lt;String, ?&gt;}</li>
- *     <li>{@link ResourceLocation}</li>
+ *     <li>{@link Identifier}</li>
  *     <li>{@link Component}</li>
  *     <li>{@link ResourceList}</li>
  *     <li>{@link UUID UUID}</li>
@@ -135,7 +135,7 @@ import java.util.*;
  * Configs come in two different types: Common configs and client configs. Common configs are loaded on
  * both the dedicated server and the client and are synced from server to client. Client configs are
  * only loaded on the client.
- * A config is registered with {@link ConfigManager#registerConfig(ResourceLocation, Class, boolean)}.
+ * A config is registered with {@link ConfigManager#registerConfig(Identifier, Class, boolean)}.
  * You can then just use the values in the config class. Make sure to not modify them as the results
  * are unpredictable.
  * 
@@ -145,7 +145,7 @@ import java.util.*;
  */
 public class ConfigManager {
     
-    private static final BiMap<ResourceLocation, Class<?>> configIds = Maps.synchronizedBiMap(HashBiMap.create());
+    private static final BiMap<Identifier, Class<?>> configIds = Maps.synchronizedBiMap(HashBiMap.create());
     private static final Map<Class<?>, Path> configs = Collections.synchronizedMap(new HashMap<>());
 
     /**
@@ -197,7 +197,7 @@ public class ConfigManager {
      * @param clientConfig Whether this is a client config.
      */
     public static void registerConfig(String modid, Class<?> configClass, boolean clientConfig) {
-        registerConfig(ResourceLocation.fromNamespaceAndPath(modid, "config"), configClass, clientConfig);
+        registerConfig(Identifier.fromNamespaceAndPath(modid, "config"), configClass, clientConfig);
     }
     
     /**
@@ -208,7 +208,7 @@ public class ConfigManager {
      * @param configClass The base class for the config.
      * @param clientConfig Whether this is a client config.
      */
-    public static void registerConfig(ResourceLocation location, Class<?> configClass, boolean clientConfig) {
+    public static void registerConfig(Identifier location, Class<?> configClass, boolean clientConfig) {
         if (configIds.containsKey(location)) {
             throw new IllegalArgumentException("Config '" + location + "' is already bound to class " + configClass);
         } else if (configIds.containsValue(configClass)) {
@@ -332,12 +332,12 @@ public class ConfigManager {
                 if (!configIds.containsValue(configClass)) {
                     throw new IllegalArgumentException("Class " + configClass + " is not registered as a config.");
                 }
-                ResourceLocation id = configIds.inverse().get(configClass);
+                Identifier id = configIds.inverse().get(configClass);
                 ConfigImpl config = ConfigImpl.getConfig(id);
                 if (!config.clientConfig) configs.add(config);
             }
         } else {
-            for (ResourceLocation id : configs()) {
+            for (Identifier id : configs()) {
                 ConfigImpl config = ConfigImpl.getConfig(id);
                 if (!config.clientConfig) configs.add(config);
             }
@@ -372,7 +372,7 @@ public class ConfigManager {
     /**
      * Gets all registered config ids.
      */
-    public static Set<ResourceLocation> configs() {
+    public static Set<Identifier> configs() {
         return Collections.unmodifiableSet(configIds.keySet());
     }
 }

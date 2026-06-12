@@ -2,7 +2,7 @@ package org.moddingx.libx.base;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -72,9 +72,9 @@ public class FluidBase implements ItemLike, Registerable {
      * located at {@code [namespace]:block/[path]} and a flowing texture located at
      * {@code [namespace]:block/[path]_flowing}.
      */
-    protected ClientExtensionInfo.Fluid createClientExtensions(ResourceLocation id) {
-        ResourceLocation stillTexture = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
-        ResourceLocation flowingTexture = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath() + "_flowing");
+    protected ClientExtensionInfo.Fluid createClientExtensions(Identifier id) {
+        Identifier stillTexture = Identifier.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
+        Identifier flowingTexture = Identifier.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath() + "_flowing");
         return new ClientExtensionInfo.Fluid(new DefaultClientExtensions(stillTexture, flowingTexture));
     }
 
@@ -86,7 +86,7 @@ public class FluidBase implements ItemLike, Registerable {
                     this.pendingBlockProperties.setId(ResourceKey.create(Registries.BLOCK, ctx.id())));
         }
         if (this.bucketItem == null) {
-            ResourceLocation bucketLoc = ResourceLocation.fromNamespaceAndPath(ctx.id().getNamespace(), ctx.id().getPath() + "_bucket");
+            Identifier bucketLoc = Identifier.fromNamespaceAndPath(ctx.id().getNamespace(), ctx.id().getPath() + "_bucket");
             this.bucketItem = this.bucketItemFactory.apply(this.sourceFluid,
                     this.pendingBucketItemProperties.setId(ResourceKey.create(Registries.ITEM, bucketLoc)));
         }

@@ -2,7 +2,7 @@ package org.moddingx.libx.impl.datagen.patchouli.content;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 
@@ -12,9 +12,9 @@ import java.util.List;
 public class ImageContent extends CaptionContent {
 
     private final String title;
-    private final List<ResourceLocation> images;
+    private final List<Identifier> images;
     
-    public ImageContent(String title, List<ResourceLocation> images, @Nullable String caption) {
+    public ImageContent(String title, List<Identifier> images, @Nullable String caption) {
         super(caption);
         this.title = title;
         this.images = List.copyOf(images);

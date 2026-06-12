@@ -1,29 +1,29 @@
 package org.moddingx.libx.impl.base.fluid;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 
 import javax.annotation.Nonnull;
 
 public class DefaultClientExtensions implements IClientFluidTypeExtensions {
 
-    private final ResourceLocation stillTexture;
-    private final ResourceLocation flowingTexture;
+    private final Identifier stillTexture;
+    private final Identifier flowingTexture;
 
-    public DefaultClientExtensions(ResourceLocation stillTexture, ResourceLocation flowingTexture) {
+    public DefaultClientExtensions(Identifier stillTexture, Identifier flowingTexture) {
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
     }
 
     @Nonnull
     @Override
-    public ResourceLocation getStillTexture() {
+    public Identifier getStillTexture() {
         return this.stillTexture;
     }
 
     @Nonnull
     @Override
-    public ResourceLocation getFlowingTexture() {
+    public Identifier getFlowingTexture() {
         return this.flowingTexture;
     }
 }

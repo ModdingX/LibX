@@ -45,7 +45,7 @@ public class SimpleSelectEditor<T> implements ConfigEditor<T> {
         }
     }
 
-    private static class ToggleWidget<T> extends Button {
+    private static class ToggleWidget<T> extends Button.Plain {
 
         private final List<T> list;
         private final Function<T, Component> nameFactory;

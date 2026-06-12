@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -29,11 +29,13 @@ import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * This class is meant to apply a {@link BlockEntityRenderer} to items. Using it is really straightforward:
@@ -48,7 +50,7 @@ import java.util.*;
  */
 public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
 
-    public static final ResourceLocation RENDERER_ID = ResourceLocation.fromNamespaceAndPath("libx", "item_stack_renderer");
+    public static final Identifier RENDERER_ID = Identifier.fromNamespaceAndPath("libx", "item_stack_renderer");
 
     private static final LazyValue<ItemStackRenderer> INSTANCE = new LazyValue<>(ItemStackRenderer::new);
     private static final List<BlockEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
@@ -122,9 +124,9 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
     }
 
     @Override
-    public void getExtents(Set<Vector3f> output) {
-        output.add(new Vector3f(0, 0, 0));
-        output.add(new Vector3f(1, 1, 1));
+    public void getExtents(Consumer<Vector3fc> output) {
+        output.accept(new Vector3f(0, 0, 0));
+        output.accept(new Vector3f(1, 1, 1));
     }
 
     private static void setLevel(BlockEntity blockEntity) {

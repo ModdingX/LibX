@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
@@ -62,7 +62,7 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
     public class JigsawBuilder {
         
         private final Holder<StructureTemplatePool> startPool;
-        private ResourceLocation centerJigsawBlockNameInStartPool;
+        private Identifier centerJigsawBlockNameInStartPool;
         private int maxNestingDepth;
         private int maxDistanceFromCenter;
         private HeightProvider startHeight;
@@ -88,7 +88,7 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
         /**
          * Sets the name of the central block in the start pool.
          */
-        public JigsawBuilder centerPositionInStartPool(ResourceLocation id)  {
+        public JigsawBuilder centerPositionInStartPool(Identifier id)  {
             this.centerJigsawBlockNameInStartPool = id;
             return this;
         }

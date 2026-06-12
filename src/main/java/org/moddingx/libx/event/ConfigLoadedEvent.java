@@ -1,6 +1,6 @@
 package org.moddingx.libx.event;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
 import org.moddingx.libx.config.ConfigManager;
 
@@ -13,14 +13,14 @@ import java.nio.file.Path;
  */
 public class ConfigLoadedEvent extends Event {
 
-    private final ResourceLocation configId;
+    private final Identifier configId;
     private final Class<?> configClass;
     private final LoadReason reason;
     private final boolean clientConfig;
     private final Path configPath;
     @Nullable private final Path currentPath;
     
-    public ConfigLoadedEvent(ResourceLocation configId, Class<?> configClass, LoadReason reason, boolean clientConfig, Path configPath, @Nullable Path currentPath) {
+    public ConfigLoadedEvent(Identifier configId, Class<?> configClass, LoadReason reason, boolean clientConfig, Path configPath, @Nullable Path currentPath) {
         this.configId = configId;
         this.configClass = configClass;
         this.reason = reason;
@@ -32,7 +32,7 @@ public class ConfigLoadedEvent extends Event {
     /**
      * Gets the id of the config that was loaded.
      */
-    public ResourceLocation getConfigId() {
+    public Identifier getConfigId() {
         return this.configId;
     }
     

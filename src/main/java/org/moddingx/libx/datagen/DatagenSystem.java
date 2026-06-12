@@ -8,7 +8,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -52,9 +52,9 @@ public class DatagenSystem {
      */
     public static synchronized void registerExtensionRegistry(ResourceKey<? extends Registry<?>> registryKey) {
         String activeMod = ModLoadingContext.get().getActiveNamespace();
-        if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.location().getNamespace(), activeMod)) {
+        if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.identifier().getNamespace(), activeMod)) {
             // LibX is the exception: It has to make vanilla and neoforge registries extension registries
-            LibX.logger.warn("Registry {} marked as extension registry by foreign mod: {}", registryKey.location(), activeMod);
+            LibX.logger.warn("Registry {} marked as extension registry by foreign mod: {}", registryKey.identifier(), activeMod);
         }
         EXTENSION_REGISTRIES.add(registryKey);
     }
@@ -68,13 +68,13 @@ public class DatagenSystem {
      */
     public static synchronized  <T> void defineDatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec) {
         String activeMod = ModLoadingContext.get().getActiveNamespace();
-        if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.location().getNamespace(), activeMod)) {
+        if (!Objects.equals(LibX.getInstance().modid, activeMod) && !Objects.equals(registryKey.identifier().getNamespace(), activeMod)) {
             // LibX is the exception: It has to make vanilla and neoforge registries extension registries
-            LibX.logger.warn("Registry {} defined for datagen by foreign mod: {}", registryKey.location(), activeMod);
+            LibX.logger.warn("Registry {} defined for datagen by foreign mod: {}", registryKey.identifier(), activeMod);
         }
         if (EXTRA_REGISTRIES.containsKey(registryKey)) {
-            LibX.logger.error("Registry {} defined for datagen twice.", registryKey.location());
-            throw new IllegalStateException("Registry " + registryKey.location() + " defined for datagen twice.");
+            LibX.logger.error("Registry {} defined for datagen twice.", registryKey.identifier());
+            throw new IllegalStateException("Registry " + registryKey.identifier() + " defined for datagen twice.");
         }
         EXTRA_REGISTRIES.put(registryKey, codec);
     }
@@ -217,7 +217,7 @@ public class DatagenSystem {
      * Creates a pack target for a vanilla-style nested datapack inside the first given parent.
      * Client resources can't be output on this target.
      */
-    public PackTarget nestedDatapack(ResourceLocation id, PackTarget... parents) {
+    public PackTarget nestedDatapack(Identifier id, PackTarget... parents) {
         return this.makePackTarget(id.toString(), parents)
                 .unsupported(PackType.CLIENT_RESOURCES)
                 .resolveOutput(PackType.SERVER_DATA, id.getNamespace(), "datapacks", id.getPath(), "data")
@@ -359,7 +359,7 @@ public class DatagenSystem {
         /**
          * Changes the output path for the given {@link PackType} by {@link Path#resolve(String) resolving} the given
          * sub-path to the current output path. This also adds a resource prefix for resource lookup through the
-         * {@link PackTarget#find(PackType, ResourceLocation)} method.
+         * {@link PackTarget#find(PackType, Identifier)} method.
          */
         public PackTargetBuilder resolveOutput(PackType type, String... subPath) {
             if (!this.outputMap.containsKey(type)) {
@@ -381,7 +381,7 @@ public class DatagenSystem {
         }
 
         /**
-         * Adds a path for resource lookup through {@link PackTarget#find(PackType, ResourceLocation)}.
+         * Adds a path for resource lookup through {@link PackTarget#find(PackType, Identifier)}.
          */
         public PackTargetBuilder resources(PackType type, Path path) {
             this.resourcePathMap.computeIfAbsent(type, k -> new ArrayList<>()).add(path);

@@ -1,6 +1,6 @@
 package org.moddingx.libx.base.decoration;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import org.moddingx.libx.impl.base.decoration.BaseMaterial;
@@ -62,7 +62,7 @@ public interface DecorationMaterial {
      * 
      * @param id The id of the {@link DecoratedBlock}.
      */
-    MaterialProperties init(ResourceLocation id);
+    MaterialProperties init(Identifier id);
     
     class MaterialProperties {
 

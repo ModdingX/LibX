@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.datagen.texture;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.datagen.provider.texture.TextureBuilder;
 import org.moddingx.libx.datagen.provider.texture.TextureFactory;
 import org.moddingx.libx.datagen.provider.texture.TextureHelper;
@@ -11,10 +11,10 @@ import java.awt.image.BufferedImage;
 
 public class SignTextureFactory implements TextureFactory {
 
-    private final ResourceLocation log;
-    private final ResourceLocation planks;
+    private final Identifier log;
+    private final Identifier planks;
 
-    public SignTextureFactory(ResourceLocation log, ResourceLocation planks) {
+    public SignTextureFactory(Identifier log, Identifier planks) {
         this.log = log;
         this.planks = planks;
     }

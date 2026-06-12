@@ -1,7 +1,7 @@
 package org.moddingx.libx.datagen.provider.patchouli.page;
 
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.datagen.provider.patchouli.BookProperties;
 
 /**
@@ -39,5 +39,5 @@ public interface PageBuilder {
     /**
      * Checks that a given asset exists, Throws an exception if not.
      */
-    void checkAssets(ResourceLocation path);
+    void checkAssets(Identifier path);
 }

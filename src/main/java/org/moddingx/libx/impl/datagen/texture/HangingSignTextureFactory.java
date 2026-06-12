@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.datagen.texture;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Rotation;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.provider.texture.*;
@@ -15,8 +15,8 @@ import java.io.InputStream;
 
 public class HangingSignTextureFactory implements TextureFactory {
 
-    private static final ResourceLocation CHAINS_IMAGE = LibX.getInstance().resource("hanging_chains");
-    private static final ResourceLocation ROTATED_LOG_IMAGE = LibX.getInstance().resource("rotated_log");
+    private static final Identifier CHAINS_IMAGE = LibX.getInstance().resource("hanging_chains");
+    private static final Identifier ROTATED_LOG_IMAGE = LibX.getInstance().resource("rotated_log");
     
     private static final LazyValue<BufferedImage> CHAINS = new LazyValue<>(() -> {
         try (InputStream in = new ByteArrayInputStream(new byte[]{
@@ -36,9 +36,9 @@ public class HangingSignTextureFactory implements TextureFactory {
         }
     });
     
-    private final ResourceLocation strippedLog;
+    private final Identifier strippedLog;
 
-    public HangingSignTextureFactory(ResourceLocation strippedLog) {
+    public HangingSignTextureFactory(Identifier strippedLog) {
         this.strippedLog = strippedLog;
     }
 

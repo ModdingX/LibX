@@ -16,6 +16,7 @@ import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.BlockEntityUpdateQueue;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -40,6 +41,9 @@ public class BlockEntityBase extends BlockEntity {
             }
             ResourceHandler<ItemResource> handler = this.level.getCapability(Capabilities.Item.BLOCK, pos, state, this, null);
             if (handler != null) {
+                if (handler instanceof BaseItemStackHandler base) {
+                    handler = base.getUnrestricted();
+                }
                 try (Transaction transaction = Transaction.openRoot()) {
                     for (int i = 0; i < handler.size(); i++) {
                         ItemResource resource = handler.getResource(i);

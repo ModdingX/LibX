@@ -8,7 +8,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -67,21 +67,21 @@ public abstract class CommonTagsProviderBase implements DataProvider {
         if (this.getClass() == InternalTagProvider.class) this.initInternalTags();
         this.setup();
         BuiltInRegistries.BLOCK.entrySet().stream()
-                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
+                .filter(entry -> this.mod.modid.equals(entry.getKey().identifier().getNamespace()))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::identifier)))
                 .map(Map.Entry::getValue)
                 .forEach(block -> {
                     DecorationTags.addTags(block, this, this::initInternalTags);
                     this.defaultBlockTags(block);
                 });
         BuiltInRegistries.ITEM.entrySet().stream()
-                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
+                .filter(entry -> this.mod.modid.equals(entry.getKey().identifier().getNamespace()))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::identifier)))
                 .map(Map.Entry::getValue)
                 .forEach(this::defaultItemTags);
         BuiltInRegistries.FLUID.entrySet().stream()
-                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
-                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::location)))
+                .filter(entry -> this.mod.modid.equals(entry.getKey().identifier().getNamespace()))
+                .sorted(Map.Entry.comparingByKey(Comparator.comparing(ResourceKey::identifier)))
                 .map(Map.Entry::getValue)
                 .forEach(this::defaultFluidTags);
     }
@@ -172,7 +172,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
     private class BlockTagProviderBase extends BlockTagsProvider {
 
-        private Map<ResourceLocation, TagBuilder> tagCache;
+        private Map<Identifier, TagBuilder> tagCache;
 
         protected BlockTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid) {
             super(packOutput, lookupProvider, modid);
@@ -189,7 +189,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             // Add fluid copies
             for (Pair<TagKey<Fluid>, TagKey<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
                 TagAppender<Block, Block> builder = this.tag(copy.getRight());
-                for (ResourceLocation entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
+                for (Identifier entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
                     BuiltInRegistries.FLUID.getOptional(entry).ifPresent(fluid -> builder.add(fluid.defaultFluidState().createLegacyBlock().getBlock()));
                 }
             }
@@ -217,7 +217,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
     private class ItemTagProviderBase extends BlockTagCopyingItemTagProvider {
 
-        private Map<ResourceLocation, TagBuilder> tagCache;
+        private Map<Identifier, TagBuilder> tagCache;
 
         protected ItemTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, BlockTagProviderBase blockTags) {
             super(packOutput, lookupProvider, blockTags.contentsGetter(), modid);
@@ -263,7 +263,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
     private class FluidTagProviderBase extends FluidTagsProvider {
 
-        private Map<ResourceLocation, TagBuilder> tagCache;
+        private Map<Identifier, TagBuilder> tagCache;
 
         protected FluidTagProviderBase(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid) {
             super(packOutput, lookupProvider, modid);
@@ -292,7 +292,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             return super.tag(tag);
         }
 
-        public List<ResourceLocation> getTagInfo(TagKey<Fluid> tag) {
+        public List<Identifier> getTagInfo(TagKey<Fluid> tag) {
             TagBuilder builder = this.builders.get(tag.location());
 
             if (builder == null) {

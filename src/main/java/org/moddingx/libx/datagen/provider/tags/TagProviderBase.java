@@ -40,7 +40,7 @@ public abstract class TagProviderBase<T> extends IntrinsicHolderTagsProvider<T> 
     @Nonnull
     @Override
     public final String getName() {
-        return this.mod.modid + " " + this.registryKey.location() + " tags";
+        return this.mod.modid + " " + this.registryKey.identifier() + " tags";
     }
 
     @Override
@@ -48,8 +48,8 @@ public abstract class TagProviderBase<T> extends IntrinsicHolderTagsProvider<T> 
         this.setup();
         
         this.registry.entrySet().stream()
-                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
-                .sorted(Comparator.comparing(entry -> entry.getKey().location()))
+                .filter(entry -> this.mod.modid.equals(entry.getKey().identifier().getNamespace()))
+                .sorted(Comparator.comparing(entry -> entry.getKey().identifier()))
                 .map(Map.Entry::getValue)
                 .forEach(this::defaultTags);
     }

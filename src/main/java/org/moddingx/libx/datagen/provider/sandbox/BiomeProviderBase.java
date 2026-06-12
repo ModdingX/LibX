@@ -2,7 +2,8 @@ package org.moddingx.libx.datagen.provider.sandbox;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.biome.OverworldBiomes;
+import net.minecraft.world.attribute.EnvironmentAttribute;
+import net.minecraft.world.attribute.EnvironmentAttributeMap;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
@@ -10,6 +11,8 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
+
+import java.util.List;
 
 /**
  * SandBox provider for {@link Biome biomes}.
@@ -32,6 +35,13 @@ public abstract class BiomeProviderBase extends RegistryProviderBase {
      */
     public BiomeBuilder biome(float temperature, float downfall) {
         return new BiomeBuilder(temperature, downfall);
+    }
+
+    /**
+     * Creates a new builder for biome environment attributes.
+     */
+    public EnvironmentAttributeMap.Builder attributes() {
+        return EnvironmentAttributeMap.builder();
     }
 
     /**
@@ -77,6 +87,21 @@ public abstract class BiomeProviderBase extends RegistryProviderBase {
          */
         public BiomeBuilder frozen() {
             this.builder.temperatureAdjustment(Biome.TemperatureModifier.FROZEN);
+            return this;
+        }
+
+        /**
+         * Sets the environment attributes for this biome. Only positional attributes can be set on biomes.
+         */
+        public BiomeBuilder attributes(EnvironmentAttributeMap.Builder builder) {
+            EnvironmentAttributeMap attributes = builder.build();
+            List<EnvironmentAttribute<?>> invalid = attributes.keySet().stream()
+                    .filter(attribute -> !attribute.isPositional())
+                    .toList();
+            if (!invalid.isEmpty()) {
+                throw new IllegalArgumentException("Non-positional environment attributes cannot be set on a biome: " + invalid);
+            }
+            this.builder.putAttributes(attributes);
             return this;
         }
 
@@ -133,15 +158,11 @@ public abstract class BiomeProviderBase extends RegistryProviderBase {
     private static class BiomeEffectsBuilder extends BiomeSpecialEffects.Builder {
         
         private BiomeEffectsBuilder() {
-            this.fogColor(0xc0d8ff);
             this.waterColor(0x3f76e4);
-            this.waterFogColor(0x050533);
         }
-        
+
         private void setDefaultSkyColor(float temperature) {
-            if (this.skyColor.isEmpty()) {
-                this.skyColor(OverworldBiomes.calculateSkyColor(temperature));
-            }
+            // Sky color is no longer part of BiomeSpecialEffects in 1.21.11
         }
     }
 

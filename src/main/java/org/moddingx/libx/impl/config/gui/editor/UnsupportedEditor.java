@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.config.gui.editor;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -39,7 +40,7 @@ public class UnsupportedEditor<T> implements ConfigEditor<T> {
     }
     
     // Required so it's not possible to enable the button via EditorOps
-    private static class UnsupportedButton extends Button implements EditorOps {
+    private static class UnsupportedButton extends Button.Plain implements EditorOps {
 
         public UnsupportedButton(int x, int y, int width, int height, Component title, Tooltip tooltip, OnPress action) {
             super(Button.builder(title, action)

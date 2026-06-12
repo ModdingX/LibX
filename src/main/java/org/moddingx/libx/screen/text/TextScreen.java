@@ -1,12 +1,15 @@
 package org.moddingx.libx.screen.text;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import org.lwjgl.glfw.GLFW;
@@ -92,10 +95,14 @@ public class TextScreen extends Screen {
         if (super.mouseClicked(event, isDoubleClick)) {
             return true;
         }
-        if (event.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT && this.content != null) {
+        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && this.content != null) {
             Style click = this.content.hoveredStyle(((int) event.x()) - this.left(), ((int) event.y()) - this.top());
             if (click != null) {
-                return this.handleComponentClicked(click);
+                ClickEvent clickEvent = click.getClickEvent();
+                if (clickEvent != null) {
+                    Screen.defaultHandleGameClickEvent(clickEvent, Minecraft.getInstance(), this);
+                    return true;
+                }
             }
         }
         return false;

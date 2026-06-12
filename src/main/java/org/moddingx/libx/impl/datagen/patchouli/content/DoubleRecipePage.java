@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.datagen.patchouli.content;
 
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.content.TextContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.Content;
@@ -13,15 +13,15 @@ public class DoubleRecipePage extends CaptionContent {
 
     private final String pageType;
     private final int skip;
-    private final ResourceLocation recipe1;
+    private final Identifier recipe1;
     
     @Nullable
-    private final ResourceLocation recipe2;
-    public DoubleRecipePage(String pageType, int skip, ResourceLocation recipe) {
+    private final Identifier recipe2;
+    public DoubleRecipePage(String pageType, int skip, Identifier recipe) {
         this(pageType, skip, recipe, null, null);
     }
     
-    private DoubleRecipePage(String pageType, int skip, ResourceLocation recipe1, @Nullable ResourceLocation recipe2, String caption) {
+    private DoubleRecipePage(String pageType, int skip, Identifier recipe1, @Nullable Identifier recipe2, String caption) {
         super(caption);
         this.pageType = pageType;
         this.skip = skip;

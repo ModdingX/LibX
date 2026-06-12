@@ -44,7 +44,7 @@ public class RenderHelperLevel {
      * stage, however that stage is not meant to redner like geometries into the world anyway.
      */
     public static void loadCameraPosition(Camera camera, PoseStack poseStack, double x, double y, double z) {
-        Vec3 cameraPos = camera.getPosition();
+        Vec3 cameraPos = camera.position();
         poseStack.translate(x - cameraPos.x, y - cameraPos.y, z - cameraPos.z);
     }
 }

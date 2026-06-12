@@ -21,7 +21,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 
 import java.util.HashMap;
@@ -168,22 +168,22 @@ public class ComponentUtil {
         Registry<DataComponentType<?>> theRegistry = registryAccess.lookup(registry).orElse(null);
         if (theRegistry == null) {
             //noinspection unchecked
-            theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.location()).orElse(null);
+            theRegistry = (Registry<DataComponentType<?>>) BuiltInRegistries.REGISTRY.get(registry.identifier()).orElse(null);
         }
         if (theRegistry == null) throw new IllegalStateException("Registry not found: " + registry);
         DynamicOps<Tag> registryOps = RegistryOps.create(NbtOps.INSTANCE, registryAccess);
         
-        Map<ResourceLocation, DataComponentType<?>> typeMap = new HashMap<>();
+        Map<Identifier, DataComponentType<?>> typeMap = new HashMap<>();
         for (DataComponentType<?> type : map.keySet()) {
             if (type.isTransient()) continue;
-            ResourceLocation id = theRegistry.getKey(type);
+            Identifier id = theRegistry.getKey(type);
             if (id == null) throw new IllegalStateException("Unregistered data component type: " + type);
             typeMap.put(id, type);
         }
 
         MutableComponent cmp = Component.literal("[");
         boolean first = true;
-        for (ResourceLocation typeId : typeMap.keySet().stream().sorted().toList()) {
+        for (Identifier typeId : typeMap.keySet().stream().sorted().toList()) {
             if (!first) cmp = cmp.append(", ");
             first = false;
             DataComponentType<?> type = typeMap.get(typeId);

@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.loot;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.entries.*;
@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 // A loot entry that merges multiple entries into one to be found in one roll.
 public class AllLootEntry extends CompositeEntryBase {
 
-    public static final ResourceLocation ID = LibX.getInstance().resource("all");
+    public static final Identifier ID = LibX.getInstance().resource("all");
     public static final MapCodec<AllLootEntry> CODEC = createCodec(AllLootEntry::new);
     public static final LootPoolEntryType TYPE = new LootPoolEntryType(CODEC);
 

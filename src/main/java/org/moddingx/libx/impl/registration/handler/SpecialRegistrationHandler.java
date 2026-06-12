@@ -1,6 +1,6 @@
 package org.moddingx.libx.impl.registration.handler;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 
@@ -16,9 +16,9 @@ public abstract class SpecialRegistrationHandler {
         this.runRegistration.run();
     }
 
-    public abstract void handle(ResourceLocation id, Object object);
+    public abstract void handle(Identifier id, Object object);
 
-    protected <T> void addToMap(String clsName, Map<ResourceLocation, T> map, ResourceLocation id, T value) {
+    protected <T> void addToMap(String clsName, Map<Identifier, T> map, Identifier id, T value) {
         if (map.containsKey(id)) {
             throw new IllegalStateException("Two instances of " + clsName + " registered with the same id: " + id);
         }

@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.util.lazy.LazyValue;
 
@@ -22,11 +22,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * A {@link Predicate} for {@link ResourceLocation resource locations} implemented as
+ * A {@link Predicate} for {@link Identifier resource locations} implemented as
  * a list of rules that will be applied one after another. The first rule that matches
  * a resource location determines the result.
  * The resource list can either be a white list or a black list. If it is an allow list,
- * by default a matching rule will make the {@link #test(ResourceLocation) test} function
+ * by default a matching rule will make the {@link #test(Identifier) test} function
  * return true. If it's a deny list it'll return false by default for matching rules.
  * For allow lists if no rule matches {@code false} is returned. For deny lists it's
  * {@code true}.
@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * specifies whether this is an allow or a deny rule and `regex` - which is a regex that must match the
  * resource location.
  */
-public class ResourceList implements Predicate<ResourceLocation> {
+public class ResourceList implements Predicate<Identifier> {
 
     /**
      * A resource list that accepts every item.
@@ -154,10 +154,10 @@ public class ResourceList implements Predicate<ResourceLocation> {
     }
 
     /**
-     * Tests whether the given {@link ResourceLocation} is on this resource list.
+     * Tests whether the given {@link Identifier} is on this resource list.
      */
     @Override
-    public boolean test(ResourceLocation rl) {
+    public boolean test(Identifier rl) {
         for (Rule rule : this.rules) {
             Boolean value = rule.test(rl);
             if (value != null) {
@@ -246,7 +246,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
     }
     
     private static List<String> parseString(String str) {
-        if (!ResourceLocation.isValidPath(str.replace("*", ""))) {
+        if (!Identifier.isValidPath(str.replace("*", ""))) {
             throw new IllegalStateException("Failed to build rule for resource list: Invalid resource location identifier: " + str);
         }
         List<String> parts = new ArrayList<>();
@@ -269,7 +269,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
     
     private sealed interface Rule permits SimpleRule, RegexRule {
 
-        Boolean test(ResourceLocation rl);
+        Boolean test(Identifier rl);
         JsonElement toJson();
         void toNetwork(FriendlyByteBuf buffer);
         RuleEntry getEntry();
@@ -290,7 +290,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
 
         @Nullable
         @Override
-        public Boolean test(ResourceLocation rl) {
+        public Boolean test(Identifier rl) {
             if (this.namespace.matcher.get().test(rl.getNamespace())
                     && this.path.matcher.get().test(rl.getPath())) {
                 return this.allow == null ? ResourceList.this.allowList : this.allow;
@@ -356,7 +356,7 @@ public class ResourceList implements Predicate<ResourceLocation> {
         }
 
         @Override
-        public Boolean test(ResourceLocation rl) {
+        public Boolean test(Identifier rl) {
             if (this.matcher.get().test(rl.toString())) {
                 return this.allow == null ? ResourceList.this.allowList : this.allow;
             } else {
@@ -428,27 +428,27 @@ public class ResourceList implements Predicate<ResourceLocation> {
         }
 
         /**
-         * Adds a simple rule that only matches the given {@link ResourceLocation}.
+         * Adds a simple rule that only matches the given {@link Identifier}.
          * When this rule matches it will return the allow list state of the resource list
          * as result.
          */
-        public void simple(ResourceLocation rl) {
+        public void simple(Identifier rl) {
             this.rulesBuilderList.add(new SimpleRule(null, new WildcardString(List.of(rl.getNamespace())), new WildcardString(List.of(rl.getPath()))));
         }
         
         /**
-         * Adds a simple rule that only matches the given {@link ResourceLocation}.
+         * Adds a simple rule that only matches the given {@link Identifier}.
          * When this rule matches it will return the value of {@code allow} as result.
          */
-        public void simple(boolean allow, ResourceLocation rl) {
+        public void simple(boolean allow, Identifier rl) {
             this.rulesBuilderList.add(new SimpleRule(allow, new WildcardString(List.of(rl.getNamespace())), new WildcardString(List.of(rl.getPath()))));
         }
 
         /**
-         * Parses a simple rule. This allows for a {@link ResourceLocation} string where asterisks (*) can
-         * match any amount of characters in the {@link ResourceLocation}. However an asterisk can never
+         * Parses a simple rule. This allows for a {@link Identifier} string where asterisks (*) can
+         * match any amount of characters in the {@link Identifier}. However an asterisk can never
          * match a colon.
-         * The special case '*' matches every {@link ResourceLocation}.
+         * The special case '*' matches every {@link Identifier}.
          * By default this will return the allow list state of the resource list as result.
          * To change this prepend a plus (+) to make it return true or a minus (-) to make
          * it return false on a match.

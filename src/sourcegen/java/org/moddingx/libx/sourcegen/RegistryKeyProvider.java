@@ -7,7 +7,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.moddingx.libx.annotation.processor.modinit.ModInit;
 
@@ -67,14 +67,14 @@ public class RegistryKeyProvider<T> implements DataProvider {
             sourceFile.append("package ").append(PACKAGE).append(";\n\n");
             sourceFile.append("import net.minecraft.core.Registry;\n");
             sourceFile.append("import net.minecraft.resources.ResourceKey;\n");
-            sourceFile.append("import net.minecraft.resources.ResourceLocation;\n");
+            sourceFile.append("import net.minecraft.resources.Identifier;\n");
             sourceFile.append("import ").append(this.registryClass.getName().replace('$', '.')).append(";\n\n");
             sourceFile.append("public class ").append(this.className).append(" {\n\n");
             sourceFile.append("    private ").append(this.className).append("() {}\n\n");
-            sourceFile.append("    private static final ResourceKey<Registry<").append(type).append(">> REGISTRY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(")
-                    .append(ModInit.quote(this.registry.location().getNamespace())).append(",").append(ModInit.quote(this.registry.location().getPath()))
+            sourceFile.append("    private static final ResourceKey<Registry<").append(type).append(">> REGISTRY = ResourceKey.createRegistryKey(Identifier.fromNamespaceAndPath(")
+                    .append(ModInit.quote(this.registry.identifier().getNamespace())).append(",").append(ModInit.quote(this.registry.identifier().getPath()))
                     .append("));\n\n");
-            for (ResourceLocation key : lookup.listElementIds().map(ResourceKey::location).sorted(ResourceLocation::compareNamespaced).toList()) {
+            for (Identifier key : lookup.listElementIds().map(ResourceKey::identifier).sorted(Identifier::compareNamespaced).toList()) {
                 StringBuilder fnb = new StringBuilder();
                 if ("realms".equals(key.getNamespace())) {
                     fnb.append("REALMS_");
@@ -89,7 +89,7 @@ public class RegistryKeyProvider<T> implements DataProvider {
                     }
                 }
                 String fn = fnb.toString();
-                sourceFile.append("    public static final ResourceKey<").append(type).append("> ").append(fn).append(" = ResourceKey.create(REGISTRY, ResourceLocation.fromNamespaceAndPath(")
+                sourceFile.append("    public static final ResourceKey<").append(type).append("> ").append(fn).append(" = ResourceKey.create(REGISTRY, Identifier.fromNamespaceAndPath(")
                         .append(ModInit.quote(key.getNamespace())).append(",").append(ModInit.quote(key.getPath()))
                         .append("));\n");
             }

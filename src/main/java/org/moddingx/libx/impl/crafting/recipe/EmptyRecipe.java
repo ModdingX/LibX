@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 public class EmptyRecipe implements Recipe<RecipeInput> {
     
-    public static final ResourceLocation ID = LibX.getInstance().resource("empty");
+    public static final Identifier ID = LibX.getInstance().resource("empty");
     public static final RecipeType<EmptyRecipe> TYPE = RecipeType.simple(ID);
 
     private EmptyRecipe() {}

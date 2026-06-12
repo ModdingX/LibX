@@ -1,4 +1,4 @@
-package org.moddingx.libx.impl.render;
+package org.moddingx.libx.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,16 +14,16 @@ import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.entity.state.HitboxRenderState;
-import net.minecraft.client.renderer.entity.state.HitboxesRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.AtlasManager;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -40,14 +40,14 @@ import java.util.List;
 
 /**
  * A {@link SubmitNodeCollector} that bridges item rendering to a {@link MultiBufferSource}.
- * Used by {@link org.moddingx.libx.render.RenderHelper#renderItem} to render items inside
+ * Used by {@link RenderHelper#renderItem} to render items inside
  * a {@link org.moddingx.libx.render.target.RenderJob} without requiring callers to
  * implement all 15 abstract methods of {@code SubmitNodeCollector}.
  */
 public class MultiBufferSourceSubmitCollector implements SubmitNodeCollector {
 
-    private static final RenderType SHADOW_RENDER_TYPE = RenderType.entityShadow(
-            ResourceLocation.withDefaultNamespace("textures/misc/shadow.png"));
+    private static final RenderType SHADOW_RENDER_TYPE = RenderTypes.entityShadow(
+            Identifier.withDefaultNamespace("textures/misc/shadow.png"));
 
     private final MultiBufferSource buffer;
 
@@ -181,21 +181,6 @@ public class MultiBufferSourceSubmitCollector implements SubmitNodeCollector {
     }
 
     @Override
-    public void submitHitbox(@Nonnull PoseStack poseStack, @Nonnull EntityRenderState entityRenderState, HitboxesRenderState hitboxesRenderState) {
-        VertexConsumer consumer = this.buffer.getBuffer(RenderType.lines());
-        for (HitboxRenderState box : hitboxesRenderState.hitboxes()) {
-            poseStack.pushPose();
-            poseStack.translate(box.offsetX(), box.offsetY(), box.offsetZ());
-            ShapeRenderer.renderLineBox(poseStack.last(), consumer,
-                    box.x0(), box.y0(), box.z0(), box.x1(), box.y1(), box.z1(),
-                    box.red(), box.green(), box.blue(), 1f);
-            poseStack.popPose();
-        }
-        Vec3 view = new Vec3(hitboxesRenderState.viewX(), hitboxesRenderState.viewY(), hitboxesRenderState.viewZ());
-        ShapeRenderer.renderVector(poseStack, consumer, new Vector3f(0f, entityRenderState.eyeHeight, 0f), view.scale(2.0), -16776961);
-    }
-
-    @Override
     public void submitFlame(PoseStack poseStack, EntityRenderState renderState, @Nonnull Quaternionf rotation) {
         AtlasManager atlasManager = Minecraft.getInstance().getAtlasManager();
         TextureAtlasSprite fire0 = atlasManager.get(ModelBakery.FIRE_0);
@@ -245,7 +230,7 @@ public class MultiBufferSourceSubmitCollector implements SubmitNodeCollector {
         float f3 = Mth.invSqrt(dx * dx + dz * dz) * 0.05f / 2f;
         float nx = dz * f3;
         float nz = dx * f3;
-        VertexConsumer consumer = this.buffer.getBuffer(RenderType.leash());
+        VertexConsumer consumer = this.buffer.getBuffer(RenderTypes.leash());
         for (int i = 0; i <= 24; i++) {
             addLeashVertexPair(consumer, pose, dx, dy, dz, 0.05f, nx, nz, i, false, leashState);
         }

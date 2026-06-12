@@ -3,36 +3,36 @@ package org.moddingx.libx.impl.config.mappers.advanced;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.InputProperties;
 import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.util.Misc;
 
-public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPrimitive> {
+public class ResourceValueMapper implements ValueMapper<Identifier, JsonPrimitive> {
 
     public static final ResourceValueMapper INSTANCE = new ResourceValueMapper();
-    private static final InputProperties<ResourceLocation> INPUT = new InputProperties<>() {
+    private static final InputProperties<Identifier> INPUT = new InputProperties<>() {
 
         @Override
-        public ResourceLocation defaultValue() {
+        public Identifier defaultValue() {
             return Misc.MISSINGNO;
         }
 
         @Override
         public boolean canInputChar(char chr) {
-            return ResourceLocation.isAllowedInResourceLocation(chr);
+            return Identifier.isAllowedInIdentifier(chr);
         }
 
         @Override
         public boolean isValid(String str) {
-            return ResourceLocation.tryParse(str) != null;
+            return Identifier.tryParse(str) != null;
         }
 
         @Override
-        public ResourceLocation valueOf(String str) {
-            return ResourceLocation.parse(str);
+        public Identifier valueOf(String str) {
+            return Identifier.parse(str);
         }
     };
 
@@ -41,8 +41,8 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
     }
 
     @Override
-    public Class<ResourceLocation> type() {
-        return ResourceLocation.class;
+    public Class<Identifier> type() {
+        return Identifier.class;
     }
 
     @Override
@@ -51,22 +51,22 @@ public class ResourceValueMapper implements ValueMapper<ResourceLocation, JsonPr
     }
 
     @Override
-    public ResourceLocation fromJson(JsonPrimitive json) {
-        return ResourceLocation.parse(json.getAsString());
+    public Identifier fromJson(JsonPrimitive json) {
+        return Identifier.parse(json.getAsString());
     }
 
     @Override
-    public JsonPrimitive toJson(ResourceLocation value) {
+    public JsonPrimitive toJson(Identifier value) {
         return new JsonPrimitive(value.toString());
     }
 
     @Override
-    public StreamCodec<? super FriendlyByteBuf, ResourceLocation> streamCodec() {
-        return ResourceLocation.STREAM_CODEC;
+    public StreamCodec<? super FriendlyByteBuf, Identifier> streamCodec() {
+        return Identifier.STREAM_CODEC;
     }
 
     @Override
-    public ConfigEditor<ResourceLocation> createEditor(ValidatorInfo<?> validator) {
+    public ConfigEditor<Identifier> createEditor(ValidatorInfo<?> validator) {
         return ConfigEditor.input(INPUT, validator);
     }
 }

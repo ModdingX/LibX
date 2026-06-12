@@ -1,6 +1,6 @@
 package org.moddingx.libx.mod;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -58,10 +58,10 @@ public abstract class ModX {
     protected abstract void clientSetup(FMLClientSetupEvent event);
 
     /**
-     * Creates a new {@link ResourceLocation} where the namespace is this mods id and the
+     * Creates a new {@link Identifier} where the namespace is this mods id and the
      * path is the given string.
      */
-    public final ResourceLocation resource(String path) {
-        return ResourceLocation.fromNamespaceAndPath(this.modid, path);
+    public final Identifier resource(String path) {
+        return Identifier.fromNamespaceAndPath(this.modid, path);
     }
 }

@@ -10,8 +10,8 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.Util;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Util;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.IOUtils;
@@ -47,7 +47,7 @@ public class DataLoader {
      *
      * @param codec A {@link Codec} to create the resulting objects.
      */
-    public static <T> Map<ResourceLocation, T> loadJson(ResourceManager rm, String basePath, Codec<T> codec) throws IOException {
+    public static <T> Map<Identifier, T> loadJson(ResourceManager rm, String basePath, Codec<T> codec) throws IOException {
         return loadJson(rm, basePath, (id, json) -> {
             DataResult<T> result = codec.decode(JsonOps.INSTANCE, json).map(Pair::getFirst);
             if (result.result().isPresent()) return result.result().get();
@@ -64,16 +64,16 @@ public class DataLoader {
      * 
      * @param factory A factory to create the resulting objects.
      */
-    public static <T> Map<ResourceLocation, T> loadJson(ResourceManager rm, String basePath, ResourceFactory<JsonElement, T> factory) throws IOException {
+    public static <T> Map<Identifier, T> loadJson(ResourceManager rm, String basePath, ResourceFactory<JsonElement, T> factory) throws IOException {
         return collectJson(locate(rm, basePath, "json", true), factory);
     }
 
     /**
      * Collects data from the given {@link Resource resources} by a given factory.
      */
-    public static <T> Map<ResourceLocation, T> collect(List<ResourceEntry> resources, ResourceFactory<Resource, T> factory) throws IOException {
+    public static <T> Map<Identifier, T> collect(List<ResourceEntry> resources, ResourceFactory<Resource, T> factory) throws IOException {
         // Don't use ImmutableMap.Builder because it would fail on duplicate keys
-        Map<ResourceLocation, T> map = new HashMap<>();
+        Map<Identifier, T> map = new HashMap<>();
         for (ResourceEntry entry : resources) {
             T value = factory.apply(entry.id(), entry.resource());
             if (value != null) map.put(entry.id(), value);
@@ -85,7 +85,7 @@ public class DataLoader {
      * Collects data from the given {@link Resource resources} by a given factory. The contents of the
      * resource are mapped to a {@link String} first.
      */
-    public static <T> Map<ResourceLocation, T> collectText(List<ResourceEntry> resources, ResourceFactory<String, T> factory) throws IOException {
+    public static <T> Map<Identifier, T> collectText(List<ResourceEntry> resources, ResourceFactory<String, T> factory) throws IOException {
         return collect(resources, (id, resource) -> {
             try (Reader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
                 return factory.apply(id, IOUtils.toString(reader));
@@ -97,7 +97,7 @@ public class DataLoader {
      * Collects data from the given {@link Resource resources} by a given {@link Codec}. The contents of the
      * resource are mapped to a {@link JsonElement} first.
      */
-    public static <T> Map<ResourceLocation, T> collectJson(List<ResourceEntry> resources, Codec<T> codec) throws IOException {
+    public static <T> Map<Identifier, T> collectJson(List<ResourceEntry> resources, Codec<T> codec) throws IOException {
         return collectJson(resources, (id, json) -> codec.decode(JsonOps.INSTANCE, json).getOrThrow(IOException::new).getFirst());
     }
     
@@ -105,7 +105,7 @@ public class DataLoader {
      * Collects data from the given {@link Resource resources} by a given factory. The contents of the
      * resource are mapped to a {@link JsonElement} first.
      */
-    public static <T> Map<ResourceLocation, T> collectJson(List<ResourceEntry> resources, ResourceFactory<JsonElement, T> factory) throws IOException {
+    public static <T> Map<Identifier, T> collectJson(List<ResourceEntry> resources, ResourceFactory<JsonElement, T> factory) throws IOException {
         return collect(resources, (id, resource) -> {
             try (Reader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
                 return factory.apply(id, GSON.fromJson(reader, JsonElement.class));
@@ -160,8 +160,8 @@ public class DataLoader {
         Set<String> namespaces = rm.getNamespaces();
         ImmutableList.Builder<ResourceEntry> list = ImmutableList.builder();
         for (String namespace : namespaces) {
-            ResourceLocation location = ResourceLocation.fromNamespaceAndPath(namespace, fullPath);
-            rm.getResource(location).ifPresent(res -> list.add(new ResourceEntry(ResourceLocation.fromNamespaceAndPath(namespace, idPath), res)));
+            Identifier location = Identifier.fromNamespaceAndPath(namespace, fullPath);
+            rm.getResource(location).ifPresent(res -> list.add(new ResourceEntry(Identifier.fromNamespaceAndPath(namespace, idPath), res)));
         }
         return list.build();
     }
@@ -177,15 +177,15 @@ public class DataLoader {
      * @return A list of resources. Their ids will have {@code basePath} and {@code suffix} stripped.
      */
     public static List<ResourceEntry> locate(ResourceManager rm, String basePath, @Nullable String suffix, boolean recursive) {
-        Map<ResourceLocation, Resource> resources = rm.listResources(basePath, file -> suffix == null || file.getPath().endsWith("." + suffix));
+        Map<Identifier, Resource> resources = rm.listResources(basePath, file -> suffix == null || file.getPath().endsWith("." + suffix));
         ImmutableList.Builder<ResourceEntry> list = ImmutableList.builder();
-        for (Map.Entry<ResourceLocation, Resource> entry : resources.entrySet()) {
-            ResourceLocation id = entry.getKey();
+        for (Map.Entry<Identifier, Resource> entry : resources.entrySet()) {
+            Identifier id = entry.getKey();
             if (!id.getPath().startsWith(basePath + "/")) continue;
             if (suffix != null && !id.getPath().endsWith("." + suffix)) continue;
             String realPath = id.getPath().substring(basePath.length() + 1, id.getPath().length() - (suffix == null ? 0 : (suffix.length() + 1)));
             if (realPath.isEmpty() || (!recursive && realPath.contains("/"))) continue;
-            list.add(new ResourceEntry(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), realPath), entry.getValue()));
+            list.add(new ResourceEntry(Identifier.fromNamespaceAndPath(id.getNamespace(), realPath), entry.getValue()));
         }
         return list.build();
     }
@@ -196,6 +196,6 @@ public class DataLoader {
     public interface ResourceFactory<T, R> {
         
         @Nullable
-        R apply(ResourceLocation id, T value) throws IOException;
+        R apply(Identifier id, T value) throws IOException;
     }
 }

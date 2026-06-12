@@ -5,7 +5,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.registries.holdersets.AndHolderSet;
 import net.neoforged.neoforge.registries.holdersets.AnyHolderSet;
@@ -47,7 +47,7 @@ public abstract class RegistryProviderBase implements RegistryProvider {
      */
     public final <T> Holder.Reference<T> holder(ResourceKey<T> key) {
         Registry<T> registry = this.registries.registry(ResourceKey.createRegistryKey(key.registry()));
-        return registry.get(key).orElseThrow(() -> new IllegalArgumentException("Unregistered element in registry " + key.registry() + ": " + key.location()));
+        return registry.get(key).orElseThrow(() -> new IllegalArgumentException("Unregistered element in registry " + key.registry() + ": " + key.identifier()));
     }
     
     /**
@@ -55,7 +55,7 @@ public abstract class RegistryProviderBase implements RegistryProvider {
      */
     public final <T> Holder.Reference<T> holder(ResourceKey<? extends Registry<T>> registryKey, T value) {
         Registry<T> registry = this.registries.registry(registryKey);
-        return registry.getResourceKey(value).map(this::holder).orElseThrow(() -> new IllegalArgumentException("Unregistered element in registry " + registryKey.location() + ": " + value));
+        return registry.getResourceKey(value).map(this::holder).orElseThrow(() -> new IllegalArgumentException("Unregistered element in registry " + registryKey.identifier() + ": " + value));
     }
 
     /**
@@ -185,10 +185,10 @@ public abstract class RegistryProviderBase implements RegistryProvider {
                     if (ref.type == Holder.Reference.Type.INTRUSIVE && !ref.isBound()) {
                         ResourceKey<? extends Registry<?>> registryKey = this.registries.findRegistryFor(ref);
                         if (registryKey == null) throw new IllegalStateException("Can't infer target registry for " + field.getName() + " in '" + this.getName() + "'. Was the holder created properly?");
-                        ResourceLocation id;
+                        Identifier id;
                         Id idObj = field.getAnnotation(Id.class);
                         if (idObj != null) {
-                            id = ResourceLocation.fromNamespaceAndPath(idObj.namespace().isEmpty() ? this.mod.modid : idObj.namespace(), idObj.value());
+                            id = Identifier.fromNamespaceAndPath(idObj.namespace().isEmpty() ? this.mod.modid : idObj.namespace(), idObj.value());
                         } else {
                             StringBuilder sb = new StringBuilder();
                             for (char chr : field.getName().toCharArray()) {
@@ -197,7 +197,7 @@ public abstract class RegistryProviderBase implements RegistryProvider {
                                 }
                                 sb.append(Character.toLowerCase(chr));
                             }
-                            id = ResourceLocation.fromNamespaceAndPath(this.mod.modid, sb.toString());
+                            id = Identifier.fromNamespaceAndPath(this.mod.modid, sb.toString());
                         }
                         //noinspection unchecked
                         this.registries.writableRegistry((ResourceKey<? extends Registry<Object>>) registryKey).register(ResourceKey.create((ResourceKey<? extends Registry<Object>>) registryKey, id), ref.value(), RegistrationInfo.BUILT_IN);

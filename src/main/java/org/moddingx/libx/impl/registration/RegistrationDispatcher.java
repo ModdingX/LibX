@@ -4,7 +4,7 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -87,7 +87,7 @@ public class RegistrationDispatcher {
     
     public <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         synchronized (this.LOCK) {
-            ResourceLocation rl = this.mod.resource(id);
+            Identifier rl = this.mod.resource(id);
             @Nullable ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
             RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
             
@@ -141,7 +141,7 @@ public class RegistrationDispatcher {
             //noinspection unchecked
             event.register((ResourceKey<Registry<Object>>) event.getRegistryKey(), reg -> {
                 for (Map.Entry<ResourceKey<?>, Object> entry : data.values()) {
-                    reg.register(entry.getKey().location(), entry.getValue());
+                    reg.register(entry.getKey().identifier(), entry.getValue());
                 }
             });
         }
@@ -158,7 +158,7 @@ public class RegistrationDispatcher {
     }
 
     private static <T> void cleanupIntrusiveHolder(ResourceKey<? extends Registry<T>> registryKey, T value) {
-        BuiltInRegistries.REGISTRY.get(registryKey.location()).ifPresent(registryHolder -> {
+        BuiltInRegistries.REGISTRY.get(registryKey.identifier()).ifPresent(registryHolder -> {
             if (registryHolder.value() instanceof MappedRegistry<?> mappedRegistry && mappedRegistry.unregisteredIntrusiveHolders != null) {
                 ((MappedRegistry<T>) mappedRegistry).unregisteredIntrusiveHolders.remove(value);
             }

@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.patchouli;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -28,14 +28,14 @@ public class EntryBuilder {
     
     public final ModX mod;
     public final String id;
-    public final ResourceLocation category;
+    public final Identifier category;
     private String name;
     private ItemStack icon;
-    private ResourceLocation advancement;
+    private Identifier advancement;
     private Content content;
     private final List<Consumer<JsonObject>> postProcessors;
 
-    public EntryBuilder(ModX mod, String id, ResourceLocation category) {
+    public EntryBuilder(ModX mod, String id, Identifier category) {
         this.mod = mod;
         this.id = id;
         this.category = category;
@@ -81,13 +81,13 @@ public class EntryBuilder {
      * Sets an advancement needed to unlock the entry.
      */
     public EntryBuilder advancement(String namespace, String path) {
-        return this.advancement(ResourceLocation.fromNamespaceAndPath(namespace, path));
+        return this.advancement(Identifier.fromNamespaceAndPath(namespace, path));
     }
 
     /**
      * Sets an advancement needed to unlock the entry.
      */
-    public EntryBuilder advancement(ResourceLocation advancement) {
+    public EntryBuilder advancement(Identifier advancement) {
         this.advancement = advancement;
         return this;
     }
@@ -126,13 +126,13 @@ public class EntryBuilder {
      * Adds some images to the entry. The image namespaces are set to the namespace of the category, this entry belongs to.
      */
     public EntryBuilder image(String title, String... images) {
-        return this.image(title, Arrays.stream(images).map(s -> ResourceLocation.fromNamespaceAndPath(this.mod.modid, s)).toArray(ResourceLocation[]::new));
+        return this.image(title, Arrays.stream(images).map(s -> Identifier.fromNamespaceAndPath(this.mod.modid, s)).toArray(Identifier[]::new));
     }
     
     /**
      * Adds some images to the entry.
      */
-    public EntryBuilder image(String title, ResourceLocation... images) {
+    public EntryBuilder image(String title, Identifier... images) {
         return this.add(new ImageContent(title, List.of(images), null));
     }
 
@@ -149,14 +149,14 @@ public class EntryBuilder {
      * and form a double recipe page.
      */
     public EntryBuilder crafting(String namespace, String path) {
-        return this.crafting(ResourceLocation.fromNamespaceAndPath(namespace, path));
+        return this.crafting(Identifier.fromNamespaceAndPath(namespace, path));
     }
     
     /**
      * Adds a crafting recipe to the entry. If the previous content is a crafting recipe as well, they'll merge together
      * and form a double recipe page.
      */
-    public EntryBuilder crafting(ResourceLocation id) {
+    public EntryBuilder crafting(Identifier id) {
         return this.add(new DoubleRecipePage("patchouli:crafting", 8, id));
     }
 
@@ -173,14 +173,14 @@ public class EntryBuilder {
      * and form a double recipe page.
      */
     public EntryBuilder smelting(String namespace, String path) {
-        return this.smelting(ResourceLocation.fromNamespaceAndPath(namespace, path));
+        return this.smelting(Identifier.fromNamespaceAndPath(namespace, path));
     }
 
     /**
      * Adds a smelting recipe to the entry. If the previous content is a smelting recipe as well, they'll merge together
      * and form a double recipe page.
      */
-    public EntryBuilder smelting(ResourceLocation id) {
+    public EntryBuilder smelting(Identifier id) {
         return this.add(new DoubleRecipePage("patchouli:smelting", 4, id));
     }
 
@@ -306,7 +306,7 @@ public class EntryBuilder {
             }
 
             @Override
-            public void checkAssets(ResourceLocation path) {
+            public void checkAssets(Identifier path) {
                 if (resourceManager.getResource(path).isEmpty()) {
                     throw new IllegalStateException("Resource " + path + " does not exist.");
                 }

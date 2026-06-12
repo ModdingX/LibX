@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.loot;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
@@ -47,7 +47,7 @@ public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider 
     /**
      * Creates a loot modifier builder for a modifier that adds the given loot table as loot.
      */
-    public LootModifierBuilder addition(String name, ResourceLocation lootTable) {
+    public LootModifierBuilder addition(String name, Identifier lootTable) {
         return this.modifier(name, conditions -> new AdditionLootModifier(lootTable, conditions));
     }
     
@@ -134,13 +134,13 @@ public abstract class GlobalLootProviderBase extends GlobalLootModifierProvider 
          * Adds a condition for the queried loot table.
          */
         public T forLootTable(String lootTableNamespace, String lootTablePath) {
-             return this.forLootTable(ResourceLocation.fromNamespaceAndPath(lootTableNamespace, lootTablePath));
+             return this.forLootTable(Identifier.fromNamespaceAndPath(lootTableNamespace, lootTablePath));
         }
 
         /**
          * Adds a condition for the queried loot table.
          */
-        public T forLootTable(ResourceLocation lootTable) {
+        public T forLootTable(Identifier lootTable) {
             return this.condition(LootTableIdCondition.builder(lootTable).build());
         }
 

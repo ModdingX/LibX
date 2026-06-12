@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import org.moddingx.libx.LibX;
@@ -27,9 +27,9 @@ public class ConfigShadowHandler extends PacketHandler<ConfigShadowHandler.Messa
 
     private static void encode(FriendlyByteBuf buffer, Message msg) {
         if (msg.config() == null || msg.state() == null || Misc.MISSINGNO.equals(msg.config().id)) {
-            buffer.writeResourceLocation(Misc.MISSINGNO);
+            buffer.writeIdentifier(Misc.MISSINGNO);
         } else {
-            buffer.writeResourceLocation(msg.config().id);
+            buffer.writeIdentifier(msg.config().id);
             FriendlyByteBuf b = new FriendlyByteBuf(Unpooled.buffer());
             msg.state().write(b);
             buffer.writeVarInt(b.writerIndex());
@@ -38,7 +38,7 @@ public class ConfigShadowHandler extends PacketHandler<ConfigShadowHandler.Messa
     }
 
     private static Message decode(FriendlyByteBuf buffer) {
-        ResourceLocation configId = buffer.readResourceLocation();
+        Identifier configId = buffer.readIdentifier();
         if (Misc.MISSINGNO.equals(configId)) {
             return new Message(null, null);
         }

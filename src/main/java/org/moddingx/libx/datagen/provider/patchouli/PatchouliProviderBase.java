@@ -3,7 +3,7 @@ package org.moddingx.libx.datagen.provider.patchouli;
 import com.google.common.collect.Streams;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.moddingx.libx.datagen.DatagenContext;
@@ -64,7 +64,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
      * @see CategoryBuilder
      */
     public CategoryBuilder category(String id) {
-        CategoryBuilder builder = new CategoryBuilder(this.mod, ResourceLocation.fromNamespaceAndPath(this.bookNamespace, id));
+        CategoryBuilder builder = new CategoryBuilder(this.mod, Identifier.fromNamespaceAndPath(this.bookNamespace, id));
         this.categories.add(builder);
         this.categoryIds.add(id);
         return builder;
@@ -105,7 +105,7 @@ public abstract class PatchouliProviderBase implements DataProvider {
         } else {
             if (!this.categoryIds.contains(category)) throw new IllegalArgumentException("Unknown category: " + category);
         }
-        EntryBuilder builder = new EntryBuilder(this.mod, id, ResourceLocation.fromNamespaceAndPath(this.bookNamespace, category));
+        EntryBuilder builder = new EntryBuilder(this.mod, id, Identifier.fromNamespaceAndPath(this.bookNamespace, category));
         this.entries.add(builder);
         return builder;
     }

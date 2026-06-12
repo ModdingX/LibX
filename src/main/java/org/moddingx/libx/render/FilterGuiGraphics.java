@@ -5,26 +5,28 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.cursor.CursorType;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.state.GuiElementRenderState;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
-import net.minecraft.client.model.BannerFlagModel;
-import net.minecraft.client.model.BookModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.model.object.banner.BannerFlagModel;
+import net.minecraft.client.model.object.book.BookModel;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.state.MapRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.profiling.ResultField;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,11 +38,12 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import org.joml.Matrix3x2fStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.jspecify.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * A {@link GuiGraphics} that overrides all methods and passes them through to the given parent. Useful if you
@@ -51,8 +54,18 @@ public class FilterGuiGraphics extends GuiGraphics {
     protected final GuiGraphics parent;
 
     public FilterGuiGraphics(GuiGraphics parent) {
-        super(Minecraft.getInstance(), parent.guiRenderState);
+        super(Minecraft.getInstance(), parent.guiRenderState, parent.mouseX, parent.mouseY);
         this.parent = parent;
+    }
+
+    @Override
+    public void requestCursor(@Nonnull CursorType cursor) {
+        this.parent.requestCursor(cursor);
+    }
+
+    @Override
+    public void applyCursor(@Nonnull Window window) {
+        this.parent.applyCursor(window);
     }
 
     @Override
@@ -127,8 +140,8 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void textHighlight(int minX, int minY, int maxX, int maxY) {
-        this.parent.textHighlight(minX, minY, maxX, maxY);
+    public void textHighlight(int minX, int minY, int maxX, int maxY, boolean invert) {
+        this.parent.textHighlight(minX, minY, maxX, maxY, invert);
     }
 
     @Override
@@ -192,32 +205,32 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void submitOutline(int x, int y, int width, int height, int color) {
-        this.parent.submitOutline(x, y, width, height, color);
+    public void renderOutline(int x, int y, int width, int height, int color) {
+        this.parent.renderOutline(x, y, width, height, color);
     }
 
     @Override
-    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation sprite, int x, int y, int width, int height) {
+    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull Identifier sprite, int x, int y, int width, int height) {
         this.parent.blitSprite(pipeline, sprite, x, y, width, height);
     }
 
     @Override
-    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation sprite, int x, int y, int width, int height, float fade) {
+    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull Identifier sprite, int x, int y, int width, int height, float fade) {
         this.parent.blitSprite(pipeline, sprite, x, y, width, height, fade);
     }
 
     @Override
-    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation sprite, int x, int y, int width, int height, int color) {
+    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull Identifier sprite, int x, int y, int width, int height, int color) {
         this.parent.blitSprite(pipeline, sprite, x, y, width, height, color);
     }
 
     @Override
-    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation sprite, int textureWidth, int textureHeight, int u, int v, int x, int y, int width, int height) {
+    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull Identifier sprite, int textureWidth, int textureHeight, int u, int v, int x, int y, int width, int height) {
         this.parent.blitSprite(pipeline, sprite, textureWidth, textureHeight, u, v, x, y, width, height);
     }
 
     @Override
-    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation sprite, int textureWidth, int textureHeight, int u, int v, int x, int y, int width, int height, int color) {
+    public void blitSprite(@Nonnull RenderPipeline pipeline, @Nonnull Identifier sprite, int textureWidth, int textureHeight, int u, int v, int x, int y, int width, int height, int color) {
         this.parent.blitSprite(pipeline, sprite, textureWidth, textureHeight, u, v, x, y, width, height, color);
     }
 
@@ -232,27 +245,27 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
+    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight, int color) {
         this.parent.blit(pipeline, atlas, x, y, u, v, width, height, textureWidth, textureHeight, color);
     }
 
     @Override
-    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
         this.parent.blit(pipeline, atlas, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
     @Override
-    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation atlas, int x, int y, float u, float v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight) {
+    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull Identifier atlas, int x, int y, float u, float v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight) {
         this.parent.blit(pipeline, atlas, x, y, u, v, width, height, uWidth, vHeight, textureWidth, textureHeight);
     }
 
     @Override
-    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull ResourceLocation atlas, int x, int y, float u, float v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight, int color) {
+    public void blit(@Nonnull RenderPipeline pipeline, @Nonnull Identifier atlas, int x, int y, float u, float v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight, int color) {
         this.parent.blit(pipeline, atlas, x, y, u, v, width, height, uWidth, vHeight, textureWidth, textureHeight, color);
     }
 
     @Override
-    public void blit(@Nonnull ResourceLocation atlas, int x0, int y0, int x1, int y1, float u0, float u1, float v0, float v1) {
+    public void blit(@Nonnull Identifier atlas, int x0, int y0, int x1, int y1, float u0, float u1, float v0, float v1) {
         this.parent.blit(atlas, x0, y0, x1, y1, u0, u1, v0, v1);
     }
 
@@ -312,7 +325,7 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> textComponents, @Nonnull Optional<TooltipComponent> tooltipComponent, @Nonnull ItemStack stack, int mouseX, int mouseY, @Nullable ResourceLocation backgroundTexture) {
+    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> textComponents, @Nonnull Optional<TooltipComponent> tooltipComponent, @Nonnull ItemStack stack, int mouseX, int mouseY, @Nullable Identifier backgroundTexture) {
         this.parent.setTooltipForNextFrame(font, textComponents, tooltipComponent, stack, mouseX, mouseY, backgroundTexture);
     }
 
@@ -322,7 +335,7 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> lines, @Nonnull Optional<TooltipComponent> tooltipImage, int x, int y, @Nullable ResourceLocation background) {
+    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> lines, @Nonnull Optional<TooltipComponent> tooltipImage, int x, int y, @Nullable Identifier background) {
         this.parent.setTooltipForNextFrame(font, lines, tooltipImage, x, y, background);
     }
 
@@ -332,7 +345,7 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull Component text, int x, int y, @Nullable ResourceLocation background) {
+    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull Component text, int x, int y, @Nullable Identifier background) {
         this.parent.setTooltipForNextFrame(font, text, x, y, background);
     }
 
@@ -342,7 +355,7 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> lines, int x, int y, @Nullable ResourceLocation background) {
+    public void setComponentTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> lines, int x, int y, @Nullable Identifier background) {
         this.parent.setComponentTooltipForNextFrame(font, lines, x, y, background);
     }
 
@@ -352,7 +365,7 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void setComponentTooltipForNextFrame(@Nonnull Font p_font, @Nonnull List<? extends FormattedText> lines, int x, int y, @Nonnull ItemStack stack, @Nullable ResourceLocation backgroundTexture) {
+    public void setComponentTooltipForNextFrame(@Nonnull Font p_font, @Nonnull List<? extends FormattedText> lines, int x, int y, @Nonnull ItemStack stack, @Nullable Identifier backgroundTexture) {
         this.parent.setComponentTooltipForNextFrame(p_font, lines, x, y, stack, backgroundTexture);
     }
 
@@ -362,7 +375,7 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void setComponentTooltipFromElementsForNextFrame(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack, @Nullable ResourceLocation backgroundTexture) {
+    public void setComponentTooltipFromElementsForNextFrame(@Nonnull Font font, @Nonnull List<Either<FormattedText, TooltipComponent>> elements, int mouseX, int mouseY, @Nonnull ItemStack stack, @Nullable Identifier backgroundTexture) {
         this.parent.setComponentTooltipFromElementsForNextFrame(font, elements, mouseX, mouseY, stack, backgroundTexture);
     }
 
@@ -372,7 +385,7 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> lines, int x, int y, @Nullable ResourceLocation background) {
+    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<? extends FormattedCharSequence> lines, int x, int y, @Nullable Identifier background) {
         this.parent.setTooltipForNextFrame(font, lines, x, y, background);
     }
 
@@ -382,12 +395,12 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void renderTooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> components, int x, int y, @Nonnull ClientTooltipPositioner positioner, @Nullable ResourceLocation background) {
+    public void renderTooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> components, int x, int y, @Nonnull ClientTooltipPositioner positioner, @Nullable Identifier background) {
         this.parent.renderTooltip(font, components, x, y, positioner, background);
     }
 
     @Override
-    public void renderTooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> components, int x, int y, @Nonnull ClientTooltipPositioner positioner, @Nullable ResourceLocation background, @Nonnull ItemStack tooltipStack) {
+    public void renderTooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> components, int x, int y, @Nonnull ClientTooltipPositioner positioner, @Nullable Identifier background, @Nonnull ItemStack tooltipStack) {
         this.parent.renderTooltip(font, components, x, y, positioner, background, tooltipStack);
     }
 
@@ -412,13 +425,13 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void submitSkinRenderState(@Nonnull PlayerModel playerModel, @Nonnull ResourceLocation texture, float scale, float rotationX, float rotationY, float pivotY, int x0, int y0, int x1, int y1) {
-        this.parent.submitSkinRenderState(playerModel, texture, scale, rotationX, rotationY, pivotY, x0, y0, x1, y1);
+    public void submitSkinRenderState(@Nonnull PlayerModel playerModel, @Nonnull Identifier texture, float rotationX, float rotationY, float pivotY, float x0, int y0, int x1, int y1, int scale) {
+        this.parent.submitSkinRenderState(playerModel, texture, rotationX, rotationY, pivotY, x0, y0, x1, y1, scale);
     }
 
     @Override
-    public void submitBookModelRenderState(@Nonnull BookModel bookModel, @Nonnull ResourceLocation texture, float scale, float open, float flip, int x0, int y0, int x1, int y1) {
-        this.parent.submitBookModelRenderState(bookModel, texture, scale, open, flip, x0, y0, x1, y1);
+    public void submitBookModelRenderState(@Nonnull BookModel bookModel, @Nonnull Identifier texture, float open, float flip, float x0, int y0, int x1, int y1, int scale) {
+        this.parent.submitBookModelRenderState(bookModel, texture, open, flip, x0, y0, x1, y1, scale);
     }
 
     @Override
@@ -447,13 +460,8 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void requestCursor(@Nonnull CursorType cursor) {
-        this.parent.requestCursor(cursor);
-    }
-
-    @Override
-    public void applyCursor(@Nonnull Window window) {
-        this.parent.applyCursor(window);
+    public @Nullable ScreenRectangle peekScissorStack() {
+        return this.parent.peekScissorStack();
     }
 
     @Nonnull
@@ -462,10 +470,28 @@ public class FilterGuiGraphics extends GuiGraphics {
         return this.parent.getSprite(material);
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public ScreenRectangle peekScissorStack() {
-        return this.parent.peekScissorStack();
+    public ActiveTextCollector textRendererForWidget(@Nonnull AbstractWidget widget, @Nonnull HoveredTextEffects hoveredTextEffects) {
+        return this.parent.textRendererForWidget(widget, hoveredTextEffects);
+    }
+
+    @Nonnull
+    @Override
+    public ActiveTextCollector textRenderer() {
+        return this.parent.textRenderer();
+    }
+
+    @Nonnull
+    @Override
+    public ActiveTextCollector textRenderer(@Nonnull HoveredTextEffects hoveredTextEffects) {
+        return this.parent.textRenderer(hoveredTextEffects);
+    }
+
+    @Nonnull
+    @Override
+    public ActiveTextCollector textRenderer(@Nonnull HoveredTextEffects hoveredTextEffects, @Nullable Consumer<Style> additionalConsumer) {
+        return this.parent.textRenderer(hoveredTextEffects, additionalConsumer);
     }
 
     @Override
@@ -474,17 +500,17 @@ public class FilterGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void drawScrollingString(@Nonnull Font font, @Nonnull Component text, int minX, int maxX, int y, int color) {
-        this.parent.drawScrollingString(font, text, minX, maxX, y, color);
+    public void drawScrollingString(@Nonnull ActiveTextCollector textCollector, @Nonnull Font font, @Nonnull Component text, int minX, int maxX, int y) {
+        this.parent.drawScrollingString(textCollector, font, text, minX, maxX, y);
     }
 
     @Override
-    public void blitInscribed(@Nonnull ResourceLocation texture, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight) {
+    public void blitInscribed(@Nonnull Identifier texture, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight) {
         this.parent.blitInscribed(texture, x, y, boundsWidth, boundsHeight, rectWidth, rectHeight);
     }
 
     @Override
-    public void blitInscribed(@Nonnull ResourceLocation texture, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight, boolean centerX, boolean centerY) {
+    public void blitInscribed(@Nonnull Identifier texture, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight, boolean centerX, boolean centerY) {
         this.parent.blitInscribed(texture, x, y, boundsWidth, boundsHeight, rectWidth, rectHeight, centerX, centerY);
     }
 }

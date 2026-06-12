@@ -62,7 +62,7 @@ public class NoiseLayerSelector {
             @Nonnull
             @Override
             public DensityFunction.NoiseHolder visitNoise(@Nonnull DensityFunction.NoiseHolder noise) {
-                long xor = noise.noiseData().unwrapKey().map(key -> (((long) key.location().getNamespace().hashCode()) << 32) | key.location().getPath().hashCode()).orElse(42L);
+                long xor = noise.noiseData().unwrapKey().map(key -> (((long) key.identifier().getNamespace().hashCode()) << 32) | key.identifier().getPath().hashCode()).orElse(42L);
                 return new DensityFunction.NoiseHolder(noise.noiseData(), NormalNoise.create(RandomSource.create(seed ^ xor), noise.noiseData().value()));
             }
         });

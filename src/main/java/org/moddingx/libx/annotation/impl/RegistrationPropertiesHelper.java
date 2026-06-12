@@ -4,7 +4,7 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -21,11 +21,11 @@ import net.minecraft.world.level.material.Fluid;
 public class RegistrationPropertiesHelper {
 
     public static void setItemId(Item.Properties props, String id) {
-        props.setId(ResourceKey.create(Registries.ITEM, ResourceLocation.parse(id)));
+        props.setId(ResourceKey.create(Registries.ITEM, Identifier.parse(id)));
     }
 
     public static void setBlockId(BlockBehaviour.Properties props, String id) {
-        props.setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.parse(id)));
+        props.setId(ResourceKey.create(Registries.BLOCK, Identifier.parse(id)));
     }
 
     public static void cleanupItemHolder(Item item) {

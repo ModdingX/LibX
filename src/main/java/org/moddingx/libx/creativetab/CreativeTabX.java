@@ -4,7 +4,7 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.GameMasterBlockItem;
@@ -38,7 +38,7 @@ public abstract class CreativeTabX {
     });
     
     protected final ModX mod;
-    protected final ResourceLocation id;
+    protected final Identifier id;
     private CreativeModeTab tab;
     
     protected CreativeTabX(ModX mod) {
@@ -118,7 +118,7 @@ public abstract class CreativeTabX {
      */
     protected void addModItemStacks(TabContext ctx, Comparator<Item> order, Function<Item, Stream<ItemStack>> stacks) {
         BuiltInRegistries.ITEM.entrySet().stream()
-                .filter(entry -> this.mod.modid.equals(entry.getKey().location().getNamespace()))
+                .filter(entry -> this.mod.modid.equals(entry.getKey().identifier().getNamespace()))
                 .map(Map.Entry::getValue)
                 .filter(item -> item.isEnabled(ctx.features()))
                 .sorted(order)
