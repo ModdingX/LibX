@@ -13,11 +13,11 @@ import javax.annotation.Nonnull;
  * on the horizontal facing. This may only be used with blocks that have the property {@link BlockStateProperties#HORIZONTAL_FACING}.
  * The {@link BlockEntity block entity} should be rendered as if it was facing north.
  */
-public abstract class RotatedBlockRenderer<T extends BlockEntity> extends TransformingBlockRenderer<T> {
+public abstract class RotatedBlockRenderer<T extends BlockEntity, S extends TransformingBlockRenderer.RenderState> extends TransformingBlockRenderer<T, S> {
 
     @Override
-    protected final void transform(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack) {
-        float rot = blockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180;
+    protected final void transform(@Nonnull S renderState, @Nonnull PoseStack poseStack) {
+        float rot = renderState.blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180;
         poseStack.translate(0.5D, 0.5D, 0.5D);
         poseStack.mulPose(Axis.YP.rotationDegrees(-rot));
         poseStack.translate(-0.5D, -0.5D, -0.5D);

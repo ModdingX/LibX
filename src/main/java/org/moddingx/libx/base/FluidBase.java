@@ -1,8 +1,8 @@
 package org.moddingx.libx.base;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -67,15 +67,17 @@ public class FluidBase implements ItemLike, Registerable {
     }
 
     /**
-     * Creates the {@link IClientFluidTypeExtensions client extensions} for this fluid. The default
-     * implementation creates client extensions that have no special properties, use a still texture
-     * located at {@code [namespace]:block/[path]} and a flowing texture located at
-     * {@code [namespace]:block/[path]_flowing}.
+     * Creates the {@link IClientFluidTypeExtensions client extensions} and the
+     * {@link net.minecraft.client.renderer.block.FluidModel fluid model} for this fluid. The default
+     * implementation creates client extensions that have no special properties and a fluid model without
+     * tint that uses a still texture located at {@code [namespace]:block/[path]} and a flowing texture
+     * located at {@code [namespace]:block/[path]_flowing}.
      */
-    protected ClientExtensionInfo.Fluid createClientExtensions(Identifier id) {
+    protected ClientExtensionInfo.Fluid createClientInfo(Identifier id) {
         Identifier stillTexture = Identifier.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
         Identifier flowingTexture = Identifier.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath() + "_flowing");
-        return new ClientExtensionInfo.Fluid(new DefaultClientExtensions(stillTexture, flowingTexture));
+        DefaultClientExtensions extensions = new DefaultClientExtensions(stillTexture, flowingTexture);
+        return new ClientExtensionInfo.Fluid(extensions, extensions.model());
     }
 
     @Override
@@ -86,9 +88,9 @@ public class FluidBase implements ItemLike, Registerable {
                     this.pendingBlockProperties.setId(ResourceKey.create(Registries.BLOCK, ctx.id())));
         }
         if (this.bucketItem == null) {
-            Identifier bucketLoc = Identifier.fromNamespaceAndPath(ctx.id().getNamespace(), ctx.id().getPath() + "_bucket");
+            Identifier bucketId = Identifier.fromNamespaceAndPath(ctx.id().getNamespace(), ctx.id().getPath() + "_bucket");
             this.bucketItem = this.bucketItemFactory.apply(this.sourceFluid,
-                    this.pendingBucketItemProperties.setId(ResourceKey.create(Registries.ITEM, bucketLoc)));
+                    this.pendingBucketItemProperties.setId(ResourceKey.create(Registries.ITEM, bucketId)));
         }
         builder.register(NeoForgeRegistries.Keys.FLUID_TYPES, this.fluidType);
         builder.register(Registries.FLUID, this.sourceFluid);
@@ -100,7 +102,7 @@ public class FluidBase implements ItemLike, Registerable {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerClientAdditional(RegistrationContext ctx, EntryCollector builder) {
-        builder.register(null, this.createClientExtensions(ctx.id()));
+        builder.register(null, this.createClientInfo(ctx.id()));
     }
 
     /**
@@ -141,27 +143,65 @@ public class FluidBase implements ItemLike, Registerable {
 
     /**
      * Gets the {@link LiquidBlock liquid block} for this {@link FluidBase}.
+     * <p>
+     * The liquid block is created during registration, as its id is not known before. Therefore, this method
+     * must not be called during construction or static initialization of the {@link FluidBase} and will throw
+     * an {@link IllegalStateException} until the fluid has been registered. It is however safe to pass a
+     * method reference to this method around, as long as it is only invoked after registration.
+     *
+     * @throws IllegalStateException if this {@link FluidBase} has not been registered yet
      */
     @Nonnull
     public final LiquidBlock getLiquidBlock() {
+        if (this.liquidBlock == null) {
+            throw new IllegalStateException(this.notRegistered("liquid block"));
+        }
         return this.liquidBlock;
     }
-    
+
     /**
      * Gets the {@link BucketItem bucket item} for this {@link FluidBase}.
+     * <p>
+     * The bucket item is created during registration, as its id is not known before. Therefore, this method
+     * must not be called during construction or static initialization of the {@link FluidBase} and will throw
+     * an {@link IllegalStateException} until the fluid has been registered. It is however safe to pass a
+     * method reference to this method around, as long as it is only invoked after registration.
+     *
+     * @throws IllegalStateException if this {@link FluidBase} has not been registered yet
      */
     @Nonnull
     public final BucketItem getBucketItem() {
+        if (this.bucketItem == null) {
+            throw new IllegalStateException(this.notRegistered("bucket item"));
+        }
         return this.bucketItem;
     }
 
     /**
      * This is the same as {@link #getBucketItem()} and allows {@link FluidBase} to be used as an {@link ItemLike}.
+     * <p>
+     * Just like {@link #getBucketItem()}, this throws an {@link IllegalStateException} if the fluid has not
+     * been registered yet, so a {@link FluidBase} must not be used as an {@link ItemLike} before registration.
+     *
+     * @throws IllegalStateException if this {@link FluidBase} has not been registered yet
      */
     @Nonnull
     @Override
     public final Item asItem() {
         return this.getBucketItem();
+    }
+
+    /**
+     * Builds the message for the {@link IllegalStateException} thrown when the {@link LiquidBlock liquid block}
+     * or the {@link BucketItem bucket item} is queried before registration.
+     */
+    private String notRegistered(String what) {
+        return "The " + what + " of the fluid " + this.getClass().getName() + " (mod " + this.mod.modid + ")"
+                + " has been queried before the fluid was registered. The " + what + " is only created while the"
+                + " fluid is registered, as its id is not known before, so it is still null at this point."
+                + " Do not call this getter during construction or static initialisation; either move the call"
+                + " to a point after registration has completed or pass a method reference to the getter instead"
+                + " of its result, so it is resolved lazily.";
     }
 
     /**

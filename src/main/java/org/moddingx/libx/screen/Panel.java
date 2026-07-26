@@ -1,7 +1,7 @@
 package org.moddingx.libx.screen;
 
 import net.minecraft.client.gui.ComponentPath;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
@@ -71,17 +71,17 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
     }
 
     @Override
-    public final void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public final void extractWidgetRenderState(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.pose().pushMatrix();
         graphics.pose().translate(this.getX(), this.getY());
         for (Renderable widget : this.renderables) {
-            widget.render(graphics, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
+            widget.extractRenderState(graphics, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
         }
         graphics.pose().popMatrix();
-        this.renderWidgetContent(graphics, mouseX, mouseY, partialTicks);
+        this.extractWidgetContent(graphics, mouseX, mouseY, partialTicks);
     }
-    
-    protected void renderWidgetContent(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+
+    protected void extractWidgetContent(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         //
     }
 

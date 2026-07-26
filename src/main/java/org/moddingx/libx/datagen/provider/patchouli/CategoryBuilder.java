@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.patchouli;
 
 import com.google.gson.JsonObject;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
 import org.moddingx.libx.mod.ModX;
@@ -21,7 +21,7 @@ public class CategoryBuilder {
     public final Identifier id;
     private String name;
     private String description;
-    private ItemStack icon;
+    private ItemStackTemplate icon;
     
     private int sort;
     private final List<Consumer<JsonObject>> postProcessors;
@@ -53,14 +53,14 @@ public class CategoryBuilder {
      * Sets the category icon. This is required.
      */
     public CategoryBuilder icon(ItemLike icon) {
-        return this.icon(new ItemStack(icon));
+        return this.icon(new ItemStackTemplate(icon.asItem()));
     }
-    
+
     /**
      * Sets the category icon. This is required.
      */
-    public CategoryBuilder icon(ItemStack icon) {
-        this.icon = icon.copy();
+    public CategoryBuilder icon(ItemStackTemplate icon) {
+        this.icon = icon;
         return this;
     }
 

@@ -10,7 +10,6 @@ import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.font.FontManager;
 import net.minecraft.client.gui.font.glyphs.SpecialGlyphs;
 import net.minecraft.network.chat.FontDescription;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.resources.Resource;
@@ -33,7 +32,7 @@ import java.util.stream.Stream;
 public class DatagenFontLoader {
 
     // Makes everything zero-width. Useful when splitting strings that have formatting codes.
-    public static final Identifier ZERO_WIDTH_FONT = LibX.getInstance().resource("zero_width");
+    public static final Identifier ZERO_WIDTH_FONT = LibX.getInstance().id("zero_width");
     public static final FontDescription.Resource ZERO_WIDTH_FONT_DESCRIPTION = new FontDescription.Resource(ZERO_WIDTH_FONT);
     public static final StringSplitter MISSING = new StringSplitter((cp, style) -> ZERO_WIDTH_FONT_DESCRIPTION.equals(style.getFont()) ? 0 : SpecialGlyphs.MISSING.getAdvance(style.isBold()));
     private static final Identifier UNIFONT_PUA_INCLUDE = Identifier.withDefaultNamespace("font/include/unifont_pua.json");

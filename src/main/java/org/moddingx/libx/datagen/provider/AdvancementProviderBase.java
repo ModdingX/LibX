@@ -14,14 +14,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -181,9 +181,9 @@ public abstract class AdvancementProviderBase implements DataProvider {
 
     private Identifier idFor(String id) {
         if (this.rootId == null) {
-            throw new IllegalStateException("On advancement providers without a root advancement only fully qualified resource locations are allowed, no plain ids.");
+            throw new IllegalStateException("On advancement providers without a root advancement only fully qualified identifiers are allowed, no plain ids.");
         }
-        return this.mod.resource(this.rootId + "/" + id);
+        return this.mod.id(this.rootId + "/" + id);
     }
 
     /**
@@ -431,7 +431,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemLike icon) {
-            return this.display(new ItemStack(icon));
+            return this.display(new ItemStackTemplate(icon.asItem()));
         }
 
         /**
@@ -439,7 +439,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemLike icon, AdvancementType type) {
-            return this.display(new ItemStack(icon), type);
+            return this.display(new ItemStackTemplate(icon.asItem()), type);
         }
         
         /**
@@ -447,14 +447,14 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemLike icon, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
-            return this.display(new ItemStack(icon), type, toast, chat, hidden);
+            return this.display(new ItemStackTemplate(icon.asItem()), type, toast, chat, hidden);
         }
 
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon) {
+        public AdvancementFactory display(ItemStackTemplate icon) {
             return this.display(icon, AdvancementType.TASK);
         }
 
@@ -462,7 +462,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, AdvancementType type) {
+        public AdvancementFactory display(ItemStackTemplate icon, AdvancementType type) {
             return this.display(icon, type, !this.root, !this.root, false);
         }
         
@@ -470,7 +470,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
+        public AdvancementFactory display(ItemStackTemplate icon, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
             return this.display(icon,
                     Component.translatable("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".title"),
                     Component.translatable("advancements." + this.id.getNamespace() + "." + this.id.getPath().replace('/', '.') + ".description"),
@@ -483,7 +483,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemLike icon, Component title, Component description) {
-            return this.display(new ItemStack(icon), title, description);
+            return this.display(new ItemStackTemplate(icon.asItem()), title, description);
         }
         
         /**
@@ -491,7 +491,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemLike icon, Component title, Component description, AdvancementType type) {
-            return this.display(new ItemStack(icon), title, description, type);
+            return this.display(new ItemStackTemplate(icon.asItem()), title, description, type);
         }
         
         /**
@@ -499,14 +499,14 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * advancement won't be visible.
          */
         public AdvancementFactory display(ItemLike icon, Component title, Component description, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
-            return this.display(new ItemStack(icon), title, description, type, toast, chat, hidden);
+            return this.display(new ItemStackTemplate(icon.asItem()), title, description, type, toast, chat, hidden);
         }
         
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, Component title, Component description) {
+        public AdvancementFactory display(ItemStackTemplate icon, Component title, Component description) {
             return this.display(icon, title, description, AdvancementType.TASK);
         }
         
@@ -514,7 +514,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, Component title, Component description, AdvancementType type) {
+        public AdvancementFactory display(ItemStackTemplate icon, Component title, Component description, AdvancementType type) {
             return this.display(icon, title, description, type, !this.root, !this.root, false);
         }
         
@@ -522,7 +522,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
          */
-        public AdvancementFactory display(ItemStack icon, Component title, Component description, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
+        public AdvancementFactory display(ItemStackTemplate icon, Component title, Component description, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
             this.display = new DisplayInfo(icon, title, description, Optional.empty(), type, toast, chat, hidden);
             return this;
         }

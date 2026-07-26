@@ -202,23 +202,23 @@ public class ConfigManager {
     
     /**
      * Registers a config.
-     * @param location The id of the config. The config will be located
+     * @param identifier The id of the config. The config will be located
      *                 in {@code config/namespace/path.json5}. Exception is a path of {@code config}.
      *                 In this case the config will be located at {@code config/modid.json5}.
      * @param configClass The base class for the config.
      * @param clientConfig Whether this is a client config.
      */
-    public static void registerConfig(Identifier location, Class<?> configClass, boolean clientConfig) {
-        if (configIds.containsKey(location)) {
-            throw new IllegalArgumentException("Config '" + location + "' is already bound to class " + configClass);
+    public static void registerConfig(Identifier identifier, Class<?> configClass, boolean clientConfig) {
+        if (configIds.containsKey(identifier)) {
+            throw new IllegalArgumentException("Config '" + identifier + "' is already bound to class " + configClass);
         } else if (configIds.containsValue(configClass)) {
             throw new IllegalArgumentException("Class " + configClass + " is already registered as '" + configIds.inverse().get(configClass) + "'");
         }
-        Path path = ConfigImpl.resolveConfigPath(FMLPaths.GAMEDIR.get().resolve("config"), location);
-        configIds.put(location, configClass);
+        Path path = ConfigImpl.resolveConfigPath(FMLPaths.GAMEDIR.get().resolve("config"), identifier);
+        configIds.put(identifier, configClass);
         configs.put(configClass, path);
-        new ConfigImpl(location, configClass, path, clientConfig);
-        ModMappers.get(location.getNamespace()).configRegistered();
+        new ConfigImpl(identifier, configClass, path, clientConfig);
+        ModMappers.get(identifier.getNamespace()).configRegistered();
         firstLoadConfig(configClass);
     }
 

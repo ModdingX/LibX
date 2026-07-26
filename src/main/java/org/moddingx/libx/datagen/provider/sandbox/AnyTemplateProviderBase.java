@@ -151,7 +151,7 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a single pool element to this pool.
          */
         public T single(int weight, String templatePath, Holder<StructureProcessorList> processor) {
-            return this.single(weight, AnyTemplateProviderBase.this.mod.resource(templatePath), processor);
+            return this.single(weight, AnyTemplateProviderBase.this.mod.id(templatePath), processor);
         }
 
         /**
@@ -232,7 +232,7 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
          * Add a legacy pool element to this pool.
          */
         public T legacy(int weight, String templatePath, Holder<StructureProcessorList> processor) {
-            return this.legacy(weight, AnyTemplateProviderBase.this.mod.resource(templatePath), processor);
+            return this.legacy(weight, AnyTemplateProviderBase.this.mod.id(templatePath), processor);
         }
 
         /**

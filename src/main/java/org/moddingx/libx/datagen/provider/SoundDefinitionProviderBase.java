@@ -282,7 +282,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * Adds a sound from this mods namespace to this sound definition.
          */
         public SoundDefinitionBuilder with(String path) {
-            return this.with(SoundDefinitionProviderBase.this.mod.resource(path), sound -> {});
+            return this.with(SoundDefinitionProviderBase.this.mod.id(path), sound -> {});
         }
 
         /**
@@ -297,7 +297,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * customise the sound.
          */
         public SoundDefinitionBuilder with(String path, Consumer<SoundDefinition.Sound> configure) {
-            return this.with(SoundDefinitionProviderBase.this.mod.resource(path), configure);
+            return this.with(SoundDefinitionProviderBase.this.mod.id(path), configure);
         }
 
         /**
@@ -316,7 +316,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
          */
         public SoundDefinitionBuilder withRange(String path, int amount) {
-            return this.withRange(SoundDefinitionProviderBase.this.mod.resource(path), amount, sound -> {});
+            return this.withRange(SoundDefinitionProviderBase.this.mod.id(path), amount, sound -> {});
         }
 
         /**
@@ -332,7 +332,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
          * {@code 0} (inclusive) to {@code amount} (exclusive) to the given id.
          */
         public SoundDefinitionBuilder withRange(String path, int amount, Consumer<SoundDefinition.Sound> configure) {
-            return this.withRange(SoundDefinitionProviderBase.this.mod.resource(path), amount, configure);
+            return this.withRange(SoundDefinitionProviderBase.this.mod.id(path), amount, configure);
         }
 
         /**

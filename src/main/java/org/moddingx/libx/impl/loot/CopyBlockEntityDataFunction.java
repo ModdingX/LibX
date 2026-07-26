@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.moddingx.libx.LibX;
@@ -26,12 +25,11 @@ import java.util.Set;
 
 public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
 
-    public static final Identifier ID = LibX.getInstance().resource("copy_block_entity_data");
-    public static final MapCodec<CopyBlockEntityDataFunction> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(instance.group(
+    public static final Identifier ID = LibX.getInstance().id("copy_block_entity_data");
+    public static final MapCodec<CopyBlockEntityDataFunction> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(instance.group(
             BuiltInRegistries.BLOCK.holderByNameCodec().fieldOf("block").forGetter(function -> function.block),
             Codec.STRING.listOf().fieldOf("tags").forGetter(function -> function.tags.stream().sorted().toList())
     )).apply(instance, CopyBlockEntityDataFunction::new));
-    public static final LootItemFunctionType<CopyBlockEntityDataFunction> TYPE = new LootItemFunctionType<>(CODEC);
 
     private final Holder<Block> block;
     private final Set<String> tags;
@@ -48,8 +46,8 @@ public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
 
     @Nonnull
     @Override
-    public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return TYPE;
+    public MapCodec<CopyBlockEntityDataFunction> codec() {
+        return MAP_CODEC;
     }
 
     @Nonnull

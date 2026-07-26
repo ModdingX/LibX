@@ -2,8 +2,7 @@ package org.moddingx.libx.screen.text;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ActiveTextCollector;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -12,7 +11,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import org.lwjgl.glfw.GLFW;
 import org.moddingx.libx.impl.screen.text.TextScreenContent;
 import org.moddingx.libx.render.RenderHelper;
 
@@ -64,29 +62,29 @@ public class TextScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (this.content == null) return;
         int left = this.left();
         int top = this.top();
         this.drawBackground(graphics, left - 10, top - 10, this.content.width() + 20, this.content.height() + 20);
 
         graphics.nextStratum();
-        this.content.render(graphics, left, top);
+        this.content.extract(graphics, left, top);
 
         graphics.nextStratum();
         for (Renderable renderable : this.renderables) {
-            renderable.render(graphics, mouseX, mouseY, partialTick);
+            renderable.extractRenderState(graphics, mouseX, mouseY, partialTick);
         }
 
         graphics.nextStratum();
         Style tooltip = this.content.hoveredStyle(mouseX - left, mouseY - top);
         if (tooltip != null) {
             RenderHelper.resetColor();
-            graphics.renderComponentHoverEffect(this.font, tooltip, mouseX, mouseY);
+            graphics.componentHoverEffect(this.font, tooltip, mouseX, mouseY);
         }
     }
     
-    protected void drawBackground(GuiGraphics graphics, int x, int y, int width, int height) {
+    protected void drawBackground(GuiGraphicsExtractor graphics, int x, int y, int width, int height) {
         RenderHelper.renderGuiBackground(RenderPipelines.GUI_TEXTURED, graphics, x, y, width, height);
     }
 

@@ -10,9 +10,11 @@ import java.util.Set;
 
 public class RegistryLoad extends SimpleClassProcessor {
 
-    private static final int FIELD_INDEX = 2;
-    private static final String TARGET_METHOD = "load";
-    private static final String TARGET_DESC = "(Lnet/minecraft/server/WorldLoader$InitConfig;Lnet/minecraft/server/WorldLoader$WorldDataSupplier;Lnet/minecraft/server/WorldLoader$ResultFactory;Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;";
+    private static final String LAYERED_ACCESS = "net/minecraft/core/LayeredRegistryAccess";
+    private static final String REPLACE_FROM = "replaceFrom";
+    private static final String REPLACE_FROM_DESC = "(Ljava/lang/Object;[Lnet/minecraft/core/RegistryAccess$Frozen;)Lnet/minecraft/core/LayeredRegistryAccess;";
+    private static final String REGISTRY_LAYER = "net/minecraft/server/RegistryLayer";
+    private static final String WORLDGEN_FIELD = "WORLDGEN";
 
     @Override
     public ProcessorName name() {
@@ -26,39 +28,44 @@ public class RegistryLoad extends SimpleClassProcessor {
 
     @Override
     public void transform(ClassNode cn, SimpleTransformationContext ctx) {
+        // Registry loading in WorldLoader#load is asynchronous, so the layer replacement for the worldgen
+        // layer does not live in the load method itself but in one of the lambda bodies it creates.
+        // Therefore every method of the class is searched for the anchor instead of only the load method.
         for (MethodNode mn : cn.methods) {
-            if (!TARGET_METHOD.equals(mn.name) || !TARGET_DESC.equals(mn.desc)) continue;
+            if (RegistryLoad.patch(mn)) {
+                return;
+            }
+        }
+        throw new IllegalStateException("Failed to patch WorldLoader.class: worldgen layer replacement not found");
+    }
 
-            InsnList injection = new InsnList();
-            injection.add(new InsnNode(Opcodes.DUP));
-            injection.add(new MethodInsnNode(
-                    Opcodes.INVOKESTATIC,
-                    "org/moddingx/libx/impl/libxcore/CoreRegistryLoad",
-                    "afterWorldGenLayerLoad",
-                    "(Lnet/minecraft/core/LayeredRegistryAccess;)V",
-                    false
-            ));
+    private static boolean patch(MethodNode mn) {
+        boolean foundWorldGenField = false;
+        for (int i = 0; i < mn.instructions.size(); i++) {
+            AbstractInsnNode node = mn.instructions.get(i);
+            if (node.getOpcode() == Opcodes.GETSTATIC && node instanceof FieldInsnNode fieldInsnNode) {
+                if (fieldInsnNode.owner.equals(REGISTRY_LAYER) && fieldInsnNode.name.equals(WORLDGEN_FIELD)) {
+                    foundWorldGenField = true;
+                }
+            } else if (node.getOpcode() == Opcodes.INVOKEVIRTUAL && foundWorldGenField && node instanceof MethodInsnNode methodInsnNode) {
+                if (methodInsnNode.owner.equals(LAYERED_ACCESS)
+                        && methodInsnNode.name.equals(REPLACE_FROM)
+                        && methodInsnNode.desc.equals(REPLACE_FROM_DESC)) {
 
-            int foundWorldGenFieldCounter = 0;
-            for (int i = 0; i < mn.instructions.size(); i++) {
-                AbstractInsnNode node = mn.instructions.get(i);
-                if (node.getOpcode() == Opcodes.GETSTATIC && foundWorldGenFieldCounter < FIELD_INDEX) {
-                    FieldInsnNode fieldInsnNode = (FieldInsnNode) node;
-                    if (fieldInsnNode.owner.equals("net/minecraft/server/RegistryLayer") && fieldInsnNode.name.equals("WORLDGEN")) {
-                        foundWorldGenFieldCounter++;
-                    }
-                } else if (node.getOpcode() == Opcodes.INVOKEVIRTUAL && foundWorldGenFieldCounter == FIELD_INDEX) {
-                    MethodInsnNode methodInsnNode = (MethodInsnNode) node;
-                    if (methodInsnNode.owner.equals("net/minecraft/core/LayeredRegistryAccess")
-                            && methodInsnNode.name.equals("replaceFrom")
-                            && methodInsnNode.desc.equals("(Ljava/lang/Object;[Lnet/minecraft/core/RegistryAccess$Frozen;)Lnet/minecraft/core/LayeredRegistryAccess;")) {
-                        mn.instructions.insert(node, injection);
-                        return;
-                    }
+                    InsnList injection = new InsnList();
+                    injection.add(new InsnNode(Opcodes.DUP));
+                    injection.add(new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            "org/moddingx/libx/impl/libxcore/CoreRegistryLoad",
+                            "afterWorldGenLayerLoad",
+                            "(Lnet/minecraft/core/LayeredRegistryAccess;)V",
+                            false
+                    ));
+                    mn.instructions.insert(node, injection);
+                    return true;
                 }
             }
-            throw new IllegalStateException("Failed to patch WorldLoader.class");
         }
-        throw new IllegalStateException("Failed to patch WorldLoader.class: method not found");
+        return false;
     }
 }

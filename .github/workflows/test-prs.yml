@@ -2,7 +2,7 @@ name: 'Test pull request 📋'
 on:
   pull_request:
     branches:
-      - '1.21'
+      - '26.1'
 
 jobs:
   test:
@@ -18,7 +18,7 @@ jobs:
         uses: 'actions/setup-java@v4'
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
 
       - name: 'Run tests 📋'
         run: './gradlew test'

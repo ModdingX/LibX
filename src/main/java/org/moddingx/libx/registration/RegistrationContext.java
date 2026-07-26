@@ -1,8 +1,8 @@
 package org.moddingx.libx.registration;
 
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import org.moddingx.libx.mod.ModXRegistration;
 
 import javax.annotation.Nullable;

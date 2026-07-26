@@ -20,7 +20,7 @@ import org.moddingx.libx.impl.config.gui.ModConfigGuiAdapter;
 import org.moddingx.libx.impl.config.mappers.SimpleValueMappers;
 import org.moddingx.libx.impl.config.mappers.advanced.ComponentValueMapper;
 import org.moddingx.libx.impl.config.mappers.advanced.ResourceListValueMapper;
-import org.moddingx.libx.impl.config.mappers.advanced.ResourceValueMapper;
+import org.moddingx.libx.impl.config.mappers.advanced.IdentifierValueMapper;
 import org.moddingx.libx.impl.config.mappers.advanced.UidValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.ListValueMapper;
 import org.moddingx.libx.impl.config.mappers.generic.MapValueMapper;
@@ -73,7 +73,7 @@ public class ModMappers {
             SimpleValueMappers.FLOAT,
             SimpleValueMappers.DOUBLE,
             SimpleValueMappers.STRING,
-            ResourceValueMapper.INSTANCE,
+            IdentifierValueMapper.INSTANCE,
             ComponentValueMapper.INSTANCE,
             ResourceListValueMapper.INSTANCE,
             UidValueMapper.INSTANCE

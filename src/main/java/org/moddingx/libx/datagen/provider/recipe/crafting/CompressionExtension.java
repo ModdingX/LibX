@@ -5,7 +5,6 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ItemLike;
 import org.moddingx.libx.datagen.provider.recipe.RecipeExtension;
 
@@ -33,13 +32,13 @@ public interface CompressionExtension extends RecipeExtension {
                 .pattern("aaa")
                 .pattern("aaa")
                 .unlockedBy("has_item", this.criterion(item))
-                .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(item, "compress")));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(item, "compress")));
 
         if (canRevert) {
             ShapelessRecipeBuilder.shapeless(this.items(), recipeCategory, item, 9)
                     .requires(compressed)
                     .unlockedBy("has_item", this.criterion(compressed))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(compressed, "decompress")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(compressed, "decompress")));
         }
     }
 
@@ -61,13 +60,13 @@ public interface CompressionExtension extends RecipeExtension {
                 .pattern("aa")
                 .pattern("aa")
                 .unlockedBy("has_item", this.criterion(item))
-                .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(item, "small_compress")));
+                .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(item, "small_compress")));
 
         if (canRevert) {
             ShapelessRecipeBuilder.shapeless(this.items(), recipeCategory, item, 4)
                     .requires(compressed)
                     .unlockedBy("has_item", this.criterion(compressed))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(compressed, "small_decompress")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(compressed, "small_decompress")));
         }
     }
 

@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.moddingx.libx.impl.datagen.load.DatagenFontLoader;
 
 import java.util.*;
@@ -23,18 +23,18 @@ import java.util.stream.Collectors;
 public class PageJson {
 
     /**
-     * Gets a {@link JsonElement} that represents the given {@link ItemStack} in the format, patchouli requires it.
+     * Gets a {@link JsonElement} that represents the given {@link ItemStackTemplate} in the format, patchouli requires it.
      */
-    public static JsonElement stack(ItemStack stack) {
+    public static JsonElement stack(ItemStackTemplate template) {
         StringBuilder sb = new StringBuilder();
-        Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        Identifier id = BuiltInRegistries.ITEM.getKey(template.item().value());
         sb.append(id.getNamespace());
         sb.append(":");
         sb.append(id.getPath());
-        sb.append(componentPatch(stack.getComponentsPatch()));
-        if (stack.getCount() != 1) {
+        sb.append(componentPatch(template.components()));
+        if (template.count() != 1) {
             sb.append("#");
-            sb.append(stack.getCount());
+            sb.append(template.count());
         }
         return new JsonPrimitive(sb.toString());
     }

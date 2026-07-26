@@ -3,10 +3,10 @@ package org.moddingx.libx.datapack;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import net.minecraft.util.Util;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
+import net.minecraft.util.Util;
 import org.moddingx.libx.impl.datapack.LibXPack;
 
 import java.io.*;

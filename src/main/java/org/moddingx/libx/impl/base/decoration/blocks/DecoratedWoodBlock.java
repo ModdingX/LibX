@@ -43,13 +43,13 @@ public class DecoratedWoodBlock extends RotatedPillarBlock {
         return this.parent.getExplosionResistance();
     }
 
-    @Override
-    public int getLightBlock(@Nonnull BlockState state) {
-        return this.parent.getLightBlock(state);
-    }
-
     public boolean isBurnable() {
         return this.parent.isBurnable();
+    }
+
+    @Override
+    protected int getLightDampening(@Nonnull BlockState state) {
+        return this.parent.getLightDampening(state);
     }
 
     @Override

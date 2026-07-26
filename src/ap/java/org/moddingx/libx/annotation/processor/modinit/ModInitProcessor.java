@@ -12,12 +12,17 @@ import org.moddingx.libx.annotation.processor.modinit.config.RegisterConfigProce
 import org.moddingx.libx.annotation.processor.modinit.config.RegisterMapperProcessor;
 import org.moddingx.libx.annotation.processor.modinit.model.ModelProcessor;
 import org.moddingx.libx.annotation.processor.modinit.register.RegisterClassProcessor;
+import org.moddingx.libx.annotation.processor.modinit.register.RegistrationEntry;
 import org.moddingx.libx.annotation.registration.RegisterClass;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -121,6 +126,47 @@ public class ModInitProcessor extends Processor implements ModEnv {
         
         for (ModInit mod : this.modInits.values()) {
             mod.write(this.filer(), this.messager());
+        }
+
+        this.writeRegistrationMetadata();
+    }
+
+    /**
+     * Writes the registration id metadata consumed by the {@code RegisterClassIds} coremod
+     * transformer. Each element is a JSON object of the form
+     * {@code {"class":"a/b/C","field":"fieldName","id":"modid:name"}}.
+     *
+     * This is emitted once for the whole compilation. The resource name is fixed, so writing it per
+     * mod would make the filer reject every write after the first, and those mods would silently lose
+     * their ids and fail at runtime instead.
+     */
+    private void writeRegistrationMetadata() {
+        List<String> entries = new ArrayList<>();
+        List<Element> originatingElements = new ArrayList<>();
+        for (ModInit mod : this.modInits.values()) {
+            List<RegistrationEntry> idEntries = mod.idEntries();
+            if (idEntries.isEmpty()) continue;
+            originatingElements.add(mod.modClass);
+            for (RegistrationEntry entry : idEntries) {
+                entries.add("{\"class\":\"" + entry.fieldClassFqn().replace('.', '/')
+                        + "\",\"field\":\"" + entry.fieldName()
+                        + "\",\"id\":\"" + mod.modid + ":" + entry.name() + "\"}");
+            }
+        }
+
+        if (entries.isEmpty()) return;
+
+        try {
+            FileObject metaFile = this.filer().createResource(StandardLocation.CLASS_OUTPUT, "",
+                    "META-INF/libx_registration.json", originatingElements.toArray(Element[]::new));
+            try (Writer writer = metaFile.openWriter()) {
+                writer.write("[" + String.join(",", entries) + "]");
+            }
+        } catch (IOException e) {
+            // Fatal on purpose: without this file the coremod cannot inject registry ids, and the mod
+            // fails at runtime with an error far removed from the actual cause.
+            this.messager().printMessage(Diagnostic.Kind.ERROR,
+                    "Failed to write libx_registration.json metadata: " + e);
         }
     }
 

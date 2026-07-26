@@ -40,114 +40,114 @@ public class TextureBuilder {
     /**
      * Adds a required texture which has the given size by default as width and height.
      */
-    public TextureBuilder addTexture(String loc, int defaultSize) {
-        return this.addTexture(loc, defaultSize, defaultSize);
+    public TextureBuilder addTexture(String id, int defaultSize) {
+        return this.addTexture(id, defaultSize, defaultSize);
     }
 
     /**
      * Adds a required image which has the given size by default as width and height.
      */
-    public TextureBuilder addImage(String loc, int defaultSize) {
-        return this.addImage(loc, defaultSize, defaultSize);
+    public TextureBuilder addImage(String id, int defaultSize) {
+        return this.addImage(id, defaultSize, defaultSize);
     }
 
     /**
      * Adds a required texture which has the given size by default as width and height.
      */
-    public TextureBuilder addTexture(Identifier loc, int defaultSize) {
-        return this.addTexture(loc, defaultSize, defaultSize);
+    public TextureBuilder addTexture(Identifier id, int defaultSize) {
+        return this.addTexture(id, defaultSize, defaultSize);
     }
 
     /**
      * Adds a required image which has the given size by default as width and height.
      */
-    public TextureBuilder addImage(Identifier loc, int defaultSize) {
-        return this.addImage(loc, defaultSize, defaultSize);
+    public TextureBuilder addImage(Identifier id, int defaultSize) {
+        return this.addImage(id, defaultSize, defaultSize);
     }
 
     /**
      * Adds a required texture which has the given width and height by default.
      */
-    public TextureBuilder addTexture(String loc, int defaultWidth, int defaultHeight) {
-        return this.addTexture(this.mod.resource(loc), defaultWidth, defaultHeight);
+    public TextureBuilder addTexture(String id, int defaultWidth, int defaultHeight) {
+        return this.addTexture(this.mod.id(id), defaultWidth, defaultHeight);
     }
 
     /**
      * Adds a required image which has the given width and height by default.
      */
-    public TextureBuilder addImage(String loc, int defaultWidth, int defaultHeight) {
-        return this.addImage(this.mod.resource(loc), defaultWidth, defaultHeight);
+    public TextureBuilder addImage(String id, int defaultWidth, int defaultHeight) {
+        return this.addImage(this.mod.id(id), defaultWidth, defaultHeight);
     }
 
     /**
      * Adds a required texture which has the given width and height by default.
      */
-    public TextureBuilder addTexture(Identifier loc, int defaultWidth, int defaultHeight) {
-        return this.addImage(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), defaultWidth, defaultHeight);
+    public TextureBuilder addTexture(Identifier id, int defaultWidth, int defaultHeight) {
+        return this.addImage(Identifier.fromNamespaceAndPath(id.getNamespace(), "textures/" + id.getPath() + ".png"), defaultWidth, defaultHeight);
     }
 
     /**
      * Assigns the given id to a fake image.
      *
-     * @param loc A fake <i>image</i> id.
+     * @param id A fake <i>image</i> id.
      */
-    public TextureBuilder addFake(Identifier loc, BufferedImage image) {
-        return this.addFake(loc, image, 1);
+    public TextureBuilder addFake(Identifier id, BufferedImage image) {
+        return this.addFake(id, image, 1);
     }
 
     /**
      * Assigns the given id to a fake image and scale.
      *
-     * @param loc A fake <i>image</i> id.
+     * @param id A fake <i>image</i> id.
      */
-    public TextureBuilder addFake(Identifier loc, BufferedImage image, int scale) {
-        if (this.fakes.containsKey(loc)) throw new IllegalStateException("Duplicate fake texture: " + loc);
-        this.fakes.put(loc, Pair.of(image, scale));
+    public TextureBuilder addFake(Identifier id, BufferedImage image, int scale) {
+        if (this.fakes.containsKey(id)) throw new IllegalStateException("Duplicate fake texture: " + id);
+        this.fakes.put(id, Pair.of(image, scale));
         return this;
     }
 
     /**
      * Assigns the given id to a fake image that is obtained by transforming another image.
-     * This requires that the texture {@code texLoc} has already been added.
+     * This requires that the texture {@code texId} has already been added.
      * 
-     * @param loc A fake <i>image</i> id.
+     * @param id A fake <i>image</i> id.
      */
-    public TextureBuilder addFakeTexture(Identifier loc, Identifier texLoc, UnaryOperator<BufferedImage> image) {
-        return this.addFakeImage(loc, Identifier.fromNamespaceAndPath(texLoc.getNamespace(), "textures/" + texLoc.getPath() + ".png"), image);
+    public TextureBuilder addFakeTexture(Identifier id, Identifier texId, UnaryOperator<BufferedImage> image) {
+        return this.addFakeImage(id, Identifier.fromNamespaceAndPath(texId.getNamespace(), "textures/" + texId.getPath() + ".png"), image);
     }
 
     /**
      * Assigns the given id to a fake image that is obtained by transforming another image.
-     * This requires that the image {@code imgLoc} has already been added.
+     * This requires that the image {@code imgId} has already been added.
      *
-     * @param loc A fake <i>image</i> id.
+     * @param id A fake <i>image</i> id.
      */
-    public TextureBuilder addFakeImage(Identifier loc, Identifier imgLoc, UnaryOperator<BufferedImage> image) {
-        if (!this.images.containsKey(imgLoc)) throw new IllegalStateException("Can't add fake transform of non-loaded image: " + imgLoc);
-        if (this.fakes.containsKey(loc)) throw new IllegalStateException("Duplicate fake texture: " + loc);
-        Pair<BufferedImage, Integer> original = this.images.get(imgLoc);
-        this.fakes.put(loc, Pair.of(image.apply(original.getLeft()), original.getRight()));
+    public TextureBuilder addFakeImage(Identifier id, Identifier imgId, UnaryOperator<BufferedImage> image) {
+        if (!this.images.containsKey(imgId)) throw new IllegalStateException("Can't add fake transform of non-loaded image: " + imgId);
+        if (this.fakes.containsKey(id)) throw new IllegalStateException("Duplicate fake texture: " + id);
+        Pair<BufferedImage, Integer> original = this.images.get(imgId);
+        this.fakes.put(id, Pair.of(image.apply(original.getLeft()), original.getRight()));
         return this;
     }
 
     /**
      * Adds a required image which has the given width and height by default.
      */
-    public TextureBuilder addImage(Identifier loc, int defaultWidth, int defaultHeight) {
-        if (!isPowerOfTwo(defaultWidth)) throw new IllegalArgumentException("Invalid default width for texture " + loc + ": " + defaultWidth + " is not a power of two.");
-        if (!isPowerOfTwo(defaultHeight)) throw new IllegalArgumentException("Invalid default height for texture " + loc + ": " + defaultHeight + " is not a power of two.");
-        if (!this.images.containsKey(loc)) {
-            BufferedImage image = this.textureLoader.apply(loc);
-            if (!isPowerOfTwo(image.getWidth())) throw new IllegalStateException("Invalid texture width for texture " + loc + ": " + image.getWidth() + " is not a power of two.");
-            if (!isPowerOfTwo(image.getHeight())) throw new IllegalStateException("Invalid texture height for texture " + loc + ": " + image.getHeight() + " is not a power of two.");
-            if (image.getWidth() < defaultWidth || image.getHeight() < defaultHeight) throw new IllegalStateException("Invalid texture: " + loc + ": Image is smaller than default");
+    public TextureBuilder addImage(Identifier id, int defaultWidth, int defaultHeight) {
+        if (!isPowerOfTwo(defaultWidth)) throw new IllegalArgumentException("Invalid default width for texture " + id + ": " + defaultWidth + " is not a power of two.");
+        if (!isPowerOfTwo(defaultHeight)) throw new IllegalArgumentException("Invalid default height for texture " + id + ": " + defaultHeight + " is not a power of two.");
+        if (!this.images.containsKey(id)) {
+            BufferedImage image = this.textureLoader.apply(id);
+            if (!isPowerOfTwo(image.getWidth())) throw new IllegalStateException("Invalid texture width for texture " + id + ": " + image.getWidth() + " is not a power of two.");
+            if (!isPowerOfTwo(image.getHeight())) throw new IllegalStateException("Invalid texture height for texture " + id + ": " + image.getHeight() + " is not a power of two.");
+            if (image.getWidth() < defaultWidth || image.getHeight() < defaultHeight) throw new IllegalStateException("Invalid texture: " + id + ": Image is smaller than default");
             int imageScaleByWidth = image.getWidth() / defaultWidth;
             int imageScaleByHeight = image.getHeight() / defaultHeight;
             if (imageScaleByWidth != imageScaleByHeight) {
                 int gcd = BigInteger.valueOf(defaultWidth).gcd(BigInteger.valueOf(defaultHeight)).intValue();
-                throw new IllegalStateException("Texture " + loc + " has invalid aspect ratio, expected " + (defaultWidth / gcd) + ":" + (defaultHeight / gcd));
+                throw new IllegalStateException("Texture " + id + " has invalid aspect ratio, expected " + (defaultWidth / gcd) + ":" + (defaultHeight / gcd));
             }
-            this.images.put(loc, Pair.of(image, imageScaleByWidth));
+            this.images.put(id, Pair.of(image, imageScaleByWidth));
             this.scale = lcm(this.scale, imageScaleByWidth);
         }
         return this;

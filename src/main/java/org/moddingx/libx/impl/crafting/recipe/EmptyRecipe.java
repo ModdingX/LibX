@@ -1,9 +1,7 @@
 package org.moddingx.libx.impl.crafting.recipe;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -15,8 +13,12 @@ import javax.annotation.Nonnull;
 
 public class EmptyRecipe implements Recipe<RecipeInput> {
     
-    public static final Identifier ID = LibX.getInstance().resource("empty");
+    public static final Identifier ID = LibX.getInstance().id("empty");
     public static final RecipeType<EmptyRecipe> TYPE = RecipeType.simple(ID);
+    public static final RecipeSerializer<EmptyRecipe> SERIALIZER = new RecipeSerializer<>(
+            MapCodec.<EmptyRecipe>unit(EmptyRecipe::new),
+            MoreStreamCodecs.<RegistryFriendlyByteBuf, EmptyRecipe>unit(EmptyRecipe::new)
+    );
 
     private EmptyRecipe() {}
 
@@ -27,8 +29,19 @@ public class EmptyRecipe implements Recipe<RecipeInput> {
 
     @Nonnull
     @Override
-    public ItemStack assemble(@Nonnull RecipeInput input, @Nonnull HolderLookup.Provider registries) {
+    public ItemStack assemble(@Nonnull RecipeInput input) {
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return true;
+    }
+
+    @Nonnull
+    @Override
+    public String group() {
+        return "";
     }
 
     @Nonnull
@@ -52,34 +65,15 @@ public class EmptyRecipe implements Recipe<RecipeInput> {
     @Nonnull
     @Override
     public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
-        return Serializer.INSTANCE;
+        return SERIALIZER;
     }
 
     @Override
     public boolean isSpecial() {
         return false;
     }
-    
+
     public static EmptyRecipe empty() {
         return new EmptyRecipe();
-    }
-    
-    public static class Serializer implements RecipeSerializer<EmptyRecipe> {
-
-        public static final Serializer INSTANCE = new Serializer();
-        
-        private Serializer() {}
-
-        @Nonnull
-        @Override
-        public MapCodec<EmptyRecipe> codec() {
-            return MapCodec.unit(EmptyRecipe::new);
-        }
-
-        @Nonnull
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, EmptyRecipe> streamCodec() {
-            return MoreStreamCodecs.unit(EmptyRecipe::new);
-        }
     }
 }

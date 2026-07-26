@@ -10,10 +10,10 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.util.Util;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.moddingx.libx.LibX;
 
@@ -160,8 +160,8 @@ public class DataLoader {
         Set<String> namespaces = rm.getNamespaces();
         ImmutableList.Builder<ResourceEntry> list = ImmutableList.builder();
         for (String namespace : namespaces) {
-            Identifier location = Identifier.fromNamespaceAndPath(namespace, fullPath);
-            rm.getResource(location).ifPresent(res -> list.add(new ResourceEntry(Identifier.fromNamespaceAndPath(namespace, idPath), res)));
+            Identifier identifier = Identifier.fromNamespaceAndPath(namespace, fullPath);
+            rm.getResource(identifier).ifPresent(res -> list.add(new ResourceEntry(Identifier.fromNamespaceAndPath(namespace, idPath), res)));
         }
         return list.build();
     }

@@ -6,6 +6,7 @@ import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagLoader;
+import net.minecraft.util.Util;
 import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.libxcore.CoreRegistryLoad;
@@ -30,7 +31,9 @@ public class DatagenRegistryLoader {
     }
 
     private static LayeredRegistryAccess<RegistryLayer> loadLayer(ResourceManager mgr, LayeredRegistryAccess<RegistryLayer> access, RegistryLayer layer, List<RegistryDataLoader.RegistryData<?>> registries) {
-        return access.replaceFrom(layer, RegistryDataLoader.load(mgr, TagLoader.buildUpdatedLookups(access.getAccessForLoading(layer), TagLoader.loadTagsForExistingRegistries(mgr, access.getLayer(RegistryLayer.STATIC))), registries));
+        // The registry loader is asynchronous now. Each layer must still be loaded and awaited on its own,
+        // as the RegistryLoad coremod patch hooks in between the layers.
+        return access.replaceFrom(layer, RegistryDataLoader.load(mgr, TagLoader.buildUpdatedLookups(access.getAccessForLoading(layer), TagLoader.loadTagsForExistingRegistries(mgr, access.getLayer(RegistryLayer.STATIC))), registries, Util.backgroundExecutor()).join());
     }
 
     @SuppressWarnings("UnstableApiUsage")

@@ -2,7 +2,7 @@ name: 'Deploy Javadoc 📖'
 on:
   push:
     branches:
-      - '1.21'
+      - '26.1'
 
 jobs:
   deploy:
@@ -17,7 +17,7 @@ jobs:
         uses: 'actions/setup-java@v4'
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
       - name: 'Install and Build 🔧'
         run: './gradlew javadoc'
 

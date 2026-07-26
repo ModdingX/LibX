@@ -6,9 +6,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryDataLoader;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryDataLoader;
+import net.minecraft.resources.RegistryValidator;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -140,7 +141,7 @@ public class DatagenSystem {
                 extraRegistries.add(new RegistryDataLoader.RegistryData<>(
                         (ResourceKey<? extends Registry<Object>>) extraEntry.getKey(),
                         (Codec<Object>) extraEntry.getValue(),
-                        false
+                        RegistryValidator.none()
                 ));
             }
             return Stream.concat(registries.stream(), extraRegistries.stream()).toList();

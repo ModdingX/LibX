@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -23,7 +23,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
 import org.lwjgl.glfw.GLFW;
-import org.moddingx.libx.render.FilterGuiGraphics;
+import org.moddingx.libx.render.FilterGuiGraphicsExtractor;
 import org.moddingx.libx.render.RenderHelper;
 
 import javax.annotation.Nonnull;
@@ -51,7 +51,7 @@ public abstract class ConfigBaseScreen extends Screen {
     // While rendering the scrollable view, tooltips must be delayed
     // Because clipping is enabled, and they need to be rendered with
     // absolute coordinates as they should not be cut by the screen border.
-    private final List<Consumer<GuiGraphics>> capturedTooltips = new LinkedList<>();
+    private final List<Consumer<GuiGraphicsExtractor>> capturedTooltips = new LinkedList<>();
     private boolean isCapturingTooltips = false;
     private int currentScrollOffset = 0;
 
@@ -115,10 +115,10 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+            public void extractRenderState(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
                 ConfigBaseScreen.this.isCapturingTooltips = true;
                 graphics.pose().pushMatrix();
-                super.render(new TooltipCapturingGuiGraphics(graphics), mouseX, mouseY, partialTicks);
+                super.extractRenderState(new TooltipCapturingGuiGraphics(graphics), mouseX, mouseY, partialTicks);
                 graphics.pose().popMatrix();
                 ConfigBaseScreen.this.isCapturingTooltips = false;
                 ConfigBaseScreen.this.capturedTooltips.forEach(action -> action.accept(graphics));
@@ -126,12 +126,12 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            protected void drawPanel(@Nonnull GuiGraphics graphics, int entryRight, int relativeY, int mouseX, int mouseY) {
+            protected void drawPanel(@Nonnull GuiGraphicsExtractor graphics, int entryRight, int relativeY, int mouseX, int mouseY) {
                 ConfigBaseScreen.this.currentScrollOffset = relativeY;
                 graphics.pose().pushMatrix();
                 graphics.pose().translate(0, relativeY);
                 for (AbstractWidget widget : widgets) {
-                    widget.render(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaTracker().getGameTimeDeltaTicks());
+                    widget.extractRenderState(graphics, mouseX, mouseY - relativeY, ConfigBaseScreen.this.mc.getDeltaTracker().getGameTimeDeltaTicks());
                 }
                 graphics.pose().popMatrix();
                 ConfigBaseScreen.this.currentScrollOffset = 0;
@@ -203,11 +203,11 @@ public abstract class ConfigBaseScreen extends Screen {
     }
 
     @Override
-    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderMenuBackground(graphics);
-        super.render(graphics, mouseX, mouseY, partialTicks);
+    public void extractRenderState(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+        this.extractMenuBackground(graphics);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
         RenderHelper.resetColor();
-        graphics.drawString(this.font, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFFFF, true);
+        graphics.text(this.font, this.getTitle(), (this.width - this.mc.font.width(this.getTitle())) / 2, 11, 0xFFFFFFFF, true);
     }
 
     @Override
@@ -246,13 +246,13 @@ public abstract class ConfigBaseScreen extends Screen {
         }
     }
 
-    private void captureTooltip(Consumer<GuiGraphics> action) {
+    private void captureTooltip(Consumer<GuiGraphicsExtractor> action) {
         this.capturedTooltips.add(action);
     }
     
-    private class TooltipCapturingGuiGraphics extends FilterGuiGraphics {
+    private class TooltipCapturingGuiGraphics extends FilterGuiGraphicsExtractor {
         
-        public TooltipCapturingGuiGraphics(GuiGraphics parent) {
+        public TooltipCapturingGuiGraphics(GuiGraphicsExtractor parent) {
             super(parent);
         }
 
@@ -418,6 +418,18 @@ public abstract class ConfigBaseScreen extends Screen {
                 ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, positioner, x, y + scrollOffset, focused));
             } else {
                 super.setTooltipForNextFrame(font, text, positioner, x, y, focused);
+            }
+        }
+
+        // This is the overload WidgetTooltipHolder uses, so it is the path every standard widget
+        // tooltip takes. Without it, those tooltips bypass capturing and miss the scroll offset.
+        @Override
+        public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<FormattedCharSequence> text, @Nonnull Optional<TooltipComponent> component, @Nonnull ClientTooltipPositioner positioner, int x, int y, boolean replaceExisting, @Nullable Identifier style) {
+            if (ConfigBaseScreen.this.isCapturingTooltips) {
+                int scrollOffset = ConfigBaseScreen.this.currentScrollOffset;
+                ConfigBaseScreen.this.captureTooltip(graphics -> graphics.setTooltipForNextFrame(font, text, component, positioner, x, y + scrollOffset, replaceExisting, style));
+            } else {
+                super.setTooltipForNextFrame(font, text, component, positioner, x, y, replaceExisting, style);
             }
         }
     }

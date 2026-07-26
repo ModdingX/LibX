@@ -35,7 +35,7 @@ import org.moddingx.libx.impl.network.NetworkImpl;
 import org.moddingx.libx.impl.render.BlockOverlayQuadCache;
 import org.moddingx.libx.impl.sandbox.EmptySurfaceRule;
 import org.moddingx.libx.impl.sandbox.density.*;
-import org.moddingx.libx.inventory.StackItemHandler;
+import org.moddingx.libx.inventory.StackItemResourceHandler;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.render.ClientTickHandler;
 import org.moddingx.libx.render.ItemStackRenderer;
@@ -130,25 +130,25 @@ public final class LibX extends ModX {
     }
 
     private void registerStuff(RegisterEvent event) {
-        event.register(Registries.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, () -> AllLootEntry.TYPE);
-        event.register(Registries.LOOT_FUNCTION_TYPE, CopyBlockEntityDataFunction.ID, () -> CopyBlockEntityDataFunction.TYPE);
-        event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, this.resource("effect"), () -> EffectIngredient.TYPE);
-        event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, this.resource("empty"), () -> EmptyIngredient.TYPE);
+        event.register(Registries.LOOT_POOL_ENTRY_TYPE, AllLootEntry.ID, () -> AllLootEntry.MAP_CODEC);
+        event.register(Registries.LOOT_FUNCTION_TYPE, CopyBlockEntityDataFunction.ID, () -> CopyBlockEntityDataFunction.MAP_CODEC);
+        event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, this.id("effect"), () -> EffectIngredient.TYPE);
+        event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, this.id("empty"), () -> EmptyIngredient.TYPE);
         event.register(Registries.RECIPE_TYPE, EmptyRecipe.ID, () -> EmptyRecipe.TYPE);
-        event.register(Registries.RECIPE_SERIALIZER, EmptyRecipe.ID, () -> EmptyRecipe.Serializer.INSTANCE);
-        event.register(Registries.COMMAND_ARGUMENT_TYPE, this.resource("enum"), () -> EnumArgumentIgnoreCase.Info.INSTANCE);
-        event.register(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("addition"), () -> AdditionLootModifier.CODEC);
-        event.register(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.resource("removal"), () -> RemovalLootModifier.CODEC);
-        event.register(Registries.MATERIAL_RULE, this.resource("empty"), () -> EmptySurfaceRule.CODEC);
-        event.register(Registries.CHUNK_GENERATOR, this.resource("noise"), () -> ExtendedNoiseChunkGenerator.CODEC);
-        event.register(Registries.BIOME_SOURCE, this.resource("layered"), () -> LayeredBiomeSource.CODEC);
-        event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.resource("inverted"), () -> InvertPlacementFilter.TYPE);
-        event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.resource("height_filter"), () -> HeightPlacementFilter.TYPE);
-        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("smash"), DensitySmash.CODEC::codec);
-        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("influence"), DensityInfluence.CODEC::codec);
-        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("debug"), DensityDebug.CODEC::codec);
-        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("lerp"), DensityLerp.CODEC::codec);
-        event.register(Registries.DENSITY_FUNCTION_TYPE, this.resource("clamp"), DensityClamp.CODEC::codec);
-        event.register(Registries.DATA_COMPONENT_TYPE, this.resource("inventory"), () -> StackItemHandler.INVENTORY_DATA);
+        event.register(Registries.RECIPE_SERIALIZER, EmptyRecipe.ID, () -> EmptyRecipe.SERIALIZER);
+        event.register(Registries.COMMAND_ARGUMENT_TYPE, this.id("enum"), () -> EnumArgumentIgnoreCase.Info.INSTANCE);
+        event.register(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.id("addition"), () -> AdditionLootModifier.CODEC);
+        event.register(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, this.id("removal"), () -> RemovalLootModifier.CODEC);
+        event.register(Registries.MATERIAL_RULE, this.id("empty"), () -> EmptySurfaceRule.CODEC);
+        event.register(Registries.CHUNK_GENERATOR, this.id("noise"), () -> ExtendedNoiseChunkGenerator.CODEC);
+        event.register(Registries.BIOME_SOURCE, this.id("layered"), () -> LayeredBiomeSource.CODEC);
+        event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.id("inverted"), () -> InvertPlacementFilter.TYPE);
+        event.register(Registries.PLACEMENT_MODIFIER_TYPE, this.id("height_filter"), () -> HeightPlacementFilter.TYPE);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.id("smash"), DensitySmash.CODEC::codec);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.id("influence"), DensityInfluence.CODEC::codec);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.id("debug"), DensityDebug.CODEC::codec);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.id("lerp"), DensityLerp.CODEC::codec);
+        event.register(Registries.DENSITY_FUNCTION_TYPE, this.id("clamp"), DensityClamp.CODEC::codec);
+        event.register(Registries.DATA_COMPONENT_TYPE, this.id("inventory"), () -> StackItemResourceHandler.INVENTORY_DATA);
     }
 }

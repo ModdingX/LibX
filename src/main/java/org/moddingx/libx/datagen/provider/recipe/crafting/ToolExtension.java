@@ -33,7 +33,7 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_sword")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "sword")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material, "sword")));
         }
 
         if (axe != null) {
@@ -46,7 +46,7 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_axe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "axe")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material, "axe")));
         }
 
         if (pick != null) {
@@ -59,7 +59,7 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_pick")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "pick")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material, "pick")));
         }
 
         if (shovel != null) {
@@ -72,7 +72,7 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_shovel")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "shovel")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material, "shovel")));
         }
 
         if (hoe != null) {
@@ -85,7 +85,7 @@ public interface ToolExtension extends RecipeExtension {
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_hoe")
                     .unlockedBy("has_item0", this.criterion(Tags.Items.RODS_WOODEN))
                     .unlockedBy("has_item1", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material, "hoe")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material, "hoe")));
         }
     }
 
@@ -102,7 +102,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m m")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_helmet")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "helmet")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material.asItem(), "helmet")));
         }
 
         if (chestplate != null) {
@@ -113,7 +113,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("mmm")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_chestplate")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "chestplate")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material.asItem(), "chestplate")));
         }
 
         if (leggings != null) {
@@ -124,7 +124,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m m")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_leggings")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "leggings")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material.asItem(), "leggings")));
         }
 
         if (boots != null) {
@@ -134,7 +134,7 @@ public interface ToolExtension extends RecipeExtension {
                     .pattern("m m")
                     .group(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(material.asItem())) + "_boots")
                     .unlockedBy("has_item", this.criterion(material))
-                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(material.asItem(), "boots")));
+                    .save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(material.asItem(), "boots")));
         }
     }
 }

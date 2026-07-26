@@ -3,8 +3,8 @@ package org.moddingx.libx.base.decoration;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
 import org.moddingx.libx.mod.ModX;
@@ -131,10 +131,10 @@ public class DecorationContext {
         for (Map.Entry<String, DecorationType<?>> entry : this.types.entrySet()) {
             // Compute the variant's block ResourceKey so that variant constructors can call setId.
             String suffix = entry.getKey();
-            Identifier variantLoc = suffix.isEmpty()
+            Identifier variantId = suffix.isEmpty()
                     ? baseCtx.id()
                     : Identifier.fromNamespaceAndPath(baseCtx.id().getNamespace(), baseCtx.id().getPath() + "_" + suffix);
-            ResourceKey<Block> variantKey = ResourceKey.create(Registries.BLOCK, variantLoc);
+            ResourceKey<Block> variantKey = ResourceKey.create(Registries.BLOCK, variantId);
 
             DecorationBlockIdContext.set(variantKey);
             DecorationType.DecorationElement<?, ?> element;

@@ -55,7 +55,7 @@ public final class NetworkImpl extends NetworkX {
         BeUpdateHandler.Message msg = this.getBeUpdateMessage(level, pos);
         if (msg != null) {
             // We don't use PacketDistributor.sendToPlayersTrackingChunk here because our payload is optional
-            for (ServerPlayer player : level.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos), false)) {
+            for (ServerPlayer player : level.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(pos), false)) {
                 if (this.canSend(player, BeUpdateHandler.TYPE)) {
                     PacketDistributor.sendToPlayer(player, msg);
                 }
@@ -72,7 +72,7 @@ public final class NetworkImpl extends NetworkX {
         } else {
             // We don't use PacketDistributor.sendToAllPlayers here because our payload is optional
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                if (this.canSend(player, BeUpdateHandler.TYPE)) {
+                if (this.canSend(player, ConfigShadowHandler.TYPE)) {
                     player.connection.send(msg);
                 }
             }

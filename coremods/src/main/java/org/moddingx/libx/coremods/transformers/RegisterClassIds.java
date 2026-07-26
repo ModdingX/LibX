@@ -2,11 +2,12 @@ package org.moddingx.libx.coremods.transformers;
 
 import net.neoforged.fml.jarcontents.JarContents;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforgespi.locating.IModFile;
 import net.neoforged.neoforgespi.transformation.ProcessorName;
 import net.neoforged.neoforgespi.transformation.SimpleClassProcessor;
 import net.neoforged.neoforgespi.transformation.SimpleTransformationContext;
-import net.neoforged.neoforgespi.locating.IModFile;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 
 import java.nio.charset.StandardCharsets;
@@ -22,7 +23,11 @@ public class RegisterClassIds extends SimpleClassProcessor {
     private final Map<String, List<FieldEntry>> entries;
 
     public RegisterClassIds() {
-        this.entries = RegisterClassIds.loadEntries();
+        this(RegisterClassIds.loadEntries());
+    }
+
+    RegisterClassIds(Map<String, List<FieldEntry>> entries) {
+        this.entries = entries;
     }
 
     @Override
@@ -40,7 +45,9 @@ public class RegisterClassIds extends SimpleClassProcessor {
     @Override
     public void transform(ClassNode cn, SimpleTransformationContext ctx) {
         List<FieldEntry> fields = this.entries.get(cn.name);
-        if (fields == null) return;
+        if (fields == null) {
+            throw new IllegalStateException("Failed to patch " + cn.name + ": no registration metadata for a targeted class");
+        }
         for (FieldEntry fe : fields) {
             RegisterClassIds.injectField(cn, cn.name, fe);
         }
@@ -55,7 +62,9 @@ public class RegisterClassIds extends SimpleClassProcessor {
                 break;
             }
         }
-        if (clinit == null) return;
+        if (clinit == null) {
+            throw new IllegalStateException("Failed to patch " + owner + ": no static initialiser for field " + fe.fieldName());
+        }
 
         InsnList insns = clinit.instructions;
 
@@ -70,7 +79,7 @@ public class RegisterClassIds extends SimpleClassProcessor {
         }
 
         if (putStatic == null) { // field not initialised in <clinit>
-            return;
+            throw new IllegalStateException("Failed to patch " + owner + ": field " + fe.fieldName() + " is not initialised in the static initialiser");
         }
 
         // Walk backward from PUTSTATIC to find the INVOKESPECIAL <init> that constructs
@@ -91,86 +100,82 @@ public class RegisterClassIds extends SimpleClassProcessor {
                 continue;
             }
 
-            // Determine which Properties types appear as constructor arguments.
-            boolean lastIsItem = min.desc.contains("L" + ITEM_PROPS + ";)V");
-            boolean lastIsBlock = min.desc.contains("L" + BLOCK_PROPS + ";)V");
+            // Locate the Properties arguments by their position in the descriptor.
+            Type[] argTypes = Type.getArgumentTypes(min.desc);
+            int itemArg = RegisterClassIds.propertiesIndex(argTypes, ITEM_PROPS, owner, fe);
+            int blockArg = RegisterClassIds.propertiesIndex(argTypes, BLOCK_PROPS, owner, fe);
 
-            if (!lastIsItem && !lastIsBlock) {
+            if (itemArg < 0 && blockArg < 0) {
                 continue;
             }
 
             // ----------------------------------------------------------------
-            // Determine injection(s) needed.
-            // The Properties object of interest is always the TOP of the
-            // operand stack just before INVOKESPECIAL executes.
+            // Spill every argument from the first Properties upwards into fresh locals, set the
+            // ids on the spilled Properties, then push the arguments back in their original
+            // order. This leaves the operand stack exactly as the constructor expects it and
+            // works for any argument shape, including intervening long/double arguments.
             // ----------------------------------------------------------------
 
-            boolean hasItemArg = min.desc.contains("L" + ITEM_PROPS + ";");
-            boolean hasBlockArg = min.desc.contains("L" + BLOCK_PROPS + ";");
-            boolean bothPresent = hasItemArg && hasBlockArg;
+            int firstArg = blockArg < 0 ? itemArg : (itemArg < 0 ? blockArg : Math.min(itemArg, blockArg));
+
+            int[] slots = new int[argTypes.length];
+            int nextSlot = clinit.maxLocals;
+            for (int arg = firstArg; arg < argTypes.length; arg++) {
+                slots[arg] = nextSlot;
+                nextSlot += argTypes[arg].getSize();
+            }
 
             InsnList injection = new InsnList();
-
-            if (!bothPresent) {
-                injection.add(new InsnNode(Opcodes.DUP));
-                injection.add(new LdcInsnNode(fe.id()));
-                if (lastIsItem) {
-                    injection.add(new MethodInsnNode(
-                            Opcodes.INVOKESTATIC,
-                            HELPER, "setItemId",
-                            "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V"
-                    ));
-                } else {
-                    injection.add(new MethodInsnNode(
-                            Opcodes.INVOKESTATIC,
-                            HELPER, "setBlockId",
-                            "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V"
-                    ));
-                }
-            } else if (lastIsItem) {
-                // Stack: [..., blockProps, itemProps]  (item on TOP)
-                injection.add(new InsnNode(Opcodes.DUP));
-                injection.add(new LdcInsnNode(fe.id()));
-                injection.add(new MethodInsnNode(
-                        Opcodes.INVOKESTATIC,
-                        HELPER, "setItemId",
-                        "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V"
-                ));
-
-                injection.add(new InsnNode(Opcodes.SWAP));
-                injection.add(new InsnNode(Opcodes.DUP));
+            for (int arg = argTypes.length - 1; arg >= firstArg; arg--) {
+                injection.add(new VarInsnNode(argTypes[arg].getOpcode(Opcodes.ISTORE), slots[arg]));
+            }
+            if (blockArg >= 0) {
+                injection.add(new VarInsnNode(Opcodes.ALOAD, slots[blockArg]));
                 injection.add(new LdcInsnNode(fe.id()));
                 injection.add(new MethodInsnNode(
                         Opcodes.INVOKESTATIC,
                         HELPER, "setBlockId",
-                        "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V"
+                        "(L" + BLOCK_PROPS + ";Ljava/lang/String;)V"
                 ));
-                injection.add(new InsnNode(Opcodes.SWAP));
-            } else {
-                // Stack: [..., itemProps, blockProps]  (block on TOP)
-                injection.add(new InsnNode(Opcodes.DUP));
-                injection.add(new LdcInsnNode(fe.id()));
-                injection.add(new MethodInsnNode(
-                        Opcodes.INVOKESTATIC,
-                        HELPER, "setBlockId",
-                        "(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/lang/String;)V"
-                ));
-                // Set item id (second): SWAP, DUP, LDC, setItemId, SWAP  → stack unchanged
-                injection.add(new InsnNode(Opcodes.SWAP));
-                injection.add(new InsnNode(Opcodes.DUP));
+            }
+            if (itemArg >= 0) {
+                injection.add(new VarInsnNode(Opcodes.ALOAD, slots[itemArg]));
                 injection.add(new LdcInsnNode(fe.id()));
                 injection.add(new MethodInsnNode(
                         Opcodes.INVOKESTATIC,
                         HELPER, "setItemId",
-                        "(Lnet/minecraft/world/item/Item$Properties;Ljava/lang/String;)V"
+                        "(L" + ITEM_PROPS + ";Ljava/lang/String;)V"
                 ));
-                injection.add(new InsnNode(Opcodes.SWAP));
+            }
+            for (int arg = firstArg; arg < argTypes.length; arg++) {
+                injection.add(new VarInsnNode(argTypes[arg].getOpcode(Opcodes.ILOAD), slots[arg]));
             }
 
             insns.insertBefore(node, injection);
+            clinit.maxLocals = Math.max(clinit.maxLocals, nextSlot);
 
             return;
         }
+
+        throw new IllegalStateException("Failed to patch " + owner + ": field " + fe.fieldName() + " must be initialised by a direct constructor call taking an Item.Properties or BlockBehaviour.Properties argument in the static initialiser, so its registry id can be injected into the properties.");
+    }
+
+    /**
+     * Finds the argument position of the given {@code Properties} type in a constructor descriptor,
+     * or {@code -1} if the constructor takes none. A constructor taking the same {@code Properties}
+     * type more than once is rejected rather than guessed at.
+     */
+    private static int propertiesIndex(Type[] argTypes, String internalName, String owner, FieldEntry fe) {
+        int found = -1;
+        for (int i = 0; i < argTypes.length; i++) {
+            if (argTypes[i].getSort() == Type.OBJECT && internalName.equals(argTypes[i].getInternalName())) {
+                if (found >= 0) {
+                    throw new IllegalStateException("Failed to patch " + owner + ": field " + fe.fieldName() + " is initialised by a constructor taking more than one " + internalName + " argument, so it is ambiguous which one should receive the registry id.");
+                }
+                found = i;
+            }
+        }
+        return found;
     }
 
     private static Map<String, List<FieldEntry>> loadEntries() {

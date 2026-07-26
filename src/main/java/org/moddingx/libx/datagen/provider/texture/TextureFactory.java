@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.texture;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 /**

@@ -1,17 +1,16 @@
 package org.moddingx.libx.impl.datagen.recipe;
 
 import net.minecraft.advancements.Criterion;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -34,8 +33,8 @@ public class ObjectCraftingBuilder {
         Identifier id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
         List<ICondition> conditions = getConditions(reader);
-        ItemStack output = getOutput(reader);
-        if (id == null) id = ext.provider().loc(output.getItem());
+        ItemStackTemplate output = getOutput(reader);
+        if (id == null) id = ext.provider().id(output.item().value());
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(ext.items(), recipeCategory, output);
         for (String line : reader.consumeWhile(String.class)) {
             builder.pattern(line);
@@ -51,8 +50,8 @@ public class ObjectCraftingBuilder {
         Identifier id = getId(reader);
         RecipeCategory recipeCategory = getRecipeCategory(reader);
         List<ICondition> conditions = getConditions(reader);
-        ItemStack output = getOutput(reader);
-        if (id == null) id = ext.provider().loc(output.getItem());
+        ItemStackTemplate output = getOutput(reader);
+        if (id == null) id = ext.provider().id(output.item().value());
         ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(ext.items(), recipeCategory, output);
         addShapelessIngredients(ext, builder, reader);
         RecipeOutput recipeOutput = ext.output();
@@ -84,7 +83,7 @@ public class ObjectCraftingBuilder {
             Optional<Character> value = reader.expectConsume(Character.class);
             if (value.isPresent()) {
                 char key = value.get();
-                Ingredient ingredient = getIngredient(reader);
+                Ingredient ingredient = getIngredient(ext, reader);
                 builder.define(key, ingredient);
                 nextId = addCriteriaToBuilder(builder::unlockedBy, ext.criteria(ingredient), nextId);
             } else {
@@ -96,7 +95,7 @@ public class ObjectCraftingBuilder {
     private static void addShapelessIngredients(RecipeExtension ext, ShapelessRecipeBuilder builder, ObjectReader reader) {
         int nextId = 0;
         while (reader.hasNext()) {
-            Ingredient ingredient = getIngredient(reader);
+            Ingredient ingredient = getIngredient(ext, reader);
             builder.requires(ingredient);
             nextId = addCriteriaToBuilder(builder::unlockedBy, ext.criteria(ingredient), nextId);
         }
@@ -110,35 +109,33 @@ public class ObjectCraftingBuilder {
     }
 
     @Nonnull
-    private static Ingredient getIngredient(ObjectReader reader) {
+    private static Ingredient getIngredient(RecipeExtension ext, ObjectReader reader) {
         return ObjectCraftingBuilder.first(
                 () -> reader.optConsume(ItemLike.class).map(Ingredient::of),
-                () -> reader.optConsume(TagKey.class).map(ObjectCraftingBuilder::createTagIngredient),
+                () -> reader.optConsume(TagKey.class).map(tagKey -> createTagIngredient(ext, tagKey)),
                 () -> reader.optConsume(ICustomIngredient.class).map(ICustomIngredient::toVanilla),
                 () -> reader.optConsume(Ingredient.class),
                 () -> reader.optConsume(List.class).map(list -> {
                     ObjectReader sub = new ObjectReader(list.toArray());
                     List<Ingredient> subList = new ArrayList<>();
-                    while (sub.hasNext()) subList.add(getIngredient(sub));
+                    while (sub.hasNext()) subList.add(getIngredient(ext, sub));
                     return CompoundIngredient.of(subList.toArray(new Ingredient[]{}));
                 })
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid ingredient at position " + reader.pos()));
     }
 
     @Nonnull
-    private static ItemStack getOutput(ObjectReader reader) {
+    private static ItemStackTemplate getOutput(ObjectReader reader) {
         return ObjectCraftingBuilder.first(
-                () -> reader.optConsume(ItemLike.class).map(item -> new ItemStack(item, reader.optConsume(Integer.class).orElse(1))),
-                () -> reader.optConsume(ItemStack.class).map(ItemStack::copy)
+                () -> reader.optConsume(ItemLike.class).map(item -> new ItemStackTemplate(item.asItem(), reader.optConsume(Integer.class).orElse(1))),
+                () -> reader.optConsume(ItemStackTemplate.class)
         ).orElseThrow(() -> new IllegalStateException("Can't build recipe, invalid output at position " + reader.pos()));
     }
 
-    private static Ingredient createTagIngredient(TagKey<?> key) {
+    private static Ingredient createTagIngredient(RecipeExtension ext, TagKey<?> key) {
         if (key.registry() != Registries.ITEM) throw new IllegalArgumentException("Non-item tag in recipe: " + key);
-        List<Item> items = new ArrayList<>();
         //noinspection unchecked
-        BuiltInRegistries.ITEM.getTagOrEmpty((TagKey<Item>) key).forEach(item -> items.add(item.value()));
-        return Ingredient.of(items.toArray(new Item[0]));
+        return Ingredient.of(ext.items().getOrThrow((TagKey<Item>) key));
     }
 
     @SafeVarargs

@@ -14,7 +14,7 @@ import org.moddingx.libx.impl.datagen.texture.TextureGenerator;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,29 +75,29 @@ public abstract class TextureProviderBase implements DataProvider {
     /**
      * Adds a texture that should be generated.
      */
-    public void texture(String loc, TextureFactory factory) {
-        this.texture(this.mod.resource(loc), factory);
+    public void texture(String id, TextureFactory factory) {
+        this.texture(this.mod.id(id), factory);
     }
 
     /**
      * Adds an image that should be generated.
      */
-    public void image(String loc, TextureFactory factory) {
-        this.image(this.mod.resource(loc), factory);
+    public void image(String id, TextureFactory factory) {
+        this.image(this.mod.id(id), factory);
     }
 
     /**
      * Adds a texture that should be generated.
      */
-    public void texture(Identifier loc, TextureFactory factory) {
-        this.image(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"), factory);
+    public void texture(Identifier id, TextureFactory factory) {
+        this.image(Identifier.fromNamespaceAndPath(id.getNamespace(), "textures/" + id.getPath() + ".png"), factory);
     }
 
     /**
      * Adds an image that should be generated.
      */
-    public void image(Identifier loc, TextureFactory factory) {
-        this.textures.put(loc, factory);
+    public void image(Identifier id, TextureFactory factory) {
+        this.textures.put(id, factory);
     }
 
     /**

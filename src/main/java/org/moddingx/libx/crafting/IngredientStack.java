@@ -31,7 +31,7 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
     );
 
     public IngredientStack(Ingredient ingredient, int count) {
-        if (count <= 0 || (ingredient.values.size() == 0 && !ingredient.isCustom())) { // todo 26.1: use Ingredient#isEmpty
+        if (count <= 0 || ingredient.isEmpty()) {
             this.ingredient = new EmptyIngredient().toVanilla();
             this.count = 0;
         } else {
@@ -49,10 +49,10 @@ public record IngredientStack(Ingredient ingredient, int count) implements Predi
         return stack.getCount() >= this.count && this.ingredient.test(stack);
     }
 
-    /* todo 26.1: re-add Javadoc
+    /**
      * Returns whether the count is 0 or {@link Ingredient#isEmpty()} returns true.
      */
     public boolean isEmpty() {
-        return this.count == 0 || (this.ingredient.values.size() == 0 && !this.ingredient.isCustom()); // todo 26.1: use Ingredient#isEmpty
+        return this.count == 0 || this.ingredient.isEmpty();
     }
 }

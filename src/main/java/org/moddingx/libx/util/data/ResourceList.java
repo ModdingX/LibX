@@ -22,9 +22,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * A {@link Predicate} for {@link Identifier resource locations} implemented as
+ * A {@link Predicate} for {@link Identifier identifiers} implemented as
  * a list of rules that will be applied one after another. The first rule that matches
- * a resource location determines the result.
+ * a identifier determines the result.
  * The resource list can either be a white list or a black list. If it is an allow list,
  * by default a matching rule will make the {@link #test(Identifier) test} function
  * return true. If it's a deny list it'll return false by default for matching rules.
@@ -43,16 +43,16 @@ import java.util.stream.Collectors;
  * This explains, how a resource list is used inj a config. In the {@code allowList} field you can specify
  * whether all entries will be accepted by default or rejected.
  * 
- * {@code elements} is an array of rules. Each resource location that is matched against this list, will
- * traverse these rules from top to bottom. The first rule that matches a resource location determines its result.
+ * {@code elements} is an array of rules. Each identifier that is matched against this list, will
+ * traverse these rules from top to bottom. The first rule that matches a identifier determines its result.
  * 
- * Rules are resource locations, where asterisks (*) can be added to match any number of characters.
- * However, an asterisk can not match a colon. The nly exception to this is the single asterisk which matches
- * everything. When a rule is matched, it will yield the result specified in `allowList` as a result. To alter
+ * Rules are identifiers, where asterisks (*) can be added to match any number of characters.
+ * However, an asterisk can not match a colon. The only exception to this is the single asterisk which matches
+ * everything. When a rule is matched, it will yield the result specified in {@code allow_list} as a result. To alter
  * this, add a plus (+) or a minus (-) in front of the rule. This will make it a allow or deny rule
- * respectively. You can also add regex rules. These are json objects with two keys: `allow` - a boolean that
- * specifies whether this is an allow or a deny rule and `regex` - which is a regex that must match the
- * resource location.
+ * respectively. You can also add regex rules. These are json objects with two keys: {@code allow} - a boolean that
+ * specifies whether this is an allow or a deny rule and {@code regex} - which is a regex that must match the
+ * identifier.
  */
 public class ResourceList implements Predicate<Identifier> {
 
@@ -157,9 +157,9 @@ public class ResourceList implements Predicate<Identifier> {
      * Tests whether the given {@link Identifier} is on this resource list.
      */
     @Override
-    public boolean test(Identifier rl) {
+    public boolean test(Identifier id) {
         for (Rule rule : this.rules) {
-            Boolean value = rule.test(rl);
+            Boolean value = rule.test(id);
             if (value != null) {
                 return value;
             }
@@ -234,7 +234,7 @@ public class ResourceList implements Predicate<Identifier> {
             path = new WildcardString(parseString(str.substring(str.indexOf(':') + 1)));
         } else if (str.contains(":")) {
             if (str.indexOf(':') != str.lastIndexOf(':')) {
-                throw new IllegalStateException("Failed to build rule for resource list: Invalid resource location: More than one colon." + str);
+                throw new IllegalStateException("Failed to build rule for resource list: Invalid identifier: More than one colon." + str);
             }
             namespace = new WildcardString(parseString(str.substring(0, str.indexOf(':'))));
             path = new WildcardString(parseString(str.substring(str.indexOf(':') + 1)));
@@ -247,7 +247,7 @@ public class ResourceList implements Predicate<Identifier> {
     
     private static List<String> parseString(String str) {
         if (!Identifier.isValidPath(str.replace("*", ""))) {
-            throw new IllegalStateException("Failed to build rule for resource list: Invalid resource location identifier: " + str);
+            throw new IllegalStateException("Failed to build rule for resource list: Invalid identifier: " + str);
         }
         List<String> parts = new ArrayList<>();
         boolean lastWildcard = false;
@@ -269,7 +269,7 @@ public class ResourceList implements Predicate<Identifier> {
     
     private sealed interface Rule permits SimpleRule, RegexRule {
 
-        Boolean test(Identifier rl);
+        Boolean test(Identifier id);
         JsonElement toJson();
         void toNetwork(FriendlyByteBuf buffer);
         RuleEntry getEntry();
@@ -290,9 +290,9 @@ public class ResourceList implements Predicate<Identifier> {
 
         @Nullable
         @Override
-        public Boolean test(Identifier rl) {
-            if (this.namespace.matcher.get().test(rl.getNamespace())
-                    && this.path.matcher.get().test(rl.getPath())) {
+        public Boolean test(Identifier id) {
+            if (this.namespace.matcher.get().test(id.getNamespace())
+                    && this.path.matcher.get().test(id.getPath())) {
                 return this.allow == null ? ResourceList.this.allowList : this.allow;
             } else {
                 return null;
@@ -356,8 +356,8 @@ public class ResourceList implements Predicate<Identifier> {
         }
 
         @Override
-        public Boolean test(Identifier rl) {
-            if (this.matcher.get().test(rl.toString())) {
+        public Boolean test(Identifier id) {
+            if (this.matcher.get().test(id.toString())) {
                 return this.allow == null ? ResourceList.this.allowList : this.allow;
             } else {
                 return null;
@@ -432,16 +432,16 @@ public class ResourceList implements Predicate<Identifier> {
          * When this rule matches it will return the allow list state of the resource list
          * as result.
          */
-        public void simple(Identifier rl) {
-            this.rulesBuilderList.add(new SimpleRule(null, new WildcardString(List.of(rl.getNamespace())), new WildcardString(List.of(rl.getPath()))));
+        public void simple(Identifier id) {
+            this.rulesBuilderList.add(new SimpleRule(null, new WildcardString(List.of(id.getNamespace())), new WildcardString(List.of(id.getPath()))));
         }
         
         /**
          * Adds a simple rule that only matches the given {@link Identifier}.
          * When this rule matches it will return the value of {@code allow} as result.
          */
-        public void simple(boolean allow, Identifier rl) {
-            this.rulesBuilderList.add(new SimpleRule(allow, new WildcardString(List.of(rl.getNamespace())), new WildcardString(List.of(rl.getPath()))));
+        public void simple(boolean allow, Identifier id) {
+            this.rulesBuilderList.add(new SimpleRule(allow, new WildcardString(List.of(id.getNamespace())), new WildcardString(List.of(id.getPath()))));
         }
 
         /**
@@ -458,7 +458,7 @@ public class ResourceList implements Predicate<Identifier> {
         }
 
         /**
-         * Adds a rule that checks that a resource location matches a regex.
+         * Adds a rule that checks that a identifier matches a regex.
          * When this rule matches it will return the allow list state of the resource list
          * as result.
          */
@@ -467,7 +467,7 @@ public class ResourceList implements Predicate<Identifier> {
         }
         
         /**
-         * Adds a rule that checks that a resource location matches a regex.
+         * Adds a rule that checks that a identifier matches a regex.
          * When this rule matches it will return the value of {@code allow} as result.
          */
         public void regex(boolean allow, @RegEx String regex) {

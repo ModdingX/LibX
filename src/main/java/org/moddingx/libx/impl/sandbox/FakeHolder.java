@@ -3,8 +3,9 @@ package org.moddingx.libx.impl.sandbox;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderOwner;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 
 import javax.annotation.Nonnull;
@@ -41,6 +42,17 @@ public class FakeHolder<T> implements Holder<T> {
     @Override
     public boolean isBound() {
         return true;
+    }
+
+    @Override
+    public boolean areComponentsBound() {
+        return this.holder.areComponentsBound();
+    }
+
+    @Nonnull
+    @Override
+    public DataComponentMap components() {
+        return this.holder.components();
     }
 
     @Override

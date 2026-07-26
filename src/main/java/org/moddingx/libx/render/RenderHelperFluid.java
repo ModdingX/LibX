@@ -1,14 +1,13 @@
 package org.moddingx.libx.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.data.AtlasIds;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.fluid.FluidTintSource;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 /**
@@ -17,24 +16,24 @@ import net.neoforged.neoforge.fluids.FluidStack;
  */
 public class RenderHelperFluid {
 
-    private static final Identifier BLOCK_ATLAS = Identifier.withDefaultNamespace("textures/atlas/blocks.png");
-
-    public static void renderFluid(GuiGraphics graphics, FluidStack stack, int x, int y, int width, int height) {
+    public static void renderFluid(GuiGraphicsExtractor graphics, FluidStack stack, int x, int y, int width, int height) {
         if (!stack.isEmpty()) {
-            Fluid fluid = stack.getFluid();
-            IClientFluidTypeExtensions properties = IClientFluidTypeExtensions.of(fluid);
-            int color = properties.getTintColor(stack);
-            TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(properties.getStillTexture(stack));
-            renderFluid(graphics, sprite, color, x, y, width, height);
+            FluidModel model = fluidModel(stack.getFluid());
+            FluidTintSource tintSource = model.fluidTintSource();
+            int color = tintSource == null ? 0xFFFFFFFF : tintSource.colorAsStack(stack);
+            renderFluid(graphics, model.stillMaterial().sprite(), color, x, y, width, height);
         }
     }
 
-    public static void renderFluid(GuiGraphics graphics, int color, int x, int y, int width, int height) {
-        TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
-        renderFluid(graphics, sprite, color, x, y, width, height);
+    public static void renderFluid(GuiGraphicsExtractor graphics, int color, int x, int y, int width, int height) {
+        renderFluid(graphics, fluidModel(Fluids.WATER).stillMaterial().sprite(), color, x, y, width, height);
     }
 
-    private static void renderFluid(GuiGraphics graphics, TextureAtlasSprite sprite, int color, int x, int y, int width, int height) {
+    private static FluidModel fluidModel(Fluid fluid) {
+        return Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(fluid.defaultFluidState());
+    }
+
+    private static void renderFluid(GuiGraphicsExtractor graphics, TextureAtlasSprite sprite, int color, int x, int y, int width, int height) {
         graphics.pose().pushMatrix();
         graphics.nextStratum();
         // Some mods set alpha, other leave it 0, so we use the alpha whenever it is not 0.

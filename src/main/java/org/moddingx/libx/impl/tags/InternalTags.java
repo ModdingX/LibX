@@ -41,7 +41,7 @@ public class InternalTags {
         public static final TagKey<Item> HANGING_SIGNS = wrap(ItemTags.HANGING_SIGNS, Blocks.CEILING_HANGING_SIGNS);
         
         private static TagKey<Item> wrap(TagKey<Item> tag, TagKey<Block> blockTag) {
-            TagKey<Item> newTag = ItemTags.create(LibX.getInstance().resource("impl_" + tag.location().getPath()));
+            TagKey<Item> newTag = ItemTags.create(LibX.getInstance().id("impl_" + tag.location().getPath()));
             TAGS.put(tag, newTag);
             COPIES.put(blockTag, newTag);
             return newTag;
@@ -88,7 +88,7 @@ public class InternalTags {
         public static final TagKey<Block> HANGING_SIGNS = wrap(BlockTags.ALL_HANGING_SIGNS);
 
         private static TagKey<Block> wrap(TagKey<Block> tag) {
-            TagKey<Block> newTag = BlockTags.create(LibX.getInstance().resource("impl_" + tag.location().getPath()));
+            TagKey<Block> newTag = BlockTags.create(LibX.getInstance().id("impl_" + tag.location().getPath()));
             TAGS.put(tag, newTag);
             return newTag;
         }

@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
 public class ConfigShadowHandler extends PacketHandler<ConfigShadowHandler.Message> {
 
-    public static final CustomPacketPayload.Type<Message> TYPE = new CustomPacketPayload.Type<>(LibX.getInstance().resource("config_shadow"));
+    public static final CustomPacketPayload.Type<Message> TYPE = new CustomPacketPayload.Type<>(LibX.getInstance().id("config_shadow"));
     
     protected ConfigShadowHandler() {
         super(TYPE, PacketFlow.CLIENTBOUND, StreamCodec.of(ConfigShadowHandler::encode, ConfigShadowHandler::decode), HandlerThread.MAIN);

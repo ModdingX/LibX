@@ -1,6 +1,5 @@
 package org.moddingx.libx.impl.datagen.tags;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.moddingx.libx.datagen.provider.tags.CommonTagsProviderBase;
 import org.moddingx.libx.impl.base.decoration.blocks.*;

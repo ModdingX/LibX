@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
 public class CoreLevelLoad {
 
     /**
-     * Patched into {@link ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, LevelStem, boolean, long, List, boolean, net.minecraft.world.RandomSequences)}
+     * Patched into {@link ServerLevel#ServerLevel(MinecraftServer, Executor, LevelStorageSource.LevelStorageAccess, ServerLevelData, ResourceKey, LevelStem, boolean, long, List, boolean)}
      * after the call to {@link LevelStem#generator()}.
      */
     public static void startLevelLoad(ChunkGenerator generator, MinecraftServer server) {

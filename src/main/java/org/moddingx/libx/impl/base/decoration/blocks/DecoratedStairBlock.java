@@ -33,8 +33,8 @@ public class DecoratedStairBlock extends StairBlock {
     }
 
     @Override
-    public int getLightBlock(@Nonnull BlockState state) {
-        return this.parent.getLightBlock(state);
+    protected int getLightDampening(@Nonnull BlockState state) {
+        return this.parent.getLightDampening(state);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.config.gui.editor;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -102,8 +102,8 @@ public class InputEditor<T> implements ConfigEditor<T> {
         }
 
         @Override
-        public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-            super.renderWidget(graphics, mouseX, mouseY, partialTicks);
+        public void extractWidgetRenderState(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+            super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTicks);
             if (this.isVisible() && this.getValidInput(this.getValue()).isEmpty()) {
                 graphics.pose().pushMatrix();
                 graphics.nextStratum();

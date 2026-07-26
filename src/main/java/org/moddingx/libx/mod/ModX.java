@@ -61,7 +61,7 @@ public abstract class ModX {
      * Creates a new {@link Identifier} where the namespace is this mods id and the
      * path is the given string.
      */
-    public final Identifier resource(String path) {
+    public final Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(this.modid, path);
     }
 }

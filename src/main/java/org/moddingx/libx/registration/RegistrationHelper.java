@@ -50,17 +50,17 @@ public final class RegistrationHelper {
 
     public BlockBehaviour.Properties blockOf(String name) {
         return BlockBehaviour.Properties.of()
-                .setId(ResourceKey.create(Registries.BLOCK, this.mod.resource(name)));
+                .setId(ResourceKey.create(Registries.BLOCK, this.mod.id(name)));
     }
 
     public BlockBehaviour.Properties blockCopy(String name, Block base) {
         return BlockBehaviour.Properties.ofFullCopy(base)
-                .setId(ResourceKey.create(Registries.BLOCK, this.mod.resource(name)));
+                .setId(ResourceKey.create(Registries.BLOCK, this.mod.id(name)));
     }
 
     public Item.Properties itemOf(String name) {
         return new Item.Properties()
-                .setId(ResourceKey.create(Registries.ITEM, this.mod.resource(name)));
+                .setId(ResourceKey.create(Registries.ITEM, this.mod.id(name)));
     }
 
     public <T extends Block> T block(String name, Function<BlockBehaviour.Properties, T> factory) {

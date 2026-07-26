@@ -2,11 +2,11 @@ package org.moddingx.libx.impl.base.decoration.blocks;
 
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
@@ -88,7 +88,7 @@ public class DecoratedSign implements Registerable, SignAccess {
 
     @Override
     public void setupClient(SetupContext ctx) {
-        BlockEntityRenderers.register(this.beType, SignRenderer::new);
+        BlockEntityRenderers.register(this.beType, StandingSignRenderer::new);
         // Add sign texture to sheet.
         ctx.enqueue(() -> Sheets.addWoodType(this.parent.getMaterialProperties().woodType()));
     }
@@ -167,7 +167,7 @@ public class DecoratedSign implements Registerable, SignAccess {
     
     public static class Entity extends SignBlockEntity {
 
-        public Entity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        public Entity(BlockEntityType<? extends SignBlockEntity> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
         }
     }

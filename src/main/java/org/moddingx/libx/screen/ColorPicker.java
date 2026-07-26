@@ -4,13 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
-import net.minecraft.client.gui.render.state.GuiElementRenderState;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.Mth;
@@ -161,7 +161,7 @@ public class ColorPicker extends Panel {
     }
 
     @Override
-    public void renderWidgetContent(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void extractWidgetContent(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.pose().pushMatrix();
         graphics.pose().translate(this.getX(), this.getY());
 
@@ -222,7 +222,7 @@ public class ColorPicker extends Panel {
 
         String colorText = String.format("#%06X", colorValue);
         graphics.nextStratum();
-        graphics.drawString(Minecraft.getInstance().font, colorText, 157 - (Minecraft.getInstance().font.width(colorText) / 2), 80, highlightColor, false);
+        graphics.text(Minecraft.getInstance().font, colorText, 157 - (Minecraft.getInstance().font.width(colorText) / 2), 80, highlightColor, false);
 
         graphics.pose().popMatrix();
     }

@@ -5,11 +5,11 @@ import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.context.ContextKeySet;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -159,7 +159,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         ValidationContext validationContext = new ValidationContext(problems, this.contextKeySet, lootTableHolderProvider);
 
         for (Map.Entry<Identifier, LootTable> entry : tables.entrySet()) {
-            entry.getValue().validate(validationContext.setContextKeySet(this.contextKeySet).enterElement(() -> "{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
+            entry.getValue().validate(validationContext.enterElement(() -> "{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
         }
 
         if (!problems.isEmpty()) {
@@ -197,7 +197,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     /**
      * Method to add a custom loot table for an item.
      */
-    public void drops(T item, ItemStack... drops) {
+    public void drops(T item, ItemStackTemplate... drops) {
         this.drops(item, Arrays.stream(drops).<LootFactory<T>>map(this::stack).toList());
     }
     
@@ -322,10 +322,10 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     }
 
     /**
-     * Tries to create the best possible representation of stack in a loot entry.
+     * Tries to create the best possible representation of the given stack template in a loot entry.
      */
-    public SimpleLootFactory<T> stack(ItemStack stack) {
-        return this.from(LootData.stack(stack));
+    public SimpleLootFactory<T> stack(ItemStackTemplate template) {
+        return this.from(LootData.stack(template));
     }
     
     /**

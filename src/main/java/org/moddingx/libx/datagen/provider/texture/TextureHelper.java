@@ -2,7 +2,7 @@ package org.moddingx.libx.datagen.provider.texture;
 
 import net.minecraft.resources.Identifier;
 
-import java.awt.*;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.util.function.Function;

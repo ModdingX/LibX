@@ -4,7 +4,10 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.entries.*;
+import net.minecraft.world.level.storage.loot.entries.ComposableEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.moddingx.libx.LibX;
 
@@ -16,9 +19,8 @@ import java.util.function.Consumer;
 // A loot entry that merges multiple entries into one to be found in one roll.
 public class AllLootEntry extends CompositeEntryBase {
 
-    public static final Identifier ID = LibX.getInstance().resource("all");
-    public static final MapCodec<AllLootEntry> CODEC = createCodec(AllLootEntry::new);
-    public static final LootPoolEntryType TYPE = new LootPoolEntryType(CODEC);
+    public static final Identifier ID = LibX.getInstance().id("all");
+    public static final MapCodec<AllLootEntry> MAP_CODEC = createCodec(AllLootEntry::new);
 
     public AllLootEntry(List<LootPoolEntryContainer> children, List<LootItemCondition> conditions) {
         super(children, conditions);
@@ -26,8 +28,8 @@ public class AllLootEntry extends CompositeEntryBase {
 
     @Nonnull
     @Override
-    public LootPoolEntryType getType() {
-        return TYPE;
+    public MapCodec<AllLootEntry> codec() {
+        return MAP_CODEC;
     }
 
     @Nonnull

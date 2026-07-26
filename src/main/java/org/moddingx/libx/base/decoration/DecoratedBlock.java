@@ -98,8 +98,8 @@ public class DecoratedBlock extends BlockBase {
     }
 
     @Override // Widen visibility
-    public int getLightBlock(@Nonnull BlockState state) {
-        return super.getLightBlock(state);
+    public int getLightDampening(@Nonnull BlockState state) {
+        return super.getLightDampening(state);
     }
 
     public boolean isBurnable() {

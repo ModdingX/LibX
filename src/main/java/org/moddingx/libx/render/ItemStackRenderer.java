@@ -4,17 +4,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.block.Block;
@@ -51,11 +52,12 @@ import java.util.function.Consumer;
 public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
 
     public static final Identifier RENDERER_ID = Identifier.fromNamespaceAndPath("libx", "item_stack_renderer");
+    private static final BlockDisplayContext BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
 
     private static final LazyValue<ItemStackRenderer> INSTANCE = new LazyValue<>(ItemStackRenderer::new);
     private static final List<BlockEntityType<?>> types = Collections.synchronizedList(new LinkedList<>());
     private static final Map<Block, Pair<LazyValue<BlockEntity>, Boolean>> blocks = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<BlockEntityType<?>, CompoundTag> defaultTags = new HashMap<>();
+    private static final Map<Block, CompoundTag> defaultTags = new HashMap<>();
 
     /**
      * Registers a {@link BlockEntityType} to be rendered with the ItemStackRenderer.
@@ -77,7 +79,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
     }
 
     @Override
-    public void submit(@Nullable ItemStack stack, @Nonnull ItemDisplayContext ctx, @Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector nodeCollector, int light, int overlay, boolean hasFoilType, int outlineColor) {
+    public void submit(@Nullable ItemStack stack, @Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector nodeCollector, int light, int overlay, boolean hasFoilType, int outlineColor) {
         if (stack == null) return;
         Block block = Block.byItem(stack.getItem());
         if (block == Blocks.AIR || !blocks.containsKey(block)) return;
@@ -85,7 +87,6 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         Pair<LazyValue<BlockEntity>, Boolean> pair = blocks.get(block);
         BlockState state = block.defaultBlockState();
         BlockEntity blockEntity = pair.getLeft().get();
-        BlockEntityType<?> teType = blockEntity.getType();
         BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
 
         @SuppressWarnings("unchecked")
@@ -93,34 +94,43 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         if (renderer == null) return;
 
         setLevel(blockEntity);
-        if (pair.getRight() && Minecraft.getInstance().level != null) {
-            if (!defaultTags.containsKey(teType)) {
-                defaultTags.put(teType, blockEntity.saveCustomOnly(Minecraft.getInstance().level.registryAccess()));
-            } else {
-                blockEntity.loadCustomOnly(TagValueInput.create(ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), defaultTags.get(teType)));
+        try {
+            if (pair.getRight() && Minecraft.getInstance().level != null) {
+                if (!defaultTags.containsKey(block)) {
+                    defaultTags.put(block, blockEntity.saveCustomOnly(Minecraft.getInstance().level.registryAccess()));
+                } else {
+                    blockEntity.loadCustomOnly(TagValueInput.create(ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), defaultTags.get(block)));
+                }
+                setLevel(blockEntity);
+
+                TypedEntityData<BlockEntityType<?>> customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+                if (customData != null && customData.type() == blockEntity.getType()) {
+                    customData.loadInto(blockEntity, Minecraft.getInstance().level.registryAccess());
+                }
             }
-            setLevel(blockEntity);
 
-            TypedEntityData<BlockEntityType<?>> customData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-            if (customData != null && customData.type() == blockEntity.getType()) {
-                customData.loadInto(blockEntity, Minecraft.getInstance().level.registryAccess());
+            poseStack.pushPose();
+            try {
+                if (state.getRenderShape() == RenderShape.MODEL) {
+                    BlockModelRenderState blockRenderState = new BlockModelRenderState();
+                    Minecraft.getInstance().getBlockModelResolver().update(blockRenderState, state, BLOCK_DISPLAY_CONTEXT);
+                    // submitMultiLayer instead of submit: the block being rendered is arbitrary, so its model
+                    // may mix solid, cutout and translucent materials, which submit would collapse into one layer.
+                    blockRenderState.submitMultiLayer(poseStack, nodeCollector, light, overlay, outlineColor);
+                }
+                float partialTick = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
+                BlockEntityRenderState renderState = renderer.createRenderState();
+                renderer.extractRenderState(blockEntity, renderState, partialTick, Vec3.ZERO, null);
+                CameraRenderState cameraRenderState = new CameraRenderState();
+                cameraRenderState.initialized = true;
+                renderer.submit(renderState, poseStack, nodeCollector, cameraRenderState);
+            } finally {
+                poseStack.popPose();
             }
+        } finally {
+            // avoid storing the level for too long
+            blockEntity.setLevel(null);
         }
-
-        poseStack.pushPose();
-
-        if (state.getRenderShape() == RenderShape.MODEL) {
-            nodeCollector.submitBlock(poseStack, block.defaultBlockState(), light, overlay, outlineColor);
-        }
-        float partialTick = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-        BlockEntityRenderState renderState = renderer.createRenderState();
-        renderer.extractRenderState(blockEntity, renderState, partialTick, Vec3.ZERO, null);
-        CameraRenderState cameraRenderState = new CameraRenderState();
-        cameraRenderState.initialized = true;
-        renderer.submit(renderState, poseStack, nodeCollector, cameraRenderState);
-                    blockEntity.setLevel(null); // avoid storing the level for too long
-
-        poseStack.popPose();
     }
 
     @Override
@@ -153,7 +163,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         return IClientItemExtensions.DEFAULT;
     }
 
-    public record Unbaked() implements SpecialModelRenderer.Unbaked {
+    public record Unbaked() implements SpecialModelRenderer.Unbaked<ItemStack> {
 
         public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(new Unbaked());
 
@@ -164,7 +174,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         }
 
         @Override
-        public SpecialModelRenderer<?> bake(@Nonnull SpecialModelRenderer.BakingContext context) {
+        public SpecialModelRenderer<ItemStack> bake(@Nonnull SpecialModelRenderer.BakingContext context) {
             return ItemStackRenderer.get();
         }
     }

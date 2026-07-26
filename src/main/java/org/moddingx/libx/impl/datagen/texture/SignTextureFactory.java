@@ -6,7 +6,7 @@ import org.moddingx.libx.datagen.provider.texture.TextureFactory;
 import org.moddingx.libx.datagen.provider.texture.TextureHelper;
 import org.moddingx.libx.datagen.provider.texture.Textures;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 public class SignTextureFactory implements TextureFactory {

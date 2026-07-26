@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.content.TextContent;
@@ -30,7 +30,7 @@ public class EntryBuilder {
     public final String id;
     public final Identifier category;
     private String name;
-    private ItemStack icon;
+    private ItemStackTemplate icon;
     private Identifier advancement;
     private Content content;
     private final List<Consumer<JsonObject>> postProcessors;
@@ -58,14 +58,14 @@ public class EntryBuilder {
      * Sets the entry icon. This is required.
      */
     public EntryBuilder icon(ItemLike icon) {
-        return this.icon(new ItemStack(icon));
+        return this.icon(new ItemStackTemplate(icon.asItem()));
     }
-    
+
     /**
      * Sets the entry icon. This is required.
      */
-    public EntryBuilder icon(ItemStack icon) {
-        this.icon = icon.copy();
+    public EntryBuilder icon(ItemStackTemplate icon) {
+        this.icon = icon;
         return this;
     }
 
@@ -188,27 +188,27 @@ public class EntryBuilder {
      * Adds some spotlight content that displays an item. It will also link the recipe for that item and cause a page flip.
      */
     public EntryBuilder item(ItemLike stack) {
-        return this.item(new ItemStack(stack), true);
+        return this.item(new ItemStackTemplate(stack.asItem()), true);
     }
 
     /**
      * Adds some spotlight content that displays an item. It will also cause a page flip.
      */
     public EntryBuilder item(ItemLike stack, boolean linkRecipe) {
-        return this.item(new ItemStack(stack), linkRecipe);
+        return this.item(new ItemStackTemplate(stack.asItem()), linkRecipe);
     }
-    
+
     /**
      * Adds some spotlight content that displays an item. It will also link the recipe for that item and cause a page flip.
      */
-    public EntryBuilder item(ItemStack stack) {
+    public EntryBuilder item(ItemStackTemplate stack) {
         return this.item(stack, true);
     }
-    
+
     /**
      * Adds some spotlight content that displays an item. It will also cause a page flip.
      */
-    public EntryBuilder item(ItemStack stack, boolean linkRecipe) {
+    public EntryBuilder item(ItemStackTemplate stack, boolean linkRecipe) {
         return this.add(new SpotlightContent(stack, linkRecipe));
     }
 

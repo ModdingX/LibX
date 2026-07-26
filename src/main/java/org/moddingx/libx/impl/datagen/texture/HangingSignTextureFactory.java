@@ -7,7 +7,7 @@ import org.moddingx.libx.datagen.provider.texture.*;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,8 +15,8 @@ import java.io.InputStream;
 
 public class HangingSignTextureFactory implements TextureFactory {
 
-    private static final Identifier CHAINS_IMAGE = LibX.getInstance().resource("hanging_chains");
-    private static final Identifier ROTATED_LOG_IMAGE = LibX.getInstance().resource("rotated_log");
+    private static final Identifier CHAINS_IMAGE = LibX.getInstance().id("hanging_chains");
+    private static final Identifier ROTATED_LOG_IMAGE = LibX.getInstance().id("rotated_log");
     
     private static final LazyValue<BufferedImage> CHAINS = new LazyValue<>(() -> {
         try (InputStream in = new ByteArrayInputStream(new byte[]{

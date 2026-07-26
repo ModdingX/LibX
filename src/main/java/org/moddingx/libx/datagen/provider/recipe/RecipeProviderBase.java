@@ -131,7 +131,7 @@ public abstract class RecipeProviderBase implements DataProvider, RecipeExtensio
      * Gets a {@link Identifier} with the namespace being the modid of the mod given in constructor
      * and the path being the registry path of the given item.
      */
-    public Identifier loc(ItemLike item) {
+    public Identifier id(ItemLike item) {
         return Identifier.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath());
     }
 
@@ -140,7 +140,7 @@ public abstract class RecipeProviderBase implements DataProvider, RecipeExtensio
      * and the path being the registry path of the given item followed by an underscore and the
      * given suffix.
      */
-    public Identifier loc(ItemLike item, String suffix) {
+    public Identifier id(ItemLike item, String suffix) {
         return Identifier.fromNamespaceAndPath(this.mod.modid, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath() + "_" + suffix);
     }
 

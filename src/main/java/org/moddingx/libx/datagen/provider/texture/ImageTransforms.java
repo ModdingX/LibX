@@ -3,7 +3,7 @@ package org.moddingx.libx.datagen.provider.texture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**

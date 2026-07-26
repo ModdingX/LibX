@@ -2,8 +2,8 @@ package org.moddingx.libx.annotation.impl;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
@@ -28,16 +28,16 @@ public class ProcessorInterface {
         return FMLEnvironment.getDist() == Dist.CLIENT;
     }
 
-    public static Identifier newRL(String rl) {
-        return Identifier.parse(rl);
+    public static Identifier newIdentifier(String id) {
+        return Identifier.parse(id);
     }
 
-    public static Identifier newRL(String namespace, String path) {
+    public static Identifier newIdentifier(String namespace, String path) {
         return Identifier.fromNamespaceAndPath(namespace, path);
     }
 
     public static void registerConfig(ModX mod, String name, Class<?> configClass, boolean client) {
-        ConfigManager.registerConfig(mod.resource(name), configClass, client);
+        ConfigManager.registerConfig(mod.id(name), configClass, client);
     }
 
     public static void registerConfigMapper(ModX mod, ValueMapper<?, ?> mapper) {

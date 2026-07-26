@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.render;
 
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -23,12 +23,12 @@ public class BlockOverlayQuadCache {
     }
 
     public static void put(BakedQuad source, BakedQuad transformed) {
-        WeakHashMap<BakedQuad, BakedQuad> quads = quadCache.computeIfAbsent(transformed.sprite(), k -> new WeakHashMap<>());
+        WeakHashMap<BakedQuad, BakedQuad> quads = quadCache.computeIfAbsent(transformed.materialInfo().sprite(), k -> new WeakHashMap<>());
         quads.put(source, transformed);
     }
 
     public static void resourcesReload(AddClientReloadListenersEvent event) {
-        event.addListener(LibX.getInstance().resource("quad_cache"), new SimplePreparableReloadListener<Void>() {
+        event.addListener(LibX.getInstance().id("quad_cache"), new SimplePreparableReloadListener<Void>() {
 
             @Nonnull
             @Override

@@ -43,4 +43,14 @@ public class EmptyIngredient implements ICustomIngredient {
     public IngredientType<?> getType() {
         return TYPE;
     }
+
+    @Override
+    public int hashCode() {
+        return "LibX".hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof EmptyIngredient;
+    }
 }

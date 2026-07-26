@@ -71,6 +71,6 @@ public class DecorationRecipes {
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));
         }
-        builder.save(ext.output(), ResourceKey.create(Registries.RECIPE, ext.provider().loc(output, "stonecutting")));
+        builder.save(ext.output(), ResourceKey.create(Registries.RECIPE, ext.provider().id(output, "stonecutting")));
     }
 }

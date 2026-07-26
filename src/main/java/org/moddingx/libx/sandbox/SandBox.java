@@ -22,22 +22,22 @@ public class SandBox {
     /**
      * The {@link SurfaceRuleSet} registry.
      */
-    public static final ResourceKey<Registry<SurfaceRuleSet>> SURFACE_RULE_SET = ResourceKey.createRegistryKey(LibX.getInstance().resource("surface_rule_set"));
+    public static final ResourceKey<Registry<SurfaceRuleSet>> SURFACE_RULE_SET = ResourceKey.createRegistryKey(LibX.getInstance().id("surface_rule_set"));
     
     /**
      * The {@link BiomeSurface} registry.
      */
-    public static final ResourceKey<Registry<BiomeSurface>> BIOME_SURFACE = ResourceKey.createRegistryKey(LibX.getInstance().resource("biome_surface"));
+    public static final ResourceKey<Registry<BiomeSurface>> BIOME_SURFACE = ResourceKey.createRegistryKey(LibX.getInstance().id("biome_surface"));
     
     /**
      * The {@link BiomeLayer} registry.
      */
-    public static final ResourceKey<Registry<BiomeLayer>> BIOME_LAYER = ResourceKey.createRegistryKey(LibX.getInstance().resource("biome_layer"));
+    public static final ResourceKey<Registry<BiomeLayer>> BIOME_LAYER = ResourceKey.createRegistryKey(LibX.getInstance().id("biome_layer"));
     
     /**
      * The {@link PoolExtension} registry.
      */
-    public static final ResourceKey<Registry<PoolExtension>> TEMPLATE_POOL_EXTENSION = ResourceKey.createRegistryKey(LibX.getInstance().resource("template_pool_extension"));
+    public static final ResourceKey<Registry<PoolExtension>> TEMPLATE_POOL_EXTENSION = ResourceKey.createRegistryKey(LibX.getInstance().id("template_pool_extension"));
 
     /**
      * Gets a surface rule that leaves every block unchanged.

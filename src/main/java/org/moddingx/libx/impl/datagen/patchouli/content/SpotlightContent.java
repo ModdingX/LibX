@@ -1,7 +1,7 @@
 package org.moddingx.libx.impl.datagen.patchouli.content;
 
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.moddingx.libx.datagen.provider.patchouli.content.CaptionContent;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageBuilder;
 import org.moddingx.libx.datagen.provider.patchouli.page.PageJson;
@@ -10,16 +10,16 @@ import javax.annotation.Nullable;
 
 public class SpotlightContent extends CaptionContent {
 
-    private final ItemStack stack;
+    private final ItemStackTemplate stack;
     private final boolean recipe;
-    
-    public SpotlightContent(ItemStack stack, boolean recipe) {
+
+    public SpotlightContent(ItemStackTemplate stack, boolean recipe) {
         this(stack, recipe, null);
     }
-    
-    private SpotlightContent(ItemStack stack, boolean recipe, @Nullable String caption) {
+
+    private SpotlightContent(ItemStackTemplate stack, boolean recipe, @Nullable String caption) {
         super(caption);
-        this.stack = stack.copy();
+        this.stack = stack;
         this.recipe = recipe;
     }
 

@@ -2,7 +2,7 @@ package org.moddingx.libx.impl.screen.text;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.locale.Language;
@@ -168,10 +168,10 @@ public class TextScreenContent {
         }
     }
     
-    public void render(GuiGraphics graphics, int left, int top) {
+    public void extract(GuiGraphicsExtractor graphics, int left, int top) {
         for (PlacedText line : this.lines) {
             RenderHelper.resetColor();
-            graphics.drawString(this.font, line.text(), left + line.x(), top + line.y(), line.color(), line.shadow());
+            graphics.text(this.font, line.text(), left + line.x(), top + line.y(), line.color(), line.shadow());
         }
     }
     

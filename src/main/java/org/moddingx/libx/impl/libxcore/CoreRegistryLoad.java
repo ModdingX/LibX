@@ -4,10 +4,8 @@ import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.WorldLoader;
-import net.minecraft.server.packs.resources.ResourceManager;
 import org.moddingx.libx.impl.sandbox.RegistryProcessor;
 
-import java.util.List;
 import java.util.concurrent.Executor;
 
 public class CoreRegistryLoad {

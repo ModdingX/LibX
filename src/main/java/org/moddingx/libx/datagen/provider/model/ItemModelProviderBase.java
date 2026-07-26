@@ -4,6 +4,7 @@ import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -34,8 +35,8 @@ public abstract class ItemModelProviderBase extends ModelProvider {
 
     public static final Identifier GENERATED = Identifier.fromNamespaceAndPath("minecraft", "item/generated");
     public static final Identifier HANDHELD = Identifier.fromNamespaceAndPath("minecraft", "item/handheld");
-    public static final Identifier SPECIAL_BLOCK_PARENT = LibX.getInstance().resource("item/base/special_block");
-    public static final Identifier SPAWN_EGG_PARENT = LibX.getInstance().resource("item/base/spawn_egg");
+    public static final Identifier SPECIAL_BLOCK_PARENT = LibX.getInstance().id("item/base/special_block");
+    public static final Identifier SPAWN_EGG_PARENT = LibX.getInstance().id("item/base/spawn_egg");
     public static final Identifier FENCE_PARENT = Identifier.fromNamespaceAndPath("minecraft", "block/fence_inventory");
     public static final Identifier BUTTON_PARENT = Identifier.fromNamespaceAndPath("minecraft", "block/button_inventory");
     public static final Identifier WALL_PARENT = Identifier.fromNamespaceAndPath("minecraft", "block/wall_inventory");
@@ -45,6 +46,8 @@ public abstract class ItemModelProviderBase extends ModelProvider {
     private final Set<Item> handheld = new HashSet<>();
     private final Set<Item> ignored = new HashSet<>();
     private final Set<Block> specialBlocks = new HashSet<>();
+
+    private boolean forceTranslucent = false;
 
     public ItemModelProviderBase(DatagenContext ctx) {
         super(ctx.output(), ctx.mod().modid);
@@ -92,6 +95,24 @@ public abstract class ItemModelProviderBase extends ModelProvider {
         this.specialBlocks.add(block);
     }
 
+    /**
+     * Sets whether the {@link Material materials} generated from here on are marked as translucent.
+     * Like the render type it replaces, this stays in effect until it is changed again, so it is
+     * typically set in {@link #setup()} around the items that need it.
+     */
+    protected void setTranslucent(boolean translucent) {
+        this.forceTranslucent = translucent;
+    }
+
+    /**
+     * Creates a {@link Material} for the given texture. Every material this provider generates goes
+     * through here, so overriding this is the way to customize them beyond
+     * {@link #setTranslucent(boolean)}.
+     */
+    protected Material material(Identifier texture) {
+        return new Material(texture, this.forceTranslucent);
+    }
+
     @Override
     protected void registerModels(@Nonnull BlockModelGenerators blockModels, @Nonnull ItemModelGenerators itemModels) {
         this.setup();
@@ -127,10 +148,10 @@ public abstract class ItemModelProviderBase extends ModelProvider {
                     item,
                     new DynamicFluidContainerModel.Unbaked(
                             new DynamicFluidContainerModel.Textures(
-                                    Optional.of(Identifier.withDefaultNamespace("item/bucket")),
-                                    Optional.of(Identifier.withDefaultNamespace("item/bucket")),
-                                    Optional.of(Identifier.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid")),
-                                    Optional.of(Identifier.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid_cover"))
+                                    Optional.of(this.material(Identifier.withDefaultNamespace("item/bucket"))),
+                                    Optional.of(this.material(Identifier.withDefaultNamespace("item/bucket"))),
+                                    Optional.of(this.material(Identifier.fromNamespaceAndPath("neoforge", "item/mask/bucket_fluid"))),
+                                    Optional.empty()
                             ),
                             bucketItem.content, false, true, true
                     )
@@ -146,17 +167,17 @@ public abstract class ItemModelProviderBase extends ModelProvider {
         } else if (item.getBlock() instanceof DecoratedFenceBlock decorated) {
             Identifier parentId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent));
             Identifier texture = Identifier.fromNamespaceAndPath(parentId.getNamespace(), "block/" + parentId.getPath());
-            Identifier model = this.createItemModel(id, FENCE_PARENT, TextureMapping.singleSlot(TextureSlot.TEXTURE, texture), TextureSlot.TEXTURE, itemModels);
+            Identifier model = this.createItemModel(id, FENCE_PARENT, TextureMapping.singleSlot(TextureSlot.TEXTURE, this.material(texture)), TextureSlot.TEXTURE, itemModels);
             itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
         } else if (item.getBlock() instanceof DecoratedButton decorated) {
             Identifier parentId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent));
             Identifier texture = Identifier.fromNamespaceAndPath(parentId.getNamespace(), "block/" + parentId.getPath());
-            Identifier model = this.createItemModel(id, BUTTON_PARENT, TextureMapping.singleSlot(TextureSlot.TEXTURE, texture), TextureSlot.TEXTURE, itemModels);
+            Identifier model = this.createItemModel(id, BUTTON_PARENT, TextureMapping.singleSlot(TextureSlot.TEXTURE, this.material(texture)), TextureSlot.TEXTURE, itemModels);
             itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
         } else if (item.getBlock() instanceof DecoratedWallBlock decorated) {
             Identifier parentId = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent));
             Identifier texture = Identifier.fromNamespaceAndPath(parentId.getNamespace(), "block/" + parentId.getPath());
-            Identifier model = this.createItemModel(id, WALL_PARENT, TextureMapping.singleSlot(TextureSlot.WALL, texture), TextureSlot.WALL, itemModels);
+            Identifier model = this.createItemModel(id, WALL_PARENT, TextureMapping.singleSlot(TextureSlot.WALL, this.material(texture)), TextureSlot.WALL, itemModels);
             itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(model));
         } else if (item.getBlock() instanceof DecoratedTrapdoorBlock) {
             itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(Identifier.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath() + "_bottom")));

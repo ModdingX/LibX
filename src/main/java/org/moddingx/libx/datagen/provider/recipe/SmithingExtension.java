@@ -397,6 +397,6 @@ public interface SmithingExtension extends RecipeExtension {
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlocks("has_item" + i, criteria.get(i));
         }
-        builder.save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(result, "smithing")));
+        builder.save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(result, "smithing")));
     }
 }

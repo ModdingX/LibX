@@ -41,35 +41,35 @@ public class Textures {
      * Gets the scale for a source texture. This indicates, how much the given source texture needs to be
      * scaled up to match the target scale.
      */
-    public int textureScale(String loc) {
-        return this.textureScale(this.mod.resource(loc));
+    public int textureScale(String id) {
+        return this.textureScale(this.mod.id(id));
     }
 
     /**
      * Gets the scale for a source image. This indicates, how much the given source image needs to be
      * scaled up to match the target scale.
      */
-    public int imageScale(String loc) {
-        return this.imageScale(this.mod.resource(loc));
+    public int imageScale(String id) {
+        return this.imageScale(this.mod.id(id));
     }
 
     /**
      * Gets the scale for a source texture. This indicates, how much the given source texture needs to be
      * scaled up to match the target scale.
      */
-    public int textureScale(Identifier loc) {
-        return this.imageScale(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
+    public int textureScale(Identifier id) {
+        return this.imageScale(Identifier.fromNamespaceAndPath(id.getNamespace(), "textures/" + id.getPath() + ".png"));
     }
 
     /**
      * Gets the scale for a source image. This indicates, how much the given source image needs to be
      * scaled up to match the target scale.
      */
-    public int imageScale(Identifier loc) {
-        if (this.images.containsKey(loc)) {
-            return this.scale / this.images.get(loc).getRight();
+    public int imageScale(Identifier id) {
+        if (this.images.containsKey(id)) {
+            return this.scale / this.images.get(id).getRight();
         } else {
-            LibX.logger.warn("Requesting texture scale for {} after scale was built. It should be added to the texture builder.", loc);
+            LibX.logger.warn("Requesting texture scale for {} after scale was built. It should be added to the texture builder.", id);
             return 1;
         }
     }
@@ -77,33 +77,33 @@ public class Textures {
     /**
      * Gets a preloaded source texture.
      */
-    public BufferedImage texture(String loc) {
-        return this.texture(this.mod.resource(loc));
+    public BufferedImage texture(String id) {
+        return this.texture(this.mod.id(id));
     }
 
     /**
      * Gets a preloaded source image.
      */
-    public BufferedImage image(String loc) {
-        return this.image(this.mod.resource(loc));
+    public BufferedImage image(String id) {
+        return this.image(this.mod.id(id));
     }
 
     /**
      * Gets a preloaded source texture.
      */
-    public BufferedImage texture(Identifier loc) {
-        return this.image(Identifier.fromNamespaceAndPath(loc.getNamespace(), "textures/" + loc.getPath() + ".png"));
+    public BufferedImage texture(Identifier id) {
+        return this.image(Identifier.fromNamespaceAndPath(id.getNamespace(), "textures/" + id.getPath() + ".png"));
     }
 
     /**
      * Gets a preloaded source image.
      */
-    public BufferedImage image(Identifier loc) {
-        if (this.images.containsKey(loc)) {
-            return this.images.get(loc).getLeft();
+    public BufferedImage image(Identifier id) {
+        if (this.images.containsKey(id)) {
+            return this.images.get(id).getLeft();
         } else {
-            LibX.logger.warn("Loading texture {} after scale was built. It should be added to the texture builder.", loc);
-            return this.textureLoader.apply(loc);
+            LibX.logger.warn("Loading texture {} after scale was built. It should be added to the texture builder.", id);
+            return this.textureLoader.apply(id);
         }
     }
 }

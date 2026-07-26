@@ -1,29 +1,23 @@
 package org.moddingx.libx.impl.base.fluid;
 
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 
-import javax.annotation.Nonnull;
-
 public class DefaultClientExtensions implements IClientFluidTypeExtensions {
 
-    private final Identifier stillTexture;
-    private final Identifier flowingTexture;
+    private final FluidModel.Unbaked model;
 
     public DefaultClientExtensions(Identifier stillTexture, Identifier flowingTexture) {
-        this.stillTexture = stillTexture;
-        this.flowingTexture = flowingTexture;
+        this.model = new FluidModel.Unbaked(new Material(stillTexture), new Material(flowingTexture), null, null, null);
     }
 
-    @Nonnull
-    @Override
-    public Identifier getStillTexture() {
-        return this.stillTexture;
-    }
-
-    @Nonnull
-    @Override
-    public Identifier getFlowingTexture() {
-        return this.flowingTexture;
+    /**
+     * Gets the default {@link FluidModel.Unbaked fluid model} that uses the still and flowing
+     * texture this instance was created with and no tint.
+     */
+    public FluidModel.Unbaked model() {
+        return this.model;
     }
 }

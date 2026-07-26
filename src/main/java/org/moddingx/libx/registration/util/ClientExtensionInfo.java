@@ -3,6 +3,7 @@ package org.moddingx.libx.registration.util;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
@@ -46,14 +47,17 @@ public abstract class ClientExtensionInfo {
     }
 
     /**
-     * Wraps some {@link IClientFluidTypeExtensions client fluid type extensions}. Using the LibX registration system, an
-     * instance of this class can be registered on the client using the same id as the associated
-     * {@link net.neoforged.neoforge.fluids.FluidType} to set up the {@link IClientFluidTypeExtensions client fluid type extensions}.
+     * Wraps some {@link IClientFluidTypeExtensions client fluid type extensions} together with a
+     * {@link FluidModel.Unbaked fluid model}. Using the LibX registration system, an instance of this class can be
+     * registered on the client using the same id as the associated {@link net.neoforged.neoforge.fluids.FluidType}
+     * to set up the {@link IClientFluidTypeExtensions client fluid type extensions}. The
+     * {@link FluidModel.Unbaked fluid model} is registered for every {@link net.minecraft.world.level.material.Fluid fluid}
+     * belonging to that fluid type, so for both the source and the flowing fluid.
      *
      * @see Registerable#registerClientAdditional(RegistrationContext, Registerable.EntryCollector)
      */
-    public record Fluid(Supplier<IClientFluidTypeExtensions> extensions) {
-        public Fluid(IClientFluidTypeExtensions extensions) { this(() -> extensions); }
+    public record Fluid(Supplier<IClientFluidTypeExtensions> extensions, Supplier<FluidModel.Unbaked> model) {
+        public Fluid(IClientFluidTypeExtensions extensions, FluidModel.Unbaked model) { this(() -> extensions, () -> model); }
     }
 
     /**

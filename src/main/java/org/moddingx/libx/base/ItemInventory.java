@@ -1,11 +1,7 @@
 package org.moddingx.libx.base;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import org.moddingx.libx.codec.MoreStreamCodecs;
 import org.moddingx.libx.inventory.StackItemResourceHandler;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
@@ -13,28 +9,25 @@ import org.moddingx.libx.registration.RegistrationContext;
 import org.moddingx.libx.registration.util.CapabilityInfo;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.function.Function;
 
 /**
  * Base class for {@link Item items} which have an inventory. This will provide the capability to the item.
  */
 public class ItemInventory extends ItemBase implements Registerable {
 
-    public static final DataComponentType<NonNullList<ItemStack>> INVENTORY_DATA = new DataComponentType.Builder<NonNullList<ItemStack>>()
-            .persistent(NonNullList.codecOf(ItemStack.OPTIONAL_CODEC))
-            .networkSynchronized(MoreStreamCodecs.listOf(ItemStack.OPTIONAL_STREAM_CODEC).map(NonNullList::copyOf, Function.identity()))
-            .build();
-
     private final int inventorySize;
-    
+
     public ItemInventory(ModX mod, int inventorySize, Properties properties) {
         super(mod, properties);
+        if (inventorySize < 1 || inventorySize > StackItemResourceHandler.MAX_SIZE) {
+            throw new IllegalArgumentException("Invalid item inventory size: " + inventorySize + ", must be in [1," + StackItemResourceHandler.MAX_SIZE + "]");
+        }
         this.inventorySize = inventorySize;
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
-        builder.register(null, new CapabilityInfo.Item<>(this, Capabilities.Item.ITEM, (stack, ignored) -> new StackItemResourceHandler(this.inventorySize, stack)));
+        builder.register(null, new CapabilityInfo.Item<>(this, Capabilities.Item.ITEM, (_, access) -> new StackItemResourceHandler(this.inventorySize, access)));
     }
 }

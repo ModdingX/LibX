@@ -47,7 +47,7 @@ public abstract class CreativeTabX {
     
     protected CreativeTabX(ModX mod, String name) {
         this.mod = mod;
-        this.id = mod.resource(name);
+        this.id = mod.id(name);
         ModInternal.get(mod).modEventBus().addListener(this::registerCreativeTab);
     }
 

@@ -10,9 +10,9 @@ import org.moddingx.libx.config.mapper.ValueMapper;
 import org.moddingx.libx.config.validator.ValidatorInfo;
 import org.moddingx.libx.util.Misc;
 
-public class ResourceValueMapper implements ValueMapper<Identifier, JsonPrimitive> {
+public class IdentifierValueMapper implements ValueMapper<Identifier, JsonPrimitive> {
 
-    public static final ResourceValueMapper INSTANCE = new ResourceValueMapper();
+    public static final IdentifierValueMapper INSTANCE = new IdentifierValueMapper();
     private static final InputProperties<Identifier> INPUT = new InputProperties<>() {
 
         @Override
@@ -36,7 +36,7 @@ public class ResourceValueMapper implements ValueMapper<Identifier, JsonPrimitiv
         }
     };
 
-    private ResourceValueMapper() {
+    private IdentifierValueMapper() {
 
     }
 

@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -43,13 +42,7 @@ import org.moddingx.libx.impl.loot.CopyBlockEntityDataFunction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
@@ -106,7 +99,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     }
 
     @Override
-    public void drops(Block block, ItemStack... drops) {
+    public void drops(Block block, ItemStackTemplate... drops) {
         this.drops(block, true, drops);
     }
 
@@ -115,7 +108,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
         this.drops(block, true, loot);
     }
 
-    public void drops(Block block, boolean silkTouch, ItemStack... drops) {
+    public void drops(Block block, boolean silkTouch, ItemStackTemplate... drops) {
         this.drops(block, silkTouch ? this.silk(this.identity()) : this.noSilk(), drops);
     }
     
@@ -128,7 +121,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
         this.drops(block, silkTouch ? this.silk(this.identity()) : this.noSilk(), drops);
     }
     
-    public void drops(Block block, SilkModifier silkTouch, ItemStack... drops) {
+    public void drops(Block block, SilkModifier silkTouch, ItemStackTemplate... drops) {
         this.drops(block, silkTouch, Arrays.stream(drops).<LootFactory<Block>>map(this::stack).toList());
     }
     

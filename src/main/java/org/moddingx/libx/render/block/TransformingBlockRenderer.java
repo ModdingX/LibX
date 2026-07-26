@@ -5,13 +5,16 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * A {@link BlockEntityRenderer} that transforms the {@link PoseStack pose stack} in some way before
@@ -19,46 +22,52 @@ import javax.annotation.Nullable;
  * being pushed and popped.
  *
  * @param <T> The block entity type.
+ * @param <S> The render state type. Extend {@link RenderState} and return it from
+ *            {@link #createRenderState()} to carry additional extracted values.
  */
-public abstract class TransformingBlockRenderer<T extends BlockEntity> implements BlockEntityRenderer<T, TransformingBlockRenderer.RenderState<T>> {
-
-    @Nonnull
-    @Override
-    public RenderState<T> createRenderState() {
-        return new RenderState<>();
-    }
+public abstract class TransformingBlockRenderer<T extends BlockEntity, S extends TransformingBlockRenderer.RenderState> implements BlockEntityRenderer<T, S> {
 
     @Override
-    public void extractRenderState(@Nonnull T blockEntity, @Nonnull RenderState<T> renderState, float partialTicks, @Nonnull Vec3 cameraPos, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+    @OverridingMethodsMustInvokeSuper
+    public void extractRenderState(@Nonnull T blockEntity, @Nonnull S renderState, float partialTicks, @Nonnull Vec3 cameraPos, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTicks, cameraPos, breakProgress);
-        renderState.blockEntity = blockEntity;
+        renderState.blockState = blockEntity.getBlockState();
         renderState.partialTicks = partialTicks;
         renderState.cameraPos = cameraPos;
     }
 
     @Override
-    public final void submit(@Nonnull RenderState<T> renderState, @Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector nodeCollector, @Nonnull CameraRenderState cameraRenderState) {
-        if (renderState.blockEntity == null) return;
+    public final void submit(@Nonnull S renderState, @Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector nodeCollector, @Nonnull CameraRenderState cameraRenderState) {
         poseStack.pushPose();
-        this.transform(renderState.blockEntity, renderState.partialTicks, poseStack);
-        this.doRender(renderState.blockEntity, renderState.partialTicks, poseStack, nodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, renderState.cameraPos);
-        poseStack.popPose();
+        try {
+            this.transform(renderState, poseStack);
+            this.doRender(renderState, poseStack, nodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY);
+        } finally {
+            poseStack.popPose();
+        }
     }
 
     /**
      * Applies the pre-render transformation to the {@link PoseStack pose stack}.
      */
-    protected abstract void transform(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack);
+    protected abstract void transform(@Nonnull S renderState, @Nonnull PoseStack poseStack);
 
     /**
-     * Renders the {@link BlockEntity block entity}.
+     * Renders the extracted {@link RenderState render state}.
      */
-    protected abstract void doRender(@Nonnull T blockEntity, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector nodeCollector, int light, int overlay, @Nonnull Vec3 cameraPos);
+    protected abstract void doRender(@Nonnull S renderState, @Nonnull PoseStack poseStack, @Nonnull SubmitNodeCollector nodeCollector, int light, int overlay);
 
-    public static class RenderState<T extends BlockEntity> extends BlockEntityRenderState {
-        @Nullable
-        public T blockEntity;
+    public static class RenderState extends BlockEntityRenderState {
+
+        /**
+         * The {@link BlockState block state} of the block entity at extraction time.
+         * {@link BlockEntityRenderState} stores one as well, but does not expose it.
+         */
+        @Nonnull
+        public BlockState blockState = Blocks.AIR.defaultBlockState();
+
         public float partialTicks;
+
         @Nonnull
         public Vec3 cameraPos = Vec3.ZERO;
     }

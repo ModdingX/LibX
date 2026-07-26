@@ -38,7 +38,7 @@ public class ImageContent extends CaptionContent {
         json.addProperty("type", "patchouli:image");
         json.addProperty("title", builder.translate(this.title));
         JsonArray array = new JsonArray();
-        this.images.forEach(rl -> array.add(rl.toString()));
+        this.images.forEach(id -> array.add(id.toString()));
         json.add("images", array);
         json.addProperty("border", true);
         if (caption != null) {

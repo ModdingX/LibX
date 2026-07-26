@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 public abstract class ChestLootProviderBase extends LootProviderBase<String> {
     
     protected ChestLootProviderBase(DatagenContext ctx) {
-        super(ctx, "chests", LootContextParamSets.CHEST, ctx.mod()::resource);
+        super(ctx, "chests", LootContextParamSets.CHEST, ctx.mod()::id);
     }
 
     @Nullable

@@ -9,10 +9,10 @@ import net.minecraft.resources.Identifier;
 public class Misc {
 
     /**
-     * This resource location should be used as a placeholder / invalid value
-     * It's value is {@code minecraft:missigno}.
-     * The reason for {@code minecraft:missigno} is that minecraft uses this resource location
-     * on it's own. See for example {@link MissingTextureAtlasSprite}.
+     * This identifier should be used as a placeholder / invalid value
+     * Its value is {@code minecraft:missigno}.
+     * The reason for {@code minecraft:missigno} is that minecraft uses this identifier
+     * on its own. See for example {@link MissingTextureAtlasSprite}.
      */
     public static final Identifier MISSINGNO = Identifier.withDefaultNamespace("missingno");
 }

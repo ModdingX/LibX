@@ -3,17 +3,18 @@ package org.moddingx.libx.datagen.provider.recipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.criterion.DataComponentMatchers;
 import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.tags.TagKey;
-import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import org.moddingx.libx.mod.ModX;
 
 import java.util.ArrayList;
@@ -82,14 +83,26 @@ public interface RecipeExtension {
      */
     default List<Criterion<?>> criteria(Ingredient item) {
         List<Criterion<?>> instances = new ArrayList<>();
-        if (item.getCustomIngredient() instanceof CompoundIngredient(List<Ingredient> children)) {
+        ICustomIngredient custom = item.getCustomIngredient();
+        if (custom instanceof CompoundIngredient(List<Ingredient> children)) {
             for (Ingredient i : children) {
                 instances.addAll(this.criteria(i));
             }
-        } else {
-            //noinspection deprecation
-            for (Holder<Item> stack : item.items().toList()) {
+        } else if (custom != null) {
+            // Ingredient#items is deprecated, but ICustomIngredient#items is the supported way to ask a
+            // custom ingredient what it accepts. Ingredient#getValues would throw for these.
+            for (Holder<Item> stack : custom.items().toList()) {
                 instances.add(this.criterion(this.item(stack.value())));
+            }
+        } else {
+            HolderSet<Item> values = item.getValues();
+            Optional<TagKey<Item>> tag = values.unwrapKey();
+            if (tag.isPresent()) {
+                instances.add(this.criterion(tag.get()));
+            } else {
+                for (Holder<Item> stack : values) {
+                    instances.add(this.criterion(this.item(stack.value())));
+                }
             }
         }
         return instances;

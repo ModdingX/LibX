@@ -9,6 +9,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -79,6 +81,24 @@ public class ClientExtensionRegistrationHandler extends SpecialRegistrationHandl
         }
     }
     
+    public void registerFluidModels(RegisterFluidModelsEvent event) {
+        this.runRegistration();
+        if (this.fluids.isEmpty()) return;
+        Map<FluidType, ClientExtensionInfo.Fluid> fluidsByType = new HashMap<>();
+        for (Map.Entry<Identifier, ClientExtensionInfo.Fluid> entry : this.fluids.entrySet()) {
+            FluidType fluidType = NeoForgeRegistries.FLUID_TYPES.getOptional(entry.getKey()).orElse(null);
+            if (fluidType == null) throw new IllegalStateException("ClientExtensionInfo.Fluid registered for unknown fluid type: " + entry.getKey());
+            fluidsByType.put(fluidType, entry.getValue());
+        }
+        // A fluid model must be registered for every fluid of the fluid type, so for both the source and the flowing fluid.
+        for (Fluid fluid : BuiltInRegistries.FLUID) {
+            ClientExtensionInfo.Fluid fluidInfo = fluidsByType.get(fluid.getFluidType());
+            if (fluidInfo != null) {
+                event.register(fluidInfo.model().get(), fluid);
+            }
+        }
+    }
+
     public void registerMenuScreens(RegisterMenuScreensEvent event) {
         this.runRegistration();
         for (Map.Entry<Identifier, ClientExtensionInfo.MenuScreen<?, ?>> entry : this.menuScreens.entrySet()) {

@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 public class BeUpdateHandler extends PacketHandler<BeUpdateHandler.Message> {
 
-    public static final CustomPacketPayload.Type<Message> TYPE = new CustomPacketPayload.Type<>(LibX.getInstance().resource("be_update"));
+    public static final CustomPacketPayload.Type<Message> TYPE = new CustomPacketPayload.Type<>(LibX.getInstance().id("be_update"));
 
     protected BeUpdateHandler() {
         super(TYPE, PacketFlow.CLIENTBOUND, StreamCodec.composite(

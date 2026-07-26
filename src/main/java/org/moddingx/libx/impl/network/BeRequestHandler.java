@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 public class BeRequestHandler extends PacketHandler<BeRequestHandler.Message> {
     
-    public static final CustomPacketPayload.Type<Message> TYPE = new CustomPacketPayload.Type<>(LibX.getInstance().resource("be_request"));
+    public static final CustomPacketPayload.Type<Message> TYPE = new CustomPacketPayload.Type<>(LibX.getInstance().id("be_request"));
 
     protected BeRequestHandler() {
         super(TYPE, PacketFlow.SERVERBOUND, BlockPos.STREAM_CODEC.map(Message::new, Message::pos), HandlerThread.MAIN);

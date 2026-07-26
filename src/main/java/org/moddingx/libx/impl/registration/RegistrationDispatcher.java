@@ -3,8 +3,8 @@ package org.moddingx.libx.impl.registration;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -72,6 +72,7 @@ public class RegistrationDispatcher {
         modBus.addListener(this.capabilityHandler::registerCapabilities);
         if (this.clientExtHandler != null) {
             modBus.addListener(this.clientExtHandler::registerClientExtensions);
+            modBus.addListener(this.clientExtHandler::registerFluidModels);
             modBus.addListener(this.clientExtHandler::registerMenuScreens);
         }
     }
@@ -87,9 +88,9 @@ public class RegistrationDispatcher {
     
     public <T> void register(@Nullable ResourceKey<? extends Registry<T>> registry, String id, T value) {
         synchronized (this.LOCK) {
-            Identifier rl = this.mod.resource(id);
-            @Nullable ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, rl);
-            RegistrationContext ctx = new RegistrationContext(this.mod, rl, resourceKey);
+            Identifier identifier = this.mod.id(id);
+            @Nullable ResourceKey<T> resourceKey = registry == null ? null : ResourceKey.create(registry, identifier);
+            RegistrationContext ctx = new RegistrationContext(this.mod, identifier, resourceKey);
             
             List<RegistryCondition> failedConditions = this.conditions.stream().filter(condition -> !condition.shouldRegister(ctx, value)).toList();
             if (!failedConditions.isEmpty()) {
@@ -111,9 +112,9 @@ public class RegistrationDispatcher {
                 this.addEntry(resourceKey, value);
             }
             
-            this.capabilityHandler.handle(rl, value);
+            this.capabilityHandler.handle(identifier, value);
             if (this.clientExtHandler != null) {
-                this.clientExtHandler.handle(rl, value);
+                this.clientExtHandler.handle(identifier, value);
             }
             
             if (value instanceof Registerable registerable) {

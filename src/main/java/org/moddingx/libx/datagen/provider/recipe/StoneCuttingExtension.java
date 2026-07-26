@@ -133,6 +133,6 @@ public interface StoneCuttingExtension extends RecipeExtension {
         for (int i = 0; i < criteria.size(); i++) {
             builder.unlockedBy("has_item" + i, criteria.get(i));
         }
-        builder.save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().loc(output, suffix)));
+        builder.save(this.output(), ResourceKey.create(Registries.RECIPE, this.provider().id(output, suffix)));
     }
 }

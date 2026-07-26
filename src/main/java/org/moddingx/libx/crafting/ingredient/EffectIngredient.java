@@ -4,19 +4,21 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.apache.commons.lang3.stream.Streams;
@@ -36,7 +38,7 @@ import java.util.stream.Stream;
  * slowness as both have the slowness effect.
  */
 public class EffectIngredient implements ICustomIngredient {
-    
+
     public static final MapCodec<EffectIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(ei -> Objects.requireNonNullElse(ei.potionItem, Items.AIR)),
                     MobEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(ei -> ei.effects),
@@ -45,16 +47,16 @@ public class EffectIngredient implements ICustomIngredient {
                     Codec.BOOL.fieldOf("allows_higher_duration").orElse(true).forGetter(ei -> ei.higherDuration)
             ).apply(instance, EffectIngredient::new)
     );
-    
+
     public static final StreamCodec<RegistryFriendlyByteBuf, EffectIngredient> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.registry(Registries.ITEM), ei -> ei.potionItem,
+            ByteBufCodecs.registry(Registries.ITEM), ei -> Objects.requireNonNullElse(ei.potionItem, Items.AIR),
             ByteBufCodecs.<RegistryFriendlyByteBuf, MobEffectInstance>list().apply(MobEffectInstance.STREAM_CODEC), ei -> ei.effects,
             ByteBufCodecs.BOOL, ei -> ei.extraEffects,
             ByteBufCodecs.BOOL, ei -> ei.higherAmplifier,
             ByteBufCodecs.BOOL, ei -> ei.higherDuration,
             EffectIngredient::new
     );
-    
+
     public static final IngredientType<EffectIngredient> TYPE = new IngredientType<>(CODEC, STREAM_CODEC);
 
     /**
@@ -98,9 +100,9 @@ public class EffectIngredient implements ICustomIngredient {
     public EffectIngredient(@Nullable Item potionItem, List<MobEffectInstance> effects, boolean extraEffects, boolean higherAmplifier, boolean higherDuration) {
         this(potionItem, effects.stream(), extraEffects, higherAmplifier, higherDuration);
     }
-    
+
     private EffectIngredient(@Nullable Item potionItem, Stream<MobEffectInstance> effects, boolean extraEffects, boolean higherAmplifier, boolean higherDuration) {
-        this.potionItem = potionItem;
+        this.potionItem = potionItem == Items.AIR ? null : potionItem;
         this.effects = effects.map(MobEffectInstance::new).toList();
         this.extraEffects = extraEffects;
         this.higherAmplifier = higherAmplifier;
@@ -133,12 +135,22 @@ public class EffectIngredient implements ICustomIngredient {
     @Nonnull
     @Override
     public Stream<Holder<Item>> items() {
-        Item potion = this.potionItem == null ? Items.POTION : this.potionItem;
+        if (this.potionItem != null) {
+            return Stream.of(BuiltInRegistries.ITEM.wrapAsHolder(this.potionItem));
+        }
 
-        Identifier id = BuiltInRegistries.ITEM.getKey(potion);
-        Optional<Holder.Reference<Item>> optional = BuiltInRegistries.ITEM.get(id);
+        return Stream.of(Items.POTION, Items.SPLASH_POTION, Items.LINGERING_POTION, Items.TIPPED_ARROW)
+                .map(BuiltInRegistries.ITEM::wrapAsHolder);
+    }
 
-        return optional.stream().map(itemReference -> itemReference);
+    @Nonnull
+    @Override
+    public SlotDisplay display() {
+        PotionContents contents = new PotionContents(Optional.empty(), Optional.empty(), this.effects, Optional.empty());
+        DataComponentPatch patch = DataComponentPatch.builder().set(DataComponents.POTION_CONTENTS, contents).build();
+        return new SlotDisplay.Composite(this.items()
+                .<SlotDisplay>map(item -> new SlotDisplay.ItemStackSlotDisplay(new ItemStackTemplate(item, 1, patch)))
+                .toList());
     }
 
     private static Stream<MobEffectInstance> getEffects(ItemStack stack) {
@@ -150,5 +162,23 @@ public class EffectIngredient implements ICustomIngredient {
     @Override
     public boolean isSimple() {
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.potionItem, this.effects, this.extraEffects, this.higherAmplifier, this.higherDuration);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof EffectIngredient ei)) {
+            return false;
+        }
+
+        return Objects.equals(this.potionItem, ei.potionItem) &&
+                Objects.equals(this.effects, ei.effects) &&
+                this.extraEffects == ei.extraEffects &&
+                this.higherAmplifier == ei.higherAmplifier &&
+                this.higherDuration == ei.higherDuration;
     }
 }
