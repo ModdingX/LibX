@@ -70,7 +70,7 @@ public class EntryBuilder {
     }
 
     /**
-     * Sets an advancement needed to unlock the entry. The namespace is set to the namespace of the category, this
+     * Sets an advancement needed to unlock the entry. The namespace is set to the mods modid of the category, this
      * entry belongs to.
      */
     public EntryBuilder advancement(String path) {
@@ -123,7 +123,7 @@ public class EntryBuilder {
     }
 
     /**
-     * Adds some images to the entry. The image namespaces are set to the namespace of the category, this entry belongs to.
+     * Adds some images to the entry. The image namespaces are set to the mods modid of the category, this entry belongs to.
      */
     public EntryBuilder image(String title, String... images) {
         return this.image(title, Arrays.stream(images).map(s -> Identifier.fromNamespaceAndPath(this.mod.modid, s)).toArray(Identifier[]::new));
@@ -222,7 +222,7 @@ public class EntryBuilder {
     /**
      * Adds some content to the entry that displays a multiblock.
      * 
-     * @param data The multiblock data as recognised by patchouli.
+     * @param data The multiblock data as recognized by patchouli.
      */
     public EntryBuilder multiblock(String title, String data) {
         return this.add(new MultiblockContent(title, data));

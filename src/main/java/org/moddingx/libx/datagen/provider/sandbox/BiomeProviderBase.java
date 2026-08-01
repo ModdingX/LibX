@@ -147,7 +147,7 @@ public abstract class BiomeProviderBase extends RegistryProviderBase {
          * Builds the {@link Biome}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<Biome> build() {

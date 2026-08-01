@@ -16,7 +16,7 @@ import org.moddingx.libx.sandbox.SandBox;
  * @param range A climate range that the layer can generate in.
  * @param density A custom density function that is sampled on every block position. Out of all biome layers the one
  *                with the highest density will be used to sample the biome at that position. These density functions
- *                don't support caching optimisations or interpolation, so they should be kept simple. 
+ *                don't support caching optimizations or interpolation, so they should be kept simple.
  * @param biomes A climate parameter list mapping climate points to biomes.
  */
 public record BiomeLayer(Climate.ParameterPoint range, DensityFunction density, Climate.ParameterList<Holder<Biome>> biomes) {

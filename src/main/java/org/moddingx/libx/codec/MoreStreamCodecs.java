@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class MoreStreamCodecs {
 
     /**
-     * A {@link StreamCodec stream streamCodec} for NBT tags.
+     * A {@link StreamCodec streamCodec} for NBT tags.
      */
     public static final StreamCodec<ByteBuf, Tag> TAG = StreamCodec.of(
             FriendlyByteBuf::writeNbt,
@@ -27,7 +27,7 @@ public class MoreStreamCodecs {
     );
     
     /**
-     * A {@link StreamCodec stream streamCodec} for NBT compound tags.
+     * A {@link StreamCodec streamCodec} for NBT compound tags.
      */
     public static final StreamCodec<ByteBuf, CompoundTag> COMPOUND_TAG = StreamCodec.of(
             FriendlyByteBuf::writeNbt,

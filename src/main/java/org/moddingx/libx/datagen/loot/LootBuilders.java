@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains builders vor various loot table entry containers.
+ * Contains builders for various loot table entry containers.
  */
 public class LootBuilders {
 
     /**
-     * Gets a loot builder for a loot entry that selects all items fro mall its children at once.
+     * Gets a loot builder for a loot entry that selects all items from all its children at once.
      */
     public static LootPoolEntryContainer.Builder<?> all(List<LootPoolEntryContainer.Builder<?>> entries) {
         return new AllLootBuilder(entries.toArray(new LootPoolEntryContainer.Builder[0]));

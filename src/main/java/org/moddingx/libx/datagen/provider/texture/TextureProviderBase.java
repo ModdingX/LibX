@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
  * to {@link TextureManager#getTexture(Identifier)}.
  * A <i>texture</i> id is converted to an <i>image</i> id like this: {@code namespace:textures/path.png}.
  * 
- * <h3>Scaling</h3>
+ * <h2>Scaling</h2>
  * 
  * This provider takes care that a resulting texture is scaled up as much as required to fit all the
  * textures used to build that texture on it.

@@ -36,11 +36,11 @@ import java.util.stream.Collectors;
  * priority and only the first matching rule will be applied.
  * Resource lists are immutable.
  * 
- * <a name="use_resource_lists_in_configs"></a>
+ * <a id="use_resource_lists_in_configs"></a>
  * 
  * <h3>ResourceLists in LibX configs</h3>
  * 
- * This explains, how a resource list is used inj a config. In the {@code allowList} field you can specify
+ * This explains, how a resource list is used in a config. In the {@code allow_list} field you can specify
  * whether all entries will be accepted by default or rejected.
  * 
  * {@code elements} is an array of rules. Each identifier that is matched against this list, will
@@ -57,12 +57,12 @@ import java.util.stream.Collectors;
 public class ResourceList implements Predicate<Identifier> {
 
     /**
-     * A resource list that accepts every item.
+     * A resource list that accepts every item given.
      */
     public static final ResourceList ALLOW_LIST = new ResourceList(true, b -> {});
     
     /**
-     * A resource list that denies every item.
+     * A resource list that denies every item given.
      */
     public static final ResourceList DENY_LIST = new ResourceList(false, b -> {});
     
@@ -120,7 +120,7 @@ public class ResourceList implements Predicate<Identifier> {
     }
 
     /**
-     * Serialises this resource list to JSON.
+     * Serializes this resource list to JSON.
      */
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
@@ -476,7 +476,7 @@ public class ResourceList implements Predicate<Identifier> {
     }
 
     /**
-     * And entry that represents a rule in this {@link ResourceList}.
+     * An entry that represents a rule in this {@link ResourceList}.
      * This is only meant to give access to the values in a resource list, it can't
      * be used to build new rules.
      */

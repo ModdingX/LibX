@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
  * @param top The vertical padding to the bottom of the previous component.
  * @param wrapping A {@link TextWrapping} describing the wrapping properties of this component or {@code null} if
  *                 this component should not be wrapped.
- * @param color The default display colour for the component. This can be altered by the style.
+ * @param color The default display color for the component. This can be altered by the style.
  * @param shadow Whether the component should be drawn with a shadow.
  */
 public record AlignedComponent(Component text, int left, int top, @Nullable TextWrapping wrapping, int color, boolean shadow) implements TextScreenEntry.Direct {

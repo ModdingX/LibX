@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 public interface IAdvancedItemHandler extends ResourceHandler<ItemResource> {
 
     /**
-     * Works like insert but without a specific slot.
+     * Works like {@code insert} but without a specific slot.
      */
     default ItemStack insertItem(ItemStack stack, boolean simulate) {
         return ItemUtil.insertItemReturnRemaining(this, stack, simulate, null);

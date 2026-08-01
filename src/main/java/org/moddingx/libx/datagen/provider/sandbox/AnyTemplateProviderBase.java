@@ -264,7 +264,7 @@ public sealed abstract class AnyTemplateProviderBase extends RegistryProviderBas
         }
 
         /**
-         * Add a legacy pool element to this pool.
+         * Add a list pool element that places all its children to this pool.
          */
         public T list(StructurePoolElement... elements) {
             return this.list(1, elements);

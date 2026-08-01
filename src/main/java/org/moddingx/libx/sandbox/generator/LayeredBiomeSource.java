@@ -30,7 +30,7 @@ public class LayeredBiomeSource extends BiomeSource {
     private Climate.ParameterPoint[] ranges;
 
     /**
-     * Creates a new {@code LayeredBiomeSource}.
+     * Creates a new {@link LayeredBiomeSource}.
      * 
      * @param layers The layers to use.
      */

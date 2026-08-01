@@ -103,14 +103,14 @@ public class ColorPicker extends Panel {
     }
 
     /**
-     * Gets the current value of the colour picker.
+     * Gets the current value of the color picker.
      */
     public TextColor getColor() {
         return this.colorValue.get();
     }
 
     /**
-     * Sets the current value of the colour picker.
+     * Sets the current value of the color picker.
      */
     public void setColor(TextColor color) {
         int rgb = 0xFFFFFF & color.getValue();
@@ -121,7 +121,7 @@ public class ColorPicker extends Panel {
     }
 
     /**
-     * Sets a responder that is notified whenever the colour changes.
+     * Sets a responder that is notified whenever the color changes.
      */
     public void setResponder(@Nullable Consumer<TextColor> responder) {
         this.responder = responder;
@@ -248,7 +248,7 @@ public class ColorPicker extends Panel {
     private boolean updateColorValue(double mouseX, double mouseY, double boundsX, double boundsY) {
         if (!this.enabled) return false;
         // boundsX and boundsY contains the last mouse position when dragging
-        // required to make it possible to get values from the border of the colour grid.
+        // required to make it possible to get values from the border of the color grid.
         mouseX -= this.getX();
         mouseY -= this.getY();
         boundsX -= this.getX();

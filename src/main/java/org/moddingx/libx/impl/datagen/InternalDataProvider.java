@@ -57,7 +57,7 @@ public class InternalDataProvider implements DataProvider {
         if (!this.registryProviders.isEmpty()) LibX.logger.info("Stage {}", DatagenStage.REGISTRY_SETUP);
         this.rootRegistries.transition(DatagenStage.REGISTRY_SETUP);
         
-        // Initialise and run providers in one go.
+        // Initialize and run providers in one go.
         // required as a provider should populate the registry during run.
         // however, later providers may expect the values to be present in the registry during init.
         for (Entry<RegistryProvider> entry : this.registryProviders) {
@@ -68,7 +68,7 @@ public class InternalDataProvider implements DataProvider {
         if (!this.extensionProviders.isEmpty()) LibX.logger.info("Stage {}", DatagenStage.EXTENSION_SETUP);
         this.rootRegistries.transition(DatagenStage.EXTENSION_SETUP);
         
-        // Initialise and run providers in one go.
+        // Initialize and run providers in one go.
         // required as a provider should populate the registry during run.
         // however, later providers may expect the values to be present in the registry during init.
         for (Entry<RegistryProvider> entry : this.extensionProviders) {
@@ -87,7 +87,7 @@ public class InternalDataProvider implements DataProvider {
         stopwatch.stop();
         LibX.logger.info("Writing registry data took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         
-        // Initialise all providers before running
+        // Initialize all providers before running
         // required as they can add other providers to the list.
         List<DataProvider> theDataProviders = new ArrayList<>();
         // Can't use regular foreach loop as the list may grow while looping

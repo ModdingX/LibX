@@ -33,8 +33,8 @@ import java.util.stream.Stream;
 
 /**
  * An ingredient that checks for {@link MobEffectInstance potion effects} to be present on a potion. This does
- * not check for a {@link Potion potion} but for the effects. So potions with the {@code CustomPotionEffects} nbt
- * tag will also be detected. And you can match a for example a potion of the turtle master and a potion of
+ * not check for a {@link Potion potion} but for the effects. So potions with the {@link DataComponents#POTION_CONTENTS} data
+ * component will also be detected. And you can match for example a potion of the turtle master and a potion of
  * slowness as both have the slowness effect.
  */
 public class EffectIngredient implements ICustomIngredient {
@@ -60,13 +60,13 @@ public class EffectIngredient implements ICustomIngredient {
     public static final IngredientType<EffectIngredient> TYPE = new IngredientType<>(CODEC, STREAM_CODEC);
 
     /**
-     * The item required for the potion. Can be null t match any item.
+     * The item required for the potion. Can be null to match any item.
      */
     @Nullable
     public final Item potionItem;
 
     /**
-     * A list of effects that an ItemStack needs.
+     * A list of effects that an {@link ItemStack} needs.
      */
     public final List<MobEffectInstance> effects;
 

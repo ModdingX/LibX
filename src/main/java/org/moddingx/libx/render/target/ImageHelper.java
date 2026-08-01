@@ -12,8 +12,7 @@ import java.util.concurrent.CompletableFuture;
 public class ImageHelper {
 
     /**
-     * Renders the given {@link RenderJob job} into an image. The future will be completed
-     * when the next frame of the game is rendered.
+     * Renders the given {@link RenderJob job} into an image.
      */
     public static CompletableFuture<NativeImage> render(RenderJob job) {
         CompletableFuture<NativeImage> future = new CompletableFuture<>();

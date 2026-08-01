@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import javax.annotation.Nonnull;
 
 /**
- * A {@link PlacementFilter} for filtering by the absolute placement position.
+ * A {@link PlacementFilter} for filtering by the absolute placement Y position.
  */
 public class HeightPlacementFilter extends PlacementFilter {
 

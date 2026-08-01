@@ -103,7 +103,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */
@@ -146,7 +146,7 @@ public interface SmeltingExtension extends RecipeExtension {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a smoker.
-     * {@code time} should be the value for the normal furnace. They'll be adjusted for
+     * {@code time} should be the value for the normal furnace. It'll be adjusted for
      * the smoker automatically.
      */
     default void cooking(TagKey<Item> in, ItemLike out, float exp, int time) {
@@ -154,7 +154,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */
@@ -205,7 +205,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */
@@ -248,7 +248,7 @@ public interface SmeltingExtension extends RecipeExtension {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a smoker.
-     * {@code time} should be the value for the normal furnace. They'll be adjusted for
+     * {@code time} should be the value for the normal furnace. It'll be adjusted for
      * the smoker automatically.
      */
     default void cooking(Identifier outputId, TagKey<Item> in, ItemLike out, float exp, int time) {
@@ -256,7 +256,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */
@@ -307,7 +307,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */
@@ -350,7 +350,7 @@ public interface SmeltingExtension extends RecipeExtension {
 
     /**
      * Adds a smelting recipe that can be performed in a regular furnace and a smoker.
-     * {@code time} should be the value for the normal furnace. They'll be adjusted for
+     * {@code time} should be the value for the normal furnace. It'll be adjusted for
      * the smoker automatically.
      */
     default void cooking(RecipeCategory category, TagKey<Item> in, ItemLike out, float exp, int time) {
@@ -358,7 +358,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */
@@ -435,7 +435,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */
@@ -498,7 +498,7 @@ public interface SmeltingExtension extends RecipeExtension {
     }
 
     /**
-     * Adds a smelting recipe that can be performed in a regular furnace, a smoker anda campfire.
+     * Adds a smelting recipe that can be performed in a regular furnace, a smoker and a campfire.
      * {@code time} should be the value for the normal furnace. It'll be adjusted for the smoker
      * and the campfire automatically.
      */

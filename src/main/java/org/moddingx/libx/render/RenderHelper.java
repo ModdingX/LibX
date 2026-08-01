@@ -21,7 +21,7 @@ import org.moddingx.libx.LibX;
 public class RenderHelper {
 
     /**
-     * Identifier of a texture with the size 512x512 that is purely white.
+     * Identifier of a texture with the size 256x256 that is purely white.
      */
     public static final Identifier TEXTURE_WHITE = LibX.getInstance().id("textures/white.png");
     public static final Identifier TEXTURE_CHEST_GUI = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
@@ -100,7 +100,7 @@ public class RenderHelper {
     /**
      * Renders a texture colored with a given color.
      *
-     * @param buffer  A VertexBuilder used to render the sprite.
+     * @param buffer  A {@link VertexConsumer} used to render the sprite.
      * @param x       x coordinate of top-left corner
      * @param y       y coordinate of top-left corner
      * @param sprite  A texture sprite
@@ -170,8 +170,7 @@ public class RenderHelper {
     }
 
     /**
-     * Same as {@link #renderGuiBackground(RenderPipeline, GuiGraphicsExtractor, int, int, int, int, Identifier, int, int, int, int, int, int) renderGuiBackground}
-     * with the default GUI texture.
+     * Same as {@link #renderGuiBackground(RenderPipeline, GuiGraphicsExtractor, int, int, int, int, Identifier, int, int, int, int, int, int) renderGuiBackground}.
      */
     public static void renderGuiBackground(RenderPipeline pipeline, GuiGraphicsExtractor graphics, int x, int y, int width, int height, Identifier texture) {
         renderGuiBackground(pipeline, graphics, x, y, width, height, texture, 176, 222, 7, 169, 125, 139);

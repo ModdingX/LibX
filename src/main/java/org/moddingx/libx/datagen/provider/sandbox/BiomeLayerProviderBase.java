@@ -77,7 +77,7 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
         }
 
         /**
-         * Gets this layer a zero density everywhere. Useful for the base layer of a dimension that others can
+         * Gives this layer a zero density everywhere. Useful for the base layer of a dimension that others can
          * then generate on top of.
          */
         public BiomeLayerBuilder baseLayer() {
@@ -123,7 +123,7 @@ public abstract class BiomeLayerProviderBase extends RegistryProviderBase {
          * Builds the {@link BiomeLayer}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<BiomeLayer> build() {

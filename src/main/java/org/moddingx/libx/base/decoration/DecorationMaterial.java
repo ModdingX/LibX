@@ -58,7 +58,7 @@ public interface DecorationMaterial {
     boolean isMetal();
 
     /**
-     * Initialises some material properties.
+     * Initializes some material properties.
      * 
      * @param id The id of the {@link DecoratedBlock}.
      */

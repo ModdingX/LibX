@@ -17,7 +17,7 @@ public class RenderHelperLevel {
      * position you need afterward as it will be buggy millions of blocks away because of rounding errors.
      *
      * Note that this does not work correctly in the {@link RenderLevelStageEvent.AfterLevel AfterLevel}
-     * stage, however that stage is not meant to redner like geometries into the world anyway.
+     * stage, however that stage is not meant to render like geometries into the world anyway.
      */
     public static void loadCameraPosition(Camera camera, PoseStack poseStack, BlockPos pos) {
         loadCameraPosition(camera, poseStack, pos.getX(), pos.getY(), pos.getZ());
@@ -29,7 +29,7 @@ public class RenderHelperLevel {
      * position you need afterward as it will be buggy millions of blocks away because of rounding errors.
      *
      * Note that this does not work correctly in the {@link RenderLevelStageEvent.AfterLevel AfterLevel}
-     * stage, however that stage is not meant to redner like geometries into the world anyway.
+     * stage, however that stage is not meant to render like geometries into the world anyway.
      */
     public static void loadCameraPosition(Camera camera, PoseStack poseStack, Vec3 pos) {
         loadCameraPosition(camera, poseStack, pos.x, pos.y, pos.z);
@@ -41,7 +41,7 @@ public class RenderHelperLevel {
      * position you need afterward as it will be buggy millions of blocks away because of rounding errors.
      *
      * Note that this does not work correctly in the {@link RenderLevelStageEvent.AfterLevel AfterLevel}
-     * stage, however that stage is not meant to redner like geometries into the world anyway.
+     * stage, however that stage is not meant to render like geometries into the world anyway.
      */
     public static void loadCameraPosition(Camera camera, PoseStack poseStack, double x, double y, double z) {
         Vec3 cameraPos = camera.position();

@@ -65,7 +65,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
     protected abstract void setup();
 
     /**
-     * Default behaviour for sound events. Override to change.
+     * Default behavior for sound events. Override to change.
      */
     protected void defaultSound(Identifier id, SoundEvent sound) {
         this.sound(sound)
@@ -294,14 +294,14 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
 
         /**
          * Adds a sound from this mods namespace to this sound definition. Also allows to then further
-         * customise the sound.
+         * customize the sound.
          */
         public SoundDefinitionBuilder with(String path, Consumer<SoundDefinition.Sound> configure) {
             return this.with(SoundDefinitionProviderBase.this.mod.id(path), configure);
         }
 
         /**
-         * Adds a sound to this sound definition. Also allows to then further customise the sound.
+         * Adds a sound to this sound definition. Also allows to then further customize the sound.
          */
         public SoundDefinitionBuilder with(Identifier soundId, Consumer<SoundDefinition.Sound> configure) {
             SoundDefinition.Sound sound = SoundDefinition.Sound.sound(soundId, SoundDefinition.SoundType.SOUND);
@@ -354,7 +354,7 @@ public abstract class SoundDefinitionProviderBase implements DataProvider {
         }
         
         /**
-         * Adds another sound event as a sound for this definition. Also allows to then further customise the sound.
+         * Adds another sound event as a sound for this definition. Also allows to then further customize the sound.
          */
         public SoundDefinitionBuilder event(SoundEvent event, Consumer<SoundDefinition.Sound> configure) {
             SoundDefinition.Sound sound = SoundDefinition.Sound.sound(Objects.requireNonNull(BuiltInRegistries.SOUND_EVENT.getKey(event)), SoundDefinition.SoundType.EVENT);

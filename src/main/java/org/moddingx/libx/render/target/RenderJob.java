@@ -35,7 +35,7 @@ public interface RenderJob {
     }
 
     /**
-     * Gets the vertex sorting to use. Defaults to {@link ProjectionType#ORTHOGRAPHIC}.
+     * Gets the projection type to use. Defaults to {@link ProjectionType#ORTHOGRAPHIC}.
      */
     default ProjectionType getProjectionType() {
         return ProjectionType.ORTHOGRAPHIC;

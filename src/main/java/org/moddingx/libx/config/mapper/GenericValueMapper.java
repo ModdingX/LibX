@@ -16,7 +16,7 @@ import java.util.Optional;
  * A value mapper for a generic type. This will get the value mapper for the generic
  * that has been used to declare the config field. For example you could create a
  * value mapper for lists that would then get passed a value mapper for the elements
- * of the list so it can fully serialise it.
+ * of the list so it can fully serialize it.
  * 
  * A limitation with these is that you can only have one generic parameter for
  * which you can get a value mapper. Only LibX builtin mappers can have multiple
@@ -24,17 +24,17 @@ import java.util.Optional;
  * 
  * When extending this, you should make the type argument {@code T} dependent on {@code C}.
  * For example for lists, you should do
- * {@code ListValueMapper&lt;T&gt; implements GenericValueMapper&lt;List&lt;T&gt;, JsonArray, T&gt;}.
- * Then you can register a {@code ListValueMapper&lt;?&gt;}.
+ * {@code ListValueMapper<T> implements GenericValueMapper<List<T>, JsonArray, T>}.
+ * Then you can register a {@code ListValueMapper<?>}.
  * 
- * @param <T> The type that this mapper can serialise.
+ * @param <T> The type that this mapper can serialize.
  * @param <E> The JSON element type this mapper uses.
  * @param <C> The element type. Should be a type variable in most cases.
  */
 public interface GenericValueMapper<T, E extends JsonElement, C> {
 
     /**
-     * Gets the class of the type that this mapper can serialise.
+     * Gets the class of the type that this mapper can serialize.
      */
     Class<T> type();
 

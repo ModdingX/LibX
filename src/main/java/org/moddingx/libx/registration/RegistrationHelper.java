@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.moddingx.libx.annotation.registration.RegisterClass;
 import org.moddingx.libx.mod.ModXRegistration;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.function.Function;
  * with the correct {@code setId} call pre-applied, and optionally tracks the created objects for
  * bulk registration via {@link #registerAll()}.
  *
- * <p>Intended for manual registration classes (those that do <em>not</em> use {@code @RegisterClass}).
+ * <p>Intended for manual registration classes (those that do <em>not</em> use {@link RegisterClass @RegisterClass}).
  * Create a static instance and use it to build all property objects:
  *
  * <pre>{@code
@@ -82,9 +84,9 @@ public final class RegistrationHelper {
     }
 
     /**
-     * Registers all blocks and items created through this helper with the mod's registration system.
+     * Registers all blocks and items created through this helper with the mods' registration system.
      * Must be called before the first {@code RegisterEvent} fires — typically from the mod class
-     * constructor or another early-setup method. Do not call from {@code FMLCommonSetupEvent} or later.
+     * constructor or another early-setup method. Do not call from {@link FMLCommonSetupEvent} or later.
      * Calling this method clears the tracked entries, so it is safe to add more entries and call again.
      */
     public void registerAll() {

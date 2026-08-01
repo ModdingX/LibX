@@ -14,7 +14,7 @@ import java.lang.annotation.*;
  *     parameter type with the name {@code CODEC} or {@code DIRECT_CODEC}.</li>
  * </ul>
  *
- * You can customise the class and field name to look after a codec using this
+ * You can customize the class and field name to look after a codec using this
  * annotation. By this you can create default values easily by creating a class
  * with a field named {@code CODEC} that holds a codec for a value and adds a
  * default to it.

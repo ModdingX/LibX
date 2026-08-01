@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A menu type for {@link AdvancedMenuFactory advanced men factories}.
+ * A menu type for {@link AdvancedMenuFactory advanced menu factories}.
  */
 public class AdvancedMenuType<T extends AbstractContainerMenu, S> extends MenuType<T> {
     

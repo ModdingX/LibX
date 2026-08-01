@@ -15,16 +15,16 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A way to serialise values of a specific type for a config file. See {@link ConfigManager} for
+ * A way to serialize values of a specific type for a config file. See {@link ConfigManager} for
  * more info.
  *
- * @param <T> The type that this mapper can serialise.
+ * @param <T> The type that this mapper can serialize.
  * @param <E> The JSON element type this mapper uses.
  */
 public interface ValueMapper<T, E extends JsonElement> {
 
     /**
-     * Gets the class of the type that this mapper can serialise.
+     * Gets the class of the type that this mapper can serialize.
      */
     Class<T> type();
 
@@ -45,15 +45,15 @@ public interface ValueMapper<T, E extends JsonElement> {
     T fromJson(E json);
 
     /**
-     * Serialises a value to JSON.
+     * Serializes a value to JSON.
      *
-     * @param value The value to serialise
+     * @param value The value to serialize
      * @return The resulting json data.
      */
     E toJson(T value);
 
     /**
-     * Gets a {@link StreamCodec} that describes, how to serialise values of this type over the network.
+     * Gets a {@link StreamCodec} that describes, how to serialize values of this type over the network.
      */
     default StreamCodec<? super FriendlyByteBuf, T> streamCodec() {
         return StreamCodec.of(
@@ -71,13 +71,13 @@ public interface ValueMapper<T, E extends JsonElement> {
 
     /**
      * Corrects a config value. This is only called if {@link #fromJson(JsonElement)} fails.
-     * Here the raw json for the config value is passed. Also a {@link ConfigCorrection} is
+     * Here the raw json for the config value is passed. Also, a {@link ConfigCorrection} is
      * passed that allows to correct json of types contained in this value. For example a
      * list value mapper can use the {@link ConfigCorrection} to try to get as many values
      * as possible out of a json array.
      *
      * @return An {@link Optional} containing the corrected value or an empty {@link Optional}
-     * the correction failed.
+     * if the correction failed.
      */
     default Optional<T> correct(JsonElement json, ConfigCorrection<T> correction) {
         return Optional.empty();

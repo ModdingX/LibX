@@ -83,7 +83,7 @@ public class PageJson {
     /**
      * Splits the given text onto multiple text pages.
      * 
-     * @param skip How many lines, the first page should be shorter that usual.
+     * @param skip How many lines, the first page should be shorter than usual.
      */
     public static List<String> splitText(String text, int skip) {
         return splitText(text, Math.max(16 - skip, 1), 16);
@@ -109,7 +109,7 @@ public class PageJson {
         return List.copyOf(pages);
     }
     
-    // Make a component, where formatting codes use a marker for a zero width font recognised by the splitter.
+    // Make a component, where formatting codes use a marker for a zero width font recognized by the splitter.
     private static Component displayText(String text) {
         Style zeroWidth = Style.EMPTY.withFont(new FontDescription.Resource(DatagenFontLoader.ZERO_WIDTH_FONT));
         MutableComponent display = Component.empty();

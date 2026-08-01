@@ -16,7 +16,7 @@ public interface ComponentType {
     MutableComponent defaultValue();
     
     // Non-null value = component is of matching type
-    // State has been initialised
+    // State has been initialized
     // Result component must have all style and siblings removed
     @Nullable
     MutableComponent init(Component component, Consumer<MutableComponent> inputChanged);

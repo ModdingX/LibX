@@ -29,7 +29,7 @@ public interface CraftingExtension extends RecipeExtension {
      *         <li>An {@link ItemLike} for the output, optionally followed by an {@link Integer} for the amount.</li>
      *         <li>An {@link ItemStackTemplate} which is the result of the crafting recipe.</li>
      *     </ul>
-     *     <li>One or more {@code String}s that form the pattern lines of the recipe.</li>
+     *     <li>One or more {@link String}s that form the pattern lines of the recipe.</li>
      *     <li>For every non-space character used in the pattern: the {@link Character} itself followed by the ingredient identifier that defines that key.</li>
      * </ul>
      *

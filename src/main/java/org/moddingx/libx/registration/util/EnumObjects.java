@@ -68,7 +68,7 @@ public final class EnumObjects<E extends Enum<E>, T> implements Registerable {
     }
 
     /**
-     *
+     * Gets all registered objects.
      */
     public Collection<T> values() {
         return this.map.values();

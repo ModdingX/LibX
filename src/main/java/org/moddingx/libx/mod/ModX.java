@@ -20,10 +20,6 @@ public abstract class ModX {
      */
     public final String modid;
 
-    /**
-     * Subclasses should provide a public no-arg constructor that calls this with
-     * the values needed.
-     */
     protected ModX() {
         Class<? extends ModX> cls = this.getClass();
         Mod mod = cls.getAnnotation(Mod.class);
@@ -35,7 +31,7 @@ public abstract class ModX {
         modInternal.modEventBus().addListener(this::setup);
         modInternal.modEventBus().addListener(this::clientSetup);
 
-        // Initialise config system for this mod container
+        // Initialize config system for this mod container
         // Required, so the extension point can be added when required
         ModMappers.get(this.modid).initAdapter(modInternal.modContainer());
 

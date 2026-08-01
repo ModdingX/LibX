@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 /**
  * Helper methods injected by the {@code RegisterClassIds} coremod transformer into the static
  * initializer of every {@code @RegisterClass}-annotated class. Each call sets the registry
- * {@link ResourceKey} on the {@code Properties} object <em>before</em> the {@code Item} or
- * {@code Block} constructor runs, satisfying the requirement that
+ * {@link ResourceKey} on the {@code Properties} object <em>before</em> the {@link Item} or
+ * {@link net.minecraft.world.level.block.Block Block} constructor runs, satisfying the requirement that
  * {@code Properties.effectiveDescriptionId()} is only called after {@code setId} has been set.
  */
 public class RegistrationPropertiesHelper {

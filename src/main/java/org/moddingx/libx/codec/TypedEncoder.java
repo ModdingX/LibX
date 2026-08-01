@@ -48,7 +48,7 @@ public interface TypedEncoder<T, R> {
 
     /**
      * Creates a new {@link TypedEncoder} given two functions to encode and decode an object.
-     * If a functions throws an exception, it is wrapped into an errored {@link DataResult}.
+     * If a function throws an exception, it is wrapped into an errored {@link DataResult}.
      */
     static <T, R> TypedEncoder<T, R> of(Class<R> resultClass, Function<? super T, ? extends R> encoder, Function<? super R, ? extends T> decoder) {
         return new TypedEncoder<>() {

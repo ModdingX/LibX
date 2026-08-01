@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A registration builder is used to configure the LibX registration system and adjust the behaviour of it.
+ * A registration builder is used to configure the LibX registration system and adjust the behavior of it.
  */
 public class RegistrationBuilder {
     

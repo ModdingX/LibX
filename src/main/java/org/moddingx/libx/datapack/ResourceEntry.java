@@ -33,7 +33,7 @@ public class ResourceEntry {
     }
 
     /**
-     * Opens a resource for this entry. The resource must be closed later.
+     * Gets a resource for this entry.
      */
     public Resource resource() throws IOException {
         return this.resource;

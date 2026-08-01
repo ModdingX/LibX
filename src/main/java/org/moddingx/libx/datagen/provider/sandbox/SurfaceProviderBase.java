@@ -49,7 +49,7 @@ public abstract class SurfaceProviderBase extends RegistryProviderBase {
      * Creates a {@link BiomeSurface} for the given {@link Biome}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<BiomeSurface> biome(Holder<Biome> biome, SurfaceRules.RuleSource... rules) {
@@ -61,7 +61,7 @@ public abstract class SurfaceProviderBase extends RegistryProviderBase {
      * Creates a {@link BiomeSurface} for the given {@link Biome}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<BiomeSurface> biome(ResourceKey<Biome> biome, SurfaceRules.RuleSource... rules) {
@@ -112,7 +112,7 @@ public abstract class SurfaceProviderBase extends RegistryProviderBase {
          * Builds the {@link SurfaceRuleSet}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<SurfaceRuleSet> build() {

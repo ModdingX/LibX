@@ -44,10 +44,6 @@ public abstract class ModXRegistration extends ModX {
 
     private final RegistrationDispatcher dispatcher;
 
-    /**
-     * Subclasses should provide a public no-arg constructor that calls this with
-     * the values needed.
-     */
     protected ModXRegistration() {
         RegistrationBuilder builder = new RegistrationBuilder();
         this.initRegistration(builder);
@@ -61,7 +57,7 @@ public abstract class ModXRegistration extends ModX {
     }
 
     /**
-     * Initialises the registration system. See {@link RegistrationBuilder} for more information.
+     * Initializes the registration system. See {@link RegistrationBuilder} for more information.
      */
     protected void initRegistration(RegistrationBuilder builder) {
         //

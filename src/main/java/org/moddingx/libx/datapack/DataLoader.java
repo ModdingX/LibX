@@ -171,7 +171,7 @@ public class DataLoader {
      * 
      * @param rm The resource manager to use.
      * @param basePath The base path to scan.
-     * @param suffix The suffix of the files to load. A file must wnd in a point followed by this
+     * @param suffix The suffix of the files to load. A file must end in a point followed by this
      *               if {@code suffix} is non-null.
      * @param recursive Whether to scan sub-directories as well.
      * @return A list of resources. Their ids will have {@code basePath} and {@code suffix} stripped.

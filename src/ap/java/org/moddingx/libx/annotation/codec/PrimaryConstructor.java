@@ -16,14 +16,14 @@ import java.lang.annotation.*;
  * For each parameter, there must either be a public field with the same name,
  * a method with no arguments and the name of the parameter, or a java bean
  * styled getter method for the parameter name. This will then be used by the
- * codec for serialisation.
+ * codec for serialization.
  * 
  * For each parameter, ModInit attempts to generate a matching codec field.
  * There are multiple types of codec fields. Each of them has an annotation that
  * can be applied to disable auto-detection and force a specific type or to help
  * ModInit detect the type correctly.
  * 
- * Currently the following field types are supported:
+ * Currently, the following field types are supported:
  * 
  * <li>
  *     <ul>{@link Param Parameter Fields}. These are the default for everything

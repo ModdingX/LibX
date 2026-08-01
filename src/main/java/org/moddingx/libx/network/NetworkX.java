@@ -21,7 +21,7 @@ import java.util.Objects;
 
 /**
  * A class implementing network logic. You can use the {@link #register(PacketHandler) register} methods
- * in you constructor to register network packets.
+ * in your constructor to register network packets.
  */
 public abstract class NetworkX {
 

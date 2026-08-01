@@ -27,10 +27,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.moddingx.libx.datagen.provider.model.ItemModelProviderBase;
+import org.moddingx.libx.registration.Registerable;
+import org.moddingx.libx.registration.SetupContext;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
@@ -42,7 +44,7 @@ import java.util.function.Consumer;
  * This class is meant to apply a {@link BlockEntityRenderer} to items. Using it is really straightforward:
  *
  * <ul>
- *     <li>Add custom {@link IClientItemExtensions client extensions} to your item.</li>
+ *     <li>Add custom {@link SpecialModelRenderer} to your item.</li>
  *     <li>In {@link Registerable#setupClient(SetupContext)} call
  *     {@link ItemStackRenderer#addRenderBlock(BlockEntityType, boolean)}</li>
  * </ul>
@@ -89,8 +91,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
         BlockEntity blockEntity = pair.getLeft().get();
         BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
 
-        @SuppressWarnings("unchecked")
-        BlockEntityRenderer<BlockEntity, BlockEntityRenderState> renderer = (BlockEntityRenderer<BlockEntity, BlockEntityRenderState>) dispatcher.getRenderer(blockEntity);
+        BlockEntityRenderer<BlockEntity, BlockEntityRenderState> renderer = dispatcher.getRenderer(blockEntity);
         if (renderer == null) return;
 
         setLevel(blockEntity);
@@ -154,13 +155,6 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStack> {
 
     public static void registerSpecialModelRenderer(RegisterSpecialModelRendererEvent event) {
         event.register(RENDERER_ID, Unbaked.MAP_CODEC);
-    }
-
-    /**
-     * Compatibility method retained for old API users.
-     */
-    public static IClientItemExtensions createProperties() {
-        return IClientItemExtensions.DEFAULT;
     }
 
     public record Unbaked() implements SpecialModelRenderer.Unbaked<ItemStack> {

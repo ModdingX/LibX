@@ -52,7 +52,7 @@ public class RenderHelperBlock {
      * Renders the break effect for a {@link BlockState}.
      *
      * @param breakProgress  How much the block already broke. 0 means no break. This should not be lower than 0 and not be greater than 10.
-     * @param positionRandom The long value to randomize the position. This can be obtained via {@code BlockState#getPositionRandom}.
+     * @param positionRandom The long value to randomize the position. This can be obtained via {@link BlockState#getSeed(BlockPos)}.
      */
     public static void renderBlockBreak(BlockState state, PoseStack poseStack, int light, int overlay, int breakProgress, long positionRandom) {
         if (breakProgress > 0) {
@@ -63,7 +63,7 @@ public class RenderHelperBlock {
     }
 
     /**
-     * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However you cen specify
+     * Renders a block overlay on top of a {@link BlockState} with the same method as the crumbling is rendered. However, you can specify
      * your own TextureAtlasSprite here to be used. (It must be from the block atlas)
      */
     public static void renderBlockOverlaySprite(BlockState state, PoseStack poseStack, int light, int overlay, TextureAtlasSprite sprite) {

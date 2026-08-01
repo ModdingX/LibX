@@ -57,7 +57,7 @@ import java.util.List;
  * A {@link SubmitNodeCollector} that bridges the submission based rendering back to a
  * {@link MultiBufferSource}. Used by {@link RenderHelper#renderItem} to render items inside
  * a {@link org.moddingx.libx.render.target.RenderJob} without requiring callers to
- * implement all abstract methods of {@code SubmitNodeCollector}.
+ * implement all abstract methods of {@link SubmitNodeCollector}.
  */
 public class MultiBufferSourceSubmitCollector implements SubmitNodeCollector {
 

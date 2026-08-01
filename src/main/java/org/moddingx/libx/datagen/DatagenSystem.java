@@ -44,10 +44,10 @@ public class DatagenSystem {
      * Marks a registry as an extension registry. An extension registry is a registry, where the id of the elements
      * reference the id inside another registry (for example LibX {@link SandBox#BIOME_SURFACE biome surface}).
      * 
-     * Extension registries are frozen later during datagen to allow them access to frozen non-extension registries
+     * Extension registries are frozen later during datagen to allow them to access to frozen non-extension registries
      * while being populated.
      * 
-     * This method sets acts globally for all mods, therefore a mod should only use it their own registries. 
+     * This method acts globally for all mods, therefore a mod should only use it for its own registries.
      * 
      * @see DatagenStage
      */
@@ -64,8 +64,8 @@ public class DatagenSystem {
      * Defines a registry for datagen. This adds a registry with the given key and codec to the root {@link RegistrySet}
      * from where it is inherited into all other {@link RegistrySet registry sets}. This is useful when there is no such
      * registry at runtime and the registry is only required during datagen.
-     * 
-     * This method sets acts globally for all mods, therefore a mod should only use it their own registries. 
+     *
+     * This method acts globally for all mods, therefore a mod should only use it for its own registries.
      */
     public static synchronized  <T> void defineDatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec) {
         String activeMod = ModLoadingContext.get().getActiveNamespace();
@@ -81,7 +81,7 @@ public class DatagenSystem {
     }
 
     /**
-     * Gets a set of all extension.registries.
+     * Gets a set of all extension registries.
      * 
      * @see #registerExtensionRegistry(ResourceKey)
      */

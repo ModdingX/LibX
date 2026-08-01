@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 public class ImageTransforms {
 
     /**
-     * Rotates the give image by the given rotation.
+     * Rotates the given image by the given rotation.
      */
     public static BufferedImage rotate(BufferedImage src, Rotation rotation) {
         if (rotation == Rotation.NONE) return src;
@@ -51,7 +51,7 @@ public class ImageTransforms {
     }
 
     /**
-     * Flips the give image by the given axis. Flipping by {@link Direction.Axis#Z} does nothing.
+     * Flips the given image by the given axis. Flipping by {@link Direction.Axis#Z} does nothing.
      */
     public static BufferedImage flip(BufferedImage src, Direction.Axis axis) {
         if (axis == Direction.Axis.Z) return src;

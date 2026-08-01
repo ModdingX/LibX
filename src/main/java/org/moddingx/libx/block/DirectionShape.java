@@ -17,7 +17,7 @@ public class DirectionShape extends RotationShape {
     protected final VoxelShape down;
 
     /**
-     * Creates a new RotationShape with the given base shape. The base shape should be the shape
+     * Creates a new DirectionShape with the given base shape. The base shape should be the shape
      * facing up.
      */
     public DirectionShape(VoxelShape baseShape) {
@@ -27,7 +27,7 @@ public class DirectionShape extends RotationShape {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public VoxelShape getShape(Direction direction) {

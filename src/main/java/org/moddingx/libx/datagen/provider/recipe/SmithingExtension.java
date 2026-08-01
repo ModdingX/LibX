@@ -13,7 +13,7 @@ import net.minecraft.world.level.ItemLike;
 import java.util.List;
 
 /**
- * A {@link RecipeExtension} for recipes in the smithing table..
+ * A {@link RecipeExtension} for recipes in the smithing table.
  */
 public interface SmithingExtension extends RecipeExtension {
 

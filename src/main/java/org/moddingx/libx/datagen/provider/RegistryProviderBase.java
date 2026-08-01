@@ -23,9 +23,9 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
- * Base provider for all SandBox data providers. Handles registering values from public {@link Holder} fields
- * inside the provider to the registries. These fields should contain intrusive holders created through the
- * current {@link RegistrySet}.
+ * Base provider for all SandBox {@link RegistryProvider registry providers}. Handles registering values
+ * from public {@link Holder} fields inside the provider to the registries. These fields should contain
+ * intrusive holders created through the current {@link RegistrySet}.
  */
 public abstract class RegistryProviderBase implements RegistryProvider {
 
@@ -136,21 +136,21 @@ public abstract class RegistryProviderBase implements RegistryProvider {
      * Gets a holder set that matches the union of the given sets.
      */
     public final <T> HolderSet<T> or(TagKey<T> a, TagKey<T> b) {
-        return this.and(this.set(a), this.set(b));
+        return this.or(this.set(a), this.set(b));
     }
 
     /**
      * Gets a holder set that matches the union of the given sets.
      */
     public final <T> HolderSet<T> or(TagKey<T> a, HolderSet<T> b) {
-        return this.and(this.set(a), b);
+        return this.or(this.set(a), b);
     }
 
     /**
      * Gets a holder set that matches the union of the given sets.
      */
     public final <T> HolderSet<T> or(HolderSet<T> a, TagKey<T> b) {
-        return this.and(a, this.set(b));
+        return this.or(a, this.set(b));
     }
 
     /**

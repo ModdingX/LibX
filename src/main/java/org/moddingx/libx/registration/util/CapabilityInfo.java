@@ -9,7 +9,7 @@ import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 
 /**
- * Auxiliary classes to to register capability providers easily.
+ * Auxiliary classes to register capability providers easily.
  */
 public abstract class CapabilityInfo {
     
@@ -46,7 +46,7 @@ public abstract class CapabilityInfo {
     /**
      * Wraps a {@link ICapabilityProvider capability provider} for a {@link BlockCapability block capability}. Using
      * the LibX registration system, an instance of this class can be registered to apply a capability to a
-     * {@link BlockEntityType block entity}.
+     * {@link BlockEntityType}.
      *
      * @see Registerable#registerAdditional(RegistrationContext, Registerable.EntryCollector)
      */

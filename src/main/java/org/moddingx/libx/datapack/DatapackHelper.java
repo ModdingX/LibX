@@ -39,7 +39,7 @@ public class DatapackHelper {
     
     /**
      * Creates a supplier that can be repeatedly called to create new {@link InputStream}s for
-     * a dynamically generated {@code pack.mcmeta} based on the given mod file.
+     * a dynamically generated {@code pack.mcmeta}.
      */
     public static IoSupplier<InputStream> generatePackMeta(String description, PackType packType) {
         try {

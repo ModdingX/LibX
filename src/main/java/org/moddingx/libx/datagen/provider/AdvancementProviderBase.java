@@ -102,7 +102,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
+     * Gets an {@link AdvancementFactory} to customize the root {@link Advancement advancement} for
      * this provider. The root id will be the modid.
      * 
      * @see #root(String, String)
@@ -112,7 +112,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
+     * Gets an {@link AdvancementFactory} to customize the root {@link Advancement advancement} for
      * this provider.
      * 
      * @param id The root id. The actual advancement id will be {@code modid:id/root}
@@ -124,7 +124,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets an {@link AdvancementFactory} to customise the root {@link Advancement advancement} for
+     * Gets an {@link AdvancementFactory} to customize the root {@link Advancement advancement} for
      * this provider.
      * 
      * @param namespace The namespace of the root advancement.
@@ -160,7 +160,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
 
     /**
      * Adds an advancement to the provider identified by its {@link Identifier}. Returns
-     * an {@link AdvancementFactory} to customise the advancement.
+     * an {@link AdvancementFactory} to customize the advancement.
      */
     public AdvancementFactory advancement(Identifier id) {
         AdvancementFactory factory = new AdvancementFactory(id);
@@ -173,7 +173,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Adds an {@link Advancement advancement} to the provider identified by an id. The
      * {@link Identifier} is built with the modid and the root advancement id. Returns an
-     * {@link AdvancementFactory} to customise the advancement.
+     * {@link AdvancementFactory} to customize the advancement.
      */
     public AdvancementFactory advancement(String id) {
         return this.advancement(this.idFor(id));
@@ -187,7 +187,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets a {@link Criterion criterion} that requires all of the given items to be in
+     * Gets a {@link Criterion criterion} that requires all the given items to be in
      * the inventory at the same time.
      */
     public Criterion<?> items(ItemLike... items) {
@@ -195,7 +195,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
     
     /**
-     * Gets a {@link Criterion criterion} that requires all of the given items to be in
+     * Gets a {@link Criterion criterion} that requires all the given items to be in
      * the inventory at the same time.
      */
     @SafeVarargs
@@ -204,7 +204,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
         
     /**
-     * Gets a {@link Criterion criterion} that requires all of the given items to be in
+     * Gets a {@link Criterion criterion} that requires all the given items to be in
      * the inventory at the same time.
      */
     public Criterion<?> items(ItemPredicate... items) {
@@ -365,7 +365,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * An advancement factory can be used to customise an advancement in a builder style pattern.
+     * An advancement factory can be used to customize an advancement in a builder style pattern.
      * Calling one of the {@link #parent(String) parent} methods for the root advancement will cause
      * an error. If this provider has no root advancement, you must always call one of the
      * {@link #parent(String) parent} methods.
@@ -528,7 +528,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         }
 
         /**
-         * Sets the background of the advancement tab. Must be used on the root advancement as is not allowed on others.
+         * Sets the background of the advancement tab. Must be used on the root advancement as it is not allowed on others.
          */
         public AdvancementFactory background(Identifier background) {
             if (!this.root) {

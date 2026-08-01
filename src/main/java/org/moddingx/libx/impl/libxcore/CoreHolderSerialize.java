@@ -8,7 +8,7 @@ public class CoreHolderSerialize {
 
     /**
      * Patched into {@link Holder.Reference#canSerializeIn(HolderOwner)} at head.
-     * Passing all the arguments from the source method. Returning true will skip default behaviour.
+     * Passing all the arguments from the source method. Returning true will skip default behavior.
      */
     public static boolean forceSerializeIn(Holder.Reference<?> ref, HolderOwner<?> owner) {
         return owner instanceof DatagenRegistry<?>;

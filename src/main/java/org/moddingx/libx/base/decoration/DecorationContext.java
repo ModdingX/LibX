@@ -45,7 +45,7 @@ public class DecorationContext {
     
     /**
      * Decoration context for wooden planks. Registers {@link DecorationType#LOG logs},
-     * {@link DecorationType#LOG stripped logs}, {@link DecorationType#WOOD wood blocks},
+     * {@link DecorationType#STRIPPED_LOG stripped logs}, {@link DecorationType#WOOD wood blocks},
      * {@link DecorationType#STRIPPED_WOOD stripped wood blocks}, {@link DecorationType#SLAB slabs},
      * {@link DecorationType#STAIRS stairs}, {@link DecorationType#FENCE fences},
      * {@link DecorationType#FENCE_GATE fence gates}, {@link DecorationType#WOOD_BUTTON buttons},

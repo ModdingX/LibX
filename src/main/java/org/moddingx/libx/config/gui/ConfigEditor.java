@@ -64,7 +64,7 @@ public interface ConfigEditor<T> {
 
     /**
      * Creates a toggle editor for a set of elements. This can be a single button that cycles on click
-     * or a sub screen so select the element, depending on the number of elements given.
+     * or a sub screen to select the element, depending on the number of elements given.
      */
     static <T> ConfigEditor<T> toggle(List<T> elems) {
         return toggle(elems, e -> Component.literal(e.toString()));
@@ -72,7 +72,7 @@ public interface ConfigEditor<T> {
 
     /**
      * Creates a toggle editor for a set of elements. This can be a single button that cycles on click
-     * or a sub screen so select the element, depending on the number of elements given.
+     * or a sub screen to select the element, depending on the number of elements given.
      * 
      * @param name A function that defines how to convert elements into a {@link Component} for display.
      */

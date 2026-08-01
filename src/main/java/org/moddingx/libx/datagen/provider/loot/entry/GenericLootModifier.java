@@ -7,8 +7,8 @@ import java.util.function.BiFunction;
 
 /**
  * Interface to modify a singleton loot entry to a new loot entry. This can also be used
- * as a {@link LootFactory} in which case the default item entry obtained from is passed to the
- * {@link #apply(Object, LootPoolSingletonContainer.Builder) apply} method.
+ * as a {@link LootFactory} in which case the default item entry obtained from {@link #element()}
+ * is passed to the {@link #apply(Object, LootPoolSingletonContainer.Builder) apply} method.
  */
 public interface GenericLootModifier<T> extends LootFactory<T> {
     
@@ -20,7 +20,7 @@ public interface GenericLootModifier<T> extends LootFactory<T> {
     }
     
     /**
-     * Creates a new generic lot modifier.
+     * Creates a new generic loot modifier.
      */
     static <T> GenericLootModifier<T> of(SimpleLootFactory<T> element, BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolEntryContainer.Builder<?>> function) {
         return new GenericLootModifier<>() {

@@ -60,7 +60,7 @@ public class RegistrationDispatcher {
                 this.hasRegistrationRun = true;
             }
         }
-        // Must run registration handlers outside of synchronized block
+        // Must run registration handlers outside synchronized block
         // so #register is not blocked.
         this.registrationHandlers.forEach(Runnable::run);
     }

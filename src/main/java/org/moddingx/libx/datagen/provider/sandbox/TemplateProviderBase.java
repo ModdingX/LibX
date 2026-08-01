@@ -32,7 +32,7 @@ public abstract non-sealed class TemplateProviderBase extends AnyTemplateProvide
     }
     
     /**
-     * Creates a new {@link PoolBuilder} with with the given fallback.
+     * Creates a new {@link PoolBuilder} with the given fallback.
      */
     public PoolBuilder template(Holder<StructureTemplatePool> fallback) {
         return new PoolBuilder(fallback);
@@ -55,7 +55,7 @@ public abstract non-sealed class TemplateProviderBase extends AnyTemplateProvide
          * Builds the {@link StructureTemplatePool}.
          * 
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<StructureTemplatePool> build() {

@@ -94,14 +94,14 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     }
 
     /**
-     * Adds default {@link BlockTags item tags} to a {@link Block}
+     * Adds default {@link BlockTags block tags} to a {@link Block}
      */
     public void defaultBlockTags(Block block) {
 
     }
 
     /**
-     * Adds default {@link FluidTags item tags} to a {@link Fluid}
+     * Adds default {@link FluidTags fluid tags} to a {@link Fluid}
      */
     public void defaultFluidTags(Fluid fluid) {
 

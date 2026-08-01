@@ -240,7 +240,7 @@ public abstract class DimensionTypeProviderBase extends RegistryProviderBase {
         }
 
         /**
-         * Sets the timelines tag for this dimension (e.g. {@code TimelineTags.IN_OVERWORLD}).
+         * Sets the timelines tag for this dimension (e.g. {@link TimelineTags#IN_OVERWORLD}).
          */
         public DimensionTypeBuilder timelines(TagKey<Timeline> tag) {
             this.timelinesTag = tag;
@@ -251,7 +251,7 @@ public abstract class DimensionTypeProviderBase extends RegistryProviderBase {
          * Builds the {@link DimensionType}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<DimensionType> build() {

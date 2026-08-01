@@ -59,7 +59,7 @@ import java.util.*;
  *     public static class SubGroup {
  *
  *         {@link Config @Config}
- *         public static {@link List List}&lt;{@link Integer Integer}&gt; valueList = {@link List List}.{@link List#of() of}(1, 5, 23);
+ *         public static {@link List List}&lt;{@link Integer Integer}&gt; valueList = {@link List List}.{@link List#of(Object, Object, Object) of}(1, 5, 23);
  *     }
  * }
  * </code>
@@ -72,11 +72,11 @@ import java.util.*;
  * {
  *   // Multiline Comments
  *   // are also possible
- *   // Minimum: 0
+ *   // Minimum: 0.0
  *   "another_value": 0.0,
  *
  *   // A component
- *   "tc": {
+ *   "component": {
  *     "text": "LibX is fancy"
  *   },
  *
@@ -84,7 +84,7 @@ import java.util.*;
  *   "value": 23,
  *
  *   "SubGroup": {
- *     "coolValues": [
+ *     "valueList": [
  *       1, 5, 23
  *     ]
  *   }
@@ -129,8 +129,8 @@ import java.util.*;
  * you can also use a <code>{@link List List}&lt;{@link Pair Pair}&lt;{@link List List}&lt;{@link Integer Integer}&gt;, {@link String String}&gt;&gt;</code>.
  * 
  * Each config field can also have <b>one</b> validator annotation applied to validate a value. You can
- * find builtin validator annotations in {@link org.moddingx.libx.config.validator}. To register
- * you own validator, use {@link #registerConfigValidator(String, ConfigValidator)}.
+ * find builtin validator annotations in {@link org.moddingx.libx.config.validate}. To register
+ * your own validator, use {@link #registerConfigValidator(String, ConfigValidator)}.
  * 
  * Configs come in two different types: Common configs and client configs. Common configs are loaded on
  * both the dedicated server and the client and are synced from server to client. Client configs are
@@ -149,7 +149,7 @@ public class ConfigManager {
     private static final Map<Class<?>, Path> configs = Collections.synchronizedMap(new HashMap<>());
 
     /**
-     * Registers a new {@link ValueMapper} that can be used to serialise config values.
+     * Registers a new {@link ValueMapper} that can be used to serialize config values.
      */
     public static void registerValueMapper(String modid, ValueMapper<?, ?> mapper) {
         if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
@@ -159,7 +159,7 @@ public class ConfigManager {
     }
     
     /**
-     * Registers a new {@link GenericValueMapper} that can be used to serialise config values.
+     * Registers a new {@link GenericValueMapper} that can be used to serialize config values.
      */
     public static void registerValueMapper(String modid, GenericValueMapper<?, ?, ?> mapper) {
         if (!Objects.equals(modid, ModLoadingContext.get().getActiveNamespace())) {
@@ -291,21 +291,21 @@ public class ConfigManager {
     }
 
     /**
-     * Forces synchronisation of one config to all players.
+     * Forces synchronization of one config to all players.
      */
     public static void synchronize(MinecraftServer server, Class<?> configClass) {
         synchronize(server, null, List.of(configClass));
     }
 
     /**
-     * Forces synchronisation of all configs to all players.
+     * Forces synchronization of all configs to all players.
      */
     public static void synchronize(MinecraftServer server) {
         synchronize(server, null, null);
     }
 
     /**
-     * Forces synchronisation of one config to one player.
+     * Forces synchronization of one config to one player.
      */
     public static void synchronize(ServerPlayer player, Class<?> configClass) {
         MinecraftServer server = player.level().getServer();
@@ -315,7 +315,7 @@ public class ConfigManager {
     }
 
     /**
-     * Forces synchronisation of all configs to one player.
+     * Forces synchronization of all configs to one player.
      */
     public static void synchronize(ServerPlayer player) {
         MinecraftServer server = player.level().getServer();

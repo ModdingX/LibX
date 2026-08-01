@@ -52,7 +52,7 @@ public abstract class NoiseProviderBase extends RegistryProviderBase {
      * Creates new {@link NormalNoise.NoiseParameters noise parameters}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<NormalNoise.NoiseParameters> noise(int firstOctave, double... amplitudes) {
@@ -63,7 +63,7 @@ public abstract class NoiseProviderBase extends RegistryProviderBase {
      * Wraps a new {@link DensityFunction} for registration.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<DensityFunction> density(DensityFunction function) {
@@ -184,7 +184,7 @@ public abstract class NoiseProviderBase extends RegistryProviderBase {
          * Builds the {@link NoiseGeneratorSettings}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<NoiseGeneratorSettings> build() {

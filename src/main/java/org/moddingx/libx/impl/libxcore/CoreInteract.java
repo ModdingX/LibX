@@ -16,8 +16,8 @@ public class CoreInteract {
 
     /**
      * Patched into {@link ServerPlayerGameMode#useItemOn(ServerPlayer, Level, ItemStack, InteractionHand, BlockHitResult)}
-     * before the last return and getstatic. Passing all the arguments from the source method. Returning null
-     * will trigger default behaviour. Returning anything else will replace the return value.
+     * before the last {@code ARETURN}. Passing all the arguments from the source method. Returning null
+     * will trigger default behavior. Returning anything else will replace the return value.
      */
     @Nullable
     public static InteractionResult useItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hit) {

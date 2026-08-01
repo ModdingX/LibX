@@ -30,7 +30,7 @@ public class RotationShape {
     }
 
     /**
-     * Gets the VoxelShape for the given direction. If the direction is not a horizontal
+     * Gets the {@link VoxelShape} for the given direction. If the direction is not a horizontal
      * direction the base shape is returned.
      */
     public VoxelShape getShape(Direction direction) {

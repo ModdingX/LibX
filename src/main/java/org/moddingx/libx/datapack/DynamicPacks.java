@@ -4,14 +4,14 @@ import net.minecraft.resources.Identifier;
 import org.moddingx.libx.impl.datapack.DynamicPackLocator;
 
 /**
- * This allows you to have multiple resource and datapacks in your mod file. While the main one is always loaded, you
- * can load the other ones via {@link DynamicPacks#enablePack(String, String)}. This should be called in your mods
+ * This allows you to have multiple resource packs and data packs in your mod file. While the main one is always loaded, you
+ * can load the other ones via {@link DynamicPacks#enablePack(String, String)}. This should be called in your mods'
  * constructor.
  * 
  * A dynamic resource pack must be located in {@code libxassets/[name]} inside your JAR file where {@code [name]} is
  * the name of your dynamic resource pack. Inside this folder you can put the content that normally is in the
  * {@code assets} folder. The resource pack is shown in the resource pack selection menu and can be activated based
- * on the users preference.
+ * on the users' preference.
  * A {@code pack.mcmeta} file is not required and if you provide one it'll be ignored. Neither are overlays.
  * 
  * A dynamic datapack must be located in {@code libxdata/[name]} inside your JAR file where {@code [name]} is
@@ -40,7 +40,7 @@ public class DynamicPacks {
     }
 
     /**
-     * Gets tests whether a dynamic pack is enabled.
+     * Tests whether a dynamic pack is enabled.
      */
     public boolean isEnabled(String modId, String packName) {
         return this.locator.isEnabled(Identifier.fromNamespaceAndPath(modId, packName));

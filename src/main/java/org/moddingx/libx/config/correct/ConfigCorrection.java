@@ -28,7 +28,7 @@ public interface ConfigCorrection<T> {
      * extract a default value for the value that this method should retrieve when given a default
      * value for this config value.
      * 
-     * For example when a {@link Pair} is corrected and it find an array with two elements, it would
+     * For example when a {@link Pair} is corrected, and it finds an array with two elements, it would
      * do something like {@code correct(jsonArray.get(0), firstMapper, Pair::getLeft);} to correct
      * the first value from the pair.
      * 

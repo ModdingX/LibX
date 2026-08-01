@@ -77,8 +77,8 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
     /**
      * Returns whether this block state needs a loot table. If all block states of a block don't
-     * need a loot table, defaultBehavior will return null for that block. Can be overridden to
-     * alter the behaviour.
+     * need a loot table, {@link #defaultBehavior(Block)} will return null for that block. Can be overridden to
+     * alter the behavior.
      */
     protected boolean needsLootTable(BlockState state) {
         return !state.isAir() && state.getFluidState().createLegacyBlock().getBlock() != state.getBlock()
@@ -148,7 +148,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     }
     
     /**
-     * Gets a new silk modifier that means: No special silk touch behaviour.
+     * Gets a new silk modifier that means: No special silk touch behavior.
      */
     public SilkModifier noSilk() {
         return new SilkModifier(null);
@@ -279,7 +279,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     /**
      * Creates a loot modifier that copies NBT-Data from a block entity into the dropped item.
      *
-     * @param tags The toplevel tags of the block entity to be copied.
+     * @param tags The top-level tags of the block entity to be copied.
      */
     public LootModifier<Block> copyNBT(String... tags) {
         return this.modifier((block, entry) -> {
@@ -305,7 +305,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     
      /**
      * A class used in the drops method to reduce ambiguity and make the code more readable. Just call
-     * the {@link #silk(GenericLootModifier)} method wih a generic loot modifier to get a silk modifier.
+     * the {@link #silk(GenericLootModifier)} method with a generic loot modifier to get a silk modifier.
      * A silk modifier does not extend {@link GenericLootModifier} for this reason.
      */
     public static class SilkModifier {

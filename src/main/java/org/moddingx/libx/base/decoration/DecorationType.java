@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  * Something that is registered together with a {@link DecoratedBlock}.
  * 
  * All builtin decoration types provide datagen through {@link BlockStateProviderBase}, {@link CommonTagsProviderBase}
- * and a special the recipe extension: {@link DefaultExtension}.
+ * and a special recipe extension: {@link DefaultExtension}.
  */
 public interface DecorationType<T> {
 

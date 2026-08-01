@@ -167,7 +167,7 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
         }
         
         /**
-         * Set the minimum padding relative to the dimensions logical height.
+         * Set the minimum padding relative to the dimension's logical height.
          */
         public JigsawBuilder dimensionPadding(int bottom, int top) {
             this.dimensionPading = new DimensionPadding(bottom, top);
@@ -175,7 +175,7 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
         }
 
         /**
-         * Disable waterlogging of waterloggable blocks when they are be placed in water.
+         * Disable waterlogging of waterloggable blocks when they are placed in water.
          */
         public JigsawBuilder noWaterLogging() {
             this.liquidSettings = LiquidSettings.IGNORE_WATERLOGGING;
@@ -252,7 +252,7 @@ public abstract class StructureProviderBase extends RegistryProviderBase {
          * Builds the {@link Structure}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<Structure> build() {

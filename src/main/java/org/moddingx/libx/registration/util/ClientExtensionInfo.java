@@ -16,7 +16,7 @@ import org.moddingx.libx.registration.RegistrationContext;
 import java.util.function.Supplier;
 
 /**
- * Auxiliary classes to to register client extensions easily.
+ * Auxiliary classes to register client extensions easily.
  */
 public abstract class ClientExtensionInfo {
     

@@ -58,7 +58,7 @@ public class MoreCodecs {
 
     /**
      * Creates a fixed codec that always encodes the {@link Unit#INSTANCE unit value} to the given serialized value.
-     * Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+     * Decoding will succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
      * useful in {@link Codec#either(Codec, Codec) either}-codecs.
      */
     public static Codec<Unit> fixed(Number value) {
@@ -67,7 +67,7 @@ public class MoreCodecs {
 
     /**
      * Creates a fixed codec that always encodes the {@link Unit#INSTANCE unit value} to the given serialized value.
-     * Decoding fille succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
+     * Decoding will succeed if the serialized value equals the given value, otherwise it fails. Fixed codecs are
      * useful in {@link Codec#either(Codec, Codec) either}-codecs.
      */
     public static Codec<Unit> fixed(String value) {
@@ -91,7 +91,7 @@ public class MoreCodecs {
     }
     
     /**
-     * Extends the give {@link Codec} with some new fields defined by the given {@link MapCodec}. The given
+     * Extends the given {@link Codec} with some new fields defined by the given {@link MapCodec}. The given
      * codec <b>must</b> encode to a {@link MapLike}.
      */
     public static <M, E> Codec<Pair<M, E>> extend(Codec<M> codec, MapCodec<E> extension) {
@@ -99,7 +99,7 @@ public class MoreCodecs {
     }
     
     /**
-     * Extends the give {@link Codec} with some new fields defined by the given {@link MapCodec}. The given
+     * Extends the given {@link Codec} with some new fields defined by the given {@link MapCodec}. The given
      * codec <b>must</b> encode to a {@link MapLike}.
      */
     public static <A, M, E> Codec<A> extend(Codec<M> codec, MapCodec<E> extension, Function<A, Pair<M, E>> decompose, BiFunction<M, E, A> construct) {
@@ -107,7 +107,7 @@ public class MoreCodecs {
     }
     
     /**
-     * Creates a map dispatched codec. When encoding an element, it ist first decomposed into key and value.
+     * Creates a map dispatched codec. When encoding an element, it is first decomposed into key and value.
      * The key is used to obtain a codec to encode the value using the passed {@code valueCodecs} function.
      * The {@link Codec} returned from that function <b>must</b> encode to a {@link MapLike}.
      * After that, the key is encoded and merged into the {@link MapLike} from the value codec.

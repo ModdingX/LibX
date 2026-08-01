@@ -25,6 +25,7 @@ import java.util.List;
  * @param verticalAlignment How the elements should be aligned vertically.
  * @param elements The elements inside this box.
  * @param left The horizontal padding to the left edge of the screen.
+ * @param right The horizontal padding to the right edge of the screen.
  * @param top The vertical padding to the bottom of the previous component.
  */
 public record FlowBox(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, List<TextScreenEntry.Direct> elements, int left, int right, int top) implements TextScreenEntry {
@@ -65,7 +66,7 @@ public record FlowBox(HorizontalAlignment horizontalAlignment, VerticalAlignment
         RIGHT,
         
         /**
-         * Elements in a row are aligned in the center, empty space is evently distributed left and right.
+         * Elements in a row are aligned in the center, empty space is evenly distributed left and right.
          */
         CENTER,
         
@@ -76,7 +77,7 @@ public record FlowBox(HorizontalAlignment horizontalAlignment, VerticalAlignment
     }
 
     /**
-     * Specifies the horizontal alignment of elements inside a {@link FlowBox}.
+     * Specifies the vertical alignment of elements inside a {@link FlowBox}.
      */
     public enum VerticalAlignment {
 

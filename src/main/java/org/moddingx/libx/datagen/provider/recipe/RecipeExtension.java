@@ -58,7 +58,7 @@ public interface RecipeExtension {
     Criterion<?> criterion(TagKey<Item> item);
 
     /**
-     * Builds an {@link Criterion advancement criterion} that requires all of the given
+     * Builds an {@link Criterion advancement criterion} that requires all the given
      * {@link ItemPredicate items}.
      */
     Criterion<?> criterion(ItemPredicate... items);

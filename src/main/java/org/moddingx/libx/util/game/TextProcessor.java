@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  *
  * <ul>
  *     <li>{@code n} or {@code newline}: A newline. When this is used, no other commands can be used in the same pair of parens.</li>
- *     <li>{@code #RRGGBB}</li>: A color in hex
+ *     <li>{@code #RRGGBB}: A color in hex</li>
  *     <li>{@code b} or {@code bold}: Bold text.</li>
  *     <li>{@code i} or {@code italic}: Italic text.</li>
  *     <li>{@code u} or {@code underline}: Underlined text.</li>

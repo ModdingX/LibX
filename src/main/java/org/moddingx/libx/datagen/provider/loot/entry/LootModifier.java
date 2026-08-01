@@ -20,7 +20,7 @@ public interface LootModifier<T> extends GenericLootModifier<T>, SimpleLootFacto
     }
     
     /**
-     * Creates a new generic lot modifier.
+     * Creates a new generic loot modifier.
      */
     static <T> LootModifier<T> of(SimpleLootFactory<T> element, BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolSingletonContainer.Builder<?>> function) {
         return new LootModifier<>() {

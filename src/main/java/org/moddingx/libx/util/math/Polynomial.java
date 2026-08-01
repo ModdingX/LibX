@@ -15,7 +15,7 @@ public abstract class Polynomial<T extends Number> implements UnaryOperator<T> {
     }
     
     /**
-     * Gets the coefficients of this polynomial. For example, the coefficients {@code [2, 0 1]} represent the
+     * Gets the coefficients of this polynomial. For example, the coefficients {@code [2, 0, 1]} represent the
      * polynomial {@code 2x²+1}.
      */
     public abstract List<T> coefficients();

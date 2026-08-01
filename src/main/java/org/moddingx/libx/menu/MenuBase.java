@@ -93,8 +93,7 @@ public abstract class MenuBase extends AbstractContainerMenu {
      * @param verAmount   The amount of slots in vertical direction
      * @param dy          The space between two slots in vertical direction. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
-     * @param slotFactory A factory to create a slot. This could be {@code ResourceHandlerSlot::new}
-     *                    or {@code OutputSlot::new} for output slots.
+     * @param slotFactory A factory to create a slot. This could be {@code OutputSlot::new} for output slots.
      * @return The next index to be used to create a slot
      */
     protected int addSlotBox(IAdvancedItemHandlerModifiable handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy, Function4<IAdvancedItemHandlerModifiable, Integer, Integer, Integer, Slot> slotFactory) {
@@ -115,8 +114,7 @@ public abstract class MenuBase extends AbstractContainerMenu {
      * @param amount      The amount of slots
      * @param dx          The space between two slots. Should not be less than 16 or
      *                    you create overlapping slots. Most of the time this is 18
-     * @param slotFactory A factory to create a slot. This could be {@code ResourceHandlerSlot::new}
-     *                    or {@code OutputSlot::new} for output slots.
+     * @param slotFactory A factory to create a slot. This could be {@code OutputSlot::new} for output slots.
      * @return The next index to be used to create a slot
      */
     protected int addSlotRange(IAdvancedItemHandlerModifiable handler, int index, int x, int y, int amount, int dx, Function4<IAdvancedItemHandlerModifiable, Integer, Integer, Integer, Slot> slotFactory) {

@@ -37,7 +37,7 @@ import java.util.function.Function;
 /**
  * SandBox provider for {@link LevelStem dimensions}.
  *
- * This provider must run in the {@link DatagenStage#EXTENSION_SETUP registry setup} stage.
+ * This provider must run in the {@link DatagenStage#EXTENSION_SETUP extension setup} stage.
  */
 public abstract class DimensionProviderBase extends RegistryProviderBase {
 
@@ -68,7 +68,7 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
      * Makes a new {@link LevelStem dimension}
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<LevelStem> dimension(ResourceKey<DimensionType> dimensionType, ChunkGenerator generator) {

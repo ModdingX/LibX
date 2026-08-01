@@ -77,7 +77,7 @@ public abstract class StructureSetProviderBase extends RegistryProviderBase {
         }
         
         /**
-         * Selects a ruing based placement strategy for this structure set.
+         * Selects a ring based placement strategy for this structure set.
          */
         public RingPlacementBuilder placeRings(int distance, int spread, int count) {
             return new RingPlacementBuilder(List.copyOf(this.entries), distance, spread, count);
@@ -87,7 +87,7 @@ public abstract class StructureSetProviderBase extends RegistryProviderBase {
          * Builds the {@link StructureSet}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<StructureSet> place(StructurePlacement placement) {
@@ -186,7 +186,7 @@ public abstract class StructureSetProviderBase extends RegistryProviderBase {
          * Builds the {@link StructureSet}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<StructureSet> build() {
@@ -234,7 +234,7 @@ public abstract class StructureSetProviderBase extends RegistryProviderBase {
          * Builds the {@link StructureSet}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<StructureSet> build() {

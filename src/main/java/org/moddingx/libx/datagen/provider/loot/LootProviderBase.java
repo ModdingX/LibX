@@ -125,7 +125,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     
     /**
      * Creates a default loot table for the given item. Can be overridden to alter
-     * default behaviour. Should return null if no loot table should be generated.
+     * default behavior. Should return null if no loot table should be generated.
      */
     @Nullable
     protected abstract LootTable.Builder defaultBehavior(T item);
@@ -301,7 +301,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
     }
     
     /**
-     * Creates a condition that is met when all of the given conditions are met.
+     * Creates a condition that is met when all the given conditions are met.
      */
     public LootItemCondition.Builder and(LootItemCondition.Builder... conditions) {
         return AllOfCondition.allOf(conditions);

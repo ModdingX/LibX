@@ -31,8 +31,8 @@ public class CodecHelper {
     }
 
     /**
-     * Wraps a value into a {@link DataResult}. If the {@link Supplier} does not throw, the result
-     * will be successful and contain the value. If the {@link Supplier} throws an exception, the
+     * Wraps a value into a {@link DataResult}. If the {@link Callable} does not throw, the result
+     * will be successful and contain the value. If the {@link Callable} throws an exception, the
      * result will be a failure with the error message of the exception.
      */
     public static <T> DataResult<T> doesNotThrow(Callable<T> value) {

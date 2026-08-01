@@ -49,10 +49,10 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
     }
     
     /**
-     * Makes a new {@link ConfiguredWorldCarver configured feature} without configuration.
+     * Makes a new {@link ConfiguredFeature configured feature} without configuration.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public Holder<ConfiguredFeature<?, ?>> feature(Feature<NoneFeatureConfiguration> feature) {
@@ -60,10 +60,10 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
     }
 
     /**
-     * Makes a new {@link ConfiguredWorldCarver configured feature}.
+     * Makes a new {@link ConfiguredFeature configured feature}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public <C extends FeatureConfiguration> Holder<ConfiguredFeature<?, ?>> feature(Feature<C> feature, C config) {
@@ -74,7 +74,7 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
      * Makes a new {@link ConfiguredWorldCarver configured carver}.
      *
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
     public <C extends CarverConfiguration> Holder<ConfiguredWorldCarver<?>> carver(WorldCarver<C> carver, C config) {
@@ -214,7 +214,7 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
          * Builds the {@link PlacedFeature}.
          *
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-         * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
+         * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         @Override
