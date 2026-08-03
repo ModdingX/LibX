@@ -71,7 +71,7 @@ public final class NetworkImpl extends NetworkX {
         } else {
             // We don't use PacketDistributor.sendToAllPlayers here because our payload is optional
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                if (this.canSend(player, BeUpdateHandler.TYPE)) {
+                if (this.canSend(player, ConfigShadowHandler.TYPE)) {
                     player.connection.send(msg);
                 }
             }
