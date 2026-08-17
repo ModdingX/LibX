@@ -12,5 +12,6 @@ public class LibXCoreMod implements ClassProcessorProvider {
         collector.add(new LevelLoad());
         collector.add(new RegisterClassIds());
         collector.add(new RegistryLoad());
+        collector.add(new TagLoad());
     }
 }

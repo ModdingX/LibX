@@ -31,9 +31,13 @@ public class DatagenRegistryLoader {
     }
 
     private static LayeredRegistryAccess<RegistryLayer> loadLayer(ResourceManager mgr, LayeredRegistryAccess<RegistryLayer> access, RegistryLayer layer, List<RegistryDataLoader.RegistryData<?>> registries) {
+        // Only the load of the registries themselves is marked as bootstrap, so the TagLoad coremod patch may allow
+        // their tags to reference elements that only a RegistryProvider creates. Tags of the static registries are
+        // loaded from the unmarked manager and keep their regular behavior.
+        ResourceManager registryManager = DatagenResourceManager.markRegistryBootstrap(mgr);
         // The registry loader is asynchronous now. Each layer must still be loaded and awaited on its own,
         // as the RegistryLoad coremod patch hooks in between the layers.
-        return access.replaceFrom(layer, RegistryDataLoader.load(mgr, TagLoader.buildUpdatedLookups(access.getAccessForLoading(layer), TagLoader.loadTagsForExistingRegistries(mgr, access.getLayer(RegistryLayer.STATIC))), registries, Util.backgroundExecutor()).join());
+        return access.replaceFrom(layer, RegistryDataLoader.load(registryManager, TagLoader.buildUpdatedLookups(access.getAccessForLoading(layer), TagLoader.loadTagsForExistingRegistries(mgr, access.getLayer(RegistryLayer.STATIC))), registries, Util.backgroundExecutor()).join());
     }
 
     @SuppressWarnings("UnstableApiUsage")
