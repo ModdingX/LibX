@@ -577,7 +577,8 @@ adds the stacks to the tab.</div>
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/RenderHelper.html#argb(int)" class="member-name-link">argb(int)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
 <dd>
-<div class="block">Sets the color to the given ARGB color in format 0xAARRGGBB</div>
+<div class="block">Sets the color, in format 0xAARRGGBB, used by subsequent calls to this class's own
+<a href="org/moddingx/libx/render/RenderHelper.html#repeatBlit(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)"><code>RenderHelper.repeatBlit(RenderPipeline, GuiGraphicsExtractor, int, int, int, int, TextureAtlasSprite)</code></a> and <a href="org/moddingx/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int)"><code>RenderHelper.renderGuiBackground(RenderPipeline, GuiGraphicsExtractor, int, int, int, int)</code></a> methods.</div>
 </dd>
 <dt><a href="org/moddingx/libx/base/decoration/HangingSignAccess.html#asItem()" class="member-name-link">asItem()</a> - Method in interface org.moddingx.libx.base.decoration.<a href="org/moddingx/libx/base/decoration/HangingSignAccess.html" title="interface in org.moddingx.libx.base.decoration">HangingSignAccess</a></dt>
 <dd>
@@ -6870,6 +6871,11 @@ things dynamically based on other objects, that have been passed to the system.<
 <dd>&nbsp;</dd>
 <dt><a href="org/moddingx/libx/render/RenderHelperFluid.html#renderFluid(net.minecraft.client.gui.GuiGraphicsExtractor,net.neoforged.neoforge.fluids.FluidStack,int,int,int,int)" class="member-name-link">renderFluid(GuiGraphicsExtractor, FluidStack, int, int, int, int)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelperFluid.html" title="class in org.moddingx.libx.render">RenderHelperFluid</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/target/RenderJob.html#renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)" class="member-name-link">renderGui(GuiGraphicsExtractor)</a> - Method in interface org.moddingx.libx.render.target.<a href="org/moddingx/libx/render/target/RenderJob.html" title="interface in org.moddingx.libx.render.target">RenderJob</a></dt>
+<dd>
+<div class="block">Renders GUI content (item icons, text, sprites, ...) for this scene using the modern
+<code>GuiGraphicsExtractor</code>-based GUI pipeline.</div>
+</dd>
 <dt><a href="org/moddingx/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int)" class="member-name-link">renderGuiBackground(RenderPipeline, GuiGraphicsExtractor, int, int, int, int)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
 <dd>
 <div class="block">Same as <a href="org/moddingx/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int,net.minecraft.resources.Identifier,int,int,int,int,int,int)"><code>renderGuiBackground</code></a> but with pre-set texture.</div>
@@ -7006,7 +7012,7 @@ in the registry.</div>
 </dd>
 <dt><a href="org/moddingx/libx/render/RenderHelper.html#resetColor()" class="member-name-link">resetColor()</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
 <dd>
-<div class="block">Resets the color to white.</div>
+<div class="block">Resets the color used by <a href="org/moddingx/libx/render/RenderHelper.html#repeatBlit(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)"><code>RenderHelper.repeatBlit(RenderPipeline, GuiGraphicsExtractor, int, int, int, int, TextureAtlasSprite)</code></a> and <a href="org/moddingx/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int)"><code>RenderHelper.renderGuiBackground(RenderPipeline, GuiGraphicsExtractor, int, int, int, int)</code></a> to white.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/DatagenSystem.PackTargetBuilder.html#resolveOutput(net.minecraft.server.packs.PackType,java.lang.String...)" class="member-name-link">resolveOutput(PackType, String...)</a> - Method in class org.moddingx.libx.datagen.<a href="org/moddingx/libx/datagen/DatagenSystem.PackTargetBuilder.html" title="class in org.moddingx.libx.datagen">DatagenSystem.PackTargetBuilder</a></dt>
 <dd>
@@ -7084,7 +7090,8 @@ state before they were shadowed by values from the server.</div>
 </dd>
 <dt><a href="org/moddingx/libx/render/RenderHelper.html#rgb(int)" class="member-name-link">rgb(int)</a> - Static method in class org.moddingx.libx.render.<a href="org/moddingx/libx/render/RenderHelper.html" title="class in org.moddingx.libx.render">RenderHelper</a></dt>
 <dd>
-<div class="block">Sets the color to the given RGB color in format 0xRRGGBB</div>
+<div class="block">Sets the color, in format 0xRRGGBB, used by subsequent calls to this class's own
+<a href="org/moddingx/libx/render/RenderHelper.html#repeatBlit(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int,net.minecraft.client.renderer.texture.TextureAtlasSprite)"><code>RenderHelper.repeatBlit(RenderPipeline, GuiGraphicsExtractor, int, int, int, int, TextureAtlasSprite)</code></a> and <a href="org/moddingx/libx/render/RenderHelper.html#renderGuiBackground(com.mojang.blaze3d.pipeline.RenderPipeline,net.minecraft.client.gui.GuiGraphicsExtractor,int,int,int,int)"><code>RenderHelper.renderGuiBackground(RenderPipeline, GuiGraphicsExtractor, int, int, int, int)</code></a> methods.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/NoiseProviderBase.GeneratorSettingsBuilder.RouterBuilder.html#ridges(net.minecraft.core.Holder)" class="member-name-link">ridges(Holder)</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/NoiseProviderBase.GeneratorSettingsBuilder.RouterBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">NoiseProviderBase.GeneratorSettingsBuilder.RouterBuilder</a></dt>
 <dd>&nbsp;</dd>
@@ -9209,6 +9216,10 @@ at the given position to all clients tracking the chunk.</div>
 </dd>
 <dt><a href="org/moddingx/libx/datagen/provider/sandbox/NoiseProviderBase.GeneratorSettingsBuilder.html#useLegacyRandomSource()" class="member-name-link">useLegacyRandomSource()</a> - Method in class org.moddingx.libx.datagen.provider.sandbox.<a href="org/moddingx/libx/datagen/provider/sandbox/NoiseProviderBase.GeneratorSettingsBuilder.html" title="class in org.moddingx.libx.datagen.provider.sandbox">NoiseProviderBase.GeneratorSettingsBuilder</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/moddingx/libx/render/target/RenderJob.html#usesGui()" class="member-name-link">usesGui()</a> - Method in interface org.moddingx.libx.render.target.<a href="org/moddingx/libx/render/target/RenderJob.html" title="interface in org.moddingx.libx.render.target">RenderJob</a></dt>
+<dd>
+<div class="block">Gets whether this render job uses <a href="org/moddingx/libx/render/target/RenderJob.html#renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)"><code>RenderJob.renderGui(GuiGraphicsExtractor)</code></a>.</div>
+</dd>
 <dt><a href="org/moddingx/libx/render/target/RenderJob.html#usesOverlay()" class="member-name-link">usesOverlay()</a> - Method in interface org.moddingx.libx.render.target.<a href="org/moddingx/libx/render/target/RenderJob.html" title="interface in org.moddingx.libx.render.target">RenderJob</a></dt>
 <dd>
 <div class="block">Gets whether this render job uses an overlay.</div>

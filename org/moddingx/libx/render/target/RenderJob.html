@@ -76,6 +76,8 @@ loadScripts(document, 'script');</script>
 <li><a href="#render(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource)" tabindex="0">render(PoseStack, MultiBufferSource)</a></li>
 <li><a href="#usesOverlay()" tabindex="0">usesOverlay()</a></li>
 <li><a href="#renderOverlay(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,org.moddingx.libx.render.target.RenderJob.Projector)" tabindex="0">renderOverlay(PoseStack, MultiBufferSource, RenderJob.Projector)</a></li>
+<li><a href="#renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)" tabindex="0">renderGui(GuiGraphicsExtractor)</a></li>
+<li><a href="#usesGui()" tabindex="0">usesGui()</a></li>
 </ol>
 </li>
 </ol>
@@ -158,26 +160,37 @@ loadScripts(document, 'script');</script>
 <div class="block">Renders the actual scene.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#renderOverlay(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,org.moddingx.libx.render.target.RenderJob.Projector)" class="member-name-link">renderOverlay</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
- net.minecraft.client.renderer.MultiBufferSource&nbsp;buffer,
- <a href="RenderJob.Projector.html" title="interface in org.moddingx.libx.render.target">RenderJob.Projector</a>&nbsp;projector)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)" class="member-name-link">renderGui</a><wbr>(net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">Renders an overlay over the scene.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://javadoc.io/doc/org.joml/joml/1.10.8/org/joml/Matrix4f.html" title="class or interface in org.joml" class="external-link">Matrix4f</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setupModelViewMatrix()" class="member-name-link">setupModelViewMatrix</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">The modelView matrix to use.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://javadoc.io/doc/org.joml/joml/1.10.8/org/joml/Matrix4f.html" title="class or interface in org.joml" class="external-link">Matrix4f</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setupProjectionMatrix()" class="member-name-link">setupProjectionMatrix</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">The projection matrix to use.</div>
+<div class="block">Renders GUI content (item icons, text, sprites, ...) for this scene using the modern
+<code>GuiGraphicsExtractor</code>-based GUI pipeline.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setupTransformation(com.mojang.blaze3d.vertex.PoseStack)" class="member-name-link">setupTransformation</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#renderOverlay(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,org.moddingx.libx.render.target.RenderJob.Projector)" class="member-name-link">renderOverlay</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack,
+ net.minecraft.client.renderer.MultiBufferSource&nbsp;buffer,
+ <a href="RenderJob.Projector.html" title="interface in org.moddingx.libx.render.target">RenderJob.Projector</a>&nbsp;projector)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Renders an overlay over the scene.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://javadoc.io/doc/org.joml/joml/1.10.8/org/joml/Matrix4f.html" title="class or interface in org.joml" class="external-link">Matrix4f</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setupModelViewMatrix()" class="member-name-link">setupModelViewMatrix</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">The modelView matrix to use.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://javadoc.io/doc/org.joml/joml/1.10.8/org/joml/Matrix4f.html" title="class or interface in org.joml" class="external-link">Matrix4f</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setupProjectionMatrix()" class="member-name-link">setupProjectionMatrix</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">The projection matrix to use.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setupTransformation(com.mojang.blaze3d.vertex.PoseStack)" class="member-name-link">setupTransformation</a><wbr>(com.mojang.blaze3d.vertex.PoseStack&nbsp;poseStack)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Sets up initial transformation on the <code>PoseStack</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#usesGui()" class="member-name-link">usesGui</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Gets whether this render job uses <a href="#renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)"><code>renderGui(GuiGraphicsExtractor)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#usesOverlay()" class="member-name-link">usesOverlay</a>()</code></div>
@@ -301,7 +314,13 @@ loadScripts(document, 'script');</script>
 <h3>setupModelViewMatrix</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://javadoc.io/doc/org.joml/joml/1.10.8/org/joml/Matrix4f.html" title="class or interface in org.joml" class="external-link">Matrix4f</a></span>&nbsp;<span class="element-name">setupModelViewMatrix</span>()</div>
-<div class="block">The modelView matrix to use. Do not confuse with the transformation matrix.</div>
+<div class="block">The modelView matrix to use. Do not confuse with the transformation matrix.
+
+<p>This is applied to <code>RenderSystem</code>'s global model-view matrix
+stack and is required to place content submitted through <a href="#render(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource)"><code>render(PoseStack, MultiBufferSource)</code></a>
+into the visible Z range of <a href="#setupProjectionMatrix()"><code>setupProjectionMatrix()</code></a>. It does not affect
+<a href="#renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)"><code>renderGui(GuiGraphicsExtractor)</code></a> - the model-view matrix stack is reset to identity for the
+duration of that call.</p></div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -381,6 +400,40 @@ over the scene. The viewport ranges from (0,0) to (width,height).
 </ul>
 </dd>
 </dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)">
+<h3>renderGui</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">renderGui</span><wbr><span class="parameters">(net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics)</span></div>
+<div class="block">Renders GUI content (item icons, text, sprites, ...) for this scene using the modern
+<code>GuiGraphicsExtractor</code>-based GUI pipeline. This is called once per invocation of
+this render job, after <a href="#render(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource)"><code>render(PoseStack, MultiBufferSource)</code></a> (and
+<a href="#renderOverlay(com.mojang.blaze3d.vertex.PoseStack,net.minecraft.client.renderer.MultiBufferSource,org.moddingx.libx.render.target.RenderJob.Projector)"><code>renderOverlay(PoseStack, MultiBufferSource, Projector)</code></a> if <a href="#usesOverlay()"><code>usesOverlay()</code></a>)
+have both completed. The extractor is backed by an isolated <code>GuiRenderState</code>/
+<code>GuiRenderer</code> pair scoped to render jobs — it does not interact with the real
+screen's GUI state. The viewport for this extractor ranges from (0,0) to (width,height).
+
+<b>In order for this to be called, <a href="#usesGui()"><code>usesGui()</code></a> must return <code>true</code></b></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="#usesGui()"><code>usesGui()</code></a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="usesGui()">
+<h3>usesGui</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">usesGui</span>()</div>
+<div class="block">Gets whether this render job uses <a href="#renderGui(net.minecraft.client.gui.GuiGraphicsExtractor)"><code>renderGui(GuiGraphicsExtractor)</code></a>.</div>
 </div>
 </section>
 </li>
