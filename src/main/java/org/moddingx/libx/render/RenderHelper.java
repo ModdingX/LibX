@@ -123,21 +123,27 @@ public class RenderHelper {
     }
 
     /**
-     * Sets the color to the given RGB color in format 0xRRGGBB
+     * Sets the color, in format 0xRRGGBB, used by subsequent calls to this class's own
+     * {@link #repeatBlit} and {@link #renderGuiBackground} methods. This does <b>not</b> affect
+     * the color of arbitrary {@code graphics.blit(...)} calls or any other rendering outside
+     * this class - there is no global shader-color mechanism in this Minecraft version to hook into.
      */
     public static void rgb(int color) {
         GUI_COLOR = 0xFF000000 | (color & 0xFFFFFF);
     }
 
     /**
-     * Sets the color to the given ARGB color in format 0xAARRGGBB
+     * Sets the color, in format 0xAARRGGBB, used by subsequent calls to this class's own
+     * {@link #repeatBlit} and {@link #renderGuiBackground} methods. This does <b>not</b> affect
+     * the color of arbitrary {@code graphics.blit(...)} calls or any other rendering outside
+     * this class - there is no global shader-color mechanism in this Minecraft version to hook into.
      */
     public static void argb(int color) {
         GUI_COLOR = color;
     }
 
     /**
-     * Resets the color to white.
+     * Resets the color used by {@link #repeatBlit} and {@link #renderGuiBackground} to white.
      */
     public static void resetColor() {
         GUI_COLOR = 0xFFFFFFFF;

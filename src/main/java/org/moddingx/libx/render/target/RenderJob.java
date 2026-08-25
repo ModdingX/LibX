@@ -2,6 +2,7 @@ package org.moddingx.libx.render.target;
 
 import com.mojang.blaze3d.ProjectionType;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
@@ -43,7 +44,13 @@ public interface RenderJob {
 
     /**
      * The modelView matrix to use. Do not confuse with the transformation matrix.
-     * 
+     *
+     * <p>This is applied to {@link com.mojang.blaze3d.systems.RenderSystem}'s global model-view matrix
+     * stack and is required to place content submitted through {@link #render(PoseStack, MultiBufferSource)}
+     * into the visible Z range of {@link #setupProjectionMatrix()}. It does not affect
+     * {@link #renderGui(GuiGraphicsExtractor)} - the model-view matrix stack is reset to identity for the
+     * duration of that call.</p>
+     *
      * @see #setupTransformation(PoseStack)
      */
     default Matrix4f setupModelViewMatrix() {
@@ -87,9 +94,33 @@ public interface RenderJob {
      * @see #usesOverlay()
      */
     default void renderOverlay(PoseStack poseStack, MultiBufferSource buffer, Projector projector) {
-        
+
     }
-    
+
+    /**
+     * Renders GUI content (item icons, text, sprites, ...) for this scene using the modern
+     * {@link GuiGraphicsExtractor}-based GUI pipeline. This is called once per invocation of
+     * this render job, after {@link #render(PoseStack, MultiBufferSource)} (and
+     * {@link #renderOverlay(PoseStack, MultiBufferSource, Projector)} if {@link #usesOverlay()})
+     * have both completed. The extractor is backed by an isolated {@code GuiRenderState}/
+     * {@code GuiRenderer} pair scoped to render jobs — it does not interact with the real
+     * screen's GUI state. The viewport for this extractor ranges from (0,0) to (width,height).
+     *
+     * <b>In order for this to be called, {@link #usesGui()} must return {@code true}</b>
+     *
+     * @see #usesGui()
+     */
+    default void renderGui(GuiGraphicsExtractor graphics) {
+
+    }
+
+    /**
+     * Gets whether this render job uses {@link #renderGui(GuiGraphicsExtractor)}.
+     */
+    default boolean usesGui() {
+        return false;
+    }
+
     interface Projector {
 
         /**

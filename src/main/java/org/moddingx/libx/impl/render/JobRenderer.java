@@ -13,8 +13,15 @@ import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.render.GuiRenderer;
 import net.minecraft.client.renderer.ProjectionMatrixBuffer;
 import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.client.renderer.SubmitNodeStorage;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import net.minecraft.client.renderer.fog.FogRenderer;
+import net.minecraft.client.renderer.state.WindowRenderState;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
@@ -26,6 +33,7 @@ import org.moddingx.libx.render.target.RenderJobFailedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class JobRenderer {
@@ -34,6 +42,31 @@ public class JobRenderer {
     public static final float GUI_MIN_Z = 0.0F;
     public static final float GUI_MAX_Z = 10000.0F;
     public static final float GUI_Z_NEAR = 1000.0F;
+
+    // Isolated GuiRenderState/GuiRenderer bridge used for RenderJob#renderGui, lazily created and
+    // reused across all render jobs (GuiRenderer.render() resets its GuiRenderState after every call).
+    // This is deliberately separate from the live GameRenderer#guiRenderer: a GuiRenderer is bound
+    // permanently to the GuiRenderState passed to its constructor, so reusing the live one would mean
+    // populating job content directly into the real game's actual GUI state.
+    private static GuiRenderState guiBridgeRenderState;
+    private static GuiRenderer guiBridgeRenderer;
+    private static FogRenderer guiBridgeFogRenderer;
+
+    private static void initGuiBridge() {
+        if (guiBridgeRenderer == null) {
+            Minecraft mc = Minecraft.getInstance();
+            guiBridgeRenderState = new GuiRenderState();
+            SubmitNodeStorage submitNodeStorage = new SubmitNodeStorage();
+            RenderBuffers guiBridgeBuffers = new RenderBuffers(1);
+            FeatureRenderDispatcher featureRenderDispatcher = new FeatureRenderDispatcher(
+                    submitNodeStorage, mc.getModelManager(), guiBridgeBuffers.bufferSource(), mc.getAtlasManager(),
+                    guiBridgeBuffers.outlineBufferSource(), guiBridgeBuffers.crumblingBufferSource(), mc.font,
+                    mc.gameRenderer.getGameRenderState()
+            );
+            guiBridgeFogRenderer = new FogRenderer();
+            guiBridgeRenderer = new GuiRenderer(guiBridgeRenderState, guiBridgeBuffers.bufferSource(), submitNodeStorage, featureRenderDispatcher, List.of());
+        }
+    }
 
     public static void renderJob(RenderJob job, CompletableFuture<NativeImage> future) {
         int width = job.width();
@@ -61,6 +94,14 @@ public class JobRenderer {
             GpuBufferSlice savedProjMatrix = RenderSystem.getProjectionMatrixBuffer();
             ProjectionType savedProjType = RenderSystem.getProjectionType();
 
+            // This matrix (translate(0,0,-11000) by default) is required to place PoseStack-authored
+            // content submitted through buffers.bufferSource() into the orthographic projection's visible
+            // Z clip range - see RenderJob#setupModelViewMatrix(). It must not be reset to identity here;
+            // doing so would clip out normal 3D content (e.g. RenderHelper.renderItem calls in job.render()).
+            // GuiRenderer.draw() itself hardcodes its own -11000 translation for backgrounds/text and never
+            // reads this matrix stack, but RenderType.draw() (used e.g. by GuiItemAtlas to render item icons)
+            // does read it - it is reset to identity around the guiBridgeRenderer.render() call below for
+            // exactly that reason, see the comment there.
             Matrix4fStack modelViewStack = RenderSystem.getModelViewStack();
             modelViewStack.pushMatrix();
             try {
@@ -85,36 +126,80 @@ public class JobRenderer {
 
                         Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_3D);
                         RenderHelper.resetColor();
+                        try {
+                            @Nullable
+                            Matrix4f transformationMatrix = overlay ? new Matrix4f(modelViewStack) : null;
+                            PoseStack poseStack = new PoseStack();
+                            job.setupTransformation(poseStack);
+                            if (overlay) {
+                                transformationMatrix.mul(poseStack.last().pose());
+                            }
 
-                        @Nullable
-                        Matrix4f transformationMatrix = overlay ? new Matrix4f(modelViewStack) : null;
-                        PoseStack poseStack = new PoseStack();
-                        job.setupTransformation(poseStack);
-                        if (overlay) {
-                            transformationMatrix.mul(poseStack.last().pose());
-                        }
-
-                        RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
-                        job.render(poseStack, buffers.bufferSource());
-                        buffers.bufferSource().endBatch();
-
-                        if (overlay) {
-                            modelViewStack.identity();
-                            modelViewStack.mul(new Matrix4f().translate(0, 0, GUI_Z_NEAR - GUI_MIN_Z));
-
-                            Matrix4f orthoMatrix = new Matrix4f().setOrtho(0, width, height, 0, GUI_Z_NEAR, GUI_Z_NEAR + GUI_MAX_Z - GUI_MIN_Z);
-                            RenderSystem.setProjectionMatrix(projBuffer.getBuffer(orthoMatrix), ProjectionType.ORTHOGRAPHIC);
-
-                            PoseStack overlayPoseStack = new PoseStack();
-                            Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_3D);
-
-                            RenderJob.Projector projector = new ProjectorImpl(projectionMatrix, transformationMatrix, 0, 0, width, height);
-                            job.renderOverlay(overlayPoseStack, buffers.bufferSource(), projector);
+                            RenderBuffers buffers = new RenderBuffers(Runtime.getRuntime().availableProcessors());
+                            job.render(poseStack, buffers.bufferSource());
                             buffers.bufferSource().endBatch();
-                        }
 
-                        takeNonOpaqueScreenshot(target, future);
-                        screenshotScheduled = true;
+                            if (overlay) {
+                                modelViewStack.identity();
+                                modelViewStack.mul(new Matrix4f().translate(0, 0, GUI_Z_NEAR - GUI_MIN_Z));
+
+                                Matrix4f orthoMatrix = new Matrix4f().setOrtho(0, width, height, 0, GUI_Z_NEAR, GUI_Z_NEAR + GUI_MAX_Z - GUI_MIN_Z);
+                                RenderSystem.setProjectionMatrix(projBuffer.getBuffer(orthoMatrix), ProjectionType.ORTHOGRAPHIC);
+
+                                PoseStack overlayPoseStack = new PoseStack();
+                                Minecraft.getInstance().gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_3D);
+
+                                RenderJob.Projector projector = new ProjectorImpl(projectionMatrix, transformationMatrix, 0, 0, width, height);
+                                job.renderOverlay(overlayPoseStack, buffers.bufferSource(), projector);
+                                buffers.bufferSource().endBatch();
+                            }
+
+                            if (job.usesGui()) {
+                                initGuiBridge();
+                                // GuiRenderer.draw() reads the live window's width/height/guiScale to build its
+                                // projection and draws into mc.getMainRenderTarget() (already swapped to target
+                                // above) - patch the shared window state to the job's dimensions for the duration
+                                // of this call. Safe: render jobs run synchronously on the render thread inside
+                                // Minecraft.execute(), never interleaved with the normal frame loop.
+                                WindowRenderState windowState = mc.gameRenderer.getGameRenderState().windowRenderState;
+                                int savedWidth = windowState.width;
+                                int savedHeight = windowState.height;
+                                int savedGuiScale = windowState.guiScale;
+                                windowState.width = width;
+                                windowState.height = height;
+                                windowState.guiScale = 1;
+                                try {
+                                    GuiGraphicsExtractor extractor = new GuiGraphicsExtractor(mc, guiBridgeRenderState, 0, 0);
+                                    job.renderGui(extractor);
+                                    // job.renderGui only queues state into the GuiRenderState - the actual GPU draws
+                                    // (including RenderType.draw calls GuiItemAtlas issues to render item icons into
+                                    // its atlas texture) happen inside guiBridgeRenderer.render() below. RenderType.draw
+                                    // bakes RenderSystem's global model-view matrix into every mesh it draws, so the
+                                    // outer job.setupModelViewMatrix() translation (still active here) must not leak
+                                    // into it - it would push item icons outside the atlas slot's own Z range, leaving
+                                    // them silently clipped while non-RenderType content (backgrounds, text) is
+                                    // unaffected, since GuiRenderer.draw() never reads this stack (see above).
+                                    modelViewStack.pushMatrix();
+                                    modelViewStack.identity();
+                                    try {
+                                        guiBridgeRenderer.render(guiBridgeFogRenderer.getBuffer(FogRenderer.FogMode.NONE));
+                                    } finally {
+                                        modelViewStack.popMatrix();
+                                    }
+                                } finally {
+                                    windowState.width = savedWidth;
+                                    windowState.height = savedHeight;
+                                    windowState.guiScale = savedGuiScale;
+                                }
+                            }
+
+                            takeNonOpaqueScreenshot(target, future);
+                            screenshotScheduled = true;
+                        } finally {
+                            // A RenderJob may call RenderHelper.rgb/argb without resetting it; reset here
+                            // so that doesn't leak into unrelated GUI rendering elsewhere in the game.
+                            RenderHelper.resetColor();
+                        }
                     } finally {
                         RenderSystem.outputColorTextureOverride = previousColorOverride;
                         RenderSystem.outputDepthTextureOverride = previousDepthOverride;
