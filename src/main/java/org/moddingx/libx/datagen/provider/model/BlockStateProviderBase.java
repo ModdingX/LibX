@@ -340,7 +340,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         }
     }
 
-    private BlockModelGenerators models() {
+    protected BlockModelGenerators models() {
         if (this.blockModels == null) throw new IllegalStateException("Not in registerModels call.");
         return this.blockModels;
     }
