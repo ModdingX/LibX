@@ -95,6 +95,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#fenceGateBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier)" tabindex="0">fenceGateBlock(Block, Identifier)</a></li>
 <li><a href="#doorBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier,net.minecraft.resources.Identifier)" tabindex="0">doorBlock(Block, Identifier, Identifier)</a></li>
 <li><a href="#trapdoorBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier,boolean)" tabindex="0">trapdoorBlock(Block, Identifier, boolean)</a></li>
+<li><a href="#models()" tabindex="0">models()</a></li>
 <li><a href="#createBlockModel(net.minecraft.resources.Identifier,net.minecraft.client.data.models.model.ModelTemplate,net.minecraft.client.data.models.model.TextureMapping)" tabindex="0">createBlockModel(Identifier, ModelTemplate, TextureMapping)</a></li>
 <li><a href="#blockModelId(net.minecraft.resources.Identifier)" tabindex="0">blockModelId(Identifier)</a></li>
 <li><a href="#blockModelId(net.minecraft.resources.Identifier,java.lang.String)" tabindex="0">blockModelId(Identifier, String)</a></li>
@@ -287,40 +288,43 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates a <code>Material</code> for the given texture.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pressurePlateBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier)" class="member-name-link">pressurePlateBlock</a><wbr>(net.minecraft.world.level.block.Block&nbsp;block,
- net.minecraft.resources.Identifier&nbsp;texture)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a block state and models for a pressure plate.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerModels(net.minecraft.client.data.models.BlockModelGenerators,net.minecraft.client.data.models.ItemModelGenerators)" class="member-name-link">registerModels</a><wbr>(net.minecraft.client.data.models.BlockModelGenerators&nbsp;blockModels,
- net.minecraft.client.data.models.ItemModelGenerators&nbsp;itemModels)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTranslucent(boolean)" class="member-name-link">setTranslucent</a><wbr>(boolean&nbsp;translucent)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets whether the <code>materials</code> generated from here on are marked as translucent.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setup()" class="member-name-link">setup</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>protected static net.minecraft.resources.Identifier</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#textureId(net.minecraft.resources.Identifier)" class="member-name-link">textureId</a><wbr>(net.minecraft.resources.Identifier&nbsp;blockId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>protected static net.minecraft.resources.Identifier</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#textureId(net.minecraft.resources.Identifier,java.lang.String)" class="member-name-link">textureId</a><wbr>(net.minecraft.resources.Identifier&nbsp;blockId,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;suffix)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#trapdoorBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier,boolean)" class="member-name-link">trapdoorBlock</a><wbr>(net.minecraft.world.level.block.Block&nbsp;block,
- net.minecraft.resources.Identifier&nbsp;texture,
- boolean&nbsp;orientable)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected net.minecraft.client.data.models.BlockModelGenerators</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#models()" class="member-name-link">models</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#wallBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier)" class="member-name-link">wallBlock</a><wbr>(net.minecraft.world.level.block.Block&nbsp;block,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pressurePlateBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier)" class="member-name-link">pressurePlateBlock</a><wbr>(net.minecraft.world.level.block.Block&nbsp;block,
  net.minecraft.resources.Identifier&nbsp;texture)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a block state and models for a pressure plate.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerModels(net.minecraft.client.data.models.BlockModelGenerators,net.minecraft.client.data.models.ItemModelGenerators)" class="member-name-link">registerModels</a><wbr>(net.minecraft.client.data.models.BlockModelGenerators&nbsp;blockModels,
+ net.minecraft.client.data.models.ItemModelGenerators&nbsp;itemModels)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTranslucent(boolean)" class="member-name-link">setTranslucent</a><wbr>(boolean&nbsp;translucent)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets whether the <code>materials</code> generated from here on are marked as translucent.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setup()" class="member-name-link">setup</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>protected static net.minecraft.resources.Identifier</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#textureId(net.minecraft.resources.Identifier)" class="member-name-link">textureId</a><wbr>(net.minecraft.resources.Identifier&nbsp;blockId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>protected static net.minecraft.resources.Identifier</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#textureId(net.minecraft.resources.Identifier,java.lang.String)" class="member-name-link">textureId</a><wbr>(net.minecraft.resources.Identifier&nbsp;blockId,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;suffix)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#trapdoorBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier,boolean)" class="member-name-link">trapdoorBlock</a><wbr>(net.minecraft.world.level.block.Block&nbsp;block,
+ net.minecraft.resources.Identifier&nbsp;texture,
+ boolean&nbsp;orientable)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#wallBlock(net.minecraft.world.level.block.Block,net.minecraft.resources.Identifier)" class="member-name-link">wallBlock</a><wbr>(net.minecraft.world.level.block.Block&nbsp;block,
+ net.minecraft.resources.Identifier&nbsp;texture)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -619,6 +623,14 @@ through here, so overriding this is the way to customize them beyond
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">trapdoorBlock</span><wbr><span class="parameters">(net.minecraft.world.level.block.Block&nbsp;block,
  net.minecraft.resources.Identifier&nbsp;texture,
  boolean&nbsp;orientable)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="models()">
+<h3>models</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">net.minecraft.client.data.models.BlockModelGenerators</span>&nbsp;<span class="element-name">models</span>()</div>
 </div>
 </section>
 </li>
