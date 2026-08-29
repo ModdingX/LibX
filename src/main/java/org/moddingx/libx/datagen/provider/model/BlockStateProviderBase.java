@@ -230,7 +230,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             generators.blockStateOutput.accept(
                     MultiVariantGenerator.dispatch(block, variant(model.get()))
-                            .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT)
+                            .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING)
             );
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.FACING)) {
             generators.blockStateOutput.accept(
