@@ -12,6 +12,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.moddingx.libx.annotation.meta.SuperChainRequired;
 import org.moddingx.libx.config.gui.EditorOps;
 
 import javax.annotation.Nonnull;
@@ -74,13 +75,27 @@ public abstract class Panel extends AbstractWidget implements ContainerEventHand
     public final void extractWidgetRenderState(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.pose().pushMatrix();
         graphics.pose().translate(this.getX(), this.getY());
-        for (Renderable widget : this.renderables) {
-            widget.extractRenderState(graphics, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
-        }
+        this.extractChildren(graphics, mouseX - this.getX(), mouseY - this.getY(), partialTicks);
         graphics.pose().popMatrix();
         this.extractWidgetContent(graphics, mouseX, mouseY, partialTicks);
     }
 
+    /**
+     * Extracts the render state of all widgets that were added to this panel. When this is called, the
+     * pose is already translated to the top-left corner of this panel and the given mouse position is
+     * relative to that corner as well.
+     */
+    protected void extractChildren(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+        for (Renderable widget : this.renderables) {
+            widget.extractRenderState(graphics, mouseX, mouseY, partialTicks);
+        }
+    }
+
+    /**
+     * Extracts the render state of the panel itself. This is called after the child widgets have been
+     * extracted. In contrast to {@link #extractChildren(GuiGraphicsExtractor, int, int, float)}, the pose
+     * is not translated here and the given mouse position is not relative to this panel.
+     */
     protected void extractWidgetContent(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         //
     }
