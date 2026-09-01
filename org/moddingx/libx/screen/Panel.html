@@ -71,6 +71,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#addWidget(T)" tabindex="0">addWidget(T)</a></li>
 <li><a href="#children()" tabindex="0">children()</a></li>
 <li><a href="#extractWidgetRenderState(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" tabindex="0">extractWidgetRenderState(GuiGraphicsExtractor, int, int, float)</a></li>
+<li><a href="#extractChildren(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" tabindex="0">extractChildren(GuiGraphicsExtractor, int, int, float)</a></li>
 <li><a href="#extractWidgetContent(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" tabindex="0">extractWidgetContent(GuiGraphicsExtractor, int, int, float)</a></li>
 <li><a href="#getChildAt(double,double)" tabindex="0">getChildAt(double, double)</a></li>
 <li><a href="#mouseClicked(net.minecraft.client.input.MouseButtonEvent,boolean)" tabindex="0">mouseClicked(MouseButtonEvent, boolean)</a></li>
@@ -199,69 +200,79 @@ the constructor.</div>
 <div class="block">Marks a widget as enabled or disabled.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractWidgetContent(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" class="member-name-link">extractWidgetContent</a><wbr>(net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractChildren(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" class="member-name-link">extractChildren</a><wbr>(net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics,
+ int&nbsp;mouseX,
+ int&nbsp;mouseY,
+ float&nbsp;partialTicks)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Extracts the render state of all widgets that were added to this panel.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractWidgetContent(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" class="member-name-link">extractWidgetContent</a><wbr>(net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics,
+ int&nbsp;mouseX,
+ int&nbsp;mouseY,
+ float&nbsp;partialTicks)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Extracts the render state of the panel itself.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractWidgetRenderState(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" class="member-name-link">extractWidgetRenderState</a><wbr>(net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics,
  int&nbsp;mouseX,
  int&nbsp;mouseY,
  float&nbsp;partialTicks)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractWidgetRenderState(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)" class="member-name-link">extractWidgetRenderState</a><wbr>(net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics,
- int&nbsp;mouseX,
- int&nbsp;mouseY,
- float&nbsp;partialTicks)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;net.minecraft.client.gui.components.events.GuiEventListener&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChildAt(double,double)" class="member-name-link">getChildAt</a><wbr>(double&nbsp;mouseX,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;net.minecraft.client.gui.components.events.GuiEventListener&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChildAt(double,double)" class="member-name-link">getChildAt</a><wbr>(double&nbsp;mouseX,
  double&nbsp;mouseY)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.client.gui.ComponentPath</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCurrentFocusPath()" class="member-name-link">getCurrentFocusPath</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.client.gui.components.events.GuiEventListener</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFocused()" class="member-name-link">getFocused</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.client.gui.ComponentPath</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCurrentFocusPath()" class="member-name-link">getCurrentFocusPath</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDragging()" class="member-name-link">isDragging</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.client.gui.components.events.GuiEventListener</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFocused()" class="member-name-link">getFocused</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyPressed(net.minecraft.client.input.KeyEvent)" class="member-name-link">keyPressed</a><wbr>(net.minecraft.client.input.KeyEvent&nbsp;event)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDragging()" class="member-name-link">isDragging</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyReleased(net.minecraft.client.input.KeyEvent)" class="member-name-link">keyReleased</a><wbr>(net.minecraft.client.input.KeyEvent&nbsp;event)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyPressed(net.minecraft.client.input.KeyEvent)" class="member-name-link">keyPressed</a><wbr>(net.minecraft.client.input.KeyEvent&nbsp;event)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseClicked(net.minecraft.client.input.MouseButtonEvent,boolean)" class="member-name-link">mouseClicked</a><wbr>(net.minecraft.client.input.MouseButtonEvent&nbsp;event,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#keyReleased(net.minecraft.client.input.KeyEvent)" class="member-name-link">keyReleased</a><wbr>(net.minecraft.client.input.KeyEvent&nbsp;event)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseClicked(net.minecraft.client.input.MouseButtonEvent,boolean)" class="member-name-link">mouseClicked</a><wbr>(net.minecraft.client.input.MouseButtonEvent&nbsp;event,
  boolean&nbsp;isDoubleClick)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseDragged(net.minecraft.client.input.MouseButtonEvent,double,double)" class="member-name-link">mouseDragged</a><wbr>(net.minecraft.client.input.MouseButtonEvent&nbsp;event,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseDragged(net.minecraft.client.input.MouseButtonEvent,double,double)" class="member-name-link">mouseDragged</a><wbr>(net.minecraft.client.input.MouseButtonEvent&nbsp;event,
  double&nbsp;dragX,
  double&nbsp;dragY)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseReleased(net.minecraft.client.input.MouseButtonEvent)" class="member-name-link">mouseReleased</a><wbr>(net.minecraft.client.input.MouseButtonEvent&nbsp;event)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseScrolled(double,double,double,double)" class="member-name-link">mouseScrolled</a><wbr>(double&nbsp;mouseX,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseReleased(net.minecraft.client.input.MouseButtonEvent)" class="member-name-link">mouseReleased</a><wbr>(net.minecraft.client.input.MouseButtonEvent&nbsp;event)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mouseScrolled(double,double,double,double)" class="member-name-link">mouseScrolled</a><wbr>(double&nbsp;mouseX,
  double&nbsp;mouseY,
  double&nbsp;scrollX,
  double&nbsp;scrollY)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.client.gui.ComponentPath</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent)" class="member-name-link">nextFocusPath</a><wbr>(net.minecraft.client.gui.navigation.FocusNavigationEvent&nbsp;event)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDragging(boolean)" class="member-name-link">setDragging</a><wbr>(boolean&nbsp;dragging)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.minecraft.client.gui.ComponentPath</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nextFocusPath(net.minecraft.client.gui.navigation.FocusNavigationEvent)" class="member-name-link">nextFocusPath</a><wbr>(net.minecraft.client.gui.navigation.FocusNavigationEvent&nbsp;event)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setFocused(boolean)" class="member-name-link">setFocused</a><wbr>(boolean&nbsp;focused)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDragging(boolean)" class="member-name-link">setDragging</a><wbr>(boolean&nbsp;dragging)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setFocused(net.minecraft.client.gui.components.events.GuiEventListener)" class="member-name-link">setFocused</a><wbr>(net.minecraft.client.gui.components.events.GuiEventListener&nbsp;focused)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setFocused(boolean)" class="member-name-link">setFocused</a><wbr>(boolean&nbsp;focused)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateWidgetNarration(net.minecraft.client.gui.narration.NarrationElementOutput)" class="member-name-link">updateWidgetNarration</a><wbr>(net.minecraft.client.gui.narration.NarrationElementOutput&nbsp;output)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setFocused(net.minecraft.client.gui.components.events.GuiEventListener)" class="member-name-link">setFocused</a><wbr>(net.minecraft.client.gui.components.events.GuiEventListener&nbsp;focused)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateWidgetNarration(net.minecraft.client.gui.narration.NarrationElementOutput)" class="member-name-link">updateWidgetNarration</a><wbr>(net.minecraft.client.gui.narration.NarrationElementOutput&nbsp;output)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -376,6 +387,21 @@ the constructor.</div>
 </section>
 </li>
 <li>
+<section class="detail" id="extractChildren(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)">
+<h3>extractChildren</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">extractChildren</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/com.google.code.findbugs/jsr305/3.0.2/javax/annotation/Nonnull.html" title="class or interface in javax.annotation" class="external-link">@Nonnull</a>
+ net.minecraft.client.gui.GuiGraphicsExtractor&nbsp;graphics,
+ int&nbsp;mouseX,
+ int&nbsp;mouseY,
+ float&nbsp;partialTicks)</span></div>
+<div class="block">Extracts the render state of all widgets that were added to this panel. When this is called, the
+pose is already translated to the top-left corner of this panel and the given mouse position is
+relative to that corner as well.</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="extractWidgetContent(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)">
 <h3>extractWidgetContent</h3>
 <div class="horizontal-scroll">
@@ -384,6 +410,9 @@ the constructor.</div>
  int&nbsp;mouseX,
  int&nbsp;mouseY,
  float&nbsp;partialTicks)</span></div>
+<div class="block">Extracts the render state of the panel itself. This is called after the child widgets have been
+extracted. In contrast to <a href="#extractChildren(net.minecraft.client.gui.GuiGraphicsExtractor,int,int,float)"><code>extractChildren(GuiGraphicsExtractor, int, int, float)</code></a>, the pose
+is not translated here and the given mouse position is not relative to this panel.</div>
 </div>
 </section>
 </li>
