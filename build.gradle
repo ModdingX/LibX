@@ -1,22 +1,28 @@
 plugins {
-    id 'org.moddingx.modgradle.meta' version '5.0.2'
-    id 'org.moddingx.modgradle.javadoc' version '5.0.2'
+    id 'org.moddingx.modgradle.meta' version '5.1.5'
+    id 'org.moddingx.modgradle.javadoc' version '5.1.5'
+}
+
+sourceSets {
+    ap
+    sourcegen
+    main { java.srcDirs += [file('./src/generated/java')] }
 }
 
 configurations {
-    apCompileOnly
-    apCompileOnlyResolvable.extendsFrom apCompileOnly
+    apCompileOnlyResolvable {
+        canBeResolved = true
+        canBeConsumed = false
+        extendsFrom configurations.apCompileOnly
+    }
 }
 
 dependencies {
     apCompileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
-sourceSets {
-    ap { compileClasspath = configurations.apCompileOnlyResolvable }
-    sourcegen { compileClasspath = configurations.compileClasspath }
-    main { java.srcDirs += [ file('./src/generated/java') ] }
-}
+sourceSets.ap.compileClasspath = configurations.apCompileOnlyResolvable
+sourceSets.sourcegen.compileClasspath = configurations.compileClasspath
 
 mod.configure {
     modid 'libx'
@@ -70,6 +76,7 @@ dependencies {
     
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.2'
 }
 
 compileJava.options.compilerArgs += [
@@ -110,5 +117,11 @@ task release {
         compileJava.options.compilerArgs += [
                 '-Amod.properties.release=true'
         ]
+    }
+}
+
+tasks.withType(Javadoc).configureEach {
+    javadocTool = javaToolchains.javadocToolFor {
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
