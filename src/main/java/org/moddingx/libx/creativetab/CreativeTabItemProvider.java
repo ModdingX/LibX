@@ -15,5 +15,5 @@ public interface CreativeTabItemProvider {
     /**
      * Returns a {@link Stream} of {@link ItemStack item stacks} to add to a creative tab.
      */
-    Stream<ItemStack> makeCreativeTabStacks();
+    Stream<ItemStack> makeCreativeTabStacks(CreativeTabX.TabContext ctx);
 }

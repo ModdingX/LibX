@@ -6,6 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import org.moddingx.libx.creativetab.CreativeTabItemProvider;
+import org.moddingx.libx.creativetab.CreativeTabX;
 
 import java.util.stream.Stream;
 
@@ -29,7 +30,7 @@ public class SpawnEggItemBase extends SpawnEggItem implements CreativeTabItemPro
     }
 
     @Override
-    public Stream<ItemStack> makeCreativeTabStacks() {
+    public Stream<ItemStack> makeCreativeTabStacks(CreativeTabX.TabContext ctx) {
         return Stream.of(new ItemStack(this));
     }
 }

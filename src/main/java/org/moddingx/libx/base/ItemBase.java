@@ -3,6 +3,7 @@ package org.moddingx.libx.base;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.moddingx.libx.creativetab.CreativeTabItemProvider;
+import org.moddingx.libx.creativetab.CreativeTabX;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
 
@@ -22,7 +23,7 @@ public class ItemBase extends Item implements CreativeTabItemProvider {
     }
 
     @Override
-    public Stream<ItemStack> makeCreativeTabStacks() {
+    public Stream<ItemStack> makeCreativeTabStacks(CreativeTabX.TabContext ctx) {
         return Stream.of(new ItemStack(this));
     }
 }
