@@ -1,6 +1,7 @@
 package org.moddingx.libx.creativetab;
 
 import net.minecraft.world.item.ItemStack;
+import org.moddingx.libx.annotation.meta.RemoveIn;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.base.ItemBase;
 
@@ -12,8 +13,16 @@ import java.util.stream.Stream;
  */
 public interface CreativeTabItemProvider {
 
+    @Deprecated(forRemoval = true)
+    @RemoveIn(minecraft = "26.1.2")
+    default Stream<ItemStack> makeCreativeTabStacks() {
+        throw new UnsupportedOperationException(this.getClass().getName() + " implements neither makeCreativeTabStacks(TabContext) nor the deprecated makeCreativeTabStacks()");
+    }
+
     /**
      * Returns a {@link Stream} of {@link ItemStack item stacks} to add to a creative tab.
      */
-    Stream<ItemStack> makeCreativeTabStacks();
+    default Stream<ItemStack> makeCreativeTabStacks(CreativeTabX.TabContext ctx) {
+        return this.makeCreativeTabStacks();
+    }
 }

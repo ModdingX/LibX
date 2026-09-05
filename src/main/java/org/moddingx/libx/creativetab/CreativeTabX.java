@@ -101,7 +101,7 @@ public abstract class CreativeTabX {
      * Adds all items from the current mod, that match a predicate into the tab using a custom order.
      */
     protected void addModItems(TabContext ctx, Comparator<Item> order, Predicate<Item> items) {
-        this.addModItemStacks(ctx, order, item -> items.test(item) ? this.itemStream(item) : Stream.empty());
+        this.addModItemStacks(ctx, order, item -> items.test(item) ? this.itemStream(ctx, item) : Stream.empty());
     }
     
     /**
@@ -135,10 +135,10 @@ public abstract class CreativeTabX {
             reg.register(this.id, this.tab);
         });
     }
-    
-    private Stream<ItemStack> itemStream(Item item) {
+
+    private Stream<ItemStack> itemStream(TabContext ctx, Item item) {
         if (item instanceof CreativeTabItemProvider provider) {
-            return provider.makeCreativeTabStacks();
+            return provider.makeCreativeTabStacks(ctx);
         } else {
             return Stream.of(new ItemStack(item));
         }

@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import org.moddingx.libx.creativetab.CreativeTabItemProvider;
+import org.moddingx.libx.creativetab.CreativeTabX;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.Registerable;
@@ -59,7 +60,7 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
     }
     
     @Override
-    public Stream<ItemStack> makeCreativeTabStacks() {
+    public Stream<ItemStack> makeCreativeTabStacks(CreativeTabX.TabContext ctx) {
         return Stream.of(new ItemStack(this));
     }
 
@@ -83,8 +84,8 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
         }
 
         @Override
-        public Stream<ItemStack> makeCreativeTabStacks() {
-            return BlockBase.this.makeCreativeTabStacks();
+        public Stream<ItemStack> makeCreativeTabStacks(CreativeTabX.TabContext ctx) {
+            return BlockBase.this.makeCreativeTabStacks(ctx);
         }
 
         @Override
