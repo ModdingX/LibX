@@ -30,7 +30,7 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
         int y = 5;
         int buttonWidth = Math.min(200, this.contentWidth() - 10);
         for (ConfigImpl config : this.configs) {
-            Button button = Button.builder(Component.literal(config.id.getPath()), b -> this.mc.setScreen(this.factory.apply(config)))
+            Button button = Button.builder(Component.literal(config.id.getPath()), b -> this.mc.gui.setScreen(this.factory.apply(config)))
                     .pos((this.width - buttonWidth) / 2, y)
                     .size(buttonWidth, 20)
                     .build();
@@ -43,7 +43,7 @@ public class ConfigSelectScreen extends ConfigBaseScreen {
     public boolean keyPressed(KeyEvent event) {
         // The manager is not available in the select screen, so we need to handle escape ourselves
         if (event.key() == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) {
-            this.mc.setScreen(this.root);
+            this.mc.gui.setScreen(this.root);
             return true;
         } else {
             return super.keyPressed(event);

@@ -26,6 +26,9 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.moddingx.libx.base.decoration.DecorationType;
+import org.moddingx.libx.base.decoration.HangingSignAccess;
+import org.moddingx.libx.base.decoration.SignAccess;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.impl.base.decoration.blocks.*;
 import org.moddingx.libx.mod.ModX;
@@ -212,21 +215,37 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         } else if (block instanceof DecoratedTrapdoorBlock) {
             this.trapdoorBlock(block, textureId(id), true);
         } else if (block instanceof DecoratedSign.Standing decorated) {
-            Identifier particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
-            Identifier signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(this.material(particle)));
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
+            TextureMapping mapping = this.signMapping(textureId(id), decorated.parent);
+            generators.blockStateOutput.accept(BlockModelGenerators.createSign(block,
+                    variant(this.createBlockModel(blockModelId(id, "_rot_0"), ModelTemplates.SIGN_ROT_0, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_rot_1"), ModelTemplates.SIGN_ROT_1, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_rot_2"), ModelTemplates.SIGN_ROT_2, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_rot_3"), ModelTemplates.SIGN_ROT_3, mapping))
+            ));
         } else if (block instanceof DecoratedSign.Wall decorated) {
-            Identifier particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
-            Identifier signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(this.material(particle)));
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
+            SignAccess sign = decorated.parent.get(DecorationType.SIGN);
+            TextureMapping mapping = this.signMapping(textureId(blockId(sign.getStandingBlock())), decorated.parent);
+            Identifier signModel = this.createBlockModel(blockModelId(id), ModelTemplates.WALL_SIGN, mapping);
+            generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, variant(signModel))
+                    .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
         } else if (block instanceof DecoratedHangingSign.Ceiling decorated) {
-            Identifier particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
-            Identifier signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(this.material(particle)));
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
+            TextureMapping mapping = this.signMapping(textureId(id), decorated.parent);
+            generators.blockStateOutput.accept(BlockModelGenerators.createHangingSign(block,
+                    variant(this.createBlockModel(blockModelId(id, "_rot_0"), ModelTemplates.HANGING_SIGN_ROT_0, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_rot_1"), ModelTemplates.HANGING_SIGN_ROT_1, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_rot_2"), ModelTemplates.HANGING_SIGN_ROT_2, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_rot_3"), ModelTemplates.HANGING_SIGN_ROT_3, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_attached_rot_0"), ModelTemplates.ATTACHED_HANGING_SIGN_ROT_0, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_attached_rot_1"), ModelTemplates.ATTACHED_HANGING_SIGN_ROT_1, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_attached_rot_2"), ModelTemplates.ATTACHED_HANGING_SIGN_ROT_2, mapping)),
+                    variant(this.createBlockModel(blockModelId(id, "_attached_rot_3"), ModelTemplates.ATTACHED_HANGING_SIGN_ROT_3, mapping))
+            ));
         } else if (block instanceof DecoratedHangingSign.Wall decorated) {
-            Identifier particle = textureId(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(decorated.parent)));
-            Identifier signModel = this.createBlockModel(blockModelId(id), ModelTemplates.PARTICLE_ONLY, TextureMapping.particle(this.material(particle)));
-            generators.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, variant(signModel)));
+            HangingSignAccess sign = decorated.parent.get(DecorationType.HANGING_SIGN);
+            TextureMapping mapping = this.signMapping(textureId(blockId(sign.getCeilingBlock())), decorated.parent);
+            Identifier signModel = this.createBlockModel(blockModelId(id), ModelTemplates.WALL_HANGING_SIGN, mapping);
+            generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, variant(signModel))
+                    .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
         } else if (block.getStateDefinition().getProperties().contains(BlockStateProperties.HORIZONTAL_FACING)) {
             generators.blockStateOutput.accept(
                     MultiVariantGenerator.dispatch(block, variant(model.get()))
@@ -340,6 +359,12 @@ public abstract class BlockStateProviderBase extends ModelProvider {
         }
     }
 
+    private TextureMapping signMapping(Identifier signTexture, Block particleBlock) {
+        return new TextureMapping()
+                .put(TextureSlot.ALL, this.material(signTexture))
+                .put(TextureSlot.PARTICLE, this.material(textureId(blockId(particleBlock))));
+    }
+
     protected BlockModelGenerators models() {
         if (this.blockModels == null) throw new IllegalStateException("Not in registerModels call.");
         return this.blockModels;
@@ -371,6 +396,10 @@ public abstract class BlockStateProviderBase extends ModelProvider {
             case 270 -> Quadrant.R270;
             default -> throw new IllegalArgumentException("Invalid rotation: " + rot);
         };
+    }
+
+    private static Identifier blockId(Block block) {
+        return Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
     }
 
     protected static Identifier blockModelId(Identifier blockId) {

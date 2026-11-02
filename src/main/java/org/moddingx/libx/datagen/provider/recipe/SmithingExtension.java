@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
-import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;

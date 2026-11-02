@@ -59,7 +59,7 @@ public record SurfaceRuleSet(boolean useDefaultNoiseSurface, SurfaceRules.RuleSo
                     if (!biomesWithRules.contains(biomeKey)) {
                         biomesWithRules.add(biomeKey);
                         rules.add(SurfaceRules.ifTrue(
-                                SurfaceRules.isBiome(biomeKey),
+                                SurfaceRules.isBiome(biomeRegistry, biomeKey),
                                 biomeSurface.get().value().rule()
                         ));
                     }
@@ -71,7 +71,7 @@ public record SurfaceRuleSet(boolean useDefaultNoiseSurface, SurfaceRules.RuleSo
         } else {
             //noinspection unchecked
             rules.add(SurfaceRules.ifTrue(
-                    SurfaceRules.not(SurfaceRules.isBiome(biomesWithRules.toArray(ResourceKey[]::new))),
+                    SurfaceRules.not(SurfaceRules.isBiome(biomeRegistry, biomesWithRules.toArray(ResourceKey[]::new))),
                     this.defaultBiomeSurface()
             ));
         }

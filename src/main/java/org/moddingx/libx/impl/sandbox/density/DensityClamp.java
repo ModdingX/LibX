@@ -12,7 +12,7 @@ public record DensityClamp(DensityFunction density, double min, double max) impl
 
     public static final KeyDispatchDataCodec<DensityClamp> CODEC = KeyDispatchDataCodec.of(
             RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("density").forGetter(DensityClamp::density),
+                    DensityFunction.CODEC.fieldOf("density").forGetter(DensityClamp::density),
                     Codec.DOUBLE.fieldOf("min").forGetter(DensityClamp::min),
                     Codec.DOUBLE.fieldOf("max").forGetter(DensityClamp::max)
             ).apply(instance, DensityClamp::new))
@@ -39,8 +39,8 @@ public record DensityClamp(DensityFunction density, double min, double max) impl
 
     @Nonnull
     @Override
-    public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return visitor.apply(new DensityClamp(this.density().mapAll(visitor), this.min(), this.max()));
+    public DensityFunction mapChildren(@Nonnull Visitor visitor) {
+        return new DensityClamp(visitor.apply(this.density()), this.min(), this.max());
     }
 
     @Override

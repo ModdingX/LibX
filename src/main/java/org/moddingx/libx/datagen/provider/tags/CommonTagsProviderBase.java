@@ -110,22 +110,22 @@ public abstract class CommonTagsProviderBase implements DataProvider {
     /**
      * Gets a {@link TagAppender tag appender} for an {@link Item}
      */
-    public TagAppender<Item, Item> item(TagKey<Item> tag) {
-        return this.itemTags.tag(tag);
+    public ElementTagAppender<Item> item(TagKey<Item> tag) {
+        return new ElementTagAppender<>(this.itemTags.tag(tag), BuiltInRegistries.ITEM);
     }
 
     /**
      * Gets a {@link TagAppender tag appender} for a {@link Block}
      */
-    public TagAppender<Block, Block> block(TagKey<Block> tag) {
-        return this.blockTags.tag(tag);
+    public ElementTagAppender<Block> block(TagKey<Block> tag) {
+        return new ElementTagAppender<>(this.blockTags.tag(tag), BuiltInRegistries.BLOCK);
     }
 
     /**
      * Gets a {@link TagAppender tag appender} for a {@link Fluid}
      */
-    public TagAppender<Fluid, Fluid> fluid(TagKey<Fluid> tag) {
-        return this.fluidTags.tag(tag);
+    public ElementTagAppender<Fluid> fluid(TagKey<Fluid> tag) {
+        return new ElementTagAppender<>(this.fluidTags.tag(tag), BuiltInRegistries.FLUID);
     }
 
     /**
@@ -188,9 +188,12 @@ public abstract class CommonTagsProviderBase implements DataProvider {
             }
             // Add fluid copies
             for (Pair<TagKey<Fluid>, TagKey<Block>> copy : CommonTagsProviderBase.this.fluidCopies) {
-                TagAppender<Block, Block> builder = this.tag(copy.getRight());
+                TagAppender<Block> builder = this.tag(copy.getRight());
                 for (Identifier entry : CommonTagsProviderBase.this.fluidTags.getTagInfo(copy.getLeft())) {
-                    BuiltInRegistries.FLUID.getOptional(entry).ifPresent(fluid -> builder.add(fluid.defaultFluidState().createLegacyBlock().getBlock()));
+                    BuiltInRegistries.FLUID.getOptional(entry).ifPresent(fluid -> {
+                        Block block = fluid.defaultFluidState().createLegacyBlock().getBlock();
+                        builder.add(BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
+                    });
                 }
             }
         }
@@ -204,7 +207,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public TagAppender<Block, Block> tag(@Nonnull TagKey<Block> tag) {
+        public TagAppender<Block> tag(@Nonnull TagKey<Block> tag) {
             return super.tag(tag);
         }
 
@@ -245,7 +248,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public TagAppender<Item, Item> tag(@Nonnull TagKey<Item> tag) {
+        public TagAppender<Item> tag(@Nonnull TagKey<Item> tag) {
             return super.tag(tag);
         }
 
@@ -288,7 +291,7 @@ public abstract class CommonTagsProviderBase implements DataProvider {
 
         @Override
         @Nonnull
-        public TagAppender<Fluid, Fluid> tag(@Nonnull TagKey<Fluid> tag) {
+        public TagAppender<Fluid> tag(@Nonnull TagKey<Fluid> tag) {
             return super.tag(tag);
         }
 

@@ -1,6 +1,5 @@
 package org.moddingx.libx.impl.base.decoration.blocks;
 
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.core.BlockPos;
@@ -88,8 +87,6 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
     @Override
     public void setupClient(SetupContext ctx) {
         BlockEntityRenderers.register(this.beType, HangingSignRenderer::new);
-        // Add sign texture to sheet.
-        ctx.enqueue(() -> Sheets.addWoodType(this.parent.getMaterialProperties().woodType()));
     }
 
     @Nonnull

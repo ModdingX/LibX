@@ -2,18 +2,18 @@ package org.moddingx.libx.datagen.provider.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -22,19 +22,15 @@ import java.util.concurrent.CompletableFuture;
  * {@link #setup() setup}. With {@link #defaultTags(Object)}, you can add default tags
  * that can be retrieved from the element.
  */
-public abstract class TagProviderBase<T> extends IntrinsicHolderTagsProvider<T> {
+public abstract class TagProviderBase<T> extends TagsProvider<T> {
 
     protected final ModX mod;
     private final Registry<T> registry;
-    
+
     protected TagProviderBase(DatagenContext ctx, ResourceKey<? extends Registry<T>> registryKey) {
-        this(ctx, registryKey, ctx.registries().registry(registryKey), CompletableFuture.completedFuture(ctx.registries().registryAccess()));
-    }
-    
-    private TagProviderBase(DatagenContext ctx, ResourceKey<? extends Registry<T>> registryKey, Registry<T> registry, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(ctx.output(), registryKey, lookupProvider, (T value) -> ResourceKey.create(registry.key(), Objects.requireNonNull(registry.getKey(value), () -> "Value not registered: " + value)), ctx.mod().modid);
+        super(ctx.output(), registryKey, CompletableFuture.completedFuture(ctx.registries().registryAccess()), ctx.mod().modid);
         this.mod = ctx.mod();
-        this.registry = registry;
+        this.registry = ctx.registries().registry(registryKey);
     }
 
     @Nonnull
@@ -52,6 +48,12 @@ public abstract class TagProviderBase<T> extends IntrinsicHolderTagsProvider<T> 
                 .sorted(Comparator.comparing(entry -> entry.getKey().identifier()))
                 .map(Map.Entry::getValue)
                 .forEach(this::defaultTags);
+    }
+
+    @Nonnull
+    @Override
+    public ElementTagAppender<T> tag(@Nonnull TagKey<T> tag) {
+        return new ElementTagAppender<>(super.tag(tag), this.registry);
     }
 
     /**

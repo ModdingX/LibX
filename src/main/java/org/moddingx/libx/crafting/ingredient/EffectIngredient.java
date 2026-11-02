@@ -122,7 +122,7 @@ public class EffectIngredient implements ICustomIngredient {
             for (MobEffectInstance effect : this.effects) {
                 if (!effectsLeft.removeIf(left -> (left.getEffect() == effect.getEffect())
                         && (left.getAmplifier() == effect.getAmplifier() || (this.higherAmplifier && left.getAmplifier() > effect.getAmplifier()))
-                        && (left.getEffect().value().isInstantenous() || left.getDuration() == effect.getDuration() || (this.higherDuration && left.getDuration() > effect.getDuration())))) {
+                        && (left.getEffect().value().isInstantaneous() || left.getDuration() == effect.getDuration() || (this.higherDuration && left.getDuration() > effect.getDuration())))) {
                     return false;
                 }
             }

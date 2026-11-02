@@ -270,7 +270,7 @@ public abstract class DimensionTypeProviderBase extends RegistryProviderBase {
                 this.minY,
                 this.height,
                 this.logicalHeight,
-                this.infiniburn,
+                DimensionTypeProviderBase.this.set(this.infiniburn),
                 this.ambientLight,
                 new DimensionType.MonsterSettings(this.monsterSpawnLightTest, this.monsterSpawnBlockLightLimit),
                 this.skybox,

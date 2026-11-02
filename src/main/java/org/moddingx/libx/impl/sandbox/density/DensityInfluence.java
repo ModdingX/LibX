@@ -11,9 +11,9 @@ public record DensityInfluence(DensityFunction base, DensityFunction modifier, D
 
     public static final KeyDispatchDataCodec<DensityInfluence> CODEC = KeyDispatchDataCodec.of(
             RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("base").forGetter(DensityInfluence::base),
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("modifier").forGetter(DensityInfluence::modifier),
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("influence").forGetter(DensityInfluence::influence),
+                    DensityFunction.CODEC.fieldOf("base").forGetter(DensityInfluence::base),
+                    DensityFunction.CODEC.fieldOf("modifier").forGetter(DensityInfluence::modifier),
+                    DensityFunction.CODEC.fieldOf("influence").forGetter(DensityInfluence::influence),
                     Codec.DOUBLE.optionalFieldOf("min_influence", -1d).forGetter(DensityInfluence::minInfluence),
                     Codec.DOUBLE.optionalFieldOf("max_influence", -1d).forGetter(DensityInfluence::maxInfluence)
             ).apply(instance, DensityInfluence::new))
@@ -45,8 +45,8 @@ public record DensityInfluence(DensityFunction base, DensityFunction modifier, D
 
     @Nonnull
     @Override
-    public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return visitor.apply(new DensityInfluence(this.base().mapAll(visitor), this.modifier().mapAll(visitor), this.influence().mapAll(visitor), this.minInfluence(), this.maxInfluence()));
+    public DensityFunction mapChildren(@Nonnull Visitor visitor) {
+        return new DensityInfluence(visitor.apply(this.base()), visitor.apply(this.modifier()), visitor.apply(this.influence()), this.minInfluence(), this.maxInfluence());
     }
 
     @Override

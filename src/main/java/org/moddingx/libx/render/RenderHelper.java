@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
@@ -150,22 +150,21 @@ public class RenderHelper {
     }
 
     /**
-     * Renders an {@link ItemStack} into a {@link MultiBufferSource}. This bridges the 1.21.10
-     * submission-based item rendering ({@link ItemStackRenderState}) back to a buffer source,
-     * which is needed inside {@link org.moddingx.libx.render.target.RenderJob#render}.
+     * Renders an {@link ItemStack} into a {@link SubmitNodeCollector}, for use inside
+     * {@link org.moddingx.libx.render.target.RenderJob#render}.
      *
      * @param stack          The item stack to render.
      * @param displayContext The display context (e.g. {@link ItemDisplayContext#GUI}).
      * @param poseStack      The current pose stack.
-     * @param buffer         The buffer source to render into.
+     * @param collector      The collector to submit the item to.
      * @param packedLight    Packed light value.
      * @param packedOverlay  Packed overlay value.
      */
-    public static void renderItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public static void renderItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector collector, int packedLight, int packedOverlay) {
         Minecraft mc = Minecraft.getInstance();
         ItemStackRenderState renderState = new ItemStackRenderState();
         mc.getItemModelResolver().updateForTopItem(renderState, stack, displayContext, mc.level, null, 0);
-        renderState.submit(poseStack, new MultiBufferSourceSubmitCollector(buffer), packedLight, packedOverlay, 0);
+        renderState.submit(poseStack, collector, packedLight, packedOverlay, 0);
     }
 
     /**

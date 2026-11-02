@@ -4,7 +4,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
-import net.minecraft.world.level.levelgen.blending.Blender;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -13,7 +12,7 @@ public class DensitySmash implements DensityFunction {
 
     public static final KeyDispatchDataCodec<DensitySmash> CODEC = KeyDispatchDataCodec.of(
             RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("density").forGetter(d -> d.wrapped),
+                    DensityFunction.CODEC.fieldOf("density").forGetter(d -> d.wrapped),
                     Direction.Axis.CODEC.fieldOf("axis").forGetter(d -> d.axis)
             ).apply(instance, DensitySmash::new))
     );
@@ -52,8 +51,8 @@ public class DensitySmash implements DensityFunction {
 
     @Nonnull
     @Override
-    public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return visitor.apply(new DensitySmash(this.wrapped.mapAll(visitor), this.axis));
+    public DensityFunction mapChildren(@Nonnull Visitor visitor) {
+        return new DensitySmash(visitor.apply(this.wrapped), this.axis);
     }
 
     @Override
@@ -142,12 +141,6 @@ public class DensitySmash implements DensityFunction {
         @Override
         public int blockZ() {
             return DensitySmash.this.axis == Direction.Axis.Z ? 0 : this.parent.blockZ();
-        }
-
-        @Nonnull
-        @Override
-        public Blender getBlender() {
-            return this.parent.getBlender();
         }
     }
     

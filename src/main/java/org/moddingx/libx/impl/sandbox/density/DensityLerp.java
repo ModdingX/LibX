@@ -12,9 +12,9 @@ public record DensityLerp(DensityFunction argument1, DensityFunction argument2, 
 
     public static final KeyDispatchDataCodec<DensityLerp> CODEC = KeyDispatchDataCodec.of(
             RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("argument1").forGetter(DensityLerp::argument1),
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("argument2").forGetter(DensityLerp::argument2),
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("niveau").forGetter(DensityLerp::niveau),
+                    DensityFunction.CODEC.fieldOf("argument1").forGetter(DensityLerp::argument1),
+                    DensityFunction.CODEC.fieldOf("argument2").forGetter(DensityLerp::argument2),
+                    DensityFunction.CODEC.fieldOf("niveau").forGetter(DensityLerp::niveau),
                     Codec.DOUBLE.optionalFieldOf("mean", 0d).forGetter(DensityLerp::mean),
                     Codec.DOUBLE.optionalFieldOf("deviation", 1d).forGetter(DensityLerp::deviation)
             ).apply(instance, DensityLerp::new))
@@ -50,8 +50,8 @@ public record DensityLerp(DensityFunction argument1, DensityFunction argument2, 
 
     @Nonnull
     @Override
-    public DensityFunction mapAll(@Nonnull Visitor visitor) {
-        return visitor.apply(new DensityLerp(this.argument1().mapAll(visitor), this.argument2().mapAll(visitor), this.niveau().mapAll(visitor), this.mean(), this.deviation()));
+    public DensityFunction mapChildren(@Nonnull Visitor visitor) {
+        return new DensityLerp(visitor.apply(this.argument1()), visitor.apply(this.argument2()), visitor.apply(this.niveau()), this.mean(), this.deviation());
     }
 
     @Override

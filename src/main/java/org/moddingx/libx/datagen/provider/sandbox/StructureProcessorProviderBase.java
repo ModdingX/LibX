@@ -83,7 +83,7 @@ public abstract class StructureProcessorProviderBase extends RegistryProviderBas
         }
         
         public ProcessorListBuilder keep(TagKey<Block> protectedBlocks) {
-            return this.add(new ProtectedBlockProcessor(protectedBlocks));
+            return this.add(new ProtectedBlockProcessor(StructureProcessorProviderBase.this.set(protectedBlocks)));
         }
         
         public ProcessorListBuilder ignore(List<Block> ignoredBlocks) {

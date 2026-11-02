@@ -117,7 +117,7 @@ public abstract class TextureProviderBase implements DataProvider {
      */
     public void sign(WoodType wood, Identifier log, Identifier planks) {
         Identifier woodId = Identifier.parse(wood.name());
-        this.sign(Identifier.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/" + woodId.getPath()), log, planks);
+        this.sign(Identifier.fromNamespaceAndPath(woodId.getNamespace(), "block/" + woodId.getPath() + "_sign"), log, planks);
     }
 
     /**
@@ -140,7 +140,7 @@ public abstract class TextureProviderBase implements DataProvider {
      */
     public void hangingSign(WoodType wood, Identifier strippedLog) {
         Identifier woodId = Identifier.parse(wood.name());
-        this.hangingSign(Identifier.fromNamespaceAndPath(woodId.getNamespace(), "entity/signs/hanging/" + woodId.getPath()), strippedLog);
+        this.hangingSign(Identifier.fromNamespaceAndPath(woodId.getNamespace(), "block/" + woodId.getPath() + "_hanging_sign"), strippedLog);
     }
 
     /**

@@ -39,7 +39,6 @@ public class InputEditor<T> implements ConfigEditor<T> {
     @Override
     public AbstractWidget updateWidget(Screen screen, AbstractWidget old, WidgetProperties<T> properties) {
         if (old instanceof InputWidget) {
-            //noinspection unchecked
             return new InputWidget<>(this.properties, this.validator, (InputWidget<T>) old, properties);
         } else {
             return this.createWidget(screen, this.defaultValue(), properties);
@@ -58,14 +57,6 @@ public class InputEditor<T> implements ConfigEditor<T> {
             this.validator = validator;
             this.setMaxLength(32767);
             this.setValue(initialValue);
-            this.setFilter(str -> {
-                for (char chr : str.toCharArray()) {
-                    if (!this.input.canInputChar(chr)) {
-                        return false;
-                    }
-                }
-                return true;
-            });
             this.setResponder(str -> {
                 if (this.last == null || !this.last.equals(str)) {
                     this.last = str;
@@ -75,6 +66,17 @@ public class InputEditor<T> implements ConfigEditor<T> {
                     }
                 }
             });
+        }
+
+        @Override
+        public void insertText(@Nonnull String text) {
+            for (char chr : text.toCharArray()) {
+                if (!this.input.canInputChar(chr)) {
+                    return;
+                }
+            }
+
+            super.insertText(text);
         }
 
         public InputWidget(InputProperties<T> input, ValidatorInfo<?> validator, T initialValue, WidgetProperties<T> properties) {

@@ -35,7 +35,7 @@ public class ConfigScreenManager {
     public void open(Screen screen) {
         if (screen != this.current()) {
             this.history.push(screen);
-            this.minecraft.setScreen(screen);
+            this.minecraft.gui.setScreen(screen);
         }
     }
     
@@ -47,10 +47,10 @@ public class ConfigScreenManager {
         if (!this.history.empty()) {
             this.history.pop();
             if (this.history.empty()) {
-                this.minecraft.setScreen(this.root);
+                this.minecraft.gui.setScreen(this.root);
                 this.display.save();
             } else {
-                this.minecraft.setScreen(this.history.peek());
+                this.minecraft.gui.setScreen(this.history.peek());
             }
         }
     }

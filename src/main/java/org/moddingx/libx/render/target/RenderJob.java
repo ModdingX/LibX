@@ -1,9 +1,10 @@
 package org.moddingx.libx.render.target;
 
 import com.mojang.blaze3d.ProjectionType;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -32,7 +33,8 @@ public interface RenderJob {
      * (Everything from 0 to image width/height is projected onto the image).
      */
     default Matrix4f setupProjectionMatrix() {
-        return new Matrix4f().setOrtho(0, this.width(), this.height(), 0, GUI_Z_NEAR, GUI_Z_NEAR + GUI_Z_RANGE);
+        boolean zZeroToOne = RenderSystem.getDevice().getDeviceInfo().isZZeroToOne();
+        return new Matrix4f().setOrtho(0, this.width(), this.height(), 0, GUI_Z_NEAR + GUI_Z_RANGE, GUI_Z_NEAR, zZeroToOne);
     }
 
     /**
@@ -46,7 +48,7 @@ public interface RenderJob {
      * The modelView matrix to use. Do not confuse with the transformation matrix.
      *
      * <p>This is applied to {@link com.mojang.blaze3d.systems.RenderSystem}'s global model-view matrix
-     * stack and is required to place content submitted through {@link #render(PoseStack, MultiBufferSource)}
+     * stack and is required to place content submitted through {@link #render(PoseStack, SubmitNodeCollector)}
      * into the visible Z range of {@link #setupProjectionMatrix()}. It does not affect
      * {@link #renderGui(GuiGraphicsExtractor)} - the model-view matrix stack is reset to identity for the
      * duration of that call.</p>
@@ -59,7 +61,7 @@ public interface RenderJob {
 
     /**
      * Sets up initial transformation on the {@link PoseStack}. These transformations will be accounted
-     * for when projecting points in {@link #renderOverlay(PoseStack, MultiBufferSource, Projector)}.
+     * for when projecting points in {@link #renderOverlay(PoseStack, SubmitNodeCollector, Projector)}.
      * 
      * @see #setupModelViewMatrix()
      */
@@ -70,12 +72,12 @@ public interface RenderJob {
     /**
      * Renders the actual scene.
      */
-    void render(PoseStack poseStack, MultiBufferSource buffer);
+    void render(PoseStack poseStack, SubmitNodeCollector collector);
 
     /**
      * Gets whether this render job uses an overlay.
      * 
-     * @see #renderOverlay(PoseStack, MultiBufferSource, Projector)
+     * @see #renderOverlay(PoseStack, SubmitNodeCollector, Projector)
      */
     default boolean usesOverlay() {
         return false;
@@ -89,19 +91,19 @@ public interface RenderJob {
      * <b>In order for this to be called, {@link #usesOverlay()} must return {@code true}</b>
      * 
      * @param projector A point projector that can project points in the 3 dimensional space used in
-     *                  {@link #render(PoseStack, MultiBufferSource)} to the two-dimensional space after projection.
+     *                  {@link #render(PoseStack, SubmitNodeCollector)} to the two-dimensional space after projection.
      * 
      * @see #usesOverlay()
      */
-    default void renderOverlay(PoseStack poseStack, MultiBufferSource buffer, Projector projector) {
+    default void renderOverlay(PoseStack poseStack, SubmitNodeCollector collector, Projector projector) {
 
     }
 
     /**
      * Renders GUI content (item icons, text, sprites, ...) for this scene using the modern
      * {@link GuiGraphicsExtractor}-based GUI pipeline. This is called once per invocation of
-     * this render job, after {@link #render(PoseStack, MultiBufferSource)} (and
-     * {@link #renderOverlay(PoseStack, MultiBufferSource, Projector)} if {@link #usesOverlay()})
+     * this render job, after {@link #render(PoseStack, SubmitNodeCollector)} (and
+     * {@link #renderOverlay(PoseStack, SubmitNodeCollector, Projector)} if {@link #usesOverlay()})
      * have both completed. The extractor is backed by an isolated {@code GuiRenderState}/
      * {@code GuiRenderer} pair scoped to render jobs — it does not interact with the real
      * screen's GUI state. The viewport for this extractor ranges from (0,0) to (width,height).

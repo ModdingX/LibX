@@ -19,7 +19,6 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositione
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.object.banner.BannerFlagModel;
 import net.minecraft.client.model.object.book.BookModel;
-import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.state.MapRenderState;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
@@ -37,10 +36,9 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
-import net.minecraft.world.level.block.state.properties.WoodType;
 import org.joml.Matrix3x2fStack;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import org.joml.Quaternionfc;
+import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -71,14 +69,16 @@ public class FilterGuiGraphicsExtractor extends GuiGraphicsExtractor {
         this.parent.applyCursor(window);
     }
 
+    // The GuiGraphicsExtractor constructor calls guiWidth()/guiHeight() to size its scissor stack,
+    // so these run before `parent` is assigned. Fall back to super until it is set.
     @Override
     public int guiWidth() {
-        return this.parent.guiWidth();
+        return this.parent == null ? super.guiWidth() : this.parent.guiWidth();
     }
 
     @Override
     public int guiHeight() {
-        return this.parent.guiHeight();
+        return this.parent == null ? super.guiHeight() : this.parent.guiHeight();
     }
 
     @Nonnull
@@ -318,12 +318,12 @@ public class FilterGuiGraphicsExtractor extends GuiGraphicsExtractor {
     }
 
     @Override
-    public void entity(@Nonnull EntityRenderState renderState, float scale, @Nonnull Vector3f translation, @Nonnull Quaternionf rotation, @Nullable Quaternionf overrideCameraAngle, int x0, int y0, int x1, int y1) {
+    public void entity(@Nonnull EntityRenderState renderState, float scale, @Nonnull Vector3fc translation, @Nonnull Quaternionfc rotation, @Nullable Quaternionfc overrideCameraAngle, int x0, int y0, int x1, int y1) {
         this.parent.entity(renderState, scale, translation, rotation, overrideCameraAngle, x0, y0, x1, y1);
     }
 
     @Override
-    public void skin(@Nonnull PlayerModel playerModel, @Nonnull Identifier texture, float scale, float rotationX, float rotationY, float pivotY, int x0, int y0, int x1, int y1) {
+    public void skin(@Nonnull Model.Simple playerModel, @Nonnull Identifier texture, float scale, float rotationX, float rotationY, float pivotY, int x0, int y0, int x1, int y1) {
         this.parent.skin(playerModel, texture, scale, rotationX, rotationY, pivotY, x0, y0, x1, y1);
     }
 
@@ -335,11 +335,6 @@ public class FilterGuiGraphicsExtractor extends GuiGraphicsExtractor {
     @Override
     public void bannerPattern(@Nonnull BannerFlagModel flag, @Nonnull DyeColor baseColor, @Nonnull BannerPatternLayers resultBannerPatterns, int x0, int y0, int x1, int y1) {
         this.parent.bannerPattern(flag, baseColor, resultBannerPatterns, x0, y0, x1, y1);
-    }
-
-    @Override
-    public void sign(@Nonnull Model.Simple signModel, float scale, @Nonnull WoodType woodType, int x0, int y0, int x1, int y1) {
-        this.parent.sign(signModel, scale, woodType, x0, y0, x1, y1);
     }
 
     @Override

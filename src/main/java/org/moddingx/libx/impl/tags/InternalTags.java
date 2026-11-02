@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.tags;
 
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -22,20 +23,20 @@ public class InternalTags {
         public static final TagKey<Item> LOGS = wrap(ItemTags.LOGS, Blocks.LOGS);
         public static final TagKey<Item> LOGS_THAT_BURN = wrap(ItemTags.LOGS_THAT_BURN, Blocks.LOGS_THAT_BURN);
         public static final TagKey<Item> WOODEN_BUTTONS = wrap(ItemTags.WOODEN_BUTTONS, Blocks.WOODEN_BUTTONS);
-        public static final TagKey<Item> STONE_BUTTONS = wrap(ItemTags.STONE_BUTTONS, Blocks.STONE_BUTTONS);
-        public static final TagKey<Item> BUTTONS = wrap(ItemTags.BUTTONS, Blocks.BUTTONS);
+        public static final TagKey<Item> STONE_BUTTONS = wrap(BlockItemTags.STONE_BUTTONS.item(), Blocks.STONE_BUTTONS);
+        public static final TagKey<Item> BUTTONS = wrap(BlockItemTags.BUTTONS.item(), Blocks.BUTTONS);
         public static final TagKey<Item> WOODEN_DOORS = wrap(ItemTags.WOODEN_DOORS, Blocks.WOODEN_DOORS);
         public static final TagKey<Item> WOODEN_STAIRS = wrap(ItemTags.WOODEN_STAIRS, Blocks.WOODEN_STAIRS);
         public static final TagKey<Item> WOODEN_SLABS = wrap(ItemTags.WOODEN_SLABS, Blocks.WOODEN_SLABS);
         public static final TagKey<Item> WOODEN_FENCES = wrap(ItemTags.WOODEN_FENCES, Blocks.WOODEN_FENCES);
         public static final TagKey<Item> WOODEN_PRESSURE_PLATES = wrap(ItemTags.WOODEN_PRESSURE_PLATES, Blocks.WOODEN_PRESSURE_PLATES);
         public static final TagKey<Item> WOODEN_TRAPDOORS = wrap(ItemTags.WOODEN_TRAPDOORS, Blocks.WOODEN_TRAPDOORS);
-        public static final TagKey<Item> DOORS = wrap(ItemTags.DOORS, Blocks.DOORS);
-        public static final TagKey<Item> STAIRS = wrap(ItemTags.STAIRS, Blocks.STAIRS);
-        public static final TagKey<Item> SLABS = wrap(ItemTags.SLABS, Blocks.SLABS);
+        public static final TagKey<Item> DOORS = wrap(BlockItemTags.DOORS.item(), Blocks.DOORS);
+        public static final TagKey<Item> STAIRS = wrap(BlockItemTags.STAIRS.item(), Blocks.STAIRS);
+        public static final TagKey<Item> SLABS = wrap(BlockItemTags.SLABS.item(), Blocks.SLABS);
         public static final TagKey<Item> WALLS = wrap(ItemTags.WALLS, Blocks.WALLS);
-        public static final TagKey<Item> TRAPDOORS = wrap(ItemTags.TRAPDOORS, Blocks.TRAPDOORS);
-        public static final TagKey<Item> FENCES = wrap(ItemTags.FENCES, Blocks.FENCES);
+        public static final TagKey<Item> TRAPDOORS = wrap(BlockItemTags.TRAPDOORS.item(), Blocks.TRAPDOORS);
+        public static final TagKey<Item> FENCES = wrap(BlockItemTags.FENCES.item(), Blocks.FENCES);
         public static final TagKey<Item> FENCE_GATES = wrap(ItemTags.FENCE_GATES, Blocks.FENCE_GATES);
         public static final TagKey<Item> SIGNS = wrap(ItemTags.SIGNS, Blocks.STANDING_SIGNS);
         public static final TagKey<Item> HANGING_SIGNS = wrap(ItemTags.HANGING_SIGNS, Blocks.CEILING_HANGING_SIGNS);
@@ -61,7 +62,7 @@ public class InternalTags {
         private static final Map<TagKey<Block>, TagKey<Block>> TAGS = new HashMap<>();
 
         public static final TagKey<Block> LOGS = wrap(BlockTags.LOGS);
-        public static final TagKey<Block> LOGS_THAT_BURN = wrap(BlockTags.LOGS_THAT_BURN);
+        public static final TagKey<Block> LOGS_THAT_BURN = wrap(BlockItemTags.LOGS_THAT_BURN.block());
         public static final TagKey<Block> WOODEN_BUTTONS = wrap(BlockTags.WOODEN_BUTTONS);
         public static final TagKey<Block> STONE_BUTTONS = wrap(BlockTags.STONE_BUTTONS);
         public static final TagKey<Block> BUTTONS = wrap(BlockTags.BUTTONS);

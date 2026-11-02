@@ -103,7 +103,7 @@ public class TextProcessor {
                     } else {
                         last: {
                             for (ChatFormatting tf : ChatFormatting.values()) {
-                                if (tf.getName().equalsIgnoreCase(part.strip())) {
+                                if (tf.name().equalsIgnoreCase(part.strip())) {
                                     style = style.withColor(tf);
                                     break last;
                                 }

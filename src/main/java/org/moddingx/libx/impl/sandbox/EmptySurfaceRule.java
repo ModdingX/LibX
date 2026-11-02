@@ -1,7 +1,6 @@
 package org.moddingx.libx.impl.sandbox;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 
 import javax.annotation.Nonnull;
@@ -17,8 +16,8 @@ public class EmptySurfaceRule implements SurfaceRules.RuleSource {
 
     @Nonnull
     @Override
-    public KeyDispatchDataCodec<? extends SurfaceRules.RuleSource> codec() {
-        return KeyDispatchDataCodec.of(CODEC);
+    public MapCodec<? extends SurfaceRules.RuleSource> codec() {
+        return CODEC;
     }
 
     @Nonnull

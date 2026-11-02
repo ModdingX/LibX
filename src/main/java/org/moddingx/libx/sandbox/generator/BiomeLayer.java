@@ -42,7 +42,7 @@ public record BiomeLayer(Climate.ParameterPoint range, DensityFunction density, 
             
     public static final Codec<BiomeLayer> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Climate.ParameterPoint.CODEC.fieldOf("range").forGetter(BiomeLayer::range),
-            DensityFunction.HOLDER_HELPER_CODEC.fieldOf("density").forGetter(BiomeLayer::density),
+            DensityFunction.CODEC.fieldOf("density").forGetter(BiomeLayer::density),
             ExtraCodecs.nonEmptyList(ENTRY_CODEC.listOf()).xmap(Climate.ParameterList::new, Climate.ParameterList::values).fieldOf("biomes").forGetter(BiomeLayer::biomes)
     ).apply(instance, BiomeLayer::new));
     

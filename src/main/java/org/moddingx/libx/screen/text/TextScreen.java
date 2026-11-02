@@ -108,6 +108,6 @@ public class TextScreen extends Screen {
 
     @Override
     protected void insertText(@Nonnull String text, boolean overwrite) {
-        Minecraft.getInstance().setScreen(new ChatScreen(text, false));
+        Minecraft.getInstance().gui.setScreen(new ChatScreen(text, false));
     }
 }
