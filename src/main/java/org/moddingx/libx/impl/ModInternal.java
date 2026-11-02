@@ -2,6 +2,7 @@ package org.moddingx.libx.impl;
 
 import com.mojang.serialization.Codec;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.CrashReportCallables;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -24,6 +25,8 @@ public class ModInternal {
     private static final Map<String, ModInternal> ID_MAP = new HashMap<>();
 
     public static ModInternal init(ModX mod) {
+        ModFileHashes.start();
+        CrashReportCallables.registerCrashCallable("Mod List", ModFileHashes::modListReport, () -> LibXConfig.appendHashesInCrashes);
         ModContainer modContainer = ModLoadingContext.get().getActiveContainer();
         if (!Objects.equals(modContainer.getModId(), mod.modid)) {
             throw new IllegalStateException("Mod entrypoint " + mod.modid + " (" + mod.getClass() + ") constructed while namespace " + modContainer.getModId() + " was active.");
