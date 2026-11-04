@@ -1,14 +1,15 @@
 package org.moddingx.libx.impl;
 
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.fml.loading.moddiscovery.ModFileInfo;
-import net.neoforged.neoforgespi.language.IModFileInfo;
 import net.neoforged.neoforgespi.language.IModInfo;
 import net.neoforged.neoforgespi.locating.IModFile;
 import org.moddingx.libx.LibX;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -31,11 +31,12 @@ public final class ModFileHashes {
     private static final int MURMUR2_SEED = 1;
     private static final int MURMUR2_M = 0x5bd1e995;
     private static final Map<Path, FileHashes> HASHES = new ConcurrentHashMap<>();
+    private static volatile Set<Path> MODS_DIR_FILES = Set.of();
     private static boolean STARTED = false;
 
     private ModFileHashes() {}
 
-    public static void start() {
+    public static synchronized void start() {
         if (STARTED) {
             return;
         }
@@ -44,13 +45,14 @@ public final class ModFileHashes {
         Path modsDir = FMLPaths.MODSDIR.get();
         Set<Path> modPaths = new LinkedHashSet<>();
 
-        for (IModFileInfo fileInfo : ModList.get().getModFiles()) {
-            Path path = ModFileHashes.normalize(fileInfo.getFile());
+        for (IModFile file : FMLLoader.getCurrent().getLoadingModList().getAllModFiles()) {
+            Path path = ModFileHashes.outermostPath(file);
             if (path.startsWith(modsDir) && Files.isRegularFile(path)) {
                 modPaths.add(path);
             }
         }
 
+        MODS_DIR_FILES = Collections.unmodifiableSet(modPaths);
         if (modPaths.isEmpty()) {
             return;
         }
@@ -74,26 +76,59 @@ public final class ModFileHashes {
     // ModList#crashReport replacement with additional SHA1 and Murmur2 hashes of each mod
     // to make recreating a modpack based on crash report easier
     public static String modListReport() {
-        return "\n" + ModList.get().applyForEachModFileAlphabetical(ModFileHashes::fileToLine)
-                .collect(Collectors.joining("\n\t\t", "\t\t", ""));
+        Set<Path> modPaths = new HashSet<>();
+        List<String> lines = ModList.get().applyForEachModFileAlphabetical(mf -> {
+            modPaths.add(ModFileHashes.outermostPath(mf));
+            return ModFileHashes.fileToLine(mf);
+        }).collect(Collectors.toCollection(ArrayList::new));
+
+        // Jars in the mods folder that provide no mod themselves, such as library bundles
+        MODS_DIR_FILES.stream()
+                .filter(path -> !modPaths.contains(path))
+                .sorted(Comparator.comparing(path -> path.getFileName().toString(), String.CASE_INSENSITIVE_ORDER))
+                .map(ModFileHashes::libraryToLine)
+                .forEach(lines::add);
+
+        return "\n" + lines.stream().collect(Collectors.joining("\n\t\t", "\t\t", ""));
     }
 
     private static String fileToLine(IModFile mf) {
         IModInfo mainMod = mf.getModInfos().getFirst();
-        FileHashes hashes = HASHES.get(ModFileHashes.normalize(mf));
 
-        return String.format(Locale.ENGLISH, "%-50.50s|%-30.30s|%-30.30s|%-20.20s|Manifest: %s|SHA1: %-40s|Murmur2: %s",
-                mf.getFileName(),
-                mainMod.getDisplayName(),
-                mainMod.getModId(),
-                mainMod.getVersion(),
+        return ModFileHashes.line(mf.getFileName(), mainMod.getDisplayName(), mainMod.getModId(),
+                mainMod.getVersion().toString(),
                 ((ModFileInfo) mf.getModFileInfo()).getCodeSigningFingerprint().orElse("NOSIGNATURE"),
+                HASHES.get(ModFileHashes.outermostPath(mf)));
+    }
+
+    private static String libraryToLine(Path path) {
+        return ModFileHashes.line(path.getFileName().toString(), "", "", "", "NOSIGNATURE", HASHES.get(path));
+    }
+
+    private static String line(String fileName, String displayName, String modId, String version, String signature, @Nullable FileHashes hashes) {
+        return String.format(Locale.ENGLISH, "%-50.50s|%-30.30s|%-30.30s|%-20.20s|Manifest: %s|SHA1: %-40s|Murmur2: %s",
+                fileName,
+                displayName,
+                modId,
+                version,
+                signature,
                 hashes == null ? "-" : hashes.sha1(),
                 hashes == null ? "-" : Long.toString(hashes.murmur2()));
     }
 
-    private static Path normalize(IModFile file) {
-        return file.getFilePath().toAbsolutePath().normalize();
+    // Nested jars have no path on disk of their own, so follow them up to the outermost file
+    private static Path outermostPath(IModFile file) {
+        IModFile outermost = file;
+        Set<IModFile> visited = new HashSet<>();
+        while (visited.add(outermost)) {
+            IModFile parent = outermost.getDiscoveryAttributes().parent();
+            if (parent == null) {
+                break;
+            }
+            outermost = parent;
+        }
+
+        return outermost.getFilePath().toAbsolutePath().normalize();
     }
 
     static FileHashes hashFile(Path path) throws IOException {
