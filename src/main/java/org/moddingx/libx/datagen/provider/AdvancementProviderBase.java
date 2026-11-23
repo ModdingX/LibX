@@ -29,6 +29,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.WithConditions;
 import org.moddingx.libx.datagen.DatagenContext;
@@ -51,7 +52,7 @@ import java.util.function.Supplier;
  * and {@link #advancement(String)} methods in {@link #setup() setup}.
  */
 public abstract class AdvancementProviderBase implements DataProvider {
-    
+
     protected final ModX mod;
     protected final PackTarget packTarget;
     private final RegistrySet registries;
@@ -66,9 +67,12 @@ public abstract class AdvancementProviderBase implements DataProvider {
         this.mod = ctx.mod();
         this.packTarget = ctx.target();
         this.registries = ctx.registries();
-        this.itemRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ITEM);
-        this.enchantmentRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-        this.entityRegistries = this.registries.registryAccess().lookupOrThrow(Registries.ENTITY_TYPE);
+        //noinspection UnstableApiUsage
+        this.itemRegistries = CommonHooks.wrapRegistryLookup(this.registries.registryAccess().lookupOrThrow(Registries.ITEM));
+        //noinspection UnstableApiUsage
+        this.enchantmentRegistries = CommonHooks.wrapRegistryLookup(this.registries.registryAccess().lookupOrThrow(Registries.ENCHANTMENT));
+        //noinspection UnstableApiUsage,NullableProblems
+        this.entityRegistries = CommonHooks.wrapRegistryLookup(this.registries.registryAccess().lookupOrThrow(Registries.ENTITY_TYPE));
     }
 
     public abstract void setup();
@@ -106,7 +110,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Gets an {@link AdvancementFactory} to customize the root {@link Advancement advancement} for
      * this provider. The root id will be the modid.
-     * 
+     *
      * @see #root(String, String)
      */
     public AdvancementFactory root() {
@@ -116,9 +120,8 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Gets an {@link AdvancementFactory} to customize the root {@link Advancement advancement} for
      * this provider.
-     * 
+     *
      * @param id The root id. The actual advancement id will be {@code modid:id/root}
-     * 
      * @see #root(String, String)
      */
     public AdvancementFactory root(String id) {
@@ -128,9 +131,9 @@ public abstract class AdvancementProviderBase implements DataProvider {
     /**
      * Gets an {@link AdvancementFactory} to customize the root {@link Advancement advancement} for
      * this provider.
-     * 
+     *
      * @param namespace The namespace of the root advancement.
-     * @param id The root id. The actual advancement id will be {@code namespace:id/root}
+     * @param id        The root id. The actual advancement id will be {@code namespace:id/root}
      */
     public AdvancementFactory root(String namespace, String id) {
         if (id.equals("recipes")) {
@@ -195,7 +198,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     public Criterion<?> items(ItemLike... items) {
         return this.items(Arrays.stream(items).map(this::stack).toArray(ItemPredicate[]::new));
     }
-    
+
     /**
      * Gets a {@link Criterion criterion} that requires all the given items to be in
      * the inventory at the same time.
@@ -204,7 +207,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     public final Criterion<?> items(TagKey<Item>... items) {
         return this.items(Arrays.stream(items).map(this::stack).toArray(ItemPredicate[]::new));
     }
-        
+
     /**
      * Gets a {@link Criterion criterion} that requires all the given items to be in
      * the inventory at the same time.
@@ -234,7 +237,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
     public TaskFactory itemTasks(ItemPredicate... items) {
         return () -> Arrays.stream(items).map(item -> List.<Criterion<?>>of(this.items(item))).toList();
     }
-    
+
     /**
      * Gets a {@link Criterion criterion} that requires a player to consume (eat/drink) any item.
      */
@@ -334,7 +337,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         EnchantmentPredicate enchantmentPredicate = new EnchantmentPredicate(this.enchantmentRegistries.getOrThrow(ench), MinMaxBounds.Ints.atLeast(min));
         return this.itemPredicate(null, List.of(enchantmentPredicate));
     }
-    
+
     private ItemPredicate applyEnchantments(@Nullable HolderSet<Item> items, ResourceKey<Enchantment>[] enchantments) {
         if (enchantments.length == 0) return this.itemPredicate(items, List.of());
         List<EnchantmentPredicate> enchantmentPredicates = Arrays.stream(enchantments)
@@ -389,7 +392,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
             this.parent = () -> null;
             this.telmetryEvent = false;
         }
-        
+
         private AdvancementFactory(Identifier id) {
             this.id = id;
             this.root = false;
@@ -443,7 +446,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         public AdvancementFactory display(ItemLike icon, AdvancementType type) {
             return this.display(new ItemStackTemplate(icon.asItem()), type);
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -467,7 +470,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         public AdvancementFactory display(ItemStackTemplate icon, AdvancementType type) {
             return this.display(icon, type, !this.root, !this.root, false);
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -479,7 +482,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
                     type, toast, chat, hidden
             );
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -487,7 +490,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         public AdvancementFactory display(ItemLike icon, Component title, Component description) {
             return this.display(new ItemStackTemplate(icon.asItem()), title, description);
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -495,7 +498,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         public AdvancementFactory display(ItemLike icon, Component title, Component description, AdvancementType type) {
             return this.display(new ItemStackTemplate(icon.asItem()), title, description, type);
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -503,7 +506,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         public AdvancementFactory display(ItemLike icon, Component title, Component description, AdvancementType type, boolean toast, boolean chat, boolean hidden) {
             return this.display(new ItemStackTemplate(icon.asItem()), title, description, type, toast, chat, hidden);
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -511,7 +514,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         public AdvancementFactory display(ItemStackTemplate icon, Component title, Component description) {
             return this.display(icon, title, description, AdvancementType.TASK);
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -519,7 +522,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
         public AdvancementFactory display(ItemStackTemplate icon, Component title, Component description, AdvancementType type) {
             return this.display(icon, title, description, type, !this.root, !this.root, false);
         }
-        
+
         /**
          * Sets the display info for this advancement. If {@code display} is not called, the
          * advancement won't be visible.
@@ -583,7 +586,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
             this.reward = reward;
             return this;
         }
-        
+
         public AdvancementFactory sendsTelmetryEvent() {
             this.telmetryEvent = true;
             return this;
@@ -667,7 +670,7 @@ public abstract class AdvancementProviderBase implements DataProvider {
 
         List<List<Criterion<?>>> apply();
     }
-    
+
     // null advancement means unknown
     private record AdvancementInfo(Identifier id, @Nullable Advancement advancement) {}
 }
