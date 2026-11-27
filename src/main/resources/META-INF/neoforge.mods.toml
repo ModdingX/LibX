@@ -9,6 +9,7 @@ displayName="${mod.name}"
 displayURL="${mod.source_url}"
 updateJSONURL="https://assets.melanx.de/updates/libx.json"
 authors="ModdingX"
+iconFile="${mod.modid}_icon.png"
 description='''
 A library mod for minecraft.
 '''
