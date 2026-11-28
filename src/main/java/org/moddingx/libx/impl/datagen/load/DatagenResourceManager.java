@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class DatagenResourceManager implements ResourceManager {
@@ -49,13 +48,13 @@ public class DatagenResourceManager implements ResourceManager {
 
     @Nonnull
     @Override
-    public Map<Identifier, Resource> listResources(@Nonnull String directory, @Nonnull Predicate<Identifier> filter) {
+    public Map<Identifier, Resource> listResources(@Nonnull String directory, ResourceManager.Selector filter) {
         return this.parent.listResources(directory, filter);
     }
 
     @Nonnull
     @Override
-    public Map<Identifier, List<Resource>> listResourceStacks(@Nonnull String directory, @Nonnull Predicate<Identifier> filter) {
+    public Map<Identifier, List<Resource>> listResourceStacks(@Nonnull String directory, @Nonnull ResourceManager.Selector filter) {
         return this.parent.listResourceStacks(directory, filter);
     }
 

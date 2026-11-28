@@ -18,7 +18,7 @@ public class PreviewWidget extends TextWidget {
 
     @Override
     public void extractWidgetRenderState(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        int color = this.getFGColor() | Mth.ceil(this.alpha * 255) << 24;
+        int color = (this.getLabelTextColor() & 0xFFFFFF) | Mth.ceil(this.alpha * 255) << 24;
         graphics.pose().pushMatrix();
         graphics.nextStratum();
         graphics.pose().translate(this.getX() + (this.width / 2f), this.getY() + ((this.height - 8) / 2f));

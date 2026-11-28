@@ -3,12 +3,13 @@ package org.moddingx.libx.impl.base.decoration.blocks;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.WallSignBlock;
@@ -24,6 +25,7 @@ import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 import org.moddingx.libx.registration.SetupContext;
+import org.moddingx.libx.util.game.CookingFuels;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,10 +37,10 @@ public class DecoratedSign implements Registerable, SignAccess {
 
     public final ModX mod;
     public final DecoratedBlock parent;
-    
+
     private final Standing standing;
     private final Wall wall;
-    private final SignItem item;
+    private final StandingAndWallBlockItem item;
     private final BlockEntityType<Entity> beType;
 
     public DecoratedSign(ModX mod, DecoratedBlock parent) {
@@ -63,12 +65,17 @@ public class DecoratedSign implements Registerable, SignAccess {
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.standing, this.wall));
 
-        Item.Properties itemProps = new Item.Properties().stacksTo(16).useBlockDescriptionPrefix();
+        Item.Properties itemProps = new Item.Properties().stacksTo(16).signText().useBlockDescriptionPrefix();
         if (signKey != null) {
             itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.identifier()));
         }
 
-        this.item = new SignItem(this.standing, this.wall, itemProps) {
+        int burnTime = (int) Math.round(this.parent.burnTime() * (2 / 3d)); // vanilla ratio is 2/3 of planks
+        if (burnTime > 0) {
+            CookingFuels.cookingFuel(itemProps, mod, burnTime);
+        }
+
+        this.item = new StandingAndWallBlockItem(this.standing, this.wall, Direction.DOWN, itemProps) {
             @Override
             public boolean isEnabled(@Nonnull FeatureFlagSet enabledFeatures) {
                 return parent.isEnabled(enabledFeatures);
@@ -113,12 +120,12 @@ public class DecoratedSign implements Registerable, SignAccess {
         if (this.beType == null) throw new IllegalStateException("Can't get sign block entity type before registration");
         return this.beType;
     }
-    
+
     public static class Standing extends StandingSignBlock {
 
         public final DecoratedBlock parent;
         private final Supplier<BlockEntityType<Entity>> beType;
-        
+
         public Standing(DecoratedBlock parent, Supplier<BlockEntityType<Entity>> beType, WoodType wood) {
             super(wood, DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent)));
             this.parent = parent;
@@ -137,7 +144,7 @@ public class DecoratedSign implements Registerable, SignAccess {
             return this.parent.isEnabled(enabledFeatures);
         }
     }
-    
+
     public static class Wall extends WallSignBlock {
 
         public final DecoratedBlock parent;
@@ -161,7 +168,7 @@ public class DecoratedSign implements Registerable, SignAccess {
             return this.parent.isEnabled(enabledFeatures);
         }
     }
-    
+
     public static class Entity extends SignBlockEntity {
 
         public Entity(BlockEntityType<? extends SignBlockEntity> type, BlockPos pos, BlockState state) {

@@ -1,6 +1,5 @@
 package org.moddingx.libx.datagen.provider.sandbox;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
@@ -14,13 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.carver.CarverConfiguration;
-import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.material.Fluids;
 import org.moddingx.libx.datagen.DatagenContext;
@@ -33,8 +27,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * SandBox provider for {@link ConfiguredFeature configured} and {@link PlacedFeature placed features}.
- *
+ * SandBox provider for {@link Feature features}, {@link WorldCarver carvers} and {@link PlacedFeature placed features}.
+ * <p>
  * This provider must run in the {@link DatagenStage#REGISTRY_SETUP registry setup} stage.
  */
 public abstract class FeatureProviderBase extends RegistryProviderBase {
@@ -47,47 +41,36 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
     public final String getName() {
         return this.mod.modid + " features";
     }
-    
+
     /**
-     * Makes a new {@link ConfiguredFeature configured feature} without configuration.
-     *
+     * Wraps a new {@link Feature} for registration.
+     * <p>
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
      * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
-    public Holder<ConfiguredFeature<?, ?>> feature(Feature<NoneFeatureConfiguration> feature) {
-        return this.feature(feature, NoneFeatureConfiguration.INSTANCE);
+    public Holder<Feature> feature(Feature feature) {
+        return this.registries.writableRegistry(Registries.FEATURE).createIntrusiveHolder(feature);
     }
 
     /**
-     * Makes a new {@link ConfiguredFeature configured feature}.
-     *
+     * Wraps a new {@link WorldCarver} for registration.
+     * <p>
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
      * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
      */
-    public <C extends FeatureConfiguration> Holder<ConfiguredFeature<?, ?>> feature(Feature<C> feature, C config) {
-        return this.registries.writableRegistry(Registries.CONFIGURED_FEATURE).createIntrusiveHolder(new ConfiguredFeature<>(feature, config));
-    }
-
-    /**
-     * Makes a new {@link ConfiguredWorldCarver configured carver}.
-     *
-     * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
-     * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
-     * {@code public}, non-{@code static} field inside the provider.
-     */
-    public <C extends CarverConfiguration> Holder<ConfiguredWorldCarver<?>> carver(WorldCarver<C> carver, C config) {
-        return this.registries.writableRegistry(Registries.CONFIGURED_CARVER).createIntrusiveHolder(new ConfiguredWorldCarver<>(carver, config));
+    public Holder<WorldCarver> carver(WorldCarver carver) {
+        return this.registries.writableRegistry(Registries.CARVER).createIntrusiveHolder(carver);
     }
 
     /**
      * Returns a new builder for a {@link PlacedFeature}.
      */
-    public PlacementBuilder placement(Holder<ConfiguredFeature<?, ?>> feature) {
+    public PlacementBuilder placement(Holder<Feature> feature) {
         return new PlacementBuilder(feature);
     }
-    
+
     /**
      * Returns a new builder for placement modifiers.
      */
@@ -96,13 +79,13 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
     }
 
     public abstract static class AnyPlacementBuilder<T> {
-        
+
         protected final List<PlacementModifier> modifiers;
 
         private AnyPlacementBuilder() {
             this.modifiers = new ArrayList<>();
         }
-        
+
         public AnyPlacementBuilder<T> count(int count) {
             if (count > 1) {
                 return this.count(ConstantInt.of(count));
@@ -110,7 +93,7 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
                 return this;
             }
         }
-        
+
         public AnyPlacementBuilder<T> count(int min, int max) {
             if (min == max) {
                 return this.count(min);
@@ -118,11 +101,11 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
                 return this.count(UniformInt.of(min, max));
             }
         }
-        
+
         public AnyPlacementBuilder<T> count(IntProvider count) {
             return this.add(CountPlacement.of(count));
         }
-        
+
         public AnyPlacementBuilder<T> countExtra(int base, float chance, int extra) {
             return this.add(PlacementUtils.countExtra(base, chance, extra));
         }
@@ -130,7 +113,7 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
         public AnyPlacementBuilder<T> rarity(int avgOnceEveryChunk) {
             return this.add(RarityFilter.onAverageOnceEvery(avgOnceEveryChunk));
         }
-        
+
         public AnyPlacementBuilder<T> noiseCount(int noiseToCount, double factor, double offset) {
             return this.add(NoiseBasedCountPlacement.of(noiseToCount, factor, offset));
         }
@@ -138,23 +121,23 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
         public AnyPlacementBuilder<T> noiseThresholdCount(double noiseLevel, int above, int below) {
             return this.add(NoiseThresholdCountPlacement.of(noiseLevel, above, below));
         }
-        
+
         public AnyPlacementBuilder<T> spread() {
             return this.add(InSquarePlacement.spread());
         }
-        
+
         public AnyPlacementBuilder<T> height(VerticalAnchor bottom, VerticalAnchor top) {
             return this.add(HeightRangePlacement.uniform(bottom, top));
         }
-        
+
         public AnyPlacementBuilder<T> heightTriangle(VerticalAnchor bottom, VerticalAnchor top) {
             return this.add(HeightRangePlacement.triangle(bottom, top));
         }
-        
+
         public AnyPlacementBuilder<T> heightmap(Heightmap.Types type) {
             return this.add(HeightmapPlacement.onHeightmap(type));
         }
-        
+
         public AnyPlacementBuilder<T> biomeFilter() {
             return this.add(BiomeFilter.biome());
         }
@@ -165,54 +148,54 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
                     BlockPredicate.matchesFluids(Fluids.EMPTY)
             )));
         }
-        
+
         public AnyPlacementBuilder<T> validGround(Block block) {
             return this.validGround(block.defaultBlockState());
         }
-        
+
         public AnyPlacementBuilder<T> validGround(BlockState state) {
             return this.add(BlockPredicateFilter.forPredicate(BlockPredicate.allOf(
-                    BlockPredicate.wouldSurvive(state, BlockPos.ZERO),
+                    BlockPredicate.wouldSurvive(state.getBlock()),
                     BlockPredicate.matchesFluids(Fluids.EMPTY)
             )));
         }
-        
+
         public AnyPlacementBuilder<T> waterDepth(int maxDepth) {
             return this.add(SurfaceWaterDepthFilter.forMaxDepth(maxDepth));
         }
-        
+
         public AnyPlacementBuilder<T> inAir() {
             return this.add(PlacementUtils.isEmpty());
         }
-        
+
         public AnyPlacementBuilder<T> add(PlacementModifiers modifiers) {
             return this.addAll(modifiers.modifiers);
         }
-        
+
         public AnyPlacementBuilder<T> add(PlacementModifier... modifiers) {
             this.modifiers.addAll(Arrays.asList(modifiers));
             return this;
         }
-        
+
         public AnyPlacementBuilder<T> addAll(Collection<PlacementModifier> modifiers) {
             this.modifiers.addAll(modifiers);
             return this;
         }
-        
+
         public abstract T build();
     }
-    
+
     public class PlacementBuilder extends AnyPlacementBuilder<Holder<PlacedFeature>> {
 
-        private final Holder<ConfiguredFeature<?, ?>> feature;
+        private final Holder<Feature> feature;
 
-        private PlacementBuilder(Holder<ConfiguredFeature<?, ?>> feature) {
+        private PlacementBuilder(Holder<Feature> feature) {
             this.feature = feature;
         }
 
         /**
          * Builds the {@link PlacedFeature}.
-         *
+         * <p>
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
          * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
@@ -222,21 +205,19 @@ public abstract class FeatureProviderBase extends RegistryProviderBase {
             return FeatureProviderBase.this.registries.writableRegistry(Registries.PLACED_FEATURE).createIntrusiveHolder(new PlacedFeature(this.feature, List.copyOf(this.modifiers)));
         }
     }
-    
+
     public static class ModifierBuilder extends AnyPlacementBuilder<PlacementModifiers> {
-        
-        private ModifierBuilder() {
-            
-        }
+
+        private ModifierBuilder() {}
 
         @Override
         public PlacementModifiers build() {
             return new PlacementModifiers(List.copyOf(this.modifiers));
         }
     }
-    
+
     public static class PlacementModifiers {
-        
+
         private final List<PlacementModifier> modifiers;
 
         public PlacementModifiers(List<PlacementModifier> modifiers) {

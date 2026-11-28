@@ -1,165 +1,66 @@
 package org.moddingx.libx.impl.sandbox.density;
 
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Direction;
-import net.minecraft.util.KeyDispatchDataCodec;
-import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.util.Interval;
+import net.minecraft.world.level.levelgen.densityfunction.*;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
 
-public class DensitySmash implements DensityFunction {
+// Evaluates the wrapped density function with one axis always set to 0.
+public record DensitySmash(DensityFunction wrapped, Direction.Axis axis) implements DensityFunction {
 
-    public static final KeyDispatchDataCodec<DensitySmash> CODEC = KeyDispatchDataCodec.of(
-            RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    DensityFunction.CODEC.fieldOf("density").forGetter(d -> d.wrapped),
-                    Direction.Axis.CODEC.fieldOf("axis").forGetter(d -> d.axis)
-            ).apply(instance, DensitySmash::new))
-    );
-    
-    private final DensityFunction wrapped;
-    private final Direction.Axis axis;
-    
-    private final SmashedContext context;
-    private final SmashedProvider provider;
-
-    public DensitySmash(DensityFunction wrapped, Direction.Axis axis) {
-        this.wrapped = wrapped;
-        this.axis = axis;
-        
-        this.context = new SmashedContext();
-        this.provider = new SmashedProvider();
-    }
+    public static final MapCodec<DensitySmash> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            DensityFunction.CODEC.fieldOf("density").forGetter(DensitySmash::wrapped),
+            Direction.Axis.CODEC.fieldOf("axis").forGetter(DensitySmash::axis)
+    ).apply(instance, DensitySmash::new));
 
     @Nonnull
     @Override
-    public KeyDispatchDataCodec<? extends DensityFunction> codec() {
+    public MapCodec<DensitySmash> codec() {
         return CODEC;
     }
 
+    @Nonnull
     @Override
-    public double compute(@Nonnull FunctionContext context) {
-        this.context.parent = context;
-        return this.wrapped.compute(this.context);
-    }
-
-    @Override
-    public void fillArray(@Nonnull double[] array, @Nonnull ContextProvider provider) {
-        this.provider.parent = provider;
-        this.wrapped.fillArray(array, provider);
+    public DensitySampler compileSampler(@Nonnull CompileContext context) {
+        return new Sampler(this.wrapped().compileSampler(context), this.axis());
     }
 
     @Nonnull
     @Override
-    public DensityFunction mapChildren(@Nonnull Visitor visitor) {
-        return new DensitySmash(visitor.apply(this.wrapped), this.axis);
-    }
-
-    @Override
-    public double minValue() {
-        return this.wrapped.minValue();
-    }
-
-    @Override
-    public double maxValue() {
-        return this.wrapped.maxValue();
+    public DensityFunction rewriteChildren(@Nonnull DfRewriteRule rule) {
+        DensityFunction wrapped = rule.rewrite(this.wrapped());
+        return wrapped == this.wrapped() ? this : new DensitySmash(wrapped, this.axis());
     }
 
     @Nonnull
     @Override
-    public DensityFunction clamp(double minValue, double maxValue) {
-        return new DensitySmash(this.wrapped.clamp(minValue, maxValue), this.axis);
-    }
-
-    @Nonnull
-    @Override
-    public DensityFunction abs() {
-        return new DensitySmash(this.wrapped.abs(), this.axis);
-    }
-
-    @Nonnull
-    @Override
-    public DensityFunction square() {
-        return new DensitySmash(this.wrapped.square(), this.axis);
-    }
-
-    @Nonnull
-    @Override
-    public DensityFunction cube() {
-        return new DensitySmash(this.wrapped.cube(), this.axis);
-    }
-
-    @Nonnull
-    @Override
-    public DensityFunction halfNegative() {
-        return new DensitySmash(this.wrapped.halfNegative(), this.axis);
-    }
-
-    @Nonnull
-    @Override
-    public DensityFunction quarterNegative() {
-        return new DensitySmash(this.wrapped.quarterNegative(), this.axis);
-    }
-
-    @Nonnull
-    @Override
-    public DensityFunction squeeze() {
-        return new DensitySmash(this.wrapped.squeeze(), this.axis);
+    public Interval range() {
+        return this.wrapped().range();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof DensitySmash other)) return false;
-        return Objects.equals(this.wrapped, other.wrapped) && this.axis == other.axis;
+    public int domainAxes() {
+        // The smashed axis is constant for the wrapped function
+        return this.wrapped().domainAxes() & ~DensityFunction.axesFrom(this.axis());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.wrapped, this.axis);
-    }
-
-    @Override
-    public String toString() {
-        return "DensitySmash[wrapped=" + this.wrapped + ", axis=" + this.axis + "]";
-    }
-
-    private class SmashedContext implements FunctionContext {
-        
-        private FunctionContext parent;
+    private record Sampler(DensitySampler wrapped, Direction.Axis axis) implements DensitySampler {
 
         @Override
-        public int blockX() {
-            return DensitySmash.this.axis == Direction.Axis.X ? 0 : this.parent.blockX();
+        public void sampleVolume(@Nonnull SamplerContext context, @Nonnull DensityBuffer outputBuffer, @Nonnull DensityVolume volume) {
+            DensitySampler.sampleVolumeNaive(context, outputBuffer, volume, this);
         }
 
         @Override
-        public int blockY() {
-            return DensitySmash.this.axis == Direction.Axis.Y ? 0 : this.parent.blockY();
-        }
-
-        @Override
-        public int blockZ() {
-            return DensitySmash.this.axis == Direction.Axis.Z ? 0 : this.parent.blockZ();
-        }
-    }
-    
-    private class SmashedProvider implements ContextProvider {
-        
-        private ContextProvider parent;
-
-        @Nonnull
-        @Override
-        public FunctionContext forIndex(int arrayIndex) {
-            DensitySmash.this.context.parent = this.parent.forIndex(arrayIndex);
-            return DensitySmash.this.context;
-        }
-
-        @Override
-        public void fillAllDirectly(@Nonnull double[] values, @Nonnull DensityFunction function) {
-            for(int i = 0; i < values.length; i++) {
-               values[i] = function.compute(this.forIndex(i));
-            }
+        public float sampleValue(@Nonnull SamplerContext context, int blockX, int blockY, int blockZ) {
+            return this.wrapped.sampleValue(context,
+                    this.axis == Direction.Axis.X ? 0 : blockX,
+                    this.axis == Direction.Axis.Y ? 0 : blockY,
+                    this.axis == Direction.Axis.Z ? 0 : blockZ
+            );
         }
     }
 }

@@ -29,7 +29,7 @@ public abstract non-sealed class TemplateExtensionProviderBase extends AnyTempla
      * Creates a builder for a {@link PoolExtension} on the given pool.
      */
     public ExtensionBuilder extension(Holder<StructureTemplatePool> pool) {
-        return this.extension(pool.unwrapKey().orElseThrow(() -> new IllegalStateException("Can't make biome surface: unbound biome holder: " + pool)));
+        return this.extension(pool.unwrapKey().orElseThrow(() -> new IllegalStateException("Can't make template pool extension: unbound template pool holder: " + pool)));
     }
     
     /**

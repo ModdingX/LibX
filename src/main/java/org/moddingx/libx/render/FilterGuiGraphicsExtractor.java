@@ -1,11 +1,11 @@
 package org.moddingx.libx.render;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.cursor.CursorType;
-import com.mojang.blaze3d.textures.GpuSampler;
-import com.mojang.blaze3d.textures.GpuTextureView;
 import com.mojang.datafixers.util.Either;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.textures.GpuSampler;
+import com.mojang.renderpearl.api.textures.GpuTextureView;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
@@ -198,13 +198,13 @@ public class FilterGuiGraphicsExtractor extends GuiGraphicsExtractor {
     }
 
     @Override
-    public void textWithWordWrap(@Nonnull Font font, @Nonnull FormattedText string, int x, int y, int width, int col) {
-        this.parent.textWithWordWrap(font, string, x, y, width, col);
+    public int textWithWordWrap(@Nonnull Font font, @Nonnull FormattedText string, int x, int y, int width, int col) {
+        return this.parent.textWithWordWrap(font, string, x, y, width, col);
     }
 
     @Override
-    public void textWithWordWrap(@Nonnull Font font, @Nonnull FormattedText string, int x, int y, int width, int col, boolean dropShadow) {
-        this.parent.textWithWordWrap(font, string, x, y, width, col, dropShadow);
+    public int textWithWordWrap(@Nonnull Font font, @Nonnull FormattedText string, int x, int y, int width, int col, boolean dropShadow) {
+        return this.parent.textWithWordWrap(font, string, x, y, width, col, dropShadow);
     }
 
     @Override
@@ -368,6 +368,11 @@ public class FilterGuiGraphicsExtractor extends GuiGraphicsExtractor {
     }
 
     @Override
+    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> textComponents, @Nonnull Optional<TooltipComponent> tooltipComponent, @Nonnull ItemStack stack, int mouseX, int mouseY, @Nullable Identifier backgroundTexture, boolean extraSpaceAfterFirstLine) {
+        this.parent.setTooltipForNextFrame(font, textComponents, tooltipComponent, stack, mouseX, mouseY, backgroundTexture, extraSpaceAfterFirstLine);
+    }
+
+    @Override
     public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> texts, @Nonnull Optional<TooltipComponent> optionalImage, int xo, int yo) {
         this.parent.setTooltipForNextFrame(font, texts, optionalImage, xo, yo);
     }
@@ -375,6 +380,11 @@ public class FilterGuiGraphicsExtractor extends GuiGraphicsExtractor {
     @Override
     public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> texts, @Nonnull Optional<TooltipComponent> optionalImage, int xo, int yo, @Nullable Identifier style) {
         this.parent.setTooltipForNextFrame(font, texts, optionalImage, xo, yo, style);
+    }
+
+    @Override
+    public void setTooltipForNextFrame(@Nonnull Font font, @Nonnull List<Component> texts, @Nonnull Optional<TooltipComponent> optionalImage, int xo, int yo, @Nullable Identifier style, boolean extraSpaceAfterFirstLine) {
+        this.parent.setTooltipForNextFrame(font, texts, optionalImage, xo, yo, style, extraSpaceAfterFirstLine);
     }
 
     @Override
@@ -438,13 +448,13 @@ public class FilterGuiGraphicsExtractor extends GuiGraphicsExtractor {
     }
 
     @Override
-    public void tooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> lines, int xo, int yo, @Nonnull ClientTooltipPositioner positioner, @Nullable Identifier style) {
-        this.parent.tooltip(font, lines, xo, yo, positioner, style);
+    public void tooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> lines, int xo, int yo, @Nonnull ClientTooltipPositioner positioner, @Nullable Identifier style, boolean extraSpaceAfterFirstLine) {
+        this.parent.tooltip(font, lines, xo, yo, positioner, style, extraSpaceAfterFirstLine);
     }
 
     @Override
-    public void tooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> lines, int xo, int yo, @Nonnull ClientTooltipPositioner positioner, @Nullable Identifier style, @Nonnull ItemStack tooltipStack) {
-        this.parent.tooltip(font, lines, xo, yo, positioner, style, tooltipStack);
+    public void tooltip(@Nonnull Font font, @Nonnull List<ClientTooltipComponent> lines, int xo, int yo, @Nonnull ClientTooltipPositioner positioner, @Nullable Identifier style, boolean extraSpaceAfterFirstLine, @Nonnull ItemStack tooltipStack) {
+        this.parent.tooltip(font, lines, xo, yo, positioner, style, extraSpaceAfterFirstLine, tooltipStack);
     }
 
     @Override

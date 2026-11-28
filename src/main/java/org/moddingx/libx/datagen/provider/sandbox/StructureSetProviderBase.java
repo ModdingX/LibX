@@ -8,10 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement;
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.*;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
@@ -99,7 +96,7 @@ public abstract class StructureSetProviderBase extends RegistryProviderBase {
         
         protected final List<StructureSet.StructureSelectionEntry> entries;
         protected float frequency;
-        protected StructurePlacement.FrequencyReductionMethod frequencyReduction;
+        protected AbstractSpreadingStructurePlacement.FrequencyReductionMethod frequencyReduction;
         protected Vec3i locateOffset;
         protected int salt;
         
@@ -119,13 +116,13 @@ public abstract class StructureSetProviderBase extends RegistryProviderBase {
          * Sets the frequency for the placement of this structure.
          */
         public T frequency(float frequency) {
-            return this.frequency(frequency, StructurePlacement.FrequencyReductionMethod.DEFAULT);
+            return this.frequency(frequency, AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT);
         }
         
         /**
          * Sets the frequency for the placement of this structure.
          */
-        public T frequency(float frequency, StructurePlacement.FrequencyReductionMethod frequencyReduction) {
+        public T frequency(float frequency, AbstractSpreadingStructurePlacement.FrequencyReductionMethod frequencyReduction) {
             this.frequency = frequency;
             this.frequencyReduction = frequencyReduction;
             return this.self();

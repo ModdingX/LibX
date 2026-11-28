@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryFileCodec;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -28,7 +28,7 @@ public class PoolExtension {
             ).codec().listOf().fieldOf("elements").forGetter(p -> p.elements)
     ).apply(instance, PoolExtension::new));
 
-    public static final Codec<Holder<PoolExtension>> CODEC = RegistryFileCodec.create(SandBox.TEMPLATE_POOL_EXTENSION, DIRECT_CODEC);
+    public static final Codec<Holder<PoolExtension>> CODEC = RegistryFileCodec.create(SandBox.TEMPLATE_POOL_EXTENSION, DIRECT_CODEC, true);
     
     private final ResourceKey<StructureTemplatePool> pool;
     private final boolean required;

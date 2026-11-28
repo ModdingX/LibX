@@ -140,8 +140,9 @@ public class RenderHelperBlock {
                 newUVs[i] = UVPair.pack(newU, newV);
             }
             BakedQuad.MaterialInfo newMaterial = new BakedQuad.MaterialInfo(
-                    newSprite, material.layer(), material.itemRenderType(), material.tintIndex(),
-                    material.shade(), material.lightEmission(), material.ambientOcclusion()
+                    newSprite, material.layer(), material.itemRenderType(), material.itemGlintRenderType(),
+                    material.itemGlintSpecialRenderType(), material.tintIndex(), material.shadeDirectionOverride(),
+                    material.lightEmission(), material.ambientOcclusion()
             );
             result = new BakedQuad(
                     quad.position0(), quad.position1(), quad.position2(), quad.position3(),

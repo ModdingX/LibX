@@ -26,12 +26,12 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.*;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.loot.LootBuilders;
 import org.moddingx.libx.datagen.provider.loot.entry.GenericLootModifier;
@@ -47,6 +47,7 @@ import java.util.*;
 public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
 
     private final HolderLookup<Item> items = this.registries.registry(Registries.ITEM);
+    private final HolderLookup<Block> blocks = this.registries.registry(Registries.BLOCK);
 
     protected BlockLootProviderBase(DatagenContext ctx) {
         super(ctx, "blocks", LootContextParamSets.BLOCK, Registries.BLOCK);
@@ -57,15 +58,15 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     protected LootTable.Builder defaultBehavior(Block block) {
         if (block.getStateDefinition().getPossibleStates().stream().anyMatch(this::needsLootTable)) {
             LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(block);
-            LootPool.Builder pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(entry)
+            LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(entry)
                     .when(ExplosionCondition.survivesExplosion());
             if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
-                pool = pool.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(
+                pool = pool.when(MatchBlock.blockMatches(this.blocks, block,
                         StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER)
                 ));
             }
             if (block.defaultBlockState().hasProperty(BlockStateProperties.BED_PART)) {
-                pool = pool.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(
+                pool = pool.when(MatchBlock.blockMatches(this.blocks, block,
                         StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.BED_PART, BedPart.HEAD)
                 ));
             }
@@ -88,7 +89,7 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
     @Override
     public void generateBaseTable(Block block, LootPoolEntryContainer.Builder<?> entry) {
         LootPool.Builder pool = LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1)).add(entry)
+                .setRolls(ContextIntProviders.exactly(1)).add(entry)
                 .when(ExplosionCondition.survivesExplosion());
         this.customLootTable(block, LootTable.lootTable().withPool(pool));
     }
@@ -396,8 +397,8 @@ public abstract class BlockLootProviderBase extends LootProviderBase<Block> {
         }
 
         @Override
-        public LootPoolEntryContainer.Builder<?> apply(Block item, LootPoolSingletonContainer.Builder<?> entry) {
-            return entry.when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(item).setProperties(this.builder));
+        public LootPoolEntryContainer.Builder<?> apply(Block item, UniformContainerBase.Builder<?> entry) {
+            return entry.when(MatchBlock.blockMatches(BlockLootProviderBase.this.blocks, item, this.builder));
         }
 
         @Override

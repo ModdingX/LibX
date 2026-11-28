@@ -1,13 +1,13 @@
 package org.moddingx.libx.impl.datagen.load;
 
 import net.minecraft.core.LayeredRegistryAccess;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagLoader;
 import net.minecraft.util.Util;
-import net.neoforged.neoforge.registries.DataPackRegistriesHooks;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.libxcore.CoreRegistryLoad;
 
@@ -22,10 +22,11 @@ public class DatagenRegistryLoader {
     public static RegistryAccess.Frozen loadRegistries(ResourceManager mgr, RegistrySelector selector) {
         LibX.logger.info("Start loading registries for datagen");
         LayeredRegistryAccess<RegistryLayer> access = RegistryLayer.createRegistryAccess();
-        access = loadLayer(mgr, access, RegistryLayer.WORLDGEN, getDataPackRegistries(RegistryLayer.WORLDGEN, selector));
+        access = loadLayer(mgr, access, RegistryLayer.WORLD, getDataPackRegistries(RegistryLayer.WORLD, selector));
         // Invoke our coremod patch here
         CoreRegistryLoad.afterWorldGenLayerLoad(access);
         access = loadLayer(mgr, access, RegistryLayer.DIMENSIONS, getDataPackRegistries(RegistryLayer.DIMENSIONS, selector));
+        access = loadLayer(mgr, access, RegistryLayer.RELOADABLE, getDataPackRegistries(RegistryLayer.RELOADABLE, selector));
         LibX.logger.info("Finished loading registries for datagen");
         return access.compositeAccess();
     }
@@ -37,7 +38,8 @@ public class DatagenRegistryLoader {
         ResourceManager registryManager = DatagenResourceManager.markRegistryBootstrap(mgr);
         // The registry loader is asynchronous now. Each layer must still be loaded and awaited on its own,
         // as the RegistryLoad coremod patch hooks in between the layers.
-        return access.replaceFrom(layer, RegistryDataLoader.load(registryManager, TagLoader.buildUpdatedLookups(access.getAccessForLoading(layer), TagLoader.loadTagsForExistingRegistries(mgr, access.getLayer(RegistryLayer.STATIC))), registries, Util.backgroundExecutor()).join());
+        List<Registry.PendingTags<?>> staticTags = TagLoader.loadTagsForExistingRegistries(mgr, access.getLayer(RegistryLayer.STATIC));
+        return access.replaceFrom(layer, RegistryDataLoader.load(registryManager, TagLoader.buildUpdatedLookups(access.getAccessForLoading(layer), staticTags), registries, Util.backgroundExecutor(), staticTags).join());
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -46,7 +48,7 @@ public class DatagenRegistryLoader {
             return Stream.concat(
                     Stream.concat(
                             getDataPackRegistries(RegistryLayer.STATIC, selector).stream(),
-                            getDataPackRegistries(RegistryLayer.WORLDGEN, selector).stream()
+                            getDataPackRegistries(RegistryLayer.WORLD, selector).stream()
                     ),
                     Stream.concat(
                             getDataPackRegistries(RegistryLayer.DIMENSIONS, selector).stream(),
@@ -55,9 +57,10 @@ public class DatagenRegistryLoader {
             ).toList();
         }
         List<RegistryDataLoader.RegistryData<?>> defaultRegistries = switch(layer) {
-            case STATIC, RELOADABLE -> List.of();
-            case WORLDGEN -> List.copyOf(DataPackRegistriesHooks.getDataPackRegistries());
+            case STATIC -> List.of();
+            case WORLD -> List.copyOf(RegistryDataLoader.WORLD_REGISTRIES);
             case DIMENSIONS -> List.copyOf(RegistryDataLoader.DIMENSION_REGISTRIES);
+            case RELOADABLE -> List.copyOf(RegistryDataLoader.RELOADABLE_REGISTRIES);
         };
         return selector == null ? defaultRegistries : List.copyOf(selector.selectRegistries(layer, defaultRegistries));
     }

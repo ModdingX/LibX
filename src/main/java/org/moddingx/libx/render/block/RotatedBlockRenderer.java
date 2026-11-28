@@ -19,7 +19,7 @@ public abstract class RotatedBlockRenderer<T extends BlockEntity, S extends Tran
     protected final void transform(@Nonnull S renderState, @Nonnull PoseStack poseStack) {
         float rot = renderState.blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180;
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-rot));
+        poseStack.rotate(Axis.YP.rotationDegrees(-rot));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
     }
 }

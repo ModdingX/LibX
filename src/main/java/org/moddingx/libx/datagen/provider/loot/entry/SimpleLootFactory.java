@@ -1,6 +1,6 @@
 package org.moddingx.libx.datagen.provider.loot.entry;
 
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.UniformContainerBase;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
@@ -16,12 +16,12 @@ public interface SimpleLootFactory<T> extends LootFactory<T> {
     /**
      * Gets a simple loot factory that will always return the given loot entry.
      */
-    static <T> SimpleLootFactory<T> from(LootPoolSingletonContainer.Builder<?> builder) {
+    static <T> SimpleLootFactory<T> from(UniformContainerBase.Builder<?> builder) {
         return item -> builder;
     }
 
     @Override
-    LootPoolSingletonContainer.Builder<?> build(T item);
+    UniformContainerBase.Builder<?> build(T item);
 
     default LootFactory<T> withFinal(GenericLootModifier<T> finalModifier) {
         return b -> finalModifier.apply(b, this.build(b));
@@ -31,7 +31,7 @@ public interface SimpleLootFactory<T> extends LootFactory<T> {
     default SimpleLootFactory<T> with(LootModifier<T>... modifiers) {
         return this.with(Arrays.stream(modifiers).toList());
     }
-    
+
     default SimpleLootFactory<T> with(List<LootModifier<T>> modifiers) {
         if (modifiers.isEmpty()) return this;
         LootModifier<T> chained = LootModifier.chain(modifiers.getFirst().element(), modifiers);
@@ -41,7 +41,7 @@ public interface SimpleLootFactory<T> extends LootFactory<T> {
     @Override
     default SimpleLootFactory<T> with(LootItemCondition.Builder... conditions) {
         return b -> {
-            LootPoolSingletonContainer.Builder<?> entry = this.build(b);
+            UniformContainerBase.Builder<?> entry = this.build(b);
             for (LootItemCondition.Builder condition : conditions) {
                 entry.when(condition);
             }
@@ -51,7 +51,7 @@ public interface SimpleLootFactory<T> extends LootFactory<T> {
 
     default SimpleLootFactory<T> with(LootItemConditionalFunction.Builder<?>... functions) {
         return item -> {
-            LootPoolSingletonContainer.Builder<?> entry = this.build(item);
+            UniformContainerBase.Builder<?> entry = this.build(item);
             for (LootItemConditionalFunction.Builder<?> function : functions) {
                 entry = entry.apply(function);
             }

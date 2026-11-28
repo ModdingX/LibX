@@ -3,6 +3,7 @@ package org.moddingx.libx.impl;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.DatagenSystem;
 import org.moddingx.libx.impl.datagen.FontLoadTest;
+import org.moddingx.libx.impl.datagen.InternalDataMapProvider;
 import org.moddingx.libx.impl.tags.InternalTagProvider;
 
 public class InternalDataGen {
@@ -11,6 +12,7 @@ public class InternalDataGen {
         DatagenSystem.create(LibX.getInstance(), system -> {
             system.addDataProvider(InternalTagProvider::new);
             system.addDataProvider(FontLoadTest::new);
+            system.addDataProvider(InternalDataMapProvider::new);
         });
     }
 }

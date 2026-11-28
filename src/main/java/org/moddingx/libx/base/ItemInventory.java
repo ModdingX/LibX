@@ -28,6 +28,7 @@ public class ItemInventory extends ItemBase implements Registerable {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
+        super.registerAdditional(ctx, builder);
         builder.register(null, new CapabilityInfo.Item<>(this, Capabilities.Item.ITEM, (_, access) -> new StackItemResourceHandler(this.inventorySize, access)));
     }
 }

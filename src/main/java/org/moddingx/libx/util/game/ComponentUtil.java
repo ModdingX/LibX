@@ -24,6 +24,7 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.FormattedCharSequence;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 public class ComponentUtil {
 
     private static final HoverEvent HOVER_COPY = new HoverEvent.ShowText(Component.translatable("libx.misc.copy"));
-    
+
     /**
      * Gets a {@link Component text component} as a string formatted with ANSI escape codes to
      * be printed on the console.
@@ -52,7 +53,7 @@ public class ComponentUtil {
         reset(sb);
         return sb.toString();
     }
-    
+
     private static void formattingCodes(StringBuilder sb, Style style) {
         if (style.getColor() != null) {
             int color = style.getColor().getValue();
@@ -94,7 +95,7 @@ public class ComponentUtil {
             }
         }
     }
-    
+
     private static void reset(StringBuilder sb) {
         sb.append("\u001B[0m");
     }
@@ -147,7 +148,7 @@ public class ComponentUtil {
     /**
      * Turns a {@link DataComponentMap} into a {@link Component} with syntax highlighting that can be used for display.
      *
-     * @param registry The registry in which the data component types for the {@link DataComponentMap data component map} are registered.
+     * @param registry       The registry in which the data component types for the {@link DataComponentMap data component map} are registered.
      * @param registryAccess A {@link RegistryAccess registry access} to provide access to datapack registries when encoding data component values.
      */
     public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, RegistryAccess registryAccess, DataComponentMap components) {
@@ -157,13 +158,18 @@ public class ComponentUtil {
     /**
      * Turns a {@link DataComponentPatch} into a {@link Component} with syntax highlighting that can be used for display.
      *
-     * @param registry The registry in which the data component types for the {@link DataComponentPatch data component patch} are registered.
+     * @param registry       The registry in which the data component types for the {@link DataComponentPatch data component patch} are registered.
      * @param registryAccess A {@link RegistryAccess registry access} to provide access to datapack registries when encoding data component values.
      */
     public static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, RegistryAccess registryAccess, DataComponentPatch patch) {
-        return toPrettyComponent(registry, registryAccess, patch.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue)));
+        Map<DataComponentType<?>, Optional<?>> map = new HashMap<>();
+        for (DataComponentType<?> type : patch.keySet()) {
+            map.put(type, Optional.ofNullable(patch.getPatch(type)));
+        }
+
+        return toPrettyComponent(registry, registryAccess, Collections.unmodifiableMap(map));
     }
-    
+
     private static Component toPrettyComponent(ResourceKey<Registry<DataComponentType<?>>> registry, RegistryAccess registryAccess, Map<DataComponentType<?>, Optional<?>> map) {
         Registry<DataComponentType<?>> theRegistry = registryAccess.lookup(registry).orElse(null);
         if (theRegistry == null) {
@@ -172,7 +178,7 @@ public class ComponentUtil {
         }
         if (theRegistry == null) throw new IllegalStateException("Registry not found: " + registry);
         DynamicOps<Tag> registryOps = RegistryOps.create(NbtOps.INSTANCE, registryAccess);
-        
+
         Map<Identifier, DataComponentType<?>> typeMap = new HashMap<>();
         for (DataComponentType<?> type : map.keySet()) {
             if (type.isTransient()) continue;
@@ -212,7 +218,7 @@ public class ComponentUtil {
     public static Component withCopyAction(Component component, String copyText) {
         return component.copy().withStyle(Style.EMPTY.withClickEvent(new ClickEvent.CopyToClipboard(copyText)).withHoverEvent(HOVER_COPY));
     }
-    
+
     /**
      * Gets a sub-sequence from the given {@link FormattedCharSequence}. The sub sequence will include
      * all characters from {@code start} (inclusive) to the end of the sequence.
@@ -221,7 +227,7 @@ public class ComponentUtil {
         if (start == 0) return text;
         return subSequence(text, start, Integer.MAX_VALUE - 1);
     }
-    
+
     /**
      * Gets a sub-sequence from the given {@link FormattedCharSequence}. The sub sequence will include
      * all characters between {@code start} (inclusive) and {@code end} (exclusive). {@code start} and

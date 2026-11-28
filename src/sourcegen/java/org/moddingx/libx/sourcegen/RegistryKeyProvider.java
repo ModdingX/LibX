@@ -33,7 +33,7 @@ public class RegistryKeyProvider<T> implements DataProvider {
     private final PackOutput output;
 
     public static <T> void create(GatherDataEvent event, Class<T> registryClass, ResourceKey<? extends Registry<T>> registry, String className) {
-        RegistryKeyProvider<T> provider = new RegistryKeyProvider<>(registryClass, registry, event.getLookupProvider(), className, event.getGenerator().getPackOutput());
+        RegistryKeyProvider<T> provider = new RegistryKeyProvider<>(registryClass, registry, event.getReloadableLookupProvider(), className, event.getGenerator().getPackOutput());
         event.getGenerator().addProvider(true, provider);
     }
     

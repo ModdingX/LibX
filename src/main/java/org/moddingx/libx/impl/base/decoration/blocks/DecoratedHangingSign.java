@@ -24,6 +24,7 @@ import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
 import org.moddingx.libx.registration.SetupContext;
+import org.moddingx.libx.util.game.CookingFuels;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,10 +63,16 @@ public class DecoratedHangingSign implements Registerable, HangingSignAccess {
         //noinspection ConstantConditions
         this.beType = new BlockEntityType<>((pos, state) -> new Entity(this.getBlockEntityType(), pos, state), Set.of(this.ceiling, this.wall));
 
-        Item.Properties itemProps = new Item.Properties().stacksTo(16).useBlockDescriptionPrefix();
+        Item.Properties itemProps = new Item.Properties().stacksTo(16).signText().useBlockDescriptionPrefix();
         if (signKey != null) {
             itemProps.setId(ResourceKey.create(Registries.ITEM, signKey.identifier()));
         }
+
+        int burnTime = (int) Math.round(this.parent.burnTime() * (8 / 3d)); // vanilla ratio is 8/3 of planks
+        if (burnTime > 0) {
+            CookingFuels.cookingFuel(itemProps, mod, burnTime);
+        }
+
         this.item = new HangingSignItem(this.ceiling, this.wall, itemProps) {
 
             @Override

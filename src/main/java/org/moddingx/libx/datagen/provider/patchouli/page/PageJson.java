@@ -43,7 +43,8 @@ public class PageJson {
         boolean empty = true;
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : patch.entrySet()) {
+        for (DataComponentType<?> type : patch.keySet()) {
+            Map.Entry<DataComponentType<?>, Optional<?>> entry = Map.entry(type, Optional.ofNullable(patch.getPatch(type)));
             Codec<?> codec = entry.getKey().codec();
             if (codec != null) {
                 if (empty) {
@@ -51,7 +52,6 @@ public class PageJson {
                     sb.append(",");
                 }
                 if (entry.getValue().isPresent()) {
-                    @SuppressWarnings("unchecked")
                     Tag tag = ((Codec<Object>) codec).encodeStart(NbtOps.INSTANCE, entry.getValue().get()).getOrThrow();
                     sb.append(Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(entry.getKey()))).append("=").append(tag);
                 } else {

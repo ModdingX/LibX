@@ -11,18 +11,18 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import org.moddingx.libx.impl.sandbox.FakeHolder;
 import org.moddingx.libx.sandbox.SandBox;
-import org.moddingx.libx.sandbox.surface.BiomeSurface;
-import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
+import org.moddingx.libx.sandbox.material.BiomeMaterial;
+import org.moddingx.libx.sandbox.material.MaterialRuleSet;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.Set;
 
 /**
- * A version of {@link NoiseBasedChunkGenerator} that allows overriding the surface rules, taking {@link BiomeSurface}
+ * A version of {@link NoiseBasedChunkGenerator} that allows overriding the surface rules, taking {@link BiomeMaterial}
  * into account.
  */
 public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
@@ -30,31 +30,31 @@ public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
     public static final MapCodec<ExtendedNoiseChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BiomeSource.CODEC.fieldOf("biome_source").forGetter(gen -> gen.biomeSource),
             NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter(gen -> gen.actualSettings),
-            SurfaceRuleSet.CODEC.optionalFieldOf("surface_override").forGetter(gen -> gen.surfaceOverride)
+            MaterialRuleSet.CODEC.optionalFieldOf("material_override").forGetter(gen -> gen.materialOverride)
     ).apply(instance, ExtendedNoiseChunkGenerator::new));
-    
-    private final Optional<Holder<SurfaceRuleSet>> surfaceOverride;
+
+    private final Optional<Holder<MaterialRuleSet>> materialOverride;
     private final Holder<NoiseGeneratorSettings> actualSettings;
     private final FakeHolder<NoiseGeneratorSettings> fakeSettings;
 
-    public ExtendedNoiseChunkGenerator(BiomeSource biomes, Holder<NoiseGeneratorSettings> settings, Optional<Holder<SurfaceRuleSet>> surfaceOverride) {
-        this(biomes, settings, new FakeHolder<>(settings), surfaceOverride);
+    public ExtendedNoiseChunkGenerator(BiomeSource biomes, Holder<NoiseGeneratorSettings> settings, Optional<Holder<MaterialRuleSet>> materialOverride) {
+        this(biomes, settings, new FakeHolder<>(settings), materialOverride);
     }
-    
-    private ExtendedNoiseChunkGenerator(BiomeSource biomes, Holder<NoiseGeneratorSettings> settings, FakeHolder<NoiseGeneratorSettings> delegate, Optional<Holder<SurfaceRuleSet>> surfaceOverride) {
+
+    private ExtendedNoiseChunkGenerator(BiomeSource biomes, Holder<NoiseGeneratorSettings> settings, FakeHolder<NoiseGeneratorSettings> delegate, Optional<Holder<MaterialRuleSet>> materialOverride) {
         super(biomes, delegate);
-        this.surfaceOverride = surfaceOverride;
+        this.materialOverride = materialOverride;
         this.actualSettings = settings;
         this.fakeSettings = delegate;
     }
 
     public void init(RegistryAccess access) {
-        if (this.surfaceOverride.isPresent()) {
+        if (this.materialOverride.isPresent()) {
             NoiseGeneratorSettings settings = this.actualSettings.value();
-            SurfaceRuleSet set = this.surfaceOverride.get().value();
+            MaterialRuleSet set = this.materialOverride.get().value();
             Set<Holder<Biome>> biomes = this.biomeSource.possibleBiomes();
-            SurfaceRules.RuleSource surfaceRule = set.build(access.lookupOrThrow(Registries.BIOME), access.lookupOrThrow(SandBox.BIOME_SURFACE), biomes, this.actualSettings.value());
-            this.fakeSettings.set(Holder.direct(withSurface(settings, surfaceRule)));
+            MaterialRule materialRule = set.build(access.lookupOrThrow(Registries.BIOME), access.lookupOrThrow(SandBox.BIOME_MATERIAL), biomes, this.actualSettings.value());
+            this.fakeSettings.set(Holder.direct(materialRule(settings, materialRule)));
         }
     }
 
@@ -74,21 +74,21 @@ public class ExtendedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
     public boolean stable(@Nonnull ResourceKey<NoiseGeneratorSettings> settings) {
         return this.actualSettings.is(settings);
     }
-    
+
     @SuppressWarnings("deprecation")
-    private static NoiseGeneratorSettings withSurface(NoiseGeneratorSettings settings, SurfaceRules.RuleSource surfaceRule) {
+    private static NoiseGeneratorSettings materialRule(NoiseGeneratorSettings settings, MaterialRule materialRule) {
         return new NoiseGeneratorSettings(
-                 settings.noiseSettings(),
-                 settings.defaultBlock(),
-                 settings.defaultFluid(),
-                 settings.noiseRouter(),
-                 surfaceRule,
-                 settings.spawnTarget(),
-                 settings.seaLevel(),
-                 settings.disableMobGeneration(),
-                 settings.aquifersEnabled(),
-                 settings.oreVeinsEnabled(),
-                 settings.useLegacyRandomSource()
+                settings.noiseSettings(),
+                settings.defaultBlock(),
+                settings.defaultFluid(),
+                settings.noiseRouter(),
+                Holder.direct(materialRule),
+                settings.spawnTarget(),
+                settings.seaLevel(),
+                settings.disableMobGeneration(),
+                settings.aquifers(),
+                settings.useLegacyRandomSource(),
+                settings.debugFunctions()
         );
     }
 }

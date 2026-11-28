@@ -13,36 +13,38 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
+import net.neoforged.neoforge.common.conditions.ConditionalOps;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.WithConditions;
 import org.moddingx.libx.datagen.PackTarget;
 import org.moddingx.libx.datapack.DatapackHelper;
 import org.moddingx.libx.util.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DatagenRegistry<T> extends MappedRegistry<T> {
 
     private final DatagenRegistrySet registrySet;
     private final Codec<T> codec;
+    private final Map<ResourceKey<T>, List<ICondition>> conditions;
     private boolean frozen;
     private boolean propagateNewElementsToChildren;
-    
+
     public static <T> DatagenRegistry<T> createRoot(ResourceKey<? extends Registry<T>> registryKey, DatagenRegistrySet registrySet, Codec<T> codec, Registry<T> rootRegistry) {
         return new DatagenRegistry<>(registryKey, registrySet, codec, List.of(rootRegistry));
     }
-    
+
     public static <T> DatagenRegistry<T> create(ResourceKey<? extends Registry<T>> registryKey, DatagenRegistrySet registrySet, Codec<T> codec, List<DatagenRegistry<T>> parents) {
         return new DatagenRegistry<>(registryKey, registrySet, codec, parents.stream().map(dr -> (Registry<T>) dr).toList());
     }
-    
+
     private DatagenRegistry(ResourceKey<? extends Registry<T>> registryKey, DatagenRegistrySet registrySet, Codec<T> codec, List<Registry<T>> fillFrom) {
         super(registryKey, Lifecycle.stable(), true);
         this.registrySet = registrySet;
         this.codec = codec;
+        this.conditions = new HashMap<>();
         this.frozen = false;
         this.propagateNewElementsToChildren = true;
         // Load this registry with the elements from the parents
@@ -108,6 +110,21 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
         }
     }
 
+    /**
+     * Sets the loading conditions for an element, that are written along with the element.
+     */
+    public void setConditions(ResourceKey<T> key, List<ICondition> conditions) {
+        if (this.frozen) {
+            throw new IllegalStateException("Can't set conditions on frozen registry: " + this.key());
+        }
+
+        if (conditions.isEmpty()) {
+            this.conditions.remove(key);
+        } else {
+            this.conditions.put(key, List.copyOf(conditions));
+        }
+    }
+
     @Nonnull
     @Override
     public Registry<T> freeze() {
@@ -129,17 +146,20 @@ public class DatagenRegistry<T> extends MappedRegistry<T> {
 
     public void writeOwnElements(PackTarget target, CachedOutput output) {
         if (!this.frozen) throw new IllegalStateException("Can't serialize unfrozen registry: " + this.key());
-        
+
         // Must use a lazy value as pack types which don't support datapack outputs also have registries
         // but can't query the datapack output path
         LazyValue<Path> outputPath = new LazyValue<>(() -> target.path(PackType.SERVER_DATA));
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, this.registrySet.registryAccess());
-        
+
         List<DatagenRegistry<T>> parents = this.registrySet.getDirectParents().stream().flatMap(parent -> parent.getDatagenRegistry(this.key(), false).stream()).toList();
         for (Map.Entry<ResourceKey<T>, T> entry : this.entrySet()) {
             if (parents.stream().noneMatch(reg -> reg.containsKey(entry.getKey()))) {
                 try {
-                    JsonElement json = this.codec.encodeStart(ops, entry.getValue()).getOrThrow(RuntimeException::new);
+                    List<ICondition> elementConditions = this.conditions.getOrDefault(entry.getKey(), List.of());
+                    JsonElement json = elementConditions.isEmpty()
+                            ? this.codec.encodeStart(ops, entry.getValue()).getOrThrow(RuntimeException::new)
+                            : ConditionalOps.createConditionalCodecWithConditions(this.codec).encodeStart(ops, Optional.of(new WithConditions<>(elementConditions, entry.getValue()))).getOrThrow(RuntimeException::new);
                     DataProvider.saveStable(output, json, outputPath.get().resolve(DatapackHelper.registryPath(entry.getKey())));
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to serialise element " + entry.getKey() + " in datagen registry", e);

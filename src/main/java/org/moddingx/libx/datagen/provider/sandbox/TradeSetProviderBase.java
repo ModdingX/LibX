@@ -7,9 +7,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.item.trading.VillagerTrade;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
@@ -58,14 +57,14 @@ public abstract class TradeSetProviderBase extends RegistryProviderBase {
     public class TradeSetBuilder {
 
         private final HolderSet<VillagerTrade> trades;
-        private NumberProvider amount;
+        private Holder<ContextIntProvider> amount;
         private boolean allowDuplicates;
         @Nullable
         private Identifier randomSequence;
 
         private TradeSetBuilder(HolderSet<VillagerTrade> trades) {
             this.trades = trades;
-            this.amount = ConstantValue.exactly(2);
+            this.amount = ContextIntProviders.exactly(2);
             this.allowDuplicates = false;
             this.randomSequence = null;
         }
@@ -74,20 +73,20 @@ public abstract class TradeSetProviderBase extends RegistryProviderBase {
          * Sets the exact amount of trades to pick from the pool. Defaults to {@code 2}.
          */
         public TradeSetBuilder amount(int amount) {
-            return this.amount(ConstantValue.exactly(amount));
+            return this.amount(ContextIntProviders.exactly(amount));
         }
 
         /**
          * Sets the amount of trades to pick from the pool to a uniformly distributed random value.
          */
         public TradeSetBuilder amount(int min, int max) {
-            return this.amount(UniformGenerator.between(min, max));
+            return this.amount(ContextIntProviders.between(min, max));
         }
 
         /**
          * Sets the amount of trades to pick from the pool.
          */
-        public TradeSetBuilder amount(NumberProvider amount) {
+        public TradeSetBuilder amount(Holder<ContextIntProvider> amount) {
             this.amount = amount;
             return this;
         }

@@ -26,8 +26,8 @@ public abstract class DirectionalBlockRenderer<T extends BlockEntity, S extends 
         };
         float yRot = facing.getAxis() == Direction.Axis.Y ? 0 : facing.toYRot();
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(yRot));
+        poseStack.rotate(Axis.XP.rotationDegrees(xRot));
+        poseStack.rotate(Axis.ZP.rotationDegrees(yRot));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
     }
 }

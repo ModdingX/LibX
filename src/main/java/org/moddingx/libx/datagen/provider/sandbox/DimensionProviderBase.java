@@ -16,9 +16,9 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
+import net.minecraft.world.level.levelgen.material.MaterialRules;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
@@ -26,7 +26,7 @@ import org.moddingx.libx.datagen.provider.RegistryProviderBase;
 import org.moddingx.libx.sandbox.generator.BiomeLayer;
 import org.moddingx.libx.sandbox.generator.ExtendedNoiseChunkGenerator;
 import org.moddingx.libx.sandbox.generator.LayeredBiomeSource;
-import org.moddingx.libx.sandbox.surface.SurfaceRuleSet;
+import org.moddingx.libx.sandbox.material.MaterialRuleSet;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ import java.util.function.Function;
 
 /**
  * SandBox provider for {@link LevelStem dimensions}.
- *
+ * <p>
  * This provider must run in the {@link DatagenStage#EXTENSION_SETUP extension setup} stage.
  */
 public abstract class DimensionProviderBase extends RegistryProviderBase {
@@ -56,7 +56,7 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
     public BiomeSourceBuilder dimension(ResourceKey<DimensionType> dimensionType) {
         return this.dimension(this.holder(dimensionType));
     }
-    
+
     /**
      * Returns a new builder for a dimension.
      */
@@ -66,7 +66,7 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
 
     /**
      * Makes a new {@link LevelStem dimension}
-     *
+     * <p>
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
      * added to the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
@@ -77,7 +77,7 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
 
     /**
      * Makes a new {@link LevelStem dimension}
-     *
+     * <p>
      * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
      * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
      * {@code public}, non-{@code static} field inside the provider.
@@ -86,11 +86,11 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
         LevelStem stem = new LevelStem(dimensionType, generator);
         return this.registries.writableRegistry(Registries.LEVEL_STEM).createIntrusiveHolder(stem);
     }
-    
+
     public class BiomeSourceBuilder {
-        
+
         private final Holder<DimensionType> dimensionType;
-        
+
         private BiomeSourceBuilder(Holder<DimensionType> dimensionType) {
             this.dimensionType = dimensionType;
         }
@@ -101,14 +101,14 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
         public ChunkGeneratorBuilder fixedBiome(ResourceKey<Biome> biome) {
             return this.fixedBiome(DimensionProviderBase.this.holder(biome));
         }
-        
+
         /**
          * Use a {@link FixedBiomeSource} for this dimension.
          */
         public ChunkGeneratorBuilder fixedBiome(Holder<Biome> biome) {
             return new ChunkGeneratorBuilder(this.dimensionType, new FixedBiomeSource(biome));
         }
-        
+
         /**
          * Use a {@link MultiNoiseBiomeSource} for this dimension.
          */
@@ -119,14 +119,14 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
             );
             return new ChunkGeneratorBuilder(this.dimensionType, MultiNoiseBiomeSource.createFromList(cleanedClimate));
         }
-        
+
         /**
          * Use a {@link LayeredBiomeSource} for this dimension.
          */
         public ChunkGeneratorBuilder layeredBiome(TagKey<BiomeLayer> layers) {
             return this.layeredBiome(DimensionProviderBase.this.set(layers));
         }
-        
+
         /**
          * Use a {@link LayeredBiomeSource} for this dimension.
          */
@@ -134,9 +134,9 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
             return new ChunkGeneratorBuilder(this.dimensionType, new LayeredBiomeSource(layers));
         }
     }
-    
+
     public class ChunkGeneratorBuilder {
-        
+
         private final Holder<DimensionType> dimensionType;
         private final BiomeSource biomes;
 
@@ -151,14 +151,14 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
         public FlatGeneratorBuilder flatGenerator() {
             return new FlatGeneratorBuilder(this.dimensionType, this.biomes);
         }
-        
+
         /**
          * Use a noise based chunk generator for this dimension.
          */
         public NoiseGeneratorBuilder noiseGenerator(Holder<NoiseGeneratorSettings> settings) {
             return new NoiseGeneratorBuilder(this.dimensionType, this.biomes, settings);
         }
-        
+
         /**
          * Use a given chunk generator.
          */
@@ -166,13 +166,13 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
             return DimensionProviderBase.this.dimension(this.dimensionType, generator.apply(this.biomes));
         }
     }
-    
+
     public class FlatGeneratorBuilder {
-        
+
         private final Holder<DimensionType> dimensionType;
         private final List<FlatLayerInfo> layers;
         private final Holder<Biome> biome;
-        
+
         @Nullable
         private HolderSet<StructureSet> structures;
         private boolean lakes;
@@ -214,7 +214,7 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
             if (height > 0) this.layers.add(new FlatLayerInfo(height, block));
             return this;
         }
-        
+
         /**
          * Configure this generator to generate lakes.
          */
@@ -222,7 +222,7 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
             this.lakes = true;
             return this;
         }
-        
+
         /**
          * Configure this generator to generate decoration.
          */
@@ -233,7 +233,7 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
 
         /**
          * Builds the {@link LevelStem dimension}.
-         *
+         * <p>
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
          * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
@@ -251,42 +251,42 @@ public abstract class DimensionProviderBase extends RegistryProviderBase {
             return DimensionProviderBase.this.dimension(this.dimensionType, generator);
         }
     }
-    
+
     public class NoiseGeneratorBuilder {
-        
+
         private final Holder<DimensionType> dimensionType;
         private final BiomeSource biomes;
         private final Holder<NoiseGeneratorSettings> settings;
-        
+
         @Nullable
-        private Holder<SurfaceRuleSet> surfaceOverride;
-        
+        private Holder<MaterialRuleSet> materialOverride;
+
         private NoiseGeneratorBuilder(Holder<DimensionType> dimensionType, BiomeSource biomes, Holder<NoiseGeneratorSettings> settings) {
             this.dimensionType = dimensionType;
             this.biomes = biomes;
             this.settings = settings;
-            this.surfaceOverride = null;
+            this.materialOverride = null;
         }
 
         /**
-         * Override the {@link SurfaceRules} used in this generator.
+         * Override the {@link MaterialRules} used in this generator.
          */
-        public NoiseGeneratorBuilder surfaceOverride(Holder<SurfaceRuleSet> surface) {
-            this.surfaceOverride = surface;
+        public NoiseGeneratorBuilder materialOverride(Holder<MaterialRuleSet> materialOverride) {
+            this.materialOverride = materialOverride;
             return this;
         }
 
         /**
          * Builds the {@link LevelStem dimension}.
-         *
+         * <p>
          * This method returns an {@link Holder.Reference.Type#INTRUSIVE intrusive holder} that must be properly
          * added the registry. {@link RegistryProviderBase} does this automatically if the result is stored in a
          * {@code public}, non-{@code static} field inside the provider.
          */
         public Holder<LevelStem> build() {
             NoiseBasedChunkGenerator generator;
-            if (this.surfaceOverride != null) {
-                generator = new ExtendedNoiseChunkGenerator(this.biomes, this.settings, Optional.of(this.surfaceOverride));
+            if (this.materialOverride != null) {
+                generator = new ExtendedNoiseChunkGenerator(this.biomes, this.settings, Optional.of(this.materialOverride));
             } else {
                 generator = new NoiseBasedChunkGenerator(this.biomes, this.settings);
             }

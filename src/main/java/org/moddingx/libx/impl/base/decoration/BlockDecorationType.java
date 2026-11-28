@@ -6,16 +6,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.FuelValues;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationContext;
 import org.moddingx.libx.fi.Function3;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
+import org.moddingx.libx.util.game.CookingFuels;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,7 +44,7 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
         this.properties = Item.Properties::new;
         this.burnTimeModifier = burnTimeModifier;
     }
-    
+
     public BlockDecorationType(String name, @Nullable ResourceKey<? extends Registry<? super T>> registry, Supplier<Item.Properties> properties, double burnTimeModifier, Function<DecoratedBlock, T> action) {
         super(name, registry, action);
         this.properties = properties;
@@ -69,27 +67,22 @@ public class BlockDecorationType<T extends Block> extends BaseDecorationType<T> 
     @OverridingMethodsMustInvokeSuper
     public void registerAdditional(ModX mod, DecorationContext context, DecoratedBlock block, T element, RegistrationContext ctx, Registerable.EntryCollector builder) {
         Item.Properties itemProperties = this.properties.get().setId(ResourceKey.create(Registries.ITEM, ctx.id())).useBlockDescriptionPrefix();
-        DecoratedBlockItem item = new DecoratedBlockItem(element, block, this.burnTimeModifier, itemProperties);
+        int burnTime = (int) Math.round(block.burnTime() * this.burnTimeModifier);
+        if (burnTime > 0) {
+            CookingFuels.cookingFuel(itemProperties, mod, burnTime);
+        }
+
+        DecoratedBlockItem item = new DecoratedBlockItem(element, block, itemProperties);
         builder.register(Registries.ITEM, item);
     }
-    
+
     private static class DecoratedBlockItem extends BlockItem {
 
         private final DecoratedBlock parent;
-        private final double burnTimeModifier;
-        
-        public DecoratedBlockItem(Block block, DecoratedBlock parent, double burnTimeModifier, Properties properties) {
+
+        public DecoratedBlockItem(Block block, DecoratedBlock parent, Properties properties) {
             super(block, properties);
             this.parent = parent;
-            this.burnTimeModifier = burnTimeModifier;
-        }
-
-        @Override
-        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType, @Nonnull FuelValues fuelValues) {
-            if (this.burnTimeModifier == 0) return 0;
-            int burnTime = this.parent.getBurnTime(stack, recipeType, fuelValues);
-            if (burnTime < 0) return burnTime;
-            return (int) Math.round(this.burnTimeModifier * burnTime);
         }
 
         @Override

@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class DynamicPackLocator implements RepositorySource {
     
@@ -71,14 +72,14 @@ public class DynamicPackLocator implements RepositorySource {
         
         @Nonnull
         @Override
-        public PackResources openPrimary(@Nonnull PackLocationInfo location) {
+        public PackResources openMetadata(@Nonnull PackLocationInfo location) {
             return this.resources().get();
         }
 
         @Nonnull
         @Override
-        public PackResources openFull(@Nonnull PackLocationInfo location, @Nonnull Pack.Metadata metadata) {
-            return this.resources().get();
+        public Stream<PackResources> openResources(@Nonnull PackLocationInfo location, @Nonnull Pack.Metadata metadata) {
+            return Stream.of(this.resources().get());
         }
     }
 }

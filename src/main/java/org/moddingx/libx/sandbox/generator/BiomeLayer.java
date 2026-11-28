@@ -4,11 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.RegistryFileCodec;
+import net.minecraft.core.registries.codec.RegistryFileCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
-import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunction;
 import org.moddingx.libx.sandbox.SandBox;
 
 /**
@@ -46,7 +46,7 @@ public record BiomeLayer(Climate.ParameterPoint range, DensityFunction density, 
             ExtraCodecs.nonEmptyList(ENTRY_CODEC.listOf()).xmap(Climate.ParameterList::new, Climate.ParameterList::values).fieldOf("biomes").forGetter(BiomeLayer::biomes)
     ).apply(instance, BiomeLayer::new));
     
-    public static final Codec<Holder<BiomeLayer>> CODEC = RegistryFileCodec.create(SandBox.BIOME_LAYER, DIRECT_CODEC);
+    public static final Codec<Holder<BiomeLayer>> CODEC = RegistryFileCodec.create(SandBox.BIOME_LAYER, DIRECT_CODEC, true);
 
     @Override
     public boolean equals(Object obj) {

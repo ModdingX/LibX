@@ -80,7 +80,7 @@ public abstract class BlockStateProviderBase extends ModelProvider {
     @Override
     protected final Stream<? extends Holder<Block>> getKnownBlocks() {
         return BuiltInRegistries.BLOCK.listElements()
-                .filter(holder -> this.mod.modid.equals(holder.getKey().identifier().getNamespace()))
+                .filter(holder -> this.mod.modid.equals(holder.key().identifier().getNamespace()))
                 .filter(holder -> !this.manualState.contains(holder.value()));
     }
 

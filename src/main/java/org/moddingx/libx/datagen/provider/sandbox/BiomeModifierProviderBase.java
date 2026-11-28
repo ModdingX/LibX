@@ -6,6 +6,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -146,7 +148,7 @@ public abstract class BiomeModifierProviderBase extends RegistryProviderBase {
         }
 
         public AddMobSpawnsBuilder spawn(EntityType<?> type, int weight, int min, int max) {
-            return this.spawn(new MobSpawnSettings.SpawnerData(type, min, max), weight);
+            return this.spawn(new MobSpawnSettings.SpawnerData(type, min == max ? ConstantInt.of(min) : UniformInt.of(min, max)), weight);
         }
         
         public AddMobSpawnsBuilder spawn(MobSpawnSettings.SpawnerData spawn) {

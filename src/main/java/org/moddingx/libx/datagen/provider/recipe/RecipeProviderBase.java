@@ -1,22 +1,26 @@
 package org.moddingx.libx.datagen.provider.recipe;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.EmptyTagLookupWrapper;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.datagen.provider.RegistryProviderBase;
+import org.moddingx.libx.impl.datagen.registries.DatagenBootstrapContext;
 import org.moddingx.libx.mod.ModX;
 
 import javax.annotation.Nonnull;
@@ -24,7 +28,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Provider for all kinds of recipes. By itself does not add support for any recipes. However you can
@@ -32,47 +35,27 @@ import java.util.concurrent.CompletableFuture;
  * As this class implements {@link RecipeExtension} as well, you don't need to implement any methods when
  * adding an extension. For a list of available extensions, see the subclasses of {@link RecipeExtension}.
  */
-public abstract class RecipeProviderBase implements DataProvider, RecipeExtension {
+public abstract class RecipeProviderBase extends RegistryProviderBase implements RecipeExtension {
 
-    protected final DatagenContext ctx;
-    protected final ModX mod;
-
-    protected HolderLookup.Provider registries;
     private RecipeOutput output;
 
     public RecipeProviderBase(DatagenContext ctx) {
-        this.ctx = ctx;
-        this.mod = ctx.mod();
+        super(ctx, DatagenStage.REGISTRY_SETUP);
     }
 
-    @Nonnull
     @Override
-    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
-        RecipeProvider.Runner runner = new RecipeProvider.Runner(this.ctx.output(), this.ctx.system().lookupProvider()) {
+    public void run() {
+        BootstrapContext<Recipe<?>> recipes = new DatagenBootstrapContext<>(this.registries, Registries.RECIPE);
+        BootstrapContext<Advancement> advancements = new DatagenBootstrapContext<>(this.registries, Registries.ADVANCEMENT);
+        new RecipeProvider(recipes, advancements, this.mod.modid, this.conditions().toArray(ICondition[]::new)) {
 
-            @Nonnull
             @Override
-            public String getName() {
-                return RecipeProviderBase.this.getName();
+            protected void buildRecipes() {
+                RecipeProviderBase.this.output = this.output;
+                RecipeProviderBase.this.setupExtensions();
+                RecipeProviderBase.this.setup();
             }
-
-            @Nonnull
-            @Override
-            protected RecipeProvider createRecipeProvider(@Nonnull HolderLookup.Provider registries, @Nonnull RecipeOutput output) {
-                return new RecipeProvider(registries, output) {
-
-                    @Override
-                    protected void buildRecipes() {
-                        RecipeProviderBase.this.registries = this.registries;
-                        RecipeProviderBase.this.output = this.output.withConditions(RecipeProviderBase.this.conditions().toArray(ICondition[]::new));
-                        RecipeProviderBase.this.setupExtensions();
-                        RecipeProviderBase.this.setup();
-                    }
-                };
-            }
-        };
-
-        return runner.run(cache);
+        }.buildRecipes();
     }
 
     @Nonnull
@@ -92,7 +75,7 @@ public abstract class RecipeProviderBase implements DataProvider, RecipeExtensio
 
     @Override
     public HolderGetter<Item> items() {
-        return this.registries.lookupOrThrow(Registries.ITEM);
+        return EmptyTagLookupWrapper.wrap(this.registries.registry(Registries.ITEM));
     }
 
     private void setupExtensions() {

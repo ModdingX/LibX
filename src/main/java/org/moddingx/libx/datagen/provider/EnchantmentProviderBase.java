@@ -189,7 +189,7 @@ public abstract class EnchantmentProviderBase extends RegistryProviderBase {
         public <T> EnchantmentBuilder conditionalEffect(DataComponentType<List<ConditionalEffect<T>>> type, T value, @Nullable LootItemCondition condition) {
             //noinspection unchecked
             List<ConditionalEffect<T>> effectList = ((List<ConditionalEffect<T>>) this.effectLists.computeIfAbsent((DataComponentType<List<?>>) (DataComponentType<?>) type, k -> new ArrayList<>()));
-            effectList.add(new ConditionalEffect<>(value, Optional.ofNullable(condition)));
+            effectList.add(new ConditionalEffect<>(value, Optional.ofNullable(condition).map(Holder::direct)));
             return this;
         }
 

@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -16,11 +17,12 @@ import java.util.stream.Stream;
 // When we know, how a holder is used.
 // Mimics a direct holder, but delegates to some other holder.
 // Value can be changed over time.
-public class FakeHolder<T> implements Holder<T> {
+public class FakeHolder<T> extends Holder.Reference<T> {
 
     private Holder<T> holder;
 
     public FakeHolder(Holder<T> initial) {
+        super(Holder.Reference.Type.STAND_ALONE, new HolderOwner<>() {}, null, null);
         this.set(initial);
     }
 
@@ -108,5 +110,33 @@ public class FakeHolder<T> implements Holder<T> {
     @Override
     public boolean canSerializeIn(@Nonnull HolderOwner<T> owner) {
         return true;
+    }
+
+    @Nonnull
+    @Override
+    public ResourceKey<T> key() {
+        throw new IllegalStateException("Fake holder has no key.");
+    }
+
+    @Nullable
+    @Override
+    public ResourceKey<T> keyOrNull() {
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj;
+    }
+
+    @Override
+    public int hashCode() {
+        return System.identityHashCode(this);
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+        return "FakeHolder{" + this.holder + "}";
     }
 }

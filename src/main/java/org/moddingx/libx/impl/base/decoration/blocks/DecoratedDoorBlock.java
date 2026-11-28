@@ -25,7 +25,7 @@ public class DecoratedDoorBlock extends DoorBlock implements Registerable {
         super(parent.getMaterialProperties().blockSetType(), Util.make(() -> {
             Properties blockProperties = DecorationBlockIdContext.applyId(Properties.ofFullCopy(parent))
                             .noOcclusion()
-                            .pushReaction(PushReaction.DESTROY);
+                            .pushReaction(PushReaction.POPPED);
                     // we need to check for WOOD since isWood() is true for the non-burnable NETHER_WOOD, too
                     if (parent.getContext().material() == DecorationMaterial.WOOD) {
                         blockProperties.instrument(NoteBlockInstrument.BASS)

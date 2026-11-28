@@ -1,25 +1,24 @@
 package org.moddingx.libx.datagen.provider;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.DataComponentMatchers;
+import net.minecraft.advancements.predicates.EnchantmentPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.*;
 import net.minecraft.core.ClientAsset;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
 import net.minecraft.core.component.predicates.EnchantmentsPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.EmptyTagLookupWrapper;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -28,21 +27,16 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import net.neoforged.neoforge.common.conditions.WithConditions;
 import org.moddingx.libx.datagen.DatagenContext;
-import org.moddingx.libx.datagen.PackTarget;
-import org.moddingx.libx.datagen.RegistrySet;
-import org.moddingx.libx.datapack.DatapackHelper;
-import org.moddingx.libx.mod.ModX;
+import org.moddingx.libx.datagen.DatagenStage;
+import org.moddingx.libx.impl.datagen.registries.DatagenBootstrapContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 /**
@@ -51,11 +45,8 @@ import java.util.function.Supplier;
  * explicit parent will be added to it. You should configure your advancements with the {@link #root()}
  * and {@link #advancement(String)} methods in {@link #setup() setup}.
  */
-public abstract class AdvancementProviderBase implements DataProvider {
+public abstract class AdvancementProviderBase extends RegistryProviderBase {
 
-    protected final ModX mod;
-    protected final PackTarget packTarget;
-    private final RegistrySet registries;
     private final HolderGetter<Item> itemRegistries;
     private final HolderGetter<Enchantment> enchantmentRegistries;
     private final HolderGetter<EntityType<?>> entityRegistries;
@@ -64,15 +55,11 @@ public abstract class AdvancementProviderBase implements DataProvider {
     private Supplier<AdvancementInfo> rootSupplier = null;
 
     public AdvancementProviderBase(DatagenContext ctx) {
-        this.mod = ctx.mod();
-        this.packTarget = ctx.target();
-        this.registries = ctx.registries();
-        //noinspection UnstableApiUsage
-        this.itemRegistries = CommonHooks.wrapRegistryLookup(this.registries.registryAccess().lookupOrThrow(Registries.ITEM));
-        //noinspection UnstableApiUsage
-        this.enchantmentRegistries = CommonHooks.wrapRegistryLookup(this.registries.registryAccess().lookupOrThrow(Registries.ENCHANTMENT));
-        //noinspection UnstableApiUsage,NullableProblems
-        this.entityRegistries = CommonHooks.wrapRegistryLookup(this.registries.registryAccess().lookupOrThrow(Registries.ENTITY_TYPE));
+        super(ctx, DatagenStage.REGISTRY_SETUP);
+        this.itemRegistries = EmptyTagLookupWrapper.wrap(this.registries.registry(Registries.ITEM));
+        this.enchantmentRegistries = EmptyTagLookupWrapper.wrap(this.registries.registry(Registries.ENCHANTMENT));
+        //noinspection NullableProblems
+        this.entityRegistries = EmptyTagLookupWrapper.wrap(this.registries.registry(Registries.ENTITY_TYPE));
     }
 
     public abstract void setup();
@@ -90,21 +77,17 @@ public abstract class AdvancementProviderBase implements DataProvider {
         return this.mod.modid + " advancements";
     }
 
-    @Nonnull
     @Override
-    public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
+    public void run() {
         this.setup();
-        RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, this.registries.registryAccess());
-        return CompletableFuture.allOf(this.advancements.entrySet().stream().map(entry -> {
-            Identifier id = entry.getKey();
-            ResourceKey<Advancement> key = ResourceKey.create(Registries.ADVANCEMENT, id);
+        DatagenBootstrapContext<Advancement> output = new DatagenBootstrapContext<>(this.registries, Registries.ADVANCEMENT);
+        ICondition[] conditions = this.conditions().toArray(ICondition[]::new);
+        this.advancements.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
             AdvancementInfo advancementInfo = entry.getValue().get();
-            if (advancementInfo.advancement() == null) return CompletableFuture.completedFuture(null);
-            WithConditions<Advancement> conditionalAdvancement = new WithConditions<>(this.conditions(), advancementInfo.advancement());
-            JsonElement json = Advancement.CONDITIONAL_CODEC.encodeStart(ops, Optional.of(conditionalAdvancement)).getOrThrow(RuntimeException::new);
-            Path path = this.packTarget.path(PackType.SERVER_DATA).resolve(DatapackHelper.registryPath(key));
-            return DataProvider.saveStable(cache, json, path);
-        }).toArray(CompletableFuture[]::new));
+            if (advancementInfo.advancement() != null) {
+                output.register(ResourceKey.create(Registries.ADVANCEMENT, entry.getKey()), advancementInfo.advancement(), conditions);
+            }
+        });
     }
 
     /**
@@ -288,16 +271,16 @@ public abstract class AdvancementProviderBase implements DataProvider {
     }
 
     /**
-     * Gets the given {@link EntityPredicate} as an {@link ContextAwarePredicate}.
+     * Gets the given {@link EntityPredicate} as a loot condition that can be used in advancement criteria.
      */
-    public ContextAwarePredicate entity(EntityPredicate entity) {
-        return ContextAwarePredicate.create(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, entity).build());
+    public Holder<LootItemCondition> entity(EntityPredicate entity) {
+        return Holder.direct(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, entity).build());
     }
 
     /**
-     * Gets an {@link ContextAwarePredicate} that matches for a specific entity type.
+     * Gets a loot condition that matches for a specific entity type and can be used in advancement criteria.
      */
-    public ContextAwarePredicate entity(EntityType<?> type) {
+    public Holder<LootItemCondition> entity(EntityType<?> type) {
         return this.entity(EntityPredicate.Builder.entity().of(this.entityRegistries, type).build());
     }
 
@@ -642,20 +625,20 @@ public abstract class AdvancementProviderBase implements DataProvider {
                     throw new IllegalStateException("Can't build root advancement without background.");
                 }
                 displayInfo = new DisplayInfo(
-                        this.display.getIcon(),
-                        this.display.getTitle(),
-                        this.display.getDescription(),
-                        Optional.ofNullable(this.background).map(ClientAsset.ResourceTexture::new),
-                        this.display.getType(),
-                        this.display.shouldShowToast(),
-                        this.display.shouldAnnounceChat(),
-                        this.display.isHidden()
+                        this.display.icon(),
+                        this.display.title(),
+                        this.display.description(),
+                        Optional.of(this.background).map(ClientAsset.ResourceTexture::new),
+                        this.display.type(),
+                        this.display.showToast(),
+                        this.display.announceToChat(),
+                        this.display.hidden()
                 );
             }
             if (parentAdv != null && parentAdv.display().isEmpty() && displayInfo != null) {
                 throw new IllegalStateException("Can't build advancement with display and display-less parent.");
             }
-            if (parentAdv != null && parentAdv.display().isPresent() && displayInfo != null && parentAdv.display().get().isHidden() && !displayInfo.isHidden()) {
+            if (parentAdv != null && parentAdv.display().isPresent() && displayInfo != null && parentAdv.display().get().hidden() && !displayInfo.hidden()) {
                 throw new IllegalStateException("Can't build visible advancement with hidden parent.");
             }
             Advancement advancement = new Advancement(Optional.ofNullable(parentId), Optional.ofNullable(displayInfo), this.reward, criteriaMap, new AdvancementRequirements(List.copyOf(criteriaIds)), this.telmetryEvent);

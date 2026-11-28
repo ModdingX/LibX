@@ -25,7 +25,6 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,7 +102,7 @@ public class DatagenFontLoader {
 
             @Nonnull
             @Override
-            public Map<Identifier, Resource> listResources(@Nonnull String path, @Nonnull Predicate<Identifier> filter) {
+            public Map<Identifier, Resource> listResources(@Nonnull String path, @Nonnull ResourceManager.Selector filter) {
                 return resourceManager.listResources(path, filter).entrySet().stream().collect(Collectors.toUnmodifiableMap(
                         Map.Entry::getKey,
                         entry -> maybePatchResource(entry.getKey(), entry.getValue())
@@ -112,7 +111,7 @@ public class DatagenFontLoader {
 
             @Nonnull
             @Override
-            public Map<Identifier, List<Resource>> listResourceStacks(@Nonnull String path, @Nonnull Predicate<Identifier> filter) {
+            public Map<Identifier, List<Resource>> listResourceStacks(@Nonnull String path, @Nonnull ResourceManager.Selector filter) {
                 return resourceManager.listResourceStacks(path, filter).entrySet().stream().collect(Collectors.toUnmodifiableMap(
                         Map.Entry::getKey,
                         entry -> entry.getValue().stream().map(resource -> maybePatchResource(entry.getKey(), resource)).toList()

@@ -14,7 +14,7 @@ public class RegistryLoad extends SimpleClassProcessor {
     private static final String REPLACE_FROM = "replaceFrom";
     private static final String REPLACE_FROM_DESC = "(Ljava/lang/Object;[Lnet/minecraft/core/RegistryAccess$Frozen;)Lnet/minecraft/core/LayeredRegistryAccess;";
     private static final String REGISTRY_LAYER = "net/minecraft/server/RegistryLayer";
-    private static final String WORLDGEN_FIELD = "WORLDGEN";
+    private static final String WORLDGEN_FIELD = "WORLD";
 
     @Override
     public ProcessorName name() {

@@ -8,28 +8,25 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementFilter;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 import javax.annotation.Nonnull;
 
 /**
  * A {@link PlacementFilter} for filtering by the absolute placement Y position.
  */
-public class HeightPlacementFilter extends PlacementFilter {
+public class HeightPlacementFilter implements PlacementFilter {
 
     public static final MapCodec<HeightPlacementFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             VerticalAnchor.CODEC.fieldOf("min_inclusive").forGetter(filter -> filter.minInclusive),
             VerticalAnchor.CODEC.fieldOf("max_inclusive").forGetter(filter -> filter.maxInclusive)
     ).apply(instance, HeightPlacementFilter::new));
-    
-    public static final PlacementModifierType<HeightPlacementFilter> TYPE = () -> CODEC;
 
     private final VerticalAnchor minInclusive;
     private final VerticalAnchor maxInclusive;
 
     /**
      * Creates a new {@link HeightPlacementFilter}.
-     * 
+     *
      * @param minInclusive The minimum height the {@link PlacedFeature} can generate on.
      * @param maxInclusive The maximum height the {@link PlacedFeature} can generate on.
      */
@@ -37,15 +34,15 @@ public class HeightPlacementFilter extends PlacementFilter {
         this.minInclusive = minInclusive;
         this.maxInclusive = maxInclusive;
     }
-    
+
     @Nonnull
     @Override
-    public PlacementModifierType<?> type() {
-        return TYPE;
+    public MapCodec<? extends PlacementFilter> codec() {
+        return CODEC;
     }
 
     @Override
-    protected boolean shouldPlace(@Nonnull PlacementContext context, @Nonnull RandomSource random, @Nonnull BlockPos pos) {
+    public boolean shouldPlace(@Nonnull PlacementContext context, @Nonnull RandomSource random, @Nonnull BlockPos pos) {
         return this.minInclusive.resolveY(context) <= pos.getY() && this.maxInclusive.resolveY(context) >= pos.getY();
     }
 }

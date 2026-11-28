@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.config.gui.screen;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -22,7 +23,6 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
-import org.lwjgl.glfw.GLFW;
 import org.moddingx.libx.render.FilterGuiGraphicsExtractor;
 import org.moddingx.libx.render.RenderHelper;
 
@@ -138,7 +138,7 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+            public boolean mouseClicked(@Nonnull MouseButtonEvent event, boolean isDoubleClick) {
                 // Without this, the panel would process clicks from areas currently not on the screen
                 if (event.x() >= this.left && event.x() <= this.left + this.width && event.y() >= this.top && event.y() <= this.top + this.height) {
                     return super.mouseClicked(event, isDoubleClick);
@@ -148,14 +148,14 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            protected boolean clickPanel(double mouseX, double mouseY, MouseButtonEvent event) {
+            protected boolean clickPanel(double mouseX, double mouseY, @Nonnull MouseButtonEvent event) {
                 // Extra var required as we need to cal all listeners
                 // so widgets can for example handle their loss of focus.
                 boolean success = false;
                 for (GuiEventListener widget : widgets) {
                     if (widget.mouseClicked(new MouseButtonEvent(mouseX, mouseY, event.buttonInfo()), false)) {
                         this.setFocused(widget);
-                        if (event.button() == 0) {
+                        if (event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
                             this.setDragging(true);
                         }
                         success = true;
@@ -165,9 +165,9 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+            public boolean mouseDragged(@Nonnull MouseButtonEvent event, double dragX, double dragY) {
                 if (!super.mouseDragged(event, dragX, dragY)) {
-                    if (this.getFocused() != null && this.isDragging() && event.button() == 0) {
+                    if (this.getFocused() != null && this.isDragging() && event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
                         MouseButtonEvent translatedEvent = new MouseButtonEvent(event.x(), event.y() - this.top + ((int) this.scrollDistance) - this.border, event.buttonInfo());
                         return this.getFocused().mouseDragged(translatedEvent, dragX, dragY);
                     } else {
@@ -179,7 +179,7 @@ public abstract class ConfigBaseScreen extends Screen {
             }
 
             @Override
-            public boolean mouseReleased(MouseButtonEvent event) {
+            public boolean mouseReleased(@Nonnull MouseButtonEvent event) {
                 if (!super.mouseReleased(event)) {
                     if (this.getFocused() != null) {
                         MouseButtonEvent translatedEvent = new MouseButtonEvent(event.x(), event.y() - this.top + ((int) this.scrollDistance) - this.border, event.buttonInfo());
@@ -212,7 +212,7 @@ public abstract class ConfigBaseScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        if (event.key() == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc() && this.manager != null) {
+        if (event.key() == InputConstants.KEY_ESCAPE && this.shouldCloseOnEsc() && this.manager != null) {
             this.manager.close();
             return true;
         } else {
@@ -249,9 +249,9 @@ public abstract class ConfigBaseScreen extends Screen {
     private void captureTooltip(Consumer<GuiGraphicsExtractor> action) {
         this.capturedTooltips.add(action);
     }
-    
+
     private class TooltipCapturingGuiGraphics extends FilterGuiGraphicsExtractor {
-        
+
         public TooltipCapturingGuiGraphics(GuiGraphicsExtractor parent) {
             super(parent);
         }

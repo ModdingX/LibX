@@ -1,5 +1,6 @@
 package org.moddingx.libx.impl.config.gui.screen.content;
 
+import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -8,7 +9,6 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Util;
 import org.moddingx.libx.config.gui.ConfigEditor;
 import org.moddingx.libx.config.gui.ConfigScreenContent;
 import org.moddingx.libx.config.gui.InputProperties;
@@ -120,7 +120,7 @@ public class ResourceListContent implements ConfigScreenContent<ResourceList> {
             @Override
             public void onClick(MouseButtonEvent event, boolean isDoubleClick) {
                 try {
-                    Util.getPlatform().openUri(ResourceListValueMapper.INFO_URL);
+                    Blaze3D.openUri(ResourceListValueMapper.INFO_URL);
                 } catch (Exception e) {
                     //
                 }

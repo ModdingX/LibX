@@ -6,15 +6,14 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.FuelValues;
 import org.moddingx.libx.creativetab.CreativeTabItemProvider;
 import org.moddingx.libx.creativetab.CreativeTabX;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.mod.ModXRegistration;
 import org.moddingx.libx.registration.Registerable;
 import org.moddingx.libx.registration.RegistrationContext;
+import org.moddingx.libx.util.game.CookingFuels;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,7 +59,7 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
         }
     }
 
-    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType, FuelValues fuelValues) {
+    public int burnTime() {
         return 0;
     }
 
@@ -74,7 +73,12 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
     public void registerAdditional(RegistrationContext ctx, EntryCollector builder) {
         if (this.hasItem) {
             //noinspection DataFlowIssue
-            this.item = new BaseBlockItem(this, this.pendingItemProperties.setId(ResourceKey.create(Registries.ITEM, ctx.id())).useBlockDescriptionPrefix());
+            Item.Properties itemProperties = this.pendingItemProperties.setId(ResourceKey.create(Registries.ITEM, ctx.id())).useBlockDescriptionPrefix();
+            int burnTime = this.burnTime();
+            if (burnTime > 0) {
+                CookingFuels.cookingFuel(itemProperties, this.mod, burnTime);
+            }
+            this.item = new BaseBlockItem(this, itemProperties);
             this.pendingItemProperties = null;
             builder.register(Registries.ITEM, this.item);
         }
@@ -84,11 +88,6 @@ public class BlockBase extends Block implements Registerable, CreativeTabItemPro
 
         public BaseBlockItem(Block block, Properties itemProperties) {
             super(block, itemProperties);
-        }
-
-        @Override
-        public int getBurnTime(@Nonnull ItemStack stack, @Nullable RecipeType<?> recipeType, @Nonnull FuelValues fuelValues) {
-            return BlockBase.this.getBurnTime(stack, recipeType, fuelValues);
         }
 
         @Override

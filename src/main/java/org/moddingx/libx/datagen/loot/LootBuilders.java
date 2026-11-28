@@ -67,7 +67,7 @@ public class LootBuilders {
         @Nonnull
         @Override
         public LootPoolEntryContainer build() {
-            return new AllLootEntry(List.copyOf(this.lootEntries), this.getConditions());
+            return new AllLootEntry(List.copyOf(this.lootEntries), this.getCondition(), this.getModifier());
         }
     }
 
@@ -95,7 +95,7 @@ public class LootBuilders {
         @Nonnull
         @Override
         public LootPoolEntryContainer build() {
-            return new EntryGroup(List.copyOf(this.lootEntries), this.getConditions());
+            return new EntryGroup(List.copyOf(this.lootEntries), this.getCondition(), this.getModifier());
         }
     }
 
@@ -123,7 +123,7 @@ public class LootBuilders {
         @Nonnull
         @Override
         public LootPoolEntryContainer build() {
-            return new SequentialEntry(List.copyOf(this.lootEntries), this.getConditions());
+            return new SequentialEntry(List.copyOf(this.lootEntries), this.getCondition(), this.getModifier());
         }
     }
 }

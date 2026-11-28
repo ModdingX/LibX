@@ -8,14 +8,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementFilter;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 import javax.annotation.Nonnull;
 
 /**
  * A {@link PlacementFilter} for inverting other {@link PlacementFilter filters}.
  */
-public class InvertPlacementFilter extends PlacementFilter {
+public class InvertPlacementFilter implements PlacementFilter {
 
     public static final MapCodec<InvertPlacementFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             PlacementModifier.CODEC.fieldOf("filter").flatXmap(
@@ -23,8 +22,6 @@ public class InvertPlacementFilter extends PlacementFilter {
                     DataResult::success
             ).forGetter(filter -> filter.filter)
     ).apply(instance, InvertPlacementFilter::new));
-    
-    public static final PlacementModifierType<InvertPlacementFilter> TYPE = () -> CODEC;
 
     private final PlacementFilter filter;
 
@@ -34,15 +31,15 @@ public class InvertPlacementFilter extends PlacementFilter {
     public InvertPlacementFilter(PlacementFilter filter) {
         this.filter = filter;
     }
-    
+
     @Nonnull
     @Override
-    public PlacementModifierType<?> type() {
-        return TYPE;
+    public MapCodec<? extends PlacementFilter> codec() {
+        return CODEC;
     }
 
     @Override
-    protected boolean shouldPlace(@Nonnull PlacementContext context, @Nonnull RandomSource random, @Nonnull BlockPos pos) {
-        return this.filter.getPositions(context, random, pos).findAny().isEmpty();
+    public boolean shouldPlace(@Nonnull PlacementContext context, @Nonnull RandomSource random, @Nonnull BlockPos pos) {
+        return !this.filter.shouldPlace(context, random, pos);
     }
 }

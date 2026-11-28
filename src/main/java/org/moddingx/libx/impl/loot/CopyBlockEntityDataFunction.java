@@ -21,6 +21,7 @@ import org.moddingx.libx.LibX;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
@@ -34,12 +35,12 @@ public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
     private final Holder<Block> block;
     private final Set<String> tags;
 
-    private CopyBlockEntityDataFunction(List<LootItemCondition> conditions, Holder<Block> block, List<String> tags) {
-        this(conditions, block, Set.copyOf(tags));
+    private CopyBlockEntityDataFunction(Optional<Holder<LootItemCondition>> condition, Holder<Block> block, List<String> tags) {
+        this(condition, block, Set.copyOf(tags));
     }
-    
-    public CopyBlockEntityDataFunction(List<LootItemCondition> conditions, Holder<Block> block, Set<String> tags) {
-        super(conditions);
+
+    public CopyBlockEntityDataFunction(Optional<Holder<LootItemCondition>> condition, Holder<Block> block, Set<String> tags) {
+        super(condition);
         this.block = block;
         this.tags = Set.copyOf(tags);
     }
@@ -53,7 +54,7 @@ public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
     @Nonnull
     @Override
     protected ItemStack run(@Nonnull ItemStack stack, @Nonnull LootContext context) {
-        BlockEntity blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        BlockEntity blockEntity = context.getOptional(LootContextParams.BLOCK_ENTITY);
         if (blockEntity != null) {
             stack.update(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(blockEntity.getType(), new CompoundTag()), data -> {
                 CompoundTag result = data.type() == blockEntity.getType() ? data.copyTagWithoutId() : new CompoundTag();
@@ -94,7 +95,7 @@ public class CopyBlockEntityDataFunction extends LootItemConditionalFunction {
         @Nonnull
         @Override
         public CopyBlockEntityDataFunction build() {
-            return new CopyBlockEntityDataFunction(this.getConditions(), this.block, this.tags);
+            return new CopyBlockEntityDataFunction(this.getCondition(), this.block, this.tags);
         }
     }
 }

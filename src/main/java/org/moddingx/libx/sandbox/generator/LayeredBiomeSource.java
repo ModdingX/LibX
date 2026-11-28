@@ -3,7 +3,11 @@ package org.moddingx.libx.sandbox.generator;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.QuartPos;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.NoiseRouterData;
@@ -20,18 +24,18 @@ import java.util.stream.Stream;
 public class LayeredBiomeSource extends BiomeSource {
 
     public static final MapCodec<LayeredBiomeSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            RegistryCodecs.homogeneousList(SandBox.BIOME_LAYER, BiomeLayer.DIRECT_CODEC).fieldOf("layers").forGetter((LayeredBiomeSource biomes) -> biomes.layers)
+            RegistryCodecs.holderSet(SandBox.BIOME_LAYER, BiomeLayer.DIRECT_CODEC).fieldOf("layers").forGetter((LayeredBiomeSource biomes) -> biomes.layers)
     ).apply(instance, LayeredBiomeSource::new));
-    
+
     private final HolderSet<BiomeLayer> layers;
-    
+
     private NoiseLayerSelector sel;
     private MultiNoiseBiomeSource[] sources;
     private Climate.ParameterPoint[] ranges;
 
     /**
      * Creates a new {@link LayeredBiomeSource}.
-     * 
+     *
      * @param layers The layers to use.
      */
     public LayeredBiomeSource(HolderSet<BiomeLayer> layers) {
@@ -84,11 +88,13 @@ public class LayeredBiomeSource extends BiomeSource {
 
     @Nonnull
     @Override
-    public Holder<Biome> getNoiseBiome(int x, int y, int z, @Nonnull Climate.Sampler sampler) {
-        Climate.TargetPoint target = sampler.sample(x, y, z);
-        return this.sources[this.getNoiseLayer(x, y, z, target)].getNoiseBiome(target);
+    public BiomeResolver createResolver(@Nonnull Climate.Sampler sampler) {
+        return (x, y, z) -> {
+            Climate.TargetPoint target = sampler.sample(x, y, z);
+            return this.sources[this.getNoiseLayer(x, y, z, target)].getNoiseBiome(target);
+        };
     }
-    
+
     @SuppressWarnings("RedundantIfStatement")
     private static boolean isInRange(Climate.ParameterPoint point, Climate.TargetPoint target) {
         if (point.temperature().distance(target.temperature()) != 0) return false;
@@ -99,7 +105,7 @@ public class LayeredBiomeSource extends BiomeSource {
         if (point.weirdness().distance(target.weirdness()) != 0) return false;
         return true;
     }
-    
+
     @Override
     public void addDebugInfo(List<String> lines, BlockPos pos, Climate.Sampler sampler) {
         Climate.TargetPoint target = sampler.sample(QuartPos.fromBlock(pos.getX()), QuartPos.fromBlock(pos.getY()), QuartPos.fromBlock(pos.getZ()));

@@ -10,10 +10,13 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.trading.TradeCost;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.functions.FunctionUserBuilder;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
 import org.moddingx.libx.datagen.provider.RegistryProviderBase;
@@ -82,7 +85,7 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
     /**
      * Creates a {@link TradeCost trade cost} for a randomized amount of items.
      */
-    public static TradeCost cost(ItemLike item, NumberProvider count) {
+    public static TradeCost cost(ItemLike item, Holder<ContextIntProvider> count) {
         return new TradeCost(item, count);
     }
 
@@ -90,7 +93,7 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
      * Creates a {@link TradeCost trade cost} for a fixed amount of items that must match the given
      * data component predicate.
      */
-    public static TradeCost cost(ItemLike item, NumberProvider count, DataComponentExactPredicate components) {
+    public static TradeCost cost(ItemLike item, Holder<ContextIntProvider> count, DataComponentExactPredicate components) {
         //noinspection deprecation
         return new TradeCost(item.asItem().builtInRegistryHolder(), count, components);
     }
@@ -102,9 +105,9 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
         private final List<LootItemFunction> givenItemModifiers;
         @Nullable
         private TradeCost additionalWants;
-        private NumberProvider maxUses;
-        private NumberProvider xp;
-        private NumberProvider reputationDiscount;
+        private Holder<ContextIntProvider> maxUses;
+        private Holder<ContextIntProvider> xp;
+        private Holder<ContextFloatProvider> reputationDiscount;
         @Nullable
         private LootItemCondition merchantPredicate;
         @Nullable
@@ -115,9 +118,9 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
             this.gives = gives;
             this.givenItemModifiers = new ArrayList<>();
             this.additionalWants = null;
-            this.maxUses = ConstantValue.exactly(4);
-            this.xp = ConstantValue.exactly(1);
-            this.reputationDiscount = ConstantValue.exactly(0);
+            this.maxUses = ContextIntProviders.exactly(4);
+            this.xp = ContextIntProviders.exactly(1);
+            this.reputationDiscount = ContextFloatProviders.exactly(0);
             this.merchantPredicate = null;
             this.doubleTradePriceEnchantments = null;
         }
@@ -147,7 +150,7 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
         /**
          * Sets how often this trade can be used before the merchant runs out of stock. Defaults to {@code 4}.
          */
-        public VillagerTradeBuilder maxUses(NumberProvider maxUses) {
+        public VillagerTradeBuilder maxUses(Holder<ContextIntProvider> maxUses) {
             this.maxUses = maxUses;
             return this;
         }
@@ -156,14 +159,14 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
          * Sets how often this trade can be used before the merchant runs out of stock. Defaults to {@code 4}.
          */
         public VillagerTradeBuilder maxUses(int maxUses) {
-            this.maxUses = ConstantValue.exactly(maxUses);
+            this.maxUses = ContextIntProviders.exactly(maxUses);
             return this;
         }
 
         /**
          * Sets the merchant experience granted for using this trade. Defaults to {@code 1}.
          */
-        public VillagerTradeBuilder xp(NumberProvider xp) {
+        public VillagerTradeBuilder xp(Holder<ContextIntProvider> xp) {
             this.xp = xp;
             return this;
         }
@@ -172,7 +175,7 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
          * Sets the merchant experience granted for using this trade. Defaults to {@code 1}.
          */
         public VillagerTradeBuilder xp(int xp) {
-            this.xp = ConstantValue.exactly(xp);
+            this.xp = ContextIntProviders.exactly(xp);
             return this;
         }
 
@@ -180,7 +183,7 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
          * Sets the fraction of the price that is discounted per reputation point the player has with the
          * merchant. Defaults to {@code 0}, vanilla villager trades commonly use {@code 0.05}.
          */
-        public VillagerTradeBuilder reputationDiscount(NumberProvider reputationDiscount) {
+        public VillagerTradeBuilder reputationDiscount(Holder<ContextFloatProvider> reputationDiscount) {
             this.reputationDiscount = reputationDiscount;
             return this;
         }
@@ -190,7 +193,7 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
          * merchant. Defaults to {@code 0}, vanilla villager trades commonly use {@code 0.05}.
          */
         public VillagerTradeBuilder reputationDiscount(float reputationDiscount) {
-            this.reputationDiscount = ConstantValue.exactly(reputationDiscount);
+            this.reputationDiscount = ContextFloatProviders.exactly(reputationDiscount);
             return this;
         }
 
@@ -266,8 +269,8 @@ public abstract class VillagerTradeProviderBase extends RegistryProviderBase {
                     this.maxUses,
                     this.xp,
                     this.reputationDiscount,
-                    Optional.ofNullable(this.merchantPredicate),
-                    List.copyOf(this.givenItemModifiers),
+                    Optional.ofNullable(this.merchantPredicate).map(Holder::direct),
+                    FunctionUserBuilder.buildFunction(this.givenItemModifiers.stream().map(Holder::direct).toList()),
                     Optional.ofNullable(this.doubleTradePriceEnchantments)
             );
             return VillagerTradeProviderBase.this.registries.writableRegistry(Registries.VILLAGER_TRADE).createIntrusiveHolder(trade);

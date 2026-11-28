@@ -3,15 +3,12 @@ package org.moddingx.libx.impl.base.decoration.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
 import org.moddingx.libx.base.decoration.DecoratedBlock;
 import org.moddingx.libx.base.decoration.DecorationType;
 import org.moddingx.libx.impl.base.decoration.DecorationBlockIdContext;
@@ -58,14 +55,17 @@ public class DecoratedWoodBlock extends RotatedPillarBlock {
     }
 
     @Nullable
-    @Override
-    public BlockState getToolModifiedState(@Nonnull BlockState state, @Nonnull UseOnContext context, @Nonnull ItemAbility itemAbility, boolean simulate) {
-        if (itemAbility == ItemAbilities.AXE_STRIP && this.stripped != null && this.parent.has(this.stripped)) {
-            Block strippedBlock = this.parent.get(this.stripped);
-            return strippedBlock.defaultBlockState().setValue(BlockStateProperties.AXIS, state.getValue(BlockStateProperties.AXIS));
-        } else {
-            return super.getToolModifiedState(state, context, itemAbility, simulate);
+    public BlockState getStrippedState(BlockState state) {
+        if (this.stripped == null || !this.parent.has(this.stripped)) {
+            return null;
         }
+
+        BlockState strippedState = this.parent.get(this.stripped).defaultBlockState();
+        if (strippedState.hasProperty(BlockStateProperties.AXIS) && state.hasProperty(BlockStateProperties.AXIS)) {
+            strippedState = strippedState.setValue(BlockStateProperties.AXIS, state.getValue(BlockStateProperties.AXIS));
+        }
+
+        return strippedState;
     }
 
     @Override

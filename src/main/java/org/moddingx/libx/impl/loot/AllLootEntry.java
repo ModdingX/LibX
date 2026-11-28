@@ -1,6 +1,7 @@
 package org.moddingx.libx.impl.loot;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -8,12 +9,14 @@ import net.minecraft.world.level.storage.loot.entries.ComposableEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.moddingx.libx.LibX;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 // A loot entry that merges multiple entries into one to be found in one roll.
@@ -22,8 +25,8 @@ public class AllLootEntry extends CompositeEntryBase {
     public static final Identifier ID = LibX.getInstance().id("all");
     public static final MapCodec<AllLootEntry> MAP_CODEC = createCodec(AllLootEntry::new);
 
-    public AllLootEntry(List<LootPoolEntryContainer> children, List<LootItemCondition> conditions) {
-        super(children, conditions);
+    public AllLootEntry(List<LootPoolEntryContainer> children, Optional<Holder<LootItemCondition>> condition, Optional<Holder<LootItemFunction>> modifier) {
+        super(children, condition, modifier);
     }
 
     @Nonnull

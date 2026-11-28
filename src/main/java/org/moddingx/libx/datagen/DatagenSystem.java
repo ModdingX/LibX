@@ -19,6 +19,7 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.impl.ModInternal;
+import org.moddingx.libx.impl.datagen.CookingFuelProvider;
 import org.moddingx.libx.impl.datagen.InternalDataProvider;
 import org.moddingx.libx.impl.datagen.load.DatagenRegistryLoader;
 import org.moddingx.libx.impl.datagen.registries.DatagenRegistrySet;
@@ -42,7 +43,7 @@ public class DatagenSystem {
 
     /**
      * Marks a registry as an extension registry. An extension registry is a registry, where the id of the elements
-     * reference the id inside another registry (for example LibX {@link SandBox#BIOME_SURFACE biome surface}).
+     * reference the id inside another registry (for example LibX {@link SandBox#BIOME_MATERIAL biome material}).
      * 
      * Extension registries are frozen later during datagen to allow them to access to frozen non-extension registries
      * while being populated.
@@ -130,9 +131,9 @@ public class DatagenSystem {
                 PackType.SERVER_DATA, event.getResourceManager(PackType.SERVER_DATA),
                 PackType.CLIENT_RESOURCES, event.getResourceManager(PackType.CLIENT_RESOURCES)
         );
-        this.lookupProvider = event.getLookupProvider();
+        this.lookupProvider = event.getReloadableLookupProvider();
         DatagenRegistryLoader.RegistrySelector selector = (layer, registries) -> {
-            if (layer != RegistryLayer.WORLDGEN) return registries;
+            if (layer != RegistryLayer.WORLD) return registries;
             List<RegistryDataLoader.RegistryData<?>> extraRegistries = new ArrayList<>();
             for (Map.Entry<ResourceKey<? extends Registry<?>>, Codec<?>> extraEntry : EXTRA_REGISTRIES.entrySet()) {
                 if (registries.stream().anyMatch(registryData -> Objects.equals(extraEntry.getKey(), registryData.key()))) {
@@ -159,6 +160,7 @@ public class DatagenSystem {
         this.locked = false;
         
         this.registryProviders = new ArrayList<>();
+        this.registryProviders.add(new InternalDataProvider.Entry<>(this.mainTarget, CookingFuelProvider::new));
         this.extensionProviders = new ArrayList<>();
         this.dataProviders = new ArrayList<>();
     }

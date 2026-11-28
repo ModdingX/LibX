@@ -1,9 +1,7 @@
 package org.moddingx.libx.datagen.provider.loot;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistrationInfo;
-import net.minecraft.core.Registry;
-import net.minecraft.core.WritableRegistry;
+import com.mojang.serialization.Lifecycle;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -18,9 +16,7 @@ import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.*;
-import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.moddingx.libx.LibX;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.DatagenStage;
@@ -54,6 +50,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
 
     private final Set<T> ignored = new HashSet<>();
     private final Map<T, Function<T, LootTable.Builder>> functionMap = new HashMap<>();
+    private final MappedRegistry<LootTable> pendingReferences = new MappedRegistry<>(Registries.LOOT_TABLE, Lifecycle.stable());
 
     protected LootProviderBase(DatagenContext ctx, String folder, ContextKeySet contextKeySet, ResourceKey<? extends Registry<T>> registryKey) {
         this(ctx, folder, contextKeySet,
@@ -154,9 +151,28 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
             registry.register(ResourceKey.create(Registries.LOOT_TABLE, entry.getKey()), entry.getValue(), RegistrationInfo.BUILT_IN);
         }
 
+        List<ResourceKey<LootTable>> missingReferences = new ArrayList<>();
+        for (ResourceKey<LootTable> key : List.copyOf(this.pendingReferences.registryKeySet())) {
+            Optional<LootTable> value = registry.getOptional(key);
+            if (value.isPresent()) {
+                // Binds the holder created in reference(ResourceKey)
+                this.pendingReferences.register(key, value.get(), RegistrationInfo.BUILT_IN);
+            } else {
+                missingReferences.add(key);
+            }
+        }
+        if (!missingReferences.isEmpty()) {
+            missingReferences.forEach(key -> LibX.logger.warn("Missing loot table reference: {}", key.identifier()));
+            throw new IllegalStateException("There were problems resolving loot table references.");
+        }
+
         ProblemReporter.Collector problems = new ProblemReporter.Collector();
-        HolderLookup.Provider lootTableHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.LOOT_TABLE)));
-        ValidationContext validationContext = new ValidationContext(problems, this.contextKeySet, lootTableHolderProvider);
+        HolderLookup.Provider lootDataProvider = HolderLookup.Provider.create(Stream.<HolderLookup.RegistryLookup<?>>of(
+                this.registries.registry(Registries.LOOT_TABLE), this.registries.registry(Registries.PREDICATE),
+                this.registries.registry(Registries.ITEM_MODIFIER), this.registries.registry(Registries.SLOT_SOURCE),
+                this.registries.registry(Registries.CONTEXT_INT_PROVIDER), this.registries.registry(Registries.CONTEXT_FLOAT_PROVIDER)
+        ));
+        ValidationContext validationContext = new ValidationContext(problems, this.contextKeySet, lootDataProvider);
 
         for (Map.Entry<Identifier, LootTable> entry : tables.entrySet()) {
             entry.getValue().validate(validationContext.enterElement(() -> "{" + entry.getKey() + "}", ResourceKey.create(Registries.LOOT_TABLE, entry.getKey())));
@@ -182,11 +198,11 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
         return Stream.of(Map.entry(entry.getKey(), loot.apply(entry.getValue()).setParamSet(this.contextKeySet).build()));
     }
 
-    protected final LootModifier<T> modifier(BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolSingletonContainer.Builder<?>> function) {
+    protected final LootModifier<T> modifier(BiFunction<T, UniformContainerBase.Builder<?>, UniformContainerBase.Builder<?>> function) {
         return LootModifier.of(this.element(), function);
     }
-    
-    protected final GenericLootModifier<T> genericModifier(BiFunction<T, LootPoolSingletonContainer.Builder<?>, LootPoolEntryContainer.Builder<?>> function) {
+
+    protected final GenericLootModifier<T> genericModifier(BiFunction<T, UniformContainerBase.Builder<?>, LootPoolEntryContainer.Builder<?>> function) {
         return GenericLootModifier.of(this.element(), function);
     }
     
@@ -221,14 +237,14 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
      */
     public void generateBaseTable(T item, LootPoolEntryContainer.Builder<?> entry) {
         LootPool.Builder pool = LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1)).add(entry);
+                .setRolls(ContextIntProviders.exactly(1)).add(entry);
         this.customLootTable(item, LootTable.lootTable().withPool(pool));
     }
     
     /**
      * Turns a singleton loot entry into a simple loot factory.
      */
-    public SimpleLootFactory<T> from(LootPoolSingletonContainer.Builder<?> entry) {
+    public SimpleLootFactory<T> from(UniformContainerBase.Builder<?> entry) {
         return SimpleLootFactory.from(entry);
     }
 
@@ -258,7 +274,12 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
      * Makes a reference to another loot table.
      */
     public SimpleLootFactory<T> reference(ResourceKey<LootTable> lootTable) {
-        return SimpleLootFactory.from(NestedLootTable.lootTableReference(lootTable));
+        Registry<LootTable> registry = this.registries.registry(Registries.LOOT_TABLE);
+        Holder<LootTable> holder = registry.get(lootTable).<Holder<LootTable>>map(h -> h).orElseGet(
+                () -> this.pendingReferences.createRegistrationLookup().getOrThrow(lootTable)
+        );
+
+        return SimpleLootFactory.from(NestedLootTable.lootTableReference(holder));
     }
     
     /**
@@ -272,7 +293,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
      * A loot modifier that sets the count of a stack.
      */
     public LootModifier<T> count(int count) {
-        return this.from(SetItemCountFunction.setCount(ConstantValue.exactly(count)));
+        return this.from(SetItemCountFunction.setCount(ContextIntProviders.exactly(count)));
     }
 
     /**
@@ -280,9 +301,9 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
      */
     public LootModifier<T> count(int min, int max) {
         if (min == max) {
-            return this.from(SetItemCountFunction.setCount(ConstantValue.exactly(min)));
+            return this.from(SetItemCountFunction.setCount(ContextIntProviders.exactly(min)));
         } else {
-            return this.from(SetItemCountFunction.setCount(UniformGenerator.between(min, max)));
+            return this.from(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
         }
     }
 
@@ -290,7 +311,7 @@ public abstract class LootProviderBase<T> extends RegistryProviderBase {
      * A loot modifier that sets the count of a stack based on a binomial formula.
      */
     public LootModifier<T> countBinomial(float chance, int num) {
-        return this.from(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(num, chance)));
+        return this.from(SetItemCountFunction.setCount(ContextIntProviders.binomial(num, chance)));
     }
 
     /**

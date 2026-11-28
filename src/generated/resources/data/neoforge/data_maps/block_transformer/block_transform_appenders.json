@@ -1,0 +1,13 @@
+{
+  "values": {
+    "minecraft:axe": [
+      {
+        "block_state_provider": {
+          "type": "libx:decoration_stripping"
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      }
+    ]
+  }
+}

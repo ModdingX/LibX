@@ -1,25 +1,33 @@
 package org.moddingx.libx.datagen.provider.loot;
 
+import net.minecraft.advancements.predicates.DataComponentMatchers;
+import net.minecraft.advancements.predicates.EnchantmentPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
 import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.predicates.DataComponentPredicates;
+import net.minecraft.core.component.predicates.EnchantmentsPredicate;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.loot.EntityLootSubProvider;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.provider.loot.entry.LootModifier;
 
 import javax.annotation.Nullable;
-import java.util.stream.Stream;
+import java.util.List;
 
 public abstract class EntityLootProviderBase extends LootProviderBase<EntityType<?>> {
 
@@ -49,8 +57,9 @@ public abstract class EntityLootProviderBase extends LootProviderBase<EntityType
      * @param max The maximum amount of additional drops.
      */
     public LootModifier<EntityType<?>> looting(int min, int max) {
-        HolderLookup.Provider enchantmentHolderProvider = HolderLookup.Provider.create(Stream.of(this.registries.registry(Registries.ENCHANTMENT)));
-        return this.modifier((entity, entry) -> entry.apply(EnchantedCountIncreaseFunction.lootingMultiplier(enchantmentHolderProvider, UniformGenerator.between(min, max))));
+        HolderGetter<Enchantment> enchantments = this.registries.registry(Registries.ENCHANTMENT);
+
+        return this.modifier((entity, entry) -> entry.apply(EnchantedCountIncreaseFunction.lootingMultiplier(enchantments, ContextFloatProviders.between(min, max))));
     }
 
     /**
@@ -64,22 +73,22 @@ public abstract class EntityLootProviderBase extends LootProviderBase<EntityType
      * Gets a loot modifier that smelts the item, if the killed entity was on fire.
      */
     public LootModifier<EntityType<?>> smeltOnFire() {
-        return this.modifier((entity, entry) -> entry.apply(SmeltItemFunction.smelted().when(new GiveMeAccessToShouldSmeltLoot().accessibleShouldSmeltLoot())));
+        return this.modifier((entity, entry) -> entry.apply(SmeltItemFunction.smelted().when(this.shouldSmeltLoot())));
     }
-    
-    private static class GiveMeAccessToShouldSmeltLoot extends EntityLootSubProvider {
 
-        protected GiveMeAccessToShouldSmeltLoot() {
-            super(FeatureFlagSet.of(), HolderLookup.Provider.create(Stream.of()));
-        }
-
-        @Override
-        public void generate() {
-            //
-        }
-        
-        public LootItemCondition.Builder accessibleShouldSmeltLoot() {
-            return this.shouldSmeltLoot();
-        }
+    // Same as EntityLootSubProvider#shouldSmeltLoot
+    private LootItemCondition.Builder shouldSmeltLoot() {
+        return AnyOfCondition.anyOf(
+                this.fire(),
+                LootItemEntityPropertyCondition.hasProperties(
+                        LootContext.EntityTarget.DIRECT_ATTACKER,
+                        EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(
+                                ItemPredicate.Builder.item().withComponents(DataComponentMatchers.Builder.components().partial(
+                                        DataComponentPredicates.ENCHANTMENTS,
+                                        EnchantmentsPredicate.enchantments(List.of(new EnchantmentPredicate(this.set(EnchantmentTags.SMELTS_LOOT), MinMaxBounds.Ints.ANY)))
+                                ).build())
+                        ))
+                )
+        );
     }
 }

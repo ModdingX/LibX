@@ -70,7 +70,7 @@ public abstract class ItemModelProviderBase extends ModelProvider {
     @Override
     protected final Stream<? extends Holder<Item>> getKnownItems() {
         return BuiltInRegistries.ITEM.listElements()
-                .filter(holder -> this.mod.modid.equals(holder.getKey().identifier().getNamespace()))
+                .filter(holder -> this.mod.modid.equals(holder.key().identifier().getNamespace()))
                 .filter(holder -> !this.ignored.contains(holder.value()));
     }
 
